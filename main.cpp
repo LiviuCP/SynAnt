@@ -18,17 +18,12 @@
 
 #include <QApplication>
 #include <QWidget>
-#include <QPixmap>
-#include <QIcon>
 #include "introductionwindow.h"
 #include "hintswindow.h"
 #include "fatalerrors.h"
 
 int main(int argc, char *argv[]) {
     QApplication app(argc,argv);
-    QPixmap appLogo("/Volumes/MyStuff/bin/Programs_Applications/"                                   // create icon to be used for all windows (introduction window, help window, main window, errors window)
-                    "SynAnt_Final_Versions/SynAnt_v1.1/"
-                    "Source_code_and_supporting_documents/Icons/SynAnt.png");
     qApp -> setStyleSheet("QLabel,"                                                                 // define default style for all widgets/windows in the application, to be modified locally if needed
                           "QGroupBox{background-color: grey; color: white; "
                                                  "border: 1px solid white;}"
@@ -40,7 +35,6 @@ int main(int argc, char *argv[]) {
                           "HintsWindow,"
                           "MainGameWindow,"
                           "FatalErrors{background-color: grey;}");
-    QIcon windowIcon(appLogo);
     try {
         WordMixer wordMixer{QApplication::applicationDirPath() + "/data"};                          /* application core, handles the mixing of the read words pair and the checking of the user input
                                                                                                        the file from which words are read will be in the same directory with the application, so its path
@@ -48,14 +42,11 @@ int main(int argc, char *argv[]) {
                                                                                                     */
         IntroductionWindow introductionWindow{};                                                    // first application window, launched when the program starts
         introductionWindow.setWindowTitle("SynAnt - Welcome");
-        introductionWindow.setWindowIcon(windowIcon);
         HintsWindow hintsWindow{};                                                                  // second application window, launched by clicking on the Hints button
         hintsWindow.setWindowTitle("SynAnt - Help");
-        hintsWindow.setWindowIcon(windowIcon);
         introductionWindow.updateHintsWinPtr(&hintsWindow);                                         // link introduction window to hints window
         MainGameWindow mainGameWindow{};                                                            // third application window, launched by clicking the Play or Ok buttons
         mainGameWindow.setWindowTitle("SynAnt - let's Play!");
-        mainGameWindow.setWindowIcon(windowIcon);
         introductionWindow.updateMainGameWinPtr(&mainGameWindow);                                   // link introduction window to main game window
         hintsWindow.updateMainGameWinPtr(&mainGameWindow);                                          // link hints window to main game window
         mainGameWindow.updateHintsWinPtr(&hintsWindow);                                             // link main game window to hints window
@@ -66,7 +57,6 @@ int main(int argc, char *argv[]) {
     catch (const QString fatalErrorMessage) {                                                       // this block handles all possible fatal errors that occur in the application
         FatalErrors fatalError{};
         fatalError.setWindowTitle("Fatal Error!");
-        fatalError.setWindowIcon(windowIcon);
         fatalError.setFatalErrorText(fatalErrorMessage);
         fatalError.show();
         return app.exec();
