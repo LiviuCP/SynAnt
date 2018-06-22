@@ -1,0 +1,19 @@
+0. Introduction
+
+This program retrieves a word pair that can be synonyms or antonyms and mixes them. The user should guess the correct words. There are 3 difficulty levels.
+
+1. Installation
+
+After compiling the code copy the data file near the executable. Feel free to modify it by adding new word pairs.
+
+2. Updating the data file
+
+Use = for separating synonym word pairs and ! for antonyms.
+
+The minimum word size is 5 characters and is determined by the minWordSize constant (see function retrieveWords() from wordmixer.cpp).
+
+3. Further info
+
+Click the Help button within the app for more information.
+
+For questions please feel free to comment on my GitHub page: https://github.com/LiviuCP
