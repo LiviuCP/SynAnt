@@ -4,15 +4,19 @@ This program retrieves a word pair that can be synonyms or antonyms and mixes th
 
 1. Installation
 
-After compiling the code copy the data file near the executable. Feel free to modify it by adding new word pairs.
+After compiling the code copy the data file near the executable (for OS X it should be near the executable placed within the .app directory). Feel free to modify it by adding new word pairs.
 
-2. Updating the data file
+2. Supported Operating Systems
+
+This program has been compiled on OS X and Linux (Fedora and OpenSUSE). It hasn't been tested on Windows so far.
+
+3. Updating the data file
 
 Use = for separating synonym word pairs and ! for antonyms.
 
 The minimum word size is 5 characters and is determined by the minWordSize constant (see function retrieveWords() from wordmixer.cpp).
 
-3. Further info
+4. Further info
 
 Click the Help button within the app for more information.
 
