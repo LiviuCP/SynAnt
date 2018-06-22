@@ -22,8 +22,8 @@ public:
     explicit FatalErrors(QWidget *parent = 0);                                                      // constructor used for building the window and its elements
     void setFatalErrorText(const QString &text);                                                    // this function is called from outside the class when the exception is encountered
 private:
-    QString errorText;                                                                              // error text to be displayed
-    QLabel *errorMessage;                                                                           // error message, shown in the upper part of the window
+    QString m_ErrorText;                                                                            // error text to be displayed
+    QLabel* m_ErrorMessage;                                                                         // error message, shown in the upper part of the window
 };
 
 #endif // FATALERRORS_H

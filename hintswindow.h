@@ -29,9 +29,9 @@ public:
     explicit HintsWindow(QWidget *parent = 0);                                                      // constructor will build all window items and connect the button signals to slots
     void updateMainGameWinPtr(MainGameWindow *mgw);                                                 // links the hints window to main game window, enables the transition between these when the Ok button is clicked
 private slots:
-    void slotButtonOkClicked();                                                                     // executes when button Play is clicked
+    void _onButtonOkClicked();                                                                      // executes when button Play is clicked
 private:
-    MainGameWindow *mainGameWindow;                                                                 // for opening the main game window when user presses the Ok button
+    MainGameWindow* m_MainGameWindow;                                                               // for opening the main game window when user presses the Ok button
 };
 
 #endif // HINTSWINDOW_H

@@ -7,14 +7,14 @@
 
 FatalErrors::FatalErrors(QWidget *parent)                                                           // constructor
     : QWidget{parent},
-      errorText{}                                                                                   // initially empty, will be filled in when writing the error message by calling setFatalErrorText()
+      m_ErrorText{}                                                                                   // initially empty, will be filled in when writing the error message by calling setFatalErrorText()
 {
                                                                                                     // first create the upper part of the window, namely the box with the message requesting input
     QHBoxLayout *messageLayout{new QHBoxLayout{}};
-    errorMessage = new QLabel{};                                                                    // initially the label is empty. A text will be setup only if a fatal error occurs
-    errorMessage -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-    errorMessage -> setFrameStyle(QFrame::StyledPanel);
-    messageLayout -> addWidget(errorMessage,1);
+    m_ErrorMessage = new QLabel{};                                                                    // initially the label is empty. A text will be setup only if a fatal error occurs
+    m_ErrorMessage -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    m_ErrorMessage -> setFrameStyle(QFrame::StyledPanel);
+    messageLayout -> addWidget(m_ErrorMessage,1);
                                                                                                     // second, create the lower part of the window, namely the Ok button
     QHBoxLayout *okButtonLayout{new QHBoxLayout{}};
     QPushButton *okButton{new QPushButton{"Ok"}};
@@ -37,6 +37,6 @@ FatalErrors::FatalErrors(QWidget *parent)                                       
                                                                                                     // this function is called from outside the class when the exception is encountered
 void FatalErrors::setFatalErrorText(const QString &text)
 {
-    errorText = text;
-    errorMessage->setText(errorText);
+    m_ErrorText = text;
+    m_ErrorMessage->setText(m_ErrorText);
 }

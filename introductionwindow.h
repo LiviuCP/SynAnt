@@ -25,11 +25,11 @@ public:
     void updateHintsWinPtr(HintsWindow *hw);                                                        // links the introduction window to hints window by assigning the pointer to the HintsWindow object
     void updateMainGameWinPtr(MainGameWindow *mgw);                                                 // links the introduction window to main game window, enables the transition between these when button Play is clicked
 private slots:
-    void slotButtonPlayClicked();                                                                   // executes when button Play is clicked
-    void slotButtonHintsClicked();                                                                  // executes when button Hints is clicked
+    void _onButtonPlayClicked();                                                                    // executes when button Play is clicked
+    void _onButtonHintsClicked();                                                                   // executes when button Hints is clicked
 private:
-    HintsWindow *hintsWindow;                                                                       // for opening the hints window when the user presses the Hints button
-    MainGameWindow *mainGameWindow;                                                                 // for opening the main game window when user presses the Play button
+    HintsWindow* m_HintsWindow;                                                                     // for opening the hints window when the user presses the Hints button
+    MainGameWindow* m_MainGameWindow;                                                               // for opening the main game window when user presses the Play button
 };
 
 #endif // INTRODUCTIONWINDOW_H

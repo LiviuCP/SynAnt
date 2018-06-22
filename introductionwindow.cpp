@@ -8,8 +8,8 @@
 
 IntroductionWindow::IntroductionWindow(QWidget *parent)
     : QWidget{parent},
-      hintsWindow{nullptr},                                                                         // will be assigned a new value when connecting the introduction window to hints window by calling updateHintsWindowPtr()
-      mainGameWindow{nullptr}                                                                       // will be assigned a new value when connecting the introduction window to main game window by calling updateMainGameWindowPtr()
+      m_HintsWindow{nullptr},                                                                         // will be assigned a new value when connecting the introduction window to hints window by calling updateHintsWindowPtr()
+      m_MainGameWindow{nullptr}                                                                       // will be assigned a new value when connecting the introduction window to main game window by calling updateMainGameWindowPtr()
 {
                                                                                                     // first create the upper part of the window, namely the box with the welcome message; set the welcome message
     QHBoxLayout *welcomeMsgLayout{new QHBoxLayout{}};
@@ -51,37 +51,37 @@ IntroductionWindow::IntroductionWindow(QWidget *parent)
                                                                                                     // fourth, connect the button and shortcut signals to slots
     connect(quitButton,&QPushButton::clicked,qApp,&QApplication::quit);
     connect(quitButtonShortcut,&QShortcut::activated,qApp,&QApplication::quit);
-    connect(hintsButton,&QPushButton::clicked,this,&IntroductionWindow::slotButtonHintsClicked);
+    connect(hintsButton,&QPushButton::clicked,this,&IntroductionWindow::_onButtonHintsClicked);
     connect(hintsButtonShortcut,&QShortcut::activated,this,
-                                                   &IntroductionWindow::slotButtonHintsClicked);
-    connect(playButton,&QPushButton::clicked,this,&IntroductionWindow::slotButtonPlayClicked);
+                                                   &IntroductionWindow::_onButtonHintsClicked);
+    connect(playButton,&QPushButton::clicked,this,&IntroductionWindow::_onButtonPlayClicked);
     connect(playButtonShortcut,&QShortcut::activated,this,
-                                                    &IntroductionWindow::slotButtonPlayClicked);
+                                                    &IntroductionWindow::_onButtonPlayClicked);
     connect(playButtonAltShortcut,&QShortcut::activated,this,
-                                                    &IntroductionWindow::slotButtonPlayClicked);
+                                                    &IntroductionWindow::_onButtonPlayClicked);
 }
                                                                                                     // this function links the introduction window to hints window by assigning the pointer to the HintsWindow object
 void IntroductionWindow::updateHintsWinPtr(HintsWindow *hw)
 {
-    hintsWindow = hw;
+    m_HintsWindow = hw;
 }
                                                                                                     // this function links the introduction window to main game window, enables the transition between these when the Play button is clicked
 void IntroductionWindow::updateMainGameWinPtr(MainGameWindow *mgw)
 {
-    mainGameWindow = mgw;
+    m_MainGameWindow = mgw;
 }
                                                                                                     // slot handles the button Play click
-void IntroductionWindow::slotButtonPlayClicked()
+void IntroductionWindow::_onButtonPlayClicked()
 {
     hide();                                                                                         // step 1: hide the introduction window
-    mainGameWindow -> getFirstTwoWords();                                                           // step 2: retrieve words, mix them, update main game window with mixed words, update results/errors section
-    mainGameWindow -> show();                                                                       // step 3: show the main game window, control passed to user (who should enter the words and/or click a button)
+    m_MainGameWindow -> getFirstTwoWords();                                                           // step 2: retrieve words, mix them, update main game window with mixed words, update results/errors section
+    m_MainGameWindow -> show();                                                                       // step 3: show the main game window, control passed to user (who should enter the words and/or click a button)
 }
                                                                                                     // slot handles the button Hints click
-void IntroductionWindow::slotButtonHintsClicked()
+void IntroductionWindow::_onButtonHintsClicked()
 {
     hide();
-    hintsWindow -> show();
+    m_HintsWindow -> show();
 }
 
 

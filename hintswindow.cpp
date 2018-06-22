@@ -9,7 +9,7 @@
                                                                                                     // constructor creates the layout of the hints window and connects button signals to slots
 HintsWindow::HintsWindow(QWidget *parent)
     : QWidget{parent},
-      mainGameWindow{nullptr}                                                                       // will be assigned a new value when connecting the hints window to main game window by calling updateMainGameWindowPtr()
+      m_MainGameWindow{nullptr}                                                                       // will be assigned a new value when connecting the hints window to main game window by calling updateMainGameWindowPtr()
 {
                                                                                                     // first create the upper part of the window, namely the box with the hints message (located in a scroll area); set the hints message
     QHBoxLayout *hintsMsgLayout{new QHBoxLayout{}};
@@ -92,23 +92,23 @@ HintsWindow::HintsWindow(QWidget *parent)
                                                                                                     // fourth, connect the button signals to slots
     connect(quitButton,&QPushButton::clicked,qApp,&QApplication::quit);
     connect(quitButtonShortcut,&QShortcut::activated,qApp,&QApplication::quit);
-    connect(okButton,&QPushButton::clicked,this,&HintsWindow::slotButtonOkClicked);
-    connect(okButtonShortcut,&QShortcut::activated,this,&HintsWindow::slotButtonOkClicked);
-    connect(okButtonAltShortcut,&QShortcut::activated,this,&HintsWindow::slotButtonOkClicked);
+    connect(okButton,&QPushButton::clicked,this,&HintsWindow::_onButtonOkClicked);
+    connect(okButtonShortcut,&QShortcut::activated,this,&HintsWindow::_onButtonOkClicked);
+    connect(okButtonAltShortcut,&QShortcut::activated,this,&HintsWindow::_onButtonOkClicked);
 }
                                                                                                     // this function links the hints window to main game window, enables the transition between these when the Ok button is clicked
 void HintsWindow::updateMainGameWinPtr(MainGameWindow *mgw)
 {
-    mainGameWindow=mgw;
+    m_MainGameWindow=mgw;
 }
                                                                                                     // slot handles the button Ok click
-void HintsWindow::slotButtonOkClicked()
+void HintsWindow::_onButtonOkClicked()
 {
     hide();                                                                                         // step 1: hide the hints window
-    if (!(mainGameWindow -> windowAlreadyAccessed()))                                               // step 2: check if the main game window has already been accessed by user
+    if (!(m_MainGameWindow -> windowAlreadyAccessed()))                                               // step 2: check if the main game window has already been accessed by user
     {
-        mainGameWindow -> getFirstTwoWords();                                                       // if not, retrieve the first 2 words, mix them, update the main game window with the mixed words, update errors/results box
+        m_MainGameWindow -> getFirstTwoWords();                                                       // if not, retrieve the first 2 words, mix them, update the main game window with the mixed words, update errors/results box
     }
-    mainGameWindow -> show();                                                                       // step 3: show updated main game window, pass control to user (who should enter the words and/or press a button)
+    m_MainGameWindow -> show();                                                                       // step 3: show updated main game window, pass control to user (who should enter the words and/or press a button)
 }
 
