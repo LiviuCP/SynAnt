@@ -47,15 +47,15 @@ public:
     int getSecondWordBeginIndex() const;                                                            // used by main window to locate the position of the first piece of the second word in the mixedWords vector
     int getSecondWordEndIndex() const;                                                              // used by main window to locate the position of the last piece of the second word in the mixedWords vector
 
-    void setLevel(const int level);                                                                 // used for updating the level specific parameters when the difficulty level is changed by user
+    enum class Level {                                                                              // used for updating the parameters when the difficulty level changes
+        EASY,
+        MEDIUM,
+        HARD
+    };
+
+    void setLevel(Level level);                                                                     // used for updating the level specific parameters when the difficulty level is changed by user
     void updateStatistics(const bool partialUpdate);                                                // updates the score/number of word pairs variables, triggers update of the score/number of word pairs texts to be displayed in the main window
     void resetStatistics();                                                                         // sets all score and number of pair variables to 0
-
-    enum DifficultyLevel {                                                                          // used for updating the parameters when the difficulty level changes
-        LEVEL_EASY,
-        LEVEL_MEDIUM,
-        LEVEL_HARD
-    };
 
 private:
     void _getRowNumber();                                                                           // generates a random number which is the row number from which the word pair is read

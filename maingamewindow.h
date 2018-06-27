@@ -74,7 +74,7 @@ private:
     void _removeMixedWordsLabels();                                                                 // removes labels of the current mixed words from the layout; de-allocates them from memory
     void _createMixedWordsLabels();                                                                 // re-allocates labels for the new mixed words, word pieces written into labels
     void _addMixedWordsLabels();                                                                    // adds the newly allocated labels to their layout
-    void _switchToLevel(const int level);                                                           // initiates difficulty level change according to user's request
+    void _switchToLevel(WordMixer::Level level);                                                    // initiates difficulty level change according to user's request
 };
 
 #endif // MAINGAMEWINDOW_H

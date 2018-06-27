@@ -208,19 +208,19 @@ int WordMixer::getSecondWordEndIndex() const
     return wordsBeginEndPositions[SECOND_END];
 }
                                                                                                    // this function is used for changing the level parameters to specific values when user changes level
-void WordMixer::setLevel(const int level)
+void WordMixer::setLevel(Level level)
 {
     statusMessage = "\nLevel changed.\n\nNo user input so far.\n";                                 // message to be displayed in the errors/results box of the main window when level is changed
     switch(level) {
-        case LEVEL_EASY:
+        case Level::EASY:
             m_WordPieceSize = 3;
             m_ScoreIncrement = 1;
             return;
-        case LEVEL_MEDIUM:
+        case Level::MEDIUM:
             m_WordPieceSize = 2;
             m_ScoreIncrement = 2;
             return;
-        case LEVEL_HARD:
+        case Level::HARD:
             m_WordPieceSize = 1;
             m_ScoreIncrement = 4;
             return;

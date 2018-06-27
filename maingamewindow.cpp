@@ -193,7 +193,7 @@ void MainGameWindow::_onButtonEasyToggled(bool checked)
 {
     if (checked)
     {
-        _switchToLevel(WordMixer::LEVEL_EASY);
+        _switchToLevel(WordMixer::Level::EASY);
     }
 }
                                                                                                     // slot handles changing the level to Easy when shortcut ALT+1 is entered
@@ -211,7 +211,7 @@ void MainGameWindow::_onButtonMediumToggled(bool checked)
 {
     if (checked)
     {
-        _switchToLevel(WordMixer::LEVEL_MEDIUM);
+        _switchToLevel(WordMixer::Level::MEDIUM);
     }
 }
                                                                                                     // slot handles changing the level to Medium when shortcut ALT+2 is entered
@@ -229,7 +229,7 @@ void MainGameWindow::_onButtonHardToggled(bool checked)
 {
     if (checked)
     {
-        _switchToLevel(WordMixer::LEVEL_HARD);
+        _switchToLevel(WordMixer::Level::HARD);
     }
 }
                                                                                                     // slot handles changing the level to Hard when shortcut ALT+3 is entered
@@ -340,7 +340,7 @@ void MainGameWindow::_addMixedWordsLabels()
                                                                                                        this means the current pair of words at the time when user chooses another level
                                                                                                        is not taken into account
                                                                                                     */
-void MainGameWindow::_switchToLevel(const int level)
+void MainGameWindow::_switchToLevel(WordMixer::Level level)
 {
     hide();
     m_FirstWord -> clear();                                                                           // any user input is erased as new words will be presented for guessing
