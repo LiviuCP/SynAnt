@@ -29,11 +29,11 @@ WordMixer::WordMixer(const QString &fname)
     {
         wordsBeginEndPositions[index] = -1;                                                         // they will be changed when mixWords() is called
     }
-    errorSuccessTexts.resize(ErrorSuccessCodesCount);                                               // allocate the required number of strings for the success message (first element) and error messages templates
-    errorSuccessTexts[SUCCESS] = "Congrats! You entered the correct words.";                        // template messages used for creating the final error & success messages
-    errorSuccessTexts[MISSING_WORDS] =
+    statusTexts.resize(StatusCodesCount);                                               // allocate the required number of strings for the success message (first element) and error messages templates
+    statusTexts[SUCCESS] = "Congrats! You entered the correct words.";                        // template messages used for creating the final error & success messages
+    statusTexts[MISSING_WORDS] =
                        "At least one of the words hasn't been entered.\n\nPlease try again!";
-    errorSuccessTexts[INCORRECT_WORDS] =
+    statusTexts[INCORRECT_WORDS] =
                                   "You didn't enter the correct words.\n\nPlease try again!";
 
     QFileInfo wordPairsFileStatus{m_FileName};                                                        // check if the file containing the word pairs exists, if not throw an exception that will end the application
@@ -362,10 +362,10 @@ void WordMixer::_createErrorMessage(const int errorCode)
     switch(errorCode)
     {
     case MISSING_WORDS:
-        statusMessage = errorSuccessTexts[MISSING_WORDS];
+        statusMessage = statusTexts[MISSING_WORDS];
         break;
     case INCORRECT_WORDS:
-        statusMessage = errorSuccessTexts[INCORRECT_WORDS];
+        statusMessage = statusTexts[INCORRECT_WORDS];
         break;
     default:
         ;                                                                                          // reserved for future use
@@ -376,7 +376,7 @@ void WordMixer::_createErrorMessage(const int errorCode)
                                                                                                    */
 void WordMixer::_createSuccessMessage()
 {                                                                                                  // shared variable statusMessage is used as success message
-    statusMessage = errorSuccessTexts[SUCCESS];
+    statusMessage = statusTexts[SUCCESS];
     statusMessage += "\n\nThe two words are:\n\n";
     statusMessage += "\t" + m_FirstWord + "\n";
     statusMessage += "\t" + m_SecondWord + "\n";
