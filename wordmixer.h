@@ -25,7 +25,6 @@
 #include <QString>
 #include <QTextStream>
 #include <random>
-#include "fatalerrors.h"
 
 class WordMixer
 {

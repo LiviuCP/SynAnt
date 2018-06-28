@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>IntroPane.qml</file>
+        <file>MainPane.qml</file>
+        <file>HelpPane.qml</file>
+    </qresource>
+</RCC>
