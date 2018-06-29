@@ -180,12 +180,10 @@ void MainGameWindow::getFirstTwoWords()
                                                                                                     // slot handles the button Reset click
 void MainGameWindow::_onButtonResetClicked()
 {
-    hide();
     m_WordMixer -> resetStatistics();                                                                 // all scores (obtained/total available) and number of pairs (guessed/total presented to user) are reset to 0
     m_HighScores -> setText(m_WordMixer -> getHighScoresMessage());
     m_NrOfWordPairs -> setText(m_WordMixer -> getNrOfPairsMessage());
     m_ResultsErrors -> setText(m_WordMixer -> getStatusMessage());                                      // results/errors box updated with reset message
-    show();
 }
 
                                                                                                     // slot handles changing the level to Easy when the designated radio button is checked (previously unchecked)
@@ -245,14 +243,12 @@ void MainGameWindow::_onButtonHardShortcut()
                                                                                                     // slot handles the button Submit click
 void MainGameWindow::_onButtonSubmitClicked()
 {
-                                                                                                    // step 1: hide main game window, clear the input buffers, set first input box as active
-    hide();
     QString firstInputWord{m_FirstWord -> text()};                                                    // stores the first word entered by user
     QString secondInputword{m_SecondWord -> text()};                                                  // stores the second word entered by user
     m_FirstWord -> clear();                                                                           // any user input is erased as new words will be presented for guessing
     m_SecondWord -> clear();
     m_FirstWord -> setFocus();
-                                                                                                    /* step 2: check if the user entered the correct words
+                                                                                                    /* step 1: check if the user entered the correct words
                                                                                                        - if the user input is correct, a success message is created and 2 new words are read and mixed
                                                                                                        - otherwise a error message is created and the mixed words remain unchanged (user should re-enter the words)
                                                                                                     */
@@ -266,8 +262,7 @@ void MainGameWindow::_onButtonSubmitClicked()
         m_HighScores -> setText(m_WordMixer -> getHighScoresMessage());                                 // and update the statistics labels with the new values
         m_NrOfWordPairs -> setText(m_WordMixer -> getNrOfPairsMessage());
     }
-    m_ResultsErrors -> setText(m_WordMixer -> getStatusMessage());                                      // step 3: update errors/results section with the status message (can be a success or error message depending on previous check)
-    show();                                                                                         // step 4: show the updated main game window
+    m_ResultsErrors -> setText(m_WordMixer -> getStatusMessage());                                      // step 2: update errors/results section with the status message (can be a success or error message depending on previous check)
 }
                                                                                                     // slot handles the button Hints click
 void MainGameWindow::_onButtonHintsClicked()
@@ -278,20 +273,18 @@ void MainGameWindow::_onButtonHintsClicked()
                                                                                                     // slot handles the button Show results click
 void MainGameWindow::_onButtonResultsClicked()
 {
-    hide();                                                                                         // step 1: hide main game window (will be shown again once updated)
     m_FirstWord -> clear();                                                                           // any user input is erased as new words will be presented for guessing
     m_SecondWord -> clear();
     m_FirstWord -> setFocus();
-    m_WordMixer -> retrieveResults();                                                                 // step 2: results message created, 2 new words are read and mixed
-    m_WordMixer -> updateStatistics(PARTIAL_UPDATE);                                                  // step 3: update the total score and the total number of pairs only (user gets no points and the guessed number of pairs stays unchanged)
-    m_WordMixer -> mixWords();                                                                        // step 4: fetch a new pair of mixed words
-    _removeMixedWordsLabels();                                                                       // step 5: update mixed words label array (remove old labels, create the ones for the new words, add them to layout
+    m_WordMixer -> retrieveResults();                                                                 // step 1: results message created, 2 new words are read and mixed
+    m_WordMixer -> updateStatistics(PARTIAL_UPDATE);                                                  // step 2: update the total score and the total number of pairs only (user gets no points and the guessed number of pairs stays unchanged)
+    m_WordMixer -> mixWords();                                                                        // step 3: fetch a new pair of mixed words
+    _removeMixedWordsLabels();                                                                       // step 4: update mixed words label array (remove old labels, create the ones for the new words, add them to layout
     _createMixedWordsLabels();
     _addMixedWordsLabels();
-    m_HighScores -> setText(m_WordMixer -> getHighScoresMessage());                                     // step 6: update statistics labels
+    m_HighScores -> setText(m_WordMixer -> getHighScoresMessage());                                     // step 5: update statistics labels
     m_NrOfWordPairs -> setText(m_WordMixer -> getNrOfPairsMessage());
-    m_ResultsErrors -> setText(m_WordMixer -> getStatusMessage());                                      // step 7: update the results/errors section with the created results message
-    show();                                                                                         // step 8: show the updated main game window
+    m_ResultsErrors -> setText(m_WordMixer -> getStatusMessage());                                      // step 6: update the results/errors section with the created results message
 }
 
                                                                                                     // removes the labels containing the pieces of the 2 mixed words from the mixed words layout; de-allocates them from memory
@@ -342,7 +335,6 @@ void MainGameWindow::_addMixedWordsLabels()
                                                                                                     */
 void MainGameWindow::_switchToLevel(WordMixer::Level level)
 {
-    hide();
     m_FirstWord -> clear();                                                                           // any user input is erased as new words will be presented for guessing
     m_SecondWord -> clear();
     m_FirstWord -> setFocus();
@@ -352,7 +344,6 @@ void MainGameWindow::_switchToLevel(WordMixer::Level level)
     _createMixedWordsLabels();
     _addMixedWordsLabels();
     m_ResultsErrors -> setText(m_WordMixer -> getStatusMessage());                                      // Step 4: update the errors/results label to reflect that the level has changed
-    show();
 }
 
 
