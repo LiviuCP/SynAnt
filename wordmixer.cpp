@@ -16,7 +16,7 @@ WordMixer::WordMixer(const QString &fname)
       m_MixedWords{},                                                                                 // initially empty, will be filled in when the words are mixed by calling mixWords()
       m_AreSynonyms{true},                                                                            // by default the words are synonyms (this is just for having the variable initialized)
       m_StatusMessage{"No user input so far."},                                                       // contains the message to be displayed in the errors/results label of the main game window
-      wordsBeginEndPositions{},                                                                     // also initialized empty, will be filled in when the positions of the first/last piece of the each word are determined (in the words mixing process: mixWords() )
+      m_WordsBeginEndPositions{},                                                                     // also initialized empty, will be filled in when the positions of the first/last piece of the each word are determined (in the words mixing process: mixWords() )
       m_ObtainedScore{0},                                                                             // all statistics (scores, number of pairs) initially set to 0 (this is reflected in the scores and number of pairs texts too)
       m_totalAvailableScore{0},
       m_GuessedWordPairs{0},
@@ -25,10 +25,10 @@ WordMixer::WordMixer(const QString &fname)
       m_HighScoresMessage{"High-score: 0/0"},
       m_NrOfPairsMessage{"Word pairs: 0/0"}
 {
-    wordsBeginEndPositions.resize(IndexesCount);
+    m_WordsBeginEndPositions.resize(IndexesCount);
     for (int index{0}; index<IndexesCount; index++)                                                 // default indexes for the 4 word pieces in the mixedWords vector will be -1;
     {
-        wordsBeginEndPositions[index] = -1;                                                         // they will be changed when mixWords() is called
+        m_WordsBeginEndPositions[index] = -1;                                                         // they will be changed when mixWords() is called
     }
     m_StatusTexts.resize(StatusCodesCount);                                               // allocate the required number of strings for the success message (first element) and error messages templates
     m_StatusTexts[SUCCESS] = "Congrats! You entered the correct words.";                        // template messages used for creating the final error & success messages
@@ -100,7 +100,7 @@ void WordMixer::mixWords()
     int firstWordLastPiecePos{m_WordPieceSize*(firstWordNrOfPieces-1)};                               // substring start position of the last piece of the first word
     int secondWordLastPiecePos{m_WordPieceSize*(secondWordNrOfPieces-1)};                             // substring start position of the last piece of the second word
                                                                                                     // start inserting the pieces of the first word
-    wordsBeginEndPositions[FIRST_BEGIN] =                                                           // insert the first piece of the first word and store the position index for further use
+    m_WordsBeginEndPositions[FIRST_BEGIN] =                                                           // insert the first piece of the first word and store the position index for further use
         _insertWordPiece(m_FirstWord, 0, wordPieceIndexes);
                                                                                                     // then continue inserting the other pieces of the first word until the last one is reached
     for (int wordPieceStartPos{m_WordPieceSize}; wordPieceStartPos<firstWordLastPiecePos;
@@ -108,9 +108,9 @@ void WordMixer::mixWords()
     {
         _insertWordPiece(m_FirstWord, wordPieceStartPos, wordPieceIndexes);
     }
-    wordsBeginEndPositions[FIRST_END] =                                                             // insert the last piece of the first word and store the position index for further use
+    m_WordsBeginEndPositions[FIRST_END] =                                                             // insert the last piece of the first word and store the position index for further use
                     _insertWordPiece(m_FirstWord, firstWordLastPiecePos, wordPieceIndexes);
-    wordsBeginEndPositions[SECOND_BEGIN] =                                                          // insert the first piece of the second word and store the position index for further use
+    m_WordsBeginEndPositions[SECOND_BEGIN] =                                                          // insert the first piece of the second word and store the position index for further use
                     _insertWordPiece(m_SecondWord, 0, wordPieceIndexes);
                                                                                                     // then continue inserting the pieces of the second word until the last one is reached
     for (int wordPieceStartPos{m_WordPieceSize}; wordPieceStartPos<secondWordLastPiecePos;
@@ -118,7 +118,7 @@ void WordMixer::mixWords()
     {
         _insertWordPiece(m_SecondWord, wordPieceStartPos, wordPieceIndexes);
     }
-    wordsBeginEndPositions[SECOND_END] =                                                            // insert the last piece of the second word and store the position index for further use
+    m_WordsBeginEndPositions[SECOND_END] =                                                            // insert the last piece of the second word and store the position index for further use
                   _insertWordPiece(m_SecondWord, secondWordLastPiecePos, wordPieceIndexes);
 
 }
@@ -191,22 +191,22 @@ const QString& WordMixer::getNrOfPairsMessage() const
                                                                                                    // this function is used by main window to locate the position of the first piece of the first word in the mixedWords vector
 int WordMixer::getFirstWordBeginIndex() const
 {
-    return wordsBeginEndPositions[FIRST_BEGIN];
+    return m_WordsBeginEndPositions[FIRST_BEGIN];
 }
                                                                                                    // this function is used by main window to locate the position of the last piece of the first word in the mixedWords vector
 int WordMixer::getFirstWordEndIndex() const
 {
-    return wordsBeginEndPositions[FIRST_END];
+    return m_WordsBeginEndPositions[FIRST_END];
 }
                                                                                                    // this function is used by main window to locate the position of the first piece of the second word in the mixedWords vector
 int WordMixer::getSecondWordBeginIndex() const
 {
-    return wordsBeginEndPositions[SECOND_BEGIN];
+    return m_WordsBeginEndPositions[SECOND_BEGIN];
 }
                                                                                                    // this function is used by main window to locate the position of the last piece of the second word in the mixedWords vector
 int WordMixer::getSecondWordEndIndex() const
 {
-    return wordsBeginEndPositions[SECOND_END];
+    return m_WordsBeginEndPositions[SECOND_END];
 }
                                                                                                    // this function is used for changing the level parameters to specific values when user changes level
 void WordMixer::setLevel(Level level)
