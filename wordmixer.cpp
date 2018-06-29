@@ -15,7 +15,7 @@ WordMixer::WordMixer(const QString &fname)
       m_SecondWord{},                                                                                 // same for the second word
       m_MixedWords{},                                                                                 // initially empty, will be filled in when the words are mixed by calling mixWords()
       m_AreSynonyms{true},                                                                            // by default the words are synonyms (this is just for having the variable initialized)
-      statusMessage{"No user input so far."},                                                       // contains the message to be displayed in the errors/results label of the main game window
+      m_StatusMessage{"No user input so far."},                                                       // contains the message to be displayed in the errors/results label of the main game window
       wordsBeginEndPositions{},                                                                     // also initialized empty, will be filled in when the positions of the first/last piece of the each word are determined (in the words mixing process: mixWords() )
       m_ObtainedScore{0},                                                                             // all statistics (scores, number of pairs) initially set to 0 (this is reflected in the scores and number of pairs texts too)
       m_totalAvailableScore{0},
@@ -30,11 +30,11 @@ WordMixer::WordMixer(const QString &fname)
     {
         wordsBeginEndPositions[index] = -1;                                                         // they will be changed when mixWords() is called
     }
-    statusTexts.resize(StatusCodesCount);                                               // allocate the required number of strings for the success message (first element) and error messages templates
-    statusTexts[SUCCESS] = "Congrats! You entered the correct words.";                        // template messages used for creating the final error & success messages
-    statusTexts[MISSING_WORDS] =
+    m_StatusTexts.resize(StatusCodesCount);                                               // allocate the required number of strings for the success message (first element) and error messages templates
+    m_StatusTexts[SUCCESS] = "Congrats! You entered the correct words.";                        // template messages used for creating the final error & success messages
+    m_StatusTexts[MISSING_WORDS] =
                        "At least one of the words hasn't been entered.\n\nPlease try again!";
-    statusTexts[INCORRECT_WORDS] =
+    m_StatusTexts[INCORRECT_WORDS] =
                                   "You didn't enter the correct words.\n\nPlease try again!";
 
     QFileInfo wordPairsFileStatus{m_FileName};                                                        // check if the file containing the word pairs exists, if not throw an exception that will end the application
@@ -158,24 +158,24 @@ const QVector<QString>& WordMixer::getMixedWordsStringArray() const
                                                                                                    // This function is called by the slot of the Show results button for requesting the message with the correct solution
 void WordMixer::retrieveResults()
 {                                                                                                  // shared variable statusMessage is used as results message (when the user pushes the Show results button)
-    statusMessage = "The correct words are: \n\n";
-    statusMessage += "\t" + m_FirstWord + "\n";
-    statusMessage += "\t" + m_SecondWord + "\n";
-    statusMessage += "\nThe words are: \n\n\t";
+    m_StatusMessage = "The correct words are: \n\n";
+    m_StatusMessage += "\t" + m_FirstWord + "\n";
+    m_StatusMessage += "\t" + m_SecondWord + "\n";
+    m_StatusMessage += "\nThe words are: \n\n\t";
     if (m_AreSynonyms)
     {
-        statusMessage += "synonyms";
+        m_StatusMessage += "synonyms";
     }
     else
     {
-        statusMessage += "antonyms";
+        m_StatusMessage += "antonyms";
     }
-    statusMessage += "\n\nNext pair of words is available below.";
+    m_StatusMessage += "\n\nNext pair of words is available below.";
 }
                                                                                                    // this function is used by main window to update the results/errors section (use cases documented above, see variable statusText)
 const QString& WordMixer::getStatusMessage() const
 {
-    return statusMessage;
+    return m_StatusMessage;
 }
 
                                                                                                    // this function is used by main window to update the high-scores label
@@ -211,7 +211,7 @@ int WordMixer::getSecondWordEndIndex() const
                                                                                                    // this function is used for changing the level parameters to specific values when user changes level
 void WordMixer::setLevel(Level level)
 {
-    statusMessage = "\nLevel changed.\n\nNo user input so far.\n";                                 // message to be displayed in the errors/results box of the main window when level is changed
+    m_StatusMessage = "\nLevel changed.\n\nNo user input so far.\n";                                 // message to be displayed in the errors/results box of the main window when level is changed
 
     setWordPieceSize(level);
     setScoreIncrement(level);
@@ -276,7 +276,7 @@ void WordMixer::resetStatistics()
     m_TotalWordPairs = 0;
     _createHighScoresMessage();                                                                     // after reset, texts are recalculated to reflect the new values in the scores and number of pairs labels
     _createNrOfPairsMessage();
-    statusMessage = "\nScores reset.\n\nLevel unchanged.\n\nNo user input so far.\n";              // message to be written in the results/errors box in main game window
+    m_StatusMessage = "\nScores reset.\n\nLevel unchanged.\n\nNo user input so far.\n";              // message to be written in the results/errors box in main game window
 }
                                                                                                    /* this function generates a random number which has a value between 0 and the maximum number of rows of the file
                                                                                                       the row with this number will then be read from the file by the retrieveWords() function
@@ -384,10 +384,10 @@ void WordMixer::_createErrorMessage(const int errorCode)
     switch(errorCode)
     {
     case MISSING_WORDS:
-        statusMessage = statusTexts[MISSING_WORDS];
+        m_StatusMessage = m_StatusTexts[MISSING_WORDS];
         break;
     case INCORRECT_WORDS:
-        statusMessage = statusTexts[INCORRECT_WORDS];
+        m_StatusMessage = m_StatusTexts[INCORRECT_WORDS];
         break;
     default:
         ;                                                                                          // reserved for future use
@@ -398,20 +398,20 @@ void WordMixer::_createErrorMessage(const int errorCode)
                                                                                                    */
 void WordMixer::_createSuccessMessage()
 {                                                                                                  // shared variable statusMessage is used as success message
-    statusMessage = statusTexts[SUCCESS];
-    statusMessage += "\n\nThe two words are:\n\n";
-    statusMessage += "\t" + m_FirstWord + "\n";
-    statusMessage += "\t" + m_SecondWord + "\n";
-    statusMessage += "\nThe words are: \n\n\t";
+    m_StatusMessage = m_StatusTexts[SUCCESS];
+    m_StatusMessage += "\n\nThe two words are:\n\n";
+    m_StatusMessage += "\t" + m_FirstWord + "\n";
+    m_StatusMessage += "\t" + m_SecondWord + "\n";
+    m_StatusMessage += "\nThe words are: \n\n\t";
     if (m_AreSynonyms)
     {
-        statusMessage += "synonyms";
+        m_StatusMessage += "synonyms";
     }
     else
     {
-        statusMessage += "antonyms";
+        m_StatusMessage += "antonyms";
     }
-    statusMessage += "\n\nNext pair of words is available below.";
+    m_StatusMessage += "\n\nNext pair of words is available below.";
 }
                                                                                                    // this function creates the text with the high-scores to be displayed in the main game window when the scores get updated
 void WordMixer::_createHighScoresMessage()
