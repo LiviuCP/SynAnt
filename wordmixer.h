@@ -89,8 +89,8 @@ private:
         INCORRECT_WORDS,                                                                            // 3) the words were not correctly entered (at least one of them)
         StatusCodesCount                                                                            // 4) total number of error and success message templates
     };
-    QVector<QString> statusTexts;                                                                   // stores the "raw" error and success messages (they will be converted by specific functions to final messages, which will be displayed by main window);
-    QString statusMessage;                                                                          // stores the message which will be displayed in the results/errors section of the main window
+    QVector<QString> m_StatusTexts;                                                                   // stores the "raw" error and success messages (they will be converted by specific functions to final messages, which will be displayed by main window);
+    QString m_StatusMessage;                                                                          // stores the message which will be displayed in the results/errors section of the main window
 
     QVector<int> wordsBeginEndPositions;                                                            // stores the indexes of the first and last piece of the 2 words in the mixedWords string vector
     enum WordsBeginEndIndexes {                                                                     // aliases for the indexes and size of the wordsBeginEndPositions vector (caution: no integer value assignment to be performed to any of the enum values!)
