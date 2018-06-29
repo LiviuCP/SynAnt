@@ -49,10 +49,13 @@ public:
     enum class Level {                                                                              // used for updating the parameters when the difficulty level changes
         EASY,
         MEDIUM,
-        HARD
+        HARD,
+        NrOfLevels
     };
 
     void setLevel(Level level);                                                                     // used for updating the level specific parameters when the difficulty level is changed by user
+    void setWordPieceSize(Level level);                                                             // used when setting level
+    void setScoreIncrement(Level level);                                                            // used when setting level
     void updateStatistics(const bool partialUpdate);                                                // updates the score/number of word pairs variables, triggers update of the score/number of word pairs texts to be displayed in the main window
     void resetStatistics();                                                                         // sets all score and number of pair variables to 0
 

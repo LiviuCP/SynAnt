@@ -2,6 +2,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QTextStream>
+#include <QtGlobal>
 #include "wordmixer.h"
 
                                                                                                     // constructor
@@ -211,21 +212,42 @@ int WordMixer::getSecondWordEndIndex() const
 void WordMixer::setLevel(Level level)
 {
     statusMessage = "\nLevel changed.\n\nNo user input so far.\n";                                 // message to be displayed in the errors/results box of the main window when level is changed
-    switch(level) {
-        case Level::EASY:
-            m_WordPieceSize = 3;
-            m_ScoreIncrement = 1;
-            return;
-        case Level::MEDIUM:
-            m_WordPieceSize = 2;
-            m_ScoreIncrement = 2;
-            return;
-        case Level::HARD:
-            m_WordPieceSize = 1;
-            m_ScoreIncrement = 4;
-            return;
-        default:
-            throw QString("Invalid difficulty level");                                             // to be triggered if any other level value than the 3 is passed as argument to the function
+
+    setWordPieceSize(level);
+    setScoreIncrement(level);
+}
+                                                                                                   // used for setting level params
+void WordMixer::setWordPieceSize(Level level)
+{
+    Q_ASSERT(static_cast<int>(level) >= 0 && static_cast<int>(level) < static_cast<int>(Level::NrOfLevels));
+
+    switch(level)
+    {
+    case Level::EASY:
+        m_WordPieceSize = 3;
+        break;
+    case Level::MEDIUM:
+        m_WordPieceSize = 2;
+        break;
+    case Level::HARD:
+        m_WordPieceSize = 1;
+    }
+}
+                                                                                                   // used for setting level params
+void WordMixer::setScoreIncrement(Level level)
+{
+    Q_ASSERT(static_cast<int>(level) >= 0 && static_cast<int>(level) < static_cast<int>(Level::NrOfLevels));
+
+    switch(level)
+    {
+    case Level::EASY:
+        m_ScoreIncrement = 1;
+        break;
+    case Level::MEDIUM:
+        m_ScoreIncrement = 2;
+        break;
+    case Level::HARD:
+        m_ScoreIncrement = 4;
     }
 }
                                                                                                    /* this function is used for updating the high-score and number of word pairs variables
