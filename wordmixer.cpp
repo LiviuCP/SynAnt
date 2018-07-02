@@ -18,7 +18,7 @@ WordMixer::WordMixer(const QString &fname)
       m_StatusMessage{"No user input so far."},                                                       // contains the message to be displayed in the errors/results label of the main game window
       m_WordsBeginEndPositions{},                                                                     // also initialized empty, will be filled in when the positions of the first/last piece of the each word are determined (in the words mixing process: mixWords() )
       m_ObtainedScore{0},                                                                             // all statistics (scores, number of pairs) initially set to 0 (this is reflected in the scores and number of pairs texts too)
-      m_totalAvailableScore{0},
+      m_TotalAvailableScore{0},
       m_GuessedWordPairs{0},
       m_TotalWordPairs{0},
       m_ScoreIncrement{2},                                                                            // default level is medium, the number by which the scores are increased coresponds to this level
@@ -262,7 +262,7 @@ void WordMixer::updateStatistics(const bool partialUpdate)
         m_ObtainedScore += m_ScoreIncrement;
         m_GuessedWordPairs++;
     }
-    m_totalAvailableScore += m_ScoreIncrement;                                                         // total available number of points and total number of pairs presented to the user will be updated
+    m_TotalAvailableScore += m_ScoreIncrement;                                                         // total available number of points and total number of pairs presented to the user will be updated
     m_TotalWordPairs++;                                                                              // anytime the user enters the words correctly (and pressses Submit) or he presses Show results button
     _createHighScoresMessage();                                                                     // also update the texts to be written in the high-scores and number of pairs labels of the main game window
     _createNrOfPairsMessage();
@@ -271,7 +271,7 @@ void WordMixer::updateStatistics(const bool partialUpdate)
 void WordMixer::resetStatistics()
 {
     m_ObtainedScore = 0;
-    m_totalAvailableScore = 0;
+    m_TotalAvailableScore = 0;
     m_GuessedWordPairs = 0;
     m_TotalWordPairs = 0;
     _createHighScoresMessage();                                                                     // after reset, texts are recalculated to reflect the new values in the scores and number of pairs labels
@@ -417,7 +417,7 @@ void WordMixer::_createSuccessMessage()
 void WordMixer::_createHighScoresMessage()
 {
     m_HighScoresMessage = "High-score: " + QString::number(m_ObtainedScore) + "/" +
-                                         QString::number(m_totalAvailableScore);
+                                         QString::number(m_TotalAvailableScore);
 }
                                                                                                    /* this function creates the text with the number of pairs to be displayed in the main game window
                                                                                                       when a new pair of words is presented to the user
