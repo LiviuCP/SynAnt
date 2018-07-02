@@ -101,7 +101,7 @@ private:
     };
 
     int m_ObtainedScore;                                                                            // score currently obtained by user (increases with each successful guess)
-    int m_totalAvailableScore;                                                                      // score that could have been obtained by user if all word pairs had been correctly guessed
+    int m_TotalAvailableScore;                                                                      // score that could have been obtained by user if all word pairs had been correctly guessed
     int m_GuessedWordPairs;                                                                         // number of pairs which have been correctly guessed by user
     int m_TotalWordPairs;                                                                           // total number of pairs available for guessing until the current moment
     int m_ScoreIncrement;                                                                           // number of points by which the scores increase (depends on difficulty level)
