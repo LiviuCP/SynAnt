@@ -6,8 +6,9 @@
 #include "wordmixer.h"
 
                                                                                                     // constructor
-WordMixer::WordMixer(const QString &fname)
-    : m_FileName{fname},                                                                              // absolute path of the file which contains the mixed words
+WordMixer::WordMixer(QObject *parent, const QString &fname)
+    : QObject(parent),
+      m_FileName{fname},                                                                              // absolute path of the file which contains the mixed words
       m_RowNumber{-1},                                                                                // will be assigned a new (random) value when generating the number of the row which will be read from file by calling getRowNumber()
       m_TotalRows{0},                                                                                 // will be updated by constructor when reading all rows from the file
       m_WordPieceSize{2},                                                                             // default size of the pieces in which the word is divided
@@ -178,16 +179,6 @@ const QString& WordMixer::getStatusMessage() const
     return m_StatusMessage;
 }
 
-                                                                                                   // this function is used by main window to update the high-scores label
-const QString& WordMixer::getHighScoresMessage() const
-{
-    return m_HighScoresMessage;
-}
-                                                                                                   // this function is used by main window to update the number of word pairs label
-const QString& WordMixer::getNrOfPairsMessage() const
-{
-    return m_NrOfPairsMessage;
-}
                                                                                                    // this function is used by main window to locate the position of the first piece of the first word in the mixedWords vector
 int WordMixer::getFirstWordBeginIndex() const
 {
@@ -208,75 +199,39 @@ int WordMixer::getSecondWordEndIndex() const
 {
     return m_WordsBeginEndPositions[SECOND_END];
 }
-                                                                                                   // this function is used for changing the level parameters to specific values when user changes level
-void WordMixer::setLevel(Level level)
-{
-    m_StatusMessage = "\nLevel changed.\n\nNo user input so far.\n";                                 // message to be displayed in the errors/results box of the main window when level is changed
-
-    setWordPieceSize(level);
-    setScoreIncrement(level);
-}
                                                                                                    // used for setting level params
-void WordMixer::setWordPieceSize(Level level)
+void WordMixer::setWordPieceSize(Game::Level level)
 {
-    Q_ASSERT(static_cast<int>(level) >= 0 && static_cast<int>(level) < static_cast<int>(Level::NrOfLevels));
+    Q_ASSERT(static_cast<int>(level) >= 0 && static_cast<int>(level) < static_cast<int>(Game::Level::NrOfLevels));
 
     switch(level)
     {
-    case Level::EASY:
+    case Game::Level::EASY:
         m_WordPieceSize = 3;
         break;
-    case Level::MEDIUM:
+    case Game::Level::MEDIUM:
         m_WordPieceSize = 2;
         break;
-    case Level::HARD:
+    case Game::Level::HARD:
         m_WordPieceSize = 1;
     }
 }
                                                                                                    // used for setting level params
-void WordMixer::setScoreIncrement(Level level)
+void WordMixer::setScoreIncrement(Game::Level level)
 {
-    Q_ASSERT(static_cast<int>(level) >= 0 && static_cast<int>(level) < static_cast<int>(Level::NrOfLevels));
+    Q_ASSERT(static_cast<int>(level) >= 0 && static_cast<int>(level) < static_cast<int>(Game::Level::NrOfLevels));
 
     switch(level)
     {
-    case Level::EASY:
+    case Game::Level::EASY:
         m_ScoreIncrement = 1;
         break;
-    case Level::MEDIUM:
+    case Game::Level::MEDIUM:
         m_ScoreIncrement = 2;
         break;
-    case Level::HARD:
+    case Game::Level::HARD:
         m_ScoreIncrement = 4;
     }
-}
-                                                                                                   /* this function is used for updating the high-score and number of word pairs variables
-                                                                                                      it also triggers updating of the high-score and number of word pairs texts which are displayed in the main game window
-                                                                                                      update can be partial (only the total score and the total number of pairs) or full (obtained score and correctly guessed
-                                                                                                      number of word pairs are updated too)
-                                                                                                   */
-void WordMixer::updateStatistics(const bool partialUpdate)
-{
-    if (!partialUpdate)                                                                            // if user enters the words correctly and presses Submit, the obtained points and the number of guessed word pairs gets updated
-    {
-        m_ObtainedScore += m_ScoreIncrement;
-        m_GuessedWordPairs++;
-    }
-    m_TotalAvailableScore += m_ScoreIncrement;                                                         // total available number of points and total number of pairs presented to the user will be updated
-    m_TotalWordPairs++;                                                                              // anytime the user enters the words correctly (and pressses Submit) or he presses Show results button
-    _createHighScoresMessage();                                                                     // also update the texts to be written in the high-scores and number of pairs labels of the main game window
-    _createNrOfPairsMessage();
-}
-                                                                                                   // this function is used for resetting all statistics (scores, number of pairs) variables to 0 when the user presses the Reset button
-void WordMixer::resetStatistics()
-{
-    m_ObtainedScore = 0;
-    m_TotalAvailableScore = 0;
-    m_GuessedWordPairs = 0;
-    m_TotalWordPairs = 0;
-    _createHighScoresMessage();                                                                     // after reset, texts are recalculated to reflect the new values in the scores and number of pairs labels
-    _createNrOfPairsMessage();
-    m_StatusMessage = "\nScores reset.\n\nLevel unchanged.\n\nNo user input so far.\n";              // message to be written in the results/errors box in main game window
 }
                                                                                                    /* this function generates a random number which has a value between 0 and the maximum number of rows of the file
                                                                                                       the row with this number will then be read from the file by the retrieveWords() function
@@ -412,20 +367,6 @@ void WordMixer::_createSuccessMessage()
         m_StatusMessage += "antonyms";
     }
     m_StatusMessage += "\n\nNext pair of words is available below.";
-}
-                                                                                                   // this function creates the text with the high-scores to be displayed in the main game window when the scores get updated
-void WordMixer::_createHighScoresMessage()
-{
-    m_HighScoresMessage = "High-score: " + QString::number(m_ObtainedScore) + "/" +
-                                         QString::number(m_TotalAvailableScore);
-}
-                                                                                                   /* this function creates the text with the number of pairs to be displayed in the main game window
-                                                                                                      when a new pair of words is presented to the user
-                                                                                                   */
-void WordMixer::_createNrOfPairsMessage()
-{
-    m_NrOfPairsMessage = "Word pairs: " + QString::number(m_GuessedWordPairs) + "/" +
-                                        QString::number(m_TotalWordPairs);
 }
                                                                                                    /* This function inserts one of the pieces (substrings) belonging to one of the words (const QString &word)
                                                                                                       into a element of the mixedWords vector

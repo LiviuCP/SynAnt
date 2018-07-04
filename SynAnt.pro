@@ -13,7 +13,8 @@ SOURCES += \
     hintswindow.cpp \
     maingamewindow.cpp \
     wordmixer.cpp \
-    fatalerrors.cpp
+    fatalerrors.cpp \
+    scoreitem.cpp
 
 
 HEADERS += \
@@ -21,4 +22,6 @@ HEADERS += \
     hintswindow.h \
     maingamewindow.h \
     wordmixer.h \
-    fatalerrors.h
+    fatalerrors.h \
+    scoreitem.h \
+    game.h

@@ -28,6 +28,7 @@
 #include <QRadioButton>
 #include "hintswindow.h"
 #include "wordmixer.h"
+#include "scoreitem.h"
 
 class HintsWindow;                                                                                  // forward declaration necessary (MGW contains pointer to HW and viceversa)
 class MainGameWindow : public QWidget
@@ -39,6 +40,12 @@ public:
     void assignWordMixer(WordMixer *wm);                                                            // links the main game window to the word mixer object
     bool windowAlreadyAccessed() const;                                                             // used by the slot of the hints window Ok button to determine if the main game window has already been accessed once by user
     void getFirstTwoWords();                                                                        // called when main game window is accessed for the first time (when clicking Play from introduction window or Ok from HintsWindow, if HW was opened from intro window)
+
+public slots:
+    void onStatisticsUpdated();
+
+signals:
+    void levelChanged(Game::Level level);
 
 private slots:
     void _onButtonResetClicked();                                                                   // executes when button Reset is clicked
@@ -65,6 +72,7 @@ private:
     QRadioButton* m_LevelMediumButton;
     QRadioButton* m_LevelHardButton;
     WordMixer* m_WordMixer;                                                                         // for accessing the WordMixer object in order to get 2 mixed words, check user input, retrieve the correct solution when user pushes the Show results button
+    ScoreItem* m_ScoreItem;                                                                         // keeps the score/statistics
     bool m_AlreadyAccessed;                                                                         // default false, set true after user enters main game window for the first time
     enum StatisticsUpdate {                                                                         // used for determining how the scores and number of pairs get updated
         FULL_UPDATE,                                                                                // all scores (obtained/total) and number of pairs (guessed/total) get updated (bool value is false)
@@ -74,7 +82,7 @@ private:
     void _removeMixedWordsLabels();                                                                 // removes labels of the current mixed words from the layout; de-allocates them from memory
     void _createMixedWordsLabels();                                                                 // re-allocates labels for the new mixed words, word pieces written into labels
     void _addMixedWordsLabels();                                                                    // adds the newly allocated labels to their layout
-    void _switchToLevel(WordMixer::Level level);                                                    // initiates difficulty level change according to user's request
+    void _switchToLevel(Game::Level level);                                                    // initiates difficulty level change according to user's request
 };
 
 #endif // MAINGAMEWINDOW_H

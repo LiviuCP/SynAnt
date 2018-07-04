@@ -10,6 +10,7 @@ MainGameWindow::MainGameWindow(QWidget *parent)
       m_HintsWindow{nullptr},                                                                         // will be assigned a new value when connecting the main game window to hints window by calling updateHintsWindowPtr()
       m_MixedWords{},                                                                                 // initially empty, will be updated when the mixed words labels are created by calling getFirstTwoWords()
       m_WordMixer{nullptr},                                                                           // will be assigned a new value when connecting the main game window to the word mixer object by calling assignWordMixer()
+      m_ScoreItem{new ScoreItem{this}},                                                               // prepare recording of statistics
       m_AlreadyAccessed{false}                                                                        // will be set true when getFirstTwoWords is called (user opens the main game window for the first time)
 {
     QHBoxLayout *statisticsLayout{new QHBoxLayout{}};                                               // 1) create the top layout, which contains the score and number of word pairs labels and the button for reseting their content
@@ -122,6 +123,8 @@ MainGameWindow::MainGameWindow(QWidget *parent)
                                                                                                     */
 
                                                                                                     // 7) connect the button signals to their slots
+    connect(m_ScoreItem,&ScoreItem::statisticsUpdated,this,&MainGameWindow::onStatisticsUpdated);
+    connect(this,&MainGameWindow::levelChanged,m_ScoreItem, &ScoreItem::setScoreIncrement);
     connect(resetButton,&QPushButton::clicked,this,&MainGameWindow::_onButtonResetClicked);
     connect(resetButtonShortcut,&QShortcut::activated,this,
                                                        &MainGameWindow::_onButtonResetClicked);
@@ -157,6 +160,9 @@ void MainGameWindow::updateHintsWinPtr(HintsWindow *hw)
 void MainGameWindow::assignWordMixer(WordMixer *wm)
 {
     m_WordMixer = wm;
+    if (m_WordMixer) {
+        connect(this,&MainGameWindow::levelChanged,m_WordMixer, &WordMixer::setWordPieceSize);
+    }
 }
                                                                                                     // this function is used by the slot of the hints window Ok button to determine if the main game window has already been accessed once by user
 bool MainGameWindow::windowAlreadyAccessed() const
@@ -173,17 +179,21 @@ void MainGameWindow::getFirstTwoWords()
     m_WordMixer -> mixWords();                                                                        // Step 1: a pair of words is fetched from file and mixed (this is solely the task of the class WordMixer)
     _createMixedWordsLabels();                                                                       // Step 2: the main game window takes over and creates the labels for the mixed words pieces
     _addMixedWordsLabels();                                                                          // Step 3: the created label array is added to the layout (mixedWordsLayout)
-    m_HighScores -> setText(m_WordMixer -> getHighScoresMessage());                                     // Step 5: update the high-scores and number of pairs labels
-    m_NrOfWordPairs -> setText(m_WordMixer -> getNrOfPairsMessage());
+    m_ScoreItem -> resetStatistics();
     m_ResultsErrors -> setText(m_WordMixer -> getStatusMessage());                                      // Step 4: update the box with results/errors mentioning that the user hasn't submitted any input yet
+}
+
+void MainGameWindow::onStatisticsUpdated()
+{
+    QVector<int> scoresPairs{m_ScoreItem -> getStatistics()};
+    m_HighScores -> setText("High-score: " + QString::number(scoresPairs[0]) + "/" + QString::number(scoresPairs[1]));
+    m_NrOfWordPairs -> setText("Word pairs: " + QString::number(scoresPairs[2]) + "/" + QString::number(scoresPairs[3]));
 }
                                                                                                     // slot handles the button Reset click
 void MainGameWindow::_onButtonResetClicked()
 {
     hide();
-    m_WordMixer -> resetStatistics();                                                                 // all scores (obtained/total available) and number of pairs (guessed/total presented to user) are reset to 0
-    m_HighScores -> setText(m_WordMixer -> getHighScoresMessage());
-    m_NrOfWordPairs -> setText(m_WordMixer -> getNrOfPairsMessage());
+    m_ScoreItem -> resetStatistics();                                                                 // all scores (obtained/total available) and number of pairs (guessed/total presented to user) are reset to 0
     m_ResultsErrors -> setText(m_WordMixer -> getStatusMessage());                                      // results/errors box updated with reset message
     show();
 }
@@ -193,7 +203,7 @@ void MainGameWindow::_onButtonEasyToggled(bool checked)
 {
     if (checked)
     {
-        _switchToLevel(WordMixer::Level::EASY);
+        _switchToLevel(Game::Level::EASY);
     }
 }
                                                                                                     // slot handles changing the level to Easy when shortcut ALT+1 is entered
@@ -211,7 +221,7 @@ void MainGameWindow::_onButtonMediumToggled(bool checked)
 {
     if (checked)
     {
-        _switchToLevel(WordMixer::Level::MEDIUM);
+        _switchToLevel(Game::Level::MEDIUM);
     }
 }
                                                                                                     // slot handles changing the level to Medium when shortcut ALT+2 is entered
@@ -229,7 +239,7 @@ void MainGameWindow::_onButtonHardToggled(bool checked)
 {
     if (checked)
     {
-        _switchToLevel(WordMixer::Level::HARD);
+        _switchToLevel(Game::Level::HARD);
     }
 }
                                                                                                     // slot handles changing the level to Hard when shortcut ALT+3 is entered
@@ -258,13 +268,11 @@ void MainGameWindow::_onButtonSubmitClicked()
                                                                                                     */
     if (m_WordMixer -> checkWords(firstInputWord,secondInputword))
     {
-        m_WordMixer -> updateStatistics(FULL_UPDATE);                                                 // if user input is correct, request update all statistics values (obtained/total score, correctly guessed/total nr of pairs)
         m_WordMixer -> mixWords();                                                                    // then request a new pair of words
         _removeMixedWordsLabels();                                                                   // update mixed words labels with the new words pair
         _createMixedWordsLabels();
         _addMixedWordsLabels();
-        m_HighScores -> setText(m_WordMixer -> getHighScoresMessage());                                 // and update the statistics labels with the new values
-        m_NrOfWordPairs -> setText(m_WordMixer -> getNrOfPairsMessage());
+        m_ScoreItem -> updateStatistics(FULL_UPDATE);
     }
     m_ResultsErrors -> setText(m_WordMixer -> getStatusMessage());                                      // step 3: update errors/results section with the status message (can be a success or error message depending on previous check)
     show();                                                                                         // step 4: show the updated main game window
@@ -283,13 +291,11 @@ void MainGameWindow::_onButtonResultsClicked()
     m_SecondWord -> clear();
     m_FirstWord -> setFocus();
     m_WordMixer -> retrieveResults();                                                                 // step 2: results message created, 2 new words are read and mixed
-    m_WordMixer -> updateStatistics(PARTIAL_UPDATE);                                                  // step 3: update the total score and the total number of pairs only (user gets no points and the guessed number of pairs stays unchanged)
+    m_ScoreItem -> updateStatistics(PARTIAL_UPDATE);                                                  // step 3: update the total score and the total number of pairs only (user gets no points and the guessed number of pairs stays unchanged)
     m_WordMixer -> mixWords();                                                                        // step 4: fetch a new pair of mixed words
     _removeMixedWordsLabels();                                                                       // step 5: update mixed words label array (remove old labels, create the ones for the new words, add them to layout
     _createMixedWordsLabels();
     _addMixedWordsLabels();
-    m_HighScores -> setText(m_WordMixer -> getHighScoresMessage());                                     // step 6: update statistics labels
-    m_NrOfWordPairs -> setText(m_WordMixer -> getNrOfPairsMessage());
     m_ResultsErrors -> setText(m_WordMixer -> getStatusMessage());                                      // step 7: update the results/errors section with the created results message
     show();                                                                                         // step 8: show the updated main game window
 }
@@ -340,13 +346,13 @@ void MainGameWindow::_addMixedWordsLabels()
                                                                                                        this means the current pair of words at the time when user chooses another level
                                                                                                        is not taken into account
                                                                                                     */
-void MainGameWindow::_switchToLevel(WordMixer::Level level)
+void MainGameWindow::_switchToLevel(Game::Level level)
 {
     hide();
     m_FirstWord -> clear();                                                                           // any user input is erased as new words will be presented for guessing
     m_SecondWord -> clear();
     m_FirstWord -> setFocus();
-    m_WordMixer -> setLevel(level);                                                                   // Step 1: change the level parameters to the values coresponding to the chosen new level
+    Q_EMIT levelChanged(level);                                                                       // Step 1: change the level parameters to the values coresponding to the chosen new level
     m_WordMixer -> mixWords();                                                                        // Step 2: get a new pair of words
     _removeMixedWordsLabels();                                                                       // Step 3: update the labels of the mixed words pair in the main game window
     _createMixedWordsLabels();

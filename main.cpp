@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
                           "MainGameWindow,"
                           "FatalErrors{background-color: grey;}");
     try {
-        WordMixer wordMixer{QApplication::applicationDirPath() + "/data"};                          /* application core, handles the mixing of the read words pair and the checking of the user input
+        WordMixer wordMixer{nullptr, QApplication::applicationDirPath() + "/data"};                 /* application core, handles the mixing of the read words pair and the checking of the user input
                                                                                                        the file from which words are read will be in the same directory with the application, so its path
                                                                                                        will be built using the application directory path as base
                                                                                                     */

@@ -24,14 +24,16 @@
 #include <QVector>
 #include <QString>
 #include <QTextStream>
+#include <QObject>
 #include <random>
 #include "fatalerrors.h"
+#include "game.h"
 
-class WordMixer
+class WordMixer : public QObject
 {
+    Q_OBJECT
 public:
-    WordMixer() = delete;                                                                           // prevent using the default constructor (a filename is always required)
-    explicit WordMixer(const QString &m_FileName);                                                  // constructor, takes the name of the file from which words are read as argument
+    explicit WordMixer(QObject *parent = nullptr, const QString &m_FileName = "");                  // constructor, takes the name of the file from which words are read as argument
 
     void mixWords();                                                                                // splits the words into pieces and mixes them into a single word
     bool checkWords(const QString &m_FirstWord, const QString &m_SecondWord);                       // checks the 2 words entered by user, returns true if they are correct
@@ -39,34 +41,22 @@ public:
     void retrieveResults();                                                                         // called when the user clicks the Results button; creates the message with the solution (the 2 words that should have been guessed by user)
 
     const QString& getStatusMessage() const;                                                        // used by main window to update the results/errors section (use cases documented above, see variable statusText)
-    const QString& getHighScoresMessage() const;                                                    // used by main game window for retrieving the text with the high-scores
-    const QString& getNrOfPairsMessage() const;                                                     // used by main game window for retrieving the text with the number of word pairs
 
     int getFirstWordBeginIndex() const;                                                             // used by main window to locate the position of the first piece of the first word in the mixedWords vector
     int getFirstWordEndIndex() const;                                                               // used by main window to locate the position of the last piece of the first word in the mixedWords vector
     int getSecondWordBeginIndex() const;                                                            // used by main window to locate the position of the first piece of the second word in the mixedWords vector
     int getSecondWordEndIndex() const;                                                              // used by main window to locate the position of the last piece of the second word in the mixedWords vector
 
-    enum class Level {                                                                              // used for updating the parameters when the difficulty level changes
-        EASY,
-        MEDIUM,
-        HARD,
-        NrOfLevels
-    };
+    void setScoreIncrement(Game::Level level);                                                      // used when setting level
 
-    void setLevel(Level level);                                                                     // used for updating the level specific parameters when the difficulty level is changed by user
-    void setWordPieceSize(Level level);                                                             // used when setting level
-    void setScoreIncrement(Level level);                                                            // used when setting level
-    void updateStatistics(const bool partialUpdate);                                                // updates the score/number of word pairs variables, triggers update of the score/number of word pairs texts to be displayed in the main window
-    void resetStatistics();                                                                         // sets all score and number of pair variables to 0
+public slots:
+    void setWordPieceSize(Game::Level level);                                                       // used when setting level
 
 private:
     void _getRowNumber();                                                                           // generates a random number which is the row number from which the word pair is read
     void _retrieveWords();                                                                          // reads the row from the file, separates the words, writes them to the firstWord and secondWord strings and updates the areSynonyms variable
     void _createErrorMessage(const int errorCode);                                                  // creates the final error message
     void _createSuccessMessage();                                                                   // creates the final success message
-    void _createHighScoresMessage();                                                                // updates the text with the scores that is displayed in the main game window (when these change)
-    void _createNrOfPairsMessage();                                                                 // updates the text with the number of word pairs that is displayed in the main game window (when a new word pair is presented to the user)
     int  _insertWordPiece(const QString &word, int firstCharPos,                                    // inserts a piece (substring) from one of the words in one of the elements of the string vector containing the mixed words
                                     QVector<int> &wordPieceIndexes);
 
