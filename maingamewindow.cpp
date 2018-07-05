@@ -199,9 +199,7 @@ void MainGameWindow::_onButtonEasyShortcut()
 {
     if (!(m_LevelEasyButton -> isChecked()))                                                          // if current level is NOT Easy, check the radio button
     {
-        hide();
         m_LevelEasyButton -> setChecked(true);                                                        // this triggers the toggled() signal and the button slot executes as if the button was clicked
-        show();
     }
 }
                                                                                                     // slot handles changing the level to Medium when the designated radio button is checked (previously unchecked)
@@ -217,9 +215,7 @@ void MainGameWindow::_onButtonMediumShortcut()
 {
     if (!(m_LevelMediumButton -> isChecked()))                                                        // if current level is NOT Medium, check the radio button
     {
-        hide();
         m_LevelMediumButton -> setChecked(true);                                                      // this triggers the toggled() signal and the button slot executes as if the button was clicked
-        show();
     }
 }
                                                                                                     // slot handles changing the level to Hard when the designated radio button is checked (previously unchecked)
@@ -235,9 +231,7 @@ void MainGameWindow::_onButtonHardShortcut()
 {
     if (!(m_LevelHardButton -> isChecked()))                                                          // if current level is NOT Hard, check the radio button
     {
-        hide();
         m_LevelHardButton -> setChecked(true);                                                        // this triggers the toggled() signal and the button slot executes as if the button was clicked
-        show();
     }
 }
                                                                                                     // slot handles the button Submit click
