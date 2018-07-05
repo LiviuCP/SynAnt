@@ -4,6 +4,7 @@
 #include <QApplication>
 #include <QShortcut>
 #include "fatalerrors.h"
+#include "gamestrings.h"
 
 FatalErrors::FatalErrors(QWidget *parent)                                                           // constructor
     : QWidget{parent},
@@ -17,18 +18,18 @@ FatalErrors::FatalErrors(QWidget *parent)                                       
     messageLayout -> addWidget(m_ErrorMessage,1);
                                                                                                     // second, create the lower part of the window, namely the Ok button
     QHBoxLayout *okButtonLayout{new QHBoxLayout{}};
-    QPushButton *okButton{new QPushButton{"Ok"}};
+    QPushButton *okButton{new QPushButton{GameStrings::c_FatalErrorQuitButtonLabel}};
     okButton -> setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    okButton -> setToolTip("Click or hit ALT+O/ENTER to exit the game.");
-    QShortcut *okButtonShortcut{new QShortcut{QKeySequence{"ALT+O"},this}};                         // Ok button primary key combination (shortcut)
-    QShortcut *okButtonAltShortcut{new QShortcut{QKeySequence{"RETURN"},this}};                     // Ok button alternative key combination (shortcut)
+    okButton -> setToolTip(GameStrings::c_FatalErrorQuitButtonToolTip);
+    QShortcut *okButtonShortcut{new QShortcut{QKeySequence{GameStrings::c_FatalErrorQuitButtonShortcut},this}}; // Ok button primary key combination (shortcut)
+    QShortcut *okButtonAltShortcut{new QShortcut{QKeySequence{GameStrings::c_FatalErrorQuitButtonAltShortcut},this}}; // Ok button alternative key combination (shortcut)
     okButtonLayout -> addWidget(okButton,1);
                                                                                                     // third, everything to be added to the main widget layout
     QVBoxLayout *mainLayout{new QVBoxLayout{}};
     mainLayout -> addLayout(messageLayout,1);
     mainLayout -> addLayout(okButtonLayout);
     setLayout(mainLayout);
-    setToolTip("A fatal error occurred. Corrective actions are required.");
+    setToolTip(GameStrings::c_FatalErrorWindowToolTip);
                                                                                                     // fourth, connect signals to slots
     connect(okButton,&QPushButton::clicked,qApp,&QApplication::quit);
     connect(okButtonShortcut,&QShortcut::activated,qApp,&QApplication::quit);

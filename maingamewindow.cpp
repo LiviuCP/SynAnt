@@ -4,6 +4,7 @@
 #include <QGroupBox>
 #include <QShortcut>
 #include "maingamewindow.h"
+#include "gamestrings.h"
 
 MainGameWindow::MainGameWindow(QWidget *parent)
     : QWidget{parent},
@@ -16,20 +17,14 @@ MainGameWindow::MainGameWindow(QWidget *parent)
     QHBoxLayout *statisticsLayout{new QHBoxLayout{}};                                               // 1) create the top layout, which contains the score and number of word pairs labels and the button for reseting their content
     m_HighScores = new QLabel{};
     m_HighScores -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
-    QString highScoresToolTip{"Displays the game scores:\n"};
-    highScoresToolTip += "\t1) Current score obtained by user\n";
-    highScoresToolTip += "\t2) Maximum possible score if all word pairs had been guessed.";
-    m_HighScores -> setToolTip(highScoresToolTip);
+    m_HighScores -> setToolTip(GameStrings::c_HighscoresToolTip);
     m_NrOfWordPairs = new QLabel{};
     m_NrOfWordPairs -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
-    QString nrOfWordPairsToolTip{"Displays the number of word pairs: \n"};
-    nrOfWordPairsToolTip += "\t1) Current number of pairs the user has guessed so far\n";
-    nrOfWordPairsToolTip += "\t2) Total number of pairs presented to user so far.";
-    m_NrOfWordPairs -> setToolTip(nrOfWordPairsToolTip);
-    QPushButton *resetButton{new QPushButton{"Reset"}};
+    m_NrOfWordPairs -> setToolTip(GameStrings::c_WordPairsToolTip);
+    QPushButton *resetButton{new QPushButton{GameStrings::c_ResetButtonLabel}};
     resetButton -> setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    resetButton -> setToolTip("Click or hit ALT+R for resetting the scores and number of pairs.");
-    QShortcut *resetButtonShortcut{new QShortcut{QKeySequence{"ALT+R"},this}};                      // Reset button key combination (shortcut)
+    resetButton -> setToolTip(GameStrings::c_ResetButtonToolTip);
+    QShortcut *resetButtonShortcut{new QShortcut{QKeySequence{GameStrings::c_ResetShortcut},this}}; // Reset button key combination (shortcut)
     statisticsLayout -> addWidget(m_HighScores);
     statisticsLayout -> addWidget(m_NrOfWordPairs);
     statisticsLayout -> addSpacing(30);
@@ -42,27 +37,19 @@ MainGameWindow::MainGameWindow(QWidget *parent)
     QHBoxLayout *levelsStatusReqInputLayout{new QHBoxLayout{}};
     QLabel *requestInput{new QLabel{}};
     requestInput -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-    requestInput -> setToolTip("Displays the game instructions.");
-    QString requestInputText{"\nPlease enter the 2 words.\n"};
-    requestInputText += "\nHit Submit when ready.\n";
-    requestInputText += "\nUse radio buttons to change difficulty level.\n";
-    requestInputText += "\nPress Reset to reset the scores and number of pairs.\n";
+    requestInput -> setToolTip(GameStrings::c_GameInstructionsToolTip);
+    QString requestInputText{GameStrings::c_InstructionsMessage};
     requestInput -> setText(requestInputText);
     QGroupBox *levelButtonsBox{new QGroupBox{}};
     levelButtonsBox -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
-    QString levelButtonsToolTip{"Choose the desired difficulty level: \n"};
-    levelButtonsToolTip += "Click radio button or hit: \n";
-    levelButtonsToolTip += "\t1) ALT+1 for Easy\n";
-    levelButtonsToolTip += "\t2) ALT+2 for Medium\n";
-    levelButtonsToolTip += "\t3) ALT+3 for Hard\n";
-    levelButtonsBox -> setToolTip(levelButtonsToolTip);
-    m_LevelEasyButton = new QRadioButton{"Easy"};
-    QShortcut *levelEasyShortcut{new QShortcut{QKeySequence{"ALT+1"},this}};                        // shortcut ALT+1 for accessing level Easy button from keyboard
-    m_LevelMediumButton = new QRadioButton{"Medium"};
-    QShortcut *levelMediumShortcut{new QShortcut{QKeySequence{"ALT+2"},this}};                      // shortcut ALT+2 for accessing level Medium button from keyboard
-    m_LevelMediumButton -> setChecked(true);                                                          // medium level (2 characters per word piece) is the default game level
-    m_LevelHardButton = new QRadioButton{"Hard"};
-    QShortcut *levelHardShortcut{new QShortcut{QKeySequence{"ALT+3"},this}};                        // shortcut ALT+3 for accessing the level Hard button from keyboard
+    levelButtonsBox -> setToolTip(GameStrings::c_LevelButtonsToolTip);
+    m_LevelEasyButton = new QRadioButton{GameStrings::c_LevelEasyButtonLabel};
+    QShortcut *levelEasyShortcut{new QShortcut{QKeySequence{GameStrings::c_LevelEasyButtonShortcut},this}};     // shortcut ALT+1 for accessing level Easy button from keyboard
+    m_LevelMediumButton = new QRadioButton{GameStrings::c_LevelMediumButtonLabel};
+    QShortcut *levelMediumShortcut{new QShortcut{QKeySequence{GameStrings::c_LevelMediumButtonShortcut},this}}; // shortcut ALT+2 for accessing level Medium button from keyboard
+    m_LevelMediumButton -> setChecked(true);                                                        // medium level (2 characters per word piece) is the default game level
+    m_LevelHardButton = new QRadioButton{GameStrings::c_LevelHardButtonLabel};
+    QShortcut *levelHardShortcut{new QShortcut{QKeySequence{GameStrings::c_LevelHardButtonShortcut},this}};     // shortcut ALT+3 for accessing the level Hard button from keyboard
     QVBoxLayout *levelButtonsLayout{new QVBoxLayout};
     levelButtonsLayout -> addWidget(m_LevelEasyButton);
     levelButtonsLayout -> addWidget(m_LevelMediumButton);
@@ -70,7 +57,7 @@ MainGameWindow::MainGameWindow(QWidget *parent)
     levelButtonsBox -> setLayout(levelButtonsLayout);
     m_ResultsErrors = new QLabel{};
     m_ResultsErrors -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-    m_ResultsErrors -> setToolTip("Displays the game status (e.g. if 2 correct words were entered).");
+    m_ResultsErrors -> setToolTip(GameStrings::c_GameStatusToolTip);
     levelsStatusReqInputLayout -> addWidget(requestInput);
     levelsStatusReqInputLayout -> addWidget(levelButtonsBox);
     levelsStatusReqInputLayout -> addWidget(m_ResultsErrors);
@@ -80,31 +67,31 @@ MainGameWindow::MainGameWindow(QWidget *parent)
                                                                                                     // 4) create the row with the 2 boxes used for entering the requested words
     QHBoxLayout *wordsLayout{new QHBoxLayout{}};
     m_FirstWord = new QLineEdit{};
-    m_FirstWord -> setToolTip("Enter the first word.");
+    m_FirstWord -> setToolTip(GameStrings::c_FirstWordToolTip);
     m_SecondWord = new QLineEdit{};
-    m_SecondWord -> setToolTip("Enter the second word.");
+    m_SecondWord -> setToolTip(GameStrings::c_SecondWordToolTip);
     wordsLayout -> addWidget(m_FirstWord);
     wordsLayout -> addWidget(m_SecondWord);
                                                                                                     // 5) create the row with the buttons
     QHBoxLayout *buttonsLayout{new QHBoxLayout{}};
     buttonsLayout -> setSpacing(25);
-    QPushButton *submitButton{new QPushButton{"Submit"}};                                           // button used by user for acknowledging the input
+    QPushButton *submitButton{new QPushButton{GameStrings::c_SubmitButtonLabel}};                    // button used by user for acknowledging the input
     submitButton -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
-    submitButton -> setToolTip("Click or hit ALT+S/ENTER after entering the 2 words.");
-    QShortcut *submitButtonShortcut{new QShortcut{QKeySequence{"ALT+S"},this}};                     // Submit button primary key combination (shortcut)
-    QShortcut *submitButtonAltShortcut{new QShortcut{QKeySequence{"RETURN"},this}};                 // Submit button alternative key combination (shortcut)
-    QPushButton *hintsButton{new QPushButton{"Help"}};                                              // button used for accessing the game instructions (hints window opens)
+    submitButton -> setToolTip(GameStrings::c_SubmitButtonToolTip);
+    QShortcut *submitButtonShortcut{new QShortcut{QKeySequence{GameStrings::c_SubmitButtonShortcut},this}}; // Submit button primary key combination (shortcut)
+    QShortcut *submitButtonAltShortcut{new QShortcut{QKeySequence{GameStrings::c_SubmitButtonAltShortcut},this}};  // Submit button alternative key combination (shortcut)
+    QPushButton *hintsButton{new QPushButton{GameStrings::c_HelpButtonLabel}};                       // button used for accessing the game instructions (hints window opens)
     hintsButton -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
-    hintsButton -> setToolTip("Click or hit ALT+H for accessing the detailed game instructions.");
-    QShortcut *hintsButtonShortcut{new QShortcut{QKeySequence{"ALT+H"},this}};                      // Hints button key combination (shortcut)
-    QPushButton *showResultsButton{new QPushButton{"Show results"}};                                // button used for asking the program to show the correct results
+    hintsButton -> setToolTip(GameStrings::c_HelpButtonToolTip);
+    QShortcut *hintsButtonShortcut{new QShortcut{QKeySequence{GameStrings::c_HelpButtonShortcut},this}}; // Hints button key combination (shortcut)
+    QPushButton *showResultsButton{new QPushButton{GameStrings::c_ResultsButtonLabel}};              // button used for asking the program to show the correct results
     showResultsButton -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
-    showResultsButton -> setToolTip("Click or hit ALT+B to have the correct words displayed.");
-    QShortcut *showResultsButtonShortcut{new QShortcut{QKeySequence{"ALT+B"},this}};                // Show results button key combination (shortcut)
-    QPushButton *quitButton{new QPushButton{"Quit"}};                                               // button used for quitting the application (window closes)
+    showResultsButton -> setToolTip(GameStrings::c_ResultsButtonToolTip);
+    QShortcut *showResultsButtonShortcut{new QShortcut{QKeySequence{GameStrings::c_ResultsButtonShortcut},this}}; // Show results button key combination (shortcut)
+    QPushButton *quitButton{new QPushButton{GameStrings::c_QuitButtonLabel}};                        // button used for quitting the application (window closes)
     quitButton -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
-    quitButton -> setToolTip("Click or hit ALT+Q to exit application.");
-    QShortcut *quitButtonShortcut{new QShortcut{QKeySequence{"ALT+Q"},this}};                       // Quit button key combination (shortcut)
+    quitButton -> setToolTip(GameStrings::c_QuitButtonToolTip);
+    QShortcut *quitButtonShortcut{new QShortcut{QKeySequence{GameStrings::c_QuitButtonShortcut},this}}; // Quit button key combination (shortcut)
     buttonsLayout -> addWidget(submitButton);
     buttonsLayout -> addWidget(hintsButton);
     buttonsLayout -> addWidget(showResultsButton);
@@ -117,7 +104,7 @@ MainGameWindow::MainGameWindow(QWidget *parent)
     mainLayout -> addLayout(wordsLayout);
     mainLayout -> addLayout(buttonsLayout);
     setLayout(mainLayout);
-    setToolTip("This is where the action happens!");
+    setToolTip(GameStrings::c_MainWindowToolTip);
     setAttribute(Qt::WA_AlwaysShowToolTips);                                                        /* ensure tooltips are shown when the window is hidden and then shown again
                                                                                                      without transitioning to another window (e.g. by slotButtonSubmitClicked() )
                                                                                                     */
@@ -320,18 +307,18 @@ void MainGameWindow::_createMixedWordsLabels()
         m_MixedWords[wordPieceIndex] = new QLabel{};
         m_MixedWords[wordPieceIndex] ->                                                               // retrieve the string from each mixed words array position
                  setText((m_WordMixer -> getMixedWordsStringArray()).at(wordPieceIndex));             // and write it into the newly created label (with the same position index)
-        m_MixedWords[wordPieceIndex] -> setStyleSheet("border: none;");
+        m_MixedWords[wordPieceIndex] -> setStyleSheet(GameStrings::c_WordEachPieceStyle);
     }
                                                                                                     // for the first piece of each word set text color green
     m_MixedWords[m_WordMixer -> getFirstWordBeginIndex()]
-                                        -> setStyleSheet("color: blue; border: none;");
+                                        -> setStyleSheet(GameStrings::c_WordBeginPieceStyle);
     m_MixedWords[m_WordMixer -> getSecondWordBeginIndex()]
-                                        -> setStyleSheet("color: blue; border: none;");
+                                        -> setStyleSheet(GameStrings::c_WordBeginPieceStyle);
                                                                                                     // for the last piece of each word set text color red
     m_MixedWords[m_WordMixer -> getFirstWordEndIndex()]
-                                        -> setStyleSheet("color: red; border: none;");
+                                        -> setStyleSheet(GameStrings::c_WordEndPieceStyle);
     m_MixedWords[m_WordMixer -> getSecondWordEndIndex()]
-                                        -> setStyleSheet("color: red; border: none;");
+                                        -> setStyleSheet(GameStrings::c_WordEndPieceStyle);
 }
                                                                                                     // this function adds the newly created labels to the mixed words layout
 void MainGameWindow::_addMixedWordsLabels()

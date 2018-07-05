@@ -21,32 +21,23 @@
 #include "introductionwindow.h"
 #include "hintswindow.h"
 #include "fatalerrors.h"
+#include "gamestrings.h"
 
 int main(int argc, char *argv[]) {
     QApplication app(argc,argv);
-    qApp -> setStyleSheet("QLabel,"                                                                 // define default style for all widgets/windows in the application, to be modified locally if needed
-                          "QGroupBox{background-color: grey; color: white; "
-                                                 "border: 1px solid white;}"
-                          "QPushButton{background-color: darkgrey; color: white;}"
-                          "QRadioButton{background-color: grey; color: white;}"
-                          "QToolTip{background-color: grey; color: yellow; "
-                                                "border: 1px solid yellow;}"
-                          "IntroductionWindow,"
-                          "HintsWindow,"
-                          "MainGameWindow,"
-                          "FatalErrors{background-color: grey;}");
+    qApp -> setStyleSheet(GameStrings::c_ApplicationStyle);
     try {
         WordMixer wordMixer{nullptr, QApplication::applicationDirPath() + "/data"};                 /* application core, handles the mixing of the read words pair and the checking of the user input
                                                                                                        the file from which words are read will be in the same directory with the application, so its path
                                                                                                        will be built using the application directory path as base
                                                                                                     */
         IntroductionWindow introductionWindow{};                                                    // first application window, launched when the program starts
-        introductionWindow.setWindowTitle("SynAnt - Welcome");
+        introductionWindow.setWindowTitle(GameStrings::c_IntroWindowTitle);
         HintsWindow hintsWindow{};                                                                  // second application window, launched by clicking on the Hints button
-        hintsWindow.setWindowTitle("SynAnt - Help");
+        hintsWindow.setWindowTitle(GameStrings::c_HelpWindowTitle);
         introductionWindow.updateHintsWinPtr(&hintsWindow);                                         // link introduction window to hints window
         MainGameWindow mainGameWindow{};                                                            // third application window, launched by clicking the Play or Ok buttons
-        mainGameWindow.setWindowTitle("SynAnt - let's Play!");
+        mainGameWindow.setWindowTitle(GameStrings::c_MainWindowTitle);
         introductionWindow.updateMainGameWinPtr(&mainGameWindow);                                   // link introduction window to main game window
         hintsWindow.updateMainGameWinPtr(&mainGameWindow);                                          // link hints window to main game window
         mainGameWindow.updateHintsWinPtr(&hintsWindow);                                             // link main game window to hints window
@@ -56,7 +47,7 @@ int main(int argc, char *argv[]) {
     }
     catch (const QString fatalErrorMessage) {                                                       // this block handles all possible fatal errors that occur in the application
         FatalErrors fatalError{};
-        fatalError.setWindowTitle("Fatal Error!");
+        fatalError.setWindowTitle(GameStrings::c_FatalErrorWindowTitle);
         fatalError.setFatalErrorText(fatalErrorMessage);
         fatalError.show();
         return app.exec();

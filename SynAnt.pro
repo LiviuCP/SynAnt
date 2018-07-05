@@ -24,4 +24,5 @@ HEADERS += \
     wordmixer.h \
     fatalerrors.h \
     scoreitem.h \
-    game.h
+    game.h \
+    gamestrings.h

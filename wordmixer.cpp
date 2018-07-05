@@ -4,6 +4,7 @@
 #include <QTextStream>
 #include <QtGlobal>
 #include "wordmixer.h"
+#include "gamestrings.h"
 
                                                                                                     // constructor
 WordMixer::WordMixer(QObject *parent, const QString &fname)
@@ -16,7 +17,7 @@ WordMixer::WordMixer(QObject *parent, const QString &fname)
       m_SecondWord{},                                                                                 // same for the second word
       m_MixedWords{},                                                                                 // initially empty, will be filled in when the words are mixed by calling mixWords()
       m_AreSynonyms{true},                                                                            // by default the words are synonyms (this is just for having the variable initialized)
-      m_StatusMessage{"No user input so far."},                                                       // contains the message to be displayed in the errors/results label of the main game window
+      m_StatusMessage{GameStrings::c_NoUserInputMessage},                                             // contains the message to be displayed in the errors/results label of the main game window
       m_WordsBeginEndPositions{},                                                                     // also initialized empty, will be filled in when the positions of the first/last piece of the each word are determined (in the words mixing process: mixWords() )
       m_ObtainedScore{0},                                                                             // all statistics (scores, number of pairs) initially set to 0 (this is reflected in the scores and number of pairs texts too)
       m_TotalAvailableScore{0},
@@ -32,22 +33,20 @@ WordMixer::WordMixer(QObject *parent, const QString &fname)
         m_WordsBeginEndPositions[index] = -1;                                                         // they will be changed when mixWords() is called
     }
     m_StatusTexts.resize(StatusCodesCount);                                               // allocate the required number of strings for the success message (first element) and error messages templates
-    m_StatusTexts[SUCCESS] = "Congrats! You entered the correct words.";                        // template messages used for creating the final error & success messages
-    m_StatusTexts[MISSING_WORDS] =
-                       "At least one of the words hasn't been entered.\n\nPlease try again!";
-    m_StatusTexts[INCORRECT_WORDS] =
-                                  "You didn't enter the correct words.\n\nPlease try again!";
+    m_StatusTexts[SUCCESS]         = GameStrings::c_SuccessMessage;                                 // template messages used for creating the final error & success messages
+    m_StatusTexts[MISSING_WORDS]   = GameStrings::c_MissingWordsMessage;
+    m_StatusTexts[INCORRECT_WORDS] = GameStrings::c_IncorrectWordsMessage;
 
     QFileInfo wordPairsFileStatus{m_FileName};                                                        // check if the file containing the word pairs exists, if not throw an exception that will end the application
     if (!wordPairsFileStatus.exists())
     {
-        throw QString{"File not found!"};
+        throw QString{GameStrings::c_FileNotFoundMessage};
     }
                                                                                                     // open the file; throw fatal exception (program ends) if file cannot be opened
     QFile wordPairsFile{m_FileName};
     if (!wordPairsFile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        throw QString{"File cannot be opened!"};
+        throw QString{GameStrings::c_CannotOpenFileMessage};
     }
                                                                                                     // determine the number of rows from the file; throw fatal exception (program ends) if the file is empty
     QTextStream allRowsReader(&wordPairsFile);
@@ -58,7 +57,7 @@ WordMixer::WordMixer(QObject *parent, const QString &fname)
     }
     if (m_TotalRows == 0)
     {
-        throw QString{"Empty file!"};
+        throw QString{GameStrings::c_EmptyFileMessage};
     }
     wordPairsFile.close();
                                                                                                     // seed the engine that is involved in generating a random row number
@@ -256,7 +255,7 @@ void WordMixer::_retrieveWords()
     QFile wordPairsFile(m_FileName);
     if (!wordPairsFile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-    throw QString{"File cannot be opened!"};
+    throw QString{GameStrings::c_CannotOpenFileMessage};
     }
                                                                                                    // read all lines before the one that is required; discard them
     QTextStream lineReader{&wordPairsFile};
