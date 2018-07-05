@@ -181,7 +181,7 @@ void MainGameWindow::_onButtonResetClicked()
 {
     hide();
     m_ScoreItem -> resetStatistics();                                                                 // all scores (obtained/total available) and number of pairs (guessed/total presented to user) are reset to 0
-    m_ResultsErrors -> setText(m_WordMixer -> getStatusMessage());                                      // results/errors box updated with reset message
+    m_ResultsErrors -> setText(GameStrings::c_ScoresResetMessage);                                      // results/errors box updated with reset message
     show();
 }
 
