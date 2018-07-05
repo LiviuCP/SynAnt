@@ -18,14 +18,7 @@ WordMixer::WordMixer(QObject *parent, const QString &fname)
       m_MixedWords{},                                                                                 // initially empty, will be filled in when the words are mixed by calling mixWords()
       m_AreSynonyms{true},                                                                            // by default the words are synonyms (this is just for having the variable initialized)
       m_StatusMessage{GameStrings::c_NoUserInputMessage},                                             // contains the message to be displayed in the errors/results label of the main game window
-      m_WordsBeginEndPositions{},                                                                     // also initialized empty, will be filled in when the positions of the first/last piece of the each word are determined (in the words mixing process: mixWords() )
-      m_ObtainedScore{0},                                                                             // all statistics (scores, number of pairs) initially set to 0 (this is reflected in the scores and number of pairs texts too)
-      m_TotalAvailableScore{0},
-      m_GuessedWordPairs{0},
-      m_TotalWordPairs{0},
-      m_ScoreIncrement{2},                                                                            // default level is medium, the number by which the scores are increased coresponds to this level
-      m_HighScoresMessage{"High-score: 0/0"},
-      m_NrOfPairsMessage{"Word pairs: 0/0"}
+      m_WordsBeginEndPositions{}                                                                     // also initialized empty, will be filled in when the positions of the first/last piece of the each word are determined (in the words mixing process: mixWords() )
 {
     m_WordsBeginEndPositions.resize(IndexesCount);
     for (int index{0}; index<IndexesCount; index++)                                                 // default indexes for the 4 word pieces in the mixedWords vector will be -1;
@@ -213,23 +206,6 @@ void WordMixer::setWordPieceSize(Game::Level level)
         break;
     case Game::Level::HARD:
         m_WordPieceSize = 1;
-    }
-}
-                                                                                                   // used for setting level params
-void WordMixer::setScoreIncrement(Game::Level level)
-{
-    Q_ASSERT(static_cast<int>(level) >= 0 && static_cast<int>(level) < static_cast<int>(Game::Level::NrOfLevels));
-
-    switch(level)
-    {
-    case Game::Level::EASY:
-        m_ScoreIncrement = 1;
-        break;
-    case Game::Level::MEDIUM:
-        m_ScoreIncrement = 2;
-        break;
-    case Game::Level::HARD:
-        m_ScoreIncrement = 4;
     }
 }
                                                                                                    /* this function generates a random number which has a value between 0 and the maximum number of rows of the file

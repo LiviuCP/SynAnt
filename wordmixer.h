@@ -47,8 +47,6 @@ public:
     int getSecondWordBeginIndex() const;                                                            // used by main window to locate the position of the first piece of the second word in the mixedWords vector
     int getSecondWordEndIndex() const;                                                              // used by main window to locate the position of the last piece of the second word in the mixedWords vector
 
-    void setScoreIncrement(Game::Level level);                                                      // used when setting level
-
 public slots:
     void setWordPieceSize(Game::Level level);                                                       // used when setting level
 
@@ -90,14 +88,6 @@ private:
         SECOND_END,                                                                                 // 4) fourth element, position of the last piece of the first word in the MixedWords vector
         IndexesCount                                                                                // 5) total number of indexes (4)
     };
-
-    int m_ObtainedScore;                                                                            // score currently obtained by user (increases with each successful guess)
-    int m_TotalAvailableScore;                                                                      // score that could have been obtained by user if all word pairs had been correctly guessed
-    int m_GuessedWordPairs;                                                                         // number of pairs which have been correctly guessed by user
-    int m_TotalWordPairs;                                                                           // total number of pairs available for guessing until the current moment
-    int m_ScoreIncrement;                                                                           // number of points by which the scores increase (depends on difficulty level)
-    QString m_HighScoresMessage;                                                                    // text to be displayed in the high-scores label of the main game window
-    QString m_NrOfPairsMessage;                                                                     // text to be displayed in the number-of-pairs label of the main game window
 };
 
 #endif // WORDMIXER_H
