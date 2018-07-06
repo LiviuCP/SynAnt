@@ -314,7 +314,7 @@ void MainGameWindow::_switchToLevel(Game::Level level)
     _removeMixedWordsLabels();
     _createMixedWordsLabels();
     _addMixedWordsLabels();
-    m_ResultsErrors -> setText(m_WordMixer -> getStatusMessage());
+    m_ResultsErrors -> setText(GameStrings::c_LevelChangedMessage);
     show();
 }
 
