@@ -2,11 +2,11 @@
 
 ScoreItem::ScoreItem(QObject *parent)
     : QObject(parent)
-    , m_ObtainedScore{0}                                                                             // all statistics (scores, number of pairs) initially set to 0 (this is reflected in the scores and number of pairs texts too)
+    , m_ObtainedScore{0}
     , m_TotalAvailableScore{0}
     , m_GuessedWordPairs{0}
     , m_TotalWordPairs{0}
-    , m_ScoreIncrement{2}                                                                            // default level is medium, the number by which the scores are increased coresponds to this level
+    , m_ScoreIncrement{2}
 
 {
     // nothing
@@ -31,13 +31,13 @@ void ScoreItem::setScoreIncrement(Game::Level level)
 
 void ScoreItem::updateStatistics(bool partialUpdate)
 {
-    if (!partialUpdate)                                                                            // if user enters the words correctly and presses Submit, the obtained points and the number of guessed word pairs gets updated
+    if (!partialUpdate)
     {
         m_ObtainedScore += m_ScoreIncrement;
         m_GuessedWordPairs++;
     }
-    m_TotalAvailableScore += m_ScoreIncrement;                                                         // total available number of points and total number of pairs presented to the user will be updated
-    m_TotalWordPairs++;                                                                              // anytime the user enters the words correctly (and pressses Submit) or he presses Show results button
+    m_TotalAvailableScore += m_ScoreIncrement;
+    m_TotalWordPairs++;
     Q_EMIT statisticsUpdated();
 }
 

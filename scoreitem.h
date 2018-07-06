@@ -1,3 +1,13 @@
+/*
+
+  This class implements the statistics that are associated with the correct guessing of words:
+  - total score: maximum score that could have been obtained by user if correctly guessing all words
+  - obtained score: for the number of pairs correctly guessed without pressing the Show results button
+  - same for the number of pairs
+  - score increment depends on chosen level
+
+*/
+
 #ifndef SCOREITEM_H
 #define SCOREITEM_H
 #include <QVector>
@@ -11,7 +21,7 @@ class ScoreItem : public QObject
 public:
     explicit ScoreItem(QObject *parent = nullptr);
 
-    void updateStatistics(bool partialUpdate);                                                      // updates the score/number of word pairs variables, triggers update of the score/number of word pairs texts to be displayed in the main window
+    void updateStatistics(bool partialUpdate);
     void resetStatistics();
     QVector<int> getStatistics() const;
 
@@ -19,14 +29,15 @@ signals:
     Q_SIGNAL void statisticsUpdated();
 
 public slots:
-    void setScoreIncrement(Game::Level level);                                                      // used when setting level
+    void setScoreIncrement(Game::Level level);
 
 private:
-    int m_ObtainedScore;                                                                            // score currently obtained by user (increases with each successful guess)
-    int m_TotalAvailableScore;                                                                      // score that could have been obtained by user if all word pairs had been correctly guessed
-    int m_GuessedWordPairs;                                                                         // number of pairs which have been correctly guessed by user
-    int m_TotalWordPairs;                                                                           // total number of pairs available for guessing until the current moment
-    int m_ScoreIncrement;                                                                           // number of points by which the scores increase (depends on difficulty level)
+    // total number is the maximum number that can be correctly guessed by user
+    int m_ObtainedScore;
+    int m_TotalAvailableScore;
+    int m_GuessedWordPairs;
+    int m_TotalWordPairs;
+    int m_ScoreIncrement;
 
 };
 #endif // SCOREITEM_H

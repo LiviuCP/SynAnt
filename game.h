@@ -1,3 +1,9 @@
+/*
+
+  This file contains specific items that are used by multiple classes (e.g. enum classes)
+
+*/
+
 #ifndef GAME_H
 #define GAME_H
 

@@ -1,3 +1,9 @@
+/*
+
+  String literals used by the game window classes etc.
+
+*/
+
 #ifndef GAMESTRINGS_H
 #define GAMESTRINGS_H
 

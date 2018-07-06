@@ -6,36 +6,35 @@
 #include "fatalerrors.h"
 #include "gamestrings.h"
 
-FatalErrors::FatalErrors(QWidget *parent)                                                           // constructor
+FatalErrors::FatalErrors(QWidget *parent)
     : QWidget{parent},
-      m_ErrorText{}                                                                                   // initially empty, will be filled in when writing the error message by calling setFatalErrorText()
+      m_ErrorText{}
 {
-                                                                                                    // first create the upper part of the window, namely the box with the message requesting input
     QHBoxLayout *messageLayout{new QHBoxLayout{}};
-    m_ErrorMessage = new QLabel{};                                                                    // initially the label is empty. A text will be setup only if a fatal error occurs
+    m_ErrorMessage = new QLabel{};
     m_ErrorMessage -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     m_ErrorMessage -> setFrameStyle(QFrame::StyledPanel);
     messageLayout -> addWidget(m_ErrorMessage,1);
-                                                                                                    // second, create the lower part of the window, namely the Ok button
+
     QHBoxLayout *okButtonLayout{new QHBoxLayout{}};
     QPushButton *okButton{new QPushButton{GameStrings::c_FatalErrorQuitButtonLabel}};
     okButton -> setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     okButton -> setToolTip(GameStrings::c_FatalErrorQuitButtonToolTip);
-    QShortcut *okButtonShortcut{new QShortcut{QKeySequence{GameStrings::c_FatalErrorQuitButtonShortcut},this}}; // Ok button primary key combination (shortcut)
-    QShortcut *okButtonAltShortcut{new QShortcut{QKeySequence{GameStrings::c_FatalErrorQuitButtonAltShortcut},this}}; // Ok button alternative key combination (shortcut)
+    QShortcut *okButtonShortcut{new QShortcut{QKeySequence{GameStrings::c_FatalErrorQuitButtonShortcut},this}};
+    QShortcut *okButtonAltShortcut{new QShortcut{QKeySequence{GameStrings::c_FatalErrorQuitButtonAltShortcut},this}};
     okButtonLayout -> addWidget(okButton,1);
-                                                                                                    // third, everything to be added to the main widget layout
+
     QVBoxLayout *mainLayout{new QVBoxLayout{}};
     mainLayout -> addLayout(messageLayout,1);
     mainLayout -> addLayout(okButtonLayout);
     setLayout(mainLayout);
     setToolTip(GameStrings::c_FatalErrorWindowToolTip);
-                                                                                                    // fourth, connect signals to slots
+
     connect(okButton,&QPushButton::clicked,qApp,&QApplication::quit);
     connect(okButtonShortcut,&QShortcut::activated,qApp,&QApplication::quit);
     connect(okButtonAltShortcut,&QShortcut::activated,qApp,&QApplication::quit);
 }
-                                                                                                    // this function is called from outside the class when the exception is encountered
+
 void FatalErrors::setFatalErrorText(const QString &text)
 {
     m_ErrorText = text;
