@@ -33,12 +33,12 @@ public:
 
     // splits the words into pieces and mixes them into an array
     void mixWords();
-    bool checkWords(const QString &m_FirstWord, const QString &m_SecondWord);
+    Game::StatusCodes checkWords(const QString &m_FirstWord, const QString &m_SecondWord);
     const QVector<QString>& getMixedWordsStringArray() const;
-    // used when pressing Results button (user gets no points)
-    void retrieveResults();
 
-    const QString& getStatusMessage() const;
+    QString getFirstWord() const;
+    QString getSecondWord() const;
+    bool areSynonyms() const;
 
     // indexes of the beginning and the end piece of each word in the mixed words array
     int getFirstWordBeginIndex() const;
@@ -52,8 +52,6 @@ public slots:
 private:
     void _getRowNumber();
     void _retrieveWords();
-    void _createErrorMessage(const int errorCode);
-    void _createSuccessMessage();
     int  _insertWordPiece(const QString &word, int firstCharPos, QVector<int> &wordPieceIndexes);
 
 
@@ -71,16 +69,6 @@ private:
     QString m_SecondWord;
     QVector<QString> m_MixedWords;
     bool m_AreSynonyms;
-
-    // for non-fatal errors only
-    enum StatusCodes {
-        SUCCESS,
-        MISSING_WORDS,
-        INCORRECT_WORDS,
-        StatusCodesCount
-    };
-    QVector<QString> m_StatusTexts;
-    QString m_StatusMessage;
 
     // stores the indexes of the first and last piece of the 2 words in the mixedWords string vector
     QVector<int> m_WordsBeginEndPositions;

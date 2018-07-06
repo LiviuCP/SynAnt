@@ -4,6 +4,7 @@
 #include <QTextStream>
 #include <QtGlobal>
 #include "wordmixer.h"
+#include "game.h"
 #include "gamestrings.h"
 
 WordMixer::WordMixer(QObject *parent, const QString &fname)
@@ -16,7 +17,6 @@ WordMixer::WordMixer(QObject *parent, const QString &fname)
       m_SecondWord{},
       m_MixedWords{},
       m_AreSynonyms{true},
-      m_StatusMessage{GameStrings::c_NoUserInputMessage},
       m_WordsBeginEndPositions{}
 {
     m_WordsBeginEndPositions.resize(IndexesCount);
@@ -24,12 +24,6 @@ WordMixer::WordMixer(QObject *parent, const QString &fname)
     {
         m_WordsBeginEndPositions[index] = -1;
     }
-
-    // template messages used for creating the final error & success messages
-    m_StatusTexts.resize(StatusCodesCount);
-    m_StatusTexts[SUCCESS]         = GameStrings::c_SuccessMessage;
-    m_StatusTexts[MISSING_WORDS]   = GameStrings::c_MissingWordsMessage;
-    m_StatusTexts[INCORRECT_WORDS] = GameStrings::c_IncorrectWordsMessage;
 
     QFileInfo wordPairsFileStatus{m_FileName};
     if (!wordPairsFileStatus.exists())
@@ -107,27 +101,24 @@ void WordMixer::mixWords()
     m_WordsBeginEndPositions[SECOND_END] = _insertWordPiece(m_SecondWord, secondWordLastPiecePos, wordPieceIndexes);
 }
 
-bool WordMixer::checkWords(const QString &firstWord, const QString &secondWord)
+Game::StatusCodes WordMixer::checkWords(const QString &firstWord, const QString &secondWord)
 {
-    enum ReturnValue
-    {
-        INCORRECT_USER_INPUT,
-        CORRECT_USER_INPUT
-    };
+    Game::StatusCodes statusCode;
 
     if (firstWord.isEmpty() || secondWord.isEmpty())
     {
-        _createErrorMessage(MISSING_WORDS);
-        return INCORRECT_USER_INPUT;
+        statusCode = Game::StatusCodes::MISSING_WORDS;
     }
 
-    if (((firstWord == this -> m_FirstWord) && (secondWord == this -> m_SecondWord)) || ((firstWord == this -> m_SecondWord) && (secondWord == this -> m_FirstWord)))
+    else if (((firstWord == this -> m_FirstWord) && (secondWord == this -> m_SecondWord)) || ((firstWord == this -> m_SecondWord) && (secondWord == this -> m_FirstWord)))
     {
-        _createSuccessMessage();
-        return CORRECT_USER_INPUT;
+        statusCode = Game::StatusCodes::SUCCESS;
     }
-    _createErrorMessage(INCORRECT_WORDS);
-    return INCORRECT_USER_INPUT;
+    else
+    {
+        statusCode = Game::StatusCodes::INCORRECT_WORDS;
+    }
+    return statusCode;
 }
 
 const QVector<QString>& WordMixer::getMixedWordsStringArray() const
@@ -135,26 +126,19 @@ const QVector<QString>& WordMixer::getMixedWordsStringArray() const
     return m_MixedWords;
 }
 
-void WordMixer::retrieveResults()
+QString WordMixer::getFirstWord() const
 {
-    m_StatusMessage = "The correct words are: \n\n";
-    m_StatusMessage += "\t" + m_FirstWord + "\n";
-    m_StatusMessage += "\t" + m_SecondWord + "\n";
-    m_StatusMessage += "\nThe words are: \n\n\t";
-    if (m_AreSynonyms)
-    {
-        m_StatusMessage += "synonyms";
-    }
-    else
-    {
-        m_StatusMessage += "antonyms";
-    }
-    m_StatusMessage += "\n\nNext pair of words is available below.";
+    return m_FirstWord;
 }
 
-const QString& WordMixer::getStatusMessage() const
+QString WordMixer::getSecondWord() const
 {
-    return m_StatusMessage;
+    return m_SecondWord;
+}
+
+bool WordMixer::areSynonyms() const
+{
+    return m_AreSynonyms;
 }
 
 int WordMixer::getFirstWordBeginIndex() const
@@ -274,40 +258,6 @@ void WordMixer::_retrieveWords()
     {
         throw QString{"Second word has less than the minimum required number of characters!\nRow number: " + rowNumberToString + "\n"};
     }
-}
-
-void WordMixer::_createErrorMessage(const int errorCode)
-{
-    switch(errorCode)
-    {
-    case MISSING_WORDS:
-        m_StatusMessage = m_StatusTexts[MISSING_WORDS];
-        break;
-    case INCORRECT_WORDS:
-        m_StatusMessage = m_StatusTexts[INCORRECT_WORDS];
-        break;
-    // reserved for future use
-    default:
-        ;
-    }
-}
-
-void WordMixer::_createSuccessMessage()
-{
-    m_StatusMessage = m_StatusTexts[SUCCESS];
-    m_StatusMessage += "\n\nThe two words are:\n\n";
-    m_StatusMessage += "\t" + m_FirstWord + "\n";
-    m_StatusMessage += "\t" + m_SecondWord + "\n";
-    m_StatusMessage += "\nThe words are: \n\n\t";
-    if (m_AreSynonyms)
-    {
-        m_StatusMessage += "synonyms";
-    }
-    else
-    {
-        m_StatusMessage += "antonyms";
-    }
-    m_StatusMessage += "\n\nNext pair of words is available below.";
 }
 
 int WordMixer::_insertWordPiece(const QString &word, int firstCharPos,

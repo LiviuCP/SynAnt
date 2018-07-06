@@ -4,6 +4,7 @@
 #include <QGroupBox>
 #include <QShortcut>
 #include "maingamewindow.h"
+#include "game.h"
 #include "gamestrings.h"
 
 MainGameWindow::MainGameWindow(QWidget *parent)
@@ -149,7 +150,7 @@ void MainGameWindow::getFirstTwoWords()
     _createMixedWordsLabels();
     _addMixedWordsLabels();
     m_ScoreItem -> resetStatistics();
-    m_ResultsErrors -> setText(m_WordMixer -> getStatusMessage());
+    _updateStatusMessage(Game::StatusCodes::NO_USER_INPUT);
 }
 
 void MainGameWindow::onStatisticsUpdated()
@@ -163,7 +164,7 @@ void MainGameWindow::_onButtonResetClicked()
 {
     hide();
     m_ScoreItem -> resetStatistics();
-    m_ResultsErrors -> setText(GameStrings::c_ScoresResetMessage);
+    _updateStatusMessage(Game::StatusCodes::STATISTICS_RESET);
     show();
 }
 
@@ -230,7 +231,8 @@ void MainGameWindow::_onButtonSubmitClicked()
     m_SecondWord -> clear();
     m_FirstWord -> setFocus();
 
-    if (m_WordMixer -> checkWords(firstInputWord,secondInputword))
+    Game::StatusCodes statusCode {m_WordMixer->checkWords(firstInputWord, secondInputword)};
+    if (statusCode == Game::StatusCodes::SUCCESS)
     {
         m_WordMixer -> mixWords();
         _removeMixedWordsLabels();
@@ -238,7 +240,7 @@ void MainGameWindow::_onButtonSubmitClicked()
         _addMixedWordsLabels();
         m_ScoreItem -> updateStatistics(FULL_UPDATE);
     }
-    m_ResultsErrors -> setText(m_WordMixer -> getStatusMessage());
+    _updateStatusMessage(statusCode);
     show();
 }
 
@@ -254,13 +256,12 @@ void MainGameWindow::_onButtonResultsClicked()
     m_FirstWord -> clear();
     m_SecondWord -> clear();
     m_FirstWord -> setFocus();
-    m_WordMixer -> retrieveResults();
     m_ScoreItem -> updateStatistics(PARTIAL_UPDATE);
     m_WordMixer -> mixWords();
     _removeMixedWordsLabels();
     _createMixedWordsLabels();
     _addMixedWordsLabels();
-    m_ResultsErrors -> setText(m_WordMixer -> getStatusMessage());
+    _updateStatusMessage(Game::StatusCodes::REQUESTED_BY_USER);
     show();
 }
 
@@ -314,8 +315,67 @@ void MainGameWindow::_switchToLevel(Game::Level level)
     _removeMixedWordsLabels();
     _createMixedWordsLabels();
     _addMixedWordsLabels();
-    m_ResultsErrors -> setText(GameStrings::c_LevelChangedMessage);
+    _updateStatusMessage(Game::StatusCodes::LEVEL_CHANGED);
     show();
+}
+
+void MainGameWindow::_updateStatusMessage(Game::StatusCodes statusCode)
+{
+    QString statusMessage{};
+
+    switch(statusCode)
+    {
+    case Game::StatusCodes::SUCCESS:
+        statusMessage = GameStrings::c_SuccessMessage;
+        statusMessage += "\n\nThe two words are:\n\n";
+        statusMessage += "\t" + m_WordMixer->getFirstWord() + "\n";
+        statusMessage += "\t" + m_WordMixer->getSecondWord() + "\n";
+        statusMessage += "\nThe words are: \n\n\t";
+        if (m_WordMixer->areSynonyms())
+        {
+            statusMessage += "synonyms";
+        }
+        else
+        {
+            statusMessage += "antonyms";
+        }
+        statusMessage += "\n\nNext pair of words is available below.";
+        break;
+    case Game::StatusCodes::MISSING_WORDS:
+        statusMessage = GameStrings::c_MissingWordsMessage;
+        break;
+    case Game::StatusCodes::INCORRECT_WORDS:
+        statusMessage = GameStrings::c_IncorrectWordsMessage;
+        break;
+    case Game::StatusCodes::REQUESTED_BY_USER:
+        statusMessage = "The correct words are: \n\n";
+        statusMessage += "\t" + m_WordMixer->getFirstWord() + "\n";
+        statusMessage += "\t" + m_WordMixer->getSecondWord() + "\n";
+        statusMessage += "\nThe words are: \n\n\t";
+        if (m_WordMixer->areSynonyms())
+        {
+            statusMessage += "synonyms";
+        }
+        else
+        {
+            statusMessage += "antonyms";
+        }
+        statusMessage += "\n\nNext pair of words is available below.";
+        break;
+    case Game::StatusCodes::NO_USER_INPUT:
+        statusMessage = GameStrings::c_NoUserInputMessage;
+        break;
+    case Game::StatusCodes::STATISTICS_RESET:
+        statusMessage = GameStrings::c_ScoresResetMessage;
+        break;
+    case Game::StatusCodes::LEVEL_CHANGED:
+        statusMessage = GameStrings::c_LevelChangedMessage;
+    // reserved for future use
+    default:
+        ;
+    }
+
+    m_ResultsErrors -> setText(statusMessage);
 }
 
 

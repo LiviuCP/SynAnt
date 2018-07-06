@@ -86,6 +86,7 @@ private:
     void _createMixedWordsLabels();
     void _addMixedWordsLabels();
     void _switchToLevel(Game::Level level);
+    void _updateStatusMessage(Game::StatusCodes statusCode);
 };
 
 #endif // MAINGAMEWINDOW_H

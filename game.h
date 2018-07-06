@@ -16,6 +16,17 @@ namespace Game
         HARD,
         NrOfLevels
     };
+
+    enum class StatusCodes {
+        SUCCESS,
+        MISSING_WORDS,
+        INCORRECT_WORDS,
+        REQUESTED_BY_USER,
+        NO_USER_INPUT,
+        STATISTICS_RESET,
+        LEVEL_CHANGED,
+        StatusCodesCount
+    };
 }
 
 #endif // GAME_H
