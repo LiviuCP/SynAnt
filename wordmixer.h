@@ -73,11 +73,11 @@ private:
     // stores the indexes of the first and last piece of the 2 words in the mixedWords string vector
     QVector<int> m_WordsBeginEndPositions;
     // used for getting these indexes from m_WordsBeginEndPositions
-    enum WordsBeginEndIndexes {
-        FIRST_BEGIN,
-        FIRST_END,
-        SECOND_BEGIN,
-        SECOND_END,
+    enum class WordsBeginEndIndexes {
+        FIRST_WORD_FIRST_PIECE,
+        FIRST_WORD_LAST_PIECE,
+        SECOND_WORD_FIRST_PIECE,
+        SECOND_WORD_LAST_PIECE,
         IndexesCount
     };
 };

@@ -19,8 +19,9 @@ WordMixer::WordMixer(QObject *parent, const QString &fname)
       m_AreSynonyms{true},
       m_WordsBeginEndPositions{}
 {
-    m_WordsBeginEndPositions.resize(IndexesCount);
-    for (int index{0}; index<IndexesCount; index++)
+    int indexesCount{static_cast<int>(WordsBeginEndIndexes::IndexesCount)};
+    m_WordsBeginEndPositions.resize(indexesCount);
+    for (int index{0}; index<indexesCount; index++)
     {
         m_WordsBeginEndPositions[index] = -1;
     }
@@ -84,21 +85,21 @@ void WordMixer::mixWords()
     int firstWordLastPiecePos{m_WordPieceSize*(firstWordNrOfPieces-1)};
     int secondWordLastPiecePos{m_WordPieceSize*(secondWordNrOfPieces-1)};
 
-    m_WordsBeginEndPositions[FIRST_BEGIN] = _insertWordPiece(m_FirstWord, 0, wordPieceIndexes);
+    m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::FIRST_WORD_FIRST_PIECE)] = _insertWordPiece(m_FirstWord, 0, wordPieceIndexes);
 
     for (int wordPieceStartPos{m_WordPieceSize}; wordPieceStartPos<firstWordLastPiecePos; wordPieceStartPos+=m_WordPieceSize)
     {
         _insertWordPiece(m_FirstWord, wordPieceStartPos, wordPieceIndexes);
     }
-    m_WordsBeginEndPositions[FIRST_END] = _insertWordPiece(m_FirstWord, firstWordLastPiecePos, wordPieceIndexes);
-    m_WordsBeginEndPositions[SECOND_BEGIN] = _insertWordPiece(m_SecondWord, 0, wordPieceIndexes);
+    m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::FIRST_WORD_LAST_PIECE)] = _insertWordPiece(m_FirstWord, firstWordLastPiecePos, wordPieceIndexes);
+    m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::SECOND_WORD_FIRST_PIECE)] = _insertWordPiece(m_SecondWord, 0, wordPieceIndexes);
 
     for (int wordPieceStartPos{m_WordPieceSize}; wordPieceStartPos<secondWordLastPiecePos;
                                       wordPieceStartPos+=m_WordPieceSize)
     {
         _insertWordPiece(m_SecondWord, wordPieceStartPos, wordPieceIndexes);
     }
-    m_WordsBeginEndPositions[SECOND_END] = _insertWordPiece(m_SecondWord, secondWordLastPiecePos, wordPieceIndexes);
+    m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::SECOND_WORD_LAST_PIECE)] = _insertWordPiece(m_SecondWord, secondWordLastPiecePos, wordPieceIndexes);
 }
 
 Game::StatusCodes WordMixer::checkWords(const QString &firstWord, const QString &secondWord)
@@ -143,22 +144,22 @@ bool WordMixer::areSynonyms() const
 
 int WordMixer::getFirstWordBeginIndex() const
 {
-    return m_WordsBeginEndPositions[FIRST_BEGIN];
+    return m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::FIRST_WORD_FIRST_PIECE)];
 }
 
 int WordMixer::getFirstWordEndIndex() const
 {
-    return m_WordsBeginEndPositions[FIRST_END];
+    return m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::FIRST_WORD_LAST_PIECE)];
 }
 
 int WordMixer::getSecondWordBeginIndex() const
 {
-    return m_WordsBeginEndPositions[SECOND_BEGIN];
+    return m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::SECOND_WORD_FIRST_PIECE)];
 }
 
 int WordMixer::getSecondWordEndIndex() const
 {
-    return m_WordsBeginEndPositions[SECOND_END];
+    return m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::SECOND_WORD_LAST_PIECE)];
 }
 
 void WordMixer::setWordPieceSize(Game::Level level)
