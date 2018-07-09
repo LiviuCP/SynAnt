@@ -26,6 +26,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QRadioButton>
+#include "game.h"
 #include "hintswindow.h"
 #include "wordmixer.h"
 #include "scoreitem.h"
@@ -76,11 +77,6 @@ private:
     ScoreItem* m_ScoreItem;
     // set true after first access to main game window
     bool m_AlreadyAccessed;
-    // update all statistics or only the totals
-    enum StatisticsUpdate {
-        FULL_UPDATE,
-        PARTIAL_UPDATE
-    };
 
     void _removeMixedWordsLabels();
     void _createMixedWordsLabels();

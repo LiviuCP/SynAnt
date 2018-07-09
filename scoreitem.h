@@ -21,7 +21,7 @@ class ScoreItem : public QObject
 public:
     explicit ScoreItem(QObject *parent = nullptr);
 
-    void updateStatistics(bool partialUpdate);
+    void updateStatistics(Game::StatisticsUpdate updateType);
     void resetStatistics();
     QVector<int> getStatistics() const;
 

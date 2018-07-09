@@ -27,6 +27,11 @@ namespace Game
         LEVEL_CHANGED,
         StatusCodesCount
     };
+
+    enum class StatisticsUpdate {
+        FULL_UPDATE,
+        PARTIAL_UPDATE
+    };
 }
 
 #endif // GAME_H

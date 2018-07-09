@@ -29,9 +29,9 @@ void ScoreItem::setScoreIncrement(Game::Level level)
     }
 }
 
-void ScoreItem::updateStatistics(bool partialUpdate)
+void ScoreItem::updateStatistics(Game::StatisticsUpdate updateType)
 {
-    if (!partialUpdate)
+    if (updateType == Game::StatisticsUpdate::FULL_UPDATE)
     {
         m_ObtainedScore += m_ScoreIncrement;
         m_GuessedWordPairs++;
