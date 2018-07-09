@@ -232,6 +232,8 @@ void MainGameWindow::_onButtonSubmitClicked()
     m_FirstWord -> setFocus();
 
     Game::StatusCodes statusCode {m_WordMixer->checkWords(firstInputWord, secondInputword)};
+    // update the status message before retrieving any new words
+    _updateStatusMessage(statusCode);
     if (statusCode == Game::StatusCodes::SUCCESS)
     {
         m_WordMixer -> mixWords();
@@ -240,7 +242,6 @@ void MainGameWindow::_onButtonSubmitClicked()
         _addMixedWordsLabels();
         m_ScoreItem -> updateStatistics(FULL_UPDATE);
     }
-    _updateStatusMessage(statusCode);
     show();
 }
 
