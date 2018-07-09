@@ -332,14 +332,7 @@ void MainGameWindow::_updateStatusMessage(Game::StatusCodes statusCode)
         statusMessage += "\t" + m_WordMixer->getFirstWord() + "\n";
         statusMessage += "\t" + m_WordMixer->getSecondWord() + "\n";
         statusMessage += "\nThe words are: \n\n\t";
-        if (m_WordMixer->areSynonyms())
-        {
-            statusMessage += "synonyms";
-        }
-        else
-        {
-            statusMessage += "antonyms";
-        }
+        statusMessage += m_WordMixer->areSynonyms() ? "synonyms" : "antonyms";
         statusMessage += "\n\nNext pair of words is available below.";
         break;
     case Game::StatusCodes::MISSING_WORDS:
@@ -353,14 +346,7 @@ void MainGameWindow::_updateStatusMessage(Game::StatusCodes statusCode)
         statusMessage += "\t" + m_WordMixer->getFirstWord() + "\n";
         statusMessage += "\t" + m_WordMixer->getSecondWord() + "\n";
         statusMessage += "\nThe words are: \n\n\t";
-        if (m_WordMixer->areSynonyms())
-        {
-            statusMessage += "synonyms";
-        }
-        else
-        {
-            statusMessage += "antonyms";
-        }
+        statusMessage += m_WordMixer->areSynonyms() ? "synonyms" : "antonyms";
         statusMessage += "\n\nNext pair of words is available below.";
         break;
     case Game::StatusCodes::NO_USER_INPUT:
