@@ -51,11 +51,11 @@ signals:
 private slots:
     void _onButtonResetClicked();
     void _onButtonEasyToggled(bool checked);
-    void _onButtonEasyShortcut();
+    void _onButtonEasyShortcutEntered();
     void _onButtonMediumToggled(bool checked);
-    void _onButtonMediumShortcut();
+    void _onButtonMediumShortcutEntered();
     void _onButtonHardToggled(bool checked);
-    void _onButtonHardShortcut();
+    void _onButtonHardShortcutEntered();
     void _onButtonSubmitClicked();
     void _onButtonHintsClicked();
     void _onButtonResultsClicked();

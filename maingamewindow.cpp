@@ -109,11 +109,11 @@ MainGameWindow::MainGameWindow(QWidget *parent)
     connect(resetButton,&QPushButton::clicked,this,&MainGameWindow::_onButtonResetClicked);
     connect(resetButtonShortcut,&QShortcut::activated,this,&MainGameWindow::_onButtonResetClicked);
     connect(m_LevelEasyButton,&QRadioButton::toggled,this,&MainGameWindow::_onButtonEasyToggled);
-    connect(levelEasyShortcut,&QShortcut::activated,this,&MainGameWindow::_onButtonEasyShortcut);
+    connect(levelEasyShortcut,&QShortcut::activated,this,&MainGameWindow::_onButtonEasyShortcutEntered);
     connect(m_LevelMediumButton,&QRadioButton::toggled,this,&MainGameWindow::_onButtonMediumToggled);
-    connect(levelMediumShortcut,&QShortcut::activated,this,&MainGameWindow::_onButtonMediumShortcut);
+    connect(levelMediumShortcut,&QShortcut::activated,this,&MainGameWindow::_onButtonMediumShortcutEntered);
     connect(m_LevelHardButton,&QRadioButton::toggled,this,&MainGameWindow::_onButtonHardToggled);
-    connect(levelHardShortcut,&QShortcut::activated,this,&MainGameWindow::_onButtonHardShortcut);
+    connect(levelHardShortcut,&QShortcut::activated,this,&MainGameWindow::_onButtonHardShortcutEntered);
     connect(submitButton,&QPushButton::clicked,this,&MainGameWindow::_onButtonSubmitClicked);
     connect(submitButtonShortcut,&QShortcut::activated,this,&MainGameWindow::_onButtonSubmitClicked);
     connect(submitButtonAltShortcut,&QShortcut::activated,this,&MainGameWindow::_onButtonSubmitClicked);
@@ -176,7 +176,7 @@ void MainGameWindow::_onButtonEasyToggled(bool checked)
     }
 }
 
-void MainGameWindow::_onButtonEasyShortcut()
+void MainGameWindow::_onButtonEasyShortcutEntered()
 {
     if (!(m_LevelEasyButton -> isChecked()))
     {
@@ -194,7 +194,7 @@ void MainGameWindow::_onButtonMediumToggled(bool checked)
     }
 }
 
-void MainGameWindow::_onButtonMediumShortcut()
+void MainGameWindow::_onButtonMediumShortcutEntered()
 {
     if (!(m_LevelMediumButton -> isChecked()))
     {
@@ -212,7 +212,7 @@ void MainGameWindow::_onButtonHardToggled(bool checked)
     }
 }
 
-void MainGameWindow::_onButtonHardShortcut()
+void MainGameWindow::_onButtonHardShortcutEntered()
 {
     if (!(m_LevelHardButton -> isChecked()))
     {
