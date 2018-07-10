@@ -2,7 +2,6 @@
 #include <QApplication>
 #include <QVBoxLayout>
 #include <QGroupBox>
-#include <QShortcut>
 #include "maingamewindow.h"
 #include "game.h"
 #include "gamestrings.h"
@@ -22,14 +21,17 @@ MainGameWindow::MainGameWindow(QWidget *parent)
     m_NrOfWordPairs = new QLabel{};
     m_NrOfWordPairs -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
     m_NrOfWordPairs -> setToolTip(GameStrings::c_WordPairsToolTip);
-    QPushButton *resetButton{new QPushButton{GameStrings::c_ResetButtonLabel}};
-    resetButton -> setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    resetButton -> setToolTip(GameStrings::c_ResetButtonToolTip);
-    QShortcut *resetButtonShortcut{new QShortcut{QKeySequence{GameStrings::c_ResetShortcut},this}};
+    m_ResetButton = new QPushButton{GameStrings::c_ResetButtonLabel};
+    m_ResetButton -> setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    m_ResetButton -> setToolTip(GameStrings::c_ResetButtonToolTip);
+    m_ResetButtonShortcut = new QShortcut{QKeySequence{GameStrings::c_ResetShortcut},this};
+    // enable reset only if statistics are different from 0
+    m_ResetButton -> setEnabled(false);
+    m_ResetButtonShortcut ->setEnabled(false);
     statisticsLayout -> addWidget(m_HighScores);
     statisticsLayout -> addWidget(m_NrOfWordPairs);
     statisticsLayout -> addSpacing(30);
-    statisticsLayout -> addWidget(resetButton);
+    statisticsLayout -> addWidget(m_ResetButton);
 
     QHBoxLayout *levelsStatusReqInputLayout{new QHBoxLayout{}};
     QLabel *requestInput{new QLabel{}};
@@ -106,8 +108,8 @@ MainGameWindow::MainGameWindow(QWidget *parent)
 
     connect(m_ScoreItem,&ScoreItem::statisticsUpdated,this,&MainGameWindow::onStatisticsUpdated);
     connect(this,&MainGameWindow::levelChanged,m_ScoreItem,&ScoreItem::setScoreIncrement);
-    connect(resetButton,&QPushButton::clicked,this,&MainGameWindow::_onButtonResetClicked);
-    connect(resetButtonShortcut,&QShortcut::activated,this,&MainGameWindow::_onButtonResetClicked);
+    connect(m_ResetButton,&QPushButton::clicked,this,&MainGameWindow::_onButtonResetClicked);
+    connect(m_ResetButtonShortcut,&QShortcut::activated,this,&MainGameWindow::_onButtonResetClicked);
     connect(m_LevelEasyButton,&QRadioButton::toggled,this,&MainGameWindow::_onButtonEasyToggled);
     connect(levelEasyShortcut,&QShortcut::activated,this,&MainGameWindow::_onButtonEasyShortcutEntered);
     connect(m_LevelMediumButton,&QRadioButton::toggled,this,&MainGameWindow::_onButtonMediumToggled);
@@ -164,6 +166,8 @@ void MainGameWindow::_onButtonResetClicked()
 {
     m_ScoreItem -> resetStatistics();
     _updateStatusMessage(Game::StatusCodes::STATISTICS_RESET);
+    m_ResetButton -> setEnabled(false);
+    m_ResetButtonShortcut -> setEnabled(false);
 }
 
 void MainGameWindow::_onButtonEasyToggled(bool checked)
@@ -232,6 +236,16 @@ void MainGameWindow::_onButtonSubmitClicked()
         _createMixedWordsLabels();
         _addMixedWordsLabels();
         m_ScoreItem -> updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
+
+        if (!m_ResetButton->isEnabled())
+        {
+            m_ResetButton->setEnabled(true);
+        }
+
+        if (!m_ResetButtonShortcut->isEnabled())
+        {
+            m_ResetButtonShortcut->setEnabled(true);
+        }
     }
 }
 
@@ -252,6 +266,16 @@ void MainGameWindow::_onButtonResultsClicked()
     _createMixedWordsLabels();
     _addMixedWordsLabels();
     m_ScoreItem -> updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
+
+    if (!m_ResetButton->isEnabled())
+    {
+        m_ResetButton->setEnabled(true);
+    }
+
+    if (!m_ResetButtonShortcut->isEnabled())
+    {
+        m_ResetButtonShortcut->setEnabled(true);
+    }
 }
 
 void MainGameWindow::_removeMixedWordsLabels()

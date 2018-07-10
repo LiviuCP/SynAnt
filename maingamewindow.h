@@ -26,6 +26,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QRadioButton>
+#include <QShortcut>
 #include "game.h"
 #include "hintswindow.h"
 #include "wordmixer.h"
@@ -73,6 +74,8 @@ private:
     QRadioButton* m_LevelEasyButton;
     QRadioButton* m_LevelMediumButton;
     QRadioButton* m_LevelHardButton;
+    QPushButton* m_ResetButton;
+    QShortcut* m_ResetButtonShortcut;
     WordMixer* m_WordMixer;
     ScoreItem* m_ScoreItem;
     // set true after first access to main game window
