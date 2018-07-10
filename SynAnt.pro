@@ -14,7 +14,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += main.cpp \
     gamepresenter.cpp \
-    wordmixer.cpp
+    wordmixer.cpp \
+    scoreitem.cpp
 
 RESOURCES += qml.qrc \
     qml.qrc
@@ -32,4 +33,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     gamepresenter.h \
-    wordmixer.h
+    wordmixer.h \
+    scoreitem.h \
+    game.h \
+    gamestrings.h
