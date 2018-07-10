@@ -42,13 +42,20 @@ IntroductionWindow::IntroductionWindow(QWidget *parent)
     setLayout(mainLayout);
     setToolTip(GameStrings::c_IntroWindowToolTip);
 
-    connect(quitButton,&QPushButton::clicked,qApp,&QApplication::quit);
-    connect(quitButtonShortcut,&QShortcut::activated,qApp,&QApplication::quit);
-    connect(hintsButton,&QPushButton::clicked,this,&IntroductionWindow::_onButtonHintsClicked);
-    connect(hintsButtonShortcut,&QShortcut::activated,this,&IntroductionWindow::_onButtonHintsClicked);
-    connect(playButton,&QPushButton::clicked,this,&IntroductionWindow::_onButtonPlayClicked);
-    connect(playButtonShortcut,&QShortcut::activated,this,&IntroductionWindow::_onButtonPlayClicked);
-    connect(playButtonAltShortcut,&QShortcut::activated,this,&IntroductionWindow::_onButtonPlayClicked);
+    bool connected{connect(quitButton,&QPushButton::clicked,qApp,&QApplication::quit)};
+    Q_ASSERT(connected);
+    connected = connect(quitButtonShortcut,&QShortcut::activated,qApp,&QApplication::quit);
+    Q_ASSERT(connected);
+    connected = connect(hintsButton,&QPushButton::clicked,this,&IntroductionWindow::_onButtonHintsClicked);
+    Q_ASSERT(connected);
+    connected = connect(hintsButtonShortcut,&QShortcut::activated,this,&IntroductionWindow::_onButtonHintsClicked);
+    Q_ASSERT(connected);
+    connected = connect(playButton,&QPushButton::clicked,this,&IntroductionWindow::_onButtonPlayClicked);
+    Q_ASSERT(connected);
+    connected = connect(playButtonShortcut,&QShortcut::activated,this,&IntroductionWindow::_onButtonPlayClicked);
+    Q_ASSERT(connected);
+    connected = connect(playButtonAltShortcut,&QShortcut::activated,this,&IntroductionWindow::_onButtonPlayClicked);
+    Q_ASSERT(connected);
 }
 
 void IntroductionWindow::updateHintsWinPtr(HintsWindow *hw)

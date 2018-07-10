@@ -40,11 +40,16 @@ HintsWindow::HintsWindow(QWidget *parent)
     setLayout(mainLayout);
     setToolTip(GameStrings::c_HelpWindowToolTip);
 
-    connect(quitButton,&QPushButton::clicked,qApp,&QApplication::quit);
-    connect(quitButtonShortcut,&QShortcut::activated,qApp,&QApplication::quit);
-    connect(okButton,&QPushButton::clicked,this,&HintsWindow::_onButtonOkClicked);
-    connect(okButtonShortcut,&QShortcut::activated,this,&HintsWindow::_onButtonOkClicked);
-    connect(okButtonAltShortcut,&QShortcut::activated,this,&HintsWindow::_onButtonOkClicked);
+    bool connected{connect(quitButton,&QPushButton::clicked,qApp,&QApplication::quit)};
+    Q_ASSERT(connected);
+    connected = connect(quitButtonShortcut,&QShortcut::activated,qApp,&QApplication::quit);
+    Q_ASSERT(connected);
+    connected = connect(okButton,&QPushButton::clicked,this,&HintsWindow::_onButtonOkClicked);
+    Q_ASSERT(connected);
+    connected = connect(okButtonShortcut,&QShortcut::activated,this,&HintsWindow::_onButtonOkClicked);
+    Q_ASSERT(connected);
+    connected = connect(okButtonAltShortcut,&QShortcut::activated,this,&HintsWindow::_onButtonOkClicked);
+    Q_ASSERT(connected);
 }
 
 void HintsWindow::updateMainGameWinPtr(MainGameWindow *mgw)

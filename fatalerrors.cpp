@@ -30,9 +30,12 @@ FatalErrors::FatalErrors(QWidget *parent)
     setLayout(mainLayout);
     setToolTip(GameStrings::c_FatalErrorWindowToolTip);
 
-    connect(closeButton,&QPushButton::clicked,qApp,&QApplication::quit);
-    connect(closeButtonShortcut,&QShortcut::activated,qApp,&QApplication::quit);
-    connect(closeButtonAltShortcut,&QShortcut::activated,qApp,&QApplication::quit);
+    bool connected{connect(closeButton,&QPushButton::clicked,qApp,&QApplication::quit)};
+    Q_ASSERT(connected);
+    connected = connect(closeButtonShortcut,&QShortcut::activated,qApp,&QApplication::quit);
+    Q_ASSERT(connected);
+    connected = connect(closeButtonAltShortcut,&QShortcut::activated,qApp,&QApplication::quit);
+    Q_ASSERT(connected);
 }
 
 void FatalErrors::setFatalErrorText(const QString &text)
