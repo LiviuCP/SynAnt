@@ -246,12 +246,12 @@ void MainGameWindow::_onButtonResultsClicked()
     m_FirstWord -> clear();
     m_SecondWord -> clear();
     m_FirstWord -> setFocus();
-    m_ScoreItem -> updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
+    _updateStatusMessage(Game::StatusCodes::REQUESTED_BY_USER);
     m_WordMixer -> mixWords();
     _removeMixedWordsLabels();
     _createMixedWordsLabels();
     _addMixedWordsLabels();
-    _updateStatusMessage(Game::StatusCodes::REQUESTED_BY_USER);
+    m_ScoreItem -> updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
 }
 
 void MainGameWindow::_removeMixedWordsLabels()
