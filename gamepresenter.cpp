@@ -1,10 +1,13 @@
 #include "gamepresenter.h"
+#include "gamestrings.h"
 
 GamePresenter::GamePresenter(QObject *parent)
     : QObject(parent)
     , m_IntroPaneVisible {true}
     , m_HelpPaneVisible {false}
     , m_MainPaneVisible {false}
+    , m_IntroPaneMessage {GameStrings::c_IntroWindowWelcomeMessage}
+    , m_HelpPaneMessage {GameStrings::c_HelpWindowMessage}
     , m_CurrentPane {Pane::INTRO}
 {
 

@@ -20,7 +20,21 @@ Item {
         border {
             color: "white"
         }
-
+        Flickable {
+            id: helpPaneFlickable
+            anchors.fill: parent
+            anchors.leftMargin: parent.width * 0.005
+            anchors.rightMargin: parent.width * 0.005
+            contentHeight: helpPaneText.height
+            clip: true
+            Text {
+                id: helpPaneText
+                text: presenter.helpPaneMessage
+                color: "white"
+                width: parent.width
+                wrapMode: Text.WordWrap
+            }
+        }
     }
 
     RowLayout {

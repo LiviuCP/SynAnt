@@ -21,6 +21,13 @@ Item {
         border {
             color: "white"
         }
+        Text {
+            id: introPaneText
+            anchors.fill: parent
+            anchors.leftMargin: parent.width * 0.005
+            text: presenter.introPaneMessage
+            color: "white"
+        }
     }
 
     RowLayout {

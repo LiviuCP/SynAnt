@@ -9,6 +9,8 @@ class GamePresenter : public QObject
     Q_PROPERTY(bool introPaneVisible READ getIntroPaneVisible NOTIFY introPaneVisibleChanged)
     Q_PROPERTY(bool helpPaneVisible READ getHelpPaneVisible NOTIFY helpPaneVisibleChanged)
     Q_PROPERTY(bool mainPaneVisible READ getMainPaneVisible NOTIFY mainPaneVisibleChanged)
+    Q_PROPERTY(QString introPaneMessage READ getIntroPaneMessage CONSTANT)
+    Q_PROPERTY(QString helpPaneMessage READ getHelpPaneMessage CONSTANT)
 
 public:
     explicit GamePresenter(QObject *parent = nullptr);
@@ -19,6 +21,8 @@ public:
     bool getIntroPaneVisible() {return m_IntroPaneVisible;}
     bool getHelpPaneVisible() {return m_HelpPaneVisible;}
     bool getMainPaneVisible() {return m_MainPaneVisible;}
+    QString getIntroPaneMessage() const {return m_IntroPaneMessage;}
+    QString getHelpPaneMessage() const {return m_HelpPaneMessage;}
 
 signals:
     Q_SIGNAL void introPaneVisibleChanged();
@@ -39,6 +43,9 @@ private:
     bool m_IntroPaneVisible;
     bool m_HelpPaneVisible;
     bool m_MainPaneVisible;
+
+    QString m_IntroPaneMessage;
+    QString m_HelpPaneMessage;
 
     Pane m_CurrentPane;
 };
