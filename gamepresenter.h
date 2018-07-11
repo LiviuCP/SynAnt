@@ -18,9 +18,9 @@ public:
     Q_INVOKABLE void switchToHelpPane();
     Q_INVOKABLE void switchToMainPane();
 
-    bool getIntroPaneVisible() {return m_IntroPaneVisible;}
-    bool getHelpPaneVisible() {return m_HelpPaneVisible;}
-    bool getMainPaneVisible() {return m_MainPaneVisible;}
+    bool getIntroPaneVisible() const {return m_IntroPaneVisible;}
+    bool getHelpPaneVisible() const {return m_HelpPaneVisible;}
+    bool getMainPaneVisible() const {return m_MainPaneVisible;}
     QString getIntroPaneMessage() const {return m_IntroPaneMessage;}
     QString getHelpPaneMessage() const {return m_HelpPaneMessage;}
 
