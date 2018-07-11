@@ -11,6 +11,8 @@ class GamePresenter : public QObject
     Q_PROPERTY(bool mainPaneVisible READ getMainPaneVisible NOTIFY mainPaneVisibleChanged)
     Q_PROPERTY(QString introPaneMessage READ getIntroPaneMessage CONSTANT)
     Q_PROPERTY(QString helpPaneMessage READ getHelpPaneMessage CONSTANT)
+    Q_PROPERTY(QString mainPaneInstructionsMessage READ getMainPaneInstructionsMessage CONSTANT)
+    Q_PROPERTY(QString mainPaneStatusMessage READ getMainPaneStatusMessage NOTIFY mainPaneStatusMessageChanged)
 
 public:
     explicit GamePresenter(QObject *parent = nullptr);
@@ -23,11 +25,14 @@ public:
     bool getMainPaneVisible() const {return m_MainPaneVisible;}
     QString getIntroPaneMessage() const {return m_IntroPaneMessage;}
     QString getHelpPaneMessage() const {return m_HelpPaneMessage;}
+    QString getMainPaneInstructionsMessage() const {return m_MainPaneInstructionsMessage;}
+    QString getMainPaneStatusMessage() const {return m_MainPaneStatusMessage;}
 
 signals:
     Q_SIGNAL void introPaneVisibleChanged();
     Q_SIGNAL void helpPaneVisibleChanged();
     Q_SIGNAL void mainPaneVisibleChanged();
+    Q_SIGNAL void mainPaneStatusMessageChanged();
 
 public slots:
 
@@ -46,6 +51,8 @@ private:
 
     QString m_IntroPaneMessage;
     QString m_HelpPaneMessage;
+    QString m_MainPaneInstructionsMessage;
+    QString m_MainPaneStatusMessage;
 
     Pane m_CurrentPane;
 };

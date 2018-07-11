@@ -89,8 +89,11 @@ Item {
 
             Text {
                 color: "white"
-                text: "Information area. Under construction!"
+                text: presenter.mainPaneInstructionsMessage
                 anchors.fill: parent
+                anchors.leftMargin: parent.width * 0.01
+                anchors.rightMargin: parent.width * 0.01
+                width: parent.width
                 wrapMode: Text.WordWrap
             }
         }
@@ -144,8 +147,11 @@ Item {
 
             Text {
                 color: "white"
-                text: "Status area. Under construction!"
+                text: presenter.mainPaneStatusMessage
                 anchors.fill: parent
+                anchors.leftMargin: parent.width * 0.02
+                anchors.rightMargin: parent.width * 0.02
+                width: parent.width
                 wrapMode: Text.WordWrap
             }
         }

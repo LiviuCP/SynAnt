@@ -8,6 +8,8 @@ GamePresenter::GamePresenter(QObject *parent)
     , m_MainPaneVisible {false}
     , m_IntroPaneMessage {GameStrings::c_IntroWindowWelcomeMessage}
     , m_HelpPaneMessage {GameStrings::c_HelpWindowMessage}
+    , m_MainPaneInstructionsMessage {GameStrings::c_InstructionsMessage}
+    , m_MainPaneStatusMessage {GameStrings::c_NoUserInputMessage}
     , m_CurrentPane {Pane::INTRO}
 {
 
