@@ -7,7 +7,7 @@
 #include "game.h"
 #include "gamestrings.h"
 
-WordMixer::WordMixer(QObject *parent, const QString &fname)
+WordMixer::WordMixer(const QString &fname, QObject *parent)
     : QObject(parent),
       m_FileName{fname},
       m_RowNumber{-1},
