@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
         HintsWindow hintsWindow{};
         hintsWindow.setWindowTitle(GameStrings::c_HelpWindowTitle);
 
-        WordMixer* wordMixer{new WordMixer{nullptr, QApplication::applicationDirPath() + "/data"}};
+        WordMixer* wordMixer{new WordMixer{QApplication::applicationDirPath() + "/data"}};
         MainGameWindow mainGameWindow{wordMixer};
         mainGameWindow.setWindowTitle(GameStrings::c_MainWindowTitle);
 

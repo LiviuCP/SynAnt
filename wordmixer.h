@@ -29,7 +29,7 @@ class WordMixer : public QObject
 {
     Q_OBJECT
 public:
-    explicit WordMixer(QObject *parent = nullptr, const QString &m_FileName = "");
+    explicit WordMixer(const QString &m_FileName = "", QObject *parent = nullptr);
 
     // splits the words into pieces and mixes them into an array
     void mixWords();
