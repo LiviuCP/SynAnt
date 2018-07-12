@@ -6,14 +6,17 @@
 #include "game.h"
 #include "gamestrings.h"
 
-MainGameWindow::MainGameWindow(QWidget *parent)
+MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     : QWidget{parent},
       m_HintsWindow{nullptr},
       m_MixedWords{},
-      m_WordMixer{nullptr},
+      m_WordMixer{wordMixer},
       m_ScoreItem{new ScoreItem{this}},
       m_AlreadyAccessed{false}
 {
+    Q_ASSERT(m_WordMixer);
+    m_WordMixer -> setParent(this);
+
     QHBoxLayout *statisticsLayout{new QHBoxLayout{}};
     m_HighScores = new QLabel{};
     m_HighScores -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
@@ -144,19 +147,13 @@ MainGameWindow::MainGameWindow(QWidget *parent)
     Q_ASSERT(connected);
     connected = connect(quitButtonShortcut,&QShortcut::activated,qApp,&QApplication::quit);
     Q_ASSERT(connected);
+    connected = connect(this,&MainGameWindow::levelChanged,m_WordMixer,&WordMixer::setWordPieceSize);
+    Q_ASSERT(connected);
 }
 
 void MainGameWindow::updateHintsWinPtr(HintsWindow *hw)
 {
     m_HintsWindow = hw;
-}
-
-void MainGameWindow::assignWordMixer(WordMixer *wm)
-{
-    m_WordMixer = wm;
-    if (m_WordMixer) {
-        connect(this,&MainGameWindow::levelChanged,m_WordMixer, &WordMixer::setWordPieceSize);
-    }
 }
 
 bool MainGameWindow::windowAlreadyAccessed() const

@@ -31,19 +31,23 @@ int main(int argc, char *argv[]) {
     QApplication app(argc,argv);
     qApp -> setStyleSheet(GameStrings::c_ApplicationStyle);
     try {
-        WordMixer wordMixer{nullptr, QApplication::applicationDirPath() + "/data"};
         IntroductionWindow introductionWindow{};
         introductionWindow.setWindowTitle(GameStrings::c_IntroWindowTitle);
+
         HintsWindow hintsWindow{};
         hintsWindow.setWindowTitle(GameStrings::c_HelpWindowTitle);
-        introductionWindow.updateHintsWinPtr(&hintsWindow);
-        MainGameWindow mainGameWindow{};
+
+        WordMixer* wordMixer{new WordMixer{nullptr, QApplication::applicationDirPath() + "/data"}};
+        MainGameWindow mainGameWindow{wordMixer};
         mainGameWindow.setWindowTitle(GameStrings::c_MainWindowTitle);
+
+        introductionWindow.updateHintsWinPtr(&hintsWindow);
         introductionWindow.updateMainGameWinPtr(&mainGameWindow);
         hintsWindow.updateMainGameWinPtr(&mainGameWindow);
         mainGameWindow.updateHintsWinPtr(&hintsWindow);
-        mainGameWindow.assignWordMixer(&wordMixer);
+
         introductionWindow.show();
+
         return app.exec();
     }
     catch (const QString fatalErrorMessage) {

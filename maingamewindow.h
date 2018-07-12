@@ -37,9 +37,8 @@ class MainGameWindow : public QWidget
 {
     Q_OBJECT
 public:
-    explicit MainGameWindow(QWidget *parent = 0);
+    explicit MainGameWindow(WordMixer *wm = nullptr, QWidget *parent = nullptr);
     void updateHintsWinPtr(HintsWindow *hw);
-    void assignWordMixer(WordMixer *wm);
     bool windowAlreadyAccessed() const;
     void getFirstTwoWords();
 
