@@ -17,12 +17,11 @@
 #ifndef WORDMIXER_H
 #define WORDMIXER_H
 
-#include <QVector>
-#include <QString>
-#include <QTextStream>
 #include <QObject>
+#include <QVector>
+
 #include <random>
-#include "fatalerrors.h"
+
 #include "game.h"
 
 class WordMixer : public QObject
