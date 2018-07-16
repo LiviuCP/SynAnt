@@ -14,7 +14,8 @@ SOURCES += \
     maingamewindow.cpp \
     wordmixer.cpp \
     fatalerrors.cpp \
-    scoreitem.cpp
+    scoreitem.cpp \
+    appmanager.cpp
 
 
 HEADERS += \
@@ -25,4 +26,5 @@ HEADERS += \
     fatalerrors.h \
     scoreitem.h \
     game.h \
-    gamestrings.h
+    gamestrings.h \
+    appmanager.h

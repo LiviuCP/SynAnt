@@ -13,23 +13,15 @@
 #define INTRODUCTIONWINDOW_H
 
 #include <QWidget>
-#include <QPushButton>
-#include "hintswindow.h"
-#include "maingamewindow.h"
 
 class IntroductionWindow : public QWidget
 {
     Q_OBJECT
 public:
-    explicit IntroductionWindow(QWidget *parent = 0);
-    void updateHintsWinPtr(HintsWindow *hw);
-    void updateMainGameWinPtr(MainGameWindow *mgw);
-private slots:
-    void _onButtonPlayClicked();
-    void _onButtonHintsClicked();
-private:
-    HintsWindow* m_HintsWindow;
-    MainGameWindow* m_MainGameWindow;
+    explicit IntroductionWindow(QWidget *parent = nullptr);
+signals:
+    void switchedIntroToHints();
+    void switchedIntroToMain();
 };
 
 #endif // INTRODUCTIONWINDOW_H

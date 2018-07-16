@@ -18,12 +18,13 @@
 
    A second additional class (ScoreItem) will be used for keeping track of the score.
 
+   An application manager (AppManager) will be responsible for creating and connecting the windows.
+
 */
 
 #include <QApplication>
-#include <QWidget>
-#include "introductionwindow.h"
-#include "hintswindow.h"
+
+#include "appmanager.h"
 #include "fatalerrors.h"
 #include "gamestrings.h"
 
@@ -31,23 +32,7 @@ int main(int argc, char *argv[]) {
     QApplication app(argc,argv);
     qApp -> setStyleSheet(GameStrings::c_ApplicationStyle);
     try {
-        IntroductionWindow introductionWindow{};
-        introductionWindow.setWindowTitle(GameStrings::c_IntroWindowTitle);
-
-        HintsWindow hintsWindow{};
-        hintsWindow.setWindowTitle(GameStrings::c_HelpWindowTitle);
-
-        WordMixer* wordMixer{new WordMixer{QApplication::applicationDirPath() + "/data"}};
-        MainGameWindow mainGameWindow{wordMixer};
-        mainGameWindow.setWindowTitle(GameStrings::c_MainWindowTitle);
-
-        introductionWindow.updateHintsWinPtr(&hintsWindow);
-        introductionWindow.updateMainGameWinPtr(&mainGameWindow);
-        hintsWindow.updateMainGameWinPtr(&mainGameWindow);
-        mainGameWindow.updateHintsWinPtr(&hintsWindow);
-
-        introductionWindow.show();
-
+        AppManager::getAppManager()->init(QApplication::applicationDirPath() + "/data");
         return app.exec();
     }
     catch (const QString fatalErrorMessage) {

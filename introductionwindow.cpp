@@ -1,15 +1,16 @@
-#include <QHBoxLayout>
-#include <QLabel>
 #include <QApplication>
+#include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <QPushButton>
+#include <QLabel>
 #include <QShortcut>
+
+#include "appmanager.h"
 #include "introductionwindow.h"
 #include "gamestrings.h"
 
 IntroductionWindow::IntroductionWindow(QWidget *parent)
-    : QWidget{parent},
-      m_HintsWindow{nullptr},
-      m_MainGameWindow{nullptr}
+    : QWidget{parent}
 {
     QHBoxLayout *welcomeMsgLayout{new QHBoxLayout{}};
     QLabel *welcomeMessage{new QLabel{}};
@@ -46,39 +47,16 @@ IntroductionWindow::IntroductionWindow(QWidget *parent)
     Q_ASSERT(connected);
     connected = connect(quitButtonShortcut,&QShortcut::activated,qApp,&QApplication::quit);
     Q_ASSERT(connected);
-    connected = connect(hintsButton,&QPushButton::clicked,this,&IntroductionWindow::_onButtonHintsClicked);
+    connected = connect(hintsButton,&QPushButton::clicked,this,&IntroductionWindow::switchedIntroToHints);
     Q_ASSERT(connected);
-    connected = connect(hintsButtonShortcut,&QShortcut::activated,this,&IntroductionWindow::_onButtonHintsClicked);
+    connected = connect(hintsButtonShortcut,&QShortcut::activated,this,&IntroductionWindow::switchedIntroToHints);
     Q_ASSERT(connected);
-    connected = connect(playButton,&QPushButton::clicked,this,&IntroductionWindow::_onButtonPlayClicked);
+    connected = connect(playButton,&QPushButton::clicked,this,&IntroductionWindow::switchedIntroToMain);
     Q_ASSERT(connected);
-    connected = connect(playButtonShortcut,&QShortcut::activated,this,&IntroductionWindow::_onButtonPlayClicked);
+    connected = connect(playButtonShortcut,&QShortcut::activated,this,&IntroductionWindow::switchedIntroToMain);
     Q_ASSERT(connected);
-    connected = connect(playButtonAltShortcut,&QShortcut::activated,this,&IntroductionWindow::_onButtonPlayClicked);
+    connected = connect(playButtonAltShortcut,&QShortcut::activated,this,&IntroductionWindow::switchedIntroToMain);
     Q_ASSERT(connected);
-}
-
-void IntroductionWindow::updateHintsWinPtr(HintsWindow *hw)
-{
-    m_HintsWindow = hw;
-}
-
-void IntroductionWindow::updateMainGameWinPtr(MainGameWindow *mgw)
-{
-    m_MainGameWindow = mgw;
-}
-
-void IntroductionWindow::_onButtonPlayClicked()
-{
-    hide();
-    m_MainGameWindow -> getFirstTwoWords();
-    m_MainGameWindow -> show();
-}
-
-void IntroductionWindow::_onButtonHintsClicked()
-{
-    hide();
-    m_HintsWindow -> show();
 }
 
 

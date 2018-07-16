@@ -1,14 +1,22 @@
-#include <QHBoxLayout>
 #include <QApplication>
+#include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QGroupBox>
+#include <QLineEdit>
+#include <QRadioButton>
+#include <QPushButton>
+#include <QLabel>
+#include <QShortcut>
+
+#include "appmanager.h"
 #include "maingamewindow.h"
-#include "game.h"
+#include "wordmixer.h"
+#include "scoreitem.h"
 #include "gamestrings.h"
+
 
 MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     : QWidget{parent},
-      m_HintsWindow{nullptr},
       m_MixedWords{},
       m_WordMixer{wordMixer},
       m_ScoreItem{new ScoreItem{this}},
@@ -135,9 +143,9 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     Q_ASSERT(connected);
     connected = connect(submitButtonAltShortcut,&QShortcut::activated,this,&MainGameWindow::_onButtonSubmitClicked);
     Q_ASSERT(connected);
-    connected = connect(hintsButton,&QPushButton::clicked, this,&MainGameWindow::_onButtonHintsClicked);
+    connected = connect(hintsButton,&QPushButton::clicked,this,&MainGameWindow::switchedMaintoHints);
     Q_ASSERT(connected);
-    connected = connect(hintsButtonShortcut,&QShortcut::activated,this,&MainGameWindow::_onButtonHintsClicked);
+    connected = connect(hintsButtonShortcut,&QShortcut::activated,this,&MainGameWindow::switchedMaintoHints);
     Q_ASSERT(connected);
     connected = connect(showResultsButton,&QPushButton::clicked,this,&MainGameWindow::_onButtonResultsClicked);
     Q_ASSERT(connected);
@@ -149,11 +157,6 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     Q_ASSERT(connected);
     connected = connect(this,&MainGameWindow::levelChanged,m_WordMixer,&WordMixer::setWordPieceSize);
     Q_ASSERT(connected);
-}
-
-void MainGameWindow::updateHintsWinPtr(HintsWindow *hw)
-{
-    m_HintsWindow = hw;
 }
 
 bool MainGameWindow::windowAlreadyAccessed() const
@@ -263,12 +266,6 @@ void MainGameWindow::_onButtonSubmitClicked()
             m_ResetButtonShortcut->setEnabled(true);
         }
     }
-}
-
-void MainGameWindow::_onButtonHintsClicked()
-{
-    hide();
-    m_HintsWindow -> show();
 }
 
 void MainGameWindow::_onButtonResultsClicked()

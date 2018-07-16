@@ -12,8 +12,8 @@
 #define FATALERRORS_H
 
 #include <QWidget>
-#include <QVBoxLayout>
-#include <QLabel>
+
+class QLabel;
 
 class FatalErrors : public QWidget
 {

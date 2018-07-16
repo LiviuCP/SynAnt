@@ -21,24 +21,24 @@
 #define MAINGAMEWINDOW_H
 
 #include <QWidget>
-#include <QPushButton>
 #include <QVector>
-#include <QLabel>
-#include <QLineEdit>
-#include <QRadioButton>
-#include <QShortcut>
-#include "game.h"
-#include "hintswindow.h"
-#include "wordmixer.h"
-#include "scoreitem.h"
 
-class HintsWindow;
+#include "game.h"
+
+class QLabel;
+class QRadioButton;
+class QPushButton;
+class QHBoxLayout;
+class QLineEdit;
+class QShortcut;
+class WordMixer;
+class ScoreItem;
+
 class MainGameWindow : public QWidget
 {
     Q_OBJECT
 public:
     explicit MainGameWindow(WordMixer *wm = nullptr, QWidget *parent = nullptr);
-    void updateHintsWinPtr(HintsWindow *hw);
     bool windowAlreadyAccessed() const;
     void getFirstTwoWords();
 
@@ -47,6 +47,7 @@ public slots:
 
 signals:
     void levelChanged(Game::Level level);
+    void switchedMaintoHints();
 
 private slots:
     void _onButtonResetClicked();
@@ -57,11 +58,9 @@ private slots:
     void _onButtonHardToggled(bool checked);
     void _onButtonHardShortcutEntered();
     void _onButtonSubmitClicked();
-    void _onButtonHintsClicked();
     void _onButtonResultsClicked();
 
 private:
-    HintsWindow* m_HintsWindow;
     // both words split into equal pieces and mixed into a single array
     QVector<QLabel*> m_MixedWords;
     QHBoxLayout* m_MixedWordsLayout;

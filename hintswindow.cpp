@@ -1,16 +1,17 @@
-#include <QHBoxLayout>
-#include <QLabel>
 #include <QApplication>
+#include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QScrollArea>
+#include <QPushButton>
+#include <QLabel>
 #include <QShortcut>
+
+#include "appmanager.h"
 #include "hintswindow.h"
 #include "gamestrings.h"
 
-
 HintsWindow::HintsWindow(QWidget *parent)
-    : QWidget{parent},
-      m_MainGameWindow{nullptr}
+    : QWidget{parent}
 {
     QHBoxLayout *hintsMsgLayout{new QHBoxLayout{}};
     QScrollArea *hintsMsgScrollArea{new QScrollArea{}};
@@ -44,26 +45,10 @@ HintsWindow::HintsWindow(QWidget *parent)
     Q_ASSERT(connected);
     connected = connect(quitButtonShortcut,&QShortcut::activated,qApp,&QApplication::quit);
     Q_ASSERT(connected);
-    connected = connect(okButton,&QPushButton::clicked,this,&HintsWindow::_onButtonOkClicked);
+    connected = connect(okButton,&QPushButton::clicked,this,&HintsWindow::switchedHintsToMain);
     Q_ASSERT(connected);
-    connected = connect(okButtonShortcut,&QShortcut::activated,this,&HintsWindow::_onButtonOkClicked);
+    connected = connect(okButtonShortcut,&QShortcut::activated,this,&HintsWindow::switchedHintsToMain);
     Q_ASSERT(connected);
-    connected = connect(okButtonAltShortcut,&QShortcut::activated,this,&HintsWindow::_onButtonOkClicked);
+    connected = connect(okButtonAltShortcut,&QShortcut::activated,this,&HintsWindow::switchedHintsToMain);
     Q_ASSERT(connected);
 }
-
-void HintsWindow::updateMainGameWinPtr(MainGameWindow *mgw)
-{
-    m_MainGameWindow=mgw;
-}
-
-void HintsWindow::_onButtonOkClicked()
-{
-    hide();
-    if (!(m_MainGameWindow -> windowAlreadyAccessed()))
-    {
-        m_MainGameWindow -> getFirstTwoWords();
-    }
-    m_MainGameWindow -> show();
-}
-

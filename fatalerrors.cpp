@@ -1,8 +1,10 @@
+#include <QApplication>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QPushButton>
-#include <QApplication>
+#include <QLabel>
 #include <QShortcut>
+
 #include "fatalerrors.h"
 #include "gamestrings.h"
 

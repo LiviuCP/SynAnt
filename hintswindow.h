@@ -18,20 +18,14 @@
 #define HINTSWINDOW_H
 
 #include <QWidget>
-#include <QPushButton>
-#include "maingamewindow.h"
 
-class MainGameWindow;
 class HintsWindow : public QWidget
 {
     Q_OBJECT
 public:
-    explicit HintsWindow(QWidget *parent = 0);
-    void updateMainGameWinPtr(MainGameWindow *mgw);
-private slots:
-    void _onButtonOkClicked();
-private:
-    MainGameWindow* m_MainGameWindow;
+    explicit HintsWindow(QWidget *parent = nullptr);
+signals:
+    void switchedHintsToMain();
 };
 
 #endif // HINTSWINDOW_H
