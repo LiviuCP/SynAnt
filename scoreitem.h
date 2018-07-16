@@ -10,8 +10,10 @@
 
 #ifndef SCOREITEM_H
 #define SCOREITEM_H
-#include <QVector>
+
 #include <QObject>
+#include <QVector>
+
 #include "game.h"
 
 class ScoreItem : public QObject
