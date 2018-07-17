@@ -13,10 +13,10 @@ FatalErrors::FatalErrors(QWidget *parent)
       m_ErrorText{}
 {
     QHBoxLayout *messageLayout{new QHBoxLayout{}};
-    m_ErrorMessage = new QLabel{};
-    m_ErrorMessage -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-    m_ErrorMessage -> setFrameStyle(QFrame::StyledPanel);
-    messageLayout -> addWidget(m_ErrorMessage,1);
+    m_pErrorMessage = new QLabel{};
+    m_pErrorMessage -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    m_pErrorMessage -> setFrameStyle(QFrame::StyledPanel);
+    messageLayout -> addWidget(m_pErrorMessage,1);
 
     QHBoxLayout *closeButtonLayout{new QHBoxLayout{}};
     QPushButton *closeButton{new QPushButton{GameStrings::c_FatalErrorQuitButtonLabel}};
@@ -43,5 +43,5 @@ FatalErrors::FatalErrors(QWidget *parent)
 void FatalErrors::setFatalErrorText(const QString &text)
 {
     m_ErrorText = text;
-    m_ErrorMessage->setText(m_ErrorText);
+    m_pErrorMessage->setText(m_ErrorText);
 }

@@ -23,7 +23,7 @@ public:
     void setFatalErrorText(const QString &text);
 private:
     QString m_ErrorText;
-    QLabel* m_ErrorMessage;
+    QLabel* m_pErrorMessage;
 };
 
 #endif // FATALERRORS_H

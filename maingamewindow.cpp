@@ -18,31 +18,31 @@
 MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     : QWidget{parent},
       m_MixedWords{},
-      m_WordMixer{wordMixer},
-      m_ScoreItem{new ScoreItem{this}},
+      m_pWordMixer{wordMixer},
+      m_pScoreItem{new ScoreItem{this}},
       m_IsInitialized{false}
 {
-    Q_ASSERT(m_WordMixer);
-    m_WordMixer -> setParent(this);
+    Q_ASSERT(m_pWordMixer);
+    m_pWordMixer -> setParent(this);
 
     QHBoxLayout *statisticsLayout{new QHBoxLayout{}};
-    m_HighScores = new QLabel{};
-    m_HighScores -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
-    m_HighScores -> setToolTip(GameStrings::c_HighscoresToolTip);
-    m_NrOfWordPairs = new QLabel{};
-    m_NrOfWordPairs -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
-    m_NrOfWordPairs -> setToolTip(GameStrings::c_WordPairsToolTip);
-    m_ResetButton = new QPushButton{GameStrings::c_ResetButtonLabel};
-    m_ResetButton -> setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    m_ResetButton -> setToolTip(GameStrings::c_ResetButtonToolTip);
-    m_ResetButtonShortcut = new QShortcut{QKeySequence{GameStrings::c_ResetShortcut},this};
+    m_pHighScores = new QLabel{};
+    m_pHighScores -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
+    m_pHighScores -> setToolTip(GameStrings::c_HighscoresToolTip);
+    m_pNrOfWordPairs = new QLabel{};
+    m_pNrOfWordPairs -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
+    m_pNrOfWordPairs -> setToolTip(GameStrings::c_WordPairsToolTip);
+    m_pResetButton = new QPushButton{GameStrings::c_ResetButtonLabel};
+    m_pResetButton -> setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    m_pResetButton -> setToolTip(GameStrings::c_ResetButtonToolTip);
+    m_pResetButtonShortcut = new QShortcut{QKeySequence{GameStrings::c_ResetShortcut},this};
     // enable reset only if statistics are different from 0
-    m_ResetButton -> setEnabled(false);
-    m_ResetButtonShortcut ->setEnabled(false);
-    statisticsLayout -> addWidget(m_HighScores);
-    statisticsLayout -> addWidget(m_NrOfWordPairs);
+    m_pResetButton -> setEnabled(false);
+    m_pResetButtonShortcut ->setEnabled(false);
+    statisticsLayout -> addWidget(m_pHighScores);
+    statisticsLayout -> addWidget(m_pNrOfWordPairs);
     statisticsLayout -> addSpacing(30);
-    statisticsLayout -> addWidget(m_ResetButton);
+    statisticsLayout -> addWidget(m_pResetButton);
 
     QHBoxLayout *levelsStatusReqInputLayout{new QHBoxLayout{}};
     QLabel *requestInput{new QLabel{}};
@@ -53,35 +53,35 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     QGroupBox *levelButtonsBox{new QGroupBox{}};
     levelButtonsBox -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
     levelButtonsBox -> setToolTip(GameStrings::c_LevelButtonsToolTip);
-    m_LevelEasyButton = new QRadioButton{GameStrings::c_LevelEasyButtonLabel};
+    m_pLevelEasyButton = new QRadioButton{GameStrings::c_LevelEasyButtonLabel};
     QShortcut *levelEasyShortcut{new QShortcut{QKeySequence{GameStrings::c_LevelEasyButtonShortcut},this}};
-    m_LevelMediumButton = new QRadioButton{GameStrings::c_LevelMediumButtonLabel};
+    m_pLevelMediumButton = new QRadioButton{GameStrings::c_LevelMediumButtonLabel};
     QShortcut *levelMediumShortcut{new QShortcut{QKeySequence{GameStrings::c_LevelMediumButtonShortcut},this}};
-    m_LevelMediumButton -> setChecked(true);
-    m_LevelHardButton = new QRadioButton{GameStrings::c_LevelHardButtonLabel};
+    m_pLevelMediumButton -> setChecked(true);
+    m_pLevelHardButton = new QRadioButton{GameStrings::c_LevelHardButtonLabel};
     QShortcut *levelHardShortcut{new QShortcut{QKeySequence{GameStrings::c_LevelHardButtonShortcut},this}};
     QVBoxLayout *levelButtonsLayout{new QVBoxLayout};
-    levelButtonsLayout -> addWidget(m_LevelEasyButton);
-    levelButtonsLayout -> addWidget(m_LevelMediumButton);
-    levelButtonsLayout -> addWidget(m_LevelHardButton);
+    levelButtonsLayout -> addWidget(m_pLevelEasyButton);
+    levelButtonsLayout -> addWidget(m_pLevelMediumButton);
+    levelButtonsLayout -> addWidget(m_pLevelHardButton);
     levelButtonsBox -> setLayout(levelButtonsLayout);
-    m_ResultsErrors = new QLabel{};
-    m_ResultsErrors -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-    m_ResultsErrors -> setToolTip(GameStrings::c_GameStatusToolTip);
+    m_pResultsErrors = new QLabel{};
+    m_pResultsErrors -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    m_pResultsErrors -> setToolTip(GameStrings::c_GameStatusToolTip);
     levelsStatusReqInputLayout -> addWidget(requestInput);
     levelsStatusReqInputLayout -> addWidget(levelButtonsBox);
-    levelsStatusReqInputLayout -> addWidget(m_ResultsErrors);
+    levelsStatusReqInputLayout -> addWidget(m_pResultsErrors);
 
-    m_MixedWordsLayout = new QHBoxLayout{};
-    m_MixedWordsLayout -> setSpacing(0);
+    m_pMixedWordsLayout = new QHBoxLayout{};
+    m_pMixedWordsLayout -> setSpacing(0);
 
     QHBoxLayout *wordsLayout{new QHBoxLayout{}};
-    m_FirstWord = new QLineEdit{};
-    m_FirstWord -> setToolTip(GameStrings::c_FirstWordToolTip);
-    m_SecondWord = new QLineEdit{};
-    m_SecondWord -> setToolTip(GameStrings::c_SecondWordToolTip);
-    wordsLayout -> addWidget(m_FirstWord);
-    wordsLayout -> addWidget(m_SecondWord);
+    m_pFirstWord = new QLineEdit{};
+    m_pFirstWord -> setToolTip(GameStrings::c_FirstWordToolTip);
+    m_pSecondWord = new QLineEdit{};
+    m_pSecondWord -> setToolTip(GameStrings::c_SecondWordToolTip);
+    wordsLayout -> addWidget(m_pFirstWord);
+    wordsLayout -> addWidget(m_pSecondWord);
 
     QHBoxLayout *buttonsLayout{new QHBoxLayout{}};
     buttonsLayout -> setSpacing(25);
@@ -110,30 +110,30 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     QVBoxLayout *mainLayout{new QVBoxLayout{}};
     mainLayout -> addLayout(statisticsLayout,1);
     mainLayout -> addLayout(levelsStatusReqInputLayout);
-    mainLayout -> addLayout(m_MixedWordsLayout);
+    mainLayout -> addLayout(m_pMixedWordsLayout);
     mainLayout -> addLayout(wordsLayout);
     mainLayout -> addLayout(buttonsLayout);
     setLayout(mainLayout);
     setToolTip(GameStrings::c_MainWindowToolTip);
     setAttribute(Qt::WA_AlwaysShowToolTips);
 
-    bool connected{connect(m_ScoreItem,&ScoreItem::statisticsUpdated,this,&MainGameWindow::onStatisticsUpdated)};
+    bool connected{connect(m_pScoreItem,&ScoreItem::statisticsUpdated,this,&MainGameWindow::onStatisticsUpdated)};
     Q_ASSERT(connected);
-    connected = connect(this,&MainGameWindow::levelChanged,m_ScoreItem,&ScoreItem::setScoreIncrement);
+    connected = connect(this,&MainGameWindow::levelChanged,m_pScoreItem,&ScoreItem::setScoreIncrement);
     Q_ASSERT(connected);
-    connected = connect(m_ResetButton,&QPushButton::clicked,this,&MainGameWindow::_onButtonResetClicked);
+    connected = connect(m_pResetButton,&QPushButton::clicked,this,&MainGameWindow::_onButtonResetClicked);
     Q_ASSERT(connected);
-    connected = connect(m_ResetButtonShortcut,&QShortcut::activated,this,&MainGameWindow::_onButtonResetClicked);
+    connected = connect(m_pResetButtonShortcut,&QShortcut::activated,this,&MainGameWindow::_onButtonResetClicked);
     Q_ASSERT(connected);
-    connected = connect(m_LevelEasyButton,&QRadioButton::toggled,this,&MainGameWindow::_onButtonEasyToggled);
+    connected = connect(m_pLevelEasyButton,&QRadioButton::toggled,this,&MainGameWindow::_onButtonEasyToggled);
     Q_ASSERT(connected);
     connected = connect(levelEasyShortcut,&QShortcut::activated,this,&MainGameWindow::_onButtonEasyShortcutEntered);
     Q_ASSERT(connected);
-    connected = connect(m_LevelMediumButton,&QRadioButton::toggled,this,&MainGameWindow::_onButtonMediumToggled);
+    connected = connect(m_pLevelMediumButton,&QRadioButton::toggled,this,&MainGameWindow::_onButtonMediumToggled);
     Q_ASSERT(connected);
     connected = connect(levelMediumShortcut,&QShortcut::activated,this,&MainGameWindow::_onButtonMediumShortcutEntered);
     Q_ASSERT(connected);
-    connected = connect(m_LevelHardButton,&QRadioButton::toggled,this,&MainGameWindow::_onButtonHardToggled);
+    connected = connect(m_pLevelHardButton,&QRadioButton::toggled,this,&MainGameWindow::_onButtonHardToggled);
     Q_ASSERT(connected);
     connected = connect(levelHardShortcut,&QShortcut::activated,this,&MainGameWindow::_onButtonHardShortcutEntered);
     Q_ASSERT(connected);
@@ -155,7 +155,7 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     Q_ASSERT(connected);
     connected = connect(quitButtonShortcut,&QShortcut::activated,qApp,&QApplication::quit);
     Q_ASSERT(connected);
-    connected = connect(this,&MainGameWindow::levelChanged,m_WordMixer,&WordMixer::setWordPieceSize);
+    connected = connect(this,&MainGameWindow::levelChanged,m_pWordMixer,&WordMixer::setWordPieceSize);
     Q_ASSERT(connected);
 }
 
@@ -167,26 +167,26 @@ bool MainGameWindow::isInitialized() const
 void MainGameWindow::init()
 {
     m_IsInitialized = true;
-    m_WordMixer -> mixWords();
+    m_pWordMixer -> mixWords();
     _createMixedWordsLabels();
     _addMixedWordsLabels();
-    m_ScoreItem -> resetStatistics();
+    m_pScoreItem -> resetStatistics();
     _updateStatusMessage(Game::StatusCodes::NO_USER_INPUT);
 }
 
 void MainGameWindow::onStatisticsUpdated()
 {
-    QVector<int> scoresPairs{m_ScoreItem -> getStatistics()};
-    m_HighScores -> setText("High-score: " + QString::number(scoresPairs[0]) + "/" + QString::number(scoresPairs[1]));
-    m_NrOfWordPairs -> setText("Word pairs: " + QString::number(scoresPairs[2]) + "/" + QString::number(scoresPairs[3]));
+    QVector<int> scoresPairs{m_pScoreItem -> getStatistics()};
+    m_pHighScores -> setText("High-score: " + QString::number(scoresPairs[0]) + "/" + QString::number(scoresPairs[1]));
+    m_pNrOfWordPairs -> setText("Word pairs: " + QString::number(scoresPairs[2]) + "/" + QString::number(scoresPairs[3]));
 }
 
 void MainGameWindow::_onButtonResetClicked()
 {
-    m_ScoreItem -> resetStatistics();
+    m_pScoreItem -> resetStatistics();
     _updateStatusMessage(Game::StatusCodes::STATISTICS_RESET);
-    m_ResetButton -> setEnabled(false);
-    m_ResetButtonShortcut -> setEnabled(false);
+    m_pResetButton -> setEnabled(false);
+    m_pResetButtonShortcut -> setEnabled(false);
 }
 
 void MainGameWindow::_onButtonEasyToggled(bool checked)
@@ -199,9 +199,9 @@ void MainGameWindow::_onButtonEasyToggled(bool checked)
 
 void MainGameWindow::_onButtonEasyShortcutEntered()
 {
-    if (!(m_LevelEasyButton -> isChecked()))
+    if (!(m_pLevelEasyButton -> isChecked()))
     {
-        m_LevelEasyButton -> setChecked(true);
+        m_pLevelEasyButton -> setChecked(true);
     }
 }
 
@@ -215,9 +215,9 @@ void MainGameWindow::_onButtonMediumToggled(bool checked)
 
 void MainGameWindow::_onButtonMediumShortcutEntered()
 {
-    if (!(m_LevelMediumButton -> isChecked()))
+    if (!(m_pLevelMediumButton -> isChecked()))
     {
-        m_LevelMediumButton -> setChecked(true);
+        m_pLevelMediumButton -> setChecked(true);
     }
 }
 
@@ -231,63 +231,63 @@ void MainGameWindow::_onButtonHardToggled(bool checked)
 
 void MainGameWindow::_onButtonHardShortcutEntered()
 {
-    if (!(m_LevelHardButton -> isChecked()))
+    if (!(m_pLevelHardButton -> isChecked()))
     {
-        m_LevelHardButton -> setChecked(true);
+        m_pLevelHardButton -> setChecked(true);
     }
 }
 
 void MainGameWindow::_onButtonSubmitClicked()
 {
-    QString firstInputWord{m_FirstWord -> text()};
-    QString secondInputword{m_SecondWord -> text()};
-    m_FirstWord -> clear();
-    m_SecondWord -> clear();
-    m_FirstWord -> setFocus();
+    QString firstInputWord{m_pFirstWord -> text()};
+    QString secondInputword{m_pSecondWord -> text()};
+    m_pFirstWord -> clear();
+    m_pSecondWord -> clear();
+    m_pFirstWord -> setFocus();
 
-    Game::StatusCodes statusCode {m_WordMixer->checkWords(firstInputWord, secondInputword)};
+    Game::StatusCodes statusCode {m_pWordMixer->checkWords(firstInputWord, secondInputword)};
     // update the status message before retrieving any new words
     _updateStatusMessage(statusCode);
     if (statusCode == Game::StatusCodes::SUCCESS)
     {
-        m_WordMixer -> mixWords();
+        m_pWordMixer -> mixWords();
         _removeMixedWordsLabels();
         _createMixedWordsLabels();
         _addMixedWordsLabels();
-        m_ScoreItem -> updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
+        m_pScoreItem -> updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
 
-        if (!m_ResetButton->isEnabled())
+        if (!m_pResetButton->isEnabled())
         {
-            m_ResetButton->setEnabled(true);
+            m_pResetButton->setEnabled(true);
         }
 
-        if (!m_ResetButtonShortcut->isEnabled())
+        if (!m_pResetButtonShortcut->isEnabled())
         {
-            m_ResetButtonShortcut->setEnabled(true);
+            m_pResetButtonShortcut->setEnabled(true);
         }
     }
 }
 
 void MainGameWindow::_onButtonResultsClicked()
 {
-    m_FirstWord -> clear();
-    m_SecondWord -> clear();
-    m_FirstWord -> setFocus();
+    m_pFirstWord -> clear();
+    m_pSecondWord -> clear();
+    m_pFirstWord -> setFocus();
     _updateStatusMessage(Game::StatusCodes::REQUESTED_BY_USER);
-    m_WordMixer -> mixWords();
+    m_pWordMixer -> mixWords();
     _removeMixedWordsLabels();
     _createMixedWordsLabels();
     _addMixedWordsLabels();
-    m_ScoreItem -> updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
+    m_pScoreItem -> updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
 
-    if (!m_ResetButton->isEnabled())
+    if (!m_pResetButton->isEnabled())
     {
-        m_ResetButton->setEnabled(true);
+        m_pResetButton->setEnabled(true);
     }
 
-    if (!m_ResetButtonShortcut->isEnabled())
+    if (!m_pResetButtonShortcut->isEnabled())
     {
-        m_ResetButtonShortcut->setEnabled(true);
+        m_pResetButtonShortcut->setEnabled(true);
     }
 }
 
@@ -295,7 +295,7 @@ void MainGameWindow::_removeMixedWordsLabels()
 {
     for(auto currentWordPiece : m_MixedWords)
     {
-        m_MixedWordsLayout -> removeWidget(currentWordPiece);
+        m_pMixedWordsLayout -> removeWidget(currentWordPiece);
         delete currentWordPiece;
         currentWordPiece = nullptr;
     }
@@ -303,22 +303,22 @@ void MainGameWindow::_removeMixedWordsLabels()
 
 void MainGameWindow::_createMixedWordsLabels()
 {
-    int newNumberOfPieces{(m_WordMixer->getMixedWordsStringArray()).size()};
+    int newNumberOfPieces{(m_pWordMixer->getMixedWordsStringArray()).size()};
     m_MixedWords.resize(newNumberOfPieces);
     for (int wordPieceIndex{0}; wordPieceIndex < newNumberOfPieces; wordPieceIndex++)
     {
         m_MixedWords[wordPieceIndex] = new QLabel{};
-        m_MixedWords[wordPieceIndex] -> setText((m_WordMixer -> getMixedWordsStringArray()).at(wordPieceIndex));
+        m_MixedWords[wordPieceIndex] -> setText((m_pWordMixer -> getMixedWordsStringArray()).at(wordPieceIndex));
         m_MixedWords[wordPieceIndex] -> setStyleSheet(GameStrings::c_WordEachPieceStyle);
     }
 
-    m_MixedWords[m_WordMixer -> getFirstWordBeginIndex()]  -> setStyleSheet(GameStrings::c_WordBeginPieceStyle);
+    m_MixedWords[m_pWordMixer -> getFirstWordBeginIndex()]  -> setStyleSheet(GameStrings::c_WordBeginPieceStyle);
 
-    m_MixedWords[m_WordMixer -> getSecondWordBeginIndex()] -> setStyleSheet(GameStrings::c_WordBeginPieceStyle);
+    m_MixedWords[m_pWordMixer -> getSecondWordBeginIndex()] -> setStyleSheet(GameStrings::c_WordBeginPieceStyle);
 
-    m_MixedWords[m_WordMixer -> getFirstWordEndIndex()]    -> setStyleSheet(GameStrings::c_WordEndPieceStyle);
+    m_MixedWords[m_pWordMixer -> getFirstWordEndIndex()]    -> setStyleSheet(GameStrings::c_WordEndPieceStyle);
 
-    m_MixedWords[m_WordMixer -> getSecondWordEndIndex()]   -> setStyleSheet(GameStrings::c_WordEndPieceStyle);
+    m_MixedWords[m_pWordMixer -> getSecondWordEndIndex()]   -> setStyleSheet(GameStrings::c_WordEndPieceStyle);
 
 }
 
@@ -326,17 +326,17 @@ void MainGameWindow::_addMixedWordsLabels()
 {
     for (auto currentWordPiece : m_MixedWords)
     {
-        m_MixedWordsLayout -> addWidget(currentWordPiece);
+        m_pMixedWordsLayout -> addWidget(currentWordPiece);
     }
 }
 
 void MainGameWindow::_switchToLevel(Game::Level level)
 {
-    m_FirstWord -> clear();
-    m_SecondWord -> clear();
-    m_FirstWord -> setFocus();
+    m_pFirstWord -> clear();
+    m_pSecondWord -> clear();
+    m_pFirstWord -> setFocus();
     Q_EMIT levelChanged(level);
-    m_WordMixer -> mixWords();
+    m_pWordMixer -> mixWords();
     _removeMixedWordsLabels();
     _createMixedWordsLabels();
     _addMixedWordsLabels();
@@ -352,10 +352,10 @@ void MainGameWindow::_updateStatusMessage(Game::StatusCodes statusCode)
     case Game::StatusCodes::SUCCESS:
         statusMessage = GameStrings::c_SuccessMessage;
         statusMessage += "\n\nThe two words are:\n\n";
-        statusMessage += "\t" + m_WordMixer->getFirstWord() + "\n";
-        statusMessage += "\t" + m_WordMixer->getSecondWord() + "\n";
+        statusMessage += "\t" + m_pWordMixer->getFirstWord() + "\n";
+        statusMessage += "\t" + m_pWordMixer->getSecondWord() + "\n";
         statusMessage += "\nThe words are: \n\n\t";
-        statusMessage += m_WordMixer->areSynonyms() ? "synonyms" : "antonyms";
+        statusMessage += m_pWordMixer->areSynonyms() ? "synonyms" : "antonyms";
         statusMessage += "\n\nNext pair of words is available below.";
         break;
     case Game::StatusCodes::MISSING_WORDS:
@@ -366,10 +366,10 @@ void MainGameWindow::_updateStatusMessage(Game::StatusCodes statusCode)
         break;
     case Game::StatusCodes::REQUESTED_BY_USER:
         statusMessage = "The correct words are: \n\n";
-        statusMessage += "\t" + m_WordMixer->getFirstWord() + "\n";
-        statusMessage += "\t" + m_WordMixer->getSecondWord() + "\n";
+        statusMessage += "\t" + m_pWordMixer->getFirstWord() + "\n";
+        statusMessage += "\t" + m_pWordMixer->getSecondWord() + "\n";
         statusMessage += "\nThe words are: \n\n\t";
-        statusMessage += m_WordMixer->areSynonyms() ? "synonyms" : "antonyms";
+        statusMessage += m_pWordMixer->areSynonyms() ? "synonyms" : "antonyms";
         statusMessage += "\n\nNext pair of words is available below.";
         break;
     case Game::StatusCodes::NO_USER_INPUT:
@@ -385,7 +385,7 @@ void MainGameWindow::_updateStatusMessage(Game::StatusCodes statusCode)
         ;
     }
 
-    m_ResultsErrors -> setText(statusMessage);
+    m_pResultsErrors -> setText(statusMessage);
 }
 
 

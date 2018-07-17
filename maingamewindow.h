@@ -63,19 +63,19 @@ private slots:
 private:
     // both words split into equal pieces and mixed into a single array
     QVector<QLabel*> m_MixedWords;
-    QHBoxLayout* m_MixedWordsLayout;
-    QLabel* m_ResultsErrors;
-    QLineEdit* m_FirstWord;
-    QLineEdit* m_SecondWord;
-    QLabel* m_HighScores;
-    QLabel* m_NrOfWordPairs;
-    QRadioButton* m_LevelEasyButton;
-    QRadioButton* m_LevelMediumButton;
-    QRadioButton* m_LevelHardButton;
-    QPushButton* m_ResetButton;
-    QShortcut* m_ResetButtonShortcut;
-    WordMixer* m_WordMixer;
-    ScoreItem* m_ScoreItem;
+    QHBoxLayout* m_pMixedWordsLayout;
+    QLabel* m_pResultsErrors;
+    QLineEdit* m_pFirstWord;
+    QLineEdit* m_pSecondWord;
+    QLabel* m_pHighScores;
+    QLabel* m_pNrOfWordPairs;
+    QRadioButton* m_pLevelEasyButton;
+    QRadioButton* m_pLevelMediumButton;
+    QRadioButton* m_pLevelHardButton;
+    QPushButton* m_pResetButton;
+    QShortcut* m_pResetButtonShortcut;
+    WordMixer* m_pWordMixer;
+    ScoreItem* m_pScoreItem;
     // set true after first access to main game window
     bool m_IsInitialized;
 
