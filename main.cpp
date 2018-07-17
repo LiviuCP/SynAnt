@@ -32,7 +32,7 @@ int main(int argc, char *argv[]) {
     QApplication app(argc,argv);
     qApp -> setStyleSheet(GameStrings::c_ApplicationStyle);
     try {
-        AppManager::getAppManager()->init(QApplication::applicationDirPath() + "/data");
+        AppManager::getAppManager()->init(QApplication::applicationDirPath() + "/" + GameStrings::c_FileName);
         return app.exec();
     }
     catch (const QString fatalErrorMessage) {

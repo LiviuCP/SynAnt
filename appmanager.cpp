@@ -3,8 +3,6 @@
 #include "appmanager.h"
 #include "wordmixer.h"
 
-const QString c_Filename{};
-
 AppManager::AppManager(QObject *parent)
     : QObject(parent)
     , m_IsInitialized{false}
