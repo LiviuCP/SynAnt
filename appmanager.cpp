@@ -57,7 +57,7 @@ void AppManager::_onSwitchedIntroToMain()
 {
     m_pIntroductionWindow -> hide();
 
-    m_pMainGameWindow -> getFirstTwoWords();
+    m_pMainGameWindow -> init();
 
     m_pMainGameWindow -> show();
 }
@@ -66,9 +66,9 @@ void AppManager::_onSwitchedHintsToMain()
 {
     m_pHintsWindow -> hide();
 
-    if (!(m_pMainGameWindow -> windowAlreadyAccessed()))
+    if (!(m_pMainGameWindow -> isInitialized()))
     {
-        m_pMainGameWindow -> getFirstTwoWords();
+        m_pMainGameWindow -> init();
     }
 
     m_pMainGameWindow -> show();

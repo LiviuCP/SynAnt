@@ -39,8 +39,8 @@ class MainGameWindow : public QWidget
     Q_OBJECT
 public:
     explicit MainGameWindow(WordMixer *wm = nullptr, QWidget *parent = nullptr);
-    bool windowAlreadyAccessed() const;
-    void getFirstTwoWords();
+    bool isInitialized() const;
+    void init();
 
 public slots:
     void onStatisticsUpdated();
@@ -77,7 +77,7 @@ private:
     WordMixer* m_WordMixer;
     ScoreItem* m_ScoreItem;
     // set true after first access to main game window
-    bool m_AlreadyAccessed;
+    bool m_IsInitialized;
 
     void _removeMixedWordsLabels();
     void _createMixedWordsLabels();

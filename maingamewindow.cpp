@@ -20,7 +20,7 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
       m_MixedWords{},
       m_WordMixer{wordMixer},
       m_ScoreItem{new ScoreItem{this}},
-      m_AlreadyAccessed{false}
+      m_IsInitialized{false}
 {
     Q_ASSERT(m_WordMixer);
     m_WordMixer -> setParent(this);
@@ -159,14 +159,14 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     Q_ASSERT(connected);
 }
 
-bool MainGameWindow::windowAlreadyAccessed() const
+bool MainGameWindow::isInitialized() const
 {
-    return m_AlreadyAccessed;
+    return m_IsInitialized;
 }
 
-void MainGameWindow::getFirstTwoWords()
+void MainGameWindow::init()
 {
-    m_AlreadyAccessed = true;
+    m_IsInitialized = true;
     m_WordMixer -> mixWords();
     _createMixedWordsLabels();
     _addMixedWordsLabels();
