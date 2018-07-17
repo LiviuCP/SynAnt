@@ -11,6 +11,9 @@
 
 namespace GameStrings {
 
+    //file name
+    const QString c_FileName                            {    "data"                                                                                     };
+
     // status and instructions messages
     const QString c_IntroWindowWelcomeMessage           {
                                                              "\n\t\tWelcome to SynAnt!\n\n\n"
