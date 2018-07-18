@@ -3,6 +3,8 @@
 
 #include <QObject>
 
+class WordMixer;
+
 class GamePresenter : public QObject
 {
     Q_OBJECT
@@ -37,17 +39,20 @@ signals:
 public slots:
 
 private:
+    void _initMainPane();
+
     enum class Pane
     {
         INTRO,
         HELP,
         MAIN,
-        NR_OF_PANES
+        Nr_Of_Panes
     };
 
     bool m_IntroPaneVisible;
     bool m_HelpPaneVisible;
     bool m_MainPaneVisible;
+    bool m_MainPaneInitialized;
 
     QString m_IntroPaneMessage;
     QString m_HelpPaneMessage;
@@ -55,6 +60,8 @@ private:
     QString m_MainPaneStatusMessage;
 
     Pane m_CurrentPane;
+
+    WordMixer* m_pWordMixer;
 };
 
 #endif // GAMEPRESENTER_H
