@@ -67,6 +67,22 @@ void GamePresenter::switchToMainPane()
     Q_EMIT mainPaneVisibleChanged();
 }
 
+void GamePresenter::handleResultsRequest()
+{
+
+    _updateStatusMessage(Game::StatusCodes::REQUESTED_BY_USER);
+    m_pWordMixer -> mixWords();
+
+    qDebug() << "Words displayed as per user request! New words mixed!";
+    qDebug() << "First word:" << m_pWordMixer->getFirstWord();
+    qDebug() << "Second word:" << m_pWordMixer->getSecondWord();
+    qDebug() << "Mixed words pieces are (in this order): ";
+    for (auto piece : m_pWordMixer->getMixedWordsStringArray())
+    {
+        qDebug() << piece;
+    }
+}
+
 void GamePresenter::_initMainPane()
 {
     m_MainPaneInitialized = true;
@@ -80,4 +96,23 @@ void GamePresenter::_initMainPane()
     {
         qDebug() << piece;
     }
+}
+
+void GamePresenter::_updateStatusMessage(Game::StatusCodes statusCode)
+{
+    switch (statusCode)
+    {
+    case Game::StatusCodes::REQUESTED_BY_USER:
+        m_MainPaneStatusMessage = "The correct words are: \n\n";
+        m_MainPaneStatusMessage += "\t" + m_pWordMixer->getFirstWord() + "\n";
+        m_MainPaneStatusMessage += "\t" + m_pWordMixer->getSecondWord() + "\n";
+        m_MainPaneStatusMessage += "\nThe words are: \n\n\t";
+        m_MainPaneStatusMessage += m_pWordMixer->areSynonyms() ? "synonyms" : "antonyms";
+        m_MainPaneStatusMessage += "\n\nNext pair of words is available below.";
+        break;
+    default:
+        ;
+    }
+
+    Q_EMIT mainPaneStatusMessageChanged();
 }

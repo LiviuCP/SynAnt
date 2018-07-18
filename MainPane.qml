@@ -147,10 +147,17 @@ Item {
 
             Text {
                 color: "white"
+
                 text: presenter.mainPaneStatusMessage
+
+                font.pointSize: 12
+                minimumPointSize: 8
+                fontSizeMode: Text.Fit
+
                 anchors.fill: parent
                 anchors.leftMargin: parent.width * 0.02
                 anchors.rightMargin: parent.width * 0.02
+
                 width: parent.width
                 wrapMode: Text.WordWrap
             }
@@ -248,7 +255,7 @@ Item {
             id: resultsBtn
             text: "Show results"
             Layout.minimumWidth: bottomBtnsMinWidth
-            onClicked: console.log("Button Show results works!!!")
+            onClicked: presenter.handleResultsRequest()
         }
 
         Button {

@@ -3,6 +3,8 @@
 
 #include <QObject>
 
+#include "game.h"
+
 class WordMixer;
 class ScoreItem;
 
@@ -22,6 +24,7 @@ public:
 
     Q_INVOKABLE void switchToHelpPane();
     Q_INVOKABLE void switchToMainPane();
+    Q_INVOKABLE void handleResultsRequest();
 
     bool getIntroPaneVisible() const {return m_IntroPaneVisible;}
     bool getHelpPaneVisible() const {return m_HelpPaneVisible;}
@@ -41,6 +44,7 @@ public slots:
 
 private:
     void _initMainPane();
+    void _updateStatusMessage(Game::StatusCodes statusCode);
 
     enum class Pane
     {
