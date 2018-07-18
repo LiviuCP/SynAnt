@@ -4,6 +4,7 @@
 #include <QObject>
 
 class WordMixer;
+class ScoreItem;
 
 class GamePresenter : public QObject
 {
@@ -62,6 +63,7 @@ private:
     Pane m_CurrentPane;
 
     WordMixer* m_pWordMixer;
+    ScoreItem* m_pScoreItem;
 };
 
 #endif // GAMEPRESENTER_H

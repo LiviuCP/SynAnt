@@ -3,6 +3,7 @@
 
 #include "gamepresenter.h"
 #include "wordmixer.h"
+#include "scoreitem.h"
 #include "gamestrings.h"
 
 GamePresenter::GamePresenter(QObject *parent)
@@ -17,6 +18,7 @@ GamePresenter::GamePresenter(QObject *parent)
     , m_MainPaneStatusMessage {GameStrings::c_NoUserInputMessage}
     , m_CurrentPane {Pane::INTRO}
     , m_pWordMixer {new WordMixer{QGuiApplication::applicationDirPath() + "/" + GameStrings::c_FileName, this}}
+    , m_pScoreItem {new ScoreItem{this}}
 {
 
 }
