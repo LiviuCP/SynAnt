@@ -35,7 +35,7 @@ void GamePresenter::switchToHelpPane()
         Q_EMIT mainPaneVisibleChanged();
         break;
     default:
-        qDebug("No valid window. Please check!");
+        Q_ASSERT(static_cast<int>(m_CurrentPane) >= 0 && static_cast<int>(m_CurrentPane) < static_cast<int>(Pane::Nr_Of_Panes));
     }
     m_CurrentPane = Pane::HELP;
     m_HelpPaneVisible = true;
