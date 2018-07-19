@@ -238,7 +238,13 @@ Item {
             id: submitBtn
             text: "Submit"
             Layout.minimumWidth: bottomBtnsMinWidth
-            onClicked: console.log("Button Submit works!!!")
+            onClicked: {
+                var clearTextFields = presenter.handleSubmitRequest(firstWordTextField.text, secondWordTextField.text);
+                if (clearTextFields) {
+                    firstWordTextField.clear();
+                    secondWordTextField.clear();
+                }
+            }
         }
 
         Button {

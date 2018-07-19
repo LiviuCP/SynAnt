@@ -25,6 +25,7 @@ public:
     Q_INVOKABLE void switchToHelpPane();
     Q_INVOKABLE void switchToMainPane();
     Q_INVOKABLE void handleResultsRequest();
+    Q_INVOKABLE bool handleSubmitRequest(const QString& firstWord, const QString& secondWord);
 
     bool getIntroPaneVisible() const {return m_IntroPaneVisible;}
     bool getHelpPaneVisible() const {return m_HelpPaneVisible;}
