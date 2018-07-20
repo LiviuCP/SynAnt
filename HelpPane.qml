@@ -11,14 +11,18 @@ Item {
     readonly property double bottomBtnsLayoutHeight: height * 0.1;
     readonly property double bottomBtnsMinWidth: (helpPaneRect.width - bottomBtnsLayout.spacing) * 0.5
 
+    readonly property color paneColor: "grey"
+    readonly property color borderColor: "white"
+    readonly property color textColor: "white"
+
     Rectangle {
         id: helpPaneRect
         anchors.top: parent.top
         width: parent.width
         height: helpPaneRectHeight
-        color: "grey"
+        color: paneColor
         border {
-            color: "white"
+            color: borderColor
         }
         Flickable {
             id: helpPaneFlickable
@@ -30,7 +34,7 @@ Item {
             Text {
                 id: helpPaneText
                 text: presenter.helpPaneMessage
-                color: "white"
+                color: textColor
                 width: parent.width
                 wrapMode: Text.WordWrap
             }
@@ -48,7 +52,7 @@ Item {
 
         Button {
             id: okBtn
-            text: "Ok"
+            text: gamePresenter.okButtonLabel
             Layout.minimumWidth: bottomBtnsMinWidth
             onClicked: {
                 presenter.switchToMainPane();
@@ -57,7 +61,7 @@ Item {
 
         Button {
             id: quitBtn
-            text: "Quit"
+            text: gamePresenter.quitButtonLabel
             Layout.minimumWidth: bottomBtnsMinWidth
             onClicked: Qt.quit()
         }

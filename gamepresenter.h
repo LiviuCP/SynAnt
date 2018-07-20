@@ -4,6 +4,7 @@
 #include <QObject>
 
 #include "game.h"
+#include "gamestrings.h"
 
 class WordMixer;
 class ScoreItem;
@@ -11,6 +12,16 @@ class ScoreItem;
 class GamePresenter : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(QString playButtonLabel READ getPlayButtonLabel CONSTANT)
+    Q_PROPERTY(QString helpButtonLabel READ getHelpButtonLabel CONSTANT)
+    Q_PROPERTY(QString quitButtonLabel READ getQuitButtonLabel CONSTANT)
+    Q_PROPERTY(QString submitButtonLabel READ getSubmitButtonLabel CONSTANT)
+    Q_PROPERTY(QString resultsButtonLabel READ getResultsButtonLabel CONSTANT)
+    Q_PROPERTY(QString resetButtonLabel READ getResetButtonLabel CONSTANT)
+    Q_PROPERTY(QString okButtonLabel READ getOkButtonLabel CONSTANT)
+    Q_PROPERTY(QString levelEasyButtonLabel READ getLevelEasyButtonLabel CONSTANT)
+    Q_PROPERTY(QString levelMediumButtonLabel READ getLevelMediumButtonLabel CONSTANT)
+    Q_PROPERTY(QString levelHardButtonLabel READ getLevelHardButtonLabel CONSTANT)
     Q_PROPERTY(bool introPaneVisible READ getIntroPaneVisible NOTIFY introPaneVisibleChanged)
     Q_PROPERTY(bool helpPaneVisible READ getHelpPaneVisible NOTIFY helpPaneVisibleChanged)
     Q_PROPERTY(bool mainPaneVisible READ getMainPaneVisible NOTIFY mainPaneVisibleChanged)
@@ -30,9 +41,21 @@ public:
     Q_INVOKABLE void switchToMediumLevel();
     Q_INVOKABLE void switchToHardLevel();
 
+    QString getPlayButtonLabel() const {return GameStrings::c_PlayButtonLabel;}
+    QString getHelpButtonLabel() const {return GameStrings::c_HelpButtonLabel;}
+    QString getQuitButtonLabel() const {return GameStrings::c_QuitButtonLabel;}
+    QString getSubmitButtonLabel() const {return GameStrings::c_SubmitButtonLabel;}
+    QString getResultsButtonLabel() const {return GameStrings::c_ResultsButtonLabel;}
+    QString getResetButtonLabel() const {return GameStrings::c_ResetButtonLabel;}
+    QString getOkButtonLabel() const {return GameStrings::c_OkButtonLabel;}
+    QString getLevelEasyButtonLabel() const {return GameStrings::c_LevelEasyButtonLabel;}
+    QString getLevelMediumButtonLabel() const {return GameStrings::c_LevelMediumButtonLabel;}
+    QString getLevelHardButtonLabel() const {return GameStrings::c_LevelHardButtonLabel;}
+
     bool getIntroPaneVisible() const {return m_IntroPaneVisible;}
     bool getHelpPaneVisible() const {return m_HelpPaneVisible;}
     bool getMainPaneVisible() const {return m_MainPaneVisible;}
+
     QString getIntroPaneMessage() const {return m_IntroPaneMessage;}
     QString getHelpPaneMessage() const {return m_HelpPaneMessage;}
     QString getMainPaneInstructionsMessage() const {return m_MainPaneInstructionsMessage;}

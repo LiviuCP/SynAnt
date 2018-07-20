@@ -15,6 +15,10 @@ Item {
 
     readonly property double bottomBtnsMinWidth: (infoLevelsAndStatusLayout.width - 3 * bottomBtnsLayout.spacing) * 0.25
 
+    readonly property color paneColor: "grey"
+    readonly property color borderColor: "white"
+    readonly property color textColor: "white"
+
     RowLayout {
         id: scoresLayout
         anchors.top: parent.top
@@ -26,14 +30,14 @@ Item {
             id: highScoresRect
             Layout.minimumWidth: parent.width / 3
             Layout.minimumHeight: parent.height / 2
-            color: "grey"
+            color: paneColor
 
             border {
-                color: "white"
+                color: borderColor
             }
 
             Text {
-                color: "white"
+                color: textColor
                 text: "High-score: 0/0"
                 anchors.left: parent.left
                 anchors.leftMargin: parent.width * 0.01
@@ -45,15 +49,15 @@ Item {
             id: wordPairsRect
             Layout.minimumWidth: parent.width / 3
             Layout.minimumHeight: parent.height / 2
-            color: "grey"
+            color: paneColor
             Layout.leftMargin: parent.width * (-0.04)
 
             border {
-                color: "white"
+                color: borderColor
             }
 
             Text {
-                color: "white"
+                color: textColor
                 text: "Word pairs: 0/0"
                 anchors.left: parent.left
                 anchors.leftMargin: parent.width * 0.01
@@ -63,7 +67,7 @@ Item {
 
         Button {
             id: resetBtn
-            text: "Reset"
+            text: presenter.resetButtonLabel
             Layout.minimumWidth: quitBtn.width
             Layout.alignment: Qt.AlignRight
             onClicked: console.log("Button Reset works!!!")
@@ -81,14 +85,14 @@ Item {
             id: infoRect
             Layout.minimumWidth: parent.width * 0.55
             Layout.minimumHeight: parent.height
-            color: "grey"
+            color: paneColor
 
             border {
-                color: "white"
+                color: borderColor
             }
 
             Text {
-                color: "white"
+                color: textColor
                 text: presenter.mainPaneInstructionsMessage
                 anchors.fill: parent
                 anchors.leftMargin: parent.width * 0.01
@@ -102,10 +106,10 @@ Item {
             id: radioBtnsRect
             Layout.minimumWidth: parent.width * 0.15
             Layout.minimumHeight: parent.height * 0.6
-            color: "grey"
+            color: paneColor
 
             border {
-                color: "white"
+                color: borderColor
             }
 
             ColumnLayout {
@@ -113,7 +117,7 @@ Item {
 
                 RadioButton {
                     id: easyLvlBtn
-                    text: "Easy"
+                    text: presenter.levelEasyButtonLabel
                     checked: false
                     onToggled: {
                         presenter.switchToEasyLevel();
@@ -122,7 +126,7 @@ Item {
 
                 RadioButton {
                     id: mediumLvlBtn
-                    text: "Medium"
+                    text: presenter.levelMediumButtonLabel
                     checked: true
                     onToggled: {
                         presenter.switchToMediumLevel();
@@ -131,7 +135,7 @@ Item {
 
                 RadioButton {
                     id: hardLvlBtn
-                    text: "Hard"
+                    text: presenter.levelHardButtonLabel
                     checked: false
                     onToggled: {
                         presenter.switchToHardLevel();
@@ -145,14 +149,14 @@ Item {
             Layout.minimumWidth: parent.width * 0.242
             Layout.minimumHeight: parent.height
             Layout.alignment: Qt.AlignRight
-            color: "grey"
+            color: paneColor
 
             border {
-                color: "white"
+                color: borderColor
             }
 
             Text {
-                color: "white"
+                color: textColor
 
                 text: presenter.mainPaneStatusMessage
 
@@ -182,7 +186,7 @@ Item {
             id: label1
             Layout.minimumWidth: parent.width * 0.25
             Layout.minimumHeight: parent.height
-            color: "white"
+            color: textColor
             text: "Label "
         }
 
@@ -190,7 +194,7 @@ Item {
             id: label2
             Layout.minimumWidth: parent.width * 0.25
             Layout.minimumHeight: parent.height
-            color: "white"
+            color: textColor
             text: "area."
         }
 
@@ -198,7 +202,7 @@ Item {
             id: label3
             Layout.minimumWidth: parent.width * 0.25
             Layout.minimumHeight: parent.height
-            color: "white"
+            color: textColor
             text: "Under"
         }
 
@@ -206,7 +210,7 @@ Item {
             id: label4
             Layout.minimumWidth: parent.width * 0.25
             Layout.minimumHeight: parent.height
-            color: "white"
+            color: textColor
             text: "construction! "
         }
     }
@@ -242,7 +246,7 @@ Item {
 
         Button {
             id: submitBtn
-            text: "Submit"
+            text: presenter.submitButtonLabel
             Layout.minimumWidth: bottomBtnsMinWidth
             onClicked: {
                 var clearTextFields = presenter.handleSubmitRequest(firstWordTextField.text, secondWordTextField.text);
@@ -255,7 +259,7 @@ Item {
 
         Button {
             id: helpBtn
-            text: "Help"
+            text: presenter.helpButtonLabel
             Layout.minimumWidth: bottomBtnsMinWidth
 
             onClicked: {
@@ -265,14 +269,14 @@ Item {
 
         Button {
             id: resultsBtn
-            text: "Show results"
+            text: presenter.resultsButtonLabel
             Layout.minimumWidth: bottomBtnsMinWidth
             onClicked: presenter.handleResultsRequest()
         }
 
         Button {
             id: quitBtn
-            text: "Quit"
+            text: presenter.quitButtonLabel
             Layout.minimumWidth: bottomBtnsMinWidth - parent.spacing * 0.25
             onClicked: Qt.quit()
         }

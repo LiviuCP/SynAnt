@@ -12,21 +12,25 @@ Item {
 
     readonly property double bottomBtnsMinWidth: (introPaneRect.width - 2 * bottomBtnsLayout.spacing) / 3
 
+    readonly property color paneColor: "grey"
+    readonly property color borderColor: "white"
+    readonly property color textColor: "white"
+
     Rectangle {
         id: introPaneRect
         anchors.top: parent.top
         width: parent.width
         height: introPaneRectHeight
-        color: "grey"
+        color: paneColor
         border {
-            color: "white"
+            color: borderColor
         }
         Text {
             id: introPaneText
             anchors.fill: parent
             anchors.leftMargin: parent.width * 0.005
             text: presenter.introPaneMessage
-            color: "white"
+            color: textColor
         }
     }
 
@@ -41,7 +45,7 @@ Item {
 
         Button {
             id: playBtn
-            text: "Play"
+            text: presenter.playButtonLabel
             Layout.minimumWidth: bottomBtnsMinWidth
             onClicked: {
                 presenter.switchToMainPane();
@@ -50,7 +54,7 @@ Item {
 
         Button {
             id: helpBtn
-            text: "Help"
+            text: presenter.helpButtonLabel
             Layout.minimumWidth: bottomBtnsMinWidth
             onClicked: {
                 presenter.switchToHelpPane();
@@ -59,7 +63,7 @@ Item {
 
         Button {
             id: quitBtn
-            text: "Quit"
+            text: presenter.quitButtonLabel
             Layout.minimumWidth: bottomBtnsMinWidth
             onClicked: Qt.quit()
         }
