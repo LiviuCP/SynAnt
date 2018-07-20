@@ -104,7 +104,7 @@ namespace GameStrings {
     const QString c_SubmitButtonLabel                   {    "Submit"                                                                                   };
     const QString c_ResultsButtonLabel                  {    "Show results"                                                                             };
     const QString c_LevelEasyButtonLabel                {    "Easy"                                                                                     };
-    const QString c_LevelMediumButtonLabel              {    "Medium;"                                                                                  };
+    const QString c_LevelMediumButtonLabel              {    "Medium"                                                                                   };
     const QString c_LevelHardButtonLabel                {    "Hard"                                                                                     };
     const QString c_ResetButtonLabel                    {    "Reset"                                                                                    };
     const QString c_FatalErrorQuitButtonLabel           {    "Close"                                                                                    };
