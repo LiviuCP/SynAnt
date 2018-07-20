@@ -2,6 +2,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QTextStream>
+#include <QDebug>
 
 #include "wordmixer.h"
 #include "game.h"
@@ -100,6 +101,14 @@ void WordMixer::mixWords()
         _insertWordPiece(m_SecondWord, wordPieceStartPos, wordPieceIndexes);
     }
     m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::SECOND_WORD_LAST_PIECE)] = _insertWordPiece(m_SecondWord, secondWordLastPiecePos, wordPieceIndexes);
+
+    qDebug() << "First word:" << getFirstWord();
+    qDebug() << "Second word:" << getSecondWord();
+    qDebug() << "Mixed words pieces are (in this order): ";
+    for (auto piece : m_MixedWords)
+    {
+        qDebug() << piece;
+    }
 }
 
 Game::StatusCodes WordMixer::checkWords(const QString &firstWord, const QString &secondWord)

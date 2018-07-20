@@ -69,18 +69,11 @@ void GamePresenter::switchToMainPane()
 
 void GamePresenter::handleResultsRequest()
 {
+    qDebug() << "=====================================================";
+    qDebug() << "Words displayed as per user request! New words mixed";
 
     _updateStatusMessage(Game::StatusCodes::REQUESTED_BY_USER);
     m_pWordMixer -> mixWords();
-
-    qDebug() << "Words displayed as per user request! New words mixed!";
-    qDebug() << "First word:" << m_pWordMixer->getFirstWord();
-    qDebug() << "Second word:" << m_pWordMixer->getSecondWord();
-    qDebug() << "Mixed words pieces are (in this order): ";
-    for (auto piece : m_pWordMixer->getMixedWordsStringArray())
-    {
-        qDebug() << piece;
-    }
 }
 
 bool GamePresenter::handleSubmitRequest(const QString &firstWord, const QString &secondWord)
@@ -93,16 +86,10 @@ bool GamePresenter::handleSubmitRequest(const QString &firstWord, const QString 
 
     if (statusCode == Game::StatusCodes::SUCCESS)
     {
-        m_pWordMixer -> mixWords();
+        qDebug() << "=====================================================";
+        qDebug() << "Words guessed by user correctly! New words mixed";
 
-        qDebug() << "Words guessed by user correctly! New words mixed!";
-        qDebug() << "First word:" << m_pWordMixer->getFirstWord();
-        qDebug() << "Second word:" << m_pWordMixer->getSecondWord();
-        qDebug() << "Mixed words pieces are (in this order): ";
-        for (auto piece : m_pWordMixer->getMixedWordsStringArray())
-        {
-            qDebug() << piece;
-        }
+        m_pWordMixer -> mixWords();
 
         clearTextFields = true;
     }
@@ -112,59 +99,35 @@ bool GamePresenter::handleSubmitRequest(const QString &firstWord, const QString 
 
 void GamePresenter::switchToEasyLevel()
 {
-    _setLevel(Game::Level::EASY);
+    qDebug() << "=====================================================";
+    qDebug() << "Level changed to easy! New words mixed";
 
-    qDebug() << "Level changed to easy! Words mixed";
-    qDebug() << "First word:" << m_pWordMixer->getFirstWord();
-    qDebug() << "Second word:" << m_pWordMixer->getSecondWord();
-    qDebug() << "Mixed words pieces are (in this order): ";
-    for (auto piece : m_pWordMixer->getMixedWordsStringArray())
-    {
-        qDebug() << piece;
-    }
+    _setLevel(Game::Level::EASY);
 }
 
 void GamePresenter::switchToMediumLevel()
 {
-    _setLevel(Game::Level::MEDIUM);
+    qDebug() << "=====================================================";
+    qDebug() << "Level changed to medium! New words mixed";
 
-    qDebug() << "Level changed to medium! Words mixed";
-    qDebug() << "First word:" << m_pWordMixer->getFirstWord();
-    qDebug() << "Second word:" << m_pWordMixer->getSecondWord();
-    qDebug() << "Mixed words pieces are (in this order): ";
-    for (auto piece : m_pWordMixer->getMixedWordsStringArray())
-    {
-        qDebug() << piece;
-    }
+    _setLevel(Game::Level::MEDIUM);
 }
 
 void GamePresenter::switchToHardLevel()
 {
-    _setLevel(Game::Level::HARD);
+    qDebug() << "=====================================================";
+    qDebug() << "Level changed to hard! New words mixed";
 
-    qDebug() << "Level changed to hard! Words mixed";
-    qDebug() << "First word:" << m_pWordMixer->getFirstWord();
-    qDebug() << "Second word:" << m_pWordMixer->getSecondWord();
-    qDebug() << "Mixed words pieces are (in this order): ";
-    for (auto piece : m_pWordMixer->getMixedWordsStringArray())
-    {
-        qDebug() << piece;
-    }
+    _setLevel(Game::Level::HARD);
 }
 
 void GamePresenter::_initMainPane()
 {
+    qDebug() << "=====================================================";
+    qDebug() << "Main window initialized! First 2 words mixed";
+
     m_MainPaneInitialized = true;
     m_pWordMixer -> mixWords();
-
-    qDebug() << "Main window initialized! Words mixed";
-    qDebug() << "First word:" << m_pWordMixer->getFirstWord();
-    qDebug() << "Second word:" << m_pWordMixer->getSecondWord();
-    qDebug() << "Mixed words pieces are (in this order): ";
-    for (auto piece : m_pWordMixer->getMixedWordsStringArray())
-    {
-        qDebug() << piece;
-    }
 }
 
 void GamePresenter::_updateStatusMessage(Game::StatusCodes statusCode)
