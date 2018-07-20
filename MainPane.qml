@@ -115,21 +115,27 @@ Item {
                     id: easyLvlBtn
                     text: "Easy"
                     checked: false
-                    onToggled: console.log("Easy level selected!")
+                    onToggled: {
+                        presenter.switchToEasyLevel();
+                    }
                 }
 
                 RadioButton {
                     id: mediumLvlBtn
                     text: "Medium"
                     checked: true
-                    onToggled: console.log("Medium level selected!")
+                    onToggled: {
+                        presenter.switchToMediumLevel();
+                    }
                 }
 
                 RadioButton {
                     id: hardLvlBtn
                     text: "Hard"
                     checked: false
-                    onToggled: console.log("Hard level selected!")
+                    onToggled: {
+                        presenter.switchToHardLevel();
+                    }
                 }
             }
         }

@@ -110,6 +110,48 @@ bool GamePresenter::handleSubmitRequest(const QString &firstWord, const QString 
     return clearTextFields;
 }
 
+void GamePresenter::switchToEasyLevel()
+{
+    _setLevel(Game::Level::EASY);
+
+    qDebug() << "Level changed to easy! Words mixed";
+    qDebug() << "First word:" << m_pWordMixer->getFirstWord();
+    qDebug() << "Second word:" << m_pWordMixer->getSecondWord();
+    qDebug() << "Mixed words pieces are (in this order): ";
+    for (auto piece : m_pWordMixer->getMixedWordsStringArray())
+    {
+        qDebug() << piece;
+    }
+}
+
+void GamePresenter::switchToMediumLevel()
+{
+    _setLevel(Game::Level::MEDIUM);
+
+    qDebug() << "Level changed to medium! Words mixed";
+    qDebug() << "First word:" << m_pWordMixer->getFirstWord();
+    qDebug() << "Second word:" << m_pWordMixer->getSecondWord();
+    qDebug() << "Mixed words pieces are (in this order): ";
+    for (auto piece : m_pWordMixer->getMixedWordsStringArray())
+    {
+        qDebug() << piece;
+    }
+}
+
+void GamePresenter::switchToHardLevel()
+{
+    _setLevel(Game::Level::HARD);
+
+    qDebug() << "Level changed to hard! Words mixed";
+    qDebug() << "First word:" << m_pWordMixer->getFirstWord();
+    qDebug() << "Second word:" << m_pWordMixer->getSecondWord();
+    qDebug() << "Mixed words pieces are (in this order): ";
+    for (auto piece : m_pWordMixer->getMixedWordsStringArray())
+    {
+        qDebug() << piece;
+    }
+}
+
 void GamePresenter::_initMainPane()
 {
     m_MainPaneInitialized = true;
@@ -152,9 +194,19 @@ void GamePresenter::_updateStatusMessage(Game::StatusCodes statusCode)
         m_MainPaneStatusMessage += m_pWordMixer->areSynonyms() ? "synonyms" : "antonyms";
         m_MainPaneStatusMessage += "\n\nNext pair of words is available below.";
         break;
+    case Game::StatusCodes::LEVEL_CHANGED:
+        m_MainPaneStatusMessage = GameStrings::c_LevelChangedMessage;
+    //reserved for future use
     default:
         ;
     }
 
     Q_EMIT mainPaneStatusMessageChanged();
+}
+
+void GamePresenter::_setLevel(Game::Level level)
+{
+    _updateStatusMessage(Game::StatusCodes::LEVEL_CHANGED);
+    m_pWordMixer -> setWordPieceSize(level);
+    m_pWordMixer -> mixWords();
 }

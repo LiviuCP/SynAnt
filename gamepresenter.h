@@ -26,6 +26,9 @@ public:
     Q_INVOKABLE void switchToMainPane();
     Q_INVOKABLE void handleResultsRequest();
     Q_INVOKABLE bool handleSubmitRequest(const QString& firstWord, const QString& secondWord);
+    Q_INVOKABLE void switchToEasyLevel();
+    Q_INVOKABLE void switchToMediumLevel();
+    Q_INVOKABLE void switchToHardLevel();
 
     bool getIntroPaneVisible() const {return m_IntroPaneVisible;}
     bool getHelpPaneVisible() const {return m_HelpPaneVisible;}
@@ -46,6 +49,7 @@ public slots:
 private:
     void _initMainPane();
     void _updateStatusMessage(Game::StatusCodes statusCode);
+    void _setLevel(Game::Level level);
 
     enum class Pane
     {
