@@ -38,7 +38,7 @@ Item {
 
             Text {
                 color: textColor
-                text: "High-score: 0/0"
+                text: presenter.mainPaneScoreMessage
                 anchors.left: parent.left
                 anchors.leftMargin: parent.width * 0.01
                 anchors.verticalCenter: parent.verticalCenter
@@ -58,7 +58,7 @@ Item {
 
             Text {
                 color: textColor
-                text: "Word pairs: 0/0"
+                text: presenter.mainPaneNrOfPairsMessage
                 anchors.left: parent.left
                 anchors.leftMargin: parent.width * 0.01
                 anchors.verticalCenter: parent.verticalCenter

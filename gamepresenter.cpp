@@ -20,7 +20,14 @@ GamePresenter::GamePresenter(QObject *parent)
     , m_pWordMixer {new WordMixer{QGuiApplication::applicationDirPath() + "/" + GameStrings::c_FileName, this}}
     , m_pScoreItem {new ScoreItem{this}}
 {
+    bool connected{connect(this,&GamePresenter::levelChanged,m_pWordMixer,&WordMixer::setWordPieceSize)};
+    Q_ASSERT(connected);
+    connected = connect(this,&GamePresenter::levelChanged,m_pScoreItem,&ScoreItem::setScoreIncrement);
+    Q_ASSERT(connected);
+    connected = connect(m_pScoreItem,&ScoreItem::statisticsUpdated,this,&GamePresenter::_onStatisticsUpdated);
+    Q_ASSERT(connected);
 
+    _onStatisticsUpdated();
 }
 
 void GamePresenter::switchToHelpPane()
@@ -73,6 +80,8 @@ void GamePresenter::handleResultsRequest()
     qDebug() << "Words displayed as per user request! New words mixed";
 
     _updateStatusMessage(Game::StatusCodes::REQUESTED_BY_USER);
+    m_pScoreItem -> updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
+
     m_pWordMixer -> mixWords();
 }
 
@@ -89,6 +98,7 @@ bool GamePresenter::handleSubmitRequest(const QString &firstWord, const QString 
         qDebug() << "=====================================================";
         qDebug() << "Words guessed by user correctly! New words mixed";
 
+        m_pScoreItem -> updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
         m_pWordMixer -> mixWords();
 
         clearTextFields = true;
@@ -119,6 +129,17 @@ void GamePresenter::switchToHardLevel()
     qDebug() << "Level changed to hard! New words mixed";
 
     _setLevel(Game::Level::HARD);
+}
+
+void GamePresenter::_onStatisticsUpdated()
+{
+    QVector<int> scoresPairs{m_pScoreItem -> getStatistics()};
+
+    m_MainPaneScoreMessage = "High-score: " + QString::number(scoresPairs[0]) + "/" + QString::number(scoresPairs[1]);
+    m_MainPaneNrOfPairsMessage = "Word pairs: " + QString::number(scoresPairs[2]) + "/" + QString::number(scoresPairs[3]);
+
+    Q_EMIT mainPaneScoreMessageChanged();
+    Q_EMIT mainPaneNrOfPairsMessageChanged();
 }
 
 void GamePresenter::_initMainPane()
@@ -170,6 +191,6 @@ void GamePresenter::_updateStatusMessage(Game::StatusCodes statusCode)
 void GamePresenter::_setLevel(Game::Level level)
 {
     _updateStatusMessage(Game::StatusCodes::LEVEL_CHANGED);
-    m_pWordMixer -> setWordPieceSize(level);
+    Q_EMIT levelChanged(level);
     m_pWordMixer -> mixWords();
 }

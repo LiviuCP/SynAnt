@@ -29,6 +29,8 @@ class GamePresenter : public QObject
     Q_PROPERTY(QString helpPaneMessage READ getHelpPaneMessage CONSTANT)
     Q_PROPERTY(QString mainPaneInstructionsMessage READ getMainPaneInstructionsMessage CONSTANT)
     Q_PROPERTY(QString mainPaneStatusMessage READ getMainPaneStatusMessage NOTIFY mainPaneStatusMessageChanged)
+    Q_PROPERTY(QString mainPaneScoreMessage READ getMainPaneScoreMessage NOTIFY mainPaneScoreMessageChanged)
+    Q_PROPERTY(QString mainPaneNrOfPairsMessage READ getMainPaneNrOfPairsMessage NOTIFY mainPaneNrOfPairsMessageChanged)
 
 public:
     explicit GamePresenter(QObject *parent = nullptr);
@@ -60,15 +62,20 @@ public:
     QString getHelpPaneMessage() const {return m_HelpPaneMessage;}
     QString getMainPaneInstructionsMessage() const {return m_MainPaneInstructionsMessage;}
     QString getMainPaneStatusMessage() const {return m_MainPaneStatusMessage;}
+    QString getMainPaneScoreMessage() const {return m_MainPaneScoreMessage;}
+    QString getMainPaneNrOfPairsMessage() const {return m_MainPaneNrOfPairsMessage;}
 
 signals:
     Q_SIGNAL void introPaneVisibleChanged();
     Q_SIGNAL void helpPaneVisibleChanged();
     Q_SIGNAL void mainPaneVisibleChanged();
     Q_SIGNAL void mainPaneStatusMessageChanged();
+    Q_SIGNAL void mainPaneScoreMessageChanged();
+    Q_SIGNAL void mainPaneNrOfPairsMessageChanged();
+    Q_SIGNAL void levelChanged(Game::Level level);
 
-public slots:
-
+private slots:
+    void _onStatisticsUpdated();
 private:
     void _initMainPane();
     void _updateStatusMessage(Game::StatusCodes statusCode);
@@ -91,6 +98,8 @@ private:
     QString m_HelpPaneMessage;
     QString m_MainPaneInstructionsMessage;
     QString m_MainPaneStatusMessage;
+    QString m_MainPaneScoreMessage;
+    QString m_MainPaneNrOfPairsMessage;
 
     Pane m_CurrentPane;
 
