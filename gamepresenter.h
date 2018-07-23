@@ -31,6 +31,7 @@ class GamePresenter : public QObject
     Q_PROPERTY(QString mainPaneStatusMessage READ getMainPaneStatusMessage NOTIFY mainPaneStatusMessageChanged)
     Q_PROPERTY(QString mainPaneScoreMessage READ getMainPaneScoreMessage NOTIFY mainPaneScoreMessageChanged)
     Q_PROPERTY(QString mainPaneNrOfPairsMessage READ getMainPaneNrOfPairsMessage NOTIFY mainPaneNrOfPairsMessageChanged)
+    Q_PROPERTY(bool resetEnabled READ getResetEnabled NOTIFY resetEnabledChanged)
 
 public:
     explicit GamePresenter(QObject *parent = nullptr);
@@ -39,6 +40,7 @@ public:
     Q_INVOKABLE void switchToMainPane();
     Q_INVOKABLE void handleResultsRequest();
     Q_INVOKABLE bool handleSubmitRequest(const QString& firstWord, const QString& secondWord);
+    Q_INVOKABLE void handleResetRequest();
     Q_INVOKABLE void switchToEasyLevel();
     Q_INVOKABLE void switchToMediumLevel();
     Q_INVOKABLE void switchToHardLevel();
@@ -57,6 +59,7 @@ public:
     bool getIntroPaneVisible() const {return m_IntroPaneVisible;}
     bool getHelpPaneVisible() const {return m_HelpPaneVisible;}
     bool getMainPaneVisible() const {return m_MainPaneVisible;}
+    bool getResetEnabled() const {return m_ResetEnabled;}
 
     QString getIntroPaneMessage() const {return m_IntroPaneMessage;}
     QString getHelpPaneMessage() const {return m_HelpPaneMessage;}
@@ -69,6 +72,7 @@ signals:
     Q_SIGNAL void introPaneVisibleChanged();
     Q_SIGNAL void helpPaneVisibleChanged();
     Q_SIGNAL void mainPaneVisibleChanged();
+    Q_SIGNAL void resetEnabledChanged();
     Q_SIGNAL void mainPaneStatusMessageChanged();
     Q_SIGNAL void mainPaneScoreMessageChanged();
     Q_SIGNAL void mainPaneNrOfPairsMessageChanged();
@@ -93,6 +97,8 @@ private:
     bool m_HelpPaneVisible;
     bool m_MainPaneVisible;
     bool m_MainPaneInitialized;
+
+    bool m_ResetEnabled;
 
     QString m_IntroPaneMessage;
     QString m_HelpPaneMessage;

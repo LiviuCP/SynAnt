@@ -12,6 +12,7 @@ GamePresenter::GamePresenter(QObject *parent)
     , m_HelpPaneVisible {false}
     , m_MainPaneVisible {false}
     , m_MainPaneInitialized {false}
+    , m_ResetEnabled {false}
     , m_IntroPaneMessage {GameStrings::c_IntroWindowWelcomeMessage}
     , m_HelpPaneMessage {GameStrings::c_HelpWindowMessage}
     , m_MainPaneInstructionsMessage {GameStrings::c_InstructionsMessage}
@@ -82,6 +83,12 @@ void GamePresenter::handleResultsRequest()
     _updateStatusMessage(Game::StatusCodes::REQUESTED_BY_USER);
     m_pScoreItem -> updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
 
+    if (!m_ResetEnabled)
+    {
+        m_ResetEnabled = true;
+        Q_EMIT resetEnabledChanged();
+    }
+
     m_pWordMixer -> mixWords();
 }
 
@@ -99,12 +106,30 @@ bool GamePresenter::handleSubmitRequest(const QString &firstWord, const QString 
         qDebug() << "Words guessed by user correctly! New words mixed";
 
         m_pScoreItem -> updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
+
+        if (!m_ResetEnabled)
+        {
+            m_ResetEnabled = true;
+            Q_EMIT resetEnabledChanged();
+        }
+
         m_pWordMixer -> mixWords();
 
         clearTextFields = true;
     }
 
     return clearTextFields;
+}
+
+void GamePresenter::handleResetRequest()
+{
+    qDebug() << "=====================================================";
+    qDebug() << "Statistics reset! Same mixed words to be guessed by user";
+
+    m_pScoreItem -> resetStatistics();
+    _updateStatusMessage(Game::StatusCodes::STATISTICS_RESET);
+    m_ResetEnabled = false;
+    Q_EMIT resetEnabledChanged();
 }
 
 void GamePresenter::switchToEasyLevel()
@@ -177,6 +202,9 @@ void GamePresenter::_updateStatusMessage(Game::StatusCodes statusCode)
         m_MainPaneStatusMessage += "\nThe words are: \n\n\t";
         m_MainPaneStatusMessage += m_pWordMixer->areSynonyms() ? "synonyms" : "antonyms";
         m_MainPaneStatusMessage += "\n\nNext pair of words is available below.";
+        break;
+    case Game::StatusCodes::STATISTICS_RESET:
+        m_MainPaneStatusMessage = GameStrings::c_ScoresResetMessage;
         break;
     case Game::StatusCodes::LEVEL_CHANGED:
         m_MainPaneStatusMessage = GameStrings::c_LevelChangedMessage;

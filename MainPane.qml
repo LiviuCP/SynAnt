@@ -70,7 +70,10 @@ Item {
             text: presenter.resetButtonLabel
             Layout.minimumWidth: quitBtn.width
             Layout.alignment: Qt.AlignRight
-            onClicked: console.log("Button Reset works!!!")
+            enabled: presenter.resetEnabled
+            onClicked: {
+                presenter.handleResetRequest();
+            }
         }
     }
 
