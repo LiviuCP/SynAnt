@@ -123,6 +123,8 @@ Item {
                     text: presenter.levelEasyButtonLabel
                     checked: false
                     onToggled: {
+                        firstWordTextField.clear();
+                        secondWordTextField.clear();
                         presenter.switchToEasyLevel();
                     }
                 }
@@ -132,6 +134,8 @@ Item {
                     text: presenter.levelMediumButtonLabel
                     checked: true
                     onToggled: {
+                        firstWordTextField.clear();
+                        secondWordTextField.clear();
                         presenter.switchToMediumLevel();
                     }
                 }
@@ -141,6 +145,8 @@ Item {
                     text: presenter.levelHardButtonLabel
                     checked: false
                     onToggled: {
+                        firstWordTextField.clear();
+                        secondWordTextField.clear();
                         presenter.switchToHardLevel();
                     }
                 }
@@ -274,7 +280,11 @@ Item {
             id: resultsBtn
             text: presenter.resultsButtonLabel
             Layout.minimumWidth: bottomBtnsMinWidth
-            onClicked: presenter.handleResultsRequest()
+            onClicked: {
+                firstWordTextField.clear();
+                secondWordTextField.clear();
+                presenter.handleResultsRequest();
+            }
         }
 
         Button {
