@@ -127,6 +127,7 @@ Item {
                         firstWordTextField.clear();
                         secondWordTextField.clear();
                         presenter.switchToEasyLevel();
+                        firstWordTextField.forceActiveFocus();
                     }
                 }
 
@@ -138,6 +139,7 @@ Item {
                         firstWordTextField.clear();
                         secondWordTextField.clear();
                         presenter.switchToMediumLevel();
+                        firstWordTextField.forceActiveFocus();
                     }
                 }
 
@@ -149,6 +151,7 @@ Item {
                         firstWordTextField.clear();
                         secondWordTextField.clear();
                         presenter.switchToHardLevel();
+                        firstWordTextField.forceActiveFocus();
                     }
                 }
             }
