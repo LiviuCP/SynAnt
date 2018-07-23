@@ -21,6 +21,7 @@ GamePresenter::GamePresenter(QObject *parent)
     , m_CurrentPane {Pane::INTRO}
     , m_pWordMixer {new WordMixer{QGuiApplication::applicationDirPath() + "/" + GameStrings::c_FileName, this}}
     , m_pScoreItem {new ScoreItem{this}}
+    , m_ToolTipDelay{1000}
 {
     bool connected{connect(this,&GamePresenter::levelChanged,m_pWordMixer,&WordMixer::setWordPieceSize)};
     Q_ASSERT(connected);

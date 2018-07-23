@@ -1,5 +1,5 @@
 import QtQuick 2.7
-import QtQuick.Controls 2.0
+import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 Item {
@@ -47,15 +47,27 @@ Item {
             id: playBtn
             text: presenter.playButtonLabel
             Layout.minimumWidth: bottomBtnsMinWidth
+
+            ToolTip.text: presenter.playButtonToolTip
+            ToolTip.delay: presenter.toolTipDelay
+            ToolTip.visible: hovered
+
             onClicked: {
                 presenter.switchToMainPane();
             }
+
+
         }
 
         Button {
             id: helpBtn
             text: presenter.helpButtonLabel
             Layout.minimumWidth: bottomBtnsMinWidth
+
+            ToolTip.text: presenter.helpButtonToolTip
+            ToolTip.delay: presenter.toolTipDelay
+            ToolTip.visible: hovered
+
             onClicked: {
                 presenter.switchToHelpPane();
             }
@@ -65,6 +77,11 @@ Item {
             id: quitBtn
             text: presenter.quitButtonLabel
             Layout.minimumWidth: bottomBtnsMinWidth
+
+            ToolTip.text: presenter.quitButtonToolTip
+            ToolTip.delay: presenter.toolTipDelay
+            ToolTip.visible: hovered
+
             onClicked: Qt.quit()
         }
     }

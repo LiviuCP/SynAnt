@@ -1,5 +1,5 @@
 import QtQuick 2.7
-import QtQuick.Controls 2.0
+import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 Item {
@@ -54,6 +54,11 @@ Item {
             id: okBtn
             text: gamePresenter.okButtonLabel
             Layout.minimumWidth: bottomBtnsMinWidth
+
+            ToolTip.text: presenter.playButtonToolTip
+            ToolTip.delay: presenter.toolTipDelay
+            ToolTip.visible: hovered
+
             onClicked: {
                 presenter.switchToMainPane();
             }
@@ -63,6 +68,11 @@ Item {
             id: quitBtn
             text: gamePresenter.quitButtonLabel
             Layout.minimumWidth: bottomBtnsMinWidth
+
+            ToolTip.text: presenter.quitButtonToolTip
+            ToolTip.delay: presenter.toolTipDelay
+            ToolTip.visible: hovered
+
             onClicked: Qt.quit()
         }
     }

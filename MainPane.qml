@@ -1,5 +1,5 @@
 import QtQuick 2.7
-import QtQuick.Controls 2.0
+import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 Item {
@@ -70,6 +70,11 @@ Item {
             text: presenter.resetButtonLabel
             Layout.minimumWidth: quitBtn.width
             Layout.alignment: Qt.AlignRight
+
+            ToolTip.text: presenter.resetButtonToolTip
+            ToolTip.delay: presenter.toolTipDelay
+            ToolTip.visible: hovered
+
             enabled: presenter.resetEnabled
 
             Shortcut {
@@ -132,6 +137,10 @@ Item {
                     text: presenter.levelEasyButtonLabel
                     checked: false
 
+                    ToolTip.text: presenter.levelButtonsToolTip
+                    ToolTip.delay: presenter.toolTipDelay
+                    ToolTip.visible: hovered
+
                     function switchToEasyLvl() {
                         checked = true;
                         firstWordTextField.clear();
@@ -157,6 +166,10 @@ Item {
                     text: presenter.levelMediumButtonLabel
                     checked: true
 
+                    ToolTip.text: presenter.levelButtonsToolTip
+                    ToolTip.delay: presenter.toolTipDelay
+                    ToolTip.visible: hovered
+
                     function switchToMediumLvl() {
                         checked = true;
                         firstWordTextField.clear();
@@ -181,6 +194,10 @@ Item {
                     id: hardLvlBtn
                     text: presenter.levelHardButtonLabel
                     checked: false
+
+                    ToolTip.text: presenter.levelButtonsToolTip
+                    ToolTip.delay: presenter.toolTipDelay
+                    ToolTip.visible: hovered
 
                     function switchToHardLvl() {
                         checked = true;
@@ -317,6 +334,10 @@ Item {
             text: presenter.submitButtonLabel
             Layout.minimumWidth: bottomBtnsMinWidth
 
+            ToolTip.text: presenter.submitButtonToolTip
+            ToolTip.delay: presenter.toolTipDelay
+            ToolTip.visible: hovered
+
             function submitWords() {
                 var clearTextFields = presenter.handleSubmitRequest(firstWordTextField.text, secondWordTextField.text);
                 if (clearTextFields) {
@@ -343,6 +364,10 @@ Item {
             text: presenter.helpButtonLabel
             Layout.minimumWidth: bottomBtnsMinWidth
 
+            ToolTip.text: presenter.helpButtonToolTip
+            ToolTip.delay: presenter.toolTipDelay
+            ToolTip.visible: hovered
+
             onClicked: {
                 presenter.switchToHelpPane();
             }
@@ -352,6 +377,10 @@ Item {
             id: resultsBtn
             text: presenter.resultsButtonLabel
             Layout.minimumWidth: bottomBtnsMinWidth
+
+            ToolTip.text: presenter.resultsButtonToolTip
+            ToolTip.delay: presenter.toolTipDelay
+            ToolTip.visible: hovered
 
             function getResults() {
                 firstWordTextField.clear();
@@ -376,6 +405,11 @@ Item {
             id: quitBtn
             text: presenter.quitButtonLabel
             Layout.minimumWidth: bottomBtnsMinWidth - parent.spacing * 0.25
+
+            ToolTip.text: presenter.quitButtonToolTip
+            ToolTip.delay: presenter.toolTipDelay
+            ToolTip.visible: hovered
+
             onClicked: Qt.quit()
         }
     }

@@ -41,6 +41,14 @@ class GamePresenter : public QObject
     Q_PROPERTY(QString mainPaneStatusMessage READ getMainPaneStatusMessage NOTIFY mainPaneStatusMessageChanged)
     Q_PROPERTY(QString mainPaneScoreMessage READ getMainPaneScoreMessage NOTIFY mainPaneScoreMessageChanged)
     Q_PROPERTY(QString mainPaneNrOfPairsMessage READ getMainPaneNrOfPairsMessage NOTIFY mainPaneNrOfPairsMessageChanged)
+    Q_PROPERTY(int toolTipDelay READ getToolTipDelay CONSTANT)
+    Q_PROPERTY(QString playButtonToolTip READ getPlayButtonToolTip CONSTANT)
+    Q_PROPERTY(QString helpButtonToolTip READ getHelpButtonToolTip CONSTANT)
+    Q_PROPERTY(QString quitButtonToolTip READ getQuitButtonToolTip CONSTANT)
+    Q_PROPERTY(QString submitButtonToolTip READ getSubmitButtonToolTip CONSTANT)
+    Q_PROPERTY(QString resultsButtonToolTip READ getResultsButtonToolTip CONSTANT)
+    Q_PROPERTY(QString resetButtonToolTip READ getResetButtonToolTip CONSTANT)
+    Q_PROPERTY(QString levelButtonsToolTip READ getLevelButtonsToolTip CONSTANT)
     Q_PROPERTY(bool resetEnabled READ getResetEnabled NOTIFY resetEnabledChanged)
 
 public:
@@ -78,6 +86,15 @@ public:
     QString getMainPaneStatusMessage() const {return m_MainPaneStatusMessage;}
     QString getMainPaneScoreMessage() const {return m_MainPaneScoreMessage;}
     QString getMainPaneNrOfPairsMessage() const {return m_MainPaneNrOfPairsMessage;}
+
+    int getToolTipDelay() const {return m_ToolTipDelay;}
+    QString getPlayButtonToolTip() const {return GameStrings::c_PlayButtonToolTip;}
+    QString getHelpButtonToolTip() const {return GameStrings::c_HelpButtonToolTip;}
+    QString getQuitButtonToolTip() const {return GameStrings::c_QuitButtonToolTip;}
+    QString getSubmitButtonToolTip() const {return GameStrings::c_SubmitButtonToolTip;}
+    QString getResultsButtonToolTip() const {return GameStrings::c_ResultsButtonToolTip;}
+    QString getResetButtonToolTip() const {return GameStrings::c_ResetButtonToolTip;}
+    QString getLevelButtonsToolTip() const {return GameStrings::c_LevelButtonsToolTip;}
 
     QString getPlayButtonShortcut() const {return GameStrings::c_PlayButtonShortcut;}
     QString getHelpButtonShortcut() const {return GameStrings::c_HelpButtonShortcut;}
@@ -134,6 +151,8 @@ private:
 
     WordMixer* m_pWordMixer;
     ScoreItem* m_pScoreItem;
+
+    int m_ToolTipDelay;
 };
 
 #endif // GAMEPRESENTER_H
