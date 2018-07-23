@@ -7,8 +7,8 @@ Item {
 
     property QtObject presenter;
 
-    readonly property double helpPaneRectHeight: height * 0.9;
-    readonly property double bottomBtnsLayoutHeight: height * 0.1;
+    readonly property double helpPaneRectHeight: height * 0.9
+    readonly property double bottomBtnsLayoutHeight: height * 0.1
     readonly property double bottomBtnsMinWidth: (helpPaneRect.width - bottomBtnsLayout.spacing) * 0.5
 
     readonly property color paneColor: "grey"

@@ -7,7 +7,7 @@ Item {
 
     property QtObject presenter;
 
-    readonly property double scoresLayoutHeight: height * 0.1;
+    readonly property double scoresLayoutHeight: height * 0.1
     readonly property double infoLevelsAndStatusLayoutHeight: height * 0.55
     readonly property double wordLabelsLayoutHeight: height * 0.05
     readonly property double wordsEntryLayoutHeight: height * 0.05

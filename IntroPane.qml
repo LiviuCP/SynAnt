@@ -7,8 +7,8 @@ Item {
 
     property QtObject presenter;
 
-    readonly property double introPaneRectHeight: height * 0.9;
-    readonly property double bottomBtnsLayoutHeight: height * 0.1;
+    readonly property double introPaneRectHeight: height * 0.9
+    readonly property double bottomBtnsLayoutHeight: height * 0.1
 
     readonly property double bottomBtnsMinWidth: (introPaneRect.width - 2 * bottomBtnsLayout.spacing) / 3
 
