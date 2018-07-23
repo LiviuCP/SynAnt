@@ -43,4 +43,27 @@ ApplicationWindow {
         anchors.fill: parent
         anchors.margins: windowMargins
     }
+
+    // shortcuts shared among multiple panes
+
+    Shortcut {
+        sequence: gamePresenter.playButtonShortcut
+        onActivated: {
+            gamePresenter.switchToMainPane();
+        }
+    }
+
+    Shortcut {
+        sequence: gamePresenter.helpButtonShortcut
+        onActivated: {
+            gamePresenter.switchToHelpPane();
+        }
+    }
+
+    Shortcut {
+        sequence: gamePresenter.quitButtonShortcut
+        onActivated: {
+            Qt.quit();
+        }
+    }
 }

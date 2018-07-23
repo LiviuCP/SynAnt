@@ -123,13 +123,16 @@ bool GamePresenter::handleSubmitRequest(const QString &firstWord, const QString 
 
 void GamePresenter::handleResetRequest()
 {
-    qDebug() << "=====================================================";
-    qDebug() << "Statistics reset! Same mixed words to be guessed by user";
+    if (m_ResetEnabled)
+    {
+        qDebug() << "=====================================================";
+        qDebug() << "Statistics reset! Same mixed words to be guessed by user";
 
-    m_pScoreItem -> resetStatistics();
-    _updateStatusMessage(Game::StatusCodes::STATISTICS_RESET);
-    m_ResetEnabled = false;
-    Q_EMIT resetEnabledChanged();
+        m_pScoreItem -> resetStatistics();
+        _updateStatusMessage(Game::StatusCodes::STATISTICS_RESET);
+        m_ResetEnabled = false;
+        Q_EMIT resetEnabledChanged();
+    }
 }
 
 void GamePresenter::switchToEasyLevel()

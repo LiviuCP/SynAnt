@@ -1,4 +1,4 @@
-import QtQuick 2.0
+import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.3
 
@@ -71,6 +71,14 @@ Item {
             Layout.minimumWidth: quitBtn.width
             Layout.alignment: Qt.AlignRight
             enabled: presenter.resetEnabled
+
+            Shortcut {
+                sequence: gamePresenter.resetButtonShortcut
+                onActivated: {
+                    gamePresenter.handleResetRequest();
+                }
+            }
+
             onClicked: {
                 presenter.handleResetRequest();
                 firstWordTextField.forceActiveFocus();
@@ -123,11 +131,24 @@ Item {
                     id: easyLvlBtn
                     text: presenter.levelEasyButtonLabel
                     checked: false
-                    onToggled: {
+
+                    function switchToEasyLvl() {
+                        checked = true;
                         firstWordTextField.clear();
                         secondWordTextField.clear();
                         presenter.switchToEasyLevel();
                         firstWordTextField.forceActiveFocus();
+                    }
+
+                    Shortcut {
+                        sequence: gamePresenter.levelEasyButtonShortcut
+                        onActivated: {
+                            easyLvlBtn.switchToEasyLvl()
+                        }
+                    }
+
+                    onToggled: {
+                        switchToEasyLvl()
                     }
                 }
 
@@ -135,11 +156,24 @@ Item {
                     id: mediumLvlBtn
                     text: presenter.levelMediumButtonLabel
                     checked: true
-                    onToggled: {
+
+                    function switchToMediumLvl() {
+                        checked = true;
                         firstWordTextField.clear();
                         secondWordTextField.clear();
                         presenter.switchToMediumLevel();
                         firstWordTextField.forceActiveFocus();
+                    }
+
+                    Shortcut {
+                        sequence: gamePresenter.levelMediumButtonShortcut
+                        onActivated: {
+                            mediumLvlBtn.switchToMediumLvl()
+                        }
+                    }
+
+                    onToggled: {
+                        switchToMediumLvl();
                     }
                 }
 
@@ -147,11 +181,24 @@ Item {
                     id: hardLvlBtn
                     text: presenter.levelHardButtonLabel
                     checked: false
-                    onToggled: {
+
+                    function switchToHardLvl() {
+                        checked = true;
                         firstWordTextField.clear();
                         secondWordTextField.clear();
                         presenter.switchToHardLevel();
                         firstWordTextField.forceActiveFocus();
+                    }
+
+                    Shortcut {
+                        sequence: gamePresenter.levelHardButtonShortcut
+                        onActivated: {
+                            hardLvlBtn.switchToHardLvl()
+                        }
+                    }
+
+                    onToggled: {
+                        switchToHardLvl();
                     }
                 }
             }
@@ -263,17 +310,31 @@ Item {
         anchors.right: wordsEntryLayout.right
         height: bottomBtnsLayoutHeight
 
+
+
         Button {
             id: submitBtn
             text: presenter.submitButtonLabel
             Layout.minimumWidth: bottomBtnsMinWidth
-            onClicked: {
+
+            function submitWords() {
                 var clearTextFields = presenter.handleSubmitRequest(firstWordTextField.text, secondWordTextField.text);
                 if (clearTextFields) {
                     firstWordTextField.clear();
                     secondWordTextField.clear();
                 }
                 firstWordTextField.forceActiveFocus();
+            }
+
+            Shortcut {
+                sequence: presenter.submitButtonShortcut
+                onActivated: {
+                    submitBtn.submitWords();
+                }
+            }
+
+            onClicked: {
+                submitWords();
             }
         }
 
@@ -291,11 +352,23 @@ Item {
             id: resultsBtn
             text: presenter.resultsButtonLabel
             Layout.minimumWidth: bottomBtnsMinWidth
-            onClicked: {
+
+            function getResults() {
                 firstWordTextField.clear();
                 secondWordTextField.clear();
                 firstWordTextField.forceActiveFocus();
                 presenter.handleResultsRequest();
+            }
+
+            Shortcut {
+                sequence: presenter.resultsButtonShortcut
+                onActivated: {
+                    resultsBtn.getResults();
+                }
+            }
+
+            onClicked: {
+                getResults();
             }
         }
 

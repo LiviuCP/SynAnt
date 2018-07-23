@@ -22,6 +22,15 @@ class GamePresenter : public QObject
     Q_PROPERTY(QString levelEasyButtonLabel READ getLevelEasyButtonLabel CONSTANT)
     Q_PROPERTY(QString levelMediumButtonLabel READ getLevelMediumButtonLabel CONSTANT)
     Q_PROPERTY(QString levelHardButtonLabel READ getLevelHardButtonLabel CONSTANT)
+    Q_PROPERTY(QString playButtonShortcut READ getPlayButtonShortcut CONSTANT)
+    Q_PROPERTY(QString helpButtonShortcut READ getHelpButtonShortcut CONSTANT)
+    Q_PROPERTY(QString quitButtonShortcut READ getQuitButtonShortcut CONSTANT)
+    Q_PROPERTY(QString submitButtonShortcut READ getSubmitButtonShortcut CONSTANT)
+    Q_PROPERTY(QString resultsButtonShortcut READ getResultsButtonShortcut CONSTANT)
+    Q_PROPERTY(QString resetButtonShortcut READ getResetButtonShortcut CONSTANT)
+    Q_PROPERTY(QString levelEasyButtonShortcut READ getLevelEasyButtonShortcut CONSTANT)
+    Q_PROPERTY(QString levelMediumButtonShortcut READ getLevelMediumButtonShortcut CONSTANT)
+    Q_PROPERTY(QString levelHardButtonShortcut READ getLevelHardButtonShortcut CONSTANT)
     Q_PROPERTY(bool introPaneVisible READ getIntroPaneVisible NOTIFY introPaneVisibleChanged)
     Q_PROPERTY(bool helpPaneVisible READ getHelpPaneVisible NOTIFY helpPaneVisibleChanged)
     Q_PROPERTY(bool mainPaneVisible READ getMainPaneVisible NOTIFY mainPaneVisibleChanged)
@@ -67,6 +76,16 @@ public:
     QString getMainPaneStatusMessage() const {return m_MainPaneStatusMessage;}
     QString getMainPaneScoreMessage() const {return m_MainPaneScoreMessage;}
     QString getMainPaneNrOfPairsMessage() const {return m_MainPaneNrOfPairsMessage;}
+
+    QString getPlayButtonShortcut() const {return GameStrings::c_PlayButtonShortcut;}
+    QString getHelpButtonShortcut() const {return GameStrings::c_HelpButtonShortcut;}
+    QString getQuitButtonShortcut() const {return GameStrings::c_QuitButtonShortcut;}
+    QString getSubmitButtonShortcut() const {return GameStrings::c_SubmitButtonShortcut;}
+    QString getResultsButtonShortcut() const {return GameStrings::c_ResultsButtonShortcut;}
+    QString getResetButtonShortcut() const {return GameStrings::c_ResetShortcut;}
+    QString getLevelEasyButtonShortcut() const {return GameStrings::c_LevelEasyButtonShortcut;}
+    QString getLevelMediumButtonShortcut() const {return GameStrings::c_LevelMediumButtonShortcut;}
+    QString getLevelHardButtonShortcut() const {return GameStrings::c_LevelHardButtonShortcut;}
 
 signals:
     Q_SIGNAL void introPaneVisibleChanged();
