@@ -34,6 +34,7 @@ class GamePresenter : public QObject
     Q_PROPERTY(bool introPaneVisible READ getIntroPaneVisible NOTIFY introPaneVisibleChanged)
     Q_PROPERTY(bool helpPaneVisible READ getHelpPaneVisible NOTIFY helpPaneVisibleChanged)
     Q_PROPERTY(bool mainPaneVisible READ getMainPaneVisible NOTIFY mainPaneVisibleChanged)
+    Q_PROPERTY(QString windowTitle READ getWindowTitle NOTIFY windowTitleChanged)
     Q_PROPERTY(QString introPaneMessage READ getIntroPaneMessage CONSTANT)
     Q_PROPERTY(QString helpPaneMessage READ getHelpPaneMessage CONSTANT)
     Q_PROPERTY(QString mainPaneInstructionsMessage READ getMainPaneInstructionsMessage CONSTANT)
@@ -70,6 +71,7 @@ public:
     bool getMainPaneVisible() const {return m_MainPaneVisible;}
     bool getResetEnabled() const {return m_ResetEnabled;}
 
+    QString getWindowTitle() const;
     QString getIntroPaneMessage() const {return m_IntroPaneMessage;}
     QString getHelpPaneMessage() const {return m_HelpPaneMessage;}
     QString getMainPaneInstructionsMessage() const {return m_MainPaneInstructionsMessage;}
@@ -88,6 +90,7 @@ public:
     QString getLevelHardButtonShortcut() const {return GameStrings::c_LevelHardButtonShortcut;}
 
 signals:
+    Q_SIGNAL void windowTitleChanged();
     Q_SIGNAL void introPaneVisibleChanged();
     Q_SIGNAL void helpPaneVisibleChanged();
     Q_SIGNAL void mainPaneVisibleChanged();
@@ -119,6 +122,7 @@ private:
 
     bool m_ResetEnabled;
 
+    QString m_WindowTitle;
     QString m_IntroPaneMessage;
     QString m_HelpPaneMessage;
     QString m_MainPaneInstructionsMessage;

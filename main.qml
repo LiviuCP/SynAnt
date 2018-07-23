@@ -11,7 +11,7 @@ ApplicationWindow {
     minimumHeight: 480
 //    maximumWidth: 640
 //    maximumHeight: 480
-    title: qsTr("SynAnt")
+    title: gamePresenter.windowTitle
     color: "grey"
 
     property double windowMargins: width * 0.01

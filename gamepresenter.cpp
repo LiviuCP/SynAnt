@@ -13,6 +13,7 @@ GamePresenter::GamePresenter(QObject *parent)
     , m_MainPaneVisible {false}
     , m_MainPaneInitialized {false}
     , m_ResetEnabled {false}
+    , m_WindowTitle{GameStrings::c_IntroWindowTitle}
     , m_IntroPaneMessage {GameStrings::c_IntroWindowWelcomeMessage}
     , m_HelpPaneMessage {GameStrings::c_HelpWindowMessage}
     , m_MainPaneInstructionsMessage {GameStrings::c_InstructionsMessage}
@@ -48,6 +49,7 @@ void GamePresenter::switchToHelpPane()
     m_CurrentPane = Pane::HELP;
     m_HelpPaneVisible = true;
     Q_EMIT helpPaneVisibleChanged();
+    Q_EMIT windowTitleChanged();
 }
 
 void GamePresenter::switchToMainPane()
@@ -73,6 +75,7 @@ void GamePresenter::switchToMainPane()
     m_CurrentPane = Pane::MAIN;
     m_MainPaneVisible = true;
     Q_EMIT mainPaneVisibleChanged();
+    Q_EMIT windowTitleChanged();
 }
 
 void GamePresenter::handleResultsRequest()
@@ -157,6 +160,27 @@ void GamePresenter::switchToHardLevel()
     qDebug() << "Level changed to hard! New words mixed";
 
     _setLevel(Game::Level::HARD);
+}
+
+QString GamePresenter::getWindowTitle() const
+{
+    QString windowTitle;
+    switch(m_CurrentPane)
+    {
+    case Pane::INTRO:
+        windowTitle = GameStrings::c_IntroWindowTitle;
+        break;
+    case Pane::HELP:
+        windowTitle = GameStrings::c_HelpWindowTitle;
+        break;
+    case Pane::MAIN:
+        windowTitle = GameStrings::c_MainWindowTitle;
+        break;
+    //reserved for future use
+    default:
+        ;
+    }
+    return windowTitle;
 }
 
 void GamePresenter::_onStatisticsUpdated()
