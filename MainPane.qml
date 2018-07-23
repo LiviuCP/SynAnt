@@ -73,6 +73,7 @@ Item {
             enabled: presenter.resetEnabled
             onClicked: {
                 presenter.handleResetRequest();
+                firstWordTextField.forceActiveFocus();
             }
         }
     }
@@ -236,6 +237,12 @@ Item {
             id: firstWordTextField
             Layout.minimumWidth: parent.width * 0.49
             Layout.minimumHeight: parent.height
+
+            onVisibleChanged: {
+                if (visible) {
+                    forceActiveFocus();
+                }
+            }
         }
 
         TextField {
@@ -263,6 +270,7 @@ Item {
                     firstWordTextField.clear();
                     secondWordTextField.clear();
                 }
+                firstWordTextField.forceActiveFocus();
             }
         }
 
@@ -283,6 +291,7 @@ Item {
             onClicked: {
                 firstWordTextField.clear();
                 secondWordTextField.clear();
+                firstWordTextField.forceActiveFocus();
                 presenter.handleResultsRequest();
             }
         }
