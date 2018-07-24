@@ -134,6 +134,19 @@ Item {
                 color: borderColor
             }
 
+            MouseArea {
+                id: infoMouseArea
+                anchors.fill: parent
+                hoverEnabled: true
+            }
+
+            ToolTip {
+                id: infoToolTip
+                delay: presenter.toolTipDelay
+                text: presenter.gameInstructionsToolTip
+                visible: infoMouseArea.containsMouse
+            }
+
             Text {
                 color: textColor
                 text: presenter.mainPaneInstructionsMessage
@@ -265,6 +278,19 @@ Item {
                 color: borderColor
             }
 
+            MouseArea {
+                id: statusMouseArea
+                anchors.fill: parent
+                hoverEnabled: true
+            }
+
+            ToolTip {
+                id: statusToolTip
+                delay: presenter.toolTipDelay
+                text: presenter.gameStatusToolTip
+                visible: statusMouseArea.containsMouse
+            }
+
             Text {
                 color: textColor
 
@@ -351,6 +377,10 @@ Item {
             Layout.minimumWidth: parent.width * 0.49
             Layout.minimumHeight: parent.height
 
+            ToolTip.text: presenter.firstWordToolTip
+            ToolTip.delay: presenter.toolTipDelay
+            ToolTip.visible: hovered
+
             onVisibleChanged: {
                 if (visible) {
                     forceActiveFocus();
@@ -364,6 +394,10 @@ Item {
             Layout.minimumWidth: parent.width * 0.49
             Layout.minimumHeight: parent.height
             Layout.alignment: Qt.AlignRight
+
+            ToolTip.text: presenter.secondWordToolTip
+            ToolTip.delay: presenter.toolTipDelay
+            ToolTip.visible: hovered
         }
     }
 

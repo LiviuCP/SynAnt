@@ -46,6 +46,10 @@ class GamePresenter : public QObject
     Q_PROPERTY(QString introPaneToolTip READ getIntroPaneToolTip CONSTANT)
     Q_PROPERTY(QString helpPaneToolTip READ getHelpPaneToolTip CONSTANT)
     Q_PROPERTY(QString mainPaneToolTip READ getMainPaneToolTip CONSTANT)
+    Q_PROPERTY(QString gameInstructionsToolTip READ getGameInstructionsToolTip CONSTANT)
+    Q_PROPERTY(QString gameStatusToolTip READ getGameStatusToolTip CONSTANT)
+    Q_PROPERTY(QString firstWordToolTip READ getFirstWordToolTip CONSTANT)
+    Q_PROPERTY(QString secondWordToolTip READ getSecondWordToolTip CONSTANT)
     Q_PROPERTY(QString playButtonToolTip READ getPlayButtonToolTip CONSTANT)
     Q_PROPERTY(QString helpButtonToolTip READ getHelpButtonToolTip CONSTANT)
     Q_PROPERTY(QString quitButtonToolTip READ getQuitButtonToolTip CONSTANT)
@@ -96,6 +100,10 @@ public:
     QString getIntroPaneToolTip() const {return GameStrings::c_IntroWindowToolTip;}
     QString getHelpPaneToolTip() const {return GameStrings::c_HelpWindowToolTip;}
     QString getMainPaneToolTip() const {return GameStrings::c_MainWindowToolTip;}
+    QString getGameInstructionsToolTip() const {return GameStrings::c_GameInstructionsToolTip;}
+    QString getGameStatusToolTip() const {return GameStrings::c_GameStatusToolTip;}
+    QString getFirstWordToolTip() const {return GameStrings::c_FirstWordToolTip;}
+    QString getSecondWordToolTip() const {return GameStrings::c_SecondWordToolTip;}
     QString getPlayButtonToolTip() const {return GameStrings::c_PlayButtonToolTip;}
     QString getHelpButtonToolTip() const {return GameStrings::c_HelpButtonToolTip;}
     QString getQuitButtonToolTip() const {return GameStrings::c_QuitButtonToolTip;}
