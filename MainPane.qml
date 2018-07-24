@@ -133,7 +133,7 @@ Item {
         }
 
         Rectangle {
-            id: radioBtnsRect
+            id: levelBtnsRect
             Layout.minimumWidth: parent.width * 0.15
             Layout.minimumHeight: parent.height * 0.6
             color: paneColor
