@@ -65,7 +65,7 @@ Item {
 
         Button {
             id: okBtn
-            text: gamePresenter.okButtonLabel
+            text: presenter.okButtonLabel
             Layout.minimumWidth: bottomBtnsMinWidth
 
             ToolTip.text: presenter.okButtonToolTip
@@ -86,7 +86,7 @@ Item {
 
         Button {
             id: quitBtn
-            text: gamePresenter.quitButtonLabel
+            text: presenter.quitButtonLabel
             Layout.minimumWidth: bottomBtnsMinWidth
 
             ToolTip.text: presenter.quitButtonToolTip

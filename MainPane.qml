@@ -91,9 +91,9 @@ Item {
             enabled: presenter.resetEnabled
 
             Shortcut {
-                sequence: gamePresenter.resetButtonShortcut
+                sequence: presenter.resetButtonShortcut
                 onActivated: {
-                    gamePresenter.handleResetRequest();
+                    presenter.handleResetRequest();
                 }
             }
 
@@ -172,7 +172,7 @@ Item {
                     }
 
                     Shortcut {
-                        sequence: gamePresenter.levelEasyButtonShortcut
+                        sequence: presenter.levelEasyButtonShortcut
                         onActivated: {
                             easyLvlBtn.switchToEasyLvl()
                         }
@@ -197,7 +197,7 @@ Item {
                     }
 
                     Shortcut {
-                        sequence: gamePresenter.levelMediumButtonShortcut
+                        sequence: presenter.levelMediumButtonShortcut
                         onActivated: {
                             mediumLvlBtn.switchToMediumLvl()
                         }
@@ -222,7 +222,7 @@ Item {
                     }
 
                     Shortcut {
-                        sequence: gamePresenter.levelHardButtonShortcut
+                        sequence: presenter.levelHardButtonShortcut
                         onActivated: {
                             hardLvlBtn.switchToHardLvl()
                         }
