@@ -16,6 +16,19 @@ Item {
     readonly property color borderColor: "white"
     readonly property color textColor: "white"
 
+    MouseArea {
+        id: introPaneMouseArea
+        anchors.fill: parent
+        hoverEnabled: true
+    }
+
+    ToolTip {
+        id: introPaneToolTip
+        delay: presenter.toolTipDelay
+        text: presenter.introPaneToolTip
+        visible: introPaneMouseArea.containsMouse
+    }
+
     Rectangle {
         id: introPaneRect
         anchors.top: parent.top

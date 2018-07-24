@@ -19,6 +19,19 @@ Item {
     readonly property color borderColor: "white"
     readonly property color textColor: "white"
 
+    MouseArea {
+        id: mainPaneMouseArea
+        anchors.fill: parent
+        hoverEnabled: true
+    }
+
+    ToolTip {
+        id: mainPaneToolTip
+        delay: presenter.toolTipDelay
+        text: presenter.mainPaneToolTip
+        visible: mainPaneMouseArea.containsMouse
+    }
+
     RowLayout {
         id: scoresLayout
         anchors.top: parent.top

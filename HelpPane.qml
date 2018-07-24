@@ -15,6 +15,19 @@ Item {
     readonly property color borderColor: "white"
     readonly property color textColor: "white"
 
+    MouseArea {
+        id: helpPaneMouseArea
+        anchors.fill: parent
+        hoverEnabled: true
+    }
+
+    ToolTip {
+        id: helpPaneToolTip
+        delay: presenter.toolTipDelay
+        text: presenter.helpPaneToolTip
+        visible: helpPaneMouseArea.containsMouse
+    }
+
     Rectangle {
         id: helpPaneRect
         anchors.top: parent.top
