@@ -24,7 +24,6 @@ IntroductionWindow::IntroductionWindow(QWidget *parent)
     playButton -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     playButton -> setToolTip(GameStrings::c_PlayButtonToolTip);
     QShortcut *playButtonShortcut{new QShortcut{QKeySequence{GameStrings::c_PlayButtonShortcut},this}};
-    QShortcut *playButtonAltShortcut{new QShortcut{QKeySequence{GameStrings::c_PlayButtonAltShortcut},this}};
     QPushButton *hintsButton{new QPushButton{GameStrings::c_HelpButtonLabel}};
     hintsButton -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     hintsButton -> setToolTip(GameStrings::c_HelpButtonToolTip);
@@ -54,8 +53,6 @@ IntroductionWindow::IntroductionWindow(QWidget *parent)
     connected = connect(playButton,&QPushButton::clicked,this,&IntroductionWindow::switchedIntroToMain);
     Q_ASSERT(connected);
     connected = connect(playButtonShortcut,&QShortcut::activated,this,&IntroductionWindow::switchedIntroToMain);
-    Q_ASSERT(connected);
-    connected = connect(playButtonAltShortcut,&QShortcut::activated,this,&IntroductionWindow::switchedIntroToMain);
     Q_ASSERT(connected);
 }
 

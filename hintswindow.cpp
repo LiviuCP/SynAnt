@@ -27,7 +27,6 @@ HintsWindow::HintsWindow(QWidget *parent)
     okButton -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     okButton -> setToolTip(GameStrings::c_OkButtonToolTip);
     QShortcut *okButtonShortcut{new QShortcut{QKeySequence{GameStrings::c_OkButtonShortcut},this}};
-    QShortcut *okButtonAltShortcut{new QShortcut{QKeySequence{GameStrings::c_OkButtonAltShortcut},this}};
     QPushButton *quitButton{new QPushButton{GameStrings::c_QuitButtonLabel}};
     quitButton -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     quitButton -> setToolTip(GameStrings::c_QuitButtonToolTip);
@@ -48,7 +47,5 @@ HintsWindow::HintsWindow(QWidget *parent)
     connected = connect(okButton,&QPushButton::clicked,this,&HintsWindow::switchedHintsToMain);
     Q_ASSERT(connected);
     connected = connect(okButtonShortcut,&QShortcut::activated,this,&HintsWindow::switchedHintsToMain);
-    Q_ASSERT(connected);
-    connected = connect(okButtonAltShortcut,&QShortcut::activated,this,&HintsWindow::switchedHintsToMain);
     Q_ASSERT(connected);
 }

@@ -89,7 +89,6 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     submitButton -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
     submitButton -> setToolTip(GameStrings::c_SubmitButtonToolTip);
     QShortcut *submitButtonShortcut{new QShortcut{QKeySequence{GameStrings::c_SubmitButtonShortcut},this}};
-    QShortcut *submitButtonAltShortcut{new QShortcut{QKeySequence{GameStrings::c_SubmitButtonAltShortcut},this}};
     QPushButton *hintsButton{new QPushButton{GameStrings::c_HelpButtonLabel}};
     hintsButton -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
     hintsButton -> setToolTip(GameStrings::c_HelpButtonToolTip);
@@ -140,8 +139,6 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     connected = connect(submitButton,&QPushButton::clicked,this,&MainGameWindow::_onButtonSubmitClicked);
     Q_ASSERT(connected);
     connected = connect(submitButtonShortcut,&QShortcut::activated,this,&MainGameWindow::_onButtonSubmitClicked);
-    Q_ASSERT(connected);
-    connected = connect(submitButtonAltShortcut,&QShortcut::activated,this,&MainGameWindow::_onButtonSubmitClicked);
     Q_ASSERT(connected);
     connected = connect(hintsButton,&QPushButton::clicked,this,&MainGameWindow::switchedMaintoHints);
     Q_ASSERT(connected);

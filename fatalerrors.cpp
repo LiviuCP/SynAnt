@@ -23,7 +23,6 @@ FatalErrors::FatalErrors(QWidget *parent)
     closeButton -> setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     closeButton -> setToolTip(GameStrings::c_FatalErrorQuitButtonToolTip);
     QShortcut *closeButtonShortcut{new QShortcut{QKeySequence{GameStrings::c_FatalErrorQuitButtonShortcut},this}};
-    QShortcut *closeButtonAltShortcut{new QShortcut{QKeySequence{GameStrings::c_FatalErrorQuitButtonAltShortcut},this}};
     closeButtonLayout -> addWidget(closeButton,1);
 
     QVBoxLayout *mainLayout{new QVBoxLayout{}};
@@ -35,8 +34,6 @@ FatalErrors::FatalErrors(QWidget *parent)
     bool connected{connect(closeButton,&QPushButton::clicked,qApp,&QApplication::quit)};
     Q_ASSERT(connected);
     connected = connect(closeButtonShortcut,&QShortcut::activated,qApp,&QApplication::quit);
-    Q_ASSERT(connected);
-    connected = connect(closeButtonAltShortcut,&QShortcut::activated,qApp,&QApplication::quit);
     Q_ASSERT(connected);
 }
 
