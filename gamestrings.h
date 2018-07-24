@@ -111,20 +111,16 @@ namespace GameStrings {
 
     // shortcuts
     const QString c_PlayButtonShortcut                  {    "ALT+P"                                                                                    };
-    const QString c_PlayButtonAltShortcut               {    "RETURN"                                                                                   };
     const QString c_HelpButtonShortcut                  {    "ALT+H"                                                                                    };
     const QString c_QuitButtonShortcut                  {    "ALT+Q"                                                                                    };
     const QString c_OkButtonShortcut                    {    "ALT+O"                                                                                    };
-    const QString c_OkButtonAltShortcut                 {    "RETURN"                                                                                   };
     const QString c_SubmitButtonShortcut                {    "ALT+S"                                                                                    };
-    const QString c_SubmitButtonAltShortcut             {    "RETURN"                                                                                   };
     const QString c_ResultsButtonShortcut               {    "ALT+B"                                                                                    };
     const QString c_LevelEasyButtonShortcut             {    "ALT+1"                                                                                    };
     const QString c_LevelMediumButtonShortcut           {    "ALT+2"                                                                                    };
     const QString c_LevelHardButtonShortcut             {    "ALT+3"                                                                                    };
     const QString c_ResetShortcut                       {    "ALT+R"                                                                                    };
     const QString c_FatalErrorQuitButtonShortcut        {    "ALT+C"                                                                                    };
-    const QString c_FatalErrorQuitButtonAltShortcut     {    "RETURN"                                                                                   };
 
     // tooltips
     const QString c_HighscoresToolTip                   {
@@ -147,13 +143,13 @@ namespace GameStrings {
                                                              "\t3) ALT+3 for Hard\n"
                                                         };
 
-    const QString c_PlayButtonToolTip                   {    "Click or hit ALT+P/ENTER to play."                                                        };
+    const QString c_PlayButtonToolTip                   {    "Click or hit ALT+P to play."                                                              };
     const QString c_HelpButtonToolTip                   {    "Click or hit ALT+H for accessing the detailed game instructions."                         };
     const QString c_QuitButtonToolTip                   {    "Click or hit ALT+Q to exit application."                                                  };
     const QString c_IntroWindowToolTip                  {    "Welcome to SynAnt"                                                                        };
-    const QString c_OkButtonToolTip                     {    "Click or hit ALT+O/ENTER to return to game."                                              };
+    const QString c_OkButtonToolTip                     {    "Click or hit ALT+O to return to game."                                                    };
     const QString c_HelpWindowToolTip                   {    "Please read the detailed game instructions."                                              };
-    const QString c_SubmitButtonToolTip                 {    "Click or hit ALT+S/ENTER after entering the 2 words."                                     };
+    const QString c_SubmitButtonToolTip                 {    "Click or hit ALT+S after entering the 2 words."                                           };
     const QString c_ResultsButtonToolTip                {    "Click or hit ALT+B to have the correct words displayed."                                  };
     const QString c_ResetButtonToolTip                  {    "Click or hit ALT+R for resetting the scores and number of pairs."                         };
     const QString c_GameInstructionsToolTip             {    "Displays the game instructions."                                                          };
@@ -161,7 +157,7 @@ namespace GameStrings {
     const QString c_FirstWordToolTip                    {    "Enter the first word."                                                                    };
     const QString c_SecondWordToolTip                   {    "Enter the second word."                                                                   };
     const QString c_MainWindowToolTip                   {    "This is where the action happens!"                                                        };
-    const QString c_FatalErrorQuitButtonToolTip         {    "Click or hit ALT+O/ENTER to exit the game."                                               };
+    const QString c_FatalErrorQuitButtonToolTip         {    "Click or hit ALT+C to exit the game."                                                     };
     const QString c_FatalErrorWindowToolTip             {    "A fatal error occurred. Corrective actions are required."                                 };
 
     // window titles
