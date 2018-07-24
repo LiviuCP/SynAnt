@@ -142,6 +142,19 @@ Item {
                 color: borderColor
             }
 
+            MouseArea {
+                id: levelBtnsMouseArea
+                anchors.fill: parent
+                hoverEnabled: true
+            }
+
+            ToolTip {
+                id: levelBtnsToolTip
+                delay: presenter.toolTipDelay
+                text: presenter.levelButtonsToolTip
+                visible: levelBtnsMouseArea.containsMouse
+            }
+
             ColumnLayout {
                 anchors.fill: parent
 
@@ -149,10 +162,6 @@ Item {
                     id: easyLvlBtn
                     text: presenter.levelEasyButtonLabel
                     checked: false
-
-                    ToolTip.text: presenter.levelButtonsToolTip
-                    ToolTip.delay: presenter.toolTipDelay
-                    ToolTip.visible: hovered
 
                     function switchToEasyLvl() {
                         checked = true;
@@ -179,10 +188,6 @@ Item {
                     text: presenter.levelMediumButtonLabel
                     checked: true
 
-                    ToolTip.text: presenter.levelButtonsToolTip
-                    ToolTip.delay: presenter.toolTipDelay
-                    ToolTip.visible: hovered
-
                     function switchToMediumLvl() {
                         checked = true;
                         firstWordTextField.clear();
@@ -207,10 +212,6 @@ Item {
                     id: hardLvlBtn
                     text: presenter.levelHardButtonLabel
                     checked: false
-
-                    ToolTip.text: presenter.levelButtonsToolTip
-                    ToolTip.delay: presenter.toolTipDelay
-                    ToolTip.visible: hovered
 
                     function switchToHardLvl() {
                         checked = true;
