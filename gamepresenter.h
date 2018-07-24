@@ -25,6 +25,7 @@ class GamePresenter : public QObject
     Q_PROPERTY(QString playButtonShortcut READ getPlayButtonShortcut CONSTANT)
     Q_PROPERTY(QString helpButtonShortcut READ getHelpButtonShortcut CONSTANT)
     Q_PROPERTY(QString quitButtonShortcut READ getQuitButtonShortcut CONSTANT)
+    Q_PROPERTY(QString okButtonShortcut READ getOkButtonShortcut CONSTANT)
     Q_PROPERTY(QString submitButtonShortcut READ getSubmitButtonShortcut CONSTANT)
     Q_PROPERTY(QString resultsButtonShortcut READ getResultsButtonShortcut CONSTANT)
     Q_PROPERTY(QString resetButtonShortcut READ getResetButtonShortcut CONSTANT)
@@ -45,6 +46,7 @@ class GamePresenter : public QObject
     Q_PROPERTY(QString playButtonToolTip READ getPlayButtonToolTip CONSTANT)
     Q_PROPERTY(QString helpButtonToolTip READ getHelpButtonToolTip CONSTANT)
     Q_PROPERTY(QString quitButtonToolTip READ getQuitButtonToolTip CONSTANT)
+    Q_PROPERTY(QString okButtonToolTip READ getOkButtonToolTip CONSTANT)
     Q_PROPERTY(QString submitButtonToolTip READ getSubmitButtonToolTip CONSTANT)
     Q_PROPERTY(QString resultsButtonToolTip READ getResultsButtonToolTip CONSTANT)
     Q_PROPERTY(QString resetButtonToolTip READ getResetButtonToolTip CONSTANT)
@@ -91,6 +93,7 @@ public:
     QString getPlayButtonToolTip() const {return GameStrings::c_PlayButtonToolTip;}
     QString getHelpButtonToolTip() const {return GameStrings::c_HelpButtonToolTip;}
     QString getQuitButtonToolTip() const {return GameStrings::c_QuitButtonToolTip;}
+    QString getOkButtonToolTip() const {return GameStrings::c_OkButtonToolTip;}
     QString getSubmitButtonToolTip() const {return GameStrings::c_SubmitButtonToolTip;}
     QString getResultsButtonToolTip() const {return GameStrings::c_ResultsButtonToolTip;}
     QString getResetButtonToolTip() const {return GameStrings::c_ResetButtonToolTip;}
@@ -99,6 +102,7 @@ public:
     QString getPlayButtonShortcut() const {return GameStrings::c_PlayButtonShortcut;}
     QString getHelpButtonShortcut() const {return GameStrings::c_HelpButtonShortcut;}
     QString getQuitButtonShortcut() const {return GameStrings::c_QuitButtonShortcut;}
+    QString getOkButtonShortcut() const {return GameStrings::c_OkButtonShortcut;}
     QString getSubmitButtonShortcut() const {return GameStrings::c_SubmitButtonShortcut;}
     QString getResultsButtonShortcut() const {return GameStrings::c_ResultsButtonShortcut;}
     QString getResetButtonShortcut() const {return GameStrings::c_ResetShortcut;}

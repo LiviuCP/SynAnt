@@ -55,9 +55,16 @@ Item {
             text: gamePresenter.okButtonLabel
             Layout.minimumWidth: bottomBtnsMinWidth
 
-            ToolTip.text: presenter.playButtonToolTip
+            ToolTip.text: presenter.okButtonToolTip
             ToolTip.delay: presenter.toolTipDelay
             ToolTip.visible: hovered
+
+            Shortcut {
+                sequence: presenter.okButtonShortcut
+                onActivated: {
+                    presenter.switchToMainPane();
+                }
+            }
 
             onClicked: {
                 presenter.switchToMainPane();
