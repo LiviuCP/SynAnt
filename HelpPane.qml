@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.3
 Item {
     id: helpPane
 
-    property QtObject presenter;
+    property QtObject presenter
 
     readonly property double helpPaneRectHeight: height * 0.9
     readonly property double bottomBtnsLayoutHeight: height * 0.1
@@ -34,16 +34,21 @@ Item {
         width: parent.width
         height: helpPaneRectHeight
         color: paneColor
+
         border {
             color: borderColor
         }
+
         Flickable {
             id: helpPaneFlickable
+
             anchors.fill: parent
             anchors.leftMargin: parent.width * 0.005
             anchors.rightMargin: parent.width * 0.005
             contentHeight: helpPaneText.height
+
             clip: true
+
             Text {
                 id: helpPaneText
                 text: presenter.helpPaneMessage
@@ -56,11 +61,13 @@ Item {
 
     RowLayout {
         id: bottomBtnsLayout
+
         anchors.top: helpPaneRect.bottom
         anchors.bottom: parent.bottom
         anchors.topMargin: parent.height * 0.01
         anchors.left: helpPaneRect.left
         anchors.right: helpPaneRect.right
+
         height: bottomBtnsLayoutHeight
 
         Button {

@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.3
 Item {
     id: mainPane
 
-    property QtObject presenter;
+    property QtObject presenter
 
     readonly property double scoresLayoutHeight: height * 0.1
     readonly property double infoLevelsAndStatusLayoutHeight: height * 0.55
@@ -34,15 +34,19 @@ Item {
 
     RowLayout {
         id: scoresLayout
+
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
+
         height: scoresLayoutHeight
 
         Rectangle {
             id: highScoresRect
+
             Layout.minimumWidth: parent.width / 3
             Layout.minimumHeight: parent.height / 2
+
             color: paneColor
 
             border {
@@ -52,6 +56,7 @@ Item {
             Text {
                 color: textColor
                 text: presenter.mainPaneScoreMessage
+
                 anchors.left: parent.left
                 anchors.leftMargin: parent.width * 0.01
                 anchors.verticalCenter: parent.verticalCenter
@@ -60,10 +65,12 @@ Item {
 
         Rectangle {
             id: wordPairsRect
+
             Layout.minimumWidth: parent.width / 3
             Layout.minimumHeight: parent.height / 2
-            color: paneColor
             Layout.leftMargin: parent.width * (-0.04)
+
+            color: paneColor
 
             border {
                 color: borderColor
@@ -72,6 +79,7 @@ Item {
             Text {
                 color: textColor
                 text: presenter.mainPaneNrOfPairsMessage
+
                 anchors.left: parent.left
                 anchors.leftMargin: parent.width * 0.01
                 anchors.verticalCenter: parent.verticalCenter
@@ -81,6 +89,7 @@ Item {
         Button {
             id: resetBtn
             text: presenter.resetButtonLabel
+
             Layout.minimumWidth: quitBtn.width
             Layout.alignment: Qt.AlignRight
 
@@ -106,15 +115,19 @@ Item {
 
     RowLayout {
         id: infoLevelsAndStatusLayout
+
         anchors.top: scoresLayout.bottom
         anchors.topMargin: parent.height * 0.05
+
         width: parent.width
         height: infoLevelsAndStatusLayoutHeight
 
         Rectangle {
             id: infoRect
+
             Layout.minimumWidth: parent.width * 0.55
             Layout.minimumHeight: parent.height
+
             color: paneColor
 
             border {
@@ -124,9 +137,11 @@ Item {
             Text {
                 color: textColor
                 text: presenter.mainPaneInstructionsMessage
+
                 anchors.fill: parent
                 anchors.leftMargin: parent.width * 0.01
                 anchors.rightMargin: parent.width * 0.01
+
                 width: parent.width
                 wrapMode: Text.WordWrap
             }
@@ -134,8 +149,10 @@ Item {
 
         Rectangle {
             id: levelBtnsRect
+
             Layout.minimumWidth: parent.width * 0.15
             Layout.minimumHeight: parent.height * 0.6
+
             color: paneColor
 
             border {
@@ -237,9 +254,11 @@ Item {
 
         Rectangle {
             id: statusRect
+
             Layout.minimumWidth: parent.width * 0.242
             Layout.minimumHeight: parent.height
             Layout.alignment: Qt.AlignRight
+
             color: paneColor
 
             border {
@@ -267,40 +286,50 @@ Item {
 
     RowLayout {
         id: wordLabelsLayout
+
         anchors.top: infoLevelsAndStatusLayout.bottom
         anchors.left: infoLevelsAndStatusLayout.left
         anchors.right: infoLevelsAndStatusLayout.right
         anchors.topMargin: parent.height * 0.025
+
         height: wordLabelsLayoutHeight
 
         Label {
             id: label1
+
             Layout.minimumWidth: parent.width * 0.25
             Layout.minimumHeight: parent.height
+
             color: textColor
             text: "Label "
         }
 
         Label {
             id: label2
+
             Layout.minimumWidth: parent.width * 0.25
             Layout.minimumHeight: parent.height
+
             color: textColor
             text: "area."
         }
 
         Label {
             id: label3
+
             Layout.minimumWidth: parent.width * 0.25
             Layout.minimumHeight: parent.height
+
             color: textColor
             text: "Under"
         }
 
         Label {
             id: label4
+
             Layout.minimumWidth: parent.width * 0.25
             Layout.minimumHeight: parent.height
+
             color: textColor
             text: "construction! "
         }
@@ -308,14 +337,17 @@ Item {
 
     RowLayout {
         id: wordsEntryLayout
+
         anchors.top: wordLabelsLayout.bottom
         anchors.left: wordLabelsLayout.left
         anchors.right: wordLabelsLayout.right
         anchors.topMargin: parent.width * 0.01
+
         height: wordsEntryLayoutHeight
 
         TextField {
             id: firstWordTextField
+
             Layout.minimumWidth: parent.width * 0.49
             Layout.minimumHeight: parent.height
 
@@ -328,6 +360,7 @@ Item {
 
         TextField {
             id: secondWordTextField
+
             Layout.minimumWidth: parent.width * 0.49
             Layout.minimumHeight: parent.height
             Layout.alignment: Qt.AlignRight
@@ -336,9 +369,11 @@ Item {
 
     RowLayout {
         id: bottomBtnsLayout
+
         anchors.bottom: parent.bottom
         anchors.left: wordsEntryLayout.left
         anchors.right: wordsEntryLayout.right
+
         height: bottomBtnsLayoutHeight
 
 

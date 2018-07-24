@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.3
 Item {
     id: introPane
 
-    property QtObject presenter;
+    property QtObject presenter
 
     readonly property double introPaneRectHeight: height * 0.9
     readonly property double bottomBtnsLayoutHeight: height * 0.1
@@ -35,9 +35,11 @@ Item {
         width: parent.width
         height: introPaneRectHeight
         color: paneColor
+
         border {
             color: borderColor
         }
+
         Text {
             id: introPaneText
             anchors.fill: parent
@@ -49,11 +51,13 @@ Item {
 
     RowLayout {
         id: bottomBtnsLayout
+
         anchors.top: introPaneRect.bottom
         anchors.bottom: parent.bottom
         anchors.topMargin: parent.height * 0.01
         anchors.left: introPaneRect.left
         anchors.right: introPaneRect.right
+
         height: bottomBtnsLayoutHeight
 
         Button {
