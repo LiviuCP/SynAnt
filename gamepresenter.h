@@ -97,9 +97,9 @@ public:
     bool getErrorOccured() const {return m_ErrorOccured;}
 
     QString getWindowTitle() const;
-    QString getIntroPaneMessage() const {return m_IntroPaneMessage;}
-    QString getHelpPaneMessage() const {return m_HelpPaneMessage;}
-    QString getMainPaneInstructionsMessage() const {return m_MainPaneInstructionsMessage;}
+    QString getIntroPaneMessage() const {return GameStrings::c_IntroWindowWelcomeMessage;}
+    QString getHelpPaneMessage() const {return GameStrings::c_HelpWindowMessage;}
+    QString getMainPaneInstructionsMessage() const {return GameStrings::c_InstructionsMessage;}
     QString getMainPaneStatusMessage() const {return m_MainPaneStatusMessage;}
     QString getMainPaneScoreMessage() const {return m_MainPaneScoreMessage;}
     QString getMainPaneNrOfPairsMessage() const {return m_MainPaneNrOfPairsMessage;}
@@ -176,9 +176,6 @@ private:
     bool m_ErrorOccured;
 
     QString m_WindowTitle;
-    QString m_IntroPaneMessage;
-    QString m_HelpPaneMessage;
-    QString m_MainPaneInstructionsMessage;
     QString m_MainPaneStatusMessage;
     QString m_MainPaneScoreMessage;
     QString m_MainPaneNrOfPairsMessage;
