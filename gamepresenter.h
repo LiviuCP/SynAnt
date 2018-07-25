@@ -22,6 +22,7 @@ class GamePresenter : public QObject
     Q_PROPERTY(QString levelEasyButtonLabel READ getLevelEasyButtonLabel CONSTANT)
     Q_PROPERTY(QString levelMediumButtonLabel READ getLevelMediumButtonLabel CONSTANT)
     Q_PROPERTY(QString levelHardButtonLabel READ getLevelHardButtonLabel CONSTANT)
+    Q_PROPERTY(QString closeButtonLabel READ getCloseButtonLabel CONSTANT)
     Q_PROPERTY(QString playButtonShortcut READ getPlayButtonShortcut CONSTANT)
     Q_PROPERTY(QString helpButtonShortcut READ getHelpButtonShortcut CONSTANT)
     Q_PROPERTY(QString quitButtonShortcut READ getQuitButtonShortcut CONSTANT)
@@ -32,6 +33,7 @@ class GamePresenter : public QObject
     Q_PROPERTY(QString levelEasyButtonShortcut READ getLevelEasyButtonShortcut CONSTANT)
     Q_PROPERTY(QString levelMediumButtonShortcut READ getLevelMediumButtonShortcut CONSTANT)
     Q_PROPERTY(QString levelHardButtonShortcut READ getLevelHardButtonShortcut CONSTANT)
+    Q_PROPERTY(QString closeButtonShortcut READ getCloseButtonShortcut CONSTANT)
     Q_PROPERTY(bool introPaneVisible READ getIntroPaneVisible NOTIFY introPaneVisibleChanged)
     Q_PROPERTY(bool helpPaneVisible READ getHelpPaneVisible NOTIFY helpPaneVisibleChanged)
     Q_PROPERTY(bool mainPaneVisible READ getMainPaneVisible NOTIFY mainPaneVisibleChanged)
@@ -42,10 +44,12 @@ class GamePresenter : public QObject
     Q_PROPERTY(QString mainPaneStatusMessage READ getMainPaneStatusMessage NOTIFY mainPaneStatusMessageChanged)
     Q_PROPERTY(QString mainPaneScoreMessage READ getMainPaneScoreMessage NOTIFY mainPaneScoreMessageChanged)
     Q_PROPERTY(QString mainPaneNrOfPairsMessage READ getMainPaneNrOfPairsMessage NOTIFY mainPaneNrOfPairsMessageChanged)
+    Q_PROPERTY(QString errorMessage READ getErrorMessage NOTIFY errorMessageChanged)
     Q_PROPERTY(int toolTipDelay READ getToolTipDelay CONSTANT)
     Q_PROPERTY(QString introPaneToolTip READ getIntroPaneToolTip CONSTANT)
     Q_PROPERTY(QString helpPaneToolTip READ getHelpPaneToolTip CONSTANT)
     Q_PROPERTY(QString mainPaneToolTip READ getMainPaneToolTip CONSTANT)
+    Q_PROPERTY(QString errorPaneToolTip READ getErrorPaneToolTip CONSTANT)
     Q_PROPERTY(QString gameInstructionsToolTip READ getGameInstructionsToolTip CONSTANT)
     Q_PROPERTY(QString gameStatusToolTip READ getGameStatusToolTip CONSTANT)
     Q_PROPERTY(QString firstWordToolTip READ getFirstWordToolTip CONSTANT)
@@ -58,7 +62,9 @@ class GamePresenter : public QObject
     Q_PROPERTY(QString resultsButtonToolTip READ getResultsButtonToolTip CONSTANT)
     Q_PROPERTY(QString resetButtonToolTip READ getResetButtonToolTip CONSTANT)
     Q_PROPERTY(QString levelButtonsToolTip READ getLevelButtonsToolTip CONSTANT)
+    Q_PROPERTY(QString closeButtonToolTip READ getCloseButtonToolTip CONSTANT)
     Q_PROPERTY(bool resetEnabled READ getResetEnabled NOTIFY resetEnabledChanged)
+    Q_PROPERTY(bool errorOccured READ getErrorOccured NOTIFY errorOccuredChanged)
 
 public:
     explicit GamePresenter(QObject *parent = nullptr);
@@ -82,11 +88,13 @@ public:
     QString getLevelEasyButtonLabel() const {return GameStrings::c_LevelEasyButtonLabel;}
     QString getLevelMediumButtonLabel() const {return GameStrings::c_LevelMediumButtonLabel;}
     QString getLevelHardButtonLabel() const {return GameStrings::c_LevelHardButtonLabel;}
+    QString getCloseButtonLabel() const {return GameStrings::c_FatalErrorQuitButtonLabel;}
 
     bool getIntroPaneVisible() const {return m_IntroPaneVisible;}
     bool getHelpPaneVisible() const {return m_HelpPaneVisible;}
     bool getMainPaneVisible() const {return m_MainPaneVisible;}
     bool getResetEnabled() const {return m_ResetEnabled;}
+    bool getErrorOccured() const {return m_ErrorOccured;}
 
     QString getWindowTitle() const;
     QString getIntroPaneMessage() const {return m_IntroPaneMessage;}
@@ -95,11 +103,13 @@ public:
     QString getMainPaneStatusMessage() const {return m_MainPaneStatusMessage;}
     QString getMainPaneScoreMessage() const {return m_MainPaneScoreMessage;}
     QString getMainPaneNrOfPairsMessage() const {return m_MainPaneNrOfPairsMessage;}
+    QString getErrorMessage() const {return m_ErrorMessage;}
 
     int getToolTipDelay() const {return m_ToolTipDelay;}
     QString getIntroPaneToolTip() const {return GameStrings::c_IntroWindowToolTip;}
     QString getHelpPaneToolTip() const {return GameStrings::c_HelpWindowToolTip;}
     QString getMainPaneToolTip() const {return GameStrings::c_MainWindowToolTip;}
+    QString getErrorPaneToolTip() const {return GameStrings::c_FatalErrorWindowToolTip;}
     QString getGameInstructionsToolTip() const {return GameStrings::c_GameInstructionsToolTip;}
     QString getGameStatusToolTip() const {return GameStrings::c_GameStatusToolTip;}
     QString getFirstWordToolTip() const {return GameStrings::c_FirstWordToolTip;}
@@ -112,6 +122,7 @@ public:
     QString getResultsButtonToolTip() const {return GameStrings::c_ResultsButtonToolTip;}
     QString getResetButtonToolTip() const {return GameStrings::c_ResetButtonToolTip;}
     QString getLevelButtonsToolTip() const {return GameStrings::c_LevelButtonsToolTip;}
+    QString getCloseButtonToolTip() const {return GameStrings::c_FatalErrorQuitButtonToolTip;}
 
     QString getPlayButtonShortcut() const {return GameStrings::c_PlayButtonShortcut;}
     QString getHelpButtonShortcut() const {return GameStrings::c_HelpButtonShortcut;}
@@ -123,6 +134,7 @@ public:
     QString getLevelEasyButtonShortcut() const {return GameStrings::c_LevelEasyButtonShortcut;}
     QString getLevelMediumButtonShortcut() const {return GameStrings::c_LevelMediumButtonShortcut;}
     QString getLevelHardButtonShortcut() const {return GameStrings::c_LevelHardButtonShortcut;}
+    QString getCloseButtonShortcut() const {return GameStrings::c_FatalErrorQuitButtonShortcut;}
 
 signals:
     Q_SIGNAL void windowTitleChanged();
@@ -130,23 +142,28 @@ signals:
     Q_SIGNAL void helpPaneVisibleChanged();
     Q_SIGNAL void mainPaneVisibleChanged();
     Q_SIGNAL void resetEnabledChanged();
+    Q_SIGNAL void errorOccuredChanged();
     Q_SIGNAL void mainPaneStatusMessageChanged();
     Q_SIGNAL void mainPaneScoreMessageChanged();
+    Q_SIGNAL void errorMessageChanged();
     Q_SIGNAL void mainPaneNrOfPairsMessageChanged();
     Q_SIGNAL void levelChanged(Game::Level level);
 
 private slots:
     void _onStatisticsUpdated();
+
 private:
     void _initMainPane();
     void _updateStatusMessage(Game::StatusCodes statusCode);
     void _setLevel(Game::Level level);
+    void _launchErrorPane(const QString& errorMessage);
 
     enum class Pane
     {
         INTRO,
         HELP,
         MAIN,
+        ERROR,
         Nr_Of_Panes
     };
 
@@ -156,6 +173,7 @@ private:
     bool m_MainPaneInitialized;
 
     bool m_ResetEnabled;
+    bool m_ErrorOccured;
 
     QString m_WindowTitle;
     QString m_IntroPaneMessage;
@@ -164,6 +182,7 @@ private:
     QString m_MainPaneStatusMessage;
     QString m_MainPaneScoreMessage;
     QString m_MainPaneNrOfPairsMessage;
+    QString m_ErrorMessage;
 
     Pane m_CurrentPane;
 

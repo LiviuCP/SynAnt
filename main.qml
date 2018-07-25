@@ -44,6 +44,14 @@ ApplicationWindow {
         anchors.margins: windowMargins
     }
 
+    ErrorPane {
+        id: errorPane
+        presenter: gamePresenter
+        visible: gamePresenter.errorOccured
+        anchors.fill: parent
+        anchors.margins: windowMargins
+    }
+
     // shortcuts shared among multiple panes
 
     Shortcut {

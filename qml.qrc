@@ -4,5 +4,6 @@
         <file>IntroPane.qml</file>
         <file>MainPane.qml</file>
         <file>HelpPane.qml</file>
+        <file>ErrorPane.qml</file>
     </qresource>
 </RCC>
