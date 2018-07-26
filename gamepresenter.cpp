@@ -270,10 +270,10 @@ void GamePresenter::_onStatisticsUpdated()
     QVector<int> scoresPairs{m_pScoreItem -> getStatistics()};
 
     m_MainPaneScoreMessage = "High-score: " + QString::number(scoresPairs[0]) + "/" + QString::number(scoresPairs[1]);
-    m_MainPaneNrOfPairsMessage = "Word pairs: " + QString::number(scoresPairs[2]) + "/" + QString::number(scoresPairs[3]);
+    m_MainPaneWordPairsMessage = "Word pairs: " + QString::number(scoresPairs[2]) + "/" + QString::number(scoresPairs[3]);
 
     Q_EMIT mainPaneScoreMessageChanged();
-    Q_EMIT mainPaneNrOfPairsMessageChanged();
+    Q_EMIT mainPaneWordPairsMessageChanged();
 }
 
 void GamePresenter::_initMainPane()

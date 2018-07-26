@@ -106,7 +106,7 @@ Item {
 
             Text {
                 color: textColor
-                text: presenter.mainPaneNrOfPairsMessage
+                text: presenter.mainPaneWordPairsMessage
 
                 anchors.left: parent.left
                 anchors.leftMargin: parent.width * 0.01

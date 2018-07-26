@@ -44,7 +44,7 @@ class GamePresenter : public QObject
     Q_PROPERTY(QString mainPaneInstructionsMessage READ getMainPaneInstructionsMessage CONSTANT)
     Q_PROPERTY(QString mainPaneStatusMessage READ getMainPaneStatusMessage NOTIFY mainPaneStatusMessageChanged)
     Q_PROPERTY(QString mainPaneScoreMessage READ getMainPaneScoreMessage NOTIFY mainPaneScoreMessageChanged)
-    Q_PROPERTY(QString mainPaneNrOfPairsMessage READ getMainPaneNrOfPairsMessage NOTIFY mainPaneNrOfPairsMessageChanged)
+    Q_PROPERTY(QString mainPaneWordPairsMessage READ getMainPaneWordPairsMessage NOTIFY mainPaneWordPairsMessageChanged)
     Q_PROPERTY(QString errorMessage READ getErrorMessage NOTIFY errorMessageChanged)
     Q_PROPERTY(int toolTipDelay READ getToolTipDelay CONSTANT)
     Q_PROPERTY(QString introPaneToolTip READ getIntroPaneToolTip CONSTANT)
@@ -110,7 +110,7 @@ public:
     QString getMainPaneInstructionsMessage() const {return GameStrings::c_InstructionsMessage;}
     QString getMainPaneStatusMessage() const {return m_MainPaneStatusMessage;}
     QString getMainPaneScoreMessage() const {return m_MainPaneScoreMessage;}
-    QString getMainPaneNrOfPairsMessage() const {return m_MainPaneNrOfPairsMessage;}
+    QString getMainPaneWordPairsMessage() const {return m_MainPaneWordPairsMessage;}
     QString getErrorMessage() const {return m_ErrorMessage;}
 
     int getToolTipDelay() const {return m_ToolTipDelay;}
@@ -162,7 +162,7 @@ signals:
     Q_SIGNAL void mainPaneStatusMessageChanged();
     Q_SIGNAL void mainPaneScoreMessageChanged();
     Q_SIGNAL void errorMessageChanged();
-    Q_SIGNAL void mainPaneNrOfPairsMessageChanged();
+    Q_SIGNAL void mainPaneWordPairsMessageChanged();
     Q_SIGNAL void levelChanged(Game::Level level);
     Q_SIGNAL void mixedWordsPiecesChanged();
 
@@ -195,7 +195,7 @@ private:
     QString m_WindowTitle;
     QString m_MainPaneStatusMessage;
     QString m_MainPaneScoreMessage;
-    QString m_MainPaneNrOfPairsMessage;
+    QString m_MainPaneWordPairsMessage;
     QString m_ErrorMessage;
 
     Pane m_CurrentPane;
