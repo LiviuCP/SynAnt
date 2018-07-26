@@ -9,7 +9,7 @@ Item {
 
     readonly property double scoresLayoutHeight: height * 0.1
     readonly property double infoLevelsAndStatusLayoutHeight: height * 0.55
-    readonly property double wordPiecesHeight: height * 0.05
+    readonly property double wordPiecesHeight: height * 0.06
     readonly property double wordsEntryLayoutHeight: height * 0.05
     readonly property double bottomBtnsLayoutHeight: height * 0.1
 
@@ -334,7 +334,8 @@ Item {
                 border.color: borderColor
 
                 Text {
-                    anchors.fill: parent
+                    font.pointSize: wordPieces.height * 0.4
+                    anchors.centerIn: parent
                     text: modelData
                     color: index === presenter.firstWordBeginIndex || index === presenter.secondWordBeginIndex ? wordFirstPieceColor :
                            index === presenter.firstWordEndIndex || index === presenter.secondWordEndIndex ? wordLastPieceColor :
