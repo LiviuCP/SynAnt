@@ -51,6 +51,8 @@ class GamePresenter : public QObject
     Q_PROPERTY(QString helpPaneToolTip READ getHelpPaneToolTip CONSTANT)
     Q_PROPERTY(QString mainPaneToolTip READ getMainPaneToolTip CONSTANT)
     Q_PROPERTY(QString errorPaneToolTip READ getErrorPaneToolTip CONSTANT)
+    Q_PROPERTY(QString highscoresToolTip READ getHighscoresToolTip CONSTANT)
+    Q_PROPERTY(QString wordPairsToolTip READ getWordPairsToolTip CONSTANT)
     Q_PROPERTY(QString gameInstructionsToolTip READ getGameInstructionsToolTip CONSTANT)
     Q_PROPERTY(QString gameStatusToolTip READ getGameStatusToolTip CONSTANT)
     Q_PROPERTY(QString firstWordToolTip READ getFirstWordToolTip CONSTANT)
@@ -116,6 +118,8 @@ public:
     QString getHelpPaneToolTip() const {return GameStrings::c_HelpWindowToolTip;}
     QString getMainPaneToolTip() const {return GameStrings::c_MainWindowToolTip;}
     QString getErrorPaneToolTip() const {return GameStrings::c_FatalErrorWindowToolTip;}
+    QString getHighscoresToolTip() const {return GameStrings::c_HighscoresToolTip;}
+    QString getWordPairsToolTip() const {return GameStrings::c_WordPairsToolTip;}
     QString getGameInstructionsToolTip() const {return GameStrings::c_GameInstructionsToolTip;}
     QString getGameStatusToolTip() const {return GameStrings::c_GameStatusToolTip;}
     QString getFirstWordToolTip() const {return GameStrings::c_FirstWordToolTip;}

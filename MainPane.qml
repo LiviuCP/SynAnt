@@ -44,7 +44,7 @@ Item {
         height: scoresLayoutHeight
 
         Rectangle {
-            id: highScoresRect
+            id: highscoresRect
 
             Layout.minimumWidth: parent.width / 3
             Layout.minimumHeight: parent.height / 2
@@ -53,6 +53,19 @@ Item {
 
             border {
                 color: borderColor
+            }
+
+            MouseArea {
+                id: highscoresMouseArea
+                anchors.fill: parent
+                hoverEnabled: true
+            }
+
+            ToolTip {
+                id: highscoresToolTip
+                delay: presenter.toolTipDelay
+                text: presenter.highscoresToolTip
+                visible: highscoresMouseArea.containsMouse
             }
 
             Text {
@@ -76,6 +89,19 @@ Item {
 
             border {
                 color: borderColor
+            }
+
+            MouseArea {
+                id: wordPairsMouseArea
+                anchors.fill: parent
+                hoverEnabled: true
+            }
+
+            ToolTip {
+                id: wordPairsToolTip
+                delay: presenter.toolTipDelay
+                text: presenter.wordPairsToolTip
+                visible: wordPairsMouseArea.containsMouse
             }
 
             Text {
