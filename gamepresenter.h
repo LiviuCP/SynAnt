@@ -2,6 +2,7 @@
 #define GAMEPRESENTER_H
 
 #include <QObject>
+#include <QVariant>
 
 #include "game.h"
 #include "gamestrings.h"
@@ -65,6 +66,11 @@ class GamePresenter : public QObject
     Q_PROPERTY(QString closeButtonToolTip READ getCloseButtonToolTip CONSTANT)
     Q_PROPERTY(bool resetEnabled READ getResetEnabled NOTIFY resetEnabledChanged)
     Q_PROPERTY(bool errorOccured READ getErrorOccured NOTIFY errorOccuredChanged)
+    Q_PROPERTY(QList<QVariant> mixedWordsPieces READ getMixedWordsPieces NOTIFY mixedWordsPiecesChanged)
+    Q_PROPERTY(int firstWordBeginIndex READ getFirstWordBeginIndex NOTIFY mixedWordsPiecesChanged)
+    Q_PROPERTY(int firstWordEndIndex READ getFirstWordEndIndex NOTIFY mixedWordsPiecesChanged)
+    Q_PROPERTY(int secondWordBeginIndex READ getSecondWordBeginIndex NOTIFY mixedWordsPiecesChanged)
+    Q_PROPERTY(int secondWordEndIndex READ getSecondWordEndIndex NOTIFY mixedWordsPiecesChanged)
 
 public:
     explicit GamePresenter(QObject *parent = nullptr);
@@ -136,6 +142,12 @@ public:
     QString getLevelHardButtonShortcut() const {return GameStrings::c_LevelHardButtonShortcut;}
     QString getCloseButtonShortcut() const {return GameStrings::c_FatalErrorQuitButtonShortcut;}
 
+    QList<QVariant> getMixedWordsPieces() const;
+    int getFirstWordBeginIndex() const;
+    int getFirstWordEndIndex() const;
+    int getSecondWordBeginIndex() const;
+    int getSecondWordEndIndex() const;
+
 signals:
     Q_SIGNAL void windowTitleChanged();
     Q_SIGNAL void introPaneVisibleChanged();
@@ -148,6 +160,7 @@ signals:
     Q_SIGNAL void errorMessageChanged();
     Q_SIGNAL void mainPaneNrOfPairsMessageChanged();
     Q_SIGNAL void levelChanged(Game::Level level);
+    Q_SIGNAL void mixedWordsPiecesChanged();
 
 private slots:
     void _onStatisticsUpdated();

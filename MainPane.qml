@@ -9,7 +9,7 @@ Item {
 
     readonly property double scoresLayoutHeight: height * 0.1
     readonly property double infoLevelsAndStatusLayoutHeight: height * 0.55
-    readonly property double wordLabelsLayoutHeight: height * 0.05
+    readonly property double wordPiecesHeight: height * 0.05
     readonly property double wordsEntryLayoutHeight: height * 0.05
     readonly property double bottomBtnsLayoutHeight: height * 0.1
 
@@ -18,6 +18,8 @@ Item {
     readonly property color paneColor: "grey"
     readonly property color borderColor: "white"
     readonly property color textColor: "white"
+    readonly property color wordFirstPieceColor: "blue"
+    readonly property color wordLastPieceColor: "red"
 
     MouseArea {
         id: mainPaneMouseArea
@@ -310,63 +312,44 @@ Item {
         }
     }
 
-    RowLayout {
-        id: wordLabelsLayout
+    Row {
+        id: wordPieces
 
         anchors.top: infoLevelsAndStatusLayout.bottom
         anchors.left: infoLevelsAndStatusLayout.left
         anchors.right: infoLevelsAndStatusLayout.right
         anchors.topMargin: parent.height * 0.025
 
-        height: wordLabelsLayoutHeight
+        height: wordPiecesHeight
 
-        Label {
-            id: label1
+        Repeater {
+            id: mixedWordsRepeater
+            model: presenter.mixedWordsPieces
 
-            Layout.minimumWidth: parent.width * 0.25
-            Layout.minimumHeight: parent.height
+            Rectangle {
+                width: parent.width / mixedWordsRepeater.count
+                height: parent.height
 
-            color: textColor
-            text: "Label "
-        }
+                color: paneColor
+                border.color: borderColor
 
-        Label {
-            id: label2
-
-            Layout.minimumWidth: parent.width * 0.25
-            Layout.minimumHeight: parent.height
-
-            color: textColor
-            text: "area."
-        }
-
-        Label {
-            id: label3
-
-            Layout.minimumWidth: parent.width * 0.25
-            Layout.minimumHeight: parent.height
-
-            color: textColor
-            text: "Under"
-        }
-
-        Label {
-            id: label4
-
-            Layout.minimumWidth: parent.width * 0.25
-            Layout.minimumHeight: parent.height
-
-            color: textColor
-            text: "construction! "
+                Text {
+                    anchors.fill: parent
+                    text: modelData
+                    color: index === presenter.firstWordBeginIndex || index === presenter.secondWordBeginIndex ? wordFirstPieceColor :
+                           index === presenter.firstWordEndIndex || index === presenter.secondWordEndIndex ? wordLastPieceColor :
+                           textColor
+                }
+            }
         }
     }
 
     RowLayout {
         id: wordsEntryLayout
 
-        anchors.top: wordLabelsLayout.bottom
-        anchors.left: wordLabelsLayout.left
-        anchors.right: wordLabelsLayout.right
+        anchors.top: wordPieces.bottom
+        anchors.left: wordPieces.left
+        anchors.right: wordPieces.right
         anchors.topMargin: parent.width * 0.01
 
         height: wordsEntryLayoutHeight

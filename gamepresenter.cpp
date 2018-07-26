@@ -109,6 +109,7 @@ void GamePresenter::handleResultsRequest()
         }
 
         m_pWordMixer -> mixWords();
+        Q_EMIT mixedWordsPiecesChanged();
     }
     catch (const QString& errorMessage)
     {
@@ -140,6 +141,7 @@ bool GamePresenter::handleSubmitRequest(const QString &firstWord, const QString 
             }
 
             m_pWordMixer -> mixWords();
+            Q_EMIT mixedWordsPiecesChanged();
 
             clearTextFields = true;
         }
@@ -232,6 +234,37 @@ QString GamePresenter::getWindowTitle() const
     return windowTitle;
 }
 
+QList<QVariant> GamePresenter::getMixedWordsPieces() const
+{
+    QList<QVariant> mixedWordsPieces;
+    QVector<QString> mixedWordsStringArray{m_pWordMixer->getMixedWordsStringArray()};
+    for (auto piece : mixedWordsStringArray)
+    {
+        mixedWordsPieces.append(piece);
+    }
+    return mixedWordsPieces;
+}
+
+int GamePresenter::getFirstWordBeginIndex() const
+{
+    return m_pWordMixer->getFirstWordBeginIndex();
+}
+
+int GamePresenter::getFirstWordEndIndex() const
+{
+    return m_pWordMixer->getFirstWordEndIndex();
+}
+
+int GamePresenter::getSecondWordBeginIndex() const
+{
+    return m_pWordMixer->getSecondWordBeginIndex();
+}
+
+int GamePresenter::getSecondWordEndIndex() const
+{
+    return m_pWordMixer->getSecondWordEndIndex();
+}
+
 void GamePresenter::_onStatisticsUpdated()
 {
     QVector<int> scoresPairs{m_pScoreItem -> getStatistics()};
@@ -251,6 +284,7 @@ void GamePresenter::_initMainPane()
 
     m_MainPaneInitialized = true;
     m_pWordMixer -> mixWords();
+    Q_EMIT mixedWordsPiecesChanged();
 }
 
 void GamePresenter::_updateStatusMessage(Game::StatusCodes statusCode)
@@ -298,6 +332,7 @@ void GamePresenter::_setLevel(Game::Level level)
     _updateStatusMessage(Game::StatusCodes::LEVEL_CHANGED);
     Q_EMIT levelChanged(level);
     m_pWordMixer -> mixWords();
+    Q_EMIT mixedWordsPiecesChanged();
 }
 
 void GamePresenter::_launchErrorPane(const QString& errorMessage)
