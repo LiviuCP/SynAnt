@@ -32,7 +32,6 @@ public:
 
     // splits the words into pieces and mixes them into an array
     void mixWords();
-    Game::StatusCodes checkWords(const QString &m_FirstWord, const QString &m_SecondWord);
     const QVector<QString>& getMixedWordsStringArray() const;
 
     QString getFirstWord() const;

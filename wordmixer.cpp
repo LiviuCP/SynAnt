@@ -102,26 +102,6 @@ void WordMixer::mixWords()
     m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::SECOND_WORD_LAST_PIECE)] = _insertWordPiece(m_SecondWord, secondWordLastPiecePos, wordPieceIndexes);
 }
 
-Game::StatusCodes WordMixer::checkWords(const QString &firstWord, const QString &secondWord)
-{
-    Game::StatusCodes statusCode;
-
-    if (firstWord.isEmpty() || secondWord.isEmpty())
-    {
-        statusCode = Game::StatusCodes::MISSING_WORDS;
-    }
-
-    else if (((firstWord == this -> m_FirstWord) && (secondWord == this -> m_SecondWord)) || ((firstWord == this -> m_SecondWord) && (secondWord == this -> m_FirstWord)))
-    {
-        statusCode = Game::StatusCodes::SUCCESS;
-    }
-    else
-    {
-        statusCode = Game::StatusCodes::INCORRECT_WORDS;
-    }
-    return statusCode;
-}
-
 const QVector<QString>& WordMixer::getMixedWordsStringArray() const
 {
     return m_MixedWords;
