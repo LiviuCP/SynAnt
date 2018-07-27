@@ -124,7 +124,7 @@ bool GamePresenter::handleSubmitRequest(const QString &firstWord, const QString 
     {
         bool clearTextFields{false};
 
-        Game::StatusCodes statusCode{m_pWordMixer->checkWords(firstWord, secondWord)};
+        Game::StatusCodes statusCode{_checkWords(firstWord, secondWord)};
 
         _updateStatusMessage(statusCode);
 
@@ -280,6 +280,29 @@ void GamePresenter::_onStatisticsUpdated()
 
     Q_EMIT mainPaneScoreMessageChanged();
     Q_EMIT mainPaneWordPairsMessageChanged();
+}
+
+Game::StatusCodes GamePresenter::_checkWords(const QString &firstWord, const QString &secondWord)
+{
+    Game::StatusCodes statusCode;
+
+    const QString firstWordRef{m_pWordMixer->getFirstWord()};
+    const QString secondWordRef{m_pWordMixer->getSecondWord()};
+
+    if (firstWord.isEmpty() || secondWord.isEmpty())
+    {
+        statusCode = Game::StatusCodes::MISSING_WORDS;
+    }
+
+    else if (((firstWord == firstWordRef) && (secondWord == secondWordRef)) || ((firstWord == secondWordRef) && (secondWord == firstWordRef)))
+    {
+        statusCode = Game::StatusCodes::SUCCESS;
+    }
+    else
+    {
+        statusCode = Game::StatusCodes::INCORRECT_WORDS;
+    }
+    return statusCode;
 }
 
 void GamePresenter::_initMainPane()

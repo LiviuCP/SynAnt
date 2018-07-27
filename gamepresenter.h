@@ -170,6 +170,7 @@ private slots:
     void _onStatisticsUpdated();
 
 private:
+    Game::StatusCodes _checkWords(const QString &firstWord, const QString &secondWord);
     void _initMainPane();
     void _updateStatusMessage(Game::StatusCodes statusCode);
     void _setLevel(Game::Level level);
