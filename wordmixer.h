@@ -8,8 +8,7 @@
    3) Divides each word in more pieces.
    4) Mixes the pieces from all words alltogether into a single word.
       The individual pieces are still visible as the mixed words are stored in a string vector, which is then displayed by the main window.
-   5) Takes over the user input (the 2 words) and checks if they were correctly entered on not.
-   6) Hands over the 2 words to the main window if the user presses the Show results button.
+   5) Hands over the 2 words to the main window for checking and/or displaying.
 
 */
 
