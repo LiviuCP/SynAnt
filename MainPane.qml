@@ -20,6 +20,7 @@ Item {
     readonly property color textColor: "white"
     readonly property color wordFirstPieceColor: "blue"
     readonly property color wordLastPieceColor: "red"
+    readonly property color wordPieceSelectedColor: "black"
 
     MouseArea {
         id: mainPaneMouseArea
@@ -353,6 +354,7 @@ Item {
             model: presenter.mixedWordsPieces
 
             Rectangle {
+                id: wordPiecesRectangle
                 width: parent.width / mixedWordsRepeater.count
                 height: parent.height
 
@@ -366,6 +368,12 @@ Item {
                     color: index === presenter.firstWordBeginIndex || index === presenter.secondWordBeginIndex ? wordFirstPieceColor :
                            index === presenter.firstWordEndIndex || index === presenter.secondWordEndIndex ? wordLastPieceColor :
                            textColor
+                }
+
+                MouseArea {
+                    id: wordPiecesMouseArea
+                    anchors.fill: parent
+                    onClicked: wordPiecesRectangle.color = wordPiecesRectangle.color === paneColor ? wordPieceSelectedColor : paneColor
                 }
             }
         }
