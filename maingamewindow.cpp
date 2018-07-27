@@ -242,7 +242,7 @@ void MainGameWindow::_onButtonSubmitClicked()
     m_pSecondWordLineEdit -> clear();
     m_pFirstWordLineEdit -> setFocus();
 
-    Game::StatusCodes statusCode {m_pWordMixer->checkWords(firstInputWord, secondInputword)};
+    Game::StatusCodes statusCode {_checkWords(firstInputWord, secondInputword)};
     // update the status message before retrieving any new words
     _updateStatusMessage(statusCode);
     if (statusCode == Game::StatusCodes::SUCCESS)
@@ -286,6 +286,29 @@ void MainGameWindow::_onButtonResultsClicked()
     {
         m_pResetButtonShortcut->setEnabled(true);
     }
+}
+
+Game::StatusCodes MainGameWindow::_checkWords(const QString &firstWord, const QString &secondWord)
+{
+    Game::StatusCodes statusCode;
+
+    const QString firstWordRef{m_pWordMixer->getFirstWord()};
+    const QString secondWordRef{m_pWordMixer->getSecondWord()};
+
+    if (firstWord.isEmpty() || secondWord.isEmpty())
+    {
+        statusCode = Game::StatusCodes::MISSING_WORDS;
+    }
+
+    else if (((firstWord == firstWordRef) && (secondWord == secondWordRef)) || ((firstWord == secondWordRef) && (secondWord == firstWordRef)))
+    {
+        statusCode = Game::StatusCodes::SUCCESS;
+    }
+    else
+    {
+        statusCode = Game::StatusCodes::INCORRECT_WORDS;
+    }
+    return statusCode;
 }
 
 void MainGameWindow::_removeMixedWordsLabels()

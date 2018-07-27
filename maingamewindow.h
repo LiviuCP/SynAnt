@@ -79,6 +79,7 @@ private:
     // set true after first access to main game window
     bool m_IsInitialized;
 
+    Game::StatusCodes _checkWords(const QString &firstWord, const QString &secondWord);
     void _removeMixedWordsLabels();
     void _createMixedWordsLabels();
     void _addMixedWordsLabels();
