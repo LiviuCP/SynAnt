@@ -76,12 +76,12 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     m_pMixedWordsLayout -> setSpacing(0);
 
     QHBoxLayout *wordsLayout{new QHBoxLayout{}};
-    m_pFirstWord = new QLineEdit{};
-    m_pFirstWord -> setToolTip(GameStrings::c_FirstWordToolTip);
-    m_pSecondWord = new QLineEdit{};
-    m_pSecondWord -> setToolTip(GameStrings::c_SecondWordToolTip);
-    wordsLayout -> addWidget(m_pFirstWord);
-    wordsLayout -> addWidget(m_pSecondWord);
+    m_pFirstWordLineEdit = new QLineEdit{};
+    m_pFirstWordLineEdit -> setToolTip(GameStrings::c_FirstWordToolTip);
+    m_pSecondWordLineEdit = new QLineEdit{};
+    m_pSecondWordLineEdit -> setToolTip(GameStrings::c_SecondWordToolTip);
+    wordsLayout -> addWidget(m_pFirstWordLineEdit);
+    wordsLayout -> addWidget(m_pSecondWordLineEdit);
 
     QHBoxLayout *buttonsLayout{new QHBoxLayout{}};
     buttonsLayout -> setSpacing(25);
@@ -236,11 +236,11 @@ void MainGameWindow::_onButtonHardShortcutEntered()
 
 void MainGameWindow::_onButtonSubmitClicked()
 {
-    QString firstInputWord{m_pFirstWord -> text()};
-    QString secondInputword{m_pSecondWord -> text()};
-    m_pFirstWord -> clear();
-    m_pSecondWord -> clear();
-    m_pFirstWord -> setFocus();
+    QString firstInputWord{m_pFirstWordLineEdit -> text()};
+    QString secondInputword{m_pSecondWordLineEdit -> text()};
+    m_pFirstWordLineEdit -> clear();
+    m_pSecondWordLineEdit -> clear();
+    m_pFirstWordLineEdit -> setFocus();
 
     Game::StatusCodes statusCode {m_pWordMixer->checkWords(firstInputWord, secondInputword)};
     // update the status message before retrieving any new words
@@ -267,9 +267,9 @@ void MainGameWindow::_onButtonSubmitClicked()
 
 void MainGameWindow::_onButtonResultsClicked()
 {
-    m_pFirstWord -> clear();
-    m_pSecondWord -> clear();
-    m_pFirstWord -> setFocus();
+    m_pFirstWordLineEdit -> clear();
+    m_pSecondWordLineEdit -> clear();
+    m_pFirstWordLineEdit -> setFocus();
     _updateStatusMessage(Game::StatusCodes::REQUESTED_BY_USER);
     m_pWordMixer -> mixWords();
     _removeMixedWordsLabels();
@@ -329,9 +329,9 @@ void MainGameWindow::_addMixedWordsLabels()
 
 void MainGameWindow::_switchToLevel(Game::Level level)
 {
-    m_pFirstWord -> clear();
-    m_pSecondWord -> clear();
-    m_pFirstWord -> setFocus();
+    m_pFirstWordLineEdit -> clear();
+    m_pSecondWordLineEdit -> clear();
+    m_pFirstWordLineEdit -> setFocus();
     Q_EMIT levelChanged(level);
     m_pWordMixer -> mixWords();
     _removeMixedWordsLabels();

@@ -65,8 +65,8 @@ private:
     QVector<QLabel*> m_MixedWords;
     QHBoxLayout* m_pMixedWordsLayout;
     QLabel* m_pResultsErrors;
-    QLineEdit* m_pFirstWord;
-    QLineEdit* m_pSecondWord;
+    QLineEdit* m_pFirstWordLineEdit;
+    QLineEdit* m_pSecondWordLineEdit;
     QLabel* m_pHighScores;
     QLabel* m_pNrOfWordPairs;
     QRadioButton* m_pLevelEasyButton;
