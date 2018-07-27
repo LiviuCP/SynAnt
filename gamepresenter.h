@@ -113,7 +113,7 @@ public:
     QString getMainPaneWordPairsMessage() const {return m_MainPaneWordPairsMessage;}
     QString getErrorMessage() const {return m_ErrorMessage;}
 
-    int getToolTipDelay() const {return m_ToolTipDelay;}
+    int getToolTipDelay() const;
     QString getIntroPaneToolTip() const {return GameStrings::c_IntroWindowToolTip;}
     QString getHelpPaneToolTip() const {return GameStrings::c_HelpWindowToolTip;}
     QString getMainPaneToolTip() const {return GameStrings::c_MainWindowToolTip;}
@@ -202,8 +202,6 @@ private:
 
     WordMixer* m_pWordMixer;
     ScoreItem* m_pScoreItem;
-
-    int m_ToolTipDelay;
 };
 
 #endif // GAMEPRESENTER_H

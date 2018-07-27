@@ -6,6 +6,8 @@
 #include "scoreitem.h"
 #include "gamestrings.h"
 
+static constexpr int c_ToolTipDelay{1000};
+
 GamePresenter::GamePresenter(QObject *parent)
     : QObject(parent)
     , m_IntroPaneVisible {true}
@@ -19,7 +21,6 @@ GamePresenter::GamePresenter(QObject *parent)
     , m_CurrentPane {Pane::INTRO}
     , m_pWordMixer {nullptr}
     , m_pScoreItem {new ScoreItem{this}}
-    , m_ToolTipDelay{1000}
 {
     try
     {
@@ -232,6 +233,11 @@ QString GamePresenter::getWindowTitle() const
         ;
     }
     return windowTitle;
+}
+
+int GamePresenter::getToolTipDelay() const
+{
+    return c_ToolTipDelay;
 }
 
 QList<QVariant> GamePresenter::getMixedWordsPieces() const
