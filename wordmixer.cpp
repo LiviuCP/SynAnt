@@ -14,8 +14,7 @@ WordMixer::WordMixer(const QString &fname, QObject *parent)
       m_RowNumber{-1},
       m_TotalRows{0},
       m_WordPieceSize{2},
-      m_FirstWord{},
-      m_SecondWord{},
+      m_WordsPair{},
       m_MixedWords{},
       m_AreSynonyms{true},
       m_WordsBeginEndPositions{}
@@ -62,7 +61,7 @@ void WordMixer::mixWords()
 {
     _retrieveWords();
 
-    int firstWordSize{m_FirstWord.size()}, secondWordSize{m_SecondWord.size()};
+    int firstWordSize{m_WordsPair.first.size()}, secondWordSize{m_WordsPair.second.size()};
     int firstWordNrOfPieces
     {
         firstWordSize / m_WordPieceSize + ((firstWordSize % m_WordPieceSize) == 0 ? 0 : 1)
@@ -86,21 +85,21 @@ void WordMixer::mixWords()
     int firstWordLastPiecePos{m_WordPieceSize*(firstWordNrOfPieces-1)};
     int secondWordLastPiecePos{m_WordPieceSize*(secondWordNrOfPieces-1)};
 
-    m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::FIRST_WORD_FIRST_PIECE)] = _insertWordPiece(m_FirstWord, 0, wordPieceIndexes);
+    m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::FIRST_WORD_FIRST_PIECE)] = _insertWordPiece(m_WordsPair.first, 0, wordPieceIndexes);
 
     for (int wordPieceStartPos{m_WordPieceSize}; wordPieceStartPos<firstWordLastPiecePos; wordPieceStartPos+=m_WordPieceSize)
     {
-        _insertWordPiece(m_FirstWord, wordPieceStartPos, wordPieceIndexes);
+        _insertWordPiece(m_WordsPair.first, wordPieceStartPos, wordPieceIndexes);
     }
-    m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::FIRST_WORD_LAST_PIECE)] = _insertWordPiece(m_FirstWord, firstWordLastPiecePos, wordPieceIndexes);
-    m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::SECOND_WORD_FIRST_PIECE)] = _insertWordPiece(m_SecondWord, 0, wordPieceIndexes);
+    m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::FIRST_WORD_LAST_PIECE)] = _insertWordPiece(m_WordsPair.first, firstWordLastPiecePos, wordPieceIndexes);
+    m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::SECOND_WORD_FIRST_PIECE)] = _insertWordPiece(m_WordsPair.second, 0, wordPieceIndexes);
 
     for (int wordPieceStartPos{m_WordPieceSize}; wordPieceStartPos<secondWordLastPiecePos;
                                       wordPieceStartPos+=m_WordPieceSize)
     {
-        _insertWordPiece(m_SecondWord, wordPieceStartPos, wordPieceIndexes);
+        _insertWordPiece(m_WordsPair.second, wordPieceStartPos, wordPieceIndexes);
     }
-    m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::SECOND_WORD_LAST_PIECE)] = _insertWordPiece(m_SecondWord, secondWordLastPiecePos, wordPieceIndexes);
+    m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::SECOND_WORD_LAST_PIECE)] = _insertWordPiece(m_WordsPair.second, secondWordLastPiecePos, wordPieceIndexes);
 
     qDebug() << "First word:" << getFirstWord();
     qDebug() << "Second word:" << getSecondWord();
@@ -118,12 +117,12 @@ const QVector<QString>& WordMixer::getMixedWordsStringArray() const
 
 QString WordMixer::getFirstWord() const
 {
-    return m_FirstWord;
+    return m_WordsPair.first;
 }
 
 QString WordMixer::getSecondWord() const
 {
-    return m_SecondWord;
+    return m_WordsPair.second;
 }
 
 bool WordMixer::areSynonyms() const
@@ -228,23 +227,23 @@ void WordMixer::_retrieveWords()
         separatorIndex = antonymsSeparatorIndex;
     }
 
-    m_FirstWord = rowContent.left(separatorIndex);
-    for (auto currentCharacter : m_FirstWord)
+    m_WordsPair.first = rowContent.left(separatorIndex);
+    for (auto currentCharacter : m_WordsPair.first)
     {
         if (!(currentCharacter.isLower()))
         throw QString{"First word contains illegal characters!\nRow number: " + rowNumberToString + "\n"};
     }
-    if (m_FirstWord.size() < minWordSize)
+    if (m_WordsPair.first.size() < minWordSize)
     {
         throw QString{"First word has less than the minimum required number of characters!\nRow number: " + rowNumberToString + "\n"};
     }
-    m_SecondWord = rowContent.mid(separatorIndex+1);
-    for (auto currentCharacter : m_SecondWord)
+    m_WordsPair.second = rowContent.mid(separatorIndex+1);
+    for (auto currentCharacter : m_WordsPair.second)
     {
         if (!(currentCharacter.isLower()))
         throw QString{"Second word contains illegal characters!\nRow number: " + rowNumberToString + "\n"};
     }
-    if (m_SecondWord.size() < minWordSize)
+    if (m_WordsPair.second.size() < minWordSize)
     {
         throw QString{"Second word has less than the minimum required number of characters!\nRow number: " + rowNumberToString + "\n"};
     }
