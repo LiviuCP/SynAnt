@@ -197,24 +197,23 @@ void WordMixer::_retrieveWords()
 
     if (rowContent.size() == 0)
     {
-        throw QString{"\nAn empty row has been read from file!\n\nRow number: " + rowNumberToString + "\n" };
+        throw QString{GameStrings::c_EmptyRowMessage}.arg(rowNumberToString);
     }
 
     int synonymsSeparatorIndex{rowContent.indexOf('=')};
     int antonymsSeparatorIndex{rowContent.indexOf('!')};
     int separatorIndex{-1};
     if ((synonymsSeparatorIndex != rowContent.lastIndexOf('=')) || (antonymsSeparatorIndex != rowContent.lastIndexOf('!')))
-
-        {
-            throw QString{"Multiple separators!\nRow number: " + rowNumberToString + "\n"};
-        }
+    {
+        throw QString{GameStrings::c_MultipleSeparatorsMessage}.arg(rowNumberToString);
+    }
     else if (synonymsSeparatorIndex == antonymsSeparatorIndex)
     {
-        throw QString{"No separator found!\nRow number: " + rowNumberToString + "\n"};
+        throw QString{GameStrings::c_NoSeparatorMessage}.arg(rowNumberToString);
     }
     else if ((synonymsSeparatorIndex != -1) && (antonymsSeparatorIndex != -1))
     {
-        throw QString{"Multiple separators!\nRow number: " + rowNumberToString + "\n"};
+        throw QString{GameStrings::c_MultipleSeparatorsMessage}.arg(rowNumberToString);
     }
     else if (synonymsSeparatorIndex != -1)
     {
@@ -231,21 +230,25 @@ void WordMixer::_retrieveWords()
     for (auto currentCharacter : m_WordsPair.first)
     {
         if (!(currentCharacter.isLower()))
-        throw QString{"First word contains illegal characters!\nRow number: " + rowNumberToString + "\n"};
+        {
+            throw QString{GameStrings::c_IllegalCharactersMessage}.arg(GameStrings::c_FirstWordCamelCase).arg(rowNumberToString);
+        }
     }
     if (m_WordsPair.first.size() < minWordSize)
     {
-        throw QString{"First word has less than the minimum required number of characters!\nRow number: " + rowNumberToString + "\n"};
+        throw QString{GameStrings::c_LessThanMinCharsMessage}.arg(GameStrings::c_FirstWordCamelCase).arg(rowNumberToString);
     }
     m_WordsPair.second = rowContent.mid(separatorIndex+1);
     for (auto currentCharacter : m_WordsPair.second)
     {
         if (!(currentCharacter.isLower()))
-        throw QString{"Second word contains illegal characters!\nRow number: " + rowNumberToString + "\n"};
+        {
+            throw QString{GameStrings::c_IllegalCharactersMessage}.arg(GameStrings::c_SecondWordCamelCase).arg(rowNumberToString);
+        }
     }
     if (m_WordsPair.second.size() < minWordSize)
     {
-        throw QString{"Second word has less than the minimum required number of characters!\nRow number: " + rowNumberToString + "\n"};
+        throw QString{GameStrings::c_LessThanMinCharsMessage}.arg(GameStrings::c_SecondWordCamelCase).arg(rowNumberToString);
     }
 }
 
