@@ -321,13 +321,9 @@ void GamePresenter::_updateStatusMessage(Game::StatusCodes statusCode)
     switch (statusCode)
     {
     case Game::StatusCodes::SUCCESS:
-        m_MainPaneStatusMessage = GameStrings::c_SuccessMessage;
-        m_MainPaneStatusMessage += "\n\nThe two words are:\n\n";
-        m_MainPaneStatusMessage += "\t" + m_pWordMixer->getFirstWord() + "\n";
-        m_MainPaneStatusMessage += "\t" + m_pWordMixer->getSecondWord() + "\n";
-        m_MainPaneStatusMessage += "\nThe words are: \n\n\t";
-        m_MainPaneStatusMessage += m_pWordMixer->areSynonyms() ? "synonyms" : "antonyms";
-        m_MainPaneStatusMessage += "\n\nNext pair of words is available below.";
+        m_MainPaneStatusMessage = GameStrings::c_SuccessMessage.arg(m_pWordMixer->getFirstWord())
+                                                               .arg(m_pWordMixer->getSecondWord())
+                                                               .arg(m_pWordMixer->areSynonyms() ? GameStrings::c_Synonyms : GameStrings::c_Antonyms);
         break;
     case Game::StatusCodes::MISSING_WORDS:
         m_MainPaneStatusMessage = GameStrings::c_MissingWordsMessage;
@@ -336,12 +332,9 @@ void GamePresenter::_updateStatusMessage(Game::StatusCodes statusCode)
         m_MainPaneStatusMessage = GameStrings::c_IncorrectWordsMessage;
         break;
     case Game::StatusCodes::REQUESTED_BY_USER:
-        m_MainPaneStatusMessage = "The correct words are: \n\n";
-        m_MainPaneStatusMessage += "\t" + m_pWordMixer->getFirstWord() + "\n";
-        m_MainPaneStatusMessage += "\t" + m_pWordMixer->getSecondWord() + "\n";
-        m_MainPaneStatusMessage += "\nThe words are: \n\n\t";
-        m_MainPaneStatusMessage += m_pWordMixer->areSynonyms() ? "synonyms" : "antonyms";
-        m_MainPaneStatusMessage += "\n\nNext pair of words is available below.";
+        m_MainPaneStatusMessage = GameStrings::c_RequestedByUserMessage.arg(m_pWordMixer->getFirstWord())
+                                                                       .arg(m_pWordMixer->getSecondWord())
+                                                                       .arg(m_pWordMixer->areSynonyms() ? GameStrings::c_Synonyms : GameStrings::c_Antonyms);
         break;
     case Game::StatusCodes::STATISTICS_RESET:
         m_MainPaneStatusMessage = GameStrings::c_ScoresResetMessage;
