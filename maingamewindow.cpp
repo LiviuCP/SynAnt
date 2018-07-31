@@ -174,8 +174,8 @@ void MainGameWindow::init()
 void MainGameWindow::onStatisticsUpdated()
 {
     QVector<int> scoresPairs{m_pScoreItem -> getStatistics()};
-    m_pHighScores -> setText("High-score: " + QString::number(scoresPairs[0]) + "/" + QString::number(scoresPairs[1]));
-    m_pNrOfWordPairs -> setText("Word pairs: " + QString::number(scoresPairs[2]) + "/" + QString::number(scoresPairs[3]));
+    m_pHighScores -> setText(GameStrings::c_HighscoresMessage.arg(QString::number(scoresPairs[0])).arg(QString::number(scoresPairs[1])));
+    m_pNrOfWordPairs -> setText(GameStrings::c_WordPairsMessage.arg(QString::number(scoresPairs[2])).arg(QString::number(scoresPairs[3])));
 }
 
 void MainGameWindow::_onButtonResetClicked()
