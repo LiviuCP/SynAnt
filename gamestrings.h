@@ -90,6 +90,8 @@ namespace GameStrings {
     const QString c_NoUserInputMessage                  {    "No user input so far."                                                                    };
     const QString c_ScoresResetMessage                  {    "\nScores reset.\n\nLevel unchanged.\n\nNo user input so far.\n"                           };
     const QString c_LevelChangedMessage                 {    "Level changed.\n\nNo user input so far.\n"                                                };
+    const QString c_HighscoresMessage                   {    "High-score: %1/%2"                                                                        };
+    const QString c_WordPairsMessage                    {    "Word pairs: %1/%2"                                                                        };
 
     // exception messages
     const QString c_FileNotFoundMessage                 {    "File not found!"                                                                          };
