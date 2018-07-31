@@ -370,13 +370,9 @@ void MainGameWindow::_updateStatusMessage(Game::StatusCodes statusCode)
     switch(statusCode)
     {
     case Game::StatusCodes::SUCCESS:
-        statusMessage = GameStrings::c_SuccessMessage;
-        statusMessage += "\n\nThe two words are:\n\n";
-        statusMessage += "\t" + m_pWordMixer->getFirstWord() + "\n";
-        statusMessage += "\t" + m_pWordMixer->getSecondWord() + "\n";
-        statusMessage += "\nThe words are: \n\n\t";
-        statusMessage += m_pWordMixer->areSynonyms() ? "synonyms" : "antonyms";
-        statusMessage += "\n\nNext pair of words is available below.";
+        statusMessage = GameStrings::c_SuccessMessage.arg(m_pWordMixer->getFirstWord())
+                                                     .arg(m_pWordMixer->getSecondWord())
+                                                     .arg(m_pWordMixer->areSynonyms() ? GameStrings::c_Synonyms : GameStrings::c_Antonyms);
         break;
     case Game::StatusCodes::MISSING_WORDS:
         statusMessage = GameStrings::c_MissingWordsMessage;
@@ -385,12 +381,9 @@ void MainGameWindow::_updateStatusMessage(Game::StatusCodes statusCode)
         statusMessage = GameStrings::c_IncorrectWordsMessage;
         break;
     case Game::StatusCodes::REQUESTED_BY_USER:
-        statusMessage = "The correct words are: \n\n";
-        statusMessage += "\t" + m_pWordMixer->getFirstWord() + "\n";
-        statusMessage += "\t" + m_pWordMixer->getSecondWord() + "\n";
-        statusMessage += "\nThe words are: \n\n\t";
-        statusMessage += m_pWordMixer->areSynonyms() ? "synonyms" : "antonyms";
-        statusMessage += "\n\nNext pair of words is available below.";
+        statusMessage = GameStrings::c_RequestedByUserMessage.arg(m_pWordMixer->getFirstWord())
+                                                             .arg(m_pWordMixer->getSecondWord())
+                                                             .arg(m_pWordMixer->areSynonyms() ? GameStrings::c_Synonyms : GameStrings::c_Antonyms);
         break;
     case Game::StatusCodes::NO_USER_INPUT:
         statusMessage = GameStrings::c_NoUserInputMessage;
