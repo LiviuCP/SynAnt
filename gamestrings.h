@@ -84,7 +84,25 @@ namespace GameStrings {
                                                              "\nPress Reset to reset the scores and number of pairs.\n"
                                                         };
 
-    const QString c_SuccessMessage                      {    "Congrats! You entered the correct words."                                                 };
+    const QString c_SuccessMessage                      {
+                                                             "Congrats! You entered the correct words."
+                                                             "\n\nThe two words are:\n\n"
+                                                             "\t%1\n"
+                                                             "\t%2\n"
+                                                             "\nThe words are: \n\n\t"
+                                                             "%3"
+                                                             "\n\nNext pair of words is available below."
+                                                        };
+
+    const QString c_RequestedByUserMessage              {
+                                                             "\nThe correct words are:\n\n"
+                                                             "\t%1\n"
+                                                             "\t%2\n"
+                                                             "\nThe words are: \n\n\t"
+                                                             "%3"
+                                                             "\n\nNext pair of words is available below."
+                                                        };
+
     const QString c_MissingWordsMessage                 {    "At least one of the words hasn't been entered.\n\nPlease try again!"                      };
     const QString c_IncorrectWordsMessage               {    "You didn't enter the correct words.\n\nPlease try again!"                                 };
     const QString c_NoUserInputMessage                  {    "No user input so far."                                                                    };
@@ -194,6 +212,8 @@ namespace GameStrings {
     const QString c_FirstWordCamelCase                  {    "First"                                                                                    };
     const QString c_SecondWordLowerCase                 {    "second"                                                                                   };
     const QString c_SecondWordCamelCase                 {    "Second"                                                                                   };
+    const QString c_Synonyms                            {    "synonyms"                                                                                 };
+    const QString c_Antonyms                            {    "antonyms"                                                                                 };
 
 }
 
