@@ -18,6 +18,7 @@
 
 #include <QObject>
 #include <QVector>
+#include <QPair>
 
 #include <random>
 
@@ -62,8 +63,7 @@ private:
     // get the index of the mixed words string array where current piece is written
     std::default_random_engine m_IndexEngine;
 
-    QString m_FirstWord;
-    QString m_SecondWord;
+    QPair<QString,QString> m_WordsPair;
     QVector<QString> m_MixedWords;
     bool m_AreSynonyms;
 
