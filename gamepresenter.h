@@ -13,6 +13,9 @@ class ScoreItem;
 class GamePresenter : public QObject
 {
     Q_OBJECT
+    Q_PROPERTY(int levelEasy READ getLevelEasy CONSTANT)
+    Q_PROPERTY(int levelMedium READ getLevelMedium CONSTANT)
+    Q_PROPERTY(int levelHard READ getLevelHard CONSTANT)
     Q_PROPERTY(QString playButtonLabel READ getPlayButtonLabel CONSTANT)
     Q_PROPERTY(QString helpButtonLabel READ getHelpButtonLabel CONSTANT)
     Q_PROPERTY(QString quitButtonLabel READ getQuitButtonLabel CONSTANT)
@@ -82,9 +85,11 @@ public:
     Q_INVOKABLE void handleResultsRequest();
     Q_INVOKABLE bool handleSubmitRequest(const QString& firstWord, const QString& secondWord);
     Q_INVOKABLE void handleResetRequest();
-    Q_INVOKABLE void switchToEasyLevel();
-    Q_INVOKABLE void switchToMediumLevel();
-    Q_INVOKABLE void switchToHardLevel();
+    Q_INVOKABLE void switchToLevel(int level);
+
+    int getLevelEasy() const {return static_cast<int>(Game::Level::EASY);}
+    int getLevelMedium() const {return static_cast<int>(Game::Level::MEDIUM);}
+    int getLevelHard() const {return static_cast<int>(Game::Level::HARD);}
 
     QString getPlayButtonLabel() const {return GameStrings::c_PlayButtonLabel;}
     QString getHelpButtonLabel() const {return GameStrings::c_HelpButtonLabel;}

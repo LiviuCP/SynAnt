@@ -169,44 +169,14 @@ void GamePresenter::handleResetRequest()
     }
 }
 
-void GamePresenter::switchToEasyLevel()
+void GamePresenter::switchToLevel(int level)
 {
     try
     {
         qDebug() << "=====================================================";
-        qDebug() << "Level changed to easy! New words mixed";
+        qDebug() << "Level changed! New words mixed";
 
-        _setLevel(Game::Level::EASY);
-    }
-    catch (const QString& errorMessage)
-    {
-        _launchErrorPane(errorMessage);
-    }
-}
-
-void GamePresenter::switchToMediumLevel()
-{
-    try
-    {
-        qDebug() << "=====================================================";
-        qDebug() << "Level changed to medium! New words mixed";
-
-        _setLevel(Game::Level::MEDIUM);
-    }
-    catch (const QString& errorMessage)
-    {
-        _launchErrorPane(errorMessage);
-    }
-}
-
-void GamePresenter::switchToHardLevel()
-{
-    try
-    {
-        qDebug() << "=====================================================";
-        qDebug() << "Level changed to hard! New words mixed";
-
-        _setLevel(Game::Level::HARD);
+        _setLevel(static_cast<Game::Level>(level));
     }
     catch (const QString& errorMessage)
     {

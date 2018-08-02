@@ -22,6 +22,13 @@ Item {
     readonly property color wordLastPieceColor: "red"
     readonly property color wordPieceSelectedColor: "black"
 
+    function switchToLvl(lvl) {
+        firstWordTextField.clear();
+        secondWordTextField.clear();
+        presenter.switchToLevel(lvl);
+        firstWordTextField.forceActiveFocus();
+    }
+
     MouseArea {
         id: mainPaneMouseArea
         anchors.fill: parent
@@ -222,23 +229,17 @@ Item {
                     text: presenter.levelEasyButtonLabel
                     checked: false
 
-                    function switchToEasyLvl() {
-                        checked = true;
-                        firstWordTextField.clear();
-                        secondWordTextField.clear();
-                        presenter.switchToEasyLevel();
-                        firstWordTextField.forceActiveFocus();
-                    }
-
                     Shortcut {
                         sequence: presenter.levelEasyButtonShortcut
                         onActivated: {
-                            easyLvlBtn.switchToEasyLvl()
+                            easyLvlBtn.checked = true;
+                            mainPane.switchToLvl(presenter.levelEasy);
                         }
                     }
 
                     onToggled: {
-                        switchToEasyLvl()
+                        checked = true
+                        mainPane.switchToLvl(presenter.levelEasy);
                     }
                 }
 
@@ -247,23 +248,17 @@ Item {
                     text: presenter.levelMediumButtonLabel
                     checked: true
 
-                    function switchToMediumLvl() {
-                        checked = true;
-                        firstWordTextField.clear();
-                        secondWordTextField.clear();
-                        presenter.switchToMediumLevel();
-                        firstWordTextField.forceActiveFocus();
-                    }
-
                     Shortcut {
                         sequence: presenter.levelMediumButtonShortcut
                         onActivated: {
-                            mediumLvlBtn.switchToMediumLvl()
+                            mediumLvlBtn.checked = true;
+                            mainPane.switchToLvl(presenter.levelMedium);
                         }
                     }
 
                     onToggled: {
-                        switchToMediumLvl();
+                        checked = true
+                        mainPane.switchToLvl(presenter.levelMedium);
                     }
                 }
 
@@ -272,23 +267,17 @@ Item {
                     text: presenter.levelHardButtonLabel
                     checked: false
 
-                    function switchToHardLvl() {
-                        checked = true;
-                        firstWordTextField.clear();
-                        secondWordTextField.clear();
-                        presenter.switchToHardLevel();
-                        firstWordTextField.forceActiveFocus();
-                    }
-
                     Shortcut {
                         sequence: presenter.levelHardButtonShortcut
                         onActivated: {
-                            hardLvlBtn.switchToHardLvl()
+                            hardLvlBtn.checked = true;
+                            mainPane.switchToLvl(presenter.levelHard);
                         }
                     }
 
                     onToggled: {
-                        switchToHardLvl();
+                        checked = true
+                        mainPane.switchToLvl(presenter.levelHard);
                     }
                 }
             }
