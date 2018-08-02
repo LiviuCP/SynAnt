@@ -232,8 +232,10 @@ Item {
                     Shortcut {
                         sequence: presenter.levelEasyButtonShortcut
                         onActivated: {
-                            easyLvlBtn.checked = true;
-                            mainPane.switchToLvl(presenter.levelEasy);
+                            if (!easyLvlBtn.checked) {
+                                easyLvlBtn.checked = true;
+                                mainPane.switchToLvl(presenter.levelEasy);
+                            }
                         }
                     }
 
@@ -251,8 +253,10 @@ Item {
                     Shortcut {
                         sequence: presenter.levelMediumButtonShortcut
                         onActivated: {
-                            mediumLvlBtn.checked = true;
-                            mainPane.switchToLvl(presenter.levelMedium);
+                            if (!mediumLvlBtn.checked) {
+                                mediumLvlBtn.checked = true;
+                                mainPane.switchToLvl(presenter.levelMedium);
+                            }
                         }
                     }
 
@@ -270,8 +274,10 @@ Item {
                     Shortcut {
                         sequence: presenter.levelHardButtonShortcut
                         onActivated: {
-                            hardLvlBtn.checked = true;
-                            mainPane.switchToLvl(presenter.levelHard);
+                            if (!hardLvlBtn.checked) {
+                                hardLvlBtn.checked = true;
+                                mainPane.switchToLvl(presenter.levelHard);
+                            }
                         }
                     }
 
