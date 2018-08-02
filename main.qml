@@ -57,14 +57,14 @@ ApplicationWindow {
     Shortcut {
         sequence: gamePresenter.playButtonShortcut
         onActivated: {
-            gamePresenter.switchToMainPane();
+            gamePresenter.switchToPane(GamePresenter.MAIN);
         }
     }
 
     Shortcut {
         sequence: gamePresenter.helpButtonShortcut
         onActivated: {
-            gamePresenter.switchToHelpPane();
+            gamePresenter.switchToPane(GamePresenter.HELP);
         }
     }
 

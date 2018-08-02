@@ -78,10 +78,19 @@ class GamePresenter : public QObject
     Q_PROPERTY(int secondWordEndIndex READ getSecondWordEndIndex NOTIFY mixedWordsPiecesChanged)
 
 public:
+    enum class Pane
+    {
+        INTRO,
+        HELP,
+        MAIN,
+        ERROR,
+        Nr_Of_Panes
+    };
+    Q_ENUM(Pane)
+
     explicit GamePresenter(QObject *parent = nullptr);
 
-    Q_INVOKABLE void switchToHelpPane();
-    Q_INVOKABLE void switchToMainPane();
+    Q_INVOKABLE void switchToPane(Pane pane);
     Q_INVOKABLE void handleResultsRequest();
     Q_INVOKABLE bool handleSubmitRequest(const QString& firstWord, const QString& secondWord);
     Q_INVOKABLE void handleResetRequest();
@@ -180,15 +189,6 @@ private:
     void _updateStatusMessage(Game::StatusCodes statusCode);
     void _setLevel(Game::Level level);
     void _launchErrorPane(const QString& errorMessage);
-
-    enum class Pane
-    {
-        INTRO,
-        HELP,
-        MAIN,
-        ERROR,
-        Nr_Of_Panes
-    };
 
     bool m_IntroPaneVisible;
     bool m_HelpPaneVisible;

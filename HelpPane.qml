@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import GameManagers 1.0
 
 Item {
     id: helpPane
@@ -82,12 +83,12 @@ Item {
             Shortcut {
                 sequence: presenter.okButtonShortcut
                 onActivated: {
-                    presenter.switchToMainPane();
+                    presenter.switchToPane(GamePresenter.MAIN);
                 }
             }
 
             onClicked: {
-                presenter.switchToMainPane();
+                presenter.switchToPane(GamePresenter.MAIN);
             }
         }
 

@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import GameManagers 1.0
 
 Item {
     id: introPane
@@ -70,7 +71,7 @@ Item {
             ToolTip.visible: hovered
 
             onClicked: {
-                presenter.switchToMainPane();
+                presenter.switchToPane(GamePresenter.MAIN);
             }
 
 
@@ -86,7 +87,7 @@ Item {
             ToolTip.visible: hovered
 
             onClicked: {
-                presenter.switchToHelpPane();
+                presenter.switchToPane(GamePresenter.HELP);
             }
         }
 

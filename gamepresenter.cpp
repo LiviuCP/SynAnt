@@ -41,56 +41,60 @@ GamePresenter::GamePresenter(QObject *parent)
     }
 }
 
-void GamePresenter::switchToHelpPane()
+void GamePresenter::switchToPane(Pane pane)
 {
-    switch (m_CurrentPane) {
-    case Pane::INTRO:
-        m_IntroPaneVisible = false;
-        Q_EMIT introPaneVisibleChanged();
-        break;
-    case Pane::MAIN:
-        m_MainPaneVisible = false;
-        Q_EMIT mainPaneVisibleChanged();
-        break;
-    default:
-        Q_ASSERT(static_cast<int>(m_CurrentPane) >= 0 && static_cast<int>(m_CurrentPane) < static_cast<int>(Pane::Nr_Of_Panes));
-    }
-    m_CurrentPane = Pane::HELP;
-    m_HelpPaneVisible = true;
-    Q_EMIT helpPaneVisibleChanged();
-    Q_EMIT windowTitleChanged();
-}
+    Q_ASSERT(static_cast<int>(pane) >= 0 && static_cast<int>(pane) < static_cast<int>(Pane::Nr_Of_Panes));
 
-void GamePresenter::switchToMainPane()
-{
-    try
+    if (m_CurrentPane != pane)
     {
-        if (!m_MainPaneInitialized)
+        try
         {
-            _initMainPane();
-        }
+            switch(m_CurrentPane)
+            {
+            case Pane::INTRO:
+                m_IntroPaneVisible = false;
+                Q_EMIT introPaneVisibleChanged();
+                break;
+            case Pane::HELP:
+                m_HelpPaneVisible = false;
+                Q_EMIT helpPaneVisibleChanged();
+                break;
+            case Pane::MAIN:
+                m_MainPaneVisible = false;
+                Q_EMIT mainPaneVisibleChanged();
+                break;
+            default:
+                Q_ASSERT(false);
+            }
 
-        switch (m_CurrentPane) {
-        case Pane::INTRO:
-            m_IntroPaneVisible = false;
-            Q_EMIT introPaneVisibleChanged();
-            break;
-        case Pane::HELP:
-            m_HelpPaneVisible = false;
-            Q_EMIT helpPaneVisibleChanged();
-            break;
-        default:
-            Q_ASSERT(static_cast<int>(m_CurrentPane) >= 0 && static_cast<int>(m_CurrentPane) < static_cast<int>(Pane::Nr_Of_Panes));
-        }
+            switch(pane)
+            {
+            case Pane::INTRO:
+                Q_ASSERT(false);
+                break;
+            case Pane::HELP:
+                m_HelpPaneVisible = true;
+                Q_EMIT helpPaneVisibleChanged();
+                break;
+            case Pane::MAIN:
+                if (!m_MainPaneInitialized)
+                {
+                    _initMainPane();
+                }
+                m_MainPaneVisible = true;
+                Q_EMIT mainPaneVisibleChanged();
+                break;
+            default:
+                Q_ASSERT(false);
+            }
 
-        m_CurrentPane = Pane::MAIN;
-        m_MainPaneVisible = true;
-        Q_EMIT mainPaneVisibleChanged();
-        Q_EMIT windowTitleChanged();
-    }
-    catch (const QString& errorMessage)
-    {
-        _launchErrorPane(errorMessage);
+            m_CurrentPane = pane;
+            Q_EMIT windowTitleChanged();
+        }
+        catch (const QString& errorMessage)
+        {
+            _launchErrorPane(errorMessage);
+        }
     }
 }
 
