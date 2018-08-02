@@ -173,6 +173,8 @@ void GamePresenter::switchToLevel(int level)
 {
     try
     {
+        Q_ASSERT(level >= 0 && level < static_cast<int>(Game::Level::NrOfLevels));
+
         qDebug() << "=====================================================";
         qDebug() << "Level changed! New words mixed";
 
