@@ -39,6 +39,11 @@ public:
     bool areSynonyms() const;
 
     // indexes of the beginning and the end piece of each word in the mixed words array
+    int getFirstWordFirstPieceIndex() const {return m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::FIRST_WORD_FIRST_PIECE)];}
+    int getFirstWordLastPieceIndex() const {return m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::FIRST_WORD_LAST_PIECE)];}
+    int getSecondWordFirstPieceIndex() const {return m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::SECOND_WORD_FIRST_PIECE)];}
+    int getSecondWordLastPieceIndex() const {return m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::SECOND_WORD_LAST_PIECE)];}
+
     int getFirstWordBeginIndex() const;
     int getFirstWordEndIndex() const;
     int getSecondWordBeginIndex() const;
