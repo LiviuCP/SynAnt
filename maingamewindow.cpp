@@ -333,13 +333,13 @@ void MainGameWindow::_createMixedWordsLabels()
         m_MixedWords[wordPieceIndex] -> setStyleSheet(GameStrings::c_WordEachPieceStyle);
     }
 
-    m_MixedWords[m_pWordMixer -> getFirstWordBeginIndex()]  -> setStyleSheet(GameStrings::c_WordBeginPieceStyle);
+    m_MixedWords[m_pWordMixer -> getFirstWordFirstPieceIndex()]  -> setStyleSheet(GameStrings::c_WordBeginPieceStyle);
 
-    m_MixedWords[m_pWordMixer -> getSecondWordBeginIndex()] -> setStyleSheet(GameStrings::c_WordBeginPieceStyle);
+    m_MixedWords[m_pWordMixer -> getSecondWordFirstPieceIndex()] -> setStyleSheet(GameStrings::c_WordBeginPieceStyle);
 
-    m_MixedWords[m_pWordMixer -> getFirstWordEndIndex()]    -> setStyleSheet(GameStrings::c_WordEndPieceStyle);
+    m_MixedWords[m_pWordMixer -> getFirstWordLastPieceIndex()]    -> setStyleSheet(GameStrings::c_WordEndPieceStyle);
 
-    m_MixedWords[m_pWordMixer -> getSecondWordEndIndex()]   -> setStyleSheet(GameStrings::c_WordEndPieceStyle);
+    m_MixedWords[m_pWordMixer -> getSecondWordLastPieceIndex()]   -> setStyleSheet(GameStrings::c_WordEndPieceStyle);
 
 }
 
