@@ -227,24 +227,24 @@ QList<QVariant> GamePresenter::getMixedWordsPieces() const
     return mixedWordsPieces;
 }
 
-int GamePresenter::getFirstWordBeginIndex() const
+int GamePresenter::getFirstWordFirstPieceIndex() const
 {
-    return m_pWordMixer->getFirstWordBeginIndex();
+    return m_pWordMixer->getFirstWordFirstPieceIndex();
 }
 
-int GamePresenter::getFirstWordEndIndex() const
+int GamePresenter::getFirstWordLastPieceIndex() const
 {
-    return m_pWordMixer->getFirstWordEndIndex();
+    return m_pWordMixer->getFirstWordLastPieceIndex();
 }
 
-int GamePresenter::getSecondWordBeginIndex() const
+int GamePresenter::getSecondWordFirstPieceIndex() const
 {
-    return m_pWordMixer->getSecondWordBeginIndex();
+    return m_pWordMixer->getSecondWordFirstPieceIndex();
 }
 
-int GamePresenter::getSecondWordEndIndex() const
+int GamePresenter::getSecondWordLastPieceIndex() const
 {
-    return m_pWordMixer->getSecondWordEndIndex();
+    return m_pWordMixer->getSecondWordLastPieceIndex();
 }
 
 void GamePresenter::_onStatisticsUpdated()

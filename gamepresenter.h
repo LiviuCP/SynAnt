@@ -72,10 +72,10 @@ class GamePresenter : public QObject
     Q_PROPERTY(bool resetEnabled READ getResetEnabled NOTIFY resetEnabledChanged)
     Q_PROPERTY(bool errorOccured READ getErrorOccured NOTIFY errorOccuredChanged)
     Q_PROPERTY(QList<QVariant> mixedWordsPieces READ getMixedWordsPieces NOTIFY mixedWordsPiecesChanged)
-    Q_PROPERTY(int firstWordBeginIndex READ getFirstWordBeginIndex NOTIFY mixedWordsPiecesChanged)
-    Q_PROPERTY(int firstWordEndIndex READ getFirstWordEndIndex NOTIFY mixedWordsPiecesChanged)
-    Q_PROPERTY(int secondWordBeginIndex READ getSecondWordBeginIndex NOTIFY mixedWordsPiecesChanged)
-    Q_PROPERTY(int secondWordEndIndex READ getSecondWordEndIndex NOTIFY mixedWordsPiecesChanged)
+    Q_PROPERTY(int firstWordBeginIndex READ getFirstWordFirstPieceIndex NOTIFY mixedWordsPiecesChanged)
+    Q_PROPERTY(int firstWordEndIndex READ getFirstWordLastPieceIndex NOTIFY mixedWordsPiecesChanged)
+    Q_PROPERTY(int secondWordBeginIndex READ getSecondWordFirstPieceIndex NOTIFY mixedWordsPiecesChanged)
+    Q_PROPERTY(int secondWordEndIndex READ getSecondWordLastPieceIndex NOTIFY mixedWordsPiecesChanged)
 
 public:
     enum class Pane
@@ -161,10 +161,10 @@ public:
     QString getCloseButtonShortcut() const {return GameStrings::c_FatalErrorQuitButtonShortcut;}
 
     QList<QVariant> getMixedWordsPieces() const;
-    int getFirstWordBeginIndex() const;
-    int getFirstWordEndIndex() const;
-    int getSecondWordBeginIndex() const;
-    int getSecondWordEndIndex() const;
+    int getFirstWordFirstPieceIndex() const;
+    int getFirstWordLastPieceIndex() const;
+    int getSecondWordFirstPieceIndex() const;
+    int getSecondWordLastPieceIndex() const;
 
 signals:
     Q_SIGNAL void windowTitleChanged();
