@@ -49,13 +49,3 @@ void ScoreItem::resetStatistics()
     m_TotalWordPairs = 0;
     Q_EMIT statisticsUpdated();
 }
-
-QVector<int> ScoreItem::getStatistics() const
-{
-    QVector<int> statistics;
-    statistics.append(m_ObtainedScore);
-    statistics.append(m_TotalAvailableScore);
-    statistics.append(m_GuessedWordPairs);
-    statistics.append(m_TotalWordPairs);
-    return statistics;
-}
