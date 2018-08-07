@@ -44,11 +44,6 @@ public:
     int getSecondWordFirstPieceIndex() const {return m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::SECOND_WORD_FIRST_PIECE)];}
     int getSecondWordLastPieceIndex() const {return m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::SECOND_WORD_LAST_PIECE)];}
 
-    int getFirstWordBeginIndex() const;
-    int getFirstWordEndIndex() const;
-    int getSecondWordBeginIndex() const;
-    int getSecondWordEndIndex() const;
-
 public slots:
     void setWordPieceSize(Game::Level level);
 
