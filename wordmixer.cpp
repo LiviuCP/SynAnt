@@ -17,13 +17,13 @@ WordMixer::WordMixer(const QString &fname, QObject *parent)
       m_WordsPair{},
       m_MixedWords{},
       m_AreSynonyms{true},
-      m_WordsBeginEndPositions{}
+      m_WordsBeginEndPieceIndexes{}
 {
-    int indexesCount{static_cast<int>(WordsBeginEndIndexes::IndexesCount)};
-    m_WordsBeginEndPositions.resize(indexesCount);
+    int indexesCount{static_cast<int>(WordsBeginEndPieces::PiecesCount)};
+    m_WordsBeginEndPieceIndexes.resize(indexesCount);
     for (int index{0}; index<indexesCount; index++)
     {
-        m_WordsBeginEndPositions[index] = -1;
+        m_WordsBeginEndPieceIndexes[index] = -1;
     }
 
     QFileInfo wordPairsFileStatus{m_FileName};
@@ -54,7 +54,7 @@ WordMixer::WordMixer(const QString &fname, QObject *parent)
     m_RowNumberEngine.seed(rDev1());
 
     std::random_device rDev2{};
-    m_IndexEngine.seed(rDev2());
+    m_WordPieceIndexEngine.seed(rDev2());
 }
 
 void WordMixer::mixWords()
@@ -85,21 +85,21 @@ void WordMixer::mixWords()
     int firstWordLastPiecePos{m_WordPieceSize*(firstWordNrOfPieces-1)};
     int secondWordLastPiecePos{m_WordPieceSize*(secondWordNrOfPieces-1)};
 
-    m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::FIRST_WORD_FIRST_PIECE)] = _insertWordPiece(m_WordsPair.first, 0, wordPieceIndexes);
+    m_WordsBeginEndPieceIndexes[static_cast<int>(WordsBeginEndPieces::FIRST_WORD_FIRST_PIECE)] = _insertWordPiece(m_WordsPair.first, 0, wordPieceIndexes);
 
     for (int wordPieceStartPos{m_WordPieceSize}; wordPieceStartPos<firstWordLastPiecePos; wordPieceStartPos+=m_WordPieceSize)
     {
         _insertWordPiece(m_WordsPair.first, wordPieceStartPos, wordPieceIndexes);
     }
-    m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::FIRST_WORD_LAST_PIECE)] = _insertWordPiece(m_WordsPair.first, firstWordLastPiecePos, wordPieceIndexes);
-    m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::SECOND_WORD_FIRST_PIECE)] = _insertWordPiece(m_WordsPair.second, 0, wordPieceIndexes);
+    m_WordsBeginEndPieceIndexes[static_cast<int>(WordsBeginEndPieces::FIRST_WORD_LAST_PIECE)] = _insertWordPiece(m_WordsPair.first, firstWordLastPiecePos, wordPieceIndexes);
+    m_WordsBeginEndPieceIndexes[static_cast<int>(WordsBeginEndPieces::SECOND_WORD_FIRST_PIECE)] = _insertWordPiece(m_WordsPair.second, 0, wordPieceIndexes);
 
     for (int wordPieceStartPos{m_WordPieceSize}; wordPieceStartPos<secondWordLastPiecePos;
                                       wordPieceStartPos+=m_WordPieceSize)
     {
         _insertWordPiece(m_WordsPair.second, wordPieceStartPos, wordPieceIndexes);
     }
-    m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::SECOND_WORD_LAST_PIECE)] = _insertWordPiece(m_WordsPair.second, secondWordLastPiecePos, wordPieceIndexes);
+    m_WordsBeginEndPieceIndexes[static_cast<int>(WordsBeginEndPieces::SECOND_WORD_LAST_PIECE)] = _insertWordPiece(m_WordsPair.second, secondWordLastPiecePos, wordPieceIndexes);
 
     qDebug() << "First word:" << m_WordsPair.first;
     qDebug() << "Second word:" << m_WordsPair.second;
@@ -236,7 +236,7 @@ int WordMixer::_insertWordPiece(const QString &word, int firstCharPos,
                                         QVector<int> &wordPieceIndexes)
 {
     std::uniform_int_distribution<int> indexDist{0,wordPieceIndexes.size()-1};
-    int insertOnPositionIndex{indexDist(m_IndexEngine)};
+    int insertOnPositionIndex{indexDist(m_WordPieceIndexEngine)};
 
     int insertOnPosition{wordPieceIndexes[insertOnPositionIndex]};
     m_MixedWords[insertOnPosition] = word.mid(firstCharPos,m_WordPieceSize);
