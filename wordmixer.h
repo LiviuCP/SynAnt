@@ -39,10 +39,10 @@ public:
     bool areSynonyms() const;
 
     // indexes of the beginning and the end piece of each word in the mixed words array
-    int getFirstWordFirstPieceIndex() const {return m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::FIRST_WORD_FIRST_PIECE)];}
-    int getFirstWordLastPieceIndex() const {return m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::FIRST_WORD_LAST_PIECE)];}
-    int getSecondWordFirstPieceIndex() const {return m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::SECOND_WORD_FIRST_PIECE)];}
-    int getSecondWordLastPieceIndex() const {return m_WordsBeginEndPositions[static_cast<int>(WordsBeginEndIndexes::SECOND_WORD_LAST_PIECE)];}
+    int getFirstWordFirstPieceIndex() const {return m_WordsBeginEndPieceIndexes[static_cast<int>(WordsBeginEndPieces::FIRST_WORD_FIRST_PIECE)];}
+    int getFirstWordLastPieceIndex() const {return m_WordsBeginEndPieceIndexes[static_cast<int>(WordsBeginEndPieces::FIRST_WORD_LAST_PIECE)];}
+    int getSecondWordFirstPieceIndex() const {return m_WordsBeginEndPieceIndexes[static_cast<int>(WordsBeginEndPieces::SECOND_WORD_FIRST_PIECE)];}
+    int getSecondWordLastPieceIndex() const {return m_WordsBeginEndPieceIndexes[static_cast<int>(WordsBeginEndPieces::SECOND_WORD_LAST_PIECE)];}
 
 public slots:
     void setWordPieceSize(Game::Level level);
@@ -61,21 +61,21 @@ private:
     // get the row number from the file which contains the word pair to be mixed
     std::default_random_engine m_RowNumberEngine;
     // get the index of the mixed words string array where current piece is written
-    std::default_random_engine m_IndexEngine;
+    std::default_random_engine m_WordPieceIndexEngine;
 
     QPair<QString,QString> m_WordsPair;
     QVector<QString> m_MixedWords;
     bool m_AreSynonyms;
 
-    // stores the indexes of the first and last piece of the 2 words in the mixedWords string vector
-    QVector<int> m_WordsBeginEndPositions;
-    // used for getting these indexes from m_WordsBeginEndPositions
-    enum class WordsBeginEndIndexes {
+    // stores the indexes of the first and last piece of the 2 words in the mixed words string vector
+    QVector<int> m_WordsBeginEndPieceIndexes;
+    // used for retrieving the mixed words string vector indexes of the first and last piece of each of the 2 words
+    enum class WordsBeginEndPieces {
         FIRST_WORD_FIRST_PIECE,
         FIRST_WORD_LAST_PIECE,
         SECOND_WORD_FIRST_PIECE,
         SECOND_WORD_LAST_PIECE,
-        IndexesCount
+        PiecesCount
     };
 };
 
