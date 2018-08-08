@@ -12,7 +12,7 @@ WordMixer::WordMixer(const QString &fname, QObject *parent)
     : QObject(parent),
       m_FileName{fname},
       m_RowNumber{-1},
-      m_TotalRows{0},
+      m_TotalNrOfRows{0},
       m_WordPieceSize{2},
       m_WordsPair{},
       m_MixedWords{},
@@ -42,9 +42,9 @@ WordMixer::WordMixer(const QString &fname, QObject *parent)
     while (!allRowsReader.atEnd())
     {
         allRowsReader.readLine();
-        m_TotalRows++;
+        m_TotalNrOfRows++;
     }
-    if (m_TotalRows == 0)
+    if (m_TotalNrOfRows == 0)
     {
         throw QString{GameStrings::c_EmptyFileMessage};
     }
@@ -149,7 +149,7 @@ void WordMixer::setWordPieceSize(Game::Level level)
 
 void WordMixer::_getRowNumber()
 {
-    std::uniform_int_distribution<int> rowNumberDist{0,m_TotalRows-1};
+    std::uniform_int_distribution<int> rowNumberDist{0,m_TotalNrOfRows-1};
     m_RowNumber = rowNumberDist(m_RowNumberEngine);
 }
 

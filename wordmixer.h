@@ -55,7 +55,7 @@ private:
 
     QString m_FileName;
     int m_RowNumber;
-    int m_TotalRows;
+    int m_TotalNrOfRows;
     int m_WordPieceSize;
 
     // get the row number from the file which contains the word pair to be mixed
