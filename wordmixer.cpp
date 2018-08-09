@@ -26,40 +26,52 @@ WordMixer::WordMixer(const QString &fname, QObject *parent)
         m_WordsBeginEndPieceIndexes[index] = -1;
     }
 
-    QFileInfo wordPairsFileStatus{m_FileName};
-    if (!wordPairsFileStatus.exists())
-    {
-        throw QString{GameStrings::c_FileNotFoundMessage};
-    }
-
-    QFile wordPairsFile{m_FileName};
-    if (!wordPairsFile.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        throw QString{GameStrings::c_CannotOpenFileMessage};
-    }
-
-    QTextStream allRowsReader(&wordPairsFile);
-    while (!allRowsReader.atEnd())
-    {
-        allRowsReader.readLine();
-        m_TotalNrOfRows++;
-    }
-    if (m_TotalNrOfRows == 0)
-    {
-        throw QString{GameStrings::c_EmptyFileMessage};
-    }
-    wordPairsFile.close();
-
     std::random_device rDev1{};
     m_RowNumberEngine.seed(rDev1());
 
     std::random_device rDev2{};
     m_WordPieceIndexEngine.seed(rDev2());
+
+    // if an empty filename is given assume unit testing mode
+    if (fname == GameStrings::c_NoFile)
+    {
+        m_ManualWordsEntry = true;
+    }
+    else
+    {
+        m_ManualWordsEntry = false;
+
+        QFileInfo wordPairsFileStatus{m_FileName};
+        if (!wordPairsFileStatus.exists())
+        {
+            throw QString{GameStrings::c_FileNotFoundMessage};
+        }
+
+        QFile wordPairsFile{m_FileName};
+        if (!wordPairsFile.open(QIODevice::ReadOnly | QIODevice::Text))
+        {
+            throw QString{GameStrings::c_CannotOpenFileMessage};
+        }
+
+        QTextStream allRowsReader(&wordPairsFile);
+        while (!allRowsReader.atEnd())
+        {
+            allRowsReader.readLine();
+            m_TotalNrOfRows++;
+        }
+        if (m_TotalNrOfRows == 0)
+        {
+            throw QString{GameStrings::c_EmptyFileMessage};
+        }
+        wordPairsFile.close();
+    }
 }
 
 void WordMixer::mixWords()
 {
     _retrieveWords();
+
+    Q_ASSERT(m_WordsPair.second.size() != 0 && m_WordsPair.first.size() != 0);
 
     int firstWordSize{m_WordsPair.first.size()}, secondWordSize{m_WordsPair.second.size()};
     int firstWordNrOfPieces
@@ -125,6 +137,16 @@ QString WordMixer::getSecondWord() const
     return m_WordsPair.second;
 }
 
+void WordMixer::setFirstWord(const QString &firstWord)
+{
+    m_WordsPair.first = firstWord;
+}
+
+void WordMixer::setSecondWord(const QString &secondWord)
+{
+    m_WordsPair.second = secondWord;
+}
+
 bool WordMixer::areSynonyms() const
 {
     return m_AreSynonyms;
@@ -155,80 +177,83 @@ void WordMixer::_getRowNumber()
 
 void WordMixer::_retrieveWords()
 {
-    _getRowNumber();
-    const int minWordSize{5};
-    QString rowNumberToString{};
-    rowNumberToString.setNum(m_RowNumber);
+    if (!m_ManualWordsEntry)
+    {
+        _getRowNumber();
+        const int minWordSize{5};
+        QString rowNumberToString{};
+        rowNumberToString.setNum(m_RowNumber);
 
-    QFile wordPairsFile(m_FileName);
-    if (!wordPairsFile.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-    throw QString{GameStrings::c_CannotOpenFileMessage};
-    }
-
-    QTextStream lineReader{&wordPairsFile};
-    for (int i{0}; i<m_RowNumber; i++)
-    {
-    QString discardedRow{lineReader.readLine()};
-    }
-
-    QString rowContent{lineReader.readLine()};
-    wordPairsFile.close();
-
-    if (rowContent.size() == 0)
-    {
-        throw QString{GameStrings::c_EmptyRowMessage}.arg(rowNumberToString);
-    }
-
-    int synonymsSeparatorIndex{rowContent.indexOf('=')};
-    int antonymsSeparatorIndex{rowContent.indexOf('!')};
-    int separatorIndex{-1};
-    if ((synonymsSeparatorIndex != rowContent.lastIndexOf('=')) || (antonymsSeparatorIndex != rowContent.lastIndexOf('!')))
-    {
-        throw QString{GameStrings::c_MultipleSeparatorsMessage}.arg(rowNumberToString);
-    }
-    else if (synonymsSeparatorIndex == antonymsSeparatorIndex)
-    {
-        throw QString{GameStrings::c_NoSeparatorMessage}.arg(rowNumberToString);
-    }
-    else if ((synonymsSeparatorIndex != -1) && (antonymsSeparatorIndex != -1))
-    {
-        throw QString{GameStrings::c_MultipleSeparatorsMessage}.arg(rowNumberToString);
-    }
-    else if (synonymsSeparatorIndex != -1)
-    {
-        m_AreSynonyms = true;
-        separatorIndex = synonymsSeparatorIndex;
-    }
-    else
-    {
-        m_AreSynonyms = false;
-        separatorIndex = antonymsSeparatorIndex;
-    }
-
-    m_WordsPair.first = rowContent.left(separatorIndex);
-    for (auto currentCharacter : m_WordsPair.first)
-    {
-        if (!(currentCharacter.isLower()))
+        QFile wordPairsFile(m_FileName);
+        if (!wordPairsFile.open(QIODevice::ReadOnly | QIODevice::Text))
         {
-            throw QString{GameStrings::c_IllegalCharactersMessage}.arg(GameStrings::c_FirstWordCamelCase).arg(rowNumberToString);
+        throw QString{GameStrings::c_CannotOpenFileMessage};
         }
-    }
-    if (m_WordsPair.first.size() < minWordSize)
-    {
-        throw QString{GameStrings::c_LessThanMinCharsMessage}.arg(GameStrings::c_FirstWordCamelCase).arg(rowNumberToString);
-    }
-    m_WordsPair.second = rowContent.mid(separatorIndex+1);
-    for (auto currentCharacter : m_WordsPair.second)
-    {
-        if (!(currentCharacter.isLower()))
+
+        QTextStream lineReader{&wordPairsFile};
+        for (int i{0}; i<m_RowNumber; i++)
         {
-            throw QString{GameStrings::c_IllegalCharactersMessage}.arg(GameStrings::c_SecondWordCamelCase).arg(rowNumberToString);
+        QString discardedRow{lineReader.readLine()};
         }
-    }
-    if (m_WordsPair.second.size() < minWordSize)
-    {
-        throw QString{GameStrings::c_LessThanMinCharsMessage}.arg(GameStrings::c_SecondWordCamelCase).arg(rowNumberToString);
+
+        QString rowContent{lineReader.readLine()};
+        wordPairsFile.close();
+
+        if (rowContent.size() == 0)
+        {
+            throw QString{GameStrings::c_EmptyRowMessage}.arg(rowNumberToString);
+        }
+
+        int synonymsSeparatorIndex{rowContent.indexOf('=')};
+        int antonymsSeparatorIndex{rowContent.indexOf('!')};
+        int separatorIndex{-1};
+        if ((synonymsSeparatorIndex != rowContent.lastIndexOf('=')) || (antonymsSeparatorIndex != rowContent.lastIndexOf('!')))
+        {
+            throw QString{GameStrings::c_MultipleSeparatorsMessage}.arg(rowNumberToString);
+        }
+        else if (synonymsSeparatorIndex == antonymsSeparatorIndex)
+        {
+            throw QString{GameStrings::c_NoSeparatorMessage}.arg(rowNumberToString);
+        }
+        else if ((synonymsSeparatorIndex != -1) && (antonymsSeparatorIndex != -1))
+        {
+            throw QString{GameStrings::c_MultipleSeparatorsMessage}.arg(rowNumberToString);
+        }
+        else if (synonymsSeparatorIndex != -1)
+        {
+            m_AreSynonyms = true;
+            separatorIndex = synonymsSeparatorIndex;
+        }
+        else
+        {
+            m_AreSynonyms = false;
+            separatorIndex = antonymsSeparatorIndex;
+        }
+
+        m_WordsPair.first = rowContent.left(separatorIndex);
+        for (auto currentCharacter : m_WordsPair.first)
+        {
+            if (!(currentCharacter.isLower()))
+            {
+                throw QString{GameStrings::c_IllegalCharactersMessage}.arg(GameStrings::c_FirstWordCamelCase).arg(rowNumberToString);
+            }
+        }
+        if (m_WordsPair.first.size() < minWordSize)
+        {
+            throw QString{GameStrings::c_LessThanMinCharsMessage}.arg(GameStrings::c_FirstWordCamelCase).arg(rowNumberToString);
+        }
+        m_WordsPair.second = rowContent.mid(separatorIndex+1);
+        for (auto currentCharacter : m_WordsPair.second)
+        {
+            if (!(currentCharacter.isLower()))
+            {
+                throw QString{GameStrings::c_IllegalCharactersMessage}.arg(GameStrings::c_SecondWordCamelCase).arg(rowNumberToString);
+            }
+        }
+        if (m_WordsPair.second.size() < minWordSize)
+        {
+            throw QString{GameStrings::c_LessThanMinCharsMessage}.arg(GameStrings::c_SecondWordCamelCase).arg(rowNumberToString);
+        }
     }
 }
 

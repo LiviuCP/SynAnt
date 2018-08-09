@@ -44,6 +44,10 @@ public:
     int getSecondWordFirstPieceIndex() const {return m_WordsBeginEndPieceIndexes[static_cast<int>(WordsBeginEndPieces::SECOND_WORD_FIRST_PIECE)];}
     int getSecondWordLastPieceIndex() const {return m_WordsBeginEndPieceIndexes[static_cast<int>(WordsBeginEndPieces::SECOND_WORD_LAST_PIECE)];}
 
+    // for unit-testing purposes only
+    void setFirstWord(const QString &firstWord);
+    void setSecondWord(const QString &secondWord);
+
 public slots:
     void setWordPieceSize(Game::Level level);
 
@@ -66,6 +70,9 @@ private:
     QPair<QString,QString> m_WordsPair;
     QVector<QString> m_MixedWords;
     bool m_AreSynonyms;
+
+    // only to be set true if unit-testing the code
+    bool m_ManualWordsEntry;
 
     // stores the indexes of the first and last piece of the 2 words in the mixed words string vector
     QVector<int> m_WordsBeginEndPieceIndexes;

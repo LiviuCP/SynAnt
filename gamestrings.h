@@ -13,6 +13,7 @@ namespace GameStrings {
 
     //file name
     const QString c_FileName                            {    "data"                                                                                     };
+    const QString c_NoFile                              {    ""                                                                                         };
 
     // status and instructions messages
     const QString c_IntroWindowWelcomeMessage           {
