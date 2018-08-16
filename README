@@ -4,7 +4,11 @@ This program retrieves a word pair that can be synonyms or antonyms and mixes th
 
 1. Installation
 
-After compiling the code copy the data file near the executable (for OS X it should be near the executable placed within the .app directory). Feel free to modify it by adding new word pairs.
+Currently there are 2 branches, each of them containing a version of the application: qWidgetsVersion and qmlVersion. Choose the branch you would like to use and then compile it.
+
+After compiling the code copy the data file near the executable. For Linux Systems refer to the Application sub-directory. For OS X it should be near the executable placed within the .app directory. Feel free to modify it by adding new word pairs.
+
+The file should be named "data", otherwise it won't be recognized by the app.
 
 2. Supported Operating Systems
 
