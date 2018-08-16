@@ -1,16 +1,38 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlComponent>
+
 #include "gamepresenter.h"
+
 
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QGuiApplication app(argc, argv);
     qmlRegisterType<GamePresenter>("GameManagers",1,0,"GamePresenter");
-    QQmlApplicationEngine engine;
-    engine.load(QUrl(QLatin1String("qrc:/main.qml")));
-    if (engine.rootObjects().isEmpty())
-        return -1;
 
-    return app.exec();
+    QGuiApplication app(argc, argv);
+    QQmlApplicationEngine engine;
+
+    try
+    {
+        engine.load(QUrl(QLatin1String("qrc:/main.qml")));
+        if (engine.rootObjects().isEmpty())
+            return -1;
+
+        return app.exec();
+    }
+    catch (const QString& exception)
+    {
+        QQmlComponent errorComponent(&engine, QUrl(QLatin1String("qrc:/ErrorDialog.qml")));
+        QObject *errorComponentObject = errorComponent.create();
+
+        QObject *errorDialogObject = errorComponentObject->findChild<QObject*>("errorDialog");
+
+        if (errorDialogObject)
+        {
+            errorDialogObject->setProperty("text", exception);
+        }
+
+        return app.exec();
+    }
 }

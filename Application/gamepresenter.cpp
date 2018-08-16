@@ -22,23 +22,16 @@ GamePresenter::GamePresenter(QObject *parent)
     , m_pWordMixer {nullptr}
     , m_pScoreItem {new ScoreItem{this}}
 {
-    try
-    {
-        m_pWordMixer = new WordMixer{QGuiApplication::applicationDirPath() + "/" + GameStrings::c_FileName, this};
+    m_pWordMixer = new WordMixer{QGuiApplication::applicationDirPath() + "/" + GameStrings::c_FileName, this};
 
-        bool connected{connect(this,&GamePresenter::levelChanged,m_pWordMixer,&WordMixer::setWordPieceSize)};
-        Q_ASSERT(connected);
-        connected = connect(this,&GamePresenter::levelChanged,m_pScoreItem,&ScoreItem::setScoreIncrement);
-        Q_ASSERT(connected);
-        connected = connect(m_pScoreItem,&ScoreItem::statisticsUpdated,this,&GamePresenter::_onStatisticsUpdated);
-        Q_ASSERT(connected);
+    bool connected{connect(this,&GamePresenter::levelChanged,m_pWordMixer,&WordMixer::setWordPieceSize)};
+    Q_ASSERT(connected);
+    connected = connect(this,&GamePresenter::levelChanged,m_pScoreItem,&ScoreItem::setScoreIncrement);
+    Q_ASSERT(connected);
+    connected = connect(m_pScoreItem,&ScoreItem::statisticsUpdated,this,&GamePresenter::_onStatisticsUpdated);
+    Q_ASSERT(connected);
 
-        _onStatisticsUpdated();
-    }
-    catch(const QString& errorMessage)
-    {
-        _launchErrorPane(errorMessage);
-    }
+    _onStatisticsUpdated();
 }
 
 void GamePresenter::switchToPane(Pane pane)
