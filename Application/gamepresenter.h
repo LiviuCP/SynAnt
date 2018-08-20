@@ -96,69 +96,69 @@ public:
     Q_INVOKABLE void handleResetRequest();
     Q_INVOKABLE void switchToLevel(int level);
 
-    int getLevelEasy() const {return static_cast<int>(Game::Level::EASY);}
-    int getLevelMedium() const {return static_cast<int>(Game::Level::MEDIUM);}
-    int getLevelHard() const {return static_cast<int>(Game::Level::HARD);}
+    int getLevelEasy() const;
+    int getLevelMedium() const;
+    int getLevelHard() const;
 
-    QString getPlayButtonLabel() const {return GameStrings::c_PlayButtonLabel;}
-    QString getHelpButtonLabel() const {return GameStrings::c_HelpButtonLabel;}
-    QString getQuitButtonLabel() const {return GameStrings::c_QuitButtonLabel;}
-    QString getSubmitButtonLabel() const {return GameStrings::c_SubmitButtonLabel;}
-    QString getResultsButtonLabel() const {return GameStrings::c_ResultsButtonLabel;}
-    QString getResetButtonLabel() const {return GameStrings::c_ResetButtonLabel;}
-    QString getOkButtonLabel() const {return GameStrings::c_OkButtonLabel;}
-    QString getLevelEasyButtonLabel() const {return GameStrings::c_LevelEasyButtonLabel;}
-    QString getLevelMediumButtonLabel() const {return GameStrings::c_LevelMediumButtonLabel;}
-    QString getLevelHardButtonLabel() const {return GameStrings::c_LevelHardButtonLabel;}
-    QString getCloseButtonLabel() const {return GameStrings::c_FatalErrorQuitButtonLabel;}
+    QString getPlayButtonLabel() const;
+    QString getHelpButtonLabel() const;
+    QString getQuitButtonLabel() const;
+    QString getSubmitButtonLabel() const;
+    QString getResultsButtonLabel() const;
+    QString getResetButtonLabel() const;
+    QString getOkButtonLabel() const;
+    QString getLevelEasyButtonLabel() const;
+    QString getLevelMediumButtonLabel() const;
+    QString getLevelHardButtonLabel() const;
+    QString getCloseButtonLabel() const;
 
-    bool getIntroPaneVisible() const {return m_IntroPaneVisible;}
-    bool getHelpPaneVisible() const {return m_HelpPaneVisible;}
-    bool getMainPaneVisible() const {return m_MainPaneVisible;}
-    bool getResetEnabled() const {return m_ResetEnabled;}
-    bool getErrorOccured() const {return m_ErrorOccured;}
+    bool getIntroPaneVisible() const;
+    bool getHelpPaneVisible() const;
+    bool getMainPaneVisible() const;
+    bool getResetEnabled() const;
+    bool getErrorOccured() const;
 
     QString getWindowTitle() const;
-    QString getIntroPaneMessage() const {return GameStrings::c_IntroWindowWelcomeMessage;}
-    QString getHelpPaneMessage() const {return GameStrings::c_HelpWindowMessage;}
-    QString getMainPaneInstructionsMessage() const {return GameStrings::c_InstructionsMessage;}
-    QString getMainPaneStatusMessage() const {return m_MainPaneStatusMessage;}
-    QString getMainPaneScoreMessage() const {return m_MainPaneScoreMessage;}
-    QString getMainPaneWordPairsMessage() const {return m_MainPaneWordPairsMessage;}
-    QString getErrorMessage() const {return m_ErrorMessage;}
+    QString getIntroPaneMessage() const;
+    QString getHelpPaneMessage() const;
+    QString getMainPaneInstructionsMessage() const;
+    QString getMainPaneStatusMessage() const;
+    QString getMainPaneScoreMessage() const;
+    QString getMainPaneWordPairsMessage() const;
+    QString getErrorMessage() const;
 
     int getToolTipDelay() const;
-    QString getIntroPaneToolTip() const {return GameStrings::c_IntroWindowToolTip;}
-    QString getHelpPaneToolTip() const {return GameStrings::c_HelpWindowToolTip;}
-    QString getMainPaneToolTip() const {return GameStrings::c_MainWindowToolTip;}
-    QString getErrorPaneToolTip() const {return GameStrings::c_FatalErrorWindowToolTip;}
-    QString getHighscoresToolTip() const {return GameStrings::c_HighscoresToolTip;}
-    QString getWordPairsToolTip() const {return GameStrings::c_WordPairsToolTip;}
-    QString getGameInstructionsToolTip() const {return GameStrings::c_GameInstructionsToolTip;}
-    QString getGameStatusToolTip() const {return GameStrings::c_GameStatusToolTip;}
-    QString getFirstWordToolTip() const {return GameStrings::c_FirstWordToolTip;}
-    QString getSecondWordToolTip() const {return GameStrings::c_SecondWordToolTip;}
-    QString getPlayButtonToolTip() const {return GameStrings::c_PlayButtonToolTip;}
-    QString getHelpButtonToolTip() const {return GameStrings::c_HelpButtonToolTip;}
-    QString getQuitButtonToolTip() const {return GameStrings::c_QuitButtonToolTip;}
-    QString getOkButtonToolTip() const {return GameStrings::c_OkButtonToolTip;}
-    QString getSubmitButtonToolTip() const {return GameStrings::c_SubmitButtonToolTip;}
-    QString getResultsButtonToolTip() const {return GameStrings::c_ResultsButtonToolTip;}
-    QString getResetButtonToolTip() const {return GameStrings::c_ResetButtonToolTip;}
-    QString getLevelButtonsToolTip() const {return GameStrings::c_LevelButtonsToolTip;}
-    QString getCloseButtonToolTip() const {return GameStrings::c_FatalErrorQuitButtonToolTip;}
+    QString getIntroPaneToolTip() const;
+    QString getHelpPaneToolTip() const;
+    QString getMainPaneToolTip() const;
+    QString getErrorPaneToolTip() const;
+    QString getHighscoresToolTip() const;
+    QString getWordPairsToolTip() const;
+    QString getGameInstructionsToolTip() const;
+    QString getGameStatusToolTip() const;
+    QString getFirstWordToolTip() const;
+    QString getSecondWordToolTip() const;
+    QString getPlayButtonToolTip() const;
+    QString getHelpButtonToolTip() const;
+    QString getQuitButtonToolTip() const;
+    QString getOkButtonToolTip() const;
+    QString getSubmitButtonToolTip() const;
+    QString getResultsButtonToolTip() const;
+    QString getResetButtonToolTip() const;
+    QString getLevelButtonsToolTip() const;
+    QString getCloseButtonToolTip() const;
 
-    QString getPlayButtonShortcut() const {return GameStrings::c_PlayButtonShortcut;}
-    QString getHelpButtonShortcut() const {return GameStrings::c_HelpButtonShortcut;}
-    QString getQuitButtonShortcut() const {return GameStrings::c_QuitButtonShortcut;}
-    QString getOkButtonShortcut() const {return GameStrings::c_OkButtonShortcut;}
-    QString getSubmitButtonShortcut() const {return GameStrings::c_SubmitButtonShortcut;}
-    QString getResultsButtonShortcut() const {return GameStrings::c_ResultsButtonShortcut;}
-    QString getResetButtonShortcut() const {return GameStrings::c_ResetShortcut;}
-    QString getLevelEasyButtonShortcut() const {return GameStrings::c_LevelEasyButtonShortcut;}
-    QString getLevelMediumButtonShortcut() const {return GameStrings::c_LevelMediumButtonShortcut;}
-    QString getLevelHardButtonShortcut() const {return GameStrings::c_LevelHardButtonShortcut;}
-    QString getCloseButtonShortcut() const {return GameStrings::c_FatalErrorQuitButtonShortcut;}
+    QString getPlayButtonShortcut() const;
+    QString getHelpButtonShortcut() const;
+    QString getQuitButtonShortcut() const;
+    QString getOkButtonShortcut() const;
+    QString getSubmitButtonShortcut() const;
+    QString getResultsButtonShortcut() const;
+    QString getResetButtonShortcut() const;
+    QString getLevelEasyButtonShortcut() const;
+    QString getLevelMediumButtonShortcut() const;
+    QString getLevelHardButtonShortcut() const;
+    QString getCloseButtonShortcut() const;
 
     QList<QVariant> getMixedWordsPieces() const;
     int getFirstWordFirstPieceIndex() const;
