@@ -18,6 +18,7 @@ private:
 private Q_SLOTS:
     void testManualWordsEntry();
     void testWordsAreCorrectlyMixed();
+    void testFirstLastPieceIndexesAreCorrect();
 };
 
 CommonTests::CommonTests()
@@ -60,6 +61,46 @@ void CommonTests::testWordsAreCorrectlyMixed()
     wordMixer.setWordPieceSize(Game::Level::HARD);
     wordMixer.mixWords();
     _checkCorrectMixing(wordMixer.getMixedWordsStringArray(), QVector<QString>{"f", "i", "r", "s", "t", "W", "o", "r", "d", "s", "e", "c", "o", "n", "d", "W", "o", "r", "d"});
+}
+
+void CommonTests::testFirstLastPieceIndexesAreCorrect()
+{
+    const QString firstWord{"wordOne"};
+    const QString secondWord{"secondWord"};
+
+    const char* firstWordFirstPieceIndexNotCorrect{"Index of the first piece of first word in the mixed words array is not correct"};
+    const char* firstWordLastPieceIndexNotCorrect{"Index of the last piece of first word in the mixed words array is not correct"};
+    const char* secondWordFirstPieceIndexNotCorrect{"Index of the first piece of second word in the mixed words array is not correct"};
+    const char* secondWordLastPieceIndexNotCorrect{"Index of the last piece of second word in the mixed words array is not correct"};
+
+    WordMixer wordMixer{GameStrings::c_NoFile};
+
+    wordMixer.setFirstWord(firstWord);
+    wordMixer.setSecondWord(secondWord);
+
+    wordMixer.setWordPieceSize(Game::Level::EASY);
+    wordMixer.mixWords();
+
+    QVERIFY2(wordMixer.getMixedWordsStringArray()[wordMixer.getFirstWordFirstPieceIndex()] == "wor", firstWordFirstPieceIndexNotCorrect);
+    QVERIFY2(wordMixer.getMixedWordsStringArray()[wordMixer.getFirstWordLastPieceIndex()] == "e", firstWordLastPieceIndexNotCorrect);
+    QVERIFY2(wordMixer.getMixedWordsStringArray()[wordMixer.getSecondWordFirstPieceIndex()] == "sec", secondWordFirstPieceIndexNotCorrect);
+    QVERIFY2(wordMixer.getMixedWordsStringArray()[wordMixer.getSecondWordLastPieceIndex()] == "d", secondWordLastPieceIndexNotCorrect);
+
+    wordMixer.setWordPieceSize(Game::Level::MEDIUM);
+    wordMixer.mixWords();
+
+    QVERIFY2(wordMixer.getMixedWordsStringArray()[wordMixer.getFirstWordFirstPieceIndex()] == "wo", firstWordFirstPieceIndexNotCorrect);
+    QVERIFY2(wordMixer.getMixedWordsStringArray()[wordMixer.getFirstWordLastPieceIndex()] == "e", firstWordLastPieceIndexNotCorrect);
+    QVERIFY2(wordMixer.getMixedWordsStringArray()[wordMixer.getSecondWordFirstPieceIndex()] == "se", secondWordFirstPieceIndexNotCorrect);
+    QVERIFY2(wordMixer.getMixedWordsStringArray()[wordMixer.getSecondWordLastPieceIndex()] == "rd", secondWordLastPieceIndexNotCorrect);
+
+    wordMixer.setWordPieceSize(Game::Level::HARD);
+    wordMixer.mixWords();
+
+    QVERIFY2(wordMixer.getMixedWordsStringArray()[wordMixer.getFirstWordFirstPieceIndex()] == "w", firstWordFirstPieceIndexNotCorrect);
+    QVERIFY2(wordMixer.getMixedWordsStringArray()[wordMixer.getFirstWordLastPieceIndex()] == "e", firstWordLastPieceIndexNotCorrect);
+    QVERIFY2(wordMixer.getMixedWordsStringArray()[wordMixer.getSecondWordFirstPieceIndex()] == "s", secondWordFirstPieceIndexNotCorrect);
+    QVERIFY2(wordMixer.getMixedWordsStringArray()[wordMixer.getSecondWordLastPieceIndex()] == "d",secondWordLastPieceIndexNotCorrect);
 }
 
 void CommonTests::_checkCorrectMixing(QVector<QString> mixedWords, QVector<QString> splitWords)
