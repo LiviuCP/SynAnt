@@ -8,12 +8,16 @@
 #include "game.h"
 #include "gamestrings.h"
 
+static constexpr int c_EasyLevelWordPieceSize{3};
+static constexpr int c_MediumLevelWordPieceSize{2};
+static constexpr int c_HardLevelWordPieceSize{1};
+
 WordMixer::WordMixer(const QString &fname, QObject *parent)
     : QObject(parent),
       m_FileName{fname},
       m_RowNumber{-1},
       m_TotalNrOfRows{0},
-      m_WordPieceSize{2},
+      m_WordPieceSize{c_MediumLevelWordPieceSize},
       m_WordsPair{},
       m_MixedWords{},
       m_AreSynonyms{true},
@@ -179,13 +183,13 @@ void WordMixer::setWordPieceSize(Game::Level level)
     switch(level)
     {
     case Game::Level::EASY:
-        m_WordPieceSize = 3;
+        m_WordPieceSize = c_EasyLevelWordPieceSize;
         break;
     case Game::Level::MEDIUM:
-        m_WordPieceSize = 2;
+        m_WordPieceSize = c_MediumLevelWordPieceSize;
         break;
     case Game::Level::HARD:
-        m_WordPieceSize = 1;
+        m_WordPieceSize = c_HardLevelWordPieceSize;
     }
 }
 
