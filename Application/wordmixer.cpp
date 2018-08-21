@@ -152,6 +152,26 @@ bool WordMixer::areSynonyms() const
     return m_AreSynonyms;
 }
 
+int WordMixer::getFirstWordFirstPieceIndex() const
+{
+    return m_WordsBeginEndPieceIndexes[static_cast<int>(WordsBeginEndPieces::FIRST_WORD_FIRST_PIECE)];
+}
+
+int WordMixer::getFirstWordLastPieceIndex() const
+{
+    return m_WordsBeginEndPieceIndexes[static_cast<int>(WordsBeginEndPieces::FIRST_WORD_LAST_PIECE)];
+}
+
+int WordMixer::getSecondWordFirstPieceIndex() const
+{
+    return m_WordsBeginEndPieceIndexes[static_cast<int>(WordsBeginEndPieces::SECOND_WORD_FIRST_PIECE)];
+}
+
+int WordMixer::getSecondWordLastPieceIndex() const
+{
+    return m_WordsBeginEndPieceIndexes[static_cast<int>(WordsBeginEndPieces::SECOND_WORD_LAST_PIECE)];
+}
+
 void WordMixer::setWordPieceSize(Game::Level level)
 {
     Q_ASSERT(static_cast<int>(level) >= 0 && static_cast<int>(level) < static_cast<int>(Game::Level::NrOfLevels));
