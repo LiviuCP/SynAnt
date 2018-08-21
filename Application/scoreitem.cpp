@@ -49,3 +49,23 @@ void ScoreItem::resetStatistics()
     m_TotalWordPairs = 0;
     Q_EMIT statisticsUpdated();
 }
+
+int ScoreItem::getObtainedScore() const
+{
+    return m_ObtainedScore;
+}
+
+int ScoreItem::getTotalAvailableScore() const
+{
+    return m_TotalAvailableScore;
+}
+
+int ScoreItem::getGuessedWordPairs() const
+{
+    return m_GuessedWordPairs;
+}
+
+int ScoreItem::getTotalWordPairs() const
+{
+    return m_TotalWordPairs;
+}
