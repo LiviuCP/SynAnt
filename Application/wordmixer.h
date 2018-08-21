@@ -39,10 +39,10 @@ public:
     bool areSynonyms() const;
 
     // indexes of the beginning and the end piece of each word in the mixed words array
-    int getFirstWordFirstPieceIndex() const {return m_WordsBeginEndPieceIndexes[static_cast<int>(WordsBeginEndPieces::FIRST_WORD_FIRST_PIECE)];}
-    int getFirstWordLastPieceIndex() const {return m_WordsBeginEndPieceIndexes[static_cast<int>(WordsBeginEndPieces::FIRST_WORD_LAST_PIECE)];}
-    int getSecondWordFirstPieceIndex() const {return m_WordsBeginEndPieceIndexes[static_cast<int>(WordsBeginEndPieces::SECOND_WORD_FIRST_PIECE)];}
-    int getSecondWordLastPieceIndex() const {return m_WordsBeginEndPieceIndexes[static_cast<int>(WordsBeginEndPieces::SECOND_WORD_LAST_PIECE)];}
+    int getFirstWordFirstPieceIndex() const;
+    int getFirstWordLastPieceIndex() const;
+    int getSecondWordFirstPieceIndex() const;
+    int getSecondWordLastPieceIndex() const;
 
     // for unit-testing purposes only
     void setFirstWord(const QString &firstWord);
