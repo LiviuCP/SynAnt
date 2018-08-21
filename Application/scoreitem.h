@@ -26,10 +26,10 @@ public:
     void updateStatistics(Game::StatisticsUpdate updateType);
     void resetStatistics();
 
-    int getObtainedScore() const {return m_ObtainedScore;}
-    int getTotalAvailableScore() const {return m_TotalAvailableScore;}
-    int getGuessedWordPairs() const {return m_GuessedWordPairs;}
-    int getTotalWordPairs() const {return m_TotalWordPairs;}
+    int getObtainedScore() const;
+    int getTotalAvailableScore() const;
+    int getGuessedWordPairs() const;
+    int getTotalWordPairs() const;
 
 signals:
     Q_SIGNAL void statisticsUpdated();
