@@ -1,12 +1,16 @@
 #include "scoreitem.h"
 
+static constexpr int c_EasyLevelScoreIncrement{1};
+static constexpr int c_MediumLevelScoreIncrement{2};
+static constexpr int c_HardLevelScoreIncrement{4};
+
 ScoreItem::ScoreItem(QObject *parent)
     : QObject(parent)
     , m_ObtainedScore{0}
     , m_TotalAvailableScore{0}
     , m_GuessedWordPairs{0}
     , m_TotalWordPairs{0}
-    , m_ScoreIncrement{2}
+    , m_ScoreIncrement{c_MediumLevelScoreIncrement}
 
 {
     // nothing
@@ -19,13 +23,13 @@ void ScoreItem::setScoreIncrement(Game::Level level)
     switch(level)
     {
     case Game::Level::EASY:
-        m_ScoreIncrement = 1;
+        m_ScoreIncrement = c_EasyLevelScoreIncrement;
         break;
     case Game::Level::MEDIUM:
-        m_ScoreIncrement = 2;
+        m_ScoreIncrement = c_MediumLevelScoreIncrement;
         break;
     case Game::Level::HARD:
-        m_ScoreIncrement = 4;
+        m_ScoreIncrement = c_HardLevelScoreIncrement;
     }
 }
 
