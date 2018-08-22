@@ -10,7 +10,7 @@
 
 namespace Game
 {
-    enum class Level {                                                                              // used for updating the parameters when the difficulty level changes
+    enum class Level {
         EASY,
         MEDIUM,
         HARD,
