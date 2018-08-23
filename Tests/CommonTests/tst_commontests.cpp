@@ -1,6 +1,7 @@
 #include <QString>
 #include <QtTest>
 #include <QtAlgorithms>
+#include <QDebug>
 
 #include "../../Application/wordmixer.h"
 #include "../../Application/gamestrings.h"
@@ -13,7 +14,7 @@ public:
     CommonTests();
 
 private:
-    void _checkCorrectMixing(QVector<QString> mixedWords, QVector<QString> splitWords);
+    void _checkCorrectMixing(QVector<QString> mixedWords, QVector<QString> splitWords, const QString& level);
 
 private Q_SLOTS:
     void testManualWordsEntry();
@@ -52,15 +53,16 @@ void CommonTests::testWordsAreCorrectlyMixed()
 
     wordMixer.setWordPieceSize(Game::Level::EASY);
     wordMixer.mixWords();
-    _checkCorrectMixing(wordMixer.getMixedWordsStringArray(), QVector<QString>{"fir", "stW", "ord", "sec", "ond", "Wor", "d"});
+    _checkCorrectMixing(wordMixer.getMixedWordsStringArray(), QVector<QString>{"fir", "stW", "ord", "sec", "ond", "Wor", "d"}, "easy");
 
     wordMixer.setWordPieceSize(Game::Level::MEDIUM);
     wordMixer.mixWords();
-    _checkCorrectMixing(wordMixer.getMixedWordsStringArray(), QVector<QString>{"fi", "rs", "tW", "or", "d", "se", "co", "nd", "Wo", "rd"});
+    _checkCorrectMixing(wordMixer.getMixedWordsStringArray(), QVector<QString>{"fi", "rs", "tW", "or", "d", "se", "co", "nd", "Wo", "rd"}, "medium");
 
     wordMixer.setWordPieceSize(Game::Level::HARD);
     wordMixer.mixWords();
-    _checkCorrectMixing(wordMixer.getMixedWordsStringArray(), QVector<QString>{"f", "i", "r", "s", "t", "W", "o", "r", "d", "s", "e", "c", "o", "n", "d", "W", "o", "r", "d"});
+    _checkCorrectMixing(wordMixer.getMixedWordsStringArray(), QVector<QString>{"f", "i", "r", "s", "t", "W", "o", "r", "d", "s", "e", "c", "o", "n", "d", "W", "o", "r", "d"},
+                        "hard");
 }
 
 void CommonTests::testFirstLastPieceIndexesAreCorrect()
@@ -103,16 +105,17 @@ void CommonTests::testFirstLastPieceIndexesAreCorrect()
     QVERIFY2(wordMixer.getMixedWordsStringArray()[wordMixer.getSecondWordLastPieceIndex()] == "d",secondWordLastPieceIndexNotCorrect);
 }
 
-void CommonTests::_checkCorrectMixing(QVector<QString> mixedWords, QVector<QString> splitWords)
+void CommonTests::_checkCorrectMixing(QVector<QString> mixedWords, QVector<QString> splitWords, const QString& level)
 {
+    qDebug()<<"Checking correct word mixing, level:"<<level;
     if (mixedWords.size() != splitWords.size())
     {
         QVERIFY2(false, "Words incorrectly mixed. Vector size differs from the one of the reference vector");
     }
     else
     {
-        qSort(mixedWords.begin(), mixedWords.end());
-        qSort(splitWords.begin(), splitWords.end());
+        std::sort(mixedWords.begin(), mixedWords.end());
+        std::sort(splitWords.begin(), splitWords.end());
         QVERIFY2(mixedWords == splitWords, "Words incorrectly mixed. Vector does not contain the exact word pieces");
     }
 }
