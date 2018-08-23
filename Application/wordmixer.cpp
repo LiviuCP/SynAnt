@@ -3,24 +3,17 @@
 #include <QFileInfo>
 #include <QTextStream>
 #include <QDebug>
-#include <QMap>
 
 #include "wordmixer.h"
 #include "game.h"
 #include "gamestrings.h"
-
-static const QMap<Game::Level, int> c_WordPieceSizes{
-                                                        {Game::Level::EASY,   3},
-                                                        {Game::Level::MEDIUM, 2},
-                                                        {Game::Level::HARD,   1}
-                                                    };
 
 WordMixer::WordMixer(const QString &fname, QObject *parent)
     : QObject(parent),
       m_FileName{fname},
       m_RowNumber{-1},
       m_TotalNrOfRows{0},
-      m_WordPieceSize{c_WordPieceSizes[Game::Level::MEDIUM]},
+      m_WordPieceSize{Game::c_WordPieceSizes[Game::Level::MEDIUM]},
       m_WordsPair{},
       m_MixedWords{},
       m_AreSynonyms{true},
@@ -182,7 +175,7 @@ int WordMixer::getSecondWordLastPieceIndex() const
 void WordMixer::setWordPieceSize(Game::Level level)
 {
     Q_ASSERT(static_cast<int>(level) >= 0 && static_cast<int>(level) < static_cast<int>(Game::Level::NrOfLevels));
-    m_WordPieceSize = c_WordPieceSizes[level];
+    m_WordPieceSize = Game::c_WordPieceSizes[level];
 }
 
 void WordMixer::_getRowNumber()
