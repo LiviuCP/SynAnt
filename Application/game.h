@@ -7,6 +7,8 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include <QMap>
+
 
 namespace Game
 {
@@ -32,6 +34,18 @@ namespace Game
         FULL_UPDATE,
         PARTIAL_UPDATE
     };
+
+    const QMap<Game::Level, int> c_ScoreIncrements{
+                                                      {Game::Level::EASY,   1},
+                                                      {Game::Level::MEDIUM, 2},
+                                                      {Game::Level::HARD,   4}
+                                                  };
+
+    const QMap<Game::Level, int> c_WordPieceSizes{
+                                                      {Game::Level::EASY,   3},
+                                                      {Game::Level::MEDIUM, 2},
+                                                      {Game::Level::HARD,   1}
+                                                 };
 }
 
 #endif // GAME_H

@@ -1,11 +1,4 @@
-#include <QMap>
 #include "scoreitem.h"
-
-static const QMap<Game::Level, int> c_ScoreIncrements{
-                                                        {Game::Level::EASY,   1},
-                                                        {Game::Level::MEDIUM, 2},
-                                                        {Game::Level::HARD,   4}
-                                                     };
 
 ScoreItem::ScoreItem(QObject *parent)
     : QObject(parent)
@@ -13,7 +6,7 @@ ScoreItem::ScoreItem(QObject *parent)
     , m_TotalAvailableScore{0}
     , m_GuessedWordPairs{0}
     , m_TotalWordPairs{0}
-    , m_ScoreIncrement{c_ScoreIncrements[Game::Level::MEDIUM]}
+    , m_ScoreIncrement{Game::c_ScoreIncrements[Game::Level::MEDIUM]}
 
 {
     // not used
@@ -22,7 +15,7 @@ ScoreItem::ScoreItem(QObject *parent)
 void ScoreItem::setScoreIncrement(Game::Level level)
 {
     Q_ASSERT(static_cast<int>(level) >= 0 && static_cast<int>(level) < static_cast<int>(Game::Level::NrOfLevels));
-    m_ScoreIncrement = c_ScoreIncrements[level];
+    m_ScoreIncrement = Game::c_ScoreIncrements[level];
 }
 
 void ScoreItem::updateStatistics(Game::StatisticsUpdate updateType)
