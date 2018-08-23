@@ -28,9 +28,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         tst_commontests.cpp \
-    ../../Application/wordmixer.cpp
+    ../../Application/wordmixer.cpp \
+    ../../Application/scoreitem.cpp
 
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
 HEADERS += \
-    ../../Application/wordmixer.h
+    ../../Application/wordmixer.h \
+    ../../Application/scoreitem.h

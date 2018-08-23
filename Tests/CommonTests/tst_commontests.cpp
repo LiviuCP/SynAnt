@@ -4,6 +4,7 @@
 #include <QDebug>
 
 #include "../../Application/wordmixer.h"
+#include "../../Application/scoreitem.h"
 #include "../../Application/gamestrings.h"
 
 class CommonTests : public QObject
@@ -15,11 +16,13 @@ public:
 
 private:
     void _checkCorrectMixing(QVector<QString> mixedWords, QVector<QString> splitWords, const QString& level);
+    void _checkCorrectStatistics(const ScoreItem& scoreItem, int guessedWordPairs, int totalWordPairs, int obtainedScore, int totalAvailableScore, const QString& status);
 
 private Q_SLOTS:
     void testManualWordsEntry();
     void testWordsAreCorrectlyMixed();
     void testFirstLastPieceIndexesAreCorrect();
+    void testStatisticsCorrectlyUpdated();
 };
 
 CommonTests::CommonTests()
@@ -105,6 +108,62 @@ void CommonTests::testFirstLastPieceIndexesAreCorrect()
     QVERIFY2(wordMixer.getMixedWordsStringArray()[wordMixer.getSecondWordLastPieceIndex()] == "d",secondWordLastPieceIndexNotCorrect);
 }
 
+void CommonTests::testStatisticsCorrectlyUpdated()
+{
+    const int referenceGuessedWordPairs = 3;
+    const int referenceTotalWordPairs = 6;
+    const int referenceObtainedScore = Game::c_ScoreIncrements[Game::Level::EASY] + Game::c_ScoreIncrements[Game::Level::MEDIUM] + Game::c_ScoreIncrements[Game::Level::HARD];
+    const int referenceTotalAvailableScore = 2 * referenceObtainedScore;
+
+    ScoreItem scoreItem{};
+
+    _checkCorrectStatistics(scoreItem, 0, 0, 0, 0, "Checking initial statistics");
+
+    scoreItem.setScoreIncrement(Game::Level::EASY);
+    scoreItem.updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
+    scoreItem.updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
+
+    scoreItem.setScoreIncrement(Game::Level::MEDIUM);
+    scoreItem.updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
+    scoreItem.updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
+
+    scoreItem.setScoreIncrement(Game::Level::HARD);
+    scoreItem.updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
+    scoreItem.updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
+
+    _checkCorrectStatistics(scoreItem, referenceGuessedWordPairs, referenceTotalWordPairs, referenceObtainedScore, referenceTotalAvailableScore,
+                            "Checking statistics after successively switching levels and running one full and one partial update per level");
+
+    scoreItem.resetStatistics();
+
+    _checkCorrectStatistics(scoreItem, 0, 0, 0, 0, "Checking statistics after reset");
+
+    scoreItem.setScoreIncrement(Game::Level::EASY);
+    scoreItem.updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
+    scoreItem.updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
+
+    _checkCorrectStatistics(scoreItem, 1, 2, Game::c_ScoreIncrements[Game::Level::EASY], 2 * Game::c_ScoreIncrements[Game::Level::EASY],
+                            "Checking statistics after setting level to easy and running a full and partial update");
+
+    scoreItem.resetStatistics();
+
+    scoreItem.setScoreIncrement(Game::Level::MEDIUM);
+    scoreItem.updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
+    scoreItem.updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
+
+    _checkCorrectStatistics(scoreItem, 1, 2, Game::c_ScoreIncrements[Game::Level::MEDIUM], 2 * Game::c_ScoreIncrements[Game::Level::MEDIUM],
+                            "Checking statistics after reset and then setting level to medium and running a full and partial update");
+
+    scoreItem.resetStatistics();
+
+    scoreItem.setScoreIncrement(Game::Level::HARD);
+    scoreItem.updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
+    scoreItem.updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
+
+    _checkCorrectStatistics(scoreItem, 1, 2, Game::c_ScoreIncrements[Game::Level::HARD], 2 * Game::c_ScoreIncrements[Game::Level::HARD],
+                            "Checking statistics after reset and then setting level to hard and running a full and partial update");
+}
+
 void CommonTests::_checkCorrectMixing(QVector<QString> mixedWords, QVector<QString> splitWords, const QString& level)
 {
     qDebug()<<"Checking correct word mixing, level:"<<level;
@@ -118,6 +177,15 @@ void CommonTests::_checkCorrectMixing(QVector<QString> mixedWords, QVector<QStri
         std::sort(splitWords.begin(), splitWords.end());
         QVERIFY2(mixedWords == splitWords, "Words incorrectly mixed. Vector does not contain the exact word pieces");
     }
+}
+
+void CommonTests::_checkCorrectStatistics(const ScoreItem& scoreItem, int guessedWordPairs, int totalWordPairs, int obtainedScore, int totalAvailableScore, const QString &status)
+{
+    qDebug()<<status;
+    QVERIFY2(scoreItem.getGuessedWordPairs() == guessedWordPairs, "Number of guessed word pairs is incorrect");
+    QVERIFY2(scoreItem.getTotalWordPairs() == totalWordPairs, "Number of total word pairs is incorrect");
+    QVERIFY2(scoreItem.getObtainedScore() == obtainedScore, "Obtained score is incorrect");
+    QVERIFY2(scoreItem.getTotalAvailableScore() == totalAvailableScore, "Total available score is incorrect");
 }
 
 QTEST_APPLESS_MAIN(CommonTests)
