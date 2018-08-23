@@ -113,13 +113,13 @@ void WordMixer::mixWords()
     }
     m_WordsBeginEndPieceIndexes[static_cast<int>(WordsBeginEndPieces::SECOND_WORD_LAST_PIECE)] = _insertWordPiece(m_WordsPair.second, secondWordLastPiecePos, wordPieceIndexes);
 
-    qDebug() << "First word:" << m_WordsPair.first;
-    qDebug() << "Second word:" << m_WordsPair.second;
-    qDebug() << "Mixed words pieces are (in this order): ";
-    for (auto piece : m_MixedWords)
-    {
-        qDebug() << piece;
-    }
+//    qDebug() << "First word:" << m_WordsPair.first;
+//    qDebug() << "Second word:" << m_WordsPair.second;
+//    qDebug() << "Mixed words pieces are (in this order): ";
+//    for (auto piece : m_MixedWords)
+//    {
+//        qDebug() << piece;
+//    }
 }
 
 const QVector<QString>& WordMixer::getMixedWordsStringArray() const
