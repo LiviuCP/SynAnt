@@ -19,6 +19,7 @@
 #include <QObject>
 #include <QVector>
 #include <QPair>
+#include <QMap>
 
 #include <random>
 
@@ -74,8 +75,6 @@ private:
     // only to be set true if unit-testing the code
     bool m_ManualWordsEntry;
 
-    // stores the indexes of the first and last piece of the 2 words in the mixed words string vector
-    QVector<int> m_WordsBeginEndPieceIndexes;
     // used for retrieving the mixed words string vector indexes of the first and last piece of each of the 2 words
     enum class WordsBeginEndPieces {
         FIRST_WORD_FIRST_PIECE,
@@ -84,6 +83,10 @@ private:
         SECOND_WORD_LAST_PIECE,
         PiecesCount
     };
+
+    // stores the indexes of the first and last piece of the 2 words in the mixed words string vector
+    QMap<WordsBeginEndPieces,int> m_WordsBeginEndPieceIndexes;
+
 };
 
 #endif // WORDMIXER_H
