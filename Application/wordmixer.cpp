@@ -17,15 +17,13 @@ WordMixer::WordMixer(const QString &fname, QObject *parent)
       m_WordsPair{},
       m_MixedWords{},
       m_AreSynonyms{true},
-      m_WordsBeginEndPieceIndexes{}
+      m_WordsBeginEndPieceIndexes{
+                                    {WordsBeginEndPieces::FIRST_WORD_FIRST_PIECE , -1},
+                                    {WordsBeginEndPieces::FIRST_WORD_LAST_PIECE  , -1},
+                                    {WordsBeginEndPieces::SECOND_WORD_FIRST_PIECE, -1},
+                                    {WordsBeginEndPieces::SECOND_WORD_LAST_PIECE , -1}
+                                 }
 {
-    int indexesCount{static_cast<int>(WordsBeginEndPieces::PiecesCount)};
-    m_WordsBeginEndPieceIndexes.resize(indexesCount);
-    for (int index{0}; index<indexesCount; index++)
-    {
-        m_WordsBeginEndPieceIndexes[index] = -1;
-    }
-
     std::random_device rDev1{};
     m_RowNumberEngine.seed(rDev1());
 
@@ -97,21 +95,21 @@ void WordMixer::mixWords()
     int firstWordLastPiecePos{m_WordPieceSize*(firstWordNrOfPieces-1)};
     int secondWordLastPiecePos{m_WordPieceSize*(secondWordNrOfPieces-1)};
 
-    m_WordsBeginEndPieceIndexes[static_cast<int>(WordsBeginEndPieces::FIRST_WORD_FIRST_PIECE)] = _insertWordPiece(m_WordsPair.first, 0, wordPieceIndexes);
+    m_WordsBeginEndPieceIndexes[WordsBeginEndPieces::FIRST_WORD_FIRST_PIECE] = _insertWordPiece(m_WordsPair.first, 0, wordPieceIndexes);
 
     for (int wordPieceStartPos{m_WordPieceSize}; wordPieceStartPos<firstWordLastPiecePos; wordPieceStartPos+=m_WordPieceSize)
     {
         _insertWordPiece(m_WordsPair.first, wordPieceStartPos, wordPieceIndexes);
     }
-    m_WordsBeginEndPieceIndexes[static_cast<int>(WordsBeginEndPieces::FIRST_WORD_LAST_PIECE)] = _insertWordPiece(m_WordsPair.first, firstWordLastPiecePos, wordPieceIndexes);
-    m_WordsBeginEndPieceIndexes[static_cast<int>(WordsBeginEndPieces::SECOND_WORD_FIRST_PIECE)] = _insertWordPiece(m_WordsPair.second, 0, wordPieceIndexes);
+    m_WordsBeginEndPieceIndexes[WordsBeginEndPieces::FIRST_WORD_LAST_PIECE] = _insertWordPiece(m_WordsPair.first, firstWordLastPiecePos, wordPieceIndexes);
+    m_WordsBeginEndPieceIndexes[WordsBeginEndPieces::SECOND_WORD_FIRST_PIECE] = _insertWordPiece(m_WordsPair.second, 0, wordPieceIndexes);
 
     for (int wordPieceStartPos{m_WordPieceSize}; wordPieceStartPos<secondWordLastPiecePos;
                                       wordPieceStartPos+=m_WordPieceSize)
     {
         _insertWordPiece(m_WordsPair.second, wordPieceStartPos, wordPieceIndexes);
     }
-    m_WordsBeginEndPieceIndexes[static_cast<int>(WordsBeginEndPieces::SECOND_WORD_LAST_PIECE)] = _insertWordPiece(m_WordsPair.second, secondWordLastPiecePos, wordPieceIndexes);
+    m_WordsBeginEndPieceIndexes[WordsBeginEndPieces::SECOND_WORD_LAST_PIECE] = _insertWordPiece(m_WordsPair.second, secondWordLastPiecePos, wordPieceIndexes);
 
 //    qDebug() << "First word:" << m_WordsPair.first;
 //    qDebug() << "Second word:" << m_WordsPair.second;
@@ -154,22 +152,22 @@ bool WordMixer::areSynonyms() const
 
 int WordMixer::getFirstWordFirstPieceIndex() const
 {
-    return m_WordsBeginEndPieceIndexes[static_cast<int>(WordsBeginEndPieces::FIRST_WORD_FIRST_PIECE)];
+    return m_WordsBeginEndPieceIndexes[WordsBeginEndPieces::FIRST_WORD_FIRST_PIECE];
 }
 
 int WordMixer::getFirstWordLastPieceIndex() const
 {
-    return m_WordsBeginEndPieceIndexes[static_cast<int>(WordsBeginEndPieces::FIRST_WORD_LAST_PIECE)];
+    return m_WordsBeginEndPieceIndexes[WordsBeginEndPieces::FIRST_WORD_LAST_PIECE];
 }
 
 int WordMixer::getSecondWordFirstPieceIndex() const
 {
-    return m_WordsBeginEndPieceIndexes[static_cast<int>(WordsBeginEndPieces::SECOND_WORD_FIRST_PIECE)];
+    return m_WordsBeginEndPieceIndexes[WordsBeginEndPieces::SECOND_WORD_FIRST_PIECE];
 }
 
 int WordMixer::getSecondWordLastPieceIndex() const
 {
-    return m_WordsBeginEndPieceIndexes[static_cast<int>(WordsBeginEndPieces::SECOND_WORD_LAST_PIECE)];
+    return m_WordsBeginEndPieceIndexes[WordsBeginEndPieces::SECOND_WORD_LAST_PIECE];
 }
 
 void WordMixer::setWordPieceSize(Game::Level level)
