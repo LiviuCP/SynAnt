@@ -7,7 +7,7 @@
 
 #include "appmanager.h"
 #include "introductionwindow.h"
-#include "gamestrings.h"
+#include "../Common/gamestrings.h"
 
 IntroductionWindow::IntroductionWindow(QWidget *parent)
     : QWidget{parent}

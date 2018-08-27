@@ -6,7 +6,7 @@
 #include <QShortcut>
 
 #include "fatalerrors.h"
-#include "gamestrings.h"
+#include "../Common/gamestrings.h"
 
 FatalErrors::FatalErrors(QWidget *parent)
     : QWidget{parent},

@@ -1,18 +1,15 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2018-08-16T09:06:43
+# Project created by QtCreator 2018-08-27T14:51:06
 #
 #-------------------------------------------------
 
-QT       += testlib
-
 QT       -= gui
 
-TARGET = tst_commontests
-CONFIG   += console
-CONFIG   -= app_bundle
+TARGET = Common
+TEMPLATE = lib
 
-TEMPLATE = app
+DEFINES += COMMON_LIBRARY
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
@@ -25,14 +22,20 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-
 SOURCES += \
-        tst_commontests.cpp
-
-DEFINES += SRCDIR=\\\"$$PWD/\\\"
+        common.cpp \
+        scoreitem.cpp \
+        wordmixer.cpp
 
 HEADERS += \
+        common.h \
+        common_global.h \
+        wordmixer.h \
+        scoreitem.h \
+        game.h \
+        gamestrings.h
 
-DEPENDPATH += $$top_builddir/Common
-INCLUDEPATH += $$top_srcdir/Common
-LIBS += -L$$top_builddir/Common -lCommon
+unix {
+    target.path = /usr/lib
+    INSTALLS += target
+}

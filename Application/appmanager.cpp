@@ -1,7 +1,7 @@
 #include <QApplication>
 
 #include "appmanager.h"
-#include "wordmixer.h"
+#include "../Common/wordmixer.h"
 
 AppManager::AppManager(QObject *parent)
     : QObject(parent)

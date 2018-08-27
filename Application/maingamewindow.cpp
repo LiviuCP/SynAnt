@@ -10,9 +10,9 @@
 
 #include "appmanager.h"
 #include "maingamewindow.h"
-#include "wordmixer.h"
-#include "scoreitem.h"
-#include "gamestrings.h"
+#include "../Common/wordmixer.h"
+#include "../Common/scoreitem.h"
+#include "../Common/gamestrings.h"
 
 
 MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)

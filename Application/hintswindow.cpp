@@ -8,7 +8,7 @@
 
 #include "appmanager.h"
 #include "hintswindow.h"
-#include "gamestrings.h"
+#include "../Common/gamestrings.h"
 
 HintsWindow::HintsWindow(QWidget *parent)
     : QWidget{parent}

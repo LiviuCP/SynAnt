@@ -26,7 +26,7 @@
 
 #include "appmanager.h"
 #include "fatalerrors.h"
-#include "gamestrings.h"
+#include "../Common/gamestrings.h"
 
 int main(int argc, char *argv[]) {
     QApplication app(argc,argv);

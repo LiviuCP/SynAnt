@@ -2,4 +2,5 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     Application \
-    Tests
+    Tests \
+    Common

@@ -3,9 +3,9 @@
 #include <QtAlgorithms>
 #include <QDebug>
 
-#include "../../Application/wordmixer.h"
-#include "../../Application/scoreitem.h"
-#include "../../Application/gamestrings.h"
+#include "../../Common/wordmixer.h"
+#include "../../Common/scoreitem.h"
+#include "../../Common/gamestrings.h"
 
 class CommonTests : public QObject
 {
