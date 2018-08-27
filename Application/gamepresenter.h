@@ -4,8 +4,8 @@
 #include <QObject>
 #include <QVariant>
 
-#include "game.h"
-#include "gamestrings.h"
+#include "../Common/game.h"
+#include "../Common/gamestrings.h"
 
 class WordMixer;
 class ScoreItem;

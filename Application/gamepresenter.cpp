@@ -2,9 +2,9 @@
 #include <QDebug>
 
 #include "gamepresenter.h"
-#include "wordmixer.h"
-#include "scoreitem.h"
-#include "gamestrings.h"
+#include "../Common/wordmixer.h"
+#include "../Common/scoreitem.h"
+#include "../Common/gamestrings.h"
 
 static constexpr int c_ToolTipDelay{1000};
 
