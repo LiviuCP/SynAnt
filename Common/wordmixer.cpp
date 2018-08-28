@@ -8,10 +8,15 @@
 #include "game.h"
 #include "gamestrings.h"
 
+static constexpr int c_MinWordSize{5};
+static constexpr char c_SynonymsSeparator{'='};
+static constexpr char c_AntonymsSeparator{'!'};
+
 WordMixer::WordMixer(const QString &fname, QObject *parent)
     : QObject(parent),
       m_FileName{fname},
       m_RowNumber{-1},
+      m_RowContent{},
       m_TotalNrOfRows{0},
       m_WordPieceSize{Game::c_WordPieceSizes[Game::Level::MEDIUM]},
       m_WordsPair{},
@@ -182,49 +187,51 @@ void WordMixer::_getRowNumber()
     m_RowNumber = rowNumberDist(m_RowNumberEngine);
 }
 
+void WordMixer::_getRowContent()
+{
+    QFile wordPairsFile(m_FileName);
+    if (!wordPairsFile.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        throw QString{GameStrings::c_CannotOpenFileMessage};
+    }
+
+    QTextStream lineReader{&wordPairsFile};
+    for (int currentRowNr{0}; currentRowNr<m_RowNumber; ++currentRowNr)
+    {
+        (void)lineReader.readLine();
+    }
+    m_RowContent = lineReader.readLine();
+
+    wordPairsFile.close();
+}
+
 void WordMixer::_retrieveWords()
 {
     if (!m_ManualWordsEntry)
     {
         _getRowNumber();
-        const int minWordSize{5};
-        QString rowNumberToString{};
-        rowNumberToString.setNum(m_RowNumber);
+        _getRowContent();
 
-        QFile wordPairsFile(m_FileName);
-        if (!wordPairsFile.open(QIODevice::ReadOnly | QIODevice::Text))
+        if (m_RowContent.size() == 0)
         {
-        throw QString{GameStrings::c_CannotOpenFileMessage};
+            throw QString{GameStrings::c_EmptyRowMessage}.arg(m_RowNumber);
         }
 
-        QTextStream lineReader{&wordPairsFile};
-        for (int i{0}; i<m_RowNumber; i++)
-        {
-        QString discardedRow{lineReader.readLine()};
-        }
-
-        QString rowContent{lineReader.readLine()};
-        wordPairsFile.close();
-
-        if (rowContent.size() == 0)
-        {
-            throw QString{GameStrings::c_EmptyRowMessage}.arg(rowNumberToString);
-        }
-
-        int synonymsSeparatorIndex{rowContent.indexOf('=')};
-        int antonymsSeparatorIndex{rowContent.indexOf('!')};
+        int synonymsSeparatorIndex{m_RowContent.indexOf(c_SynonymsSeparator)};
+        int antonymsSeparatorIndex{m_RowContent.indexOf(c_AntonymsSeparator)};
         int separatorIndex{-1};
-        if ((synonymsSeparatorIndex != rowContent.lastIndexOf('=')) || (antonymsSeparatorIndex != rowContent.lastIndexOf('!')))
+
+        if ((synonymsSeparatorIndex != m_RowContent.lastIndexOf(c_SynonymsSeparator)) || (antonymsSeparatorIndex != m_RowContent.lastIndexOf(c_AntonymsSeparator)))
         {
-            throw QString{GameStrings::c_MultipleSeparatorsMessage}.arg(rowNumberToString);
+            throw QString{GameStrings::c_MultipleSeparatorsMessage}.arg(m_RowNumber);
         }
         else if (synonymsSeparatorIndex == antonymsSeparatorIndex)
         {
-            throw QString{GameStrings::c_NoSeparatorMessage}.arg(rowNumberToString);
+            throw QString{GameStrings::c_NoSeparatorMessage}.arg(m_RowNumber);
         }
         else if ((synonymsSeparatorIndex != -1) && (antonymsSeparatorIndex != -1))
         {
-            throw QString{GameStrings::c_MultipleSeparatorsMessage}.arg(rowNumberToString);
+            throw QString{GameStrings::c_MultipleSeparatorsMessage}.arg(m_RowNumber);
         }
         else if (synonymsSeparatorIndex != -1)
         {
@@ -237,30 +244,26 @@ void WordMixer::_retrieveWords()
             separatorIndex = antonymsSeparatorIndex;
         }
 
-        m_WordsPair.first = rowContent.left(separatorIndex);
-        for (auto currentCharacter : m_WordsPair.first)
+        m_WordsPair.first = m_RowContent.left(separatorIndex);
+        _checkWordIsCorrect(m_WordsPair.first, GameStrings::c_FirstWordCamelCase);
+
+        m_WordsPair.second = m_RowContent.mid(separatorIndex+1);
+        _checkWordIsCorrect(m_WordsPair.second, GameStrings::c_SecondWordCamelCase);
+    }
+}
+
+void WordMixer::_checkWordIsCorrect(const QString &word, const QString& wordIdentifier)
+{
+    for (auto currentCharacter : word)
+    {
+        if (!(currentCharacter.isLower()))
         {
-            if (!(currentCharacter.isLower()))
-            {
-                throw QString{GameStrings::c_IllegalCharactersMessage}.arg(GameStrings::c_FirstWordCamelCase).arg(rowNumberToString);
-            }
+            throw QString{GameStrings::c_IllegalCharactersMessage}.arg(wordIdentifier).arg(m_RowNumber);
         }
-        if (m_WordsPair.first.size() < minWordSize)
-        {
-            throw QString{GameStrings::c_LessThanMinCharsMessage}.arg(GameStrings::c_FirstWordCamelCase).arg(rowNumberToString);
-        }
-        m_WordsPair.second = rowContent.mid(separatorIndex+1);
-        for (auto currentCharacter : m_WordsPair.second)
-        {
-            if (!(currentCharacter.isLower()))
-            {
-                throw QString{GameStrings::c_IllegalCharactersMessage}.arg(GameStrings::c_SecondWordCamelCase).arg(rowNumberToString);
-            }
-        }
-        if (m_WordsPair.second.size() < minWordSize)
-        {
-            throw QString{GameStrings::c_LessThanMinCharsMessage}.arg(GameStrings::c_SecondWordCamelCase).arg(rowNumberToString);
-        }
+    }
+    if (word.size() < c_MinWordSize)
+    {
+        throw QString{GameStrings::c_LessThanMinCharsMessage}.arg(wordIdentifier).arg(m_RowNumber);
     }
 }
 
