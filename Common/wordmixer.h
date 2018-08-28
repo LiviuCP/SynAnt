@@ -55,11 +55,13 @@ public slots:
 private:
     void _getRowNumber();
     void _retrieveWords();
+    void _checkWordIsCorrect(const QString& word, const QString& wordIdentifier);
     int  _insertWordPiece(const QString &word, int firstCharPos, QVector<int> &wordPieceIndexes);
 
 
     QString m_FileName;
     int m_RowNumber;
+    QString m_RowContent;
     int m_TotalNrOfRows;
     int m_WordPieceSize;
 
@@ -87,6 +89,7 @@ private:
     // stores the indexes of the first and last piece of the 2 words in the mixed words string vector
     QMap<WordsBeginEndPieces,int> m_WordsBeginEndPieceIndexes;
 
+    void _getRowContent();
 };
 
 #endif // WORDMIXER_H
