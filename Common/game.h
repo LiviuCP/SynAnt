@@ -12,14 +12,16 @@
 
 namespace Game
 {
-    enum class Level {
+    enum class Level
+    {
         EASY,
         MEDIUM,
         HARD,
         NrOfLevels
     };
 
-    enum class StatusCodes {
+    enum class StatusCodes
+    {
         SUCCESS,
         MISSING_WORDS,
         INCORRECT_WORDS,
@@ -30,22 +32,25 @@ namespace Game
         StatusCodesCount
     };
 
-    enum class StatisticsUpdate {
+    enum class StatisticsUpdate
+    {
         FULL_UPDATE,
         PARTIAL_UPDATE
     };
 
-    const QMap<Game::Level, int> c_ScoreIncrements{
-                                                      {Game::Level::EASY,   1},
-                                                      {Game::Level::MEDIUM, 2},
-                                                      {Game::Level::HARD,   4}
-                                                  };
+    const QMap<Game::Level, int> c_ScoreIncrements
+    {
+        {Game::Level::EASY,   1},
+        {Game::Level::MEDIUM, 2},
+        {Game::Level::HARD,   4}
+    };
 
-    const QMap<Game::Level, int> c_WordPieceSizes{
-                                                      {Game::Level::EASY,   3},
-                                                      {Game::Level::MEDIUM, 2},
-                                                      {Game::Level::HARD,   1}
-                                                 };
+    const QMap<Game::Level, int> c_WordPieceSizes
+    {
+        {Game::Level::EASY,   3},
+        {Game::Level::MEDIUM, 2},
+        {Game::Level::HARD,   1}
+    };
 }
 
 #endif // GAME_H
