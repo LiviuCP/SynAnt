@@ -76,53 +76,36 @@ void WordMixer::mixWords()
 
     Q_ASSERT(m_WordsPair.second.size() != 0 && m_WordsPair.first.size() != 0);
 
-    int firstWordSize{m_WordsPair.first.size()}, secondWordSize{m_WordsPair.second.size()};
-    int firstWordNrOfPieces
-    {
-        firstWordSize / m_WordPieceSize + ((firstWordSize % m_WordPieceSize) == 0 ? 0 : 1)
-    };
-    int secondWordNrOfPieces
-    {
-        secondWordSize / m_WordPieceSize + ((secondWordSize % m_WordPieceSize) == 0 ? 0 : 1)
-    };
+    int firstWordSize{m_WordsPair.first.size()};
+    int secondWordSize{m_WordsPair.second.size()};
+    int firstWordNrOfPieces{firstWordSize / m_WordPieceSize + ((firstWordSize % m_WordPieceSize) == 0 ? 0 : 1)};
+    int secondWordNrOfPieces{secondWordSize / m_WordPieceSize + ((secondWordSize % m_WordPieceSize) == 0 ? 0 : 1)};
     int totalNrOfPieces{firstWordNrOfPieces + secondWordNrOfPieces};
-    m_MixedWords.resize(totalNrOfPieces);
-    QVector<int> wordPieceIndexes{};
 
-    wordPieceIndexes.resize(totalNrOfPieces);
-    for (int pieceNumber{0}; pieceNumber<totalNrOfPieces; pieceNumber++)
+    m_MixedWords.resize(totalNrOfPieces);
+
+    QVector<int> wordPieceIndexes{};
+    for (int pieceIndex{0}; pieceIndex<totalNrOfPieces; ++pieceIndex)
     {
-        wordPieceIndexes[pieceNumber] = pieceNumber;
+        wordPieceIndexes.append(pieceIndex);
     }
-    /* in the first phase a simple operation will be implemented: the pieces of the 2 words will be put in order in the mixedWords vector
-       in the next phase this will be replaced with random placements
-    */
+
     int firstWordLastPiecePos{m_WordPieceSize*(firstWordNrOfPieces-1)};
     int secondWordLastPiecePos{m_WordPieceSize*(secondWordNrOfPieces-1)};
 
     m_WordsBeginEndPieceIndexes[WordsBeginEndPieces::FIRST_WORD_FIRST_PIECE] = _insertWordPiece(m_WordsPair.first, 0, wordPieceIndexes);
-
     for (int wordPieceStartPos{m_WordPieceSize}; wordPieceStartPos<firstWordLastPiecePos; wordPieceStartPos+=m_WordPieceSize)
     {
         _insertWordPiece(m_WordsPair.first, wordPieceStartPos, wordPieceIndexes);
     }
     m_WordsBeginEndPieceIndexes[WordsBeginEndPieces::FIRST_WORD_LAST_PIECE] = _insertWordPiece(m_WordsPair.first, firstWordLastPiecePos, wordPieceIndexes);
-    m_WordsBeginEndPieceIndexes[WordsBeginEndPieces::SECOND_WORD_FIRST_PIECE] = _insertWordPiece(m_WordsPair.second, 0, wordPieceIndexes);
 
-    for (int wordPieceStartPos{m_WordPieceSize}; wordPieceStartPos<secondWordLastPiecePos;
-                                      wordPieceStartPos+=m_WordPieceSize)
+    m_WordsBeginEndPieceIndexes[WordsBeginEndPieces::SECOND_WORD_FIRST_PIECE] = _insertWordPiece(m_WordsPair.second, 0, wordPieceIndexes);
+    for (int wordPieceStartPos{m_WordPieceSize}; wordPieceStartPos<secondWordLastPiecePos; wordPieceStartPos+=m_WordPieceSize)
     {
         _insertWordPiece(m_WordsPair.second, wordPieceStartPos, wordPieceIndexes);
     }
     m_WordsBeginEndPieceIndexes[WordsBeginEndPieces::SECOND_WORD_LAST_PIECE] = _insertWordPiece(m_WordsPair.second, secondWordLastPiecePos, wordPieceIndexes);
-
-//    qDebug() << "First word:" << m_WordsPair.first;
-//    qDebug() << "Second word:" << m_WordsPair.second;
-//    qDebug() << "Mixed words pieces are (in this order): ";
-//    for (auto piece : m_MixedWords)
-//    {
-//        qDebug() << piece;
-//    }
 }
 
 const QVector<QString>& WordMixer::getMixedWordsStringArray() const
