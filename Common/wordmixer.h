@@ -48,6 +48,7 @@ public:
     // for unit-testing purposes only
     void setFirstWord(const QString &firstWord);
     void setSecondWord(const QString &secondWord);
+    void fetchWordsFromRowContent(const QString &rowContent);
 
 public slots:
     void setWordPieceSize(Game::Level level);
