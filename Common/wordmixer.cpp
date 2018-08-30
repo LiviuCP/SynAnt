@@ -138,6 +138,13 @@ void WordMixer::setSecondWord(const QString &secondWord)
     m_WordsPair.second = secondWord;
 }
 
+void WordMixer::fetchWordsFromRowContent(const QString &rowContent)
+{
+    m_RowContent = rowContent;
+    _retrieveWords();
+}
+
+
 bool WordMixer::areSynonyms() const
 {
     return m_AreSynonyms;
