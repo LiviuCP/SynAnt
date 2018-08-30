@@ -72,7 +72,12 @@ WordMixer::WordMixer(const QString &fname, QObject *parent)
 
 void WordMixer::mixWords()
 {
-    _retrieveWords();
+    if (!m_ManualWordsEntry)
+    {
+        _getRowNumber();
+        _getRowContent();
+        _retrieveWords();
+    }
 
     Q_ASSERT(m_WordsPair.second.size() != 0 && m_WordsPair.first.size() != 0);
 
@@ -190,49 +195,43 @@ void WordMixer::_getRowContent()
 
 void WordMixer::_retrieveWords()
 {
-    if (!m_ManualWordsEntry)
+    if (m_RowContent.size() == 0)
     {
-        _getRowNumber();
-        _getRowContent();
-
-        if (m_RowContent.size() == 0)
-        {
-            throw QString{GameStrings::c_EmptyRowMessage}.arg(m_RowNumber);
-        }
-
-        int synonymsSeparatorIndex{m_RowContent.indexOf(c_SynonymsSeparator)};
-        int antonymsSeparatorIndex{m_RowContent.indexOf(c_AntonymsSeparator)};
-        int separatorIndex{-1};
-
-        if ((synonymsSeparatorIndex != m_RowContent.lastIndexOf(c_SynonymsSeparator)) || (antonymsSeparatorIndex != m_RowContent.lastIndexOf(c_AntonymsSeparator)))
-        {
-            throw QString{GameStrings::c_MultipleSeparatorsMessage}.arg(m_RowNumber);
-        }
-        else if (synonymsSeparatorIndex == antonymsSeparatorIndex)
-        {
-            throw QString{GameStrings::c_NoSeparatorMessage}.arg(m_RowNumber);
-        }
-        else if ((synonymsSeparatorIndex != -1) && (antonymsSeparatorIndex != -1))
-        {
-            throw QString{GameStrings::c_MultipleSeparatorsMessage}.arg(m_RowNumber);
-        }
-        else if (synonymsSeparatorIndex != -1)
-        {
-            m_AreSynonyms = true;
-            separatorIndex = synonymsSeparatorIndex;
-        }
-        else
-        {
-            m_AreSynonyms = false;
-            separatorIndex = antonymsSeparatorIndex;
-        }
-
-        m_WordsPair.first = m_RowContent.left(separatorIndex);
-        _checkWordIsCorrect(m_WordsPair.first, GameStrings::c_FirstWordCamelCase);
-
-        m_WordsPair.second = m_RowContent.mid(separatorIndex+1);
-        _checkWordIsCorrect(m_WordsPair.second, GameStrings::c_SecondWordCamelCase);
+        throw QString{GameStrings::c_EmptyRowMessage}.arg(m_RowNumber);
     }
+
+    int synonymsSeparatorIndex{m_RowContent.indexOf(c_SynonymsSeparator)};
+    int antonymsSeparatorIndex{m_RowContent.indexOf(c_AntonymsSeparator)};
+    int separatorIndex{-1};
+
+    if ((synonymsSeparatorIndex != m_RowContent.lastIndexOf(c_SynonymsSeparator)) || (antonymsSeparatorIndex != m_RowContent.lastIndexOf(c_AntonymsSeparator)))
+    {
+        throw QString{GameStrings::c_MultipleSeparatorsMessage}.arg(m_RowNumber);
+    }
+    else if (synonymsSeparatorIndex == antonymsSeparatorIndex)
+    {
+        throw QString{GameStrings::c_NoSeparatorMessage}.arg(m_RowNumber);
+    }
+    else if ((synonymsSeparatorIndex != -1) && (antonymsSeparatorIndex != -1))
+    {
+        throw QString{GameStrings::c_MultipleSeparatorsMessage}.arg(m_RowNumber);
+    }
+    else if (synonymsSeparatorIndex != -1)
+    {
+        m_AreSynonyms = true;
+        separatorIndex = synonymsSeparatorIndex;
+    }
+    else
+    {
+        m_AreSynonyms = false;
+        separatorIndex = antonymsSeparatorIndex;
+    }
+
+    m_WordsPair.first = m_RowContent.left(separatorIndex);
+    _checkWordIsCorrect(m_WordsPair.first, GameStrings::c_FirstWordCamelCase);
+
+    m_WordsPair.second = m_RowContent.mid(separatorIndex+1);
+    _checkWordIsCorrect(m_WordsPair.second, GameStrings::c_SecondWordCamelCase);
 }
 
 void WordMixer::_checkWordIsCorrect(const QString &word, const QString& wordIdentifier)
