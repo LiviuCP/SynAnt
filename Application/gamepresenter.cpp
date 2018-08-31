@@ -84,9 +84,9 @@ void GamePresenter::switchToPane(Pane pane)
             m_CurrentPane = pane;
             Q_EMIT windowTitleChanged();
         }
-        catch (const QString& errorMessage)
+        catch (const std::exception& errorMessage)
         {
-            _launchErrorPane(errorMessage);
+            _launchErrorPane(errorMessage.what());
         }
     }
 }
@@ -109,9 +109,9 @@ void GamePresenter::handleResultsRequest()
         m_pWordMixer -> mixWords();
         Q_EMIT mixedWordsPiecesChanged();
     }
-    catch (const QString& errorMessage)
+    catch (const std::exception& errorMessage)
     {
-        _launchErrorPane(errorMessage);
+        _launchErrorPane(errorMessage.what());
     }
 }
 
@@ -146,9 +146,9 @@ bool GamePresenter::handleSubmitRequest(const QString &firstWord, const QString 
 
         return clearTextFields;
     }
-    catch(const QString& errorMessage)
+    catch(const std::exception& errorMessage)
     {
-        _launchErrorPane(errorMessage);
+        _launchErrorPane(errorMessage.what());
     }
 }
 
@@ -177,9 +177,9 @@ void GamePresenter::switchToLevel(int level)
 
         _setLevel(static_cast<Game::Level>(level));
     }
-    catch (const QString& errorMessage)
+    catch (const std::exception& errorMessage)
     {
-        _launchErrorPane(errorMessage);
+        _launchErrorPane(errorMessage.what());
     }
 }
 

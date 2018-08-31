@@ -113,14 +113,18 @@ namespace GameStrings {
     const QString c_WordPairsMessage                    {    "Word pairs: %1/%2"                                                                        };
 
     // exception messages
-    const QString c_FileNotFoundMessage                 {    "File not found!"                                                                          };
-    const QString c_CannotOpenFileMessage               {    "File cannot be opened!"                                                                   };
-    const QString c_EmptyFileMessage                    {    "Empty file!"                                                                              };
-    const QString c_EmptyRowMessage                     {    "\nAn empty row has been read from file!\n\nRow number: %1\n"                              };
-    const QString c_MultipleSeparatorsMessage           {    "Multiple separators!\nRow number: %1\n"                                                   };
-    const QString c_NoSeparatorMessage                  {    "No separator found!\nRow number: %1\n"                                                    };
-    const QString c_IllegalCharactersMessage            {    "%1 word contains illegal characters!\nRow number: %2\n"                                   };
-    const QString c_LessThanMinCharsMessage             {    "%1 word has less than the minimum required number of characters!\nRow number: %2\n"       };
+    const QString c_FileNotFoundMessage                 {    "File not found!\n"                                                                        };
+    const QString c_CannotOpenFileMessage               {    "File cannot be opened!\n"                                                                 };
+    const QString c_EmptyFileMessage                    {    "Empty file!\n"                                                                            };
+
+    const QString c_EmptyRowMessage                     {    "An empty row has been read from file!\n"                                                  };
+    const QString c_MultipleSeparatorsMessage           {    "Multiple separators!\n"                                                                   };
+    const QString c_NoSeparatorMessage                  {    "No separator found!\n"                                                                    };
+    const QString c_IllegalCharactersMessage            {    "%1 word contains illegal characters!\n"                                                   };
+    const QString c_LessThanMinCharsMessage             {    "%1 word has less than the minimum required number of characters!\n"                       };
+
+    const QString c_FileNameMessage                     {    "\nFile: %1\n"                                                                             };
+    const QString c_RowNumberMessage                    {    "\nRow number: %1\n"                                                                       };
 
     // button names
     const QString c_PlayButtonLabel                     {    "Play"                                                                                     };

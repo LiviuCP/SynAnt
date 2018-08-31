@@ -7,6 +7,7 @@
 #include "wordmixer.h"
 #include "game.h"
 #include "gamestrings.h"
+#include "exceptions.h"
 
 static constexpr int c_MinWordSize{5};
 static constexpr char c_SynonymsSeparator{'='};
@@ -47,13 +48,13 @@ WordMixer::WordMixer(const QString &fname, QObject *parent)
         QFileInfo wordPairsFileStatus{m_FileName};
         if (!wordPairsFileStatus.exists())
         {
-            throw QString{GameStrings::c_FileNotFoundMessage};
+            throw FileException{GameStrings::c_FileNotFoundMessage, m_FileName};
         }
 
         QFile wordPairsFile{m_FileName};
         if (!wordPairsFile.open(QIODevice::ReadOnly | QIODevice::Text))
         {
-            throw QString{GameStrings::c_CannotOpenFileMessage};
+            throw FileException{GameStrings::c_CannotOpenFileMessage, m_FileName};
         }
 
         QTextStream allRowsReader(&wordPairsFile);
@@ -64,7 +65,7 @@ WordMixer::WordMixer(const QString &fname, QObject *parent)
         }
         if (m_TotalNrOfRows == 0)
         {
-            throw QString{GameStrings::c_EmptyFileMessage};
+            throw FileException{GameStrings::c_EmptyFileMessage, m_FileName};
         }
         wordPairsFile.close();
     }
@@ -187,7 +188,7 @@ void WordMixer::_getRowContent()
     QFile wordPairsFile(m_FileName);
     if (!wordPairsFile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        throw QString{GameStrings::c_CannotOpenFileMessage};
+        throw FileException{GameStrings::c_CannotOpenFileMessage, m_FileName};
     }
 
     QTextStream lineReader{&wordPairsFile};
@@ -204,7 +205,7 @@ void WordMixer::_retrieveWords()
 {
     if (m_RowContent.size() == 0)
     {
-        throw QString{GameStrings::c_EmptyRowMessage}.arg(m_RowNumber);
+        throw WordException{GameStrings::c_EmptyRowMessage, m_FileName, m_RowNumber};
     }
 
     int synonymsSeparatorIndex{m_RowContent.indexOf(c_SynonymsSeparator)};
@@ -213,15 +214,15 @@ void WordMixer::_retrieveWords()
 
     if ((synonymsSeparatorIndex != m_RowContent.lastIndexOf(c_SynonymsSeparator)) || (antonymsSeparatorIndex != m_RowContent.lastIndexOf(c_AntonymsSeparator)))
     {
-        throw QString{GameStrings::c_MultipleSeparatorsMessage}.arg(m_RowNumber);
+        throw WordException{GameStrings::c_MultipleSeparatorsMessage, m_FileName, m_RowNumber};
     }
     else if (synonymsSeparatorIndex == antonymsSeparatorIndex)
     {
-        throw QString{GameStrings::c_NoSeparatorMessage}.arg(m_RowNumber);
+        throw WordException{GameStrings::c_NoSeparatorMessage, m_FileName, m_RowNumber};
     }
     else if ((synonymsSeparatorIndex != -1) && (antonymsSeparatorIndex != -1))
     {
-        throw QString{GameStrings::c_MultipleSeparatorsMessage}.arg(m_RowNumber);
+        throw WordException{GameStrings::c_MultipleSeparatorsMessage, m_FileName, m_RowNumber};
     }
     else if (synonymsSeparatorIndex != -1)
     {
@@ -247,12 +248,12 @@ void WordMixer::_checkWordIsCorrect(const QString &word, const QString& wordIden
     {
         if (!(currentCharacter.isLower()))
         {
-            throw QString{GameStrings::c_IllegalCharactersMessage}.arg(wordIdentifier).arg(m_RowNumber);
+            throw WordException{GameStrings::c_IllegalCharactersMessage.arg(wordIdentifier), m_FileName, m_RowNumber};
         }
     }
     if (word.size() < c_MinWordSize)
     {
-        throw QString{GameStrings::c_LessThanMinCharsMessage}.arg(wordIdentifier).arg(m_RowNumber);
+        throw WordException{GameStrings::c_LessThanMinCharsMessage.arg(wordIdentifier), m_FileName, m_RowNumber};
     }
 }
 

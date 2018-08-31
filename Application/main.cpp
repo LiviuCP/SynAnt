@@ -3,6 +3,7 @@
 #include <QQmlComponent>
 
 #include "gamepresenter.h"
+#include "exceptions.h"
 
 
 int main(int argc, char *argv[])
@@ -21,7 +22,7 @@ int main(int argc, char *argv[])
 
         return app.exec();
     }
-    catch (const QString& exception)
+    catch (const std::exception& exception)
     {
         QQmlComponent errorComponent(&engine, QUrl(QLatin1String("qrc:/ErrorDialog.qml")));
         QObject *errorComponentObject = errorComponent.create();
@@ -30,7 +31,7 @@ int main(int argc, char *argv[])
 
         if (errorDialogObject)
         {
-            errorDialogObject->setProperty("text", exception);
+            errorDialogObject->setProperty("text", QString{exception.what()});
         }
 
         return app.exec();
