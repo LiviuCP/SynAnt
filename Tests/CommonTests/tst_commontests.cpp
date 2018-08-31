@@ -20,6 +20,7 @@ private:
 
 private Q_SLOTS:
     void testManualWordsEntry();
+    void testWordPairsAreCorrect();
     void testWordsAreCorrectlyMixed();
     void testFirstLastPieceIndexesAreCorrect();
     void testStatisticsCorrectlyUpdated();
@@ -42,6 +43,33 @@ void CommonTests::testManualWordsEntry()
     wordMixer.mixWords();
 
     QVERIFY2(firstWord==wordMixer.getFirstWord() && secondWord==wordMixer.getSecondWord() , "Manual words entry does not work properly");
+}
+
+void CommonTests::testWordPairsAreCorrect()
+{
+    WordMixer wordMixer{GameStrings::c_NoFile};
+
+    // empty row
+    QVERIFY_EXCEPTION_THROWN(wordMixer.fetchWordsFromRowContent(""), std::exception);
+
+    // illegal chars (including capitals)
+    QVERIFY_EXCEPTION_THROWN(wordMixer.fetchWordsFromRowContent("firstWord!secondword"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(wordMixer.fetchWordsFromRowContent("firstword!second&word"), std::exception);
+
+    // no separator
+    QVERIFY_EXCEPTION_THROWN(wordMixer.fetchWordsFromRowContent("firstwordsecondword"), std::exception);
+
+    // multiple separators
+    QVERIFY_EXCEPTION_THROWN(wordMixer.fetchWordsFromRowContent("firs!tword!secondword"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(wordMixer.fetchWordsFromRowContent("firs!tword=secondword"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(wordMixer.fetchWordsFromRowContent("firs=tword!secondword"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(wordMixer.fetchWordsFromRowContent("firs=tword=secondword"), std::exception);
+
+    // less than minimum required number of chars per word
+    QVERIFY_EXCEPTION_THROWN(wordMixer.fetchWordsFromRowContent("abcd!secondword"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(wordMixer.fetchWordsFromRowContent("abcd=secondword"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(wordMixer.fetchWordsFromRowContent("firstword=efgh"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(wordMixer.fetchWordsFromRowContent("firstword!efgh"), std::exception);
 }
 
 void CommonTests::testWordsAreCorrectlyMixed()
@@ -161,7 +189,7 @@ void CommonTests::testStatisticsCorrectlyUpdated()
     scoreItem.updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
 
     _checkCorrectStatistics(scoreItem, 1, 2, Game::c_ScoreIncrements[Game::Level::HARD], 2 * Game::c_ScoreIncrements[Game::Level::HARD],
-                            "Checking statistics after reset and then setting level to hard and running a full and partial update");
+            "Checking statistics after reset and then setting level to hard and running a full and partial update");
 }
 
 void CommonTests::_checkCorrectMixing(QVector<QString> mixedWords, QVector<QString> splitWords, const QString& level)
