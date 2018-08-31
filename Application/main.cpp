@@ -35,10 +35,10 @@ int main(int argc, char *argv[]) {
         AppManager::getAppManager()->init(QApplication::applicationDirPath() + "/" + GameStrings::c_FileName);
         return app.exec();
     }
-    catch (const QString fatalErrorMessage) {
+    catch (const std::exception& exception) {
         FatalErrors fatalError{};
         fatalError.setWindowTitle(GameStrings::c_FatalErrorWindowTitle);
-        fatalError.setFatalErrorText(fatalErrorMessage);
+        fatalError.setFatalErrorText(exception.what());
         fatalError.show();
         return app.exec();
     }

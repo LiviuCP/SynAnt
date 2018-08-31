@@ -24,8 +24,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         common.cpp \
+        wordmixer.cpp \
         scoreitem.cpp \
-        wordmixer.cpp
+        exceptions.cpp
 
 HEADERS += \
         common.h \
@@ -33,7 +34,8 @@ HEADERS += \
         wordmixer.h \
         scoreitem.h \
         game.h \
-        gamestrings.h
+        gamestrings.h \
+        exceptions.h
 
 unix {
     target.path = /usr/lib
