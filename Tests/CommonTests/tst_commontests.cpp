@@ -3,6 +3,8 @@
 #include <QtAlgorithms>
 #include <QDebug>
 
+#include <memory>
+
 #include "../../Common/wordmixer.h"
 #include "../../Common/scoreitem.h"
 #include "../../Common/gamestrings.h"
@@ -35,41 +37,41 @@ void CommonTests::testManualWordsEntry()
     const QString firstWord{"firstWord"};
     const QString secondWord{"secondWord"};
 
-    WordMixer wordMixer{GameStrings::c_NoFile};
+    std::unique_ptr<WordMixer> pWordMixer{new WordMixer{GameStrings::c_NoFile}};
 
-    wordMixer.setFirstWord(firstWord);
-    wordMixer.setSecondWord(secondWord);
+    pWordMixer->setFirstWord(firstWord);
+    pWordMixer->setSecondWord(secondWord);
 
-    wordMixer.mixWords();
+    pWordMixer->mixWords();
 
-    QVERIFY2(firstWord==wordMixer.getFirstWord() && secondWord==wordMixer.getSecondWord() , "Manual words entry does not work properly");
+    QVERIFY2(firstWord==pWordMixer->getFirstWord() && secondWord==pWordMixer->getSecondWord() , "Manual words entry does not work properly");
 }
 
 void CommonTests::testWordPairsAreCorrect()
 {
-    WordMixer wordMixer{GameStrings::c_NoFile};
+    std::unique_ptr<WordMixer> pWordMixer{new WordMixer{GameStrings::c_NoFile}};
 
     // empty row
-    QVERIFY_EXCEPTION_THROWN(wordMixer.fetchWordsFromRowContent(""), std::exception);
+    QVERIFY_EXCEPTION_THROWN(pWordMixer->fetchWordsFromRowContent(""), std::exception);
 
     // illegal chars (including capitals)
-    QVERIFY_EXCEPTION_THROWN(wordMixer.fetchWordsFromRowContent("firstWord!secondword"), std::exception);
-    QVERIFY_EXCEPTION_THROWN(wordMixer.fetchWordsFromRowContent("firstword!second&word"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(pWordMixer->fetchWordsFromRowContent("firstWord!secondword"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(pWordMixer->fetchWordsFromRowContent("firstword!second&word"), std::exception);
 
     // no separator
-    QVERIFY_EXCEPTION_THROWN(wordMixer.fetchWordsFromRowContent("firstwordsecondword"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(pWordMixer->fetchWordsFromRowContent("firstwordsecondword"), std::exception);
 
     // multiple separators
-    QVERIFY_EXCEPTION_THROWN(wordMixer.fetchWordsFromRowContent("firs!tword!secondword"), std::exception);
-    QVERIFY_EXCEPTION_THROWN(wordMixer.fetchWordsFromRowContent("firs!tword=secondword"), std::exception);
-    QVERIFY_EXCEPTION_THROWN(wordMixer.fetchWordsFromRowContent("firs=tword!secondword"), std::exception);
-    QVERIFY_EXCEPTION_THROWN(wordMixer.fetchWordsFromRowContent("firs=tword=secondword"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(pWordMixer->fetchWordsFromRowContent("firs!tword!secondword"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(pWordMixer->fetchWordsFromRowContent("firs!tword=secondword"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(pWordMixer->fetchWordsFromRowContent("firs=tword!secondword"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(pWordMixer->fetchWordsFromRowContent("firs=tword=secondword"), std::exception);
 
     // less than minimum required number of chars per word
-    QVERIFY_EXCEPTION_THROWN(wordMixer.fetchWordsFromRowContent("abcd!secondword"), std::exception);
-    QVERIFY_EXCEPTION_THROWN(wordMixer.fetchWordsFromRowContent("abcd=secondword"), std::exception);
-    QVERIFY_EXCEPTION_THROWN(wordMixer.fetchWordsFromRowContent("firstword=efgh"), std::exception);
-    QVERIFY_EXCEPTION_THROWN(wordMixer.fetchWordsFromRowContent("firstword!efgh"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(pWordMixer->fetchWordsFromRowContent("abcd!secondword"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(pWordMixer->fetchWordsFromRowContent("abcd=secondword"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(pWordMixer->fetchWordsFromRowContent("firstword=efgh"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(pWordMixer->fetchWordsFromRowContent("firstword!efgh"), std::exception);
 }
 
 void CommonTests::testWordsAreCorrectlyMixed()
@@ -77,22 +79,22 @@ void CommonTests::testWordsAreCorrectlyMixed()
     const QString firstWord{"firstWord"};
     const QString secondWord{"secondWord"};
 
-    WordMixer wordMixer{GameStrings::c_NoFile};
+    std::unique_ptr<WordMixer> pWordMixer{new WordMixer{GameStrings::c_NoFile}};
 
-    wordMixer.setFirstWord(firstWord);
-    wordMixer.setSecondWord(secondWord);
+    pWordMixer->setFirstWord(firstWord);
+    pWordMixer->setSecondWord(secondWord);
 
-    wordMixer.setWordPieceSize(Game::Level::EASY);
-    wordMixer.mixWords();
-    _checkCorrectMixing(wordMixer.getMixedWordsStringArray(), QVector<QString>{"fir", "stW", "ord", "sec", "ond", "Wor", "d"}, "easy");
+    pWordMixer->setWordPieceSize(Game::Level::EASY);
+    pWordMixer->mixWords();
+    _checkCorrectMixing(pWordMixer->getMixedWordsStringArray(), QVector<QString>{"fir", "stW", "ord", "sec", "ond", "Wor", "d"}, "easy");
 
-    wordMixer.setWordPieceSize(Game::Level::MEDIUM);
-    wordMixer.mixWords();
-    _checkCorrectMixing(wordMixer.getMixedWordsStringArray(), QVector<QString>{"fi", "rs", "tW", "or", "d", "se", "co", "nd", "Wo", "rd"}, "medium");
+    pWordMixer->setWordPieceSize(Game::Level::MEDIUM);
+    pWordMixer->mixWords();
+    _checkCorrectMixing(pWordMixer->getMixedWordsStringArray(), QVector<QString>{"fi", "rs", "tW", "or", "d", "se", "co", "nd", "Wo", "rd"}, "medium");
 
-    wordMixer.setWordPieceSize(Game::Level::HARD);
-    wordMixer.mixWords();
-    _checkCorrectMixing(wordMixer.getMixedWordsStringArray(), QVector<QString>{"f", "i", "r", "s", "t", "W", "o", "r", "d", "s", "e", "c", "o", "n", "d", "W", "o", "r", "d"},
+    pWordMixer->setWordPieceSize(Game::Level::HARD);
+    pWordMixer->mixWords();
+    _checkCorrectMixing(pWordMixer->getMixedWordsStringArray(), QVector<QString>{"f", "i", "r", "s", "t", "W", "o", "r", "d", "s", "e", "c", "o", "n", "d", "W", "o", "r", "d"},
                         "hard");
 }
 
@@ -106,34 +108,34 @@ void CommonTests::testFirstLastPieceIndexesAreCorrect()
     const char* secondWordFirstPieceIndexNotCorrect{"Index of the first piece of second word in the mixed words array is not correct"};
     const char* secondWordLastPieceIndexNotCorrect{"Index of the last piece of second word in the mixed words array is not correct"};
 
-    WordMixer wordMixer{GameStrings::c_NoFile};
+    std::unique_ptr<WordMixer> pWordMixer{new WordMixer{GameStrings::c_NoFile}};
 
-    wordMixer.setFirstWord(firstWord);
-    wordMixer.setSecondWord(secondWord);
+    pWordMixer->setFirstWord(firstWord);
+    pWordMixer->setSecondWord(secondWord);
 
-    wordMixer.setWordPieceSize(Game::Level::EASY);
-    wordMixer.mixWords();
+    pWordMixer->setWordPieceSize(Game::Level::EASY);
+    pWordMixer->mixWords();
 
-    QVERIFY2(wordMixer.getMixedWordsStringArray()[wordMixer.getFirstWordFirstPieceIndex()] == "wor", firstWordFirstPieceIndexNotCorrect);
-    QVERIFY2(wordMixer.getMixedWordsStringArray()[wordMixer.getFirstWordLastPieceIndex()] == "e", firstWordLastPieceIndexNotCorrect);
-    QVERIFY2(wordMixer.getMixedWordsStringArray()[wordMixer.getSecondWordFirstPieceIndex()] == "sec", secondWordFirstPieceIndexNotCorrect);
-    QVERIFY2(wordMixer.getMixedWordsStringArray()[wordMixer.getSecondWordLastPieceIndex()] == "d", secondWordLastPieceIndexNotCorrect);
+    QVERIFY2(pWordMixer->getMixedWordsStringArray()[pWordMixer->getFirstWordFirstPieceIndex()] == "wor", firstWordFirstPieceIndexNotCorrect);
+    QVERIFY2(pWordMixer->getMixedWordsStringArray()[pWordMixer->getFirstWordLastPieceIndex()] == "e", firstWordLastPieceIndexNotCorrect);
+    QVERIFY2(pWordMixer->getMixedWordsStringArray()[pWordMixer->getSecondWordFirstPieceIndex()] == "sec", secondWordFirstPieceIndexNotCorrect);
+    QVERIFY2(pWordMixer->getMixedWordsStringArray()[pWordMixer->getSecondWordLastPieceIndex()] == "d", secondWordLastPieceIndexNotCorrect);
 
-    wordMixer.setWordPieceSize(Game::Level::MEDIUM);
-    wordMixer.mixWords();
+    pWordMixer->setWordPieceSize(Game::Level::MEDIUM);
+    pWordMixer->mixWords();
 
-    QVERIFY2(wordMixer.getMixedWordsStringArray()[wordMixer.getFirstWordFirstPieceIndex()] == "wo", firstWordFirstPieceIndexNotCorrect);
-    QVERIFY2(wordMixer.getMixedWordsStringArray()[wordMixer.getFirstWordLastPieceIndex()] == "e", firstWordLastPieceIndexNotCorrect);
-    QVERIFY2(wordMixer.getMixedWordsStringArray()[wordMixer.getSecondWordFirstPieceIndex()] == "se", secondWordFirstPieceIndexNotCorrect);
-    QVERIFY2(wordMixer.getMixedWordsStringArray()[wordMixer.getSecondWordLastPieceIndex()] == "rd", secondWordLastPieceIndexNotCorrect);
+    QVERIFY2(pWordMixer->getMixedWordsStringArray()[pWordMixer->getFirstWordFirstPieceIndex()] == "wo", firstWordFirstPieceIndexNotCorrect);
+    QVERIFY2(pWordMixer->getMixedWordsStringArray()[pWordMixer->getFirstWordLastPieceIndex()] == "e", firstWordLastPieceIndexNotCorrect);
+    QVERIFY2(pWordMixer->getMixedWordsStringArray()[pWordMixer->getSecondWordFirstPieceIndex()] == "se", secondWordFirstPieceIndexNotCorrect);
+    QVERIFY2(pWordMixer->getMixedWordsStringArray()[pWordMixer->getSecondWordLastPieceIndex()] == "rd", secondWordLastPieceIndexNotCorrect);
 
-    wordMixer.setWordPieceSize(Game::Level::HARD);
-    wordMixer.mixWords();
+    pWordMixer->setWordPieceSize(Game::Level::HARD);
+    pWordMixer->mixWords();
 
-    QVERIFY2(wordMixer.getMixedWordsStringArray()[wordMixer.getFirstWordFirstPieceIndex()] == "w", firstWordFirstPieceIndexNotCorrect);
-    QVERIFY2(wordMixer.getMixedWordsStringArray()[wordMixer.getFirstWordLastPieceIndex()] == "e", firstWordLastPieceIndexNotCorrect);
-    QVERIFY2(wordMixer.getMixedWordsStringArray()[wordMixer.getSecondWordFirstPieceIndex()] == "s", secondWordFirstPieceIndexNotCorrect);
-    QVERIFY2(wordMixer.getMixedWordsStringArray()[wordMixer.getSecondWordLastPieceIndex()] == "d",secondWordLastPieceIndexNotCorrect);
+    QVERIFY2(pWordMixer->getMixedWordsStringArray()[pWordMixer->getFirstWordFirstPieceIndex()] == "w", firstWordFirstPieceIndexNotCorrect);
+    QVERIFY2(pWordMixer->getMixedWordsStringArray()[pWordMixer->getFirstWordLastPieceIndex()] == "e", firstWordLastPieceIndexNotCorrect);
+    QVERIFY2(pWordMixer->getMixedWordsStringArray()[pWordMixer->getSecondWordFirstPieceIndex()] == "s", secondWordFirstPieceIndexNotCorrect);
+    QVERIFY2(pWordMixer->getMixedWordsStringArray()[pWordMixer->getSecondWordLastPieceIndex()] == "d",secondWordLastPieceIndexNotCorrect);
 }
 
 void CommonTests::testStatisticsCorrectlyUpdated()
@@ -143,52 +145,52 @@ void CommonTests::testStatisticsCorrectlyUpdated()
     const int referenceObtainedScore = Game::c_ScoreIncrements[Game::Level::EASY] + Game::c_ScoreIncrements[Game::Level::MEDIUM] + Game::c_ScoreIncrements[Game::Level::HARD];
     const int referenceTotalAvailableScore = 2 * referenceObtainedScore;
 
-    ScoreItem scoreItem{};
+    std::unique_ptr<ScoreItem> pScoreItem{new ScoreItem{}};
 
-    _checkCorrectStatistics(scoreItem, 0, 0, 0, 0, "Checking initial statistics");
+    _checkCorrectStatistics(*pScoreItem, 0, 0, 0, 0, "Checking initial statistics");
 
-    scoreItem.setScoreIncrement(Game::Level::EASY);
-    scoreItem.updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
-    scoreItem.updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
+    pScoreItem->setScoreIncrement(Game::Level::EASY);
+    pScoreItem->updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
+    pScoreItem->updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
 
-    scoreItem.setScoreIncrement(Game::Level::MEDIUM);
-    scoreItem.updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
-    scoreItem.updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
+    pScoreItem->setScoreIncrement(Game::Level::MEDIUM);
+    pScoreItem->updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
+    pScoreItem->updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
 
-    scoreItem.setScoreIncrement(Game::Level::HARD);
-    scoreItem.updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
-    scoreItem.updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
+    pScoreItem->setScoreIncrement(Game::Level::HARD);
+    pScoreItem->updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
+    pScoreItem->updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
 
-    _checkCorrectStatistics(scoreItem, referenceGuessedWordPairs, referenceTotalWordPairs, referenceObtainedScore, referenceTotalAvailableScore,
+    _checkCorrectStatistics(*pScoreItem, referenceGuessedWordPairs, referenceTotalWordPairs, referenceObtainedScore, referenceTotalAvailableScore,
                             "Checking statistics after successively switching levels and running one full and one partial update per level");
 
-    scoreItem.resetStatistics();
+    pScoreItem->resetStatistics();
 
-    _checkCorrectStatistics(scoreItem, 0, 0, 0, 0, "Checking statistics after reset");
+    _checkCorrectStatistics(*pScoreItem, 0, 0, 0, 0, "Checking statistics after reset");
 
-    scoreItem.setScoreIncrement(Game::Level::EASY);
-    scoreItem.updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
-    scoreItem.updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
+    pScoreItem->setScoreIncrement(Game::Level::EASY);
+    pScoreItem->updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
+    pScoreItem->updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
 
-    _checkCorrectStatistics(scoreItem, 1, 2, Game::c_ScoreIncrements[Game::Level::EASY], 2 * Game::c_ScoreIncrements[Game::Level::EASY],
+    _checkCorrectStatistics(*pScoreItem, 1, 2, Game::c_ScoreIncrements[Game::Level::EASY], 2 * Game::c_ScoreIncrements[Game::Level::EASY],
                             "Checking statistics after setting level to easy and running a full and partial update");
 
-    scoreItem.resetStatistics();
+    pScoreItem->resetStatistics();
 
-    scoreItem.setScoreIncrement(Game::Level::MEDIUM);
-    scoreItem.updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
-    scoreItem.updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
+    pScoreItem->setScoreIncrement(Game::Level::MEDIUM);
+    pScoreItem->updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
+    pScoreItem->updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
 
-    _checkCorrectStatistics(scoreItem, 1, 2, Game::c_ScoreIncrements[Game::Level::MEDIUM], 2 * Game::c_ScoreIncrements[Game::Level::MEDIUM],
+    _checkCorrectStatistics(*pScoreItem, 1, 2, Game::c_ScoreIncrements[Game::Level::MEDIUM], 2 * Game::c_ScoreIncrements[Game::Level::MEDIUM],
                             "Checking statistics after reset and then setting level to medium and running a full and partial update");
 
-    scoreItem.resetStatistics();
+    pScoreItem->resetStatistics();
 
-    scoreItem.setScoreIncrement(Game::Level::HARD);
-    scoreItem.updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
-    scoreItem.updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
+    pScoreItem->setScoreIncrement(Game::Level::HARD);
+    pScoreItem->updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
+    pScoreItem->updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
 
-    _checkCorrectStatistics(scoreItem, 1, 2, Game::c_ScoreIncrements[Game::Level::HARD], 2 * Game::c_ScoreIncrements[Game::Level::HARD],
+    _checkCorrectStatistics(*pScoreItem, 1, 2, Game::c_ScoreIncrements[Game::Level::HARD], 2 * Game::c_ScoreIncrements[Game::Level::HARD],
             "Checking statistics after reset and then setting level to hard and running a full and partial update");
 }
 
