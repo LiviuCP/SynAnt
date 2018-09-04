@@ -5,6 +5,7 @@
 #include "../Common/wordmixer.h"
 #include "../Common/scoreitem.h"
 #include "../Common/gamestrings.h"
+#include "../Common/exceptions.h"
 
 static constexpr int c_ToolTipDelay{1000};
 
@@ -84,9 +85,9 @@ void GamePresenter::switchToPane(Pane pane)
             m_CurrentPane = pane;
             Q_EMIT windowTitleChanged();
         }
-        catch (const std::exception& exception)
+        catch (const GameException& exception)
         {
-            _launchErrorPane(exception.what());
+            _launchErrorPane(exception.getDescription());
         }
     }
 }
@@ -109,9 +110,9 @@ void GamePresenter::handleResultsRequest()
         m_pWordMixer -> mixWords();
         Q_EMIT mixedWordsPiecesChanged();
     }
-    catch (const std::exception& exception)
+    catch (const GameException& exception)
     {
-        _launchErrorPane(exception.what());
+        _launchErrorPane(exception.getDescription());
     }
 }
 
@@ -146,9 +147,9 @@ bool GamePresenter::handleSubmitRequest(const QString &firstWord, const QString 
 
         return clearTextFields;
     }
-    catch(const std::exception& exception)
+    catch(const GameException& exception)
     {
-        _launchErrorPane(exception.what());
+        _launchErrorPane(exception.getDescription());
     }
 }
 
@@ -177,9 +178,9 @@ void GamePresenter::switchToLevel(int level)
 
         _setLevel(static_cast<Game::Level>(level));
     }
-    catch (const std::exception& exception)
+    catch (const GameException& exception)
     {
-        _launchErrorPane(exception.what());
+        _launchErrorPane(exception.getDescription());
     }
 }
 

@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 
         return app.exec();
     }
-    catch (const std::exception& exception)
+    catch (const GameException& exception)
     {
         QQmlComponent errorComponent(&engine, QUrl(QLatin1String("qrc:/ErrorDialog.qml")));
         QObject *errorComponentObject = errorComponent.create();
@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 
         if (errorDialogObject)
         {
-            errorDialogObject->setProperty("text", QString{exception.what()});
+            errorDialogObject->setProperty("text", exception.getDescription());
         }
 
         return app.exec();
