@@ -34,8 +34,8 @@ CommonTests::CommonTests()
 
 void CommonTests::testManualWordsEntry()
 {
-    const QString firstWord{"firstWord"};
-    const QString secondWord{"secondWord"};
+    const QString firstWord{"firstword"};
+    const QString secondWord{"secondword"};
 
     std::unique_ptr<WordMixer> pWordMixer{new WordMixer{GameStrings::c_NoFile}};
 
@@ -76,8 +76,8 @@ void CommonTests::testWordPairsAreCorrect()
 
 void CommonTests::testWordsAreCorrectlyMixed()
 {
-    const QString firstWord{"firstWord"};
-    const QString secondWord{"secondWord"};
+    const QString firstWord{"firstword"};
+    const QString secondWord{"secondword"};
 
     std::unique_ptr<WordMixer> pWordMixer{new WordMixer{GameStrings::c_NoFile}};
 
@@ -86,22 +86,22 @@ void CommonTests::testWordsAreCorrectlyMixed()
 
     pWordMixer->setWordPieceSize(Game::Level::EASY);
     pWordMixer->mixWords();
-    _checkCorrectMixing(pWordMixer->getMixedWordsStringArray(), QVector<QString>{"fir", "stW", "ord", "sec", "ond", "Wor", "d"}, "easy");
+    _checkCorrectMixing(pWordMixer->getMixedWordsStringArray(), QVector<QString>{"fir", "stw", "ord", "sec", "ond", "wor", "d"}, "easy");
 
     pWordMixer->setWordPieceSize(Game::Level::MEDIUM);
     pWordMixer->mixWords();
-    _checkCorrectMixing(pWordMixer->getMixedWordsStringArray(), QVector<QString>{"fi", "rs", "tW", "or", "d", "se", "co", "nd", "Wo", "rd"}, "medium");
+    _checkCorrectMixing(pWordMixer->getMixedWordsStringArray(), QVector<QString>{"fi", "rs", "tw", "or", "d", "se", "co", "nd", "wo", "rd"}, "medium");
 
     pWordMixer->setWordPieceSize(Game::Level::HARD);
     pWordMixer->mixWords();
-    _checkCorrectMixing(pWordMixer->getMixedWordsStringArray(), QVector<QString>{"f", "i", "r", "s", "t", "W", "o", "r", "d", "s", "e", "c", "o", "n", "d", "W", "o", "r", "d"},
+    _checkCorrectMixing(pWordMixer->getMixedWordsStringArray(), QVector<QString>{"f", "i", "r", "s", "t", "w", "o", "r", "d", "s", "e", "c", "o", "n", "d", "w", "o", "r", "d"},
                         "hard");
 }
 
 void CommonTests::testFirstLastPieceIndexesAreCorrect()
 {
-    const QString firstWord{"wordOne"};
-    const QString secondWord{"secondWord"};
+    const QString firstWord{"wordone"};
+    const QString secondWord{"secondword"};
 
     const char* firstWordFirstPieceIndexNotCorrect{"Index of the first piece of first word in the mixed words array is not correct"};
     const char* firstWordLastPieceIndexNotCorrect{"Index of the last piece of first word in the mixed words array is not correct"};
