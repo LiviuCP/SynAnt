@@ -27,6 +27,7 @@
 #include "appmanager.h"
 #include "fatalerrors.h"
 #include "../Common/gamestrings.h"
+#include "../Common/exceptions.h"
 
 int main(int argc, char *argv[]) {
     QApplication app(argc,argv);
@@ -35,10 +36,10 @@ int main(int argc, char *argv[]) {
         AppManager::getAppManager()->init(QApplication::applicationDirPath() + "/" + GameStrings::c_FileName);
         return app.exec();
     }
-    catch (const std::exception& exception) {
+    catch (const GameException& exception) {
         FatalErrors fatalError{};
         fatalError.setWindowTitle(GameStrings::c_FatalErrorWindowTitle);
-        fatalError.setFatalErrorText(exception.what());
+        fatalError.setFatalErrorText(exception.getDescription());
         fatalError.show();
         return app.exec();
     }

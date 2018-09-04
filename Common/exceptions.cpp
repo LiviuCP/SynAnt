@@ -7,10 +7,9 @@ GameException::GameException(QString description)
 {
 }
 
-const char* GameException::what() const noexcept
+const QString GameException::getDescription() const noexcept
 {
-    QString exceptionMessage{m_Description};
-    return exceptionMessage.toStdString().c_str();
+    return m_Description;
 }
 
 FileException::FileException(QString description, QString fileName)
@@ -19,10 +18,9 @@ FileException::FileException(QString description, QString fileName)
 {
 }
 
-const char* FileException::what() const noexcept
+const QString FileException::getDescription() const noexcept
 {
-    QString exceptionMessage{GameException::what() + GameStrings::c_FileNameMessage.arg(m_FileName)};
-    return exceptionMessage.toStdString().c_str();
+    return {GameException::getDescription() + GameStrings::c_FileNameMessage.arg(m_FileName)};
 }
 
 WordException::WordException(QString description, QString fileName, int rowNumber)
@@ -31,10 +29,9 @@ WordException::WordException(QString description, QString fileName, int rowNumbe
 {
 }
 
-const char* WordException::what() const noexcept
+const QString WordException::getDescription() const noexcept
 {
-    QString exceptionMessage{FileException::what() + GameStrings::c_RowNumberMessage.arg(m_RowNumber)};
-    return exceptionMessage.toStdString().c_str();
+    return {FileException::getDescription() + GameStrings::c_RowNumberMessage.arg(m_RowNumber)};
 }
 
 
