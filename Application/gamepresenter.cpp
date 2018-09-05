@@ -293,6 +293,9 @@ QString GamePresenter::getWindowTitle() const
     case Pane::MAIN:
         windowTitle = GameStrings::c_MainWindowTitle;
         break;
+    case Pane::ERROR:
+        windowTitle = GameStrings::c_FatalErrorWindowTitle;
+        break;
     //reserved for future use
     default:
         ;
@@ -634,4 +637,5 @@ void GamePresenter::_launchErrorPane(const QString& errorMessage)
 
     Q_EMIT errorMessageChanged();
     Q_EMIT errorOccuredChanged();
+    Q_EMIT windowTitleChanged();
 }
