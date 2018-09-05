@@ -38,6 +38,7 @@ int main(int argc, char *argv[]) {
     }
     catch (const GameException& exception) {
         FatalErrors fatalError{};
+        AppManager::getAppManager()->hideActiveWindow();
         fatalError.setWindowTitle(GameStrings::c_FatalErrorWindowTitle);
         fatalError.setFatalErrorText(exception.getDescription());
         fatalError.show();

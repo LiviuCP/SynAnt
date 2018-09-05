@@ -43,6 +43,22 @@ void AppManager::init(const QString& filename)
     }
 }
 
+void AppManager::hideActiveWindow()
+{
+    if (m_pIntroductionWindow && m_pIntroductionWindow->isVisible())
+    {
+        m_pIntroductionWindow->hide();
+    }
+    else if (m_pHintsWindow && m_pHintsWindow->isVisible())
+    {
+        m_pHintsWindow->hide();
+    }
+    else if (m_pMainGameWindow && m_pMainGameWindow->isVisible())
+    {
+        m_pMainGameWindow->hide();
+    }
+}
+
 AppManager* AppManager::s_pAppManager = nullptr;
 
 void AppManager::_onSwitchedIntroToHints()

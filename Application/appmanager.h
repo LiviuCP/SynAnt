@@ -30,6 +30,7 @@ class AppManager : public QObject
 public:
     static AppManager* getAppManager();
     void init(const QString& filename);
+    void hideActiveWindow();
 
 signals:
 
