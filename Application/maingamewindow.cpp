@@ -116,6 +116,8 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     setToolTip(GameStrings::c_MainWindowToolTip);
     setAttribute(Qt::WA_AlwaysShowToolTips);
 
+    setWindowTitle(GameStrings::c_MainWindowTitle);
+
     bool connected{connect(m_pScoreItem,&ScoreItem::statisticsUpdated,this,&MainGameWindow::onStatisticsUpdated)};
     Q_ASSERT(connected);
     connected = connect(this,&MainGameWindow::levelChanged,m_pScoreItem,&ScoreItem::setScoreIncrement);

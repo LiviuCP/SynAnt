@@ -40,6 +40,8 @@ HintsWindow::HintsWindow(QWidget *parent)
     setLayout(mainLayout);
     setToolTip(GameStrings::c_HelpWindowToolTip);
 
+    setWindowTitle(GameStrings::c_HelpWindowTitle);
+
     bool connected{connect(quitButton,&QPushButton::clicked,qApp,&QApplication::quit)};
     Q_ASSERT(connected);
     connected = connect(quitButtonShortcut,&QShortcut::activated,qApp,&QApplication::quit);

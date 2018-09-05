@@ -42,6 +42,8 @@ IntroductionWindow::IntroductionWindow(QWidget *parent)
     setLayout(mainLayout);
     setToolTip(GameStrings::c_IntroWindowToolTip);
 
+    setWindowTitle(GameStrings::c_IntroWindowTitle);
+
     bool connected{connect(quitButton,&QPushButton::clicked,qApp,&QApplication::quit)};
     Q_ASSERT(connected);
     connected = connect(quitButtonShortcut,&QShortcut::activated,qApp,&QApplication::quit);
