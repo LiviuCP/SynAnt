@@ -9,6 +9,14 @@
 
 static constexpr int c_ToolTipDelay{1000};
 
+static const QMap<GamePresenter::Pane,QString> c_WindowTitles
+{
+    {GamePresenter::Pane::INTRO, GameStrings::c_IntroWindowTitle},
+    {GamePresenter::Pane::HELP, GameStrings::c_HelpWindowTitle},
+    {GamePresenter::Pane::MAIN, GameStrings::c_MainWindowTitle},
+    {GamePresenter::Pane::ERROR, GameStrings::c_FatalErrorWindowTitle}
+};
+
 GamePresenter::GamePresenter(QObject *parent)
     : QObject(parent)
     , m_IntroPaneVisible {true}
@@ -281,26 +289,7 @@ bool GamePresenter::getErrorOccured() const
 
 QString GamePresenter::getWindowTitle() const
 {
-    QString windowTitle;
-    switch(m_CurrentPane)
-    {
-    case Pane::INTRO:
-        windowTitle = GameStrings::c_IntroWindowTitle;
-        break;
-    case Pane::HELP:
-        windowTitle = GameStrings::c_HelpWindowTitle;
-        break;
-    case Pane::MAIN:
-        windowTitle = GameStrings::c_MainWindowTitle;
-        break;
-    case Pane::ERROR:
-        windowTitle = GameStrings::c_FatalErrorWindowTitle;
-        break;
-    //reserved for future use
-    default:
-        ;
-    }
-    return windowTitle;
+    return c_WindowTitles[m_CurrentPane];
 }
 
 QString GamePresenter::getIntroPaneMessage() const
