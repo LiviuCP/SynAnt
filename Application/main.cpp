@@ -26,12 +26,13 @@
 
 #include "appmanager.h"
 #include "fatalerrors.h"
+#include "styles.h"
 #include "../Common/gamestrings.h"
 #include "../Common/exceptions.h"
 
 int main(int argc, char *argv[]) {
     QApplication app(argc,argv);
-    qApp -> setStyleSheet(GameStrings::c_ApplicationStyle);
+    qApp -> setStyleSheet(Styles::c_ApplicationStyle);
     try {
         AppManager::getAppManager()->init(QApplication::applicationDirPath() + "/" + GameStrings::c_FileName);
         return app.exec();

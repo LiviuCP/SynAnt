@@ -20,7 +20,8 @@ HEADERS += \
     hintswindow.h \
     maingamewindow.h \
     fatalerrors.h \
-    appmanager.h
+    appmanager.h \
+    styles.h
 
 DEPENDPATH += $$top_builddir/Common
 INCLUDEPATH += $$top_srcdir/Common

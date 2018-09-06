@@ -10,6 +10,7 @@
 
 #include "appmanager.h"
 #include "maingamewindow.h"
+#include "styles.h"
 #include "../Common/wordmixer.h"
 #include "../Common/scoreitem.h"
 #include "../Common/gamestrings.h"
@@ -332,16 +333,16 @@ void MainGameWindow::_createMixedWordsLabels()
     {
         m_MixedWords[wordPieceIndex] = new QLabel{};
         m_MixedWords[wordPieceIndex] -> setText((m_pWordMixer -> getMixedWordsStringArray()).at(wordPieceIndex));
-        m_MixedWords[wordPieceIndex] -> setStyleSheet(GameStrings::c_WordEachPieceStyle);
+        m_MixedWords[wordPieceIndex] -> setStyleSheet(Styles::c_WordEachPieceStyle);
     }
 
-    m_MixedWords[m_pWordMixer -> getFirstWordFirstPieceIndex()]  -> setStyleSheet(GameStrings::c_WordBeginPieceStyle);
+    m_MixedWords[m_pWordMixer -> getFirstWordFirstPieceIndex()]  -> setStyleSheet(Styles::c_WordBeginPieceStyle);
 
-    m_MixedWords[m_pWordMixer -> getSecondWordFirstPieceIndex()] -> setStyleSheet(GameStrings::c_WordBeginPieceStyle);
+    m_MixedWords[m_pWordMixer -> getSecondWordFirstPieceIndex()] -> setStyleSheet(Styles::c_WordBeginPieceStyle);
 
-    m_MixedWords[m_pWordMixer -> getFirstWordLastPieceIndex()]    -> setStyleSheet(GameStrings::c_WordEndPieceStyle);
+    m_MixedWords[m_pWordMixer -> getFirstWordLastPieceIndex()]    -> setStyleSheet(Styles::c_WordEndPieceStyle);
 
-    m_MixedWords[m_pWordMixer -> getSecondWordLastPieceIndex()]   -> setStyleSheet(GameStrings::c_WordEndPieceStyle);
+    m_MixedWords[m_pWordMixer -> getSecondWordLastPieceIndex()]   -> setStyleSheet(Styles::c_WordEndPieceStyle);
 
 }
 
