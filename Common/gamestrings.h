@@ -208,9 +208,9 @@ namespace GameStrings {
                                                              "FatalErrors{background-color: grey;}"
                                                         };
 
-    const QString c_WordBeginPieceStyle                 {    "color: blue; border: none;"                                                               };
-    const QString c_WordEndPieceStyle                   {    "color: red; border: none;"                                                                };
-    const QString c_WordEachPieceStyle                  {    "border:none"                                                                              };
+    const QString c_WordBeginPieceStyle                 {    "color: blue; border-width: 1px;"                                                          };
+    const QString c_WordEndPieceStyle                   {    "color: red; border-width: 1px;"                                                           };
+    const QString c_WordEachPieceStyle                  {    "border-width:1px"                                                                         };
 
     // miscellaneous
     const QString c_FirstWordLowerCase                  {    "first"                                                                                    };
