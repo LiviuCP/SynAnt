@@ -12,7 +12,8 @@ SOURCES += \
     hintswindow.cpp \
     maingamewindow.cpp \
     fatalerrors.cpp \
-    appmanager.cpp
+    appmanager.cpp \
+    selectablelabel.cpp
 
 
 HEADERS += \
@@ -21,7 +22,8 @@ HEADERS += \
     maingamewindow.h \
     fatalerrors.h \
     appmanager.h \
-    styles.h
+    styles.h \
+    selectablelabel.h
 
 DEPENDPATH += $$top_builddir/Common
 INCLUDEPATH += $$top_srcdir/Common

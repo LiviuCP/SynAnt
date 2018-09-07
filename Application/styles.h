@@ -13,9 +13,11 @@ namespace Styles {
                                                              "FatalErrors{background-color: grey;}"
                                                         };
 
-    const QString c_WordBeginPieceStyle                 {    "color: blue; border-width: 1px;"                                                          };
-    const QString c_WordEndPieceStyle                   {    "color: red; border-width: 1px;"                                                           };
-    const QString c_WordEachPieceStyle                  {    "border-width:1px"                                                                         };
-}
+    const QString c_WordBeginPieceNotSelectedStyle      {    "color: blue; border-width: 1px; background-color: grey;"                                  };
+    const QString c_WordEndPieceNotSelectedStyle        {    "color: red; border-width: 1px; background-color: grey;"                                   };
+
+    const QString c_WordBeginPieceSelectedStyle         {    "color: blue; border-width: 1px; background-color: black;"                                 };
+    const QString c_WordEndPieceSelectedStyle           {    "color: red; border-width: 1px; background-color: black;"                                  };
+    }
 
 #endif // STYLES_H

@@ -26,6 +26,7 @@
 #include "../Common/game.h"
 
 class QLabel;
+class SelectableLabel;
 class QRadioButton;
 class QPushButton;
 class QHBoxLayout;
@@ -62,7 +63,7 @@ private slots:
 
 private:
     // both words split into equal pieces and mixed into a single array
-    QVector<QLabel*> m_MixedWords;
+    QVector<SelectableLabel*> m_MixedWords;
     QHBoxLayout* m_pMixedWordsLayout;
     QLabel* m_pResultsErrors;
     QLineEdit* m_pFirstWordLineEdit;
