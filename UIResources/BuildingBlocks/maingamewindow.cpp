@@ -1,3 +1,12 @@
+#include "maingamewindow.h"
+
+#include "../OtherResources/styles.h"
+#include "../OtherResources/selectablelabel.h"
+
+#include "../../Common/wordmixer.h"
+#include "../../Common/scoreitem.h"
+#include "../../Common/gamestrings.h"
+
 #include <QApplication>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -6,15 +15,6 @@
 #include <QRadioButton>
 #include <QPushButton>
 #include <QShortcut>
-
-#include "appmanager.h"
-#include "maingamewindow.h"
-#include "styles.h"
-#include "selectablelabel.h"
-#include "../Common/wordmixer.h"
-#include "../Common/scoreitem.h"
-#include "../Common/gamestrings.h"
-
 
 MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     : QWidget{parent},

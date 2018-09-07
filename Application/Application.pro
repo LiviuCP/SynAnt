@@ -8,23 +8,17 @@ greaterThan (QT_MAJOR_VERSION, 4): QT += widgets
 
 SOURCES += \
     main.cpp \
-    introductionwindow.cpp \
-    hintswindow.cpp \
-    maingamewindow.cpp \
-    fatalerrors.cpp \
     appmanager.cpp \
-    selectablelabel.cpp
-
 
 HEADERS += \
-    introductionwindow.h \
-    hintswindow.h \
-    maingamewindow.h \
-    fatalerrors.h \
     appmanager.h \
-    styles.h \
-    selectablelabel.h
 
-DEPENDPATH += $$top_builddir/Common
-INCLUDEPATH += $$top_srcdir/Common
-LIBS += -L$$top_builddir/Common -lCommon
+DEPENDPATH += \
+    $$top_builddir/Common \
+    $$top_builddir/UIResources
+INCLUDEPATH += \
+    $$top_srcdir/Common \
+    $$top_srcdir/UIResources
+LIBS += \
+    -L$$top_builddir/Common -lCommon \
+    -L$$top_builddir/UIResources -lUIResources

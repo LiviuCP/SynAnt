@@ -3,4 +3,5 @@ TEMPLATE = subdirs
 SUBDIRS += \
     Application \
     Tests \
-    Common
+    Common \
+    UIResources

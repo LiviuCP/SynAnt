@@ -1,12 +1,13 @@
+#include "fatalerrors.h"
+
+#include "../../Common/gamestrings.h"
+
 #include <QApplication>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QLabel>
 #include <QShortcut>
-
-#include "fatalerrors.h"
-#include "../Common/gamestrings.h"
 
 FatalErrors::FatalErrors(QWidget *parent)
     : QWidget{parent},

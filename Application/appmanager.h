@@ -18,9 +18,9 @@
 
 #include <memory>
 
-#include "introductionwindow.h"
-#include "hintswindow.h"
-#include "maingamewindow.h"
+#include "../UIResources/BuildingBlocks/introductionwindow.h"
+#include "../UIResources/BuildingBlocks/hintswindow.h"
+#include "../UIResources/BuildingBlocks/maingamewindow.h"
 
 class WordMixer;
 

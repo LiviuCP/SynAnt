@@ -1,3 +1,7 @@
+#include "hintswindow.h"
+
+#include "../../Common/gamestrings.h"
+
 #include <QApplication>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -5,10 +9,6 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QShortcut>
-
-#include "appmanager.h"
-#include "hintswindow.h"
-#include "../Common/gamestrings.h"
 
 HintsWindow::HintsWindow(QWidget *parent)
     : QWidget{parent}

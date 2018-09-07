@@ -1,13 +1,13 @@
+#include "introductionwindow.h"
+
+#include "../../Common/gamestrings.h"
+
 #include <QApplication>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QPushButton>
 #include <QLabel>
 #include <QShortcut>
-
-#include "appmanager.h"
-#include "introductionwindow.h"
-#include "../Common/gamestrings.h"
 
 IntroductionWindow::IntroductionWindow(QWidget *parent)
     : QWidget{parent}

@@ -25,8 +25,8 @@
 #include <QApplication>
 
 #include "appmanager.h"
-#include "fatalerrors.h"
-#include "styles.h"
+#include "../UIResources/BuildingBlocks/fatalerrors.h"
+#include "../UIResources/OtherResources/styles.h"
 #include "../Common/gamestrings.h"
 #include "../Common/exceptions.h"
 

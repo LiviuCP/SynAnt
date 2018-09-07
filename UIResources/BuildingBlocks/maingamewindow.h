@@ -23,7 +23,7 @@
 #include <QWidget>
 #include <QVector>
 
-#include "../Common/game.h"
+#include "../../Common/game.h"
 
 class QLabel;
 class SelectableLabel;
