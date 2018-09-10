@@ -3,10 +3,11 @@
 
 namespace Styles {
     const QString c_ApplicationStyle                    {    "QLabel,"
+                                                             "SelectableLabel,"
                                                              "QGroupBox{background-color: grey; color: white; border: 1px solid white;}"
                                                              "QPushButton{background-color: darkgrey; color: white;}"
                                                              "QRadioButton{background-color: grey; color: white;}"
-                                                             "QToolTip{background-color: grey; color: yellow; border: 1px solid yellow;}"
+                                                             "QToolTip{}"
                                                              "IntroductionWindow,"
                                                              "HintsWindow,"
                                                              "MainGameWindow,"
