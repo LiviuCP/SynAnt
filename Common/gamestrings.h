@@ -196,6 +196,15 @@ namespace GameStrings {
     const QString c_MainWindowTitle                     {    "SynAnt - Let's Play!"                                                                     };
     const QString c_FatalErrorWindowTitle               {    "Fatal Error!"                                                                             };
 
+    // colors
+    const QString c_BackgroundColor                     {    "grey"                                                                                     };
+    const QString c_BorderColor                         {    "white"                                                                                    };
+    const QString c_TextColor                           {    "white"                                                                                    };
+    const QString c_WordFirstPieceColor                 {    "blue"                                                                                     };
+    const QString c_WordLastPieceColor                  {    "red"                                                                                      };
+    const QString c_WordPieceSelectedColor              {    "black"                                                                                    };
+    const QString c_PushButtonColor                     {    "darkgrey"                                                                                 };
+
     // miscellaneous
     const QString c_FirstWordLowerCase                  {    "first"                                                                                    };
     const QString c_FirstWordCamelCase                  {    "First"                                                                                    };
