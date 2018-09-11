@@ -513,6 +513,46 @@ int GamePresenter::getSecondWordLastPieceIndex() const
     return m_pWordMixer->getSecondWordLastPieceIndex();
 }
 
+QColor GamePresenter::getBackgroundColor() const
+{
+    return QColor{GameStrings::c_BackgroundColor};
+}
+
+QColor GamePresenter::getPushButtonColor() const
+{
+    return QColor{GameStrings::c_PushButtonColor};
+}
+
+QColor GamePresenter::getBorderColor() const
+{
+    return QColor{GameStrings::c_BorderColor};
+}
+
+QColor GamePresenter::getTextColor() const
+{
+    return QColor{GameStrings::c_TextColor};
+}
+
+QColor GamePresenter::getErrorTextColor() const
+{
+    return QColor{"red"};
+}
+
+QColor GamePresenter::getWordFirstPieceColor() const
+{
+    return QColor{GameStrings::c_WordFirstPieceColor};
+}
+
+QColor GamePresenter::getWordLastPieceColor() const
+{
+    return QColor{GameStrings::c_WordLastPieceColor};
+}
+
+QColor GamePresenter::getWordPieceSelectedColor() const
+{
+    return QColor{GameStrings::c_WordPieceSelectedColor};
+}
+
 void GamePresenter::_onStatisticsUpdated()
 {
     m_MainPaneScoreMessage = GameStrings::c_HighscoresMessage.arg(m_pScoreItem->getObtainedScore())

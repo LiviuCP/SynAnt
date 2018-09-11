@@ -12,9 +12,13 @@ Item {
     readonly property double bottomBtnsLayoutHeight: height * 0.1
     readonly property double bottomBtnsMinWidth: (helpPaneRect.width - bottomBtnsLayout.spacing) * 0.5
 
-    readonly property color paneColor: "grey"
-    readonly property color borderColor: "white"
-    readonly property color textColor: "white"
+    readonly property double pressedButtonOpacity: 0.5
+    readonly property double releasedButtonOpacity: 1.0
+
+    readonly property color paneColor: presenter.backgroundColor
+    readonly property color buttonColor: presenter.pushButtonColor
+    readonly property color borderColor: presenter.borderColor
+    readonly property color textColor: presenter.textColor
 
     MouseArea {
         id: helpPaneMouseArea
@@ -73,7 +77,21 @@ Item {
 
         Button {
             id: okBtn
-            text: presenter.okButtonLabel
+
+            contentItem: Text {
+                text: presenter.okButtonLabel
+                color: textColor
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            background: Rectangle {
+                color: buttonColor
+                border.color: borderColor
+                border.width: width * 0.005
+                radius: width * 0.01
+            }
+
             Layout.minimumWidth: bottomBtnsMinWidth
 
             ToolTip.text: presenter.okButtonToolTip
@@ -87,14 +105,29 @@ Item {
                 }
             }
 
-            onClicked: {
-                presenter.switchToPane(GamePresenter.MAIN);
-            }
+            onClicked: presenter.switchToPane(GamePresenter.MAIN)
+            onPressed: opacity = pressedButtonOpacity
+            onReleased: opacity = releasedButtonOpacity
+            onCanceled: opacity = releasedButtonOpacity
         }
 
         Button {
             id: quitBtn
-            text: presenter.quitButtonLabel
+
+            contentItem: Text {
+                text: presenter.quitButtonLabel
+                color: textColor
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            background: Rectangle {
+                color: buttonColor
+                border.color: borderColor
+                border.width: width * 0.005
+                radius: width * 0.01
+            }
+
             Layout.minimumWidth: bottomBtnsMinWidth
 
             ToolTip.text: presenter.quitButtonToolTip
@@ -102,6 +135,9 @@ Item {
             ToolTip.visible: hovered
 
             onClicked: Qt.quit()
+            onPressed: opacity = pressedButtonOpacity
+            onReleased: opacity = releasedButtonOpacity
+            onCanceled: opacity = releasedButtonOpacity
         }
     }
 }

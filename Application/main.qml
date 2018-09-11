@@ -12,7 +12,7 @@ ApplicationWindow {
 //    maximumWidth: 640
 //    maximumHeight: 480
     title: gamePresenter.windowTitle
-    color: "grey"
+    color: gamePresenter.backgroundColor
 
     property double windowMargins: width * 0.01
 

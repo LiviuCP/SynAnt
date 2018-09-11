@@ -12,9 +12,14 @@ Item {
 
     readonly property double bottomBtnsMinWidth: errorPaneRect.width / 3
 
-    readonly property color paneColor: "grey"
-    readonly property color borderColor: "white"
-    readonly property color textColor: "red"
+    readonly property double pressedButtonOpacity: 0.5
+    readonly property double releasedButtonOpacity: 1.0
+
+    readonly property color paneColor: presenter.backgroundColor
+    readonly property color buttonColor: presenter.pushButtonColor
+    readonly property color borderColor: presenter.borderColor
+    readonly property color textColor: presenter.textColor
+    readonly property color errorTextColor: presenter.errorTextColor
 
     MouseArea {
         id: errorPaneMouseArea
@@ -43,7 +48,7 @@ Item {
         Text {
             id: errorPaneText
             text: presenter.errorMessage
-            color: textColor
+            color: errorTextColor
 
             font.pointSize: 12
             minimumPointSize: 8
@@ -70,7 +75,21 @@ Item {
 
         Button {
             id: closeBtn
-            text: presenter.closeButtonLabel
+
+            contentItem: Text {
+                text: presenter.closeButtonLabel
+                color: textColor
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            background: Rectangle {
+                color: buttonColor
+                border.color: borderColor
+                border.width: width * 0.005
+                radius: width * 0.01
+            }
+
             Layout.minimumWidth: bottomBtnsMinWidth
             Layout.alignment: Layout.Center
 
@@ -85,9 +104,10 @@ Item {
                 }
             }
 
-            onClicked: {
-                Qt.quit();
-            }
+            onClicked: Qt.quit();
+            onPressed: opacity = pressedButtonOpacity
+            onReleased: opacity = releasedButtonOpacity
+            onCanceled: opacity = releasedButtonOpacity
         }
     }
 }

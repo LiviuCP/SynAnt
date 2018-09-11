@@ -16,12 +16,17 @@ Item {
 
     readonly property double bottomBtnsMinWidth: (infoLevelsAndStatusLayout.width - 3 * bottomBtnsLayout.spacing) * 0.25
 
-    readonly property color paneColor: "grey"
-    readonly property color borderColor: "white"
-    readonly property color textColor: "white"
-    readonly property color wordFirstPieceColor: "blue"
-    readonly property color wordLastPieceColor: "red"
-    readonly property color wordPieceSelectedColor: "black"
+    readonly property double pressedButtonOpacity: 0.5
+    readonly property double releasedButtonOpacity: 1.0
+    readonly property double disabledButtonOpacity: 0.3
+
+    readonly property color paneColor: presenter.backgroundColor
+    readonly property color buttonColor: presenter.pushButtonColor
+    readonly property color borderColor: presenter.borderColor
+    readonly property color textColor: presenter.textColor
+    readonly property color wordFirstPieceColor: presenter.wordFirstPieceColor
+    readonly property color wordLastPieceColor: presenter.wordLastPieceColor
+    readonly property color wordPieceSelectedColor: presenter.wordPieceSelectedColor
 
     function switchToLvl(lvl) {
         firstWordTextField.clear();
@@ -125,7 +130,22 @@ Item {
 
         Button {
             id: resetBtn
-            text: presenter.resetButtonLabel
+
+            contentItem: Text {
+                text: presenter.resetButtonLabel
+                color: textColor
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                opacity: enabled ? releasedButtonOpacity : disabledButtonOpacity
+            }
+
+            background: Rectangle {
+                color: buttonColor
+                border.color: borderColor
+                border.width: width * 0.005
+                radius: width * 0.01
+                opacity: enabled ? releasedButtonOpacity : disabledButtonOpacity
+            }
 
             Layout.minimumWidth: quitBtn.width
             Layout.alignment: Qt.AlignRight
@@ -147,6 +167,10 @@ Item {
                 presenter.handleResetRequest();
                 firstWordTextField.forceActiveFocus();
             }
+
+            onPressed: opacity = pressedButtonOpacity
+            onReleased: opacity = releasedButtonOpacity
+            onCanceled: opacity = releasedButtonOpacity
         }
     }
 
@@ -428,7 +452,21 @@ Item {
 
         Button {
             id: submitBtn
-            text: presenter.submitButtonLabel
+
+            contentItem: Text {
+                text: presenter.submitButtonLabel
+                color: textColor
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            background: Rectangle {
+                color: buttonColor
+                border.color: borderColor
+                border.width: width * 0.005
+                radius: width * 0.01
+            }
+
             Layout.minimumWidth: bottomBtnsMinWidth
 
             ToolTip.text: presenter.submitButtonToolTip
@@ -451,28 +489,58 @@ Item {
                 }
             }
 
-            onClicked: {
-                submitWords();
-            }
+            onClicked: submitWords()
+            onPressed: opacity = pressedButtonOpacity
+            onReleased: opacity = releasedButtonOpacity
+            onCanceled: opacity = releasedButtonOpacity
         }
 
         Button {
             id: helpBtn
-            text: presenter.helpButtonLabel
+
+            contentItem: Text {
+                text: presenter.helpButtonLabel
+                color: textColor
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            background: Rectangle {
+                color: buttonColor
+                border.color: borderColor
+                border.width: width * 0.005
+                radius: width * 0.01
+            }
+
             Layout.minimumWidth: bottomBtnsMinWidth
 
             ToolTip.text: presenter.helpButtonToolTip
             ToolTip.delay: presenter.toolTipDelay
             ToolTip.visible: hovered
 
-            onClicked: {
-                presenter.switchToPane(GamePresenter.HELP);
-            }
+            onClicked: presenter.switchToPane(GamePresenter.HELP)
+            onPressed: opacity = pressedButtonOpacity
+            onReleased: opacity = releasedButtonOpacity
+            onCanceled: opacity = releasedButtonOpacity
         }
 
         Button {
             id: resultsBtn
-            text: presenter.resultsButtonLabel
+
+            contentItem: Text {
+                text: presenter.resultsButtonLabel
+                color: textColor
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            background: Rectangle {
+                color: buttonColor
+                border.color: borderColor
+                border.width: width * 0.005
+                radius: width * 0.01
+            }
+
             Layout.minimumWidth: bottomBtnsMinWidth
 
             ToolTip.text: presenter.resultsButtonToolTip
@@ -493,14 +561,29 @@ Item {
                 }
             }
 
-            onClicked: {
-                getResults();
-            }
+            onClicked: getResults()
+            onPressed: opacity = pressedButtonOpacity
+            onReleased: opacity = releasedButtonOpacity
+            onCanceled: opacity = releasedButtonOpacity
         }
 
         Button {
             id: quitBtn
-            text: presenter.quitButtonLabel
+
+            contentItem: Text {
+                text: presenter.quitButtonLabel
+                color: textColor
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            background: Rectangle {
+                color: buttonColor
+                border.color: borderColor
+                border.width: width * 0.005
+                radius: width * 0.01
+            }
+
             Layout.minimumWidth: bottomBtnsMinWidth - parent.spacing * 0.25
 
             ToolTip.text: presenter.quitButtonToolTip
@@ -508,6 +591,9 @@ Item {
             ToolTip.visible: hovered
 
             onClicked: Qt.quit()
+            onPressed: opacity = pressedButtonOpacity
+            onReleased: opacity = releasedButtonOpacity
+            onCanceled: opacity = releasedButtonOpacity
         }
     }
 }

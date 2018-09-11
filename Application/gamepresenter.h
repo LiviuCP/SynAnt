@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QVariant>
+#include <QColor>
 
 #include "../Common/game.h"
 #include "../Common/gamestrings.h"
@@ -76,6 +77,14 @@ class GamePresenter : public QObject
     Q_PROPERTY(int firstWordEndIndex READ getFirstWordLastPieceIndex NOTIFY mixedWordsPiecesChanged)
     Q_PROPERTY(int secondWordBeginIndex READ getSecondWordFirstPieceIndex NOTIFY mixedWordsPiecesChanged)
     Q_PROPERTY(int secondWordEndIndex READ getSecondWordLastPieceIndex NOTIFY mixedWordsPiecesChanged)
+    Q_PROPERTY(QColor backgroundColor READ getBackgroundColor CONSTANT)
+    Q_PROPERTY(QColor pushButtonColor READ getPushButtonColor CONSTANT)
+    Q_PROPERTY(QColor borderColor READ getBorderColor CONSTANT)
+    Q_PROPERTY(QColor textColor READ getTextColor CONSTANT)
+    Q_PROPERTY(QColor errorTextColor READ getErrorTextColor CONSTANT)
+    Q_PROPERTY(QColor wordFirstPieceColor READ getWordFirstPieceColor CONSTANT)
+    Q_PROPERTY(QColor wordLastPieceColor READ getWordLastPieceColor CONSTANT)
+    Q_PROPERTY(QColor wordPieceSelectedColor READ getWordPieceSelectedColor CONSTANT)
 
 public:
     enum class Pane
@@ -165,6 +174,15 @@ public:
     int getFirstWordLastPieceIndex() const;
     int getSecondWordFirstPieceIndex() const;
     int getSecondWordLastPieceIndex() const;
+
+    QColor getBackgroundColor() const;
+    QColor getPushButtonColor() const;
+    QColor getBorderColor() const;
+    QColor getTextColor() const;
+    QColor getErrorTextColor() const;
+    QColor getWordFirstPieceColor() const;
+    QColor getWordLastPieceColor() const;
+    QColor getWordPieceSelectedColor() const;
 
 signals:
     Q_SIGNAL void windowTitleChanged();
