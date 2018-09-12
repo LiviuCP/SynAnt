@@ -40,23 +40,23 @@ namespace Styles {
                                                         };
 
     const QString c_WordBeginPieceNotSelectedStyle      {    QString{"color: %1; border-width: 1px; background-color: %2;"}
-                                                                 .arg(GameStrings::c_WordFirstPieceColor)
+                                                                 .arg(GameStrings::c_WordFirstPieceTextColor)
                                                                  .arg(GameStrings::c_BackgroundColor)
                                                         };
 
     const QString c_WordEndPieceNotSelectedStyle        {    QString{"color: %1; border-width: 1px; background-color: %2;"}
-                                                                 .arg(GameStrings::c_WordLastPieceColor)
+                                                                 .arg(GameStrings::c_WordLastPieceTextColor)
                                                                  .arg(GameStrings::c_BackgroundColor)
                                                         };
 
     const QString c_WordBeginPieceSelectedStyle         {    QString{"color: %1; border-width: 1px; background-color: %2;"}
-                                                                 .arg(GameStrings::c_WordFirstPieceColor)
-                                                                 .arg(GameStrings::c_WordPieceSelectedColor)
+                                                                 .arg(GameStrings::c_WordFirstPieceTextColor)
+                                                                 .arg(GameStrings::c_WordPieceSelectedBackgroundColor)
                                                         };
 
     const QString c_WordEndPieceSelectedStyle           {    QString{"color: %1; border-width: 1px; background-color: %2;"}
-                                                                 .arg(GameStrings::c_WordLastPieceColor)
-                                                                 .arg(GameStrings::c_WordPieceSelectedColor)
+                                                                 .arg(GameStrings::c_WordLastPieceTextColor)
+                                                                 .arg(GameStrings::c_WordPieceSelectedBackgroundColor)
                                                         };
 
     const QString c_ErrorMessageStyle                   {    QString{"color: %1; border-width: 1px; background-color: %2;"}
