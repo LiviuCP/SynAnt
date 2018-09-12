@@ -540,17 +540,17 @@ QColor GamePresenter::getFatalErrorTextColor() const
 
 QColor GamePresenter::getWordFirstPieceColor() const
 {
-    return QColor{GameStrings::c_WordFirstPieceColor};
+    return QColor{GameStrings::c_WordFirstPieceTextColor};
 }
 
 QColor GamePresenter::getWordLastPieceColor() const
 {
-    return QColor{GameStrings::c_WordLastPieceColor};
+    return QColor{GameStrings::c_WordLastPieceTextColor};
 }
 
 QColor GamePresenter::getWordPieceSelectedColor() const
 {
-    return QColor{GameStrings::c_WordPieceSelectedColor};
+    return QColor{GameStrings::c_WordPieceSelectedBackgroundColor};
 }
 
 void GamePresenter::_onStatisticsUpdated()
