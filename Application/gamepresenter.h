@@ -81,7 +81,7 @@ class GamePresenter : public QObject
     Q_PROPERTY(QColor pushButtonColor READ getPushButtonColor CONSTANT)
     Q_PROPERTY(QColor borderColor READ getBorderColor CONSTANT)
     Q_PROPERTY(QColor textColor READ getTextColor CONSTANT)
-    Q_PROPERTY(QColor errorTextColor READ getErrorTextColor CONSTANT)
+    Q_PROPERTY(QColor fatalErrorTextColor READ getFatalErrorTextColor CONSTANT)
     Q_PROPERTY(QColor wordFirstPieceColor READ getWordFirstPieceColor CONSTANT)
     Q_PROPERTY(QColor wordLastPieceColor READ getWordLastPieceColor CONSTANT)
     Q_PROPERTY(QColor wordPieceSelectedColor READ getWordPieceSelectedColor CONSTANT)
@@ -179,7 +179,7 @@ public:
     QColor getPushButtonColor() const;
     QColor getBorderColor() const;
     QColor getTextColor() const;
-    QColor getErrorTextColor() const;
+    QColor getFatalErrorTextColor() const;
     QColor getWordFirstPieceColor() const;
     QColor getWordLastPieceColor() const;
     QColor getWordPieceSelectedColor() const;

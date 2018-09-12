@@ -19,7 +19,7 @@ Item {
     readonly property color buttonColor: presenter.pushButtonColor
     readonly property color borderColor: presenter.borderColor
     readonly property color textColor: presenter.textColor
-    readonly property color errorTextColor: presenter.errorTextColor
+    readonly property color fatalErrorTextColor: presenter.fatalErrorTextColor
 
     MouseArea {
         id: errorPaneMouseArea
@@ -48,7 +48,7 @@ Item {
         Text {
             id: errorPaneText
             text: presenter.errorMessage
-            color: errorTextColor
+            color: fatalErrorTextColor
 
             font.pointSize: 12
             minimumPointSize: 8

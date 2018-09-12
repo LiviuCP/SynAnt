@@ -533,9 +533,9 @@ QColor GamePresenter::getTextColor() const
     return QColor{GameStrings::c_TextColor};
 }
 
-QColor GamePresenter::getErrorTextColor() const
+QColor GamePresenter::getFatalErrorTextColor() const
 {
-    return QColor{"red"};
+    return QColor{GameStrings::c_FatalErrorTextColor};
 }
 
 QColor GamePresenter::getWordFirstPieceColor() const
