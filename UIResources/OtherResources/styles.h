@@ -19,6 +19,8 @@ namespace Styles {
 
     const QString c_WordBeginPieceSelectedStyle         {    "color: blue; border-width: 1px; background-color: black;"                                 };
     const QString c_WordEndPieceSelectedStyle           {    "color: red; border-width: 1px; background-color: black;"                                  };
+
+    const QString c_ErrorMessageStyle                   {    "color: red; border-width: 1px; background-color: grey;"                                   };
     }
 
 #endif // STYLES_H

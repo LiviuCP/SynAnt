@@ -1,5 +1,7 @@
 #include "fatalerrors.h"
 
+#include "../OtherResources/styles.h"
+
 #include "../../Common/gamestrings.h"
 
 #include <QApplication>
@@ -17,6 +19,7 @@ FatalErrors::FatalErrors(QWidget *parent)
     m_pErrorMessage = new QLabel{};
     m_pErrorMessage -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     m_pErrorMessage -> setFrameStyle(QFrame::StyledPanel);
+    m_pErrorMessage -> setStyleSheet(Styles::c_ErrorMessageStyle);
     messageLayout -> addWidget(m_pErrorMessage,1);
 
     QHBoxLayout *closeButtonLayout{new QHBoxLayout{}};
