@@ -424,6 +424,8 @@ Item {
                     forceActiveFocus();
                 }
             }
+
+            Keys.onReleased: submitBtn.enabled = (firstWordTextField.text.length != 0 && secondWordTextField.text.length != 0) ? true : false
         }
 
         TextField {
@@ -436,6 +438,8 @@ Item {
             ToolTip.text: presenter.secondWordToolTip
             ToolTip.delay: presenter.toolTipDelay
             ToolTip.visible: hovered
+
+            Keys.onReleased: submitBtn.enabled = (firstWordTextField.text.length != 0 && secondWordTextField.text.length != 0) ? true : false
         }
     }
 
@@ -452,12 +456,14 @@ Item {
 
         Button {
             id: submitBtn
+            enabled: false
 
             contentItem: Text {
                 text: presenter.submitButtonLabel
                 color: textColor
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
+                opacity: enabled ? releasedButtonOpacity : disabledButtonOpacity
             }
 
             background: Rectangle {
@@ -465,6 +471,7 @@ Item {
                 border.color: borderColor
                 border.width: width * 0.005
                 radius: width * 0.01
+                opacity: enabled ? releasedButtonOpacity : disabledButtonOpacity
             }
 
             Layout.minimumWidth: bottomBtnsMinWidth
@@ -478,6 +485,7 @@ Item {
                 if (clearTextFields) {
                     firstWordTextField.clear();
                     secondWordTextField.clear();
+                    enabled = false;
                 }
                 firstWordTextField.forceActiveFocus();
             }
@@ -552,6 +560,7 @@ Item {
                 secondWordTextField.clear();
                 firstWordTextField.forceActiveFocus();
                 presenter.handleResultsRequest();
+                submitBtn.enabled = false;
             }
 
             Shortcut {
