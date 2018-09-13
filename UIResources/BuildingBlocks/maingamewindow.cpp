@@ -335,15 +335,15 @@ void MainGameWindow::_createMixedWordsLabels()
         m_MixedWords[wordPieceIndex] -> setText((m_pWordMixer -> getMixedWordsStringArray()).at(wordPieceIndex));
     }
 
-    m_MixedWords[m_pWordMixer -> getFirstWordFirstPieceIndex() ] -> setLabelNotSelectedStyleSheet(Styles::c_WordBeginPieceNotSelectedStyle);
-    m_MixedWords[m_pWordMixer -> getSecondWordFirstPieceIndex()] -> setLabelNotSelectedStyleSheet(Styles::c_WordBeginPieceNotSelectedStyle);
-    m_MixedWords[m_pWordMixer -> getFirstWordLastPieceIndex()  ] -> setLabelNotSelectedStyleSheet(Styles::c_WordEndPieceNotSelectedStyle);
-    m_MixedWords[m_pWordMixer -> getSecondWordLastPieceIndex() ] -> setLabelNotSelectedStyleSheet(Styles::c_WordEndPieceNotSelectedStyle);
+    m_MixedWords[m_pWordMixer -> getFirstWordFirstPieceIndex() ] -> setLabelNotSelectedStyleSheet(Styles::c_WordFirstPieceNotSelectedStyle);
+    m_MixedWords[m_pWordMixer -> getSecondWordFirstPieceIndex()] -> setLabelNotSelectedStyleSheet(Styles::c_WordFirstPieceNotSelectedStyle);
+    m_MixedWords[m_pWordMixer -> getFirstWordLastPieceIndex()  ] -> setLabelNotSelectedStyleSheet(Styles::c_WordLastPieceNotSelectedStyle);
+    m_MixedWords[m_pWordMixer -> getSecondWordLastPieceIndex() ] -> setLabelNotSelectedStyleSheet(Styles::c_WordLastPieceNotSelectedStyle);
 
-    m_MixedWords[m_pWordMixer -> getFirstWordFirstPieceIndex() ] -> setLabelSelectedStyleSheet(Styles::c_WordBeginPieceSelectedStyle);
-    m_MixedWords[m_pWordMixer -> getSecondWordFirstPieceIndex()] -> setLabelSelectedStyleSheet(Styles::c_WordBeginPieceSelectedStyle);
-    m_MixedWords[m_pWordMixer -> getFirstWordLastPieceIndex()  ] -> setLabelSelectedStyleSheet(Styles::c_WordEndPieceSelectedStyle);
-    m_MixedWords[m_pWordMixer -> getSecondWordLastPieceIndex() ] -> setLabelSelectedStyleSheet(Styles::c_WordEndPieceSelectedStyle);
+    m_MixedWords[m_pWordMixer -> getFirstWordFirstPieceIndex() ] -> setLabelSelectedStyleSheet(Styles::c_WordFirstPieceSelectedStyle);
+    m_MixedWords[m_pWordMixer -> getSecondWordFirstPieceIndex()] -> setLabelSelectedStyleSheet(Styles::c_WordFirstPieceSelectedStyle);
+    m_MixedWords[m_pWordMixer -> getFirstWordLastPieceIndex()  ] -> setLabelSelectedStyleSheet(Styles::c_WordLastPieceSelectedStyle);
+    m_MixedWords[m_pWordMixer -> getSecondWordLastPieceIndex() ] -> setLabelSelectedStyleSheet(Styles::c_WordLastPieceSelectedStyle);
 }
 
 void MainGameWindow::_addMixedWordsLabels()
