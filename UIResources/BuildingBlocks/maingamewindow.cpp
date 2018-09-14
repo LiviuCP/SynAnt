@@ -315,12 +315,7 @@ Game::StatusCodes MainGameWindow::_checkWords(const QString &firstWord, const QS
     const QString firstWordRef{m_pWordMixer->getFirstWord()};
     const QString secondWordRef{m_pWordMixer->getSecondWord()};
 
-    if (firstWord.isEmpty() || secondWord.isEmpty())
-    {
-        statusCode = Game::StatusCodes::MISSING_WORDS;
-    }
-
-    else if (((firstWord == firstWordRef) && (secondWord == secondWordRef)) || ((firstWord == secondWordRef) && (secondWord == firstWordRef)))
+    if (((firstWord == firstWordRef) && (secondWord == secondWordRef)) || ((firstWord == secondWordRef) && (secondWord == firstWordRef)))
     {
         statusCode = Game::StatusCodes::SUCCESS;
     }
@@ -394,9 +389,6 @@ void MainGameWindow::_updateStatusMessage(Game::StatusCodes statusCode)
         statusMessage = GameStrings::c_SuccessMessage.arg(m_pWordMixer->getFirstWord())
                                                      .arg(m_pWordMixer->getSecondWord())
                                                      .arg(m_pWordMixer->areSynonyms() ? GameStrings::c_Synonyms : GameStrings::c_Antonyms);
-        break;
-    case Game::StatusCodes::MISSING_WORDS:
-        statusMessage = GameStrings::c_MissingWordsMessage;
         break;
     case Game::StatusCodes::INCORRECT_WORDS:
         statusMessage = GameStrings::c_IncorrectWordsMessage;
