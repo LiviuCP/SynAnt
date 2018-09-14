@@ -86,7 +86,9 @@ private:
     ScoreItem* m_pScoreItem;
     // set true after first access to main game window
     bool m_IsInitialized;
+    // needed for easier enabling/disabling of the buttons AND shortcuts
     bool m_IsSubmitEnabled;
+    bool m_IsResetEnabled;
 
     Game::StatusCodes _checkWords(const QString &firstWord, const QString &secondWord);
     void _removeMixedWordsLabels();
@@ -95,6 +97,7 @@ private:
     void _switchToLevel(Game::Level level);
     void _updateStatusMessage(Game::StatusCodes statusCode);
     void _setSubmitEnabled(bool enabled);
+    void _setResetEnabled(bool enabled);
 };
 
 #endif // MAINGAMEWINDOW_H

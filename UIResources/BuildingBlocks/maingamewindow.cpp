@@ -22,7 +22,8 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
       m_pWordMixer{wordMixer},
       m_pScoreItem{new ScoreItem{this}},
       m_IsInitialized{false},
-      m_IsSubmitEnabled{false}
+      m_IsSubmitEnabled{false},
+      m_IsResetEnabled{false}
 {
     Q_ASSERT(m_pWordMixer);
     m_pWordMixer -> setParent(this);
@@ -39,8 +40,8 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     m_pResetButton -> setToolTip(GameStrings::c_ResetButtonToolTip);
     m_pResetButtonShortcut = new QShortcut{QKeySequence{GameStrings::c_ResetShortcut},this};
     // enable reset only if statistics are different from 0
-    m_pResetButton -> setEnabled(false);
-    m_pResetButtonShortcut ->setEnabled(false);
+    m_pResetButton -> setEnabled(m_IsResetEnabled);
+    m_pResetButtonShortcut ->setEnabled(m_IsResetEnabled);
     statisticsLayout -> addWidget(m_pHighScores);
     statisticsLayout -> addWidget(m_pNrOfWordPairs);
     statisticsLayout -> addSpacing(30);
@@ -200,8 +201,8 @@ void MainGameWindow::_onButtonResetClicked()
 {
     m_pScoreItem -> resetStatistics();
     _updateStatusMessage(Game::StatusCodes::STATISTICS_RESET);
-    m_pResetButton -> setEnabled(false);
-    m_pResetButtonShortcut -> setEnabled(false);
+    _setResetEnabled(false);
+    m_pFirstWordLineEdit->setFocus();
 }
 
 void MainGameWindow::_onButtonEasyToggled(bool checked)
@@ -268,15 +269,7 @@ void MainGameWindow::_onButtonSubmitClicked()
         _addMixedWordsLabels();
         m_pScoreItem -> updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
 
-        if (!m_pResetButton->isEnabled())
-        {
-            m_pResetButton->setEnabled(true);
-        }
-
-        if (!m_pResetButtonShortcut->isEnabled())
-        {
-            m_pResetButtonShortcut->setEnabled(true);
-        }
+        _setResetEnabled(true);
 
         m_pFirstWordLineEdit -> clear();
         m_pSecondWordLineEdit -> clear();
@@ -298,14 +291,7 @@ void MainGameWindow::_onButtonResultsClicked()
     _addMixedWordsLabels();
     m_pScoreItem -> updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
 
-    if (!m_pResetButton->isEnabled())
-    {
-        m_pResetButton->setEnabled(true);
-    }
-    if (!m_pResetButtonShortcut->isEnabled())
-    {
-        m_pResetButtonShortcut->setEnabled(true);
-    }
+    _setResetEnabled(true);
 
     _setSubmitEnabled(false);
 }
@@ -443,6 +429,16 @@ void MainGameWindow::_setSubmitEnabled(bool enabled)
         m_pSubmitButton->setEnabled(enabled);
         m_pSubmitButtonShortcut->setEnabled(enabled);
         m_IsSubmitEnabled = enabled;
+    }
+}
+
+void MainGameWindow::_setResetEnabled(bool enabled)
+{
+    if (m_IsResetEnabled != enabled)
+    {
+        m_pResetButton->setEnabled(enabled);
+        m_pResetButtonShortcut->setEnabled(enabled);
+        m_IsResetEnabled = enabled;
     }
 }
 
