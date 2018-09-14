@@ -273,10 +273,10 @@ void MainGameWindow::_onButtonSubmitClicked()
 
         m_pFirstWordLineEdit -> clear();
         m_pSecondWordLineEdit -> clear();
-        m_pFirstWordLineEdit -> setFocus();
 
         _setSubmitEnabled(false);
     }
+    m_pFirstWordLineEdit -> setFocus();
 }
 
 void MainGameWindow::_onButtonResultsClicked()
