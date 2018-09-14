@@ -21,7 +21,8 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
       m_MixedWords{},
       m_pWordMixer{wordMixer},
       m_pScoreItem{new ScoreItem{this}},
-      m_IsInitialized{false}
+      m_IsInitialized{false},
+      m_IsSubmitEnabled{false}
 {
     Q_ASSERT(m_pWordMixer);
     m_pWordMixer -> setParent(this);
@@ -86,10 +87,13 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
 
     QHBoxLayout *buttonsLayout{new QHBoxLayout{}};
     buttonsLayout -> setSpacing(25);
-    QPushButton *submitButton{new QPushButton{GameStrings::c_SubmitButtonLabel}};
-    submitButton -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
-    submitButton -> setToolTip(GameStrings::c_SubmitButtonToolTip);
-    QShortcut *submitButtonShortcut{new QShortcut{QKeySequence{GameStrings::c_SubmitButtonShortcut},this}};
+    m_pSubmitButton = new QPushButton{GameStrings::c_SubmitButtonLabel};
+    m_pSubmitButton -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
+    m_pSubmitButton -> setToolTip(GameStrings::c_SubmitButtonToolTip);
+    m_pSubmitButtonShortcut = new QShortcut{QKeySequence{GameStrings::c_SubmitButtonShortcut},this};
+    // enable the submit button/shortcut only if user entered input in both linedit fields
+    m_pSubmitButton -> setEnabled(m_IsSubmitEnabled);
+    m_pSubmitButtonShortcut -> setEnabled(m_IsSubmitEnabled);
     QPushButton *hintsButton{new QPushButton{GameStrings::c_HelpButtonLabel}};
     hintsButton -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
     hintsButton -> setToolTip(GameStrings::c_HelpButtonToolTip);
@@ -102,7 +106,7 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     quitButton -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
     quitButton -> setToolTip(GameStrings::c_QuitButtonToolTip);
     QShortcut *quitButtonShortcut{new QShortcut{QKeySequence{GameStrings::c_QuitButtonShortcut},this}};
-    buttonsLayout -> addWidget(submitButton);
+    buttonsLayout -> addWidget(m_pSubmitButton);
     buttonsLayout -> addWidget(hintsButton);
     buttonsLayout -> addWidget(showResultsButton);
     buttonsLayout -> addWidget(quitButton);
@@ -114,10 +118,12 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     mainLayout -> addLayout(wordsLayout);
     mainLayout -> addLayout(buttonsLayout);
     setLayout(mainLayout);
+
     setToolTip(GameStrings::c_MainWindowToolTip);
     setAttribute(Qt::WA_AlwaysShowToolTips);
-
     setWindowTitle(GameStrings::c_MainWindowTitle);
+
+    m_pFirstWordLineEdit -> setFocus();
 
     bool connected{connect(m_pScoreItem,&ScoreItem::statisticsUpdated,this,&MainGameWindow::onStatisticsUpdated)};
     Q_ASSERT(connected);
@@ -139,9 +145,9 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     Q_ASSERT(connected);
     connected = connect(levelHardShortcut,&QShortcut::activated,this,&MainGameWindow::_onButtonHardShortcutEntered);
     Q_ASSERT(connected);
-    connected = connect(submitButton,&QPushButton::clicked,this,&MainGameWindow::_onButtonSubmitClicked);
+    connected = connect(m_pSubmitButton,&QPushButton::clicked,this,&MainGameWindow::_onButtonSubmitClicked);
     Q_ASSERT(connected);
-    connected = connect(submitButtonShortcut,&QShortcut::activated,this,&MainGameWindow::_onButtonSubmitClicked);
+    connected = connect(m_pSubmitButtonShortcut,&QShortcut::activated,this,&MainGameWindow::_onButtonSubmitClicked);
     Q_ASSERT(connected);
     connected = connect(hintsButton,&QPushButton::clicked,this,&MainGameWindow::switchedMaintoHints);
     Q_ASSERT(connected);
@@ -156,6 +162,8 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     connected = connect(quitButtonShortcut,&QShortcut::activated,qApp,&QApplication::quit);
     Q_ASSERT(connected);
     connected = connect(this,&MainGameWindow::levelChanged,m_pWordMixer,&WordMixer::setWordPieceSize);
+    Q_ASSERT(connected);
+    connected = connect(this,&MainGameWindow::keyReleased,this,&MainGameWindow::_onKeyReleased);
     Q_ASSERT(connected);
 }
 
@@ -180,6 +188,12 @@ void MainGameWindow::onStatisticsUpdated()
                                                              .arg(m_pScoreItem->getTotalAvailableScore()));
     m_pNrOfWordPairs -> setText(GameStrings::c_WordPairsMessage.arg(m_pScoreItem->getGuessedWordPairs())
                                                                .arg(m_pScoreItem->getTotalWordPairs()));
+}
+
+void MainGameWindow::keyReleaseEvent(QKeyEvent *keyEvent)
+{
+    (void) keyEvent;
+    emit keyReleased();
 }
 
 void MainGameWindow::_onButtonResetClicked()
@@ -242,9 +256,6 @@ void MainGameWindow::_onButtonSubmitClicked()
 {
     QString firstInputWord{m_pFirstWordLineEdit -> text()};
     QString secondInputword{m_pSecondWordLineEdit -> text()};
-    m_pFirstWordLineEdit -> clear();
-    m_pSecondWordLineEdit -> clear();
-    m_pFirstWordLineEdit -> setFocus();
 
     Game::StatusCodes statusCode {_checkWords(firstInputWord, secondInputword)};
     // update the status message before retrieving any new words
@@ -266,6 +277,12 @@ void MainGameWindow::_onButtonSubmitClicked()
         {
             m_pResetButtonShortcut->setEnabled(true);
         }
+
+        m_pFirstWordLineEdit -> clear();
+        m_pSecondWordLineEdit -> clear();
+        m_pFirstWordLineEdit -> setFocus();
+
+        _setSubmitEnabled(false);
     }
 }
 
@@ -285,10 +302,23 @@ void MainGameWindow::_onButtonResultsClicked()
     {
         m_pResetButton->setEnabled(true);
     }
-
     if (!m_pResetButtonShortcut->isEnabled())
     {
         m_pResetButtonShortcut->setEnabled(true);
+    }
+
+    _setSubmitEnabled(false);
+}
+
+void MainGameWindow::_onKeyReleased()
+{
+    if ((m_pFirstWordLineEdit->text()).size() != 0 && (m_pSecondWordLineEdit->text()).size() != 0)
+    {
+        _setSubmitEnabled(true);
+    }
+    else
+    {
+        _setSubmitEnabled(false);
     }
 }
 
@@ -365,6 +395,7 @@ void MainGameWindow::_switchToLevel(Game::Level level)
     _createMixedWordsLabels();
     _addMixedWordsLabels();
     _updateStatusMessage(Game::StatusCodes::LEVEL_CHANGED);
+    _setSubmitEnabled(false);
 }
 
 void MainGameWindow::_updateStatusMessage(Game::StatusCodes statusCode)
@@ -403,6 +434,16 @@ void MainGameWindow::_updateStatusMessage(Game::StatusCodes statusCode)
     }
 
     m_pResultsErrors -> setText(statusMessage);
+}
+
+void MainGameWindow::_setSubmitEnabled(bool enabled)
+{
+    if (m_IsSubmitEnabled != enabled)
+    {
+        m_pSubmitButton->setEnabled(enabled);
+        m_pSubmitButtonShortcut->setEnabled(enabled);
+        m_IsSubmitEnabled = enabled;
+    }
 }
 
 

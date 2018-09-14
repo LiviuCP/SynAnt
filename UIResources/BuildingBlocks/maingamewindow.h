@@ -49,6 +49,10 @@ public slots:
 signals:
     void levelChanged(Game::Level level);
     void switchedMaintoHints();
+    void keyReleased();
+
+protected:
+    void keyReleaseEvent(QKeyEvent *keyEvent) override;
 
 private slots:
     void _onButtonResetClicked();
@@ -60,6 +64,7 @@ private slots:
     void _onButtonHardShortcutEntered();
     void _onButtonSubmitClicked();
     void _onButtonResultsClicked();
+    void _onKeyReleased();
 
 private:
     // both words split into equal pieces and mixed into a single array
@@ -70,6 +75,8 @@ private:
     QLineEdit* m_pSecondWordLineEdit;
     QLabel* m_pHighScores;
     QLabel* m_pNrOfWordPairs;
+    QPushButton* m_pSubmitButton;
+    QShortcut* m_pSubmitButtonShortcut;
     QRadioButton* m_pLevelEasyButton;
     QRadioButton* m_pLevelMediumButton;
     QRadioButton* m_pLevelHardButton;
@@ -79,6 +86,7 @@ private:
     ScoreItem* m_pScoreItem;
     // set true after first access to main game window
     bool m_IsInitialized;
+    bool m_IsSubmitEnabled;
 
     Game::StatusCodes _checkWords(const QString &firstWord, const QString &secondWord);
     void _removeMixedWordsLabels();
@@ -86,6 +94,7 @@ private:
     void _addMixedWordsLabels();
     void _switchToLevel(Game::Level level);
     void _updateStatusMessage(Game::StatusCodes statusCode);
+    void _setSubmitEnabled(bool enabled);
 };
 
 #endif // MAINGAMEWINDOW_H
