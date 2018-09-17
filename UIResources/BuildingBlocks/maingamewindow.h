@@ -67,6 +67,15 @@ private slots:
     void _onKeyReleased();
 
 private:
+    Game::StatusCodes _checkWords(const QString &firstWord, const QString &secondWord);
+    void _removeMixedWordsLabels();
+    void _createMixedWordsLabels();
+    void _addMixedWordsLabels();
+    void _switchToLevel(Game::Level level);
+    void _updateStatusMessage(Game::StatusCodes statusCode);
+    void _setSubmitEnabled(bool enabled);
+    void _setResetEnabled(bool enabled);
+
     // both words split into equal pieces and mixed into a single array
     QVector<SelectableLabel*> m_MixedWordsLabels;
     QHBoxLayout* m_pMixedWordsLayout;
@@ -89,15 +98,6 @@ private:
     // needed for easier enabling/disabling of the buttons AND shortcuts
     bool m_IsSubmitEnabled;
     bool m_IsResetEnabled;
-
-    Game::StatusCodes _checkWords(const QString &firstWord, const QString &secondWord);
-    void _removeMixedWordsLabels();
-    void _createMixedWordsLabels();
-    void _addMixedWordsLabels();
-    void _switchToLevel(Game::Level level);
-    void _updateStatusMessage(Game::StatusCodes statusCode);
-    void _setSubmitEnabled(bool enabled);
-    void _setResetEnabled(bool enabled);
 };
 
 #endif // MAINGAMEWINDOW_H
