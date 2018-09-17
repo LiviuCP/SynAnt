@@ -68,13 +68,13 @@ private slots:
 
 private:
     // both words split into equal pieces and mixed into a single array
-    QVector<SelectableLabel*> m_MixedWords;
+    QVector<SelectableLabel*> m_MixedWordsLabels;
     QHBoxLayout* m_pMixedWordsLayout;
-    QLabel* m_pResultsErrors;
+    QLabel* m_pResultsErrorsLabel;
     QLineEdit* m_pFirstWordLineEdit;
     QLineEdit* m_pSecondWordLineEdit;
-    QLabel* m_pHighScores;
-    QLabel* m_pNrOfWordPairs;
+    QLabel* m_pHighScoresLabel;
+    QLabel* m_pNrOfWordPairsLabel;
     QPushButton* m_pSubmitButton;
     QShortcut* m_pSubmitButtonShortcut;
     QRadioButton* m_pLevelEasyButton;

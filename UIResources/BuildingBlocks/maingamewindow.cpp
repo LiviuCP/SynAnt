@@ -18,7 +18,7 @@
 
 MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     : QWidget{parent},
-      m_MixedWords{},
+      m_MixedWordsLabels{},
       m_pWordMixer{wordMixer},
       m_pScoreItem{new ScoreItem{this}},
       m_IsInitialized{false},
@@ -29,12 +29,12 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     m_pWordMixer -> setParent(this);
 
     QHBoxLayout *statisticsLayout{new QHBoxLayout{}};
-    m_pHighScores = new QLabel{};
-    m_pHighScores -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
-    m_pHighScores -> setToolTip(GameStrings::c_HighscoresToolTip);
-    m_pNrOfWordPairs = new QLabel{};
-    m_pNrOfWordPairs -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
-    m_pNrOfWordPairs -> setToolTip(GameStrings::c_WordPairsToolTip);
+    m_pHighScoresLabel = new QLabel{};
+    m_pHighScoresLabel -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
+    m_pHighScoresLabel -> setToolTip(GameStrings::c_HighscoresToolTip);
+    m_pNrOfWordPairsLabel = new QLabel{};
+    m_pNrOfWordPairsLabel -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
+    m_pNrOfWordPairsLabel -> setToolTip(GameStrings::c_WordPairsToolTip);
     m_pResetButton = new QPushButton{GameStrings::c_ResetButtonLabel};
     m_pResetButton -> setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_pResetButton -> setToolTip(GameStrings::c_ResetButtonToolTip);
@@ -42,8 +42,8 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     // enable reset only if statistics are different from 0
     m_pResetButton -> setEnabled(m_IsResetEnabled);
     m_pResetButtonShortcut ->setEnabled(m_IsResetEnabled);
-    statisticsLayout -> addWidget(m_pHighScores);
-    statisticsLayout -> addWidget(m_pNrOfWordPairs);
+    statisticsLayout -> addWidget(m_pHighScoresLabel);
+    statisticsLayout -> addWidget(m_pNrOfWordPairsLabel);
     statisticsLayout -> addSpacing(30);
     statisticsLayout -> addWidget(m_pResetButton);
 
@@ -68,12 +68,12 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     levelButtonsLayout -> addWidget(m_pLevelMediumButton);
     levelButtonsLayout -> addWidget(m_pLevelHardButton);
     levelButtonsBox -> setLayout(levelButtonsLayout);
-    m_pResultsErrors = new QLabel{};
-    m_pResultsErrors -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-    m_pResultsErrors -> setToolTip(GameStrings::c_GameStatusToolTip);
+    m_pResultsErrorsLabel = new QLabel{};
+    m_pResultsErrorsLabel -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    m_pResultsErrorsLabel -> setToolTip(GameStrings::c_GameStatusToolTip);
     levelsStatusReqInputLayout -> addWidget(requestInput);
     levelsStatusReqInputLayout -> addWidget(levelButtonsBox);
-    levelsStatusReqInputLayout -> addWidget(m_pResultsErrors);
+    levelsStatusReqInputLayout -> addWidget(m_pResultsErrorsLabel);
 
     m_pMixedWordsLayout = new QHBoxLayout{};
     m_pMixedWordsLayout -> setSpacing(0);
@@ -185,9 +185,9 @@ void MainGameWindow::init()
 
 void MainGameWindow::onStatisticsUpdated()
 {
-    m_pHighScores -> setText(GameStrings::c_HighscoresMessage.arg(m_pScoreItem->getObtainedScore())
+    m_pHighScoresLabel -> setText(GameStrings::c_HighscoresMessage.arg(m_pScoreItem->getObtainedScore())
                                                              .arg(m_pScoreItem->getTotalAvailableScore()));
-    m_pNrOfWordPairs -> setText(GameStrings::c_WordPairsMessage.arg(m_pScoreItem->getGuessedWordPairs())
+    m_pNrOfWordPairsLabel -> setText(GameStrings::c_WordPairsMessage.arg(m_pScoreItem->getGuessedWordPairs())
                                                                .arg(m_pScoreItem->getTotalWordPairs()));
 }
 
@@ -328,7 +328,7 @@ Game::StatusCodes MainGameWindow::_checkWords(const QString &firstWord, const QS
 
 void MainGameWindow::_removeMixedWordsLabels()
 {
-    for(auto currentWordPiece : m_MixedWords)
+    for(auto currentWordPiece : m_MixedWordsLabels)
     {
         m_pMixedWordsLayout -> removeWidget(currentWordPiece);
         delete currentWordPiece;
@@ -339,27 +339,27 @@ void MainGameWindow::_removeMixedWordsLabels()
 void MainGameWindow::_createMixedWordsLabels()
 {
     int newNumberOfPieces{(m_pWordMixer->getMixedWordsStringArray()).size()};
-    m_MixedWords.resize(newNumberOfPieces);
+    m_MixedWordsLabels.resize(newNumberOfPieces);
     for (int wordPieceIndex{0}; wordPieceIndex < newNumberOfPieces; wordPieceIndex++)
     {
-        m_MixedWords[wordPieceIndex] = new SelectableLabel{};
-        m_MixedWords[wordPieceIndex] -> setText((m_pWordMixer -> getMixedWordsStringArray()).at(wordPieceIndex));
+        m_MixedWordsLabels[wordPieceIndex] = new SelectableLabel{};
+        m_MixedWordsLabels[wordPieceIndex] -> setText((m_pWordMixer -> getMixedWordsStringArray()).at(wordPieceIndex));
     }
 
-    m_MixedWords[m_pWordMixer -> getFirstWordFirstPieceIndex() ] -> setLabelNotSelectedStyleSheet(Styles::c_WordFirstPieceNotSelectedStyle);
-    m_MixedWords[m_pWordMixer -> getSecondWordFirstPieceIndex()] -> setLabelNotSelectedStyleSheet(Styles::c_WordFirstPieceNotSelectedStyle);
-    m_MixedWords[m_pWordMixer -> getFirstWordLastPieceIndex()  ] -> setLabelNotSelectedStyleSheet(Styles::c_WordLastPieceNotSelectedStyle);
-    m_MixedWords[m_pWordMixer -> getSecondWordLastPieceIndex() ] -> setLabelNotSelectedStyleSheet(Styles::c_WordLastPieceNotSelectedStyle);
+    m_MixedWordsLabels[m_pWordMixer -> getFirstWordFirstPieceIndex() ] -> setLabelNotSelectedStyleSheet(Styles::c_WordFirstPieceNotSelectedStyle);
+    m_MixedWordsLabels[m_pWordMixer -> getSecondWordFirstPieceIndex()] -> setLabelNotSelectedStyleSheet(Styles::c_WordFirstPieceNotSelectedStyle);
+    m_MixedWordsLabels[m_pWordMixer -> getFirstWordLastPieceIndex()  ] -> setLabelNotSelectedStyleSheet(Styles::c_WordLastPieceNotSelectedStyle);
+    m_MixedWordsLabels[m_pWordMixer -> getSecondWordLastPieceIndex() ] -> setLabelNotSelectedStyleSheet(Styles::c_WordLastPieceNotSelectedStyle);
 
-    m_MixedWords[m_pWordMixer -> getFirstWordFirstPieceIndex() ] -> setLabelSelectedStyleSheet(Styles::c_WordFirstPieceSelectedStyle);
-    m_MixedWords[m_pWordMixer -> getSecondWordFirstPieceIndex()] -> setLabelSelectedStyleSheet(Styles::c_WordFirstPieceSelectedStyle);
-    m_MixedWords[m_pWordMixer -> getFirstWordLastPieceIndex()  ] -> setLabelSelectedStyleSheet(Styles::c_WordLastPieceSelectedStyle);
-    m_MixedWords[m_pWordMixer -> getSecondWordLastPieceIndex() ] -> setLabelSelectedStyleSheet(Styles::c_WordLastPieceSelectedStyle);
+    m_MixedWordsLabels[m_pWordMixer -> getFirstWordFirstPieceIndex() ] -> setLabelSelectedStyleSheet(Styles::c_WordFirstPieceSelectedStyle);
+    m_MixedWordsLabels[m_pWordMixer -> getSecondWordFirstPieceIndex()] -> setLabelSelectedStyleSheet(Styles::c_WordFirstPieceSelectedStyle);
+    m_MixedWordsLabels[m_pWordMixer -> getFirstWordLastPieceIndex()  ] -> setLabelSelectedStyleSheet(Styles::c_WordLastPieceSelectedStyle);
+    m_MixedWordsLabels[m_pWordMixer -> getSecondWordLastPieceIndex() ] -> setLabelSelectedStyleSheet(Styles::c_WordLastPieceSelectedStyle);
 }
 
 void MainGameWindow::_addMixedWordsLabels()
 {
-    for (auto currentWordPiece : m_MixedWords)
+    for (auto currentWordPiece : m_MixedWordsLabels)
     {
         m_pMixedWordsLayout -> addWidget(currentWordPiece);
     }
@@ -411,7 +411,7 @@ void MainGameWindow::_updateStatusMessage(Game::StatusCodes statusCode)
         ;
     }
 
-    m_pResultsErrors -> setText(statusMessage);
+    m_pResultsErrorsLabel -> setText(statusMessage);
 }
 
 void MainGameWindow::_setSubmitEnabled(bool enabled)
