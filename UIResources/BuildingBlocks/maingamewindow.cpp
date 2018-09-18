@@ -44,12 +44,14 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     m_pResetButtonShortcut ->setEnabled(m_IsResetEnabled);
     statisticsLayout -> addWidget(m_pHighScoresLabel);
     statisticsLayout -> addWidget(m_pNrOfWordPairsLabel);
-    statisticsLayout -> addSpacing(30);
+    statisticsLayout -> addSpacing(width()/25);
     statisticsLayout -> addWidget(m_pResetButton);
 
     QHBoxLayout *levelsStatusReqInputLayout{new QHBoxLayout{}};
     QLabel *requestInput{new QLabel{}};
     requestInput -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    requestInput -> setMinimumWidth(width()/1.8);
+    requestInput -> setWordWrap(true);
     requestInput -> setToolTip(GameStrings::c_GameInstructionsToolTip);
     QString requestInputText{GameStrings::c_InstructionsMessage};
     requestInput -> setText(requestInputText);
@@ -70,6 +72,8 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     levelButtonsBox -> setLayout(levelButtonsLayout);
     m_pResultsErrorsLabel = new QLabel{};
     m_pResultsErrorsLabel -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    m_pResultsErrorsLabel -> setMinimumSize(width()/3, height()/1.8);
+    m_pResultsErrorsLabel -> setWordWrap(true);
     m_pResultsErrorsLabel -> setToolTip(GameStrings::c_GameStatusToolTip);
     levelsStatusReqInputLayout -> addWidget(requestInput);
     levelsStatusReqInputLayout -> addWidget(levelButtonsBox);
