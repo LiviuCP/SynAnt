@@ -72,7 +72,7 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     levelButtonsBox -> setLayout(levelButtonsLayout);
     m_pResultsErrorsLabel = new QLabel{};
     m_pResultsErrorsLabel -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-    m_pResultsErrorsLabel -> setMinimumSize(width()/3, height()/1.8);
+    m_pResultsErrorsLabel -> setMinimumSize(width()/3, height()/1.6);
     m_pResultsErrorsLabel -> setWordWrap(true);
     m_pResultsErrorsLabel -> setToolTip(GameStrings::c_GameStatusToolTip);
     levelsStatusReqInputLayout -> addWidget(requestInput);
