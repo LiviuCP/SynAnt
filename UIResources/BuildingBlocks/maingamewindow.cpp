@@ -348,6 +348,8 @@ void MainGameWindow::_createMixedWordsLabels()
     {
         m_MixedWordsLabels[wordPieceIndex] = new SelectableLabel{};
         m_MixedWordsLabels[wordPieceIndex] -> setText((m_pWordMixer -> getMixedWordsStringArray()).at(wordPieceIndex));
+        m_MixedWordsLabels[wordPieceIndex] -> setLabelNotSelectedStyleSheet(Styles::c_WordPieceNotSelectedStyle);
+        m_MixedWordsLabels[wordPieceIndex] -> setLabelSelectedStyleSheet(Styles::c_WordPieceSelectedStyle);
     }
 
     m_MixedWordsLabels[m_pWordMixer -> getFirstWordFirstPieceIndex() ] -> setLabelNotSelectedStyleSheet(Styles::c_WordFirstPieceNotSelectedStyle);
