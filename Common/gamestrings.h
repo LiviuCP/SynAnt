@@ -92,7 +92,7 @@ namespace GameStrings {
                                                              "\t%2\n"
                                                              "\nThe words are: \n\n\t"
                                                              "%3"
-                                                             "\n\nNext pair of words is available below."
+                                                             "\n\nA new pair of words is available below."
                                                         };
 
     const QString c_RequestedByUserMessage              {
@@ -101,14 +101,18 @@ namespace GameStrings {
                                                              "\t%2\n"
                                                              "\nThe words are: \n\n\t"
                                                              "%3"
-                                                             "\n\nNext pair of words is available below."
+                                                             "\n\nA new pair of words is available below."
+                                                        };
+
+    const QString c_LevelChangedMessage                 {
+                                                             "Level changed.\n\n"
+                                                             "A new pair of words is available below."
                                                         };
 
     const QString c_MissingWordsMessage                 {    "At least one of the words hasn't been entered.\n\nPlease try again!"                      };
     const QString c_IncorrectWordsMessage               {    "You didn't enter the correct words.\n\nPlease try again!"                                 };
     const QString c_NoUserInputMessage                  {    "No user input so far."                                                                    };
     const QString c_ScoresResetMessage                  {    "\nScores reset.\n\nLevel unchanged.\n\nNo user input so far.\n"                           };
-    const QString c_LevelChangedMessage                 {    "Level changed.\n\nNo user input so far.\n"                                                };
     const QString c_HighscoresMessage                   {    "High-score: %1/%2"                                                                        };
     const QString c_WordPairsMessage                    {    "Word pairs: %1/%2"                                                                        };
 
