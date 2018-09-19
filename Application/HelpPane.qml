@@ -88,7 +88,7 @@ Item {
             background: Rectangle {
                 color: buttonColor
                 border.color: borderColor
-                border.width: width * 0.005
+                border.width: width * 0.002
                 radius: width * 0.01
             }
 
@@ -124,7 +124,7 @@ Item {
             background: Rectangle {
                 color: buttonColor
                 border.color: borderColor
-                border.width: width * 0.005
+                border.width: width * 0.002
                 radius: width * 0.01
             }
 
