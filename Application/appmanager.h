@@ -28,7 +28,7 @@ class AppManager : public QObject
 {
     Q_OBJECT
 public:
-    static AppManager* getAppManager();
+    explicit AppManager(QObject *parent = nullptr);
     void init(const QString& filename);
     void hideActiveWindow();
 
@@ -41,11 +41,7 @@ public slots:
     void _onSwitchedMainToHints();
 
 private:
-    explicit AppManager(QObject *parent = nullptr);
-
     bool m_IsInitialized;
-
-    static AppManager* s_pAppManager;
 
     WordMixer* m_pWordMixer;
 

@@ -10,15 +10,6 @@ AppManager::AppManager(QObject *parent)
 {
 }
 
-AppManager* AppManager::getAppManager()
-{
-    if (!s_pAppManager)
-    {
-        s_pAppManager = new AppManager{};
-    }
-    return s_pAppManager;
-}
-
 void AppManager::init(const QString& filename)
 {
     if (!m_IsInitialized)
@@ -58,8 +49,6 @@ void AppManager::hideActiveWindow()
         m_pMainGameWindow->hide();
     }
 }
-
-AppManager* AppManager::s_pAppManager = nullptr;
 
 void AppManager::_onSwitchedIntroToHints()
 {

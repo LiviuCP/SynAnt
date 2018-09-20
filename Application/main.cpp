@@ -32,14 +32,17 @@
 
 int main(int argc, char *argv[]) {
     QApplication app(argc,argv);
+    AppManager appManager{};
+
     qApp -> setStyleSheet(Styles::c_ApplicationStyle);
+
     try {
-        AppManager::getAppManager()->init(QApplication::applicationDirPath() + "/" + GameStrings::c_FileName);
+        appManager.init(QApplication::applicationDirPath() + "/" + GameStrings::c_FileName);
         return app.exec();
     }
     catch (const GameException& exception) {
         FatalErrors fatalError{};
-        AppManager::getAppManager()->hideActiveWindow();
+        appManager.hideActiveWindow();
         fatalError.setWindowTitle(GameStrings::c_FatalErrorWindowTitle);
         fatalError.setFatalErrorText(exception.getDescription());
         fatalError.show();
