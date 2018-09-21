@@ -71,11 +71,9 @@ namespace GameStrings {
                                                              "ALT+[first character of the button name].\n"
                                                              "\n28) For example the key combination for Quit is ALT+Q.\n"
                                                              "\n29) For the Show results button the key combination is ALT+B.\n"
-                                                             "\n30) For buttons Play, Ok and Submit the alternative key combination is "
-                                                             "ENTER.\n"
-                                                             "\n31) Hit ALT+1/2/3 for setting the difficulty levels to "
+                                                             "\n30) Hit ALT+1/2/3 for setting the difficulty levels to "
                                                              "easy/medium/hard.\n"
-                                                             "\n\n\n\n\t\t\t\tPress Ok to proceed (or return) to game.\n"
+                                                             "\n\nPress Ok to proceed (or return) to game.\n"
                                                         };
 
     const QString c_InstructionsMessage                 {
