@@ -25,7 +25,8 @@ static const QString c_ErrorMessageStyleString                  {    "color: %1;
 
 namespace Styles {
 
-    const QString c_ApplicationStyle                            {    c_QLabelStyleString                                                                        +
+    const QString c_ApplicationStyle                            {
+                                                                     c_QLabelStyleString                                                                        +
                                                                      c_SelectableLabelStyleString                                                               +
                                                                      c_QGroupBoxStyleString
                                                                          .arg(GameStrings::c_BackgroundColor)
@@ -48,37 +49,44 @@ namespace Styles {
                                                                          .arg(GameStrings::c_BackgroundColor)
                                                                 };
 
-    const QString c_WordPieceNotSelectedStyle                   {    c_WordPieceNotSelectedStyleString
+    const QString c_WordPieceNotSelectedStyle                   {
+                                                                     c_WordPieceNotSelectedStyleString
                                                                          .arg(GameStrings::c_TextColor)
                                                                          .arg(GameStrings::c_BackgroundColor)
                                                                 };
 
-    const QString c_WordPieceSelectedStyle                      {    c_WordPieceSelectedStyleString
+    const QString c_WordPieceSelectedStyle                      {
+                                                                     c_WordPieceSelectedStyleString
                                                                          .arg(GameStrings::c_TextColor)
                                                                          .arg(GameStrings::c_WordPieceSelectedBackgroundColor)
                                                                 };
 
-    const QString c_WordFirstPieceNotSelectedStyle              {    c_WordFirstPieceNotSelectedStyleString
+    const QString c_WordFirstPieceNotSelectedStyle              {
+                                                                     c_WordFirstPieceNotSelectedStyleString
                                                                          .arg(GameStrings::c_WordFirstPieceTextColor)
                                                                          .arg(GameStrings::c_BackgroundColor)
                                                                 };
 
-    const QString c_WordLastPieceNotSelectedStyle               {    c_WordLastPieceNotSelectedStyleString
+    const QString c_WordLastPieceNotSelectedStyle               {
+                                                                     c_WordLastPieceNotSelectedStyleString
                                                                          .arg(GameStrings::c_WordLastPieceTextColor)
                                                                          .arg(GameStrings::c_BackgroundColor)
                                                                 };
 
-    const QString c_WordFirstPieceSelectedStyle                 {    c_WordFirstPieceSelectedStyleString
+    const QString c_WordFirstPieceSelectedStyle                 {
+                                                                     c_WordFirstPieceSelectedStyleString
                                                                          .arg(GameStrings::c_WordFirstPieceTextColor)
                                                                          .arg(GameStrings::c_WordPieceSelectedBackgroundColor)
                                                                 };
 
-    const QString c_WordLastPieceSelectedStyle                  {    c_WordLastPieceSelectedStyleString
+    const QString c_WordLastPieceSelectedStyle                  {
+                                                                     c_WordLastPieceSelectedStyleString
                                                                          .arg(GameStrings::c_WordLastPieceTextColor)
                                                                          .arg(GameStrings::c_WordPieceSelectedBackgroundColor)
                                                                 };
 
-    const QString c_ErrorMessageStyle                           {    c_ErrorMessageStyleString
+    const QString c_ErrorMessageStyle                           {
+                                                                     c_ErrorMessageStyleString
                                                                          .arg(GameStrings::c_FatalErrorTextColor)
                                                                          .arg(GameStrings::c_BackgroundColor)
                                                                 };
