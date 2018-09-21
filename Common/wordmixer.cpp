@@ -9,7 +9,6 @@
 #include "gamestrings.h"
 #include "exceptions.h"
 
-static constexpr int c_MinWordSize{5};
 static constexpr char c_SynonymsSeparator{'='};
 static constexpr char c_AntonymsSeparator{'!'};
 
@@ -251,7 +250,7 @@ void WordMixer::_checkWordIsCorrect(const QString &word, const QString& wordIden
             throw WordException{GameStrings::c_IllegalCharactersMessage.arg(wordIdentifier), m_FileName, m_RowNumber};
         }
     }
-    if (word.size() < c_MinWordSize)
+    if (word.size() < Game::c_MinWordSize)
     {
         throw WordException{GameStrings::c_LessThanMinCharsMessage.arg(wordIdentifier), m_FileName, m_RowNumber};
     }

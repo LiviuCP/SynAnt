@@ -7,27 +7,13 @@
 #ifndef GAMESTRINGS_H
 #define GAMESTRINGS_H
 
+#include "game.h"
+
 #include <QString>
 
-namespace GameStrings {
-
-    //file name
-    const QString c_FileName                            {    "data"                                                                                     };
-    const QString c_NoFile                              {    ""                                                                                         };
-
-    // status and instructions messages
-    const QString c_IntroWindowWelcomeMessage           {
-                                                             "\n\t\tWelcome to SynAnt!\n\n\n"
-                                                             "\nIt's simple!\n"
-                                                             "\nTwo words are divided into equal pieces and mixed with each other.\n"
-                                                             "\nYou just need to guess them.\n"
-                                                             "\nThe words can either be synonyms or antonyms.\n\n\n"
-                                                             "\nPress Play to enter the game or Help for more information.\n"
-                                                        };
-
-    const QString c_HelpWindowMessage                   {
-                                                             "\n\n 1) The words are either in Romanian or English language.\n"
-                                                             "\n 2) Minimum word size is 5 characters. \n"
+static const QString c_HelpWindowMessageString          {
+                                                             "\n\n 1) The words can be in language depending on the data file content.\n"
+                                                             "\n 2) Minimum word size is %1 characters. \n"
                                                              "\n 3) Each word is divided in equal parts, "
                                                              "except the last part, which might have a smaller number of characters.\n"
                                                              "\n 4) The parts from both words are mixed with each other.\n"
@@ -60,8 +46,8 @@ namespace GameStrings {
                                                              "the words are divided.\n"
                                                              "\n22) It also determines the obtained score for correctly guessing "
                                                              "a pair of words.\n"
-                                                             "\n23) The obtained score per pair is: 1 point (easy), 2 points (medium), "
-                                                             "4 points (hard).\n"
+                                                             "\n23) The  score obtained for each correctly guessed pair is: "
+                                                             "%2 point/s (easy), %3 points (medium), %4 points (hard).\n"
                                                              "\n24) When changing the difficulty level, the score and number of word "
                                                              "pairs remain unchanged.\n"
                                                              "\n25) However, when the level is changed, a new pair of words "
@@ -74,6 +60,30 @@ namespace GameStrings {
                                                              "\n30) Hit ALT+1/2/3 for setting the difficulty levels to "
                                                              "easy/medium/hard.\n"
                                                              "\n\nPress Ok to proceed (or return) to game.\n"
+                                                        };
+
+namespace GameStrings {
+
+    //file name
+    const QString c_FileName                            {    "data"                                                                                     };
+    const QString c_NoFile                              {    ""                                                                                         };
+
+    // status and instructions messages
+    const QString c_IntroWindowWelcomeMessage           {
+                                                             "\n\t\tWelcome to SynAnt!\n\n\n"
+                                                             "\nIt's simple!\n"
+                                                             "\nTwo words are divided into equal pieces and mixed with each other.\n"
+                                                             "\nYou just need to guess them.\n"
+                                                             "\nThe words can either be synonyms or antonyms.\n\n\n"
+                                                             "\nPress Play to enter the game or Help for more information.\n"
+                                                        };
+
+    const QString c_HelpWindowMessage                   {
+                                                             c_HelpWindowMessageString
+                                                                 .arg(Game::c_MinWordSize)
+                                                                 .arg(Game::c_ScoreIncrements[Game::Level::EASY])
+                                                                 .arg(Game::c_ScoreIncrements[Game::Level::MEDIUM])
+                                                                 .arg(Game::c_ScoreIncrements[Game::Level::HARD])
                                                         };
 
     const QString c_InstructionsMessage                 {
