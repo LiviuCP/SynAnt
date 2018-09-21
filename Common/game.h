@@ -12,6 +12,8 @@
 
 namespace Game
 {
+    static constexpr int c_MinWordSize{5};
+
     enum class Level
     {
         EASY,
