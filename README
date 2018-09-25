@@ -8,17 +8,17 @@ Currently there are 2 branches, each of them containing a version of the applica
 
 After compiling the code copy the data file near the executable. For Linux Systems refer to the Application sub-directory. For OS X it should be near the executable placed within the .app directory. Feel free to modify it by adding new word pairs.
 
-The file should be named "data", otherwise it won't be recognized by the app.
+The file should be named "data", otherwise it won't be recognized by the app and an error will be triggered.
 
 2. Supported Operating Systems
 
-This program has been compiled on OS X and Linux (Fedora and OpenSUSE). It hasn't been tested on Windows so far.
+This program has been compiled on Linux (Fedora and OpenSUSE). It hasn't been tested on Windows so far. On OS X some previous versions have been run.
 
 3. Updating the data file
 
 Use = for separating synonym word pairs and ! for antonyms.
 
-The minimum word size is 5 characters and is determined by the minWordSize constant (see function retrieveWords() from wordmixer.cpp).
+The minimum word size is 5 characters and is determined by the c_MinWordSize constant from Common/game.h.
 
 4. Further info
 
