@@ -195,6 +195,7 @@ void CommonTests::testStatisticsCorrectlyUpdated()
 
 void CommonTests::_checkCorrectMixing(QVector<QString> mixedWords, QVector<QString> splitWords, const QString& level)
 {
+    qInfo() << "Checking correct word mixing, level:" << level;
     if (mixedWords.size() != splitWords.size())
     {
         QVERIFY2(false, "Words incorrectly mixed. Vector size differs from the one of the reference vector");
@@ -209,6 +210,7 @@ void CommonTests::_checkCorrectMixing(QVector<QString> mixedWords, QVector<QStri
 
 void CommonTests::_checkCorrectStatistics(const ScoreItem& scoreItem, int guessedWordPairs, int totalWordPairs, int obtainedScore, int totalAvailableScore, const QString &status)
 {
+    qInfo()<<status;
     QVERIFY2(scoreItem.getGuessedWordPairs() == guessedWordPairs, "Number of guessed word pairs is incorrect");
     QVERIFY2(scoreItem.getTotalWordPairs() == totalWordPairs, "Number of total word pairs is incorrect");
     QVERIFY2(scoreItem.getObtainedScore() == obtainedScore, "Obtained score is incorrect");
