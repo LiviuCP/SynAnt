@@ -1,5 +1,4 @@
 #include <QGuiApplication>
-#include <QDebug>
 
 #include "gamepresenter.h"
 #include "../Common/wordmixer.h"
@@ -103,9 +102,6 @@ void GamePresenter::switchToPane(Pane pane)
 void GamePresenter::handleResultsRequest()
 {
     try {
-        qDebug() << "=====================================================";
-        qDebug() << "Words displayed as per user request! New words mixed";
-
         _updateStatusMessage(Game::StatusCodes::REQUESTED_BY_USER);
         m_pScoreItem -> updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
 
@@ -136,9 +132,6 @@ bool GamePresenter::handleSubmitRequest(const QString &firstWord, const QString 
 
         if (statusCode == Game::StatusCodes::SUCCESS)
         {
-            qDebug() << "=====================================================";
-            qDebug() << "Words guessed by user correctly! New words mixed";
-
             m_pScoreItem -> updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
 
             if (!m_ResetEnabled)
@@ -165,9 +158,6 @@ void GamePresenter::handleResetRequest()
 {
     if (m_ResetEnabled)
     {
-        qDebug() << "=====================================================";
-        qDebug() << "Statistics reset! Same mixed words to be guessed by user";
-
         m_pScoreItem -> resetStatistics();
         _updateStatusMessage(Game::StatusCodes::STATISTICS_RESET);
         m_ResetEnabled = false;
@@ -180,9 +170,6 @@ void GamePresenter::switchToLevel(int level)
     try
     {
         Q_ASSERT(level >= 0 && level < static_cast<int>(Game::Level::NrOfLevels));
-
-        qDebug() << "=====================================================";
-        qDebug() << "Level changed! New words mixed";
 
         _setLevel(static_cast<Game::Level>(level));
     }
@@ -584,10 +571,6 @@ Game::StatusCodes GamePresenter::_checkWords(const QString &firstWord, const QSt
 
 void GamePresenter::_initMainPane()
 {
-
-    qDebug() << "=====================================================";
-    qDebug() << "Main window initialized! First 2 words mixed";
-
     m_MainPaneInitialized = true;
     m_pWordMixer -> mixWords();
     Q_EMIT mixedWordsPiecesChanged();
@@ -633,8 +616,6 @@ void GamePresenter::_setLevel(Game::Level level)
 
 void GamePresenter::_launchErrorPane(const QString& errorMessage)
 {
-    qDebug() << "Error message: " << errorMessage;
-
     switch (m_CurrentPane) {
     case Pane::INTRO:
         m_IntroPaneVisible = false;
