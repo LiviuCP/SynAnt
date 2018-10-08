@@ -2,7 +2,6 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QTextStream>
-#include <QDebug>
 
 #include "wordmixer.h"
 #include "game.h"
