@@ -13,12 +13,9 @@ SOURCES += \
 HEADERS += \
     appmanager.h \
 
-DEPENDPATH += \
-    $$top_builddir/Common \
-    $$top_builddir/UIResources
-INCLUDEPATH += \
-    $$top_srcdir/Common \
-    $$top_srcdir/UIResources
+QMAKE_LFLAGS += "-Wl,-rpath,\'$$top_builddir/Common\'"
+QMAKE_LFLAGS += "-Wl,-rpath,\'$$top_builddir/UIResources\'"
+
 LIBS += \
     -L$$top_builddir/Common -lCommon \
     -L$$top_builddir/UIResources -lUIResources

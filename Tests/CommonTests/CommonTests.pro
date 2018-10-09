@@ -33,6 +33,6 @@ DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
 HEADERS += \
 
-DEPENDPATH += $$top_builddir/Common
-INCLUDEPATH += $$top_srcdir/Common
+QMAKE_LFLAGS += "-Wl,-rpath,\'$$top_builddir/Common\'"
+
 LIBS += -L$$top_builddir/Common -lCommon

@@ -40,11 +40,6 @@ HEADERS += \
     uiresources.h \
     uiresources_global.h
 
-
-DEPENDPATH += \
-    $$top_builddir/Common
-INCLUDEPATH += \
-    $$top_srcdir/Common
 LIBS += \
     -L$$top_builddir/Common -lCommon
 
