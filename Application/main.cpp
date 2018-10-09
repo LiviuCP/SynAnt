@@ -3,7 +3,7 @@
 #include <QQmlComponent>
 
 #include "gamepresenter.h"
-#include "exceptions.h"
+#include "../Common/exceptions.h"
 
 
 int main(int argc, char *argv[])

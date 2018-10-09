@@ -32,6 +32,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     gamepresenter.h
 
-DEPENDPATH += $$top_builddir/Common
-INCLUDEPATH += $$top_srcdir/Common
+QMAKE_LFLAGS += "-Wl,-rpath,\'$$top_builddir/Common\'"
+
 LIBS += -L$$top_builddir/Common -lCommon
