@@ -52,6 +52,9 @@ namespace Game
         {Game::Level::MEDIUM, 2},
         {Game::Level::HARD,   1}
     };
+
+    static constexpr int c_ToolTipDelay{1000};
+    static constexpr int c_ToolTipTimeout{4000};
 }
 
 #endif // GAME_H
