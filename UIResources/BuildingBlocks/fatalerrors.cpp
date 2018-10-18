@@ -26,6 +26,7 @@ FatalErrors::FatalErrors(QWidget *parent)
     QPushButton *closeButton{new QPushButton{GameStrings::c_FatalErrorQuitButtonLabel}};
     closeButton -> setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     closeButton -> setToolTip(GameStrings::c_FatalErrorQuitButtonToolTip);
+    closeButton -> setToolTipDuration(Game::c_ToolTipTimeout);
     QShortcut *closeButtonShortcut{new QShortcut{QKeySequence{GameStrings::c_FatalErrorQuitButtonShortcut},this}};
     closeButtonLayout -> addWidget(closeButton,1);
 
@@ -34,6 +35,7 @@ FatalErrors::FatalErrors(QWidget *parent)
     mainLayout -> addLayout(closeButtonLayout);
     setLayout(mainLayout);
     setToolTip(GameStrings::c_FatalErrorWindowToolTip);
+    setToolTipDuration(Game::c_ToolTipTimeout);
 
     bool connected{connect(closeButton,&QPushButton::clicked,qApp,&QApplication::quit)};
     Q_ASSERT(connected);

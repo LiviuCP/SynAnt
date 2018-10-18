@@ -23,14 +23,17 @@ IntroductionWindow::IntroductionWindow(QWidget *parent)
     QPushButton *playButton{new QPushButton{GameStrings::c_PlayButtonLabel}};
     playButton -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     playButton -> setToolTip(GameStrings::c_PlayButtonToolTip);
+    playButton -> setToolTipDuration(Game::c_ToolTipTimeout);
     QShortcut *playButtonShortcut{new QShortcut{QKeySequence{GameStrings::c_PlayButtonShortcut},this}};
     QPushButton *hintsButton{new QPushButton{GameStrings::c_HelpButtonLabel}};
     hintsButton -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     hintsButton -> setToolTip(GameStrings::c_HelpButtonToolTip);
+    hintsButton -> setToolTipDuration(Game::c_ToolTipTimeout);
     QShortcut *hintsButtonShortcut{new QShortcut{QKeySequence{GameStrings::c_HelpButtonShortcut},this}};
     QPushButton *quitButton{new QPushButton{GameStrings::c_QuitButtonLabel}};
     quitButton -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     quitButton -> setToolTip(GameStrings::c_QuitButtonToolTip);
+    quitButton -> setToolTipDuration(Game::c_ToolTipTimeout);
     QShortcut *quitButtonShortcut{new QShortcut{QKeySequence{GameStrings::c_QuitButtonShortcut},this}};
     buttonsLayout -> addWidget(playButton);
     buttonsLayout -> addWidget(hintsButton);
@@ -41,6 +44,7 @@ IntroductionWindow::IntroductionWindow(QWidget *parent)
     mainLayout -> addLayout(buttonsLayout,0);
     setLayout(mainLayout);
     setToolTip(GameStrings::c_IntroWindowToolTip);
+    setToolTipDuration(Game::c_ToolTipTimeout);
 
     setWindowTitle(GameStrings::c_IntroWindowTitle);
 

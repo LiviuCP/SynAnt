@@ -32,12 +32,15 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     m_pHighScoresLabel = new QLabel{};
     m_pHighScoresLabel -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
     m_pHighScoresLabel -> setToolTip(GameStrings::c_HighscoresToolTip);
+    m_pHighScoresLabel -> setToolTipDuration(Game::c_ToolTipTimeout);
     m_pNrOfWordPairsLabel = new QLabel{};
     m_pNrOfWordPairsLabel -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
     m_pNrOfWordPairsLabel -> setToolTip(GameStrings::c_WordPairsToolTip);
+    m_pNrOfWordPairsLabel -> setToolTipDuration(Game::c_ToolTipTimeout);
     m_pResetButton = new QPushButton{GameStrings::c_ResetButtonLabel};
     m_pResetButton -> setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     m_pResetButton -> setToolTip(GameStrings::c_ResetButtonToolTip);
+    m_pResetButton -> setToolTipDuration(Game::c_ToolTipTimeout);
     m_pResetButtonShortcut = new QShortcut{QKeySequence{GameStrings::c_ResetShortcut},this};
     // enable reset only if statistics are different from 0
     m_pResetButton -> setEnabled(m_IsResetEnabled);
@@ -53,11 +56,13 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     requestInput -> setMinimumWidth(width()/1.8);
     requestInput -> setWordWrap(true);
     requestInput -> setToolTip(GameStrings::c_GameInstructionsToolTip);
+    requestInput -> setToolTipDuration(Game::c_ToolTipTimeout);
     QString requestInputText{GameStrings::c_InstructionsMessage};
     requestInput -> setText(requestInputText);
     QGroupBox *levelButtonsBox{new QGroupBox{}};
     levelButtonsBox -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
     levelButtonsBox -> setToolTip(GameStrings::c_LevelButtonsToolTip);
+    levelButtonsBox -> setToolTipDuration(Game::c_ToolTipTimeout);
     m_pLevelEasyButton = new QRadioButton{GameStrings::c_LevelEasyButtonLabel};
     QShortcut *levelEasyShortcut{new QShortcut{QKeySequence{GameStrings::c_LevelEasyButtonShortcut},this}};
     m_pLevelMediumButton = new QRadioButton{GameStrings::c_LevelMediumButtonLabel};
@@ -75,6 +80,7 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     m_pResultsErrorsLabel -> setMinimumSize(width()/3, height()/1.6);
     m_pResultsErrorsLabel -> setWordWrap(true);
     m_pResultsErrorsLabel -> setToolTip(GameStrings::c_GameStatusToolTip);
+    m_pResultsErrorsLabel -> setToolTipDuration(Game::c_ToolTipTimeout);
     levelsStatusReqInputLayout -> addWidget(requestInput);
     levelsStatusReqInputLayout -> addWidget(levelButtonsBox);
     levelsStatusReqInputLayout -> addWidget(m_pResultsErrorsLabel);
@@ -85,8 +91,10 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     QHBoxLayout *wordsLayout{new QHBoxLayout{}};
     m_pFirstWordLineEdit = new QLineEdit{};
     m_pFirstWordLineEdit -> setToolTip(GameStrings::c_FirstWordToolTip);
+    m_pFirstWordLineEdit -> setToolTipDuration(Game::c_ToolTipTimeout);
     m_pSecondWordLineEdit = new QLineEdit{};
     m_pSecondWordLineEdit -> setToolTip(GameStrings::c_SecondWordToolTip);
+    m_pSecondWordLineEdit -> setToolTipDuration(Game::c_ToolTipTimeout);
     wordsLayout -> addWidget(m_pFirstWordLineEdit);
     wordsLayout -> addWidget(m_pSecondWordLineEdit);
 
@@ -95,6 +103,7 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     m_pSubmitButton = new QPushButton{GameStrings::c_SubmitButtonLabel};
     m_pSubmitButton -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
     m_pSubmitButton -> setToolTip(GameStrings::c_SubmitButtonToolTip);
+    m_pSubmitButton -> setToolTipDuration(Game::c_ToolTipTimeout);
     m_pSubmitButtonShortcut = new QShortcut{QKeySequence{GameStrings::c_SubmitButtonShortcut},this};
     // enable the submit button/shortcut only if user entered input in both linedit fields
     m_pSubmitButton -> setEnabled(m_IsSubmitEnabled);
@@ -102,14 +111,17 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     QPushButton *hintsButton{new QPushButton{GameStrings::c_HelpButtonLabel}};
     hintsButton -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
     hintsButton -> setToolTip(GameStrings::c_HelpButtonToolTip);
+    hintsButton -> setToolTipDuration(Game::c_ToolTipTimeout);
     QShortcut *hintsButtonShortcut{new QShortcut{QKeySequence{GameStrings::c_HelpButtonShortcut},this}};
     QPushButton *showResultsButton{new QPushButton{GameStrings::c_ResultsButtonLabel}};
     showResultsButton -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
     showResultsButton -> setToolTip(GameStrings::c_ResultsButtonToolTip);
+    showResultsButton -> setToolTipDuration(Game::c_ToolTipTimeout);
     QShortcut *showResultsButtonShortcut{new QShortcut{QKeySequence{GameStrings::c_ResultsButtonShortcut},this}};
     QPushButton *quitButton{new QPushButton{GameStrings::c_QuitButtonLabel}};
     quitButton -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Fixed);
     quitButton -> setToolTip(GameStrings::c_QuitButtonToolTip);
+    quitButton -> setToolTipDuration(Game::c_ToolTipTimeout);
     QShortcut *quitButtonShortcut{new QShortcut{QKeySequence{GameStrings::c_QuitButtonShortcut},this}};
     buttonsLayout -> addWidget(m_pSubmitButton);
     buttonsLayout -> addWidget(hintsButton);
@@ -125,6 +137,7 @@ MainGameWindow::MainGameWindow(WordMixer *wordMixer, QWidget *parent)
     setLayout(mainLayout);
 
     setToolTip(GameStrings::c_MainWindowToolTip);
+    setToolTipDuration(Game::c_ToolTipTimeout);
     setAttribute(Qt::WA_AlwaysShowToolTips);
     setWindowTitle(GameStrings::c_MainWindowTitle);
 

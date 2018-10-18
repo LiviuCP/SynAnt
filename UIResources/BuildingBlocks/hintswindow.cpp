@@ -26,10 +26,12 @@ HintsWindow::HintsWindow(QWidget *parent)
     QPushButton *okButton{new QPushButton{GameStrings::c_OkButtonLabel}};
     okButton -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     okButton -> setToolTip(GameStrings::c_OkButtonToolTip);
+    okButton -> setToolTipDuration(Game::c_ToolTipTimeout);
     QShortcut *okButtonShortcut{new QShortcut{QKeySequence{GameStrings::c_OkButtonShortcut},this}};
     QPushButton *quitButton{new QPushButton{GameStrings::c_QuitButtonLabel}};
     quitButton -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     quitButton -> setToolTip(GameStrings::c_QuitButtonToolTip);
+    quitButton -> setToolTipDuration(Game::c_ToolTipTimeout);
     QShortcut *quitButtonShortcut{new QShortcut{QKeySequence{GameStrings::c_QuitButtonShortcut},this}};
     buttonsLayout -> addWidget(okButton);
     buttonsLayout -> addWidget(quitButton);
@@ -39,6 +41,7 @@ HintsWindow::HintsWindow(QWidget *parent)
     mainLayout -> addLayout(buttonsLayout);
     setLayout(mainLayout);
     setToolTip(GameStrings::c_HelpWindowToolTip);
+    setToolTipDuration(Game::c_ToolTipTimeout);
 
     setWindowTitle(GameStrings::c_HelpWindowTitle);
 
