@@ -29,6 +29,7 @@ Item {
     ToolTip {
         id: helpPaneToolTip
         delay: presenter.toolTipDelay
+        timeout: presenter.toolTipTimeout
         text: presenter.helpPaneToolTip
         visible: helpPaneMouseArea.containsMouse
     }
@@ -96,6 +97,7 @@ Item {
 
             ToolTip.text: presenter.okButtonToolTip
             ToolTip.delay: presenter.toolTipDelay
+            ToolTip.timeout: presenter.toolTipTimeout
             ToolTip.visible: hovered
 
             Shortcut {
@@ -132,6 +134,7 @@ Item {
 
             ToolTip.text: presenter.quitButtonToolTip
             ToolTip.delay: presenter.toolTipDelay
+            ToolTip.timeout: presenter.toolTipTimeout
             ToolTip.visible: hovered
 
             onClicked: Qt.quit()

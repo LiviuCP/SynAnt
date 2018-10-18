@@ -30,6 +30,7 @@ Item {
     ToolTip {
         id: errorPaneToolTip
         delay: presenter.toolTipDelay
+        timeout: presenter.toolTipTimeout
         text: presenter.errorPaneToolTip
         visible: errorPaneMouseArea.containsMouse
     }
@@ -95,6 +96,7 @@ Item {
 
             ToolTip.text: presenter.closeButtonToolTip
             ToolTip.delay: presenter.toolTipDelay
+            ToolTip.timeout: presenter.toolTipTimeout
             ToolTip.visible: hovered
 
             Shortcut {

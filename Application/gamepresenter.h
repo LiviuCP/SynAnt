@@ -51,6 +51,7 @@ class GamePresenter : public QObject
     Q_PROPERTY(QString mainPaneWordPairsMessage READ getMainPaneWordPairsMessage NOTIFY mainPaneWordPairsMessageChanged)
     Q_PROPERTY(QString errorMessage READ getErrorMessage NOTIFY errorMessageChanged)
     Q_PROPERTY(int toolTipDelay READ getToolTipDelay CONSTANT)
+    Q_PROPERTY(int toolTipTimeout READ getToolTipTimeout CONSTANT)
     Q_PROPERTY(QString introPaneToolTip READ getIntroPaneToolTip CONSTANT)
     Q_PROPERTY(QString helpPaneToolTip READ getHelpPaneToolTip CONSTANT)
     Q_PROPERTY(QString mainPaneToolTip READ getMainPaneToolTip CONSTANT)
@@ -137,6 +138,7 @@ public:
     QString getErrorMessage() const;
 
     int getToolTipDelay() const;
+    int getToolTipTimeout() const;
     QString getIntroPaneToolTip() const;
     QString getHelpPaneToolTip() const;
     QString getMainPaneToolTip() const;

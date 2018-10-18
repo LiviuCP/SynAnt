@@ -44,6 +44,7 @@ Item {
     ToolTip {
         id: mainPaneToolTip
         delay: presenter.toolTipDelay
+        timeout: presenter.toolTipTimeout
         text: presenter.mainPaneToolTip
         visible: mainPaneMouseArea.containsMouse
     }
@@ -78,6 +79,7 @@ Item {
             ToolTip {
                 id: highscoresToolTip
                 delay: presenter.toolTipDelay
+                timeout: presenter.toolTipTimeout
                 text: presenter.highscoresToolTip
                 visible: highscoresMouseArea.containsMouse
             }
@@ -114,6 +116,7 @@ Item {
             ToolTip {
                 id: wordPairsToolTip
                 delay: presenter.toolTipDelay
+                timeout: presenter.toolTipTimeout
                 text: presenter.wordPairsToolTip
                 visible: wordPairsMouseArea.containsMouse
             }
@@ -152,6 +155,7 @@ Item {
 
             ToolTip.text: presenter.resetButtonToolTip
             ToolTip.delay: presenter.toolTipDelay
+            ToolTip.timeout: presenter.toolTipTimeout
             ToolTip.visible: hovered
 
             enabled: presenter.resetEnabled
@@ -204,6 +208,7 @@ Item {
             ToolTip {
                 id: infoToolTip
                 delay: presenter.toolTipDelay
+                timeout: presenter.toolTipTimeout
                 text: presenter.gameInstructionsToolTip
                 visible: infoMouseArea.containsMouse
             }
@@ -242,6 +247,7 @@ Item {
             ToolTip {
                 id: levelBtnsToolTip
                 delay: presenter.toolTipDelay
+                timeout: presenter.toolTipTimeout
                 text: presenter.levelButtonsToolTip
                 visible: levelBtnsMouseArea.containsMouse
             }
@@ -336,6 +342,7 @@ Item {
             ToolTip {
                 id: statusToolTip
                 delay: presenter.toolTipDelay
+                timeout: presenter.toolTipTimeout
                 text: presenter.gameStatusToolTip
                 visible: statusMouseArea.containsMouse
             }
@@ -417,6 +424,7 @@ Item {
 
             ToolTip.text: presenter.firstWordToolTip
             ToolTip.delay: presenter.toolTipDelay
+            ToolTip.timeout: presenter.toolTipTimeout
             ToolTip.visible: hovered
 
             onVisibleChanged: {
@@ -437,6 +445,7 @@ Item {
 
             ToolTip.text: presenter.secondWordToolTip
             ToolTip.delay: presenter.toolTipDelay
+            ToolTip.timeout: presenter.toolTipTimeout
             ToolTip.visible: hovered
 
             Keys.onReleased: submitBtn.enabled = (firstWordTextField.text.length != 0 && secondWordTextField.text.length != 0) ? true : false
@@ -478,6 +487,7 @@ Item {
 
             ToolTip.text: presenter.submitButtonToolTip
             ToolTip.delay: presenter.toolTipDelay
+            ToolTip.timeout: presenter.toolTipTimeout
             ToolTip.visible: hovered
 
             function submitWords() {
@@ -524,6 +534,7 @@ Item {
 
             ToolTip.text: presenter.helpButtonToolTip
             ToolTip.delay: presenter.toolTipDelay
+            ToolTip.timeout: presenter.toolTipTimeout
             ToolTip.visible: hovered
 
             onClicked: presenter.switchToPane(GamePresenter.HELP)
@@ -553,6 +564,7 @@ Item {
 
             ToolTip.text: presenter.resultsButtonToolTip
             ToolTip.delay: presenter.toolTipDelay
+            ToolTip.timeout: presenter.toolTipTimeout
             ToolTip.visible: hovered
 
             function getResults() {
@@ -597,6 +609,7 @@ Item {
 
             ToolTip.text: presenter.quitButtonToolTip
             ToolTip.delay: presenter.toolTipDelay
+            ToolTip.timeout: presenter.toolTipTimeout
             ToolTip.visible: hovered
 
             onClicked: Qt.quit()

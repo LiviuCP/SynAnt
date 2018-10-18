@@ -6,8 +6,6 @@
 #include "../Common/gamestrings.h"
 #include "../Common/exceptions.h"
 
-static constexpr int c_ToolTipDelay{1000};
-
 static const QMap<GamePresenter::Pane,QString> c_WindowTitles
 {
     {GamePresenter::Pane::INTRO, GameStrings::c_IntroWindowTitle},
@@ -316,7 +314,12 @@ QString GamePresenter::getErrorMessage() const
 
 int GamePresenter::getToolTipDelay() const
 {
-    return c_ToolTipDelay;
+    return Game::c_ToolTipDelay;
+}
+
+int GamePresenter::getToolTipTimeout() const
+{
+    return Game::c_ToolTipTimeout;
 }
 
 QString GamePresenter::getIntroPaneToolTip() const
