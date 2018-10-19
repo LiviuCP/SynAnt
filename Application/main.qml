@@ -1,16 +1,20 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import QtQuick.Window 2.3
 import GameManagers 1.0
 
 ApplicationWindow {
     visible: true
+
     width: 640
     height: 480
     minimumWidth: 640
     minimumHeight: 480
-//    maximumWidth: 640
-//    maximumHeight: 480
+
+    x: (Screen.width - minimumWidth)/2
+    y: (Screen.height - minimumHeight)/2
+
     title: gamePresenter.windowTitle
     color: gamePresenter.backgroundColor
 
