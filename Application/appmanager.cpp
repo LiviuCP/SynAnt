@@ -1,4 +1,5 @@
 #include <QApplication>
+#include <QDesktopWidget>
 
 #include "appmanager.h"
 #include "../Common/wordmixer.h"
@@ -30,6 +31,10 @@ void AppManager::init(const QString& filename)
 
         m_IsInitialized = true;
 
+        // center the introduction window to the (primary) screen
+        QRect desktopRect {QApplication::desktop()->availableGeometry()};
+        m_pIntroductionWindow -> move((desktopRect.width() - m_pIntroductionWindow->width())/2, (desktopRect.height() - m_pIntroductionWindow->height())/2);
+
         m_pIntroductionWindow -> show();
     }
 }
@@ -53,6 +58,10 @@ void AppManager::hideActiveWindow()
 void AppManager::_onSwitchedIntroToHints()
 {
     m_pIntroductionWindow -> hide();
+
+    QPointF pos{m_pIntroductionWindow->pos()};
+    m_pHintsWindow->move(pos.x(), pos.y());
+
     m_pHintsWindow -> show();
 }
 
@@ -61,6 +70,9 @@ void AppManager::_onSwitchedIntroToMain()
     m_pIntroductionWindow -> hide();
 
     m_pMainGameWindow -> init();
+
+    QPointF pos{m_pIntroductionWindow->pos()};
+    m_pMainGameWindow->move(pos.x(), pos.y());
 
     m_pMainGameWindow -> show();
 }
@@ -74,12 +86,19 @@ void AppManager::_onSwitchedHintsToMain()
         m_pMainGameWindow -> init();
     }
 
+    QPointF pos{m_pHintsWindow->pos()};
+    m_pMainGameWindow->move(pos.x(), pos.y());
+
     m_pMainGameWindow -> show();
 }
 
 void AppManager::_onSwitchedMainToHints()
 {
     m_pMainGameWindow -> hide();
+
+    QPointF pos{m_pMainGameWindow->pos()};
+    m_pHintsWindow->move(pos.x(), pos.y());
+
     m_pHintsWindow -> show();
 }
 
