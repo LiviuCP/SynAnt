@@ -1,22 +1,24 @@
 0. Introduction
 
-This program retrieves a word pair that can be synonyms or antonyms and mixes them. The user should guess the correct words. There are 3 difficulty levels.
+This program retrieves a word pair that can either be synonyms or antonyms, divides them in (almost) equal pieces and mixes them. The user should guess the correct words. There are 3 difficulty levels based on the word piece size.
 
 1. Installation
 
-Currently there are 2 branches, each of them containing a version of the application: qWidgetsVersion and qmlVersion. Choose the branch you would like to use and then compile it.
+Currently there are 2 branches, each of them containing a version of the application: qWidgetsVersion and qmlVersion (the master branch currently replicates qmlVersion). Choose the branch you would like to use and then compile it.
 
-After compiling the code copy the data file near the executable. For Linux Systems refer to the Application sub-directory. For OS X it should be near the executable placed within the .app directory. Feel free to modify it by adding new word pairs.
+After compiling the code copy the file "data" near the executable from the Application sub-directory. Feel free to modify it by adding new word pairs.
 
-The file should be named "data", otherwise it won't be recognized by the app and an error will be triggered.
+The file should keep its name ("data"), otherwise it won't be recognized by the app and an error will be triggered.
 
 2. Supported Operating Systems
 
-This program has been compiled on Linux (Fedora and OpenSUSE). It hasn't been tested on Windows so far. On OS X some previous versions have been run.
+This program has been compiled on Linux (Fedora 28) using Qt 5.9.2 and a 64bit GCC-C++ compiler. It is currently not supported on OS-X/Mac OS or Windows.
 
-3. Updating the data file
+3. Updating the "data" file
 
-Use = for separating synonym word pairs and ! for antonyms.
+Currently the file can only be updated manually. In a future version I'm planning to add functionality that allows "update through the app" without even needing to know the file name.
+
+Each row should contain one word pair. The 2 words from each pair are separated by a special character which is '=' for synonyms and '!' for antonyms. No rows should be left empty or with incorrect format (e.g. no separator/multiple separators) otherwise an exception will be triggered when reading the incorrect row and the program will stop.
 
 The minimum word size is 5 characters and is determined by the c_MinWordSize constant from Common/game.h.
 
