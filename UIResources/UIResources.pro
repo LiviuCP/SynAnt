@@ -40,6 +40,8 @@ HEADERS += \
     uiresources.h \
     uiresources_global.h
 
+QMAKE_LFLAGS += "-Wl,-rpath,\'$$top_builddir/Common\'"
+
 LIBS += \
     -L$$top_builddir/Common -lCommon
 
