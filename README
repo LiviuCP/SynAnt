@@ -1,20 +1,43 @@
 0. Introduction
 
-This program retrieves a word pair that can either be synonyms or antonyms, divides them in (almost) equal pieces and mixes them. The user should guess the correct words. There are 3 difficulty levels based on the word piece size.
+This program retrieves a words pair that can either be synonyms or antonyms, divides them in (almost) equal pieces and mixes them. The user should guess the correct words.
 
-1. Installation
+1. Supported Operating Systems
 
-Currently there are 2 branches, each of them containing a version of the application: qWidgetsVersion and qmlVersion (the master branch currently replicates qmlVersion). Choose the branch you would like to use and then compile it.
+This program has been compiled on Linux (Fedora 28) using Qt 5.9.2 and a 64bit GCC-C++ compiler. It has been deployed on Fedora 28 and OpenSUSE 42.3 so far. The app is currently not supported on OS-X/Mac OS or Windows.
 
-After compiling the code copy the file "data" near the executable from the Application sub-directory. Feel free to modify it by adding new word pairs.
+2. Build 
+
+Currently there are 2 branches, each of them containing an implementation of the application: qWidgetsVersion and qmlVersion (the master branch currently replicates qmlVersion). Choose the branch you would like to use and then compile it.
+
+After compiling the code copy the file "data" in the Application sub-directory. Feel free to modify it by adding new word pairs.
 
 The file should keep its name ("data"), otherwise it won't be recognized by the app and an error will be triggered.
 
-2. Supported Operating Systems
+3. Deploying the app
 
-This program has been compiled on Linux (Fedora 28) using Qt 5.9.2 and a 64bit GCC-C++ compiler. It is currently not supported on OS-X/Mac OS or Windows.
+I used linuxdeployqt for having all necessary libs added to the application so it can run on Linux machines where Qt is not installed. In order to successfully create the deployable package please follow these steps:
+- download linuxdeployqt from this GitHub page: https://github.com/probonopd/linuxdeployqt (check instructions from the page for more details)
+- Make the downloaded file executable: chmod a+x linuxdeployqt-continuous-x86_64.AppImage
+- locate the folder where the qmake executable resides. The directory should have a path similar to this: /path/to/Qt/5.9.2/gcc_64/bin
+- add the qmake directory to the $PATH variable: export PATH="/path/to/Qt/5.9.2/gcc_64/bin:$PATH"
+- go to another directory and execute qmake -v. You should get following output which shows Qt is installed and configured correctly:
 
-3. Updating the "data" file
+  QMake version 3.1
+  Using Qt version 5.9.2 in /path/to/Qt/5.9.2/gcc_64/lib
+
+- build the application as RELEASE
+- run the linuxdeployqt as follows:
+  - for the qWidgetsVersion branch you only need to provide the path of the executable as argument:
+    /path/to/linuxdeployqt-continuous-x86_64.AppImage /path/to/builddir/Application/SynAnt
+  - for the qmlVersion branch the directory containing the qml files should be provided too. This is located in the Application subdir of the source code directory:
+    /path/to/linuxdeployqt-continuous-x86_64.AppImage /path/to/builddir/Application/SynAnt -qmldir='/path/to/SynAnt/Application'
+- check that the build directory now contains following folders within the Application subdir: lib, plugins, qml (last one only for the qmlVersion branch)
+- copy the build directory onto a Linux machine where Qt is not installed and check that it runs successfully (should run exactly the same as on the Qt machine)
+
+Note: an error might trigger when running linuxdeployqt mentioning that libjasper.so.1 cannot be found. I solved this error by creating a symbolic link to libjasper.so.4. The symbolic link was placed into the same directory as the libjasper.so.4 file. You can use the locate command (don't forget to execute updatedb as sudo before running it) for finding the libjasper.so files.
+
+4. Updating the "data" file
 
 Currently the file can only be updated manually. In a future version I'm planning to add functionality that allows "update through the app" without even needing to know the file name.
 
@@ -22,7 +45,7 @@ Each row should contain one word pair. The 2 words from each pair are separated 
 
 The minimum word size is 5 characters and is determined by the c_MinWordSize constant from Common/game.h.
 
-4. Further info
+5. Further info
 
 Click the Help button within the app for more information.
 
