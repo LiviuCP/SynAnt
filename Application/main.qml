@@ -12,8 +12,10 @@ ApplicationWindow {
     minimumWidth: 640
     minimumHeight: 480
 
-    x: (Screen.width - minimumWidth)/2
-    y: (Screen.height - minimumHeight)/2
+    screen: Qt.application.screens[0]
+
+    x: (Qt.application.screens[0].width - minimumWidth)/2
+    y: (Qt.application.screens[0].height - minimumHeight)/2
 
     title: gamePresenter.windowTitle
     color: gamePresenter.backgroundColor
