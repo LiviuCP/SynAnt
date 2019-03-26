@@ -159,76 +159,6 @@ void GamePresenter::switchToLevel(int level)
     }
 }
 
-int GamePresenter::getLevelEasy() const
-{
-    return static_cast<int>(Game::Level::EASY);
-}
-
-int GamePresenter::getLevelMedium() const
-{
-    return static_cast<int>(Game::Level::MEDIUM);
-}
-
-int GamePresenter::getLevelHard() const
-{
-    return static_cast<int>(Game::Level::HARD);
-}
-
-QString GamePresenter::getPlayButtonLabel() const
-{
-    return GameStrings::c_PlayButtonLabel;
-}
-
-QString GamePresenter::getHelpButtonLabel() const
-{
-    return GameStrings::c_HelpButtonLabel;
-}
-
-QString GamePresenter::getQuitButtonLabel() const
-{
-    return GameStrings::c_QuitButtonLabel;
-}
-
-QString GamePresenter::getSubmitButtonLabel() const
-{
-    return GameStrings::c_SubmitButtonLabel;
-}
-
-QString GamePresenter::getResultsButtonLabel() const
-{
-    return GameStrings::c_ResultsButtonLabel;
-}
-
-QString GamePresenter::getResetButtonLabel() const
-{
-    return GameStrings::c_ResetButtonLabel;
-}
-
-QString GamePresenter::getOkButtonLabel() const
-{
-    return GameStrings::c_OkButtonLabel;
-}
-
-QString GamePresenter::getLevelEasyButtonLabel() const
-{
-    return GameStrings::c_LevelEasyButtonLabel;
-}
-
-QString GamePresenter::getLevelMediumButtonLabel() const
-{
-    return GameStrings::c_LevelMediumButtonLabel;
-}
-
-QString GamePresenter::getLevelHardButtonLabel() const
-{
-    return GameStrings::c_LevelHardButtonLabel;
-}
-
-QString GamePresenter::getCloseButtonLabel() const
-{
-    return GameStrings::c_FatalErrorQuitButtonLabel;
-}
-
 bool GamePresenter::getIntroPaneVisible() const
 {
     return m_IntroPaneVisible;
@@ -252,6 +182,62 @@ bool GamePresenter::getResetEnabled() const
 bool GamePresenter::getErrorOccured() const
 {
     return m_ErrorOccured;
+}
+
+QList<QVariant> GamePresenter::getMixedWordsPieces() const
+{
+    QList<QVariant> mixedWordsPieces;
+    QVector<QString> mixedWordsStringArray{m_pGameFacade->getMixedWordsStringArray()};
+    for (auto piece : mixedWordsStringArray)
+    {
+        mixedWordsPieces.append(piece);
+    }
+    return mixedWordsPieces;
+}
+
+int GamePresenter::getFirstWordFirstPieceIndex() const
+{
+    return m_pGameFacade->getFirstWordFirstPieceIndex();
+}
+
+int GamePresenter::getFirstWordLastPieceIndex() const
+{
+    return m_pGameFacade->getFirstWordLastPieceIndex();
+}
+
+int GamePresenter::getSecondWordFirstPieceIndex() const
+{
+    return m_pGameFacade->getSecondWordFirstPieceIndex();
+}
+
+int GamePresenter::getSecondWordLastPieceIndex() const
+{
+    return m_pGameFacade->getSecondWordLastPieceIndex();
+}
+
+int GamePresenter::getLevelEasy() const
+{
+    return static_cast<int>(Game::Level::EASY);
+}
+
+int GamePresenter::getLevelMedium() const
+{
+    return static_cast<int>(Game::Level::MEDIUM);
+}
+
+int GamePresenter::getLevelHard() const
+{
+    return static_cast<int>(Game::Level::HARD);
+}
+
+int GamePresenter::getToolTipDelay() const
+{
+    return Game::c_ToolTipDelay;
+}
+
+int GamePresenter::getToolTipTimeout() const
+{
+    return Game::c_ToolTipTimeout;
 }
 
 QString GamePresenter::getWindowTitle() const
@@ -294,14 +280,114 @@ QString GamePresenter::getErrorMessage() const
     return m_ErrorMessage;
 }
 
-int GamePresenter::getToolTipDelay() const
+QString GamePresenter::getPlayButtonLabel() const
 {
-    return Game::c_ToolTipDelay;
+    return GameStrings::c_PlayButtonLabel;
 }
 
-int GamePresenter::getToolTipTimeout() const
+QString GamePresenter::getHelpButtonLabel() const
 {
-    return Game::c_ToolTipTimeout;
+    return GameStrings::c_HelpButtonLabel;
+}
+
+QString GamePresenter::getQuitButtonLabel() const
+{
+    return GameStrings::c_QuitButtonLabel;
+}
+
+QString GamePresenter::getSubmitButtonLabel() const
+{
+    return GameStrings::c_SubmitButtonLabel;
+}
+
+QString GamePresenter::getResultsButtonLabel() const
+{
+    return GameStrings::c_ResultsButtonLabel;
+}
+
+QString GamePresenter::getResetButtonLabel() const
+{
+    return GameStrings::c_ResetButtonLabel;
+}
+
+QString GamePresenter::getLevelEasyButtonLabel() const
+{
+    return GameStrings::c_LevelEasyButtonLabel;
+}
+
+QString GamePresenter::getLevelMediumButtonLabel() const
+{
+    return GameStrings::c_LevelMediumButtonLabel;
+}
+
+QString GamePresenter::getLevelHardButtonLabel() const
+{
+    return GameStrings::c_LevelHardButtonLabel;
+}
+
+QString GamePresenter::getOkButtonLabel() const
+{
+    return GameStrings::c_OkButtonLabel;
+}
+
+QString GamePresenter::getCloseButtonLabel() const
+{
+    return GameStrings::c_FatalErrorQuitButtonLabel;
+}
+
+QString GamePresenter::getPlayButtonShortcut() const
+{
+    return GameStrings::c_PlayButtonShortcut;
+}
+
+QString GamePresenter::getHelpButtonShortcut() const
+{
+    return GameStrings::c_HelpButtonShortcut;
+}
+
+QString GamePresenter::getQuitButtonShortcut() const
+{
+    return GameStrings::c_QuitButtonShortcut;
+}
+
+QString GamePresenter::getSubmitButtonShortcut() const
+{
+    return GameStrings::c_SubmitButtonShortcut;
+}
+
+QString GamePresenter::getResultsButtonShortcut() const
+{
+    return GameStrings::c_ResultsButtonShortcut;
+}
+
+QString GamePresenter::getResetButtonShortcut() const
+{
+    return GameStrings::c_ResetShortcut;
+}
+
+QString GamePresenter::getLevelEasyButtonShortcut() const
+{
+    return GameStrings::c_LevelEasyButtonShortcut;
+}
+
+QString GamePresenter::getLevelMediumButtonShortcut() const
+{
+    return GameStrings::c_LevelMediumButtonShortcut;
+}
+
+QString GamePresenter::getLevelHardButtonShortcut() const
+{
+    return GameStrings::c_LevelHardButtonShortcut;
+}
+
+QString GamePresenter::getOkButtonShortcut() const
+{
+    return GameStrings::c_OkButtonShortcut;
+}
+
+QString GamePresenter::getCloseButtonShortcut() const
+{
+    return GameStrings::c_FatalErrorQuitButtonShortcut;
 }
 
 QString GamePresenter::getIntroPaneToolTip() const
@@ -369,11 +455,6 @@ QString GamePresenter::getQuitButtonToolTip() const
     return GameStrings::c_QuitButtonToolTip;
 }
 
-QString GamePresenter::getOkButtonToolTip() const
-{
-    return GameStrings::c_OkButtonToolTip;
-}
-
 QString GamePresenter::getSubmitButtonToolTip() const
 {
     return GameStrings::c_SubmitButtonToolTip;
@@ -394,95 +475,14 @@ QString GamePresenter::getLevelButtonsToolTip() const
     return GameStrings::c_LevelButtonsToolTip;
 }
 
+QString GamePresenter::getOkButtonToolTip() const
+{
+    return GameStrings::c_OkButtonToolTip;
+}
+
 QString GamePresenter::getCloseButtonToolTip() const
 {
     return GameStrings::c_FatalErrorQuitButtonToolTip;
-}
-
-QString GamePresenter::getPlayButtonShortcut() const
-{
-    return GameStrings::c_PlayButtonShortcut;
-}
-
-QString GamePresenter::getHelpButtonShortcut() const
-{
-    return GameStrings::c_HelpButtonShortcut;
-}
-
-QString GamePresenter::getQuitButtonShortcut() const
-{
-    return GameStrings::c_QuitButtonShortcut;
-}
-
-QString GamePresenter::getOkButtonShortcut() const
-{
-    return GameStrings::c_OkButtonShortcut;
-}
-
-QString GamePresenter::getSubmitButtonShortcut() const
-{
-    return GameStrings::c_SubmitButtonShortcut;
-}
-
-QString GamePresenter::getResultsButtonShortcut() const
-{
-    return GameStrings::c_ResultsButtonShortcut;
-}
-
-QString GamePresenter::getResetButtonShortcut() const
-{
-    return GameStrings::c_ResetShortcut;
-}
-
-QString GamePresenter::getLevelEasyButtonShortcut() const
-{
-    return GameStrings::c_LevelEasyButtonShortcut;
-}
-
-QString GamePresenter::getLevelMediumButtonShortcut() const
-{
-    return GameStrings::c_LevelMediumButtonShortcut;
-}
-
-QString GamePresenter::getLevelHardButtonShortcut() const
-{
-    return GameStrings::c_LevelHardButtonShortcut;
-}
-
-QString GamePresenter::getCloseButtonShortcut() const
-{
-    return GameStrings::c_FatalErrorQuitButtonShortcut;
-}
-
-QList<QVariant> GamePresenter::getMixedWordsPieces() const
-{
-    QList<QVariant> mixedWordsPieces;
-    QVector<QString> mixedWordsStringArray{m_pGameFacade->getMixedWordsStringArray()};
-    for (auto piece : mixedWordsStringArray)
-    {
-        mixedWordsPieces.append(piece);
-    }
-    return mixedWordsPieces;
-}
-
-int GamePresenter::getFirstWordFirstPieceIndex() const
-{
-    return m_pGameFacade->getFirstWordFirstPieceIndex();
-}
-
-int GamePresenter::getFirstWordLastPieceIndex() const
-{
-    return m_pGameFacade->getFirstWordLastPieceIndex();
-}
-
-int GamePresenter::getSecondWordFirstPieceIndex() const
-{
-    return m_pGameFacade->getSecondWordFirstPieceIndex();
-}
-
-int GamePresenter::getSecondWordLastPieceIndex() const
-{
-    return m_pGameFacade->getSecondWordLastPieceIndex();
 }
 
 QColor GamePresenter::getBackgroundColor() const

@@ -12,9 +12,35 @@ class GameFacade;
 class GamePresenter : public QObject
 {
     Q_OBJECT
+
+    // functionality properties
+    Q_PROPERTY(bool introPaneVisible READ getIntroPaneVisible NOTIFY introPaneVisibleChanged)
+    Q_PROPERTY(bool helpPaneVisible READ getHelpPaneVisible NOTIFY helpPaneVisibleChanged)
+    Q_PROPERTY(bool mainPaneVisible READ getMainPaneVisible NOTIFY mainPaneVisibleChanged)
+    Q_PROPERTY(bool resetEnabled READ getResetEnabled NOTIFY resetEnabledChanged)
+    Q_PROPERTY(bool errorOccured READ getErrorOccured NOTIFY errorOccuredChanged)
+    Q_PROPERTY(QList<QVariant> mixedWordsPieces READ getMixedWordsPieces NOTIFY mixedWordsChanged)
+    Q_PROPERTY(int firstWordBeginIndex READ getFirstWordFirstPieceIndex NOTIFY mixedWordsChanged)
+    Q_PROPERTY(int firstWordEndIndex READ getFirstWordLastPieceIndex NOTIFY mixedWordsChanged)
+    Q_PROPERTY(int secondWordBeginIndex READ getSecondWordFirstPieceIndex NOTIFY mixedWordsChanged)
+    Q_PROPERTY(int secondWordEndIndex READ getSecondWordLastPieceIndex NOTIFY mixedWordsChanged)
     Q_PROPERTY(int levelEasy READ getLevelEasy CONSTANT)
     Q_PROPERTY(int levelMedium READ getLevelMedium CONSTANT)
     Q_PROPERTY(int levelHard READ getLevelHard CONSTANT)
+    Q_PROPERTY(int toolTipDelay READ getToolTipDelay CONSTANT)
+    Q_PROPERTY(int toolTipTimeout READ getToolTipTimeout CONSTANT)
+
+    // text properties
+    Q_PROPERTY(QString windowTitle READ getWindowTitle NOTIFY windowTitleChanged)
+
+    Q_PROPERTY(QString introPaneMessage READ getIntroPaneMessage CONSTANT)
+    Q_PROPERTY(QString helpPaneMessage READ getHelpPaneMessage CONSTANT)
+    Q_PROPERTY(QString mainPaneInstructionsMessage READ getMainPaneInstructionsMessage CONSTANT)
+    Q_PROPERTY(QString mainPaneStatusMessage READ getMainPaneStatusMessage NOTIFY mainPaneStatusMessageChanged)
+    Q_PROPERTY(QString mainPaneScoreMessage READ getMainPaneScoreMessage NOTIFY mainPaneStatisticsMessagesChanged)
+    Q_PROPERTY(QString mainPaneWordPairsMessage READ getMainPaneWordPairsMessage NOTIFY mainPaneStatisticsMessagesChanged)
+    Q_PROPERTY(QString errorMessage READ getErrorMessage NOTIFY errorMessageChanged)
+
     Q_PROPERTY(QString playButtonLabel READ getPlayButtonLabel CONSTANT)
     Q_PROPERTY(QString helpButtonLabel READ getHelpButtonLabel CONSTANT)
     Q_PROPERTY(QString quitButtonLabel READ getQuitButtonLabel CONSTANT)
@@ -26,6 +52,7 @@ class GamePresenter : public QObject
     Q_PROPERTY(QString levelMediumButtonLabel READ getLevelMediumButtonLabel CONSTANT)
     Q_PROPERTY(QString levelHardButtonLabel READ getLevelHardButtonLabel CONSTANT)
     Q_PROPERTY(QString closeButtonLabel READ getCloseButtonLabel CONSTANT)
+
     Q_PROPERTY(QString playButtonShortcut READ getPlayButtonShortcut CONSTANT)
     Q_PROPERTY(QString helpButtonShortcut READ getHelpButtonShortcut CONSTANT)
     Q_PROPERTY(QString quitButtonShortcut READ getQuitButtonShortcut CONSTANT)
@@ -38,22 +65,6 @@ class GamePresenter : public QObject
     Q_PROPERTY(QString levelHardButtonShortcut READ getLevelHardButtonShortcut CONSTANT)
     Q_PROPERTY(QString closeButtonShortcut READ getCloseButtonShortcut CONSTANT)
 
-    Q_PROPERTY(bool introPaneVisible READ getIntroPaneVisible NOTIFY introPaneVisibleChanged)
-    Q_PROPERTY(bool helpPaneVisible READ getHelpPaneVisible NOTIFY helpPaneVisibleChanged)
-    Q_PROPERTY(bool mainPaneVisible READ getMainPaneVisible NOTIFY mainPaneVisibleChanged)
-    Q_PROPERTY(QString windowTitle READ getWindowTitle NOTIFY windowTitleChanged)
-
-    Q_PROPERTY(QString introPaneMessage READ getIntroPaneMessage CONSTANT)
-    Q_PROPERTY(QString helpPaneMessage READ getHelpPaneMessage CONSTANT)
-    Q_PROPERTY(QString mainPaneInstructionsMessage READ getMainPaneInstructionsMessage CONSTANT)
-
-    Q_PROPERTY(QString mainPaneStatusMessage READ getMainPaneStatusMessage NOTIFY mainPaneStatusMessageChanged)
-    Q_PROPERTY(QString mainPaneScoreMessage READ getMainPaneScoreMessage NOTIFY mainPaneStatisticsMessagesChanged)
-    Q_PROPERTY(QString mainPaneWordPairsMessage READ getMainPaneWordPairsMessage NOTIFY mainPaneStatisticsMessagesChanged)
-    Q_PROPERTY(QString errorMessage READ getErrorMessage NOTIFY errorMessageChanged)
-
-    Q_PROPERTY(int toolTipDelay READ getToolTipDelay CONSTANT)
-    Q_PROPERTY(int toolTipTimeout READ getToolTipTimeout CONSTANT)
     Q_PROPERTY(QString introPaneToolTip READ getIntroPaneToolTip CONSTANT)
     Q_PROPERTY(QString helpPaneToolTip READ getHelpPaneToolTip CONSTANT)
     Q_PROPERTY(QString mainPaneToolTip READ getMainPaneToolTip CONSTANT)
@@ -74,14 +85,7 @@ class GamePresenter : public QObject
     Q_PROPERTY(QString levelButtonsToolTip READ getLevelButtonsToolTip CONSTANT)
     Q_PROPERTY(QString closeButtonToolTip READ getCloseButtonToolTip CONSTANT)
 
-    Q_PROPERTY(bool resetEnabled READ getResetEnabled NOTIFY resetEnabledChanged)
-    Q_PROPERTY(bool errorOccured READ getErrorOccured NOTIFY errorOccuredChanged)
-    Q_PROPERTY(QList<QVariant> mixedWordsPieces READ getMixedWordsPieces NOTIFY mixedWordsChanged)
-    Q_PROPERTY(int firstWordBeginIndex READ getFirstWordFirstPieceIndex NOTIFY mixedWordsChanged)
-    Q_PROPERTY(int firstWordEndIndex READ getFirstWordLastPieceIndex NOTIFY mixedWordsChanged)
-    Q_PROPERTY(int secondWordBeginIndex READ getSecondWordFirstPieceIndex NOTIFY mixedWordsChanged)
-    Q_PROPERTY(int secondWordEndIndex READ getSecondWordLastPieceIndex NOTIFY mixedWordsChanged)
-
+    // color properties
     Q_PROPERTY(QColor backgroundColor READ getBackgroundColor CONSTANT)
     Q_PROPERTY(QColor pushButtonColor READ getPushButtonColor CONSTANT)
     Q_PROPERTY(QColor borderColor READ getBorderColor CONSTANT)
@@ -110,29 +114,24 @@ public:
     Q_INVOKABLE void handleResetRequest();
     Q_INVOKABLE void switchToLevel(int level);
 
-    int getLevelEasy() const;
-    int getLevelMedium() const;
-    int getLevelHard() const;
-
-    QString getPlayButtonLabel() const;
-    QString getHelpButtonLabel() const;
-    QString getQuitButtonLabel() const;
-    QString getSubmitButtonLabel() const;
-    QString getResultsButtonLabel() const;
-    QString getResetButtonLabel() const;
-    QString getOkButtonLabel() const;
-    QString getLevelEasyButtonLabel() const;
-    QString getLevelMediumButtonLabel() const;
-    QString getLevelHardButtonLabel() const;
-    QString getCloseButtonLabel() const;
-
     bool getIntroPaneVisible() const;
     bool getHelpPaneVisible() const;
     bool getMainPaneVisible() const;
     bool getResetEnabled() const;
     bool getErrorOccured() const;
+    QList<QVariant> getMixedWordsPieces() const;
+    int getFirstWordFirstPieceIndex() const;
+    int getFirstWordLastPieceIndex() const;
+    int getSecondWordFirstPieceIndex() const;
+    int getSecondWordLastPieceIndex() const;
+    int getLevelEasy() const;
+    int getLevelMedium() const;
+    int getLevelHard() const;
+    int getToolTipDelay() const;
+    int getToolTipTimeout() const;
 
     QString getWindowTitle() const;
+
     QString getIntroPaneMessage() const;
     QString getHelpPaneMessage() const;
     QString getMainPaneInstructionsMessage() const;
@@ -141,8 +140,30 @@ public:
     QString getMainPaneWordPairsMessage() const;
     QString getErrorMessage() const;
 
-    int getToolTipDelay() const;
-    int getToolTipTimeout() const;
+    QString getPlayButtonLabel() const;
+    QString getHelpButtonLabel() const;
+    QString getQuitButtonLabel() const;
+    QString getSubmitButtonLabel() const;
+    QString getResultsButtonLabel() const;
+    QString getResetButtonLabel() const;
+    QString getLevelEasyButtonLabel() const;
+    QString getLevelMediumButtonLabel() const;
+    QString getLevelHardButtonLabel() const;
+    QString getOkButtonLabel() const;
+    QString getCloseButtonLabel() const;
+
+    QString getPlayButtonShortcut() const;
+    QString getHelpButtonShortcut() const;
+    QString getQuitButtonShortcut() const;
+    QString getSubmitButtonShortcut() const;
+    QString getResultsButtonShortcut() const;
+    QString getResetButtonShortcut() const;
+    QString getLevelEasyButtonShortcut() const;
+    QString getLevelMediumButtonShortcut() const;
+    QString getLevelHardButtonShortcut() const;
+    QString getOkButtonShortcut() const;
+    QString getCloseButtonShortcut() const;
+
     QString getIntroPaneToolTip() const;
     QString getHelpPaneToolTip() const;
     QString getMainPaneToolTip() const;
@@ -156,30 +177,12 @@ public:
     QString getPlayButtonToolTip() const;
     QString getHelpButtonToolTip() const;
     QString getQuitButtonToolTip() const;
-    QString getOkButtonToolTip() const;
     QString getSubmitButtonToolTip() const;
     QString getResultsButtonToolTip() const;
     QString getResetButtonToolTip() const;
     QString getLevelButtonsToolTip() const;
+    QString getOkButtonToolTip() const;
     QString getCloseButtonToolTip() const;
-
-    QString getPlayButtonShortcut() const;
-    QString getHelpButtonShortcut() const;
-    QString getQuitButtonShortcut() const;
-    QString getOkButtonShortcut() const;
-    QString getSubmitButtonShortcut() const;
-    QString getResultsButtonShortcut() const;
-    QString getResetButtonShortcut() const;
-    QString getLevelEasyButtonShortcut() const;
-    QString getLevelMediumButtonShortcut() const;
-    QString getLevelHardButtonShortcut() const;
-    QString getCloseButtonShortcut() const;
-
-    QList<QVariant> getMixedWordsPieces() const;
-    int getFirstWordFirstPieceIndex() const;
-    int getFirstWordLastPieceIndex() const;
-    int getSecondWordFirstPieceIndex() const;
-    int getSecondWordLastPieceIndex() const;
 
     QColor getBackgroundColor() const;
     QColor getPushButtonColor() const;
@@ -191,16 +194,16 @@ public:
     QColor getWordPieceSelectedColor() const;
 
 signals:
-    Q_SIGNAL void windowTitleChanged();
     Q_SIGNAL void introPaneVisibleChanged();
     Q_SIGNAL void helpPaneVisibleChanged();
     Q_SIGNAL void mainPaneVisibleChanged();
     Q_SIGNAL void resetEnabledChanged();
     Q_SIGNAL void errorOccuredChanged();
+    Q_SIGNAL void mixedWordsChanged();
+    Q_SIGNAL void windowTitleChanged();
     Q_SIGNAL void mainPaneStatusMessageChanged();
     Q_SIGNAL void mainPaneStatisticsMessagesChanged();
     Q_SIGNAL void errorMessageChanged();
-    Q_SIGNAL void mixedWordsChanged();
 
 private slots:
     void _onStatisticsUpdated();
