@@ -206,10 +206,10 @@ signals:
     Q_SIGNAL void errorMessageChanged();
 
 private slots:
-    void _onStatisticsUpdated();
+    void _onStatisticsChanged();
+    void _onStatusChanged(Game::StatusCodes statusCode);
 
 private:
-    void _updateStatusMessage(Game::StatusCodes statusCode);
     void _launchErrorPane(const QString& errorMessage);
 
     bool m_IntroPaneVisible;

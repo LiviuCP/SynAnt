@@ -27,9 +27,9 @@ GamePresenter::GamePresenter(QObject *parent)
     , m_CurrentPane {Pane::INTRO}
     , m_pGameFacade {new GameFacade{QGuiApplication::applicationDirPath(), this}}
 {
-    bool connected{connect(m_pGameFacade, &GameFacade::statisticsChanged, this, &GamePresenter::_onStatisticsUpdated)};
+    bool connected{connect(m_pGameFacade, &GameFacade::statisticsChanged, this, &GamePresenter::_onStatisticsChanged)};
     Q_ASSERT(connected);
-    connected = connect(m_pGameFacade, &GameFacade::statusChanged, this, &GamePresenter::_updateStatusMessage);
+    connected = connect(m_pGameFacade, &GameFacade::statusChanged, this, &GamePresenter::_onStatusChanged);
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::mixedWordsChanged, this, &GamePresenter::mixedWordsChanged);
     Q_ASSERT(connected);
@@ -525,7 +525,7 @@ QColor GamePresenter::getWordPieceSelectedColor() const
     return QColor{GameStrings::c_WordPieceSelectedBackgroundColor};
 }
 
-void GamePresenter::_onStatisticsUpdated()
+void GamePresenter::_onStatisticsChanged()
 {
     m_MainPaneScoreMessage = GameStrings::c_HighscoresMessage.arg(m_pGameFacade->getObtainedScore())
                                                              .arg(m_pGameFacade->getTotalAvailableScore());
@@ -535,7 +535,7 @@ void GamePresenter::_onStatisticsUpdated()
     Q_EMIT mainPaneStatisticsMessagesChanged();
 }
 
-void GamePresenter::_updateStatusMessage(Game::StatusCodes statusCode)
+void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
 {
     switch (statusCode)
     {
