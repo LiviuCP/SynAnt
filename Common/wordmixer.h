@@ -31,10 +31,13 @@ class WordMixer : public QObject
 public:
     explicit WordMixer(const QString &m_FileName, QObject *parent = nullptr);
 
-    // splits the words into pieces and mixes them into an array
+    // splits the words into equal pieces and mixes them into an array (last piece might have less characters than the others)
     void mixWords();
-    const QVector<QString>& getMixedWordsStringArray() const;
 
+    // sets number of characters for each word piece
+    void setWordPieceSize(Game::Level level);
+
+    const QVector<QString>& getMixedWordsStringArray() const;
     QString getFirstWord() const;
     QString getSecondWord() const;
     bool areSynonyms() const;
@@ -50,15 +53,14 @@ public:
     void setSecondWord(const QString &secondWord);
     void fetchWordsFromRowContent(const QString &rowContent);
 
-public slots:
-    void setWordPieceSize(Game::Level level);
+signals:
+    Q_SIGNAL void mixedWordsChanged();
 
 private:
     void _getRowNumber();
     void _retrieveWords();
     void _checkWordIsCorrect(const QString& word, const QString& wordIdentifier);
     int  _insertWordPiece(const QString &word, int firstCharPos, QVector<int> &wordPieceIndexes);
-
 
     QString m_FileName;
     int m_RowNumber;

@@ -110,6 +110,14 @@ void WordMixer::mixWords()
         _insertWordPiece(m_WordsPair.second, wordPieceStartPos, wordPieceIndexes);
     }
     m_WordsBeginEndPieceIndexes[WordsBeginEndPieces::SECOND_WORD_LAST_PIECE] = _insertWordPiece(m_WordsPair.second, secondWordLastPiecePos, wordPieceIndexes);
+
+    Q_EMIT mixedWordsChanged();
+}
+
+void WordMixer::setWordPieceSize(Game::Level level)
+{
+    Q_ASSERT(static_cast<int>(level) >= 0 && static_cast<int>(level) < static_cast<int>(Game::Level::NrOfLevels));
+    m_WordPieceSize = Game::c_WordPieceSizes[level];
 }
 
 const QVector<QString>& WordMixer::getMixedWordsStringArray() const
@@ -167,12 +175,6 @@ int WordMixer::getSecondWordFirstPieceIndex() const
 int WordMixer::getSecondWordLastPieceIndex() const
 {
     return m_WordsBeginEndPieceIndexes[WordsBeginEndPieces::SECOND_WORD_LAST_PIECE];
-}
-
-void WordMixer::setWordPieceSize(Game::Level level)
-{
-    Q_ASSERT(static_cast<int>(level) >= 0 && static_cast<int>(level) < static_cast<int>(Game::Level::NrOfLevels));
-    m_WordPieceSize = Game::c_WordPieceSizes[level];
 }
 
 void WordMixer::_getRowNumber()

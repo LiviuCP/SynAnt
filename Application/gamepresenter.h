@@ -6,10 +6,8 @@
 #include <QColor>
 
 #include "../Common/game.h"
-#include "../Common/gamestrings.h"
 
-class WordMixer;
-class ScoreItem;
+class GameFacade;
 
 class GamePresenter : public QObject
 {
@@ -39,17 +37,21 @@ class GamePresenter : public QObject
     Q_PROPERTY(QString levelMediumButtonShortcut READ getLevelMediumButtonShortcut CONSTANT)
     Q_PROPERTY(QString levelHardButtonShortcut READ getLevelHardButtonShortcut CONSTANT)
     Q_PROPERTY(QString closeButtonShortcut READ getCloseButtonShortcut CONSTANT)
+
     Q_PROPERTY(bool introPaneVisible READ getIntroPaneVisible NOTIFY introPaneVisibleChanged)
     Q_PROPERTY(bool helpPaneVisible READ getHelpPaneVisible NOTIFY helpPaneVisibleChanged)
     Q_PROPERTY(bool mainPaneVisible READ getMainPaneVisible NOTIFY mainPaneVisibleChanged)
     Q_PROPERTY(QString windowTitle READ getWindowTitle NOTIFY windowTitleChanged)
+
     Q_PROPERTY(QString introPaneMessage READ getIntroPaneMessage CONSTANT)
     Q_PROPERTY(QString helpPaneMessage READ getHelpPaneMessage CONSTANT)
     Q_PROPERTY(QString mainPaneInstructionsMessage READ getMainPaneInstructionsMessage CONSTANT)
+
     Q_PROPERTY(QString mainPaneStatusMessage READ getMainPaneStatusMessage NOTIFY mainPaneStatusMessageChanged)
-    Q_PROPERTY(QString mainPaneScoreMessage READ getMainPaneScoreMessage NOTIFY mainPaneScoreMessageChanged)
-    Q_PROPERTY(QString mainPaneWordPairsMessage READ getMainPaneWordPairsMessage NOTIFY mainPaneWordPairsMessageChanged)
+    Q_PROPERTY(QString mainPaneScoreMessage READ getMainPaneScoreMessage NOTIFY mainPaneStatisticsMessagesChanged)
+    Q_PROPERTY(QString mainPaneWordPairsMessage READ getMainPaneWordPairsMessage NOTIFY mainPaneStatisticsMessagesChanged)
     Q_PROPERTY(QString errorMessage READ getErrorMessage NOTIFY errorMessageChanged)
+
     Q_PROPERTY(int toolTipDelay READ getToolTipDelay CONSTANT)
     Q_PROPERTY(int toolTipTimeout READ getToolTipTimeout CONSTANT)
     Q_PROPERTY(QString introPaneToolTip READ getIntroPaneToolTip CONSTANT)
@@ -71,13 +73,15 @@ class GamePresenter : public QObject
     Q_PROPERTY(QString resetButtonToolTip READ getResetButtonToolTip CONSTANT)
     Q_PROPERTY(QString levelButtonsToolTip READ getLevelButtonsToolTip CONSTANT)
     Q_PROPERTY(QString closeButtonToolTip READ getCloseButtonToolTip CONSTANT)
+
     Q_PROPERTY(bool resetEnabled READ getResetEnabled NOTIFY resetEnabledChanged)
     Q_PROPERTY(bool errorOccured READ getErrorOccured NOTIFY errorOccuredChanged)
-    Q_PROPERTY(QList<QVariant> mixedWordsPieces READ getMixedWordsPieces NOTIFY mixedWordsPiecesChanged)
-    Q_PROPERTY(int firstWordBeginIndex READ getFirstWordFirstPieceIndex NOTIFY mixedWordsPiecesChanged)
-    Q_PROPERTY(int firstWordEndIndex READ getFirstWordLastPieceIndex NOTIFY mixedWordsPiecesChanged)
-    Q_PROPERTY(int secondWordBeginIndex READ getSecondWordFirstPieceIndex NOTIFY mixedWordsPiecesChanged)
-    Q_PROPERTY(int secondWordEndIndex READ getSecondWordLastPieceIndex NOTIFY mixedWordsPiecesChanged)
+    Q_PROPERTY(QList<QVariant> mixedWordsPieces READ getMixedWordsPieces NOTIFY mixedWordsChanged)
+    Q_PROPERTY(int firstWordBeginIndex READ getFirstWordFirstPieceIndex NOTIFY mixedWordsChanged)
+    Q_PROPERTY(int firstWordEndIndex READ getFirstWordLastPieceIndex NOTIFY mixedWordsChanged)
+    Q_PROPERTY(int secondWordBeginIndex READ getSecondWordFirstPieceIndex NOTIFY mixedWordsChanged)
+    Q_PROPERTY(int secondWordEndIndex READ getSecondWordLastPieceIndex NOTIFY mixedWordsChanged)
+
     Q_PROPERTY(QColor backgroundColor READ getBackgroundColor CONSTANT)
     Q_PROPERTY(QColor pushButtonColor READ getPushButtonColor CONSTANT)
     Q_PROPERTY(QColor borderColor READ getBorderColor CONSTANT)
@@ -194,20 +198,15 @@ signals:
     Q_SIGNAL void resetEnabledChanged();
     Q_SIGNAL void errorOccuredChanged();
     Q_SIGNAL void mainPaneStatusMessageChanged();
-    Q_SIGNAL void mainPaneScoreMessageChanged();
+    Q_SIGNAL void mainPaneStatisticsMessagesChanged();
     Q_SIGNAL void errorMessageChanged();
-    Q_SIGNAL void mainPaneWordPairsMessageChanged();
-    Q_SIGNAL void levelChanged(Game::Level level);
-    Q_SIGNAL void mixedWordsPiecesChanged();
+    Q_SIGNAL void mixedWordsChanged();
 
 private slots:
     void _onStatisticsUpdated();
 
 private:
-    Game::StatusCodes _checkWords(const QString &firstWord, const QString &secondWord);
-    void _initMainPane();
     void _updateStatusMessage(Game::StatusCodes statusCode);
-    void _setLevel(Game::Level level);
     void _launchErrorPane(const QString& errorMessage);
 
     bool m_IntroPaneVisible;
@@ -226,8 +225,7 @@ private:
 
     Pane m_CurrentPane;
 
-    WordMixer* m_pWordMixer;
-    ScoreItem* m_pScoreItem;
+    GameFacade* m_pGameFacade;
 };
 
 #endif // GAMEPRESENTER_H

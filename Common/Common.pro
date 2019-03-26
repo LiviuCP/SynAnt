@@ -26,7 +26,8 @@ SOURCES += \
         common.cpp \
         wordmixer.cpp \
         scoreitem.cpp \
-        exceptions.cpp
+        exceptions.cpp \
+    gamefacade.cpp
 
 HEADERS += \
         common.h \
@@ -35,7 +36,8 @@ HEADERS += \
         scoreitem.h \
         game.h \
         gamestrings.h \
-        exceptions.h
+        exceptions.h \
+        gamefacade.h
 
 unix {
     target.path = /usr/lib

@@ -1,8 +1,8 @@
 #include <QGuiApplication>
+#include <QVector>
 
 #include "gamepresenter.h"
-#include "../Common/wordmixer.h"
-#include "../Common/scoreitem.h"
+#include "../Common/gamefacade.h"
 #include "../Common/gamestrings.h"
 #include "../Common/exceptions.h"
 
@@ -25,19 +25,14 @@ GamePresenter::GamePresenter(QObject *parent)
     , m_WindowTitle{GameStrings::c_IntroWindowTitle}
     , m_MainPaneStatusMessage {GameStrings::c_NoUserInputMessage}
     , m_CurrentPane {Pane::INTRO}
-    , m_pWordMixer {nullptr}
-    , m_pScoreItem {new ScoreItem{this}}
+    , m_pGameFacade {new GameFacade{QGuiApplication::applicationDirPath(), this}}
 {
-    m_pWordMixer = new WordMixer{QGuiApplication::applicationDirPath() + "/" + GameStrings::c_FileName, this};
-
-    bool connected{connect(this,&GamePresenter::levelChanged,m_pWordMixer,&WordMixer::setWordPieceSize)};
+    bool connected{connect(m_pGameFacade, &GameFacade::statisticsChanged, this, &GamePresenter::_onStatisticsUpdated)};
     Q_ASSERT(connected);
-    connected = connect(this,&GamePresenter::levelChanged,m_pScoreItem,&ScoreItem::setScoreIncrement);
+    connected = connect(m_pGameFacade, &GameFacade::statusChanged, this, &GamePresenter::_updateStatusMessage);
     Q_ASSERT(connected);
-    connected = connect(m_pScoreItem,&ScoreItem::statisticsUpdated,this,&GamePresenter::_onStatisticsUpdated);
+    connected = connect(m_pGameFacade, &GameFacade::mixedWordsChanged, this, &GamePresenter::mixedWordsChanged);
     Q_ASSERT(connected);
-
-    _onStatisticsUpdated();
 }
 
 void GamePresenter::switchToPane(Pane pane)
@@ -78,7 +73,8 @@ void GamePresenter::switchToPane(Pane pane)
             case Pane::MAIN:
                 if (!m_MainPaneInitialized)
                 {
-                    _initMainPane();
+                    m_MainPaneInitialized = true;
+                    m_pGameFacade -> startGame();
                 }
                 m_MainPaneVisible = true;
                 Q_EMIT mainPaneVisibleChanged();
@@ -99,18 +95,15 @@ void GamePresenter::switchToPane(Pane pane)
 
 void GamePresenter::handleResultsRequest()
 {
-    try {
-        _updateStatusMessage(Game::StatusCodes::REQUESTED_BY_USER);
-        m_pScoreItem -> updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
+    try
+    {
+        m_pGameFacade->provideResultsToUser();
 
         if (!m_ResetEnabled)
         {
             m_ResetEnabled = true;
             Q_EMIT resetEnabledChanged();
         }
-
-        m_pWordMixer -> mixWords();
-        Q_EMIT mixedWordsPiecesChanged();
     }
     catch (const GameException& exception)
     {
@@ -120,44 +113,34 @@ void GamePresenter::handleResultsRequest()
 
 bool GamePresenter::handleSubmitRequest(const QString &firstWord, const QString &secondWord)
 {
+    bool success{false};
+
     try
     {
-        bool clearTextFields{false};
+        success = m_pGameFacade->checkWords(firstWord, secondWord);
 
-        Game::StatusCodes statusCode{_checkWords(firstWord, secondWord)};
-
-        _updateStatusMessage(statusCode);
-
-        if (statusCode == Game::StatusCodes::SUCCESS)
+        if (success)
         {
-            m_pScoreItem -> updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
-
             if (!m_ResetEnabled)
             {
                 m_ResetEnabled = true;
                 Q_EMIT resetEnabledChanged();
             }
-
-            m_pWordMixer -> mixWords();
-            Q_EMIT mixedWordsPiecesChanged();
-
-            clearTextFields = true;
         }
-
-        return clearTextFields;
     }
     catch(const GameException& exception)
     {
         _launchErrorPane(exception.getDescription());
     }
+
+    return success;
 }
 
 void GamePresenter::handleResetRequest()
 {
     if (m_ResetEnabled)
     {
-        m_pScoreItem -> resetStatistics();
-        _updateStatusMessage(Game::StatusCodes::STATISTICS_RESET);
+        m_pGameFacade -> resetStatistics();
         m_ResetEnabled = false;
         Q_EMIT resetEnabledChanged();
     }
@@ -168,8 +151,7 @@ void GamePresenter::switchToLevel(int level)
     try
     {
         Q_ASSERT(level >= 0 && level < static_cast<int>(Game::Level::NrOfLevels));
-
-        _setLevel(static_cast<Game::Level>(level));
+        m_pGameFacade->setLevel(static_cast<Game::Level>(level));
     }
     catch (const GameException& exception)
     {
@@ -475,7 +457,7 @@ QString GamePresenter::getCloseButtonShortcut() const
 QList<QVariant> GamePresenter::getMixedWordsPieces() const
 {
     QList<QVariant> mixedWordsPieces;
-    QVector<QString> mixedWordsStringArray{m_pWordMixer->getMixedWordsStringArray()};
+    QVector<QString> mixedWordsStringArray{m_pGameFacade->getMixedWordsStringArray()};
     for (auto piece : mixedWordsStringArray)
     {
         mixedWordsPieces.append(piece);
@@ -485,22 +467,22 @@ QList<QVariant> GamePresenter::getMixedWordsPieces() const
 
 int GamePresenter::getFirstWordFirstPieceIndex() const
 {
-    return m_pWordMixer->getFirstWordFirstPieceIndex();
+    return m_pGameFacade->getFirstWordFirstPieceIndex();
 }
 
 int GamePresenter::getFirstWordLastPieceIndex() const
 {
-    return m_pWordMixer->getFirstWordLastPieceIndex();
+    return m_pGameFacade->getFirstWordLastPieceIndex();
 }
 
 int GamePresenter::getSecondWordFirstPieceIndex() const
 {
-    return m_pWordMixer->getSecondWordFirstPieceIndex();
+    return m_pGameFacade->getSecondWordFirstPieceIndex();
 }
 
 int GamePresenter::getSecondWordLastPieceIndex() const
 {
-    return m_pWordMixer->getSecondWordLastPieceIndex();
+    return m_pGameFacade->getSecondWordLastPieceIndex();
 }
 
 QColor GamePresenter::getBackgroundColor() const
@@ -545,38 +527,12 @@ QColor GamePresenter::getWordPieceSelectedColor() const
 
 void GamePresenter::_onStatisticsUpdated()
 {
-    m_MainPaneScoreMessage = GameStrings::c_HighscoresMessage.arg(m_pScoreItem->getObtainedScore())
-                                                             .arg(m_pScoreItem->getTotalAvailableScore());
-    m_MainPaneWordPairsMessage = GameStrings::c_WordPairsMessage.arg(m_pScoreItem->getGuessedWordPairs())
-                                                                .arg(m_pScoreItem->getTotalWordPairs());
+    m_MainPaneScoreMessage = GameStrings::c_HighscoresMessage.arg(m_pGameFacade->getObtainedScore())
+                                                             .arg(m_pGameFacade->getTotalAvailableScore());
+    m_MainPaneWordPairsMessage = GameStrings::c_WordPairsMessage.arg(m_pGameFacade->getGuessedWordPairs())
+                                                                .arg(m_pGameFacade->getTotalWordPairs());
 
-    Q_EMIT mainPaneScoreMessageChanged();
-    Q_EMIT mainPaneWordPairsMessageChanged();
-}
-
-Game::StatusCodes GamePresenter::_checkWords(const QString &firstWord, const QString &secondWord)
-{
-    Game::StatusCodes statusCode;
-
-    const QString firstWordRef{m_pWordMixer->getFirstWord()};
-    const QString secondWordRef{m_pWordMixer->getSecondWord()};
-
-    if (((firstWord == firstWordRef) && (secondWord == secondWordRef)) || ((firstWord == secondWordRef) && (secondWord == firstWordRef)))
-    {
-        statusCode = Game::StatusCodes::SUCCESS;
-    }
-    else
-    {
-        statusCode = Game::StatusCodes::INCORRECT_WORDS;
-    }
-    return statusCode;
-}
-
-void GamePresenter::_initMainPane()
-{
-    m_MainPaneInitialized = true;
-    m_pWordMixer -> mixWords();
-    Q_EMIT mixedWordsPiecesChanged();
+    Q_EMIT mainPaneStatisticsMessagesChanged();
 }
 
 void GamePresenter::_updateStatusMessage(Game::StatusCodes statusCode)
@@ -584,17 +540,17 @@ void GamePresenter::_updateStatusMessage(Game::StatusCodes statusCode)
     switch (statusCode)
     {
     case Game::StatusCodes::SUCCESS:
-        m_MainPaneStatusMessage = GameStrings::c_SuccessMessage.arg(m_pWordMixer->getFirstWord())
-                                                               .arg(m_pWordMixer->getSecondWord())
-                                                               .arg(m_pWordMixer->areSynonyms() ? GameStrings::c_Synonyms : GameStrings::c_Antonyms);
+        m_MainPaneStatusMessage = GameStrings::c_SuccessMessage.arg(m_pGameFacade->getFirstWord())
+                                                               .arg(m_pGameFacade->getSecondWord())
+                                                               .arg(m_pGameFacade->areSynonyms() ? GameStrings::c_Synonyms : GameStrings::c_Antonyms);
         break;
     case Game::StatusCodes::INCORRECT_WORDS:
         m_MainPaneStatusMessage = GameStrings::c_IncorrectWordsMessage;
         break;
     case Game::StatusCodes::REQUESTED_BY_USER:
-        m_MainPaneStatusMessage = GameStrings::c_RequestedByUserMessage.arg(m_pWordMixer->getFirstWord())
-                                                                       .arg(m_pWordMixer->getSecondWord())
-                                                                       .arg(m_pWordMixer->areSynonyms() ? GameStrings::c_Synonyms : GameStrings::c_Antonyms);
+        m_MainPaneStatusMessage = GameStrings::c_RequestedByUserMessage.arg(m_pGameFacade->getFirstWord())
+                                                                       .arg(m_pGameFacade->getSecondWord())
+                                                                       .arg(m_pGameFacade->areSynonyms() ? GameStrings::c_Synonyms : GameStrings::c_Antonyms);
         break;
     case Game::StatusCodes::STATISTICS_RESET:
         m_MainPaneStatusMessage = GameStrings::c_ScoresResetMessage;
@@ -607,14 +563,6 @@ void GamePresenter::_updateStatusMessage(Game::StatusCodes statusCode)
     }
 
     Q_EMIT mainPaneStatusMessageChanged();
-}
-
-void GamePresenter::_setLevel(Game::Level level)
-{
-    _updateStatusMessage(Game::StatusCodes::LEVEL_CHANGED);
-    Q_EMIT levelChanged(level);
-    m_pWordMixer -> mixWords();
-    Q_EMIT mixedWordsPiecesChanged();
 }
 
 void GamePresenter::_launchErrorPane(const QString& errorMessage)
