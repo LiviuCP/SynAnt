@@ -15,7 +15,7 @@ public:
     explicit GameFacade(QString applicationPath, QObject *parent = nullptr);
 
     void startGame();
-    bool checkWords(const QString &firstWord, const QString &secondWord);
+    bool handleSubmitRequest(const QString &firstWord, const QString &secondWord);
     void provideResultsToUser();
     void updateStatistics(Game::StatisticsUpdate updateType);
     void resetStatistics();

@@ -23,7 +23,7 @@ void GameFacade::startGame()
     m_pWordMixer->mixWords();
 }
 
-bool GameFacade::checkWords(const QString &firstWord, const QString &secondWord)
+bool GameFacade::handleSubmitRequest(const QString &firstWord, const QString &secondWord)
 {
     const QString firstWordRef{m_pWordMixer->getFirstWord()};
     const QString secondWordRef{m_pWordMixer->getSecondWord()};

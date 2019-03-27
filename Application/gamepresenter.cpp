@@ -113,7 +113,7 @@ bool GamePresenter::handleSubmitRequest(const QString &firstWord, const QString 
 
     try
     {
-        success = m_pGameFacade->checkWords(firstWord, secondWord);
+        success = m_pGameFacade->handleSubmitRequest(firstWord, secondWord);
     }
     catch(const GameException& exception)
     {
