@@ -23,7 +23,7 @@ GamePresenter::GamePresenter(QObject *parent)
     , m_ResetEnabled {false}
     , m_ErrorOccured {false}
     , m_WindowTitle{GameStrings::c_IntroWindowTitle}
-    , m_MainPaneStatusMessage {GameStrings::c_NoUserInputMessage}
+    , m_MainPaneStatusMessage {GameStrings::c_InitialStatusMessage}
     , m_CurrentPane {Pane::INTRO}
     , m_pGameFacade {new GameFacade{QGuiApplication::applicationDirPath(), this}}
 {
