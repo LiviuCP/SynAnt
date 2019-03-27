@@ -109,18 +109,19 @@ void GamePresenter::handleResultsRequest()
 
 bool GamePresenter::handleSubmitRequest(const QString &firstWord, const QString &secondWord)
 {
-    bool success{false};
+    bool clearUserInput{false};
 
     try
     {
-        success = m_pGameFacade->handleSubmitRequest(firstWord, secondWord);
+        clearUserInput = m_pGameFacade->handleSubmitRequest(firstWord, secondWord);
     }
     catch(const GameException& exception)
     {
+        clearUserInput = true;
         _launchErrorPane(exception.getDescription());
     }
 
-    return success;
+    return clearUserInput;
 }
 
 void GamePresenter::handleResetRequest()
