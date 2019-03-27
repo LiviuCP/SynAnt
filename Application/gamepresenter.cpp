@@ -20,13 +20,15 @@ GamePresenter::GamePresenter(QObject *parent)
     , m_HelpPaneVisible {false}
     , m_MainPaneVisible {false}
     , m_MainPaneInitialized {false}
-    , m_ResetEnabled {false}
+    , m_StatisticsResetEnabled {false}
     , m_ErrorOccured {false}
     , m_WindowTitle{GameStrings::c_IntroWindowTitle}
     , m_MainPaneStatusMessage {GameStrings::c_InitialStatusMessage}
     , m_CurrentPane {Pane::INTRO}
     , m_pGameFacade {new GameFacade{QGuiApplication::applicationDirPath(), this}}
 {
+    Q_ASSERT(m_pGameFacade);
+
     bool connected{connect(m_pGameFacade, &GameFacade::statisticsChanged, this, &GamePresenter::_onStatisticsChanged)};
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::statusChanged, this, &GamePresenter::_onStatusChanged);
@@ -98,12 +100,6 @@ void GamePresenter::handleResultsRequest()
     try
     {
         m_pGameFacade->provideResultsToUser();
-
-        if (!m_ResetEnabled)
-        {
-            m_ResetEnabled = true;
-            Q_EMIT resetEnabledChanged();
-        }
     }
     catch (const GameException& exception)
     {
@@ -118,15 +114,6 @@ bool GamePresenter::handleSubmitRequest(const QString &firstWord, const QString 
     try
     {
         success = m_pGameFacade->checkWords(firstWord, secondWord);
-
-        if (success)
-        {
-            if (!m_ResetEnabled)
-            {
-                m_ResetEnabled = true;
-                Q_EMIT resetEnabledChanged();
-            }
-        }
     }
     catch(const GameException& exception)
     {
@@ -138,12 +125,7 @@ bool GamePresenter::handleSubmitRequest(const QString &firstWord, const QString 
 
 void GamePresenter::handleResetRequest()
 {
-    if (m_ResetEnabled)
-    {
-        m_pGameFacade -> resetStatistics();
-        m_ResetEnabled = false;
-        Q_EMIT resetEnabledChanged();
-    }
+    m_pGameFacade -> resetStatistics();
 }
 
 void GamePresenter::switchToLevel(int level)
@@ -176,7 +158,7 @@ bool GamePresenter::getMainPaneVisible() const
 
 bool GamePresenter::getResetEnabled() const
 {
-    return m_ResetEnabled;
+    return m_StatisticsResetEnabled;
 }
 
 bool GamePresenter::getErrorOccured() const
@@ -527,10 +509,28 @@ QColor GamePresenter::getWordPieceSelectedColor() const
 
 void GamePresenter::_onStatisticsChanged()
 {
-    m_MainPaneScoreMessage = GameStrings::c_HighscoresMessage.arg(m_pGameFacade->getObtainedScore())
-                                                             .arg(m_pGameFacade->getTotalAvailableScore());
-    m_MainPaneWordPairsMessage = GameStrings::c_WordPairsMessage.arg(m_pGameFacade->getGuessedWordPairs())
-                                                                .arg(m_pGameFacade->getTotalWordPairs());
+    int obtainedScore{m_pGameFacade->getObtainedScore()};
+    int totalAvailableScore{m_pGameFacade->getTotalAvailableScore()};
+    int guessedWordPairs{m_pGameFacade->getGuessedWordPairs()};
+    int totalWordPairs{m_pGameFacade->getTotalWordPairs()};
+
+    bool emptyStatistics{obtainedScore == 0 && totalAvailableScore == 0 && guessedWordPairs == 0 && totalWordPairs == 0};
+
+    if (!m_StatisticsResetEnabled && !emptyStatistics)
+    {
+        m_StatisticsResetEnabled = true;
+        Q_EMIT resetEnabledChanged();
+    }
+    else if (m_StatisticsResetEnabled && emptyStatistics)
+    {
+        m_StatisticsResetEnabled = false;
+        Q_EMIT resetEnabledChanged();
+    }
+
+    m_MainPaneScoreMessage = GameStrings::c_HighscoresMessage.arg(obtainedScore)
+                                                             .arg(totalAvailableScore);
+    m_MainPaneWordPairsMessage = GameStrings::c_WordPairsMessage.arg(guessedWordPairs)
+                                                                .arg(totalWordPairs);
 
     Q_EMIT mainPaneStatisticsMessagesChanged();
 }

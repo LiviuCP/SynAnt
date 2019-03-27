@@ -217,7 +217,7 @@ private:
     bool m_MainPaneVisible;
     bool m_MainPaneInitialized;
 
-    bool m_ResetEnabled;
+    bool m_StatisticsResetEnabled;
     bool m_ErrorOccured;
 
     QString m_WindowTitle;
