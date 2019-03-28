@@ -7,15 +7,7 @@ ScoreItem::ScoreItem(QObject *parent)
     , m_GuessedWordPairs{0}
     , m_TotalWordPairs{0}
     , m_ScoreIncrement{Game::c_ScoreIncrements[Game::Level::MEDIUM]}
-
 {
-    // not used
-}
-
-void ScoreItem::setScoreIncrement(Game::Level level)
-{
-    Q_ASSERT(static_cast<int>(level) >= 0 && static_cast<int>(level) < static_cast<int>(Game::Level::NrOfLevels));
-    m_ScoreIncrement = Game::c_ScoreIncrements[level];
 }
 
 void ScoreItem::updateStatistics(Game::StatisticsUpdate updateType)
@@ -57,4 +49,10 @@ int ScoreItem::getGuessedWordPairs() const
 int ScoreItem::getTotalWordPairs() const
 {
     return m_TotalWordPairs;
+}
+
+void ScoreItem::setScoreIncrement(Game::Level level)
+{
+    Q_ASSERT(static_cast<int>(level) >= 0 && static_cast<int>(level) < static_cast<int>(Game::Level::NrOfLevels));
+    m_ScoreIncrement = Game::c_ScoreIncrements[level];
 }

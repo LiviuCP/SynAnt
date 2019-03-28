@@ -26,6 +26,7 @@
 class WordMixer : public QObject
 {
     Q_OBJECT
+
 public:
     explicit WordMixer(const QString &m_FileName, QObject *parent = nullptr);
 
