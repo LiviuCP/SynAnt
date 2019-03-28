@@ -1,14 +1,12 @@
 /*
 
-   This class implements the application core, which interfaces with the user through the MainGameWindow class.
-
-   The class fulfills following tasks:
+   This class fulfills following tasks:
    1) Reads a randomly chosen line from a file. The line contains 2 words which are either synonyms or antonyms.
-   2) Puts the 2 words in separate strings.
+   2) Puts the 2 words into separate strings.
    3) Divides each word in more pieces.
-   4) Mixes the pieces from all words alltogether into a single word.
-      The individual pieces are still visible as the mixed words are stored in a string vector, which is then displayed by the main window.
-   5) Hands over the 2 words to the main window for checking and/or displaying.
+   4) Mixes the pieces from all words alltogether into a single array.
+      The array is then displayed by the main window.
+   5) Hands over the original words to the facade for checking and sending to presenter for displaying.
 
 */
 
@@ -40,13 +38,14 @@ public:
     const QVector<QString>& getMixedWordsStringArray() const;
     QString getFirstWord() const;
     QString getSecondWord() const;
-    bool areSynonyms() const;
 
     // indexes of the beginning and the end piece of each word in the mixed words array
     int getFirstWordFirstPieceIndex() const;
     int getFirstWordLastPieceIndex() const;
     int getSecondWordFirstPieceIndex() const;
     int getSecondWordLastPieceIndex() const;
+
+    bool areSynonyms() const;
 
     // for unit-testing purposes only
     void setFirstWord(const QString &firstWord);
@@ -58,27 +57,10 @@ signals:
 
 private:
     void _getRowNumber();
+    void _getRowContent();
     void _retrieveWords();
     void _checkWordIsCorrect(const QString& word, const QString& wordIdentifier);
     int  _insertWordPiece(const QString &word, int firstCharPos, QVector<int> &wordPieceIndexes);
-
-    QString m_FileName;
-    int m_RowNumber;
-    QString m_RowContent;
-    int m_TotalNrOfRows;
-    int m_WordPieceSize;
-
-    // get the row number from the file which contains the word pair to be mixed
-    std::default_random_engine m_RowNumberEngine;
-    // get the index of the mixed words string array where current piece is written
-    std::default_random_engine m_WordPieceIndexEngine;
-
-    QPair<QString,QString> m_WordsPair;
-    QVector<QString> m_MixedWords;
-    bool m_AreSynonyms;
-
-    // only to be set true if unit-testing the code
-    bool m_ManualWordsEntry;
 
     // used for retrieving the mixed words string vector indexes of the first and last piece of each of the 2 words
     enum class WordsBeginEndPieces {
@@ -89,10 +71,26 @@ private:
         PiecesCount
     };
 
+    int m_WordPieceSize;
+    QString m_FileName;
+    int m_TotalNrOfRows;
+    int m_RowNumber;
+    QString m_RowContent;
+    QPair<QString,QString> m_WordsPair;
+    QVector<QString> m_MixedWords;
+
     // stores the indexes of the first and last piece of the 2 words in the mixed words string vector
     QMap<WordsBeginEndPieces,int> m_WordsBeginEndPieceIndexes;
 
-    void _getRowContent();
+    bool m_AreSynonyms;
+
+    // get the row number from the file which contains the word pair to be mixed
+    std::default_random_engine m_RowNumberEngine;
+    // get the index of the mixed words string array where current piece is written
+    std::default_random_engine m_WordPieceIndexEngine;
+
+    // only to be set true if unit-testing the code
+    bool m_ManualWordsEntry;
 };
 
 #endif // WORDMIXER_H

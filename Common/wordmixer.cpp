@@ -12,21 +12,21 @@ static constexpr char c_SynonymsSeparator{'='};
 static constexpr char c_AntonymsSeparator{'!'};
 
 WordMixer::WordMixer(const QString &fname, QObject *parent)
-    : QObject(parent),
-      m_FileName{fname},
-      m_RowNumber{-1},
-      m_RowContent{},
-      m_TotalNrOfRows{0},
-      m_WordPieceSize{Game::c_WordPieceSizes[Game::Level::MEDIUM]},
-      m_WordsPair{},
-      m_MixedWords{},
-      m_AreSynonyms{true},
-      m_WordsBeginEndPieceIndexes{
+    : QObject(parent)
+    , m_WordPieceSize{Game::c_WordPieceSizes[Game::Level::MEDIUM]}
+    , m_FileName{fname}
+    , m_TotalNrOfRows{0}
+    , m_RowNumber{-1}
+    , m_RowContent{}
+    , m_WordsPair{}
+    , m_MixedWords{}
+    , m_WordsBeginEndPieceIndexes{
                                     {WordsBeginEndPieces::FIRST_WORD_FIRST_PIECE , -1},
                                     {WordsBeginEndPieces::FIRST_WORD_LAST_PIECE  , -1},
                                     {WordsBeginEndPieces::SECOND_WORD_FIRST_PIECE, -1},
                                     {WordsBeginEndPieces::SECOND_WORD_LAST_PIECE , -1}
                                  }
+    , m_AreSynonyms{true}
 {
     std::random_device rDev1{};
     m_RowNumberEngine.seed(rDev1());
@@ -65,6 +65,7 @@ WordMixer::WordMixer(const QString &fname, QObject *parent)
         {
             throw FileException{GameStrings::c_EmptyFileMessage, m_FileName};
         }
+
         wordPairsFile.close();
     }
 }
@@ -135,28 +136,6 @@ QString WordMixer::getSecondWord() const
     return m_WordsPair.second;
 }
 
-void WordMixer::setFirstWord(const QString &firstWord)
-{
-    m_WordsPair.first = firstWord;
-}
-
-void WordMixer::setSecondWord(const QString &secondWord)
-{
-    m_WordsPair.second = secondWord;
-}
-
-void WordMixer::fetchWordsFromRowContent(const QString &rowContent)
-{
-    m_RowContent = rowContent;
-    _retrieveWords();
-}
-
-
-bool WordMixer::areSynonyms() const
-{
-    return m_AreSynonyms;
-}
-
 int WordMixer::getFirstWordFirstPieceIndex() const
 {
     return m_WordsBeginEndPieceIndexes[WordsBeginEndPieces::FIRST_WORD_FIRST_PIECE];
@@ -175,6 +154,27 @@ int WordMixer::getSecondWordFirstPieceIndex() const
 int WordMixer::getSecondWordLastPieceIndex() const
 {
     return m_WordsBeginEndPieceIndexes[WordsBeginEndPieces::SECOND_WORD_LAST_PIECE];
+}
+
+bool WordMixer::areSynonyms() const
+{
+    return m_AreSynonyms;
+}
+
+void WordMixer::setFirstWord(const QString &firstWord)
+{
+    m_WordsPair.first = firstWord;
+}
+
+void WordMixer::setSecondWord(const QString &secondWord)
+{
+    m_WordsPair.second = secondWord;
+}
+
+void WordMixer::fetchWordsFromRowContent(const QString &rowContent)
+{
+    m_RowContent = rowContent;
+    _retrieveWords();
 }
 
 void WordMixer::_getRowNumber()
