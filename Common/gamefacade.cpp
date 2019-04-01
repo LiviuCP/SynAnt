@@ -1,4 +1,5 @@
 #include "gamefacade.h"
+#include "wordpairowner.h"
 #include "wordmixer.h"
 #include "scoreitem.h"
 #include "gamestrings.h"
@@ -6,12 +7,14 @@
 GameFacade::GameFacade(QString applicationPath, QObject *parent)
     : QObject(parent)
     , m_ApplicationPath{applicationPath}
+    , m_pWordPairOwner{new WordPairOwner{this}}
     , m_pWordMixer{nullptr}
     , m_pScoreItem {new ScoreItem{this}}
 {
     m_pWordMixer = new WordMixer{m_ApplicationPath + "/" + GameStrings::c_FileName, this};
+    m_pWordPairOwner->connectToWordMixer(m_pWordMixer);
 
-    bool connected = connect(m_pWordMixer, &WordMixer::mixedWordsChanged, this, &GameFacade::mixedWordsChanged);
+    bool connected = connect(m_pWordPairOwner, &WordPairOwner::mixedWordsAvailable, this, &GameFacade::mixedWordsChanged);
     Q_ASSERT(connected);
     connected = connect(m_pScoreItem, &ScoreItem::statisticsUpdated, this, &GameFacade::statisticsChanged);
     Q_ASSERT(connected);
@@ -20,13 +23,13 @@ GameFacade::GameFacade(QString applicationPath, QObject *parent)
 void GameFacade::startGame()
 {
     Q_EMIT statisticsChanged();
-    m_pWordMixer->mixWords();
+    m_pWordPairOwner->fetchNewMixedWords();
 }
 
 bool GameFacade::handleSubmitRequest(const QString &firstWord, const QString &secondWord)
 {
-    const QString firstWordRef{m_pWordMixer->getFirstWord()};
-    const QString secondWordRef{m_pWordMixer->getSecondWord()};
+    const QString firstWordRef{m_pWordPairOwner->getFirstWord()};
+    const QString secondWordRef{m_pWordPairOwner->getSecondWord()};
     bool success{(firstWord == firstWordRef && secondWord == secondWordRef) || (firstWord == secondWordRef && secondWord == firstWordRef)};
     Game::StatusCodes statusCode{success ? Game::StatusCodes::SUCCESS : Game::StatusCodes::INCORRECT_WORDS};
 
@@ -35,7 +38,7 @@ bool GameFacade::handleSubmitRequest(const QString &firstWord, const QString &se
     if (success)
     {
         updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
-        m_pWordMixer->mixWords();
+        m_pWordPairOwner->fetchNewMixedWords();
     }
 
     return success;
@@ -45,7 +48,7 @@ void GameFacade::provideResultsToUser()
 {
     m_pScoreItem->updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
     Q_EMIT statusChanged(Game::StatusCodes::REQUESTED_BY_USER);
-    m_pWordMixer->mixWords();
+    m_pWordPairOwner->fetchNewMixedWords();
 }
 
 void GameFacade::updateStatistics(Game::StatisticsUpdate updateType)
@@ -63,33 +66,34 @@ void GameFacade::setLevel(Game::Level level)
 {
     m_pWordMixer->setWordPieceSize(level);
     m_pScoreItem->setScoreIncrement(level);
-    m_pWordMixer->mixWords();
+    m_pWordPairOwner->fetchNewMixedWords();
+
     Q_EMIT statusChanged(Game::StatusCodes::LEVEL_CHANGED);
 }
 
-QVector<QString> GameFacade::getMixedWordsStringArray() const
+QVector<QString> GameFacade::getMixedWordsPiecesArray() const
 {
-    return m_pWordMixer->getMixedWordsStringArray();
+    return m_pWordPairOwner->getMixedWordsPiecesArray();
 }
 
 int GameFacade::getFirstWordFirstPieceIndex() const
 {
-    return m_pWordMixer->getFirstWordFirstPieceIndex();
+    return m_pWordPairOwner->getFirstWordFirstPieceIndex();
 }
 
 int GameFacade::getFirstWordLastPieceIndex() const
 {
-    return m_pWordMixer->getFirstWordLastPieceIndex();
+    return m_pWordPairOwner->getFirstWordLastPieceIndex();
 }
 
 int GameFacade::getSecondWordFirstPieceIndex() const
 {
-    return m_pWordMixer->getSecondWordFirstPieceIndex();
+    return m_pWordPairOwner->getSecondWordFirstPieceIndex();
 }
 
 int GameFacade::getSecondWordLastPieceIndex() const
 {
-    return m_pWordMixer->getSecondWordLastPieceIndex();
+    return m_pWordPairOwner->getSecondWordLastPieceIndex();
 }
 
 int GameFacade::getObtainedScore() const
@@ -114,15 +118,15 @@ int GameFacade::getTotalWordPairs() const
 
 QString GameFacade::getFirstWord() const
 {
-    return m_pWordMixer->getFirstWord();
+    return m_pWordPairOwner->getFirstWord();
 }
 
 QString GameFacade::getSecondWord() const
 {
-    return m_pWordMixer->getSecondWord();
+    return m_pWordPairOwner->getSecondWord();
 }
 
 bool GameFacade::areSynonyms() const
 {
-    return m_pWordMixer->areSynonyms();
+    return m_pWordPairOwner->areSynonyms();
 }

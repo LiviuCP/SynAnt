@@ -170,7 +170,7 @@ bool GamePresenter::getErrorOccured() const
 QList<QVariant> GamePresenter::getMixedWordsPieces() const
 {
     QList<QVariant> mixedWordsPieces;
-    QVector<QString> mixedWordsStringArray{m_pGameFacade->getMixedWordsStringArray()};
+    QVector<QString> mixedWordsStringArray{m_pGameFacade->getMixedWordsPiecesArray()};
     for (auto piece : mixedWordsStringArray)
     {
         mixedWordsPieces.append(piece);

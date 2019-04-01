@@ -36,7 +36,7 @@ public:
     // sets number of characters for each word piece
     void setWordPieceSize(Game::Level level);
 
-    const QVector<QString>& getMixedWordsStringArray() const;
+    const QVector<QString>& getMixedWordsPiecesArray() const;
     QString getFirstWord() const;
     QString getSecondWord() const;
 

@@ -85,15 +85,15 @@ void CommonTests::testWordsAreCorrectlyMixed()
 
     pWordMixer->setWordPieceSize(Game::Level::EASY);
     pWordMixer->mixWords();
-    _checkCorrectMixing(pWordMixer->getMixedWordsStringArray(), QVector<QString>{"fir", "stw", "ord", "sec", "ond", "wor", "d"}, "easy");
+    _checkCorrectMixing(pWordMixer->getMixedWordsPiecesArray(), QVector<QString>{"fir", "stw", "ord", "sec", "ond", "wor", "d"}, "easy");
 
     pWordMixer->setWordPieceSize(Game::Level::MEDIUM);
     pWordMixer->mixWords();
-    _checkCorrectMixing(pWordMixer->getMixedWordsStringArray(), QVector<QString>{"fi", "rs", "tw", "or", "d", "se", "co", "nd", "wo", "rd"}, "medium");
+    _checkCorrectMixing(pWordMixer->getMixedWordsPiecesArray(), QVector<QString>{"fi", "rs", "tw", "or", "d", "se", "co", "nd", "wo", "rd"}, "medium");
 
     pWordMixer->setWordPieceSize(Game::Level::HARD);
     pWordMixer->mixWords();
-    _checkCorrectMixing(pWordMixer->getMixedWordsStringArray(), QVector<QString>{"f", "i", "r", "s", "t", "w", "o", "r", "d", "s", "e", "c", "o", "n", "d", "w", "o", "r", "d"},
+    _checkCorrectMixing(pWordMixer->getMixedWordsPiecesArray(), QVector<QString>{"f", "i", "r", "s", "t", "w", "o", "r", "d", "s", "e", "c", "o", "n", "d", "w", "o", "r", "d"},
                         "hard");
 }
 
@@ -115,26 +115,26 @@ void CommonTests::testFirstLastPieceIndexesAreCorrect()
     pWordMixer->setWordPieceSize(Game::Level::EASY);
     pWordMixer->mixWords();
 
-    QVERIFY2(pWordMixer->getMixedWordsStringArray()[pWordMixer->getFirstWordFirstPieceIndex()] == "wor", firstWordFirstPieceIndexNotCorrect);
-    QVERIFY2(pWordMixer->getMixedWordsStringArray()[pWordMixer->getFirstWordLastPieceIndex()] == "e", firstWordLastPieceIndexNotCorrect);
-    QVERIFY2(pWordMixer->getMixedWordsStringArray()[pWordMixer->getSecondWordFirstPieceIndex()] == "sec", secondWordFirstPieceIndexNotCorrect);
-    QVERIFY2(pWordMixer->getMixedWordsStringArray()[pWordMixer->getSecondWordLastPieceIndex()] == "d", secondWordLastPieceIndexNotCorrect);
+    QVERIFY2(pWordMixer->getMixedWordsPiecesArray()[pWordMixer->getFirstWordFirstPieceIndex()] == "wor", firstWordFirstPieceIndexNotCorrect);
+    QVERIFY2(pWordMixer->getMixedWordsPiecesArray()[pWordMixer->getFirstWordLastPieceIndex()] == "e", firstWordLastPieceIndexNotCorrect);
+    QVERIFY2(pWordMixer->getMixedWordsPiecesArray()[pWordMixer->getSecondWordFirstPieceIndex()] == "sec", secondWordFirstPieceIndexNotCorrect);
+    QVERIFY2(pWordMixer->getMixedWordsPiecesArray()[pWordMixer->getSecondWordLastPieceIndex()] == "d", secondWordLastPieceIndexNotCorrect);
 
     pWordMixer->setWordPieceSize(Game::Level::MEDIUM);
     pWordMixer->mixWords();
 
-    QVERIFY2(pWordMixer->getMixedWordsStringArray()[pWordMixer->getFirstWordFirstPieceIndex()] == "wo", firstWordFirstPieceIndexNotCorrect);
-    QVERIFY2(pWordMixer->getMixedWordsStringArray()[pWordMixer->getFirstWordLastPieceIndex()] == "e", firstWordLastPieceIndexNotCorrect);
-    QVERIFY2(pWordMixer->getMixedWordsStringArray()[pWordMixer->getSecondWordFirstPieceIndex()] == "se", secondWordFirstPieceIndexNotCorrect);
-    QVERIFY2(pWordMixer->getMixedWordsStringArray()[pWordMixer->getSecondWordLastPieceIndex()] == "rd", secondWordLastPieceIndexNotCorrect);
+    QVERIFY2(pWordMixer->getMixedWordsPiecesArray()[pWordMixer->getFirstWordFirstPieceIndex()] == "wo", firstWordFirstPieceIndexNotCorrect);
+    QVERIFY2(pWordMixer->getMixedWordsPiecesArray()[pWordMixer->getFirstWordLastPieceIndex()] == "e", firstWordLastPieceIndexNotCorrect);
+    QVERIFY2(pWordMixer->getMixedWordsPiecesArray()[pWordMixer->getSecondWordFirstPieceIndex()] == "se", secondWordFirstPieceIndexNotCorrect);
+    QVERIFY2(pWordMixer->getMixedWordsPiecesArray()[pWordMixer->getSecondWordLastPieceIndex()] == "rd", secondWordLastPieceIndexNotCorrect);
 
     pWordMixer->setWordPieceSize(Game::Level::HARD);
     pWordMixer->mixWords();
 
-    QVERIFY2(pWordMixer->getMixedWordsStringArray()[pWordMixer->getFirstWordFirstPieceIndex()] == "w", firstWordFirstPieceIndexNotCorrect);
-    QVERIFY2(pWordMixer->getMixedWordsStringArray()[pWordMixer->getFirstWordLastPieceIndex()] == "e", firstWordLastPieceIndexNotCorrect);
-    QVERIFY2(pWordMixer->getMixedWordsStringArray()[pWordMixer->getSecondWordFirstPieceIndex()] == "s", secondWordFirstPieceIndexNotCorrect);
-    QVERIFY2(pWordMixer->getMixedWordsStringArray()[pWordMixer->getSecondWordLastPieceIndex()] == "d",secondWordLastPieceIndexNotCorrect);
+    QVERIFY2(pWordMixer->getMixedWordsPiecesArray()[pWordMixer->getFirstWordFirstPieceIndex()] == "w", firstWordFirstPieceIndexNotCorrect);
+    QVERIFY2(pWordMixer->getMixedWordsPiecesArray()[pWordMixer->getFirstWordLastPieceIndex()] == "e", firstWordLastPieceIndexNotCorrect);
+    QVERIFY2(pWordMixer->getMixedWordsPiecesArray()[pWordMixer->getSecondWordFirstPieceIndex()] == "s", secondWordFirstPieceIndexNotCorrect);
+    QVERIFY2(pWordMixer->getMixedWordsPiecesArray()[pWordMixer->getSecondWordLastPieceIndex()] == "d",secondWordLastPieceIndexNotCorrect);
 }
 
 void CommonTests::testStatisticsCorrectlyUpdated()

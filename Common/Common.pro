@@ -27,7 +27,8 @@ SOURCES += \
         wordmixer.cpp \
         scoreitem.cpp \
         exceptions.cpp \
-    gamefacade.cpp
+        gamefacade.cpp \
+        wordpairowner.cpp
 
 HEADERS += \
         common.h \
@@ -37,7 +38,8 @@ HEADERS += \
         game.h \
         gamestrings.h \
         exceptions.h \
-        gamefacade.h
+        gamefacade.h \
+        wordpairowner.h
 
 unix {
     target.path = /usr/lib

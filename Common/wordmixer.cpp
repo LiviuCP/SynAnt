@@ -121,7 +121,7 @@ void WordMixer::setWordPieceSize(Game::Level level)
     m_WordPieceSize = Game::c_WordPieceSizes[level];
 }
 
-const QVector<QString>& WordMixer::getMixedWordsStringArray() const
+const QVector<QString>& WordMixer::getMixedWordsPiecesArray() const
 {
     return m_MixedWords;
 }

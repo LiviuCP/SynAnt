@@ -5,6 +5,7 @@
 
 #include "game.h"
 
+class WordPairOwner;
 class WordMixer;
 class ScoreItem;
 
@@ -21,7 +22,7 @@ public:
     void resetStatistics();
     void setLevel(Game::Level level);
 
-    QVector<QString> getMixedWordsStringArray() const;
+    QVector<QString> getMixedWordsPiecesArray() const;
 
     int getFirstWordFirstPieceIndex() const;
     int getFirstWordLastPieceIndex() const;
@@ -44,6 +45,7 @@ signals:
 
 private:
     QString m_ApplicationPath;
+    WordPairOwner* m_pWordPairOwner;
     WordMixer* m_pWordMixer;
     ScoreItem* m_pScoreItem;
 };
