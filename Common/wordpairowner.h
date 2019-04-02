@@ -13,7 +13,6 @@ public:
     explicit WordPairOwner(QObject *parent = nullptr);
 
     void connectToWordMixer(WordMixer* pWordMixer);
-    void fetchNewMixedWords();
 
     QVector<QString> getMixedWordsPiecesArray() const;
 

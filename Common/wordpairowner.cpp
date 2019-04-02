@@ -21,11 +21,6 @@ void WordPairOwner::connectToWordMixer(WordMixer* pWordMixer)
     Q_ASSERT(connected);
 }
 
-void WordPairOwner::fetchNewMixedWords()
-{
-    m_pWordMixer->mixWords();
-}
-
 QVector<QString> WordPairOwner::getMixedWordsPiecesArray() const
 {
     return m_MixedWordsPiecesArray;

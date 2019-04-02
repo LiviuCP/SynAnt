@@ -23,7 +23,7 @@ GameFacade::GameFacade(QString applicationPath, QObject *parent)
 void GameFacade::startGame()
 {
     Q_EMIT statisticsChanged();
-    m_pWordPairOwner->fetchNewMixedWords();
+    m_pWordMixer->mixWords();
 }
 
 bool GameFacade::handleSubmitRequest(const QString &firstWord, const QString &secondWord)
@@ -38,7 +38,7 @@ bool GameFacade::handleSubmitRequest(const QString &firstWord, const QString &se
     if (success)
     {
         updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
-        m_pWordPairOwner->fetchNewMixedWords();
+        m_pWordMixer->mixWords();
     }
 
     return success;
@@ -48,7 +48,7 @@ void GameFacade::provideResultsToUser()
 {
     m_pScoreItem->updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
     Q_EMIT statusChanged(Game::StatusCodes::REQUESTED_BY_USER);
-    m_pWordPairOwner->fetchNewMixedWords();
+    m_pWordMixer->mixWords();
 }
 
 void GameFacade::updateStatistics(Game::StatisticsUpdate updateType)
@@ -66,7 +66,7 @@ void GameFacade::setLevel(Game::Level level)
 {
     m_pWordMixer->setWordPieceSize(level);
     m_pScoreItem->setScoreIncrement(level);
-    m_pWordPairOwner->fetchNewMixedWords();
+    m_pWordMixer->mixWords();
 
     Q_EMIT statusChanged(Game::StatusCodes::LEVEL_CHANGED);
 }
