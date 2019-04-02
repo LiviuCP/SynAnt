@@ -378,7 +378,7 @@ Item {
 
         Repeater {
             id: mixedWordsRepeater
-            model: presenter.mixedWordsPieces
+            model: presenter.mixedWordsPiecesContent
 
             Rectangle {
                 id: wordPiecesRectangle

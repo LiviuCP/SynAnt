@@ -55,6 +55,21 @@ namespace Game
 
     static constexpr int c_ToolTipDelay{1000};
     static constexpr int c_ToolTipTimeout{4000};
+
+    enum class PieceTypes
+    {
+        BEGIN_PIECE,
+        MIDDLE_PIECE,
+        END_PIECE,
+        PieceTypesCount
+    };
+
+    struct WordPiece
+    {
+        QString content;
+        PieceTypes pieceType;
+        bool isSelected;
+    };
 }
 
 #endif // GAME_H

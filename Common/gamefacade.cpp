@@ -71,9 +71,9 @@ void GameFacade::setLevel(Game::Level level)
     Q_EMIT statusChanged(Game::StatusCodes::LEVEL_CHANGED);
 }
 
-QVector<QString> GameFacade::getMixedWordsPiecesArray() const
+const QVector<Game::WordPiece> GameFacade::getMixedWordsPieces() const
 {
-    return m_pWordPairOwner->getMixedWordsPiecesArray();
+    return m_pWordPairOwner->getMixedWordsPieces();
 }
 
 int GameFacade::getFirstWordFirstPieceIndex() const

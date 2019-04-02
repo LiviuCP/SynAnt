@@ -36,7 +36,7 @@ public:
     // sets number of characters for each word piece
     void setWordPieceSize(Game::Level level);
 
-    const QVector<QString>& getMixedWordsPiecesArray() const;
+    const QVector<QString>& getMixedWordsPiecesContent() const;
     QString getFirstWord() const;
     QString getSecondWord() const;
 
@@ -78,7 +78,7 @@ private:
     int m_RowNumber;
     QString m_RowContent;
     QPair<QString,QString> m_WordsPair;
-    QVector<QString> m_MixedWords;
+    QVector<QString> m_MixedWordsPiecesContent;
 
     // stores the indexes of the first and last piece of the 2 words in the mixed words string vector
     QMap<WordsBeginEndPieces,int> m_WordsBeginEndPieceIndexes;

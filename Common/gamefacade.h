@@ -22,7 +22,7 @@ public:
     void resetStatistics();
     void setLevel(Game::Level level);
 
-    QVector<QString> getMixedWordsPiecesArray() const;
+    const QVector<Game::WordPiece> getMixedWordsPieces() const;
 
     int getFirstWordFirstPieceIndex() const;
     int getFirstWordLastPieceIndex() const;

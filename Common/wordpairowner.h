@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QVector>
 
+#include "game.h"
+
 class WordMixer;
 
 class WordPairOwner : public QObject
@@ -14,7 +16,7 @@ public:
 
     void connectToWordMixer(WordMixer* pWordMixer);
 
-    QVector<QString> getMixedWordsPiecesArray() const;
+    const QVector<Game::WordPiece> getMixedWordsPieces() const;
 
     QString getFirstWord() const;
     QString getSecondWord() const;
@@ -28,21 +30,23 @@ public:
 
 signals:
     Q_SIGNAL void mixedWordsAvailable();
-public slots:
+
+private slots:
+    void _onMixedWordsAvailable();
 
 private:
+    void _buildMixedWordsPieces();
+
     WordMixer* m_pWordMixer;
     QString m_FirstWord;
     QString m_SecondWord;
-    QVector<QString> m_MixedWordsPiecesArray;
+    QVector<Game::WordPiece> m_MixedWordsPieces;
     int m_FirstWordFirstPieceIndex;
     int m_FirstWordLastPieceIndex;
     int m_SecondWordFirstPieceIndex;
     int m_SecondWordLastPieceIndex;
     bool m_AreSynonyms;
 
-private slots:
-    void _onMixedWordsAvailable();
 };
 
 #endif // WORDPAIROWNER_H

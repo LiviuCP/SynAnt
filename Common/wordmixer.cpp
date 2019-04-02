@@ -19,7 +19,7 @@ WordMixer::WordMixer(const QString &fname, QObject *parent)
     , m_RowNumber{-1}
     , m_RowContent{}
     , m_WordsPair{}
-    , m_MixedWords{}
+    , m_MixedWordsPiecesContent{}
     , m_WordsBeginEndPieceIndexes{
                                     {WordsBeginEndPieces::FIRST_WORD_FIRST_PIECE , -1},
                                     {WordsBeginEndPieces::FIRST_WORD_LAST_PIECE  , -1},
@@ -87,7 +87,7 @@ void WordMixer::mixWords()
     int secondWordNrOfPieces{secondWordSize / m_WordPieceSize + ((secondWordSize % m_WordPieceSize) == 0 ? 0 : 1)};
     int totalNrOfPieces{firstWordNrOfPieces + secondWordNrOfPieces};
 
-    m_MixedWords.resize(totalNrOfPieces);
+    m_MixedWordsPiecesContent.resize(totalNrOfPieces);
 
     QVector<int> wordPieceIndexes{};
     for (int pieceIndex{0}; pieceIndex<totalNrOfPieces; ++pieceIndex)
@@ -121,9 +121,9 @@ void WordMixer::setWordPieceSize(Game::Level level)
     m_WordPieceSize = Game::c_WordPieceSizes[level];
 }
 
-const QVector<QString>& WordMixer::getMixedWordsPiecesArray() const
+const QVector<QString>& WordMixer::getMixedWordsPiecesContent() const
 {
-    return m_MixedWords;
+    return m_MixedWordsPiecesContent;
 }
 
 QString WordMixer::getFirstWord() const
@@ -264,7 +264,7 @@ int WordMixer::_insertWordPiece(const QString &word, int firstCharPos,
     int insertOnPositionIndex{indexDist(m_WordPieceIndexEngine)};
 
     int insertOnPosition{wordPieceIndexes[insertOnPositionIndex]};
-    m_MixedWords[insertOnPosition] = word.mid(firstCharPos,m_WordPieceSize);
+    m_MixedWordsPiecesContent[insertOnPosition] = word.mid(firstCharPos,m_WordPieceSize);
 
     wordPieceIndexes.remove(insertOnPositionIndex);
     return insertOnPosition;

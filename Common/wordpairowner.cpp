@@ -21,9 +21,9 @@ void WordPairOwner::connectToWordMixer(WordMixer* pWordMixer)
     Q_ASSERT(connected);
 }
 
-QVector<QString> WordPairOwner::getMixedWordsPiecesArray() const
+const QVector<Game::WordPiece> WordPairOwner::getMixedWordsPieces() const
 {
-    return m_MixedWordsPiecesArray;
+    return m_MixedWordsPieces;
 }
 
 QString WordPairOwner::getFirstWord() const
@@ -63,7 +63,8 @@ bool WordPairOwner::areSynonyms() const
 
 void WordPairOwner::_onMixedWordsAvailable()
 {
-    m_MixedWordsPiecesArray = m_pWordMixer->getMixedWordsPiecesArray();
+    _buildMixedWordsPieces();
+
     m_FirstWord = m_pWordMixer->getFirstWord();
     m_SecondWord = m_pWordMixer->getSecondWord();
     m_FirstWordFirstPieceIndex = m_pWordMixer->getFirstWordFirstPieceIndex();
@@ -73,4 +74,29 @@ void WordPairOwner::_onMixedWordsAvailable()
     m_AreSynonyms = m_pWordMixer->areSynonyms();
 
     Q_EMIT mixedWordsAvailable();
+}
+
+void WordPairOwner::_buildMixedWordsPieces()
+{
+    m_MixedWordsPieces.clear();
+    m_MixedWordsPieces.resize(m_pWordMixer->getMixedWordsPiecesContent().size());
+    int index{0};
+    for (auto& piece : m_MixedWordsPieces)
+    {
+        piece.content = m_pWordMixer->getMixedWordsPiecesContent().at(index);
+        piece.isSelected = false;
+        if (index == m_pWordMixer->getFirstWordFirstPieceIndex() || index == m_pWordMixer->getSecondWordFirstPieceIndex())
+        {
+            piece.pieceType = Game::PieceTypes::BEGIN_PIECE;
+        }
+        else if (index == m_pWordMixer->getFirstWordLastPieceIndex() || index == m_pWordMixer->getSecondWordLastPieceIndex())
+        {
+            piece.pieceType = Game::PieceTypes::END_PIECE;
+        }
+        else
+        {
+            piece.pieceType = Game::PieceTypes::MIDDLE_PIECE;
+        }
+        ++index;
+    }
 }

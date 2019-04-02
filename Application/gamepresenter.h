@@ -19,7 +19,7 @@ class GamePresenter : public QObject
     Q_PROPERTY(bool mainPaneVisible READ getMainPaneVisible NOTIFY mainPaneVisibleChanged)
     Q_PROPERTY(bool resetEnabled READ getResetEnabled NOTIFY resetEnabledChanged)
     Q_PROPERTY(bool errorOccured READ getErrorOccured NOTIFY errorOccuredChanged)
-    Q_PROPERTY(QList<QVariant> mixedWordsPieces READ getMixedWordsPieces NOTIFY mixedWordsChanged)
+    Q_PROPERTY(QList<QVariant> mixedWordsPiecesContent READ getMixedWordsPiecesContent NOTIFY mixedWordsChanged)
     Q_PROPERTY(int firstWordBeginIndex READ getFirstWordFirstPieceIndex NOTIFY mixedWordsChanged)
     Q_PROPERTY(int firstWordEndIndex READ getFirstWordLastPieceIndex NOTIFY mixedWordsChanged)
     Q_PROPERTY(int secondWordBeginIndex READ getSecondWordFirstPieceIndex NOTIFY mixedWordsChanged)
@@ -119,7 +119,7 @@ public:
     bool getMainPaneVisible() const;
     bool getResetEnabled() const;
     bool getErrorOccured() const;
-    QList<QVariant> getMixedWordsPieces() const;
+    QList<QVariant> getMixedWordsPiecesContent() const;
     int getFirstWordFirstPieceIndex() const;
     int getFirstWordLastPieceIndex() const;
     int getSecondWordFirstPieceIndex() const;
