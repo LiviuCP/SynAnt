@@ -42,6 +42,8 @@ GamePresenter::GamePresenter(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::mixedWordsChanged, this, &GamePresenter::mixedWordsChanged);
     Q_ASSERT(connected);
+    connected = connect(m_pGameFacade, &GameFacade::selectionChanged, this, &GamePresenter::selectionChanged);
+    Q_ASSERT(connected);
 }
 
 void GamePresenter::switchToPane(Pane pane)
@@ -149,6 +151,11 @@ void GamePresenter::switchToLevel(int level)
     }
 }
 
+void GamePresenter::toggleWordPieceSelection(int index)
+{
+    m_pGameFacade->toggleWordPieceSelection(index);
+}
+
 bool GamePresenter::getIntroPaneVisible() const
 {
     return m_IntroPaneVisible;
@@ -196,6 +203,18 @@ QList<QVariant> GamePresenter::getMixedWordsPiecesTextColors() const
     }
 
     return mixedWordsPiecesTextColors;
+}
+
+QList<QVariant> GamePresenter::getMixedWordsPiecesSelections() const
+{
+    QList<QVariant> mixedWordsPiecesSelections;
+
+    for (auto piece : m_pGameFacade->getMixedWordsPieces())
+    {
+        mixedWordsPiecesSelections.append(piece.isSelected);
+    }
+
+    return mixedWordsPiecesSelections;
 }
 
 int GamePresenter::getLevelEasy() const

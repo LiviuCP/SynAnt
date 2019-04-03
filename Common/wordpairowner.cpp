@@ -17,6 +17,15 @@ void WordPairOwner::connectToWordMixer(WordMixer* pWordMixer)
     Q_ASSERT(connected);
 }
 
+void WordPairOwner::updateWordPieceSelection(int index, bool selected)
+{
+    if (m_MixedWordsPieces[index].isSelected != selected)
+    {
+        m_MixedWordsPieces[index].isSelected = selected;
+        Q_EMIT selectionChanged();
+    }
+}
+
 const QVector<Game::WordPiece> WordPairOwner::getMixedWordsPieces() const
 {
     return m_MixedWordsPieces;

@@ -383,7 +383,7 @@ Item {
                 width: parent.width / mixedWordsRepeater.count
                 height: parent.height
 
-                color: paneColor
+                color: presenter.mixedWordsPiecesSelections[index] ? wordPieceSelectedColor : paneColor
                 border.color: borderColor
 
                 Text {
@@ -396,7 +396,7 @@ Item {
                 MouseArea {
                     id: wordPiecesMouseArea
                     anchors.fill: parent
-                    onClicked: wordPiecesRectangle.color = wordPiecesRectangle.color === paneColor ? wordPieceSelectedColor : paneColor
+                    onClicked: presenter.toggleWordPieceSelection(index);
                 }
             }
         }

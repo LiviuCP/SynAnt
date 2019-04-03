@@ -21,6 +21,7 @@ class GamePresenter : public QObject
     Q_PROPERTY(bool errorOccured READ getErrorOccured NOTIFY errorOccuredChanged)
     Q_PROPERTY(QList<QVariant> mixedWordsPiecesContent READ getMixedWordsPiecesContent NOTIFY mixedWordsChanged)
     Q_PROPERTY(QList<QVariant> mixedWordsPiecesTextColors READ getMixedWordsPiecesTextColors NOTIFY mixedWordsChanged)
+    Q_PROPERTY(QList<QVariant> mixedWordsPiecesSelections READ getMixedWordsPiecesSelections NOTIFY selectionChanged)
     Q_PROPERTY(int levelEasy READ getLevelEasy CONSTANT)
     Q_PROPERTY(int levelMedium READ getLevelMedium CONSTANT)
     Q_PROPERTY(int levelHard READ getLevelHard CONSTANT)
@@ -108,6 +109,7 @@ public:
     Q_INVOKABLE bool handleSubmitRequest(const QString& firstWord, const QString& secondWord);
     Q_INVOKABLE void handleResetRequest();
     Q_INVOKABLE void switchToLevel(int level);
+    Q_INVOKABLE void toggleWordPieceSelection(int index);
 
     bool getIntroPaneVisible() const;
     bool getHelpPaneVisible() const;
@@ -116,6 +118,7 @@ public:
     bool getErrorOccured() const;
     QList<QVariant> getMixedWordsPiecesContent() const;
     QList<QVariant> getMixedWordsPiecesTextColors() const;
+    QList<QVariant> getMixedWordsPiecesSelections() const;
     int getLevelEasy() const;
     int getLevelMedium() const;
     int getLevelHard() const;
@@ -190,6 +193,7 @@ signals:
     Q_SIGNAL void resetEnabledChanged();
     Q_SIGNAL void errorOccuredChanged();
     Q_SIGNAL void mixedWordsChanged();
+    Q_SIGNAL void selectionChanged();
     Q_SIGNAL void windowTitleChanged();
     Q_SIGNAL void mainPaneStatusMessageChanged();
     Q_SIGNAL void mainPaneStatisticsMessagesChanged();

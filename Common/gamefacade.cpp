@@ -16,6 +16,8 @@ GameFacade::GameFacade(QString applicationPath, QObject *parent)
 
     bool connected = connect(m_pWordPairOwner, &WordPairOwner::mixedWordsAvailable, this, &GameFacade::mixedWordsChanged);
     Q_ASSERT(connected);
+    connected = connect(m_pWordPairOwner, &WordPairOwner::selectionChanged, this, &GameFacade::selectionChanged);
+    Q_ASSERT(connected);
     connected = connect(m_pScoreItem, &ScoreItem::statisticsUpdated, this, &GameFacade::statisticsChanged);
     Q_ASSERT(connected);
 }
@@ -69,6 +71,12 @@ void GameFacade::setLevel(Game::Level level)
     m_pWordMixer->mixWords();
 
     Q_EMIT statusChanged(Game::StatusCodes::LEVEL_CHANGED);
+}
+
+void GameFacade::toggleWordPieceSelection(int index)
+{
+    bool selected{!m_pWordPairOwner->getMixedWordsPieces().at(index).isSelected};
+    m_pWordPairOwner->updateWordPieceSelection(index, selected);
 }
 
 const QVector<Game::WordPiece> GameFacade::getMixedWordsPieces() const

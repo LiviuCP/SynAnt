@@ -21,6 +21,7 @@ public:
     void updateStatistics(Game::StatisticsUpdate updateType);
     void resetStatistics();
     void setLevel(Game::Level level);
+    void toggleWordPieceSelection(int index);
 
     const QVector<Game::WordPiece> getMixedWordsPieces() const;
 
@@ -36,6 +37,7 @@ public:
 
 signals:
     Q_SIGNAL void mixedWordsChanged();
+    Q_SIGNAL void selectionChanged();
     Q_SIGNAL void statisticsChanged();
     Q_SIGNAL void statusChanged(Game::StatusCodes status);
 
