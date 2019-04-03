@@ -76,26 +76,6 @@ const QVector<Game::WordPiece> GameFacade::getMixedWordsPieces() const
     return m_pWordPairOwner->getMixedWordsPieces();
 }
 
-int GameFacade::getFirstWordFirstPieceIndex() const
-{
-    return m_pWordPairOwner->getFirstWordFirstPieceIndex();
-}
-
-int GameFacade::getFirstWordLastPieceIndex() const
-{
-    return m_pWordPairOwner->getFirstWordLastPieceIndex();
-}
-
-int GameFacade::getSecondWordFirstPieceIndex() const
-{
-    return m_pWordPairOwner->getSecondWordFirstPieceIndex();
-}
-
-int GameFacade::getSecondWordLastPieceIndex() const
-{
-    return m_pWordPairOwner->getSecondWordLastPieceIndex();
-}
-
 int GameFacade::getObtainedScore() const
 {
     return m_pScoreItem->getObtainedScore();

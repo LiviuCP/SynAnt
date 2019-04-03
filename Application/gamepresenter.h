@@ -20,10 +20,7 @@ class GamePresenter : public QObject
     Q_PROPERTY(bool resetEnabled READ getResetEnabled NOTIFY resetEnabledChanged)
     Q_PROPERTY(bool errorOccured READ getErrorOccured NOTIFY errorOccuredChanged)
     Q_PROPERTY(QList<QVariant> mixedWordsPiecesContent READ getMixedWordsPiecesContent NOTIFY mixedWordsChanged)
-    Q_PROPERTY(int firstWordBeginIndex READ getFirstWordFirstPieceIndex NOTIFY mixedWordsChanged)
-    Q_PROPERTY(int firstWordEndIndex READ getFirstWordLastPieceIndex NOTIFY mixedWordsChanged)
-    Q_PROPERTY(int secondWordBeginIndex READ getSecondWordFirstPieceIndex NOTIFY mixedWordsChanged)
-    Q_PROPERTY(int secondWordEndIndex READ getSecondWordLastPieceIndex NOTIFY mixedWordsChanged)
+    Q_PROPERTY(QList<QVariant> mixedWordsPiecesTextColors READ getMixedWordsPiecesTextColors NOTIFY mixedWordsChanged)
     Q_PROPERTY(int levelEasy READ getLevelEasy CONSTANT)
     Q_PROPERTY(int levelMedium READ getLevelMedium CONSTANT)
     Q_PROPERTY(int levelHard READ getLevelHard CONSTANT)
@@ -91,8 +88,6 @@ class GamePresenter : public QObject
     Q_PROPERTY(QColor borderColor READ getBorderColor CONSTANT)
     Q_PROPERTY(QColor textColor READ getTextColor CONSTANT)
     Q_PROPERTY(QColor fatalErrorTextColor READ getFatalErrorTextColor CONSTANT)
-    Q_PROPERTY(QColor wordFirstPieceColor READ getWordFirstPieceColor CONSTANT)
-    Q_PROPERTY(QColor wordLastPieceColor READ getWordLastPieceColor CONSTANT)
     Q_PROPERTY(QColor wordPieceSelectedColor READ getWordPieceSelectedColor CONSTANT)
 
 public:
@@ -120,10 +115,7 @@ public:
     bool getResetEnabled() const;
     bool getErrorOccured() const;
     QList<QVariant> getMixedWordsPiecesContent() const;
-    int getFirstWordFirstPieceIndex() const;
-    int getFirstWordLastPieceIndex() const;
-    int getSecondWordFirstPieceIndex() const;
-    int getSecondWordLastPieceIndex() const;
+    QList<QVariant> getMixedWordsPiecesTextColors() const;
     int getLevelEasy() const;
     int getLevelMedium() const;
     int getLevelHard() const;
@@ -189,8 +181,6 @@ public:
     QColor getBorderColor() const;
     QColor getTextColor() const;
     QColor getFatalErrorTextColor() const;
-    QColor getWordFirstPieceColor() const;
-    QColor getWordLastPieceColor() const;
     QColor getWordPieceSelectedColor() const;
 
 signals:

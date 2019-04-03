@@ -24,10 +24,6 @@ public:
 
     const QVector<Game::WordPiece> getMixedWordsPieces() const;
 
-    int getFirstWordFirstPieceIndex() const;
-    int getFirstWordLastPieceIndex() const;
-    int getSecondWordFirstPieceIndex() const;
-    int getSecondWordLastPieceIndex() const;
     int getObtainedScore() const;
     int getTotalAvailableScore() const;
     int getGuessedWordPairs() const;

@@ -6,12 +6,19 @@
 #include "../Common/gamestrings.h"
 #include "../Common/exceptions.h"
 
-static const QMap<GamePresenter::Pane,QString> c_WindowTitles
+static const QMap<GamePresenter::Pane, QString> c_WindowTitles
 {
     {GamePresenter::Pane::INTRO, GameStrings::c_IntroWindowTitle},
     {GamePresenter::Pane::HELP, GameStrings::c_HelpWindowTitle},
     {GamePresenter::Pane::MAIN, GameStrings::c_MainWindowTitle},
     {GamePresenter::Pane::ERROR, GameStrings::c_FatalErrorWindowTitle}
+};
+
+static const QMap<Game::PieceTypes, QColor> c_WordPieceTextColors
+{
+    {Game::PieceTypes::BEGIN_PIECE, GameStrings::c_WordFirstPieceTextColor},
+    {Game::PieceTypes::MIDDLE_PIECE, GameStrings::c_WordMiddlePieceTextColor},
+    {Game::PieceTypes::END_PIECE, GameStrings::c_WordLastPieceTextColor}
 };
 
 GamePresenter::GamePresenter(QObject *parent)
@@ -169,32 +176,26 @@ bool GamePresenter::getErrorOccured() const
 
 QList<QVariant> GamePresenter::getMixedWordsPiecesContent() const
 {
-    QList<QVariant> mixedWordsPieces;
+    QList<QVariant> mixedWordsPiecesContent;
+
     for (auto piece : m_pGameFacade->getMixedWordsPieces())
     {
-        mixedWordsPieces.append(piece.content);
+        mixedWordsPiecesContent.append(piece.content);
     }
-    return mixedWordsPieces;
+
+    return mixedWordsPiecesContent;
 }
 
-int GamePresenter::getFirstWordFirstPieceIndex() const
+QList<QVariant> GamePresenter::getMixedWordsPiecesTextColors() const
 {
-    return m_pGameFacade->getFirstWordFirstPieceIndex();
-}
+    QList<QVariant> mixedWordsPiecesTextColors;
 
-int GamePresenter::getFirstWordLastPieceIndex() const
-{
-    return m_pGameFacade->getFirstWordLastPieceIndex();
-}
+    for (auto piece : m_pGameFacade->getMixedWordsPieces())
+    {
+        mixedWordsPiecesTextColors.append(c_WordPieceTextColors[piece.pieceType]);
+    }
 
-int GamePresenter::getSecondWordFirstPieceIndex() const
-{
-    return m_pGameFacade->getSecondWordFirstPieceIndex();
-}
-
-int GamePresenter::getSecondWordLastPieceIndex() const
-{
-    return m_pGameFacade->getSecondWordLastPieceIndex();
+    return mixedWordsPiecesTextColors;
 }
 
 int GamePresenter::getLevelEasy() const
@@ -490,16 +491,6 @@ QColor GamePresenter::getTextColor() const
 QColor GamePresenter::getFatalErrorTextColor() const
 {
     return QColor{GameStrings::c_FatalErrorTextColor};
-}
-
-QColor GamePresenter::getWordFirstPieceColor() const
-{
-    return QColor{GameStrings::c_WordFirstPieceTextColor};
-}
-
-QColor GamePresenter::getWordLastPieceColor() const
-{
-    return QColor{GameStrings::c_WordLastPieceTextColor};
 }
 
 QColor GamePresenter::getWordPieceSelectedColor() const

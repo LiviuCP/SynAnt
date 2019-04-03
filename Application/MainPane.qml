@@ -24,8 +24,6 @@ Item {
     readonly property color buttonColor: presenter.pushButtonColor
     readonly property color borderColor: presenter.borderColor
     readonly property color textColor: presenter.textColor
-    readonly property color wordFirstPieceColor: presenter.wordFirstPieceColor
-    readonly property color wordLastPieceColor: presenter.wordLastPieceColor
     readonly property color wordPieceSelectedColor: presenter.wordPieceSelectedColor
 
     function switchToLvl(lvl) {
@@ -392,9 +390,7 @@ Item {
                     font.pointSize: wordPieces.height * 0.4
                     anchors.centerIn: parent
                     text: modelData
-                    color: index === presenter.firstWordBeginIndex || index === presenter.secondWordBeginIndex ? wordFirstPieceColor :
-                           index === presenter.firstWordEndIndex || index === presenter.secondWordEndIndex ? wordLastPieceColor :
-                           textColor
+                    color: presenter.mixedWordsPiecesTextColors[index]
                 }
 
                 MouseArea {

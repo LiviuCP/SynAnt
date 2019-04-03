@@ -214,6 +214,7 @@ namespace GameStrings {
     const QString c_TextColor                           {    "black"                                                                                    };
     const QString c_FatalErrorTextColor                 {    "red"                                                                                      };
     const QString c_WordFirstPieceTextColor             {    "blue"                                                                                     };
+    const QString c_WordMiddlePieceTextColor            {    "black"                                                                                    };
     const QString c_WordLastPieceTextColor              {    "red"                                                                                      };
     const QString c_WordPieceSelectedBackgroundColor    {    "grey"                                                                                     };
     const QString c_PushButtonColor                     {    "lightgrey"                                                                                };
