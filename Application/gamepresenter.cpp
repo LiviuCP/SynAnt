@@ -153,9 +153,14 @@ void GamePresenter::switchToLevel(int level)
     }
 }
 
-void GamePresenter::selectWordPiece(int index)
+void GamePresenter::selectWordPieceForFirstWord(int index)
 {
-    m_pGameFacade->selectWordPiece(index);
+    m_pGameFacade->selectWordPieceForFirstWord(index);
+}
+
+void GamePresenter::selectWordPieceForSecondWord(int index)
+{
+    m_pGameFacade->selectWordPieceForSecondWord(index);
 }
 
 bool GamePresenter::getIntroPaneVisible() const

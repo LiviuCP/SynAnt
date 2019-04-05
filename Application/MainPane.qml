@@ -386,6 +386,15 @@ Item {
                 color: presenter.mixedWordsPiecesSelections[index] ? wordPieceSelectedColor : paneColor
                 border.color: borderColor
 
+                Timer {
+                    id: clickTimer
+                    interval: 200
+                    onTriggered: {
+
+                        presenter.selectWordPieceForFirstWord(index);
+                    }
+                }
+
                 Text {
                     font.pointSize: wordPieces.height * 0.4
                     anchors.centerIn: parent
@@ -396,7 +405,17 @@ Item {
                 MouseArea {
                     id: wordPiecesMouseArea
                     anchors.fill: parent
-                    onClicked: presenter.selectWordPiece(index);
+
+                    // single click for assigning piece to first word, double click for assigning to second word
+                    onClicked: {
+                        if (clickTimer.running) {
+                            presenter.selectWordPieceForSecondWord(index);
+                            clickTimer.stop();
+                        }
+                        else {
+                            clickTimer.restart();
+                        }
+                    }
                 }
             }
         }

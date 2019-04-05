@@ -22,7 +22,8 @@ public:
     void updateStatistics(Game::StatisticsUpdate updateType);
     void resetStatistics();
     void setLevel(Game::Level level);
-    void selectWordPiece(int index);
+    void selectWordPieceForFirstWord(int index);
+    void selectWordPieceForSecondWord(int index);
 
     const QVector<Game::WordPiece> getMixedWordsPieces() const;
 

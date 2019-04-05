@@ -78,23 +78,27 @@ void GameFacade::setLevel(Game::Level level)
     Q_EMIT statusChanged(Game::StatusCodes::LEVEL_CHANGED);
 }
 
-void GameFacade::selectWordPiece(int index)
+void GameFacade::selectWordPieceForFirstWord(int index)
 {
     if (!m_pWordPairOwner->getMixedWordsPieces().at(index).isSelected)
     {
         qInfo("");
-        qInfo("Adding piece with index [%d] and content [%s] to [%s] word input",
-              index, m_pWordPairOwner->getMixedWordsPieces().at(index).content.toStdString().c_str(), index%2 == 0 ? "first" : "second");
+        qInfo("Adding piece with index [%d] and content [%s] to first word input", index, m_pWordPairOwner->getMixedWordsPieces().at(index).content.toStdString().c_str());
 
-        if (index%2 == 0)
-        {
-            Q_UNUSED(m_pInputBuilder->addPieceToFirstWordInput(index));
+        Q_UNUSED(m_pInputBuilder->addPieceToFirstWordInput(index));
 
-        }
-        else
-        {
-            Q_UNUSED(m_pInputBuilder->addPieceToSecondWordInput(index));
-        }
+        qInfo("DONE");
+    }
+}
+
+void GameFacade::selectWordPieceForSecondWord(int index)
+{
+    if (!m_pWordPairOwner->getMixedWordsPieces().at(index).isSelected)
+    {
+        qInfo("");
+        qInfo("Adding piece with index [%d] and content [%s] to second word input", index, m_pWordPairOwner->getMixedWordsPieces().at(index).content.toStdString().c_str());
+
+        Q_UNUSED(m_pInputBuilder->addPieceToSecondWordInput(index));
 
         qInfo("DONE");
     }

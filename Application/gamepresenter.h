@@ -109,7 +109,8 @@ public:
     Q_INVOKABLE bool handleSubmitRequest(const QString& firstWord, const QString& secondWord);
     Q_INVOKABLE void handleResetRequest();
     Q_INVOKABLE void switchToLevel(int level);
-    Q_INVOKABLE void selectWordPiece(int index);
+    Q_INVOKABLE void selectWordPieceForFirstWord(int index);
+    Q_INVOKABLE void selectWordPieceForSecondWord(int index);
 
     bool getIntroPaneVisible() const;
     bool getHelpPaneVisible() const;
