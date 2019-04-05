@@ -109,13 +109,14 @@ public:
     Q_INVOKABLE bool handleSubmitRequest(const QString& firstWord, const QString& secondWord);
     Q_INVOKABLE void handleResetRequest();
     Q_INVOKABLE void switchToLevel(int level);
-    Q_INVOKABLE void toggleWordPieceSelection(int index);
+    Q_INVOKABLE void selectWordPiece(int index);
 
     bool getIntroPaneVisible() const;
     bool getHelpPaneVisible() const;
     bool getMainPaneVisible() const;
     bool getResetEnabled() const;
     bool getErrorOccured() const;
+
     QList<QVariant> getMixedWordsPiecesContent() const;
     QList<QVariant> getMixedWordsPiecesTextColors() const;
     QList<QVariant> getMixedWordsPiecesSelections() const;
@@ -193,6 +194,7 @@ signals:
     Q_SIGNAL void resetEnabledChanged();
     Q_SIGNAL void errorOccuredChanged();
     Q_SIGNAL void mixedWordsChanged();
+    Q_SIGNAL void inputChanged();
     Q_SIGNAL void selectionChanged();
     Q_SIGNAL void windowTitleChanged();
     Q_SIGNAL void mainPaneStatusMessageChanged();

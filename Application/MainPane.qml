@@ -396,7 +396,7 @@ Item {
                 MouseArea {
                     id: wordPiecesMouseArea
                     anchors.fill: parent
-                    onClicked: presenter.toggleWordPieceSelection(index);
+                    onClicked: presenter.selectWordPiece(index);
                 }
             }
         }

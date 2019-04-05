@@ -6,6 +6,7 @@
 #include "game.h"
 
 class WordPairOwner;
+class InputBuilder;
 class WordMixer;
 class ScoreItem;
 
@@ -21,9 +22,12 @@ public:
     void updateStatistics(Game::StatisticsUpdate updateType);
     void resetStatistics();
     void setLevel(Game::Level level);
-    void toggleWordPieceSelection(int index);
+    void selectWordPiece(int index);
 
     const QVector<Game::WordPiece> getMixedWordsPieces() const;
+
+    const QVector<int> getFirstWordInputIndexes() const;
+    const QVector<int> getSecondWordInputIndexes() const;
 
     int getObtainedScore() const;
     int getTotalAvailableScore() const;
@@ -37,6 +41,7 @@ public:
 
 signals:
     Q_SIGNAL void mixedWordsChanged();
+    Q_SIGNAL void inputChanged();
     Q_SIGNAL void selectionChanged();
     Q_SIGNAL void statisticsChanged();
     Q_SIGNAL void statusChanged(Game::StatusCodes status);
@@ -44,6 +49,7 @@ signals:
 private:
     QString m_ApplicationPath;
     WordPairOwner* m_pWordPairOwner;
+    InputBuilder* m_pInputBuilder;
     WordMixer* m_pWordMixer;
     ScoreItem* m_pScoreItem;
 };
