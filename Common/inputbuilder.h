@@ -44,6 +44,7 @@ private:
     };
 
     bool _addPieceToWordInput(WordInput& currentWordInput, const WordInput& otherWordInput, int index);
+    bool _checkAndUpdateState(WordInput& currentWordInput, const WordInput& otherWordInput, int index);
 
     WordPairOwner* m_pWordPairOwner;
     WordInput m_FirstWordInput;

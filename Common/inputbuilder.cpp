@@ -73,23 +73,83 @@ void InputBuilder::resetInput()
 
 bool InputBuilder::_addPieceToWordInput(InputBuilder::WordInput &currentWordInput, const InputBuilder::WordInput &otherWordInput, int index)
 {
-    Q_UNUSED(otherWordInput);
-
-    currentWordInput.indexes.append(index);
-    m_pWordPairOwner->updateWordPieceSelection(index, true);
-
-    qInfo("Index added. The word input now contains following indexes:");
-    for (auto index : currentWordInput.indexes)
+    bool success{false};
+    if (_checkAndUpdateState(currentWordInput, otherWordInput, index))
     {
-        qInfo("%d", index);
+        Q_UNUSED(otherWordInput);
+
+        currentWordInput.indexes.append(index);
+        m_pWordPairOwner->updateWordPieceSelection(index, true);
+
+        qInfo("Index added. The word input now contains following indexes:");
+        for (auto index : currentWordInput.indexes)
+        {
+            qInfo("%d", index);
+        }
+
+        qInfo("First word is now: %s", getFirstInputWord().toStdString().c_str());
+        qInfo("Second word is now: %s", getSecondInputWord().toStdString().c_str());
+
+        Q_EMIT inputChanged();
+    }
+    else
+    {
+        qInfo("Cannot add index, it doesn't follow the rules");
     }
 
-    qInfo("First word is now: %s", getFirstInputWord().toStdString().c_str());
-    qInfo("Second word is now: %s", getSecondInputWord().toStdString().c_str());
+    return success;
+}
 
-    Q_EMIT inputChanged();
+bool InputBuilder::_checkAndUpdateState(InputBuilder::WordInput &currentWordInput, const InputBuilder::WordInput& otherWordInput, int index)
+{
+    bool isValid{false};
 
-    return true;
+    switch (currentWordInput.state)
+    {
+    case WordInputState::EMPTY:
+        if (m_pWordPairOwner->getMixedWordsPieces().at(index).pieceType == Game::PieceTypes::BEGIN_PIECE)
+        {
+            isValid = true;
+            currentWordInput.state = WordInputState::BUILD_IN_PROGRESS;
+        }
+        break;
+    case WordInputState::BUILD_IN_PROGRESS:
+        if (m_pWordPairOwner->getMixedWordsPieces().at(index).pieceType == Game::PieceTypes::MIDDLE_PIECE)
+        {
+            isValid = true;
+        }
+        else if (m_pWordPairOwner->getMixedWordsPieces().at(index).pieceType == Game::PieceTypes::END_PIECE)
+        {
+            if (otherWordInput.state != WordInputState::CLOSED)
+            {
+                isValid = true;
+                currentWordInput.state = WordInputState::CLOSED;
+            }
+            else
+            {
+                int nrOfPiecesNotSelected{0};
+
+                for (auto piece : m_pWordPairOwner->getMixedWordsPieces())
+                {
+                    if (!piece.isSelected)
+                    {
+                        ++nrOfPiecesNotSelected;
+                    }
+                }
+
+                if (nrOfPiecesNotSelected == 1)
+                {
+                    isValid = true;
+                    currentWordInput.state = WordInputState::CLOSED;
+                }
+            }
+        }
+        break;
+    case WordInputState::CLOSED:
+        break;
+    }
+
+    return isValid;
 }
 
 InputBuilder::WordInput::WordInput()
