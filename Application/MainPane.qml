@@ -26,13 +26,6 @@ Item {
     readonly property color textColor: presenter.textColor
     readonly property color wordPieceSelectedColor: presenter.wordPieceSelectedColor
 
-    function switchToLvl(lvl) {
-        firstWordTextField.clear();
-        secondWordTextField.clear();
-        presenter.switchToLevel(lvl);
-        firstWordTextField.forceActiveFocus();
-    }
-
     MouseArea {
         id: mainPaneMouseArea
         anchors.fill: parent
@@ -167,7 +160,6 @@ Item {
 
             onClicked: {
                 presenter.handleResetRequest();
-                firstWordTextField.forceActiveFocus();
             }
 
             onPressed: opacity = pressedButtonOpacity
@@ -263,14 +255,14 @@ Item {
                         onActivated: {
                             if (!easyLvlBtn.checked) {
                                 easyLvlBtn.checked = true;
-                                mainPane.switchToLvl(presenter.levelEasy);
+                                presenter.switchToLevel(presenter.levelEasy);
                             }
                         }
                     }
 
                     onToggled: {
                         checked = true
-                        mainPane.switchToLvl(presenter.levelEasy);
+                        presenter.switchToLevel(presenter.levelEasy);
                     }
                 }
 
@@ -284,14 +276,14 @@ Item {
                         onActivated: {
                             if (!mediumLvlBtn.checked) {
                                 mediumLvlBtn.checked = true;
-                                mainPane.switchToLvl(presenter.levelMedium);
+                                presenter.switchToLevel(presenter.levelMedium);
                             }
                         }
                     }
 
                     onToggled: {
                         checked = true
-                        mainPane.switchToLvl(presenter.levelMedium);
+                        presenter.switchToLevel(presenter.levelMedium);
                     }
                 }
 
@@ -305,14 +297,14 @@ Item {
                         onActivated: {
                             if (!hardLvlBtn.checked) {
                                 hardLvlBtn.checked = true;
-                                mainPane.switchToLvl(presenter.levelHard);
+                                presenter.switchToLevel(presenter.levelHard);
                             }
                         }
                     }
 
                     onToggled: {
                         checked = true
-                        mainPane.switchToLvl(presenter.levelHard);
+                        presenter.switchToLevel(presenter.levelHard);
                     }
                 }
             }
@@ -379,7 +371,6 @@ Item {
             model: presenter.mixedWordsPiecesContent
 
             Rectangle {
-                id: wordPiecesRectangle
                 width: parent.width / mixedWordsRepeater.count
                 height: parent.height
 
@@ -390,7 +381,6 @@ Item {
                     id: clickTimer
                     interval: 200
                     onTriggered: {
-
                         presenter.selectWordPieceForFirstWord(index);
                     }
                 }
@@ -403,7 +393,6 @@ Item {
                 }
 
                 MouseArea {
-                    id: wordPiecesMouseArea
                     anchors.fill: parent
 
                     // single click for assigning piece to first word, double click for assigning to second word
@@ -421,7 +410,7 @@ Item {
         }
     }
 
-    RowLayout {
+    Row {
         id: wordsEntryLayout
 
         anchors.top: wordPieces.bottom
@@ -431,37 +420,44 @@ Item {
 
         height: wordsEntryLayoutHeight
 
-        TextField {
-            id: firstWordTextField
+        Repeater {
+            id: firstWordInputRepeater
+            model: presenter.firstWordInputPiecesContent
 
-            Layout.minimumWidth: parent.width * 0.49
-            Layout.minimumHeight: parent.height
+            Rectangle {
+                width: parent.width / mixedWordsRepeater.count
+                height: parent.height
 
-            ToolTip.text: presenter.firstWordToolTip
-            ToolTip.delay: presenter.toolTipDelay
-            ToolTip.timeout: presenter.toolTipTimeout
-            ToolTip.visible: hovered
+                color: paneColor
+                border.color: borderColor
 
-            onVisibleChanged: {
-                if (visible) {
-                    forceActiveFocus();
+                Text {
+                    font.pointSize: wordPieces.height * 0.4
+                    anchors.centerIn: parent
+                    text: modelData
+                    color: presenter.firstWordInputPiecesTextColors[index]
                 }
             }
-
         }
 
-        TextField {
-            id: secondWordTextField
+        Repeater {
+            id: secondWordInputRepeater
+            model: presenter.secondWordInputPiecesContent
 
-            Layout.minimumWidth: parent.width * 0.49
-            Layout.minimumHeight: parent.height
-            Layout.alignment: Qt.AlignRight
+            Rectangle {
+                width: parent.width / mixedWordsRepeater.count
+                height: parent.height
 
-            ToolTip.text: presenter.secondWordToolTip
-            ToolTip.delay: presenter.toolTipDelay
-            ToolTip.timeout: presenter.toolTipTimeout
-            ToolTip.visible: hovered
+                color: paneColor
+                border.color: borderColor
 
+                Text {
+                    font.pointSize: wordPieces.height * 0.4
+                    anchors.centerIn: parent
+                    text: modelData
+                    color: presenter.secondWordInputPiecesTextColors[index]
+                }
+            }
         }
     }
 
@@ -503,23 +499,14 @@ Item {
             ToolTip.timeout: presenter.toolTipTimeout
             ToolTip.visible: hovered
 
-            function submitWords() {
-                var clearTextFields = presenter.handleSubmitRequest(firstWordTextField.text, secondWordTextField.text);
-                if (clearTextFields) {
-                    firstWordTextField.clear();
-                    secondWordTextField.clear();
-                }
-                firstWordTextField.forceActiveFocus();
-            }
-
             Shortcut {
                 sequence: presenter.submitButtonShortcut
                 onActivated: {
-                    submitBtn.submitWords();
+                    presenter.handleSubmitRequest();
                 }
             }
 
-            onClicked: submitWords()
+            onClicked: presenter.handleSubmitRequest()
             onPressed: opacity = pressedButtonOpacity
             onReleased: opacity = releasedButtonOpacity
             onCanceled: opacity = releasedButtonOpacity
@@ -579,21 +566,14 @@ Item {
             ToolTip.timeout: presenter.toolTipTimeout
             ToolTip.visible: hovered
 
-            function getResults() {
-                firstWordTextField.clear();
-                secondWordTextField.clear();
-                firstWordTextField.forceActiveFocus();
-                presenter.handleResultsRequest();
-            }
-
             Shortcut {
                 sequence: presenter.resultsButtonShortcut
                 onActivated: {
-                    resultsBtn.getResults();
+                    presenter.handleResultsRequest()
                 }
             }
 
-            onClicked: getResults()
+            onClicked: presenter.handleResultsRequest()
             onPressed: opacity = pressedButtonOpacity
             onReleased: opacity = releasedButtonOpacity
             onCanceled: opacity = releasedButtonOpacity

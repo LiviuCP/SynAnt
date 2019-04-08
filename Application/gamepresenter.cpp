@@ -120,21 +120,16 @@ void GamePresenter::handleResultsRequest()
     }
 }
 
-bool GamePresenter::handleSubmitRequest(const QString &firstWord, const QString &secondWord)
+void GamePresenter::handleSubmitRequest()
 {
-    bool clearUserInput{false};
-
     try
     {
-        clearUserInput = m_pGameFacade->handleSubmitRequest(firstWord, secondWord);
+        m_pGameFacade->handleSubmitRequest();
     }
     catch(const GameException& exception)
     {
-        clearUserInput = true;
         _launchErrorPane(exception.getDescription());
     }
-
-    return clearUserInput;
 }
 
 void GamePresenter::handleResetRequest()
@@ -229,6 +224,54 @@ QList<QVariant> GamePresenter::getMixedWordsPiecesSelections() const
     }
 
     return mixedWordsPiecesSelections;
+}
+
+QList<QVariant> GamePresenter::getFirstWordInputPiecesContent() const
+{
+    QList<QVariant> firstWordInputPiecesContent;
+
+    for (auto index : m_pGameFacade->getFirstWordInputIndexes())
+    {
+        firstWordInputPiecesContent.append(m_pGameFacade->getMixedWordsPieces().at(index).content);
+    }
+
+    return firstWordInputPiecesContent;
+}
+
+QList<QVariant> GamePresenter::getFirstWordInputPiecesTextColors() const
+{
+    QList<QVariant> firstWordInputPiecesTextColors;
+
+    for (auto index : m_pGameFacade->getFirstWordInputIndexes())
+    {
+        firstWordInputPiecesTextColors.append(c_WordPieceTextColors[m_pGameFacade->getMixedWordsPieces().at(index).pieceType]);
+    }
+
+    return firstWordInputPiecesTextColors;
+}
+
+QList<QVariant> GamePresenter::getSecondWordInputPiecesContent() const
+{
+    QList<QVariant> secondWordInputPiecesContent;
+
+    for (auto index : m_pGameFacade->getSecondWordInputIndexes())
+    {
+        secondWordInputPiecesContent.append(m_pGameFacade->getMixedWordsPieces().at(index).content);
+    }
+
+    return secondWordInputPiecesContent;
+}
+
+QList<QVariant> GamePresenter::getSecondWordInputPiecesTextColors() const
+{
+    QList<QVariant> secondWordInputPiecesTextColors;
+
+    for (auto index : m_pGameFacade->getSecondWordInputIndexes())
+    {
+        secondWordInputPiecesTextColors.append(c_WordPieceTextColors[m_pGameFacade->getMixedWordsPieces().at(index).pieceType]);
+    }
+
+    return secondWordInputPiecesTextColors;
 }
 
 int GamePresenter::getLevelEasy() const
@@ -444,16 +487,6 @@ QString GamePresenter::getGameInstructionsToolTip() const
 QString GamePresenter::getGameStatusToolTip() const
 {
     return GameStrings::c_GameStatusToolTip;
-}
-
-QString GamePresenter::getFirstWordToolTip() const
-{
-    return GameStrings::c_FirstWordToolTip;
-}
-
-QString GamePresenter::getSecondWordToolTip() const
-{
-    return GameStrings::c_SecondWordToolTip;
 }
 
 QString GamePresenter::getPlayButtonToolTip() const

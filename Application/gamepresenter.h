@@ -23,6 +23,10 @@ class GamePresenter : public QObject
     Q_PROPERTY(QList<QVariant> mixedWordsPiecesContent READ getMixedWordsPiecesContent NOTIFY mixedWordsChanged)
     Q_PROPERTY(QList<QVariant> mixedWordsPiecesTextColors READ getMixedWordsPiecesTextColors NOTIFY mixedWordsChanged)
     Q_PROPERTY(QList<QVariant> mixedWordsPiecesSelections READ getMixedWordsPiecesSelections NOTIFY selectionChanged)
+    Q_PROPERTY(QList<QVariant> firstWordInputPiecesContent READ getFirstWordInputPiecesContent NOTIFY inputChanged)
+    Q_PROPERTY(QList<QVariant> firstWordInputPiecesTextColors READ getFirstWordInputPiecesTextColors NOTIFY inputChanged)
+    Q_PROPERTY(QList<QVariant> secondWordInputPiecesContent READ getSecondWordInputPiecesContent NOTIFY inputChanged)
+    Q_PROPERTY(QList<QVariant> secondWordInputPiecesTextColors READ getSecondWordInputPiecesTextColors NOTIFY inputChanged)
     Q_PROPERTY(int levelEasy READ getLevelEasy CONSTANT)
     Q_PROPERTY(int levelMedium READ getLevelMedium CONSTANT)
     Q_PROPERTY(int levelHard READ getLevelHard CONSTANT)
@@ -72,8 +76,6 @@ class GamePresenter : public QObject
     Q_PROPERTY(QString wordPairsToolTip READ getWordPairsToolTip CONSTANT)
     Q_PROPERTY(QString gameInstructionsToolTip READ getGameInstructionsToolTip CONSTANT)
     Q_PROPERTY(QString gameStatusToolTip READ getGameStatusToolTip CONSTANT)
-    Q_PROPERTY(QString firstWordToolTip READ getFirstWordToolTip CONSTANT)
-    Q_PROPERTY(QString secondWordToolTip READ getSecondWordToolTip CONSTANT)
     Q_PROPERTY(QString playButtonToolTip READ getPlayButtonToolTip CONSTANT)
     Q_PROPERTY(QString helpButtonToolTip READ getHelpButtonToolTip CONSTANT)
     Q_PROPERTY(QString quitButtonToolTip READ getQuitButtonToolTip CONSTANT)
@@ -107,7 +109,7 @@ public:
 
     Q_INVOKABLE void switchToPane(Pane pane);
     Q_INVOKABLE void handleResultsRequest();
-    Q_INVOKABLE bool handleSubmitRequest(const QString& firstWord, const QString& secondWord);
+    Q_INVOKABLE void handleSubmitRequest();
     Q_INVOKABLE void handleResetRequest();
     Q_INVOKABLE void switchToLevel(int level);
     Q_INVOKABLE void selectWordPieceForFirstWord(int index);
@@ -123,6 +125,11 @@ public:
     QList<QVariant> getMixedWordsPiecesContent() const;
     QList<QVariant> getMixedWordsPiecesTextColors() const;
     QList<QVariant> getMixedWordsPiecesSelections() const;
+    QList<QVariant> getFirstWordInputPiecesContent() const;
+    QList<QVariant> getFirstWordInputPiecesTextColors() const;
+    QList<QVariant> getSecondWordInputPiecesContent() const;
+    QList<QVariant> getSecondWordInputPiecesTextColors() const;
+
     int getLevelEasy() const;
     int getLevelMedium() const;
     int getLevelHard() const;
@@ -171,8 +178,6 @@ public:
     QString getWordPairsToolTip() const;
     QString getGameInstructionsToolTip() const;
     QString getGameStatusToolTip() const;
-    QString getFirstWordToolTip() const;
-    QString getSecondWordToolTip() const;
     QString getPlayButtonToolTip() const;
     QString getHelpButtonToolTip() const;
     QString getQuitButtonToolTip() const;

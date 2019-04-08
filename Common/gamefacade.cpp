@@ -35,22 +35,20 @@ void GameFacade::startGame()
     m_pWordMixer->mixWords();
 }
 
-bool GameFacade::handleSubmitRequest(const QString &firstWord, const QString &secondWord)
+void GameFacade::handleSubmitRequest()
 {
-    const QString firstWordRef{m_pWordPairOwner->getFirstWord()};
-    const QString secondWordRef{m_pWordPairOwner->getSecondWord()};
-    bool success{(firstWord == firstWordRef && secondWord == secondWordRef) || (firstWord == secondWordRef && secondWord == firstWordRef)};
+    bool success{(m_pInputBuilder->getFirstInputWord() == m_pWordPairOwner->getFirstWord() && m_pInputBuilder->getSecondInputWord() == m_pWordPairOwner->getSecondWord()) ||
+                 (m_pInputBuilder->getFirstInputWord() == m_pWordPairOwner->getSecondWord() && m_pInputBuilder->getSecondInputWord() == m_pWordPairOwner->getFirstWord())};
+
     Game::StatusCodes statusCode{success ? Game::StatusCodes::SUCCESS : Game::StatusCodes::INCORRECT_WORDS};
 
     Q_EMIT statusChanged(statusCode);
 
     if (success)
     {
-        updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
+        m_pScoreItem->updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
         m_pWordMixer->mixWords();
     }
-
-    return success;
 }
 
 void GameFacade::provideResultsToUser()
@@ -58,11 +56,6 @@ void GameFacade::provideResultsToUser()
     m_pScoreItem->updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
     Q_EMIT statusChanged(Game::StatusCodes::REQUESTED_BY_USER);
     m_pWordMixer->mixWords();
-}
-
-void GameFacade::updateStatistics(Game::StatisticsUpdate updateType)
-{
-    m_pScoreItem->updateStatistics(updateType);
 }
 
 void GameFacade::resetStatistics()
