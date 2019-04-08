@@ -448,7 +448,6 @@ Item {
                 }
             }
 
-            Keys.onReleased: submitBtn.enabled = (firstWordTextField.text.length != 0 && secondWordTextField.text.length != 0) ? true : false
         }
 
         TextField {
@@ -463,7 +462,6 @@ Item {
             ToolTip.timeout: presenter.toolTipTimeout
             ToolTip.visible: hovered
 
-            Keys.onReleased: submitBtn.enabled = (firstWordTextField.text.length != 0 && secondWordTextField.text.length != 0) ? true : false
         }
     }
 
@@ -480,7 +478,7 @@ Item {
 
         Button {
             id: submitBtn
-            enabled: false
+            enabled: presenter.submitEnabled
 
             contentItem: Text {
                 text: presenter.submitButtonLabel
@@ -510,7 +508,6 @@ Item {
                 if (clearTextFields) {
                     firstWordTextField.clear();
                     secondWordTextField.clear();
-                    enabled = false;
                 }
                 firstWordTextField.forceActiveFocus();
             }
@@ -587,7 +584,6 @@ Item {
                 secondWordTextField.clear();
                 firstWordTextField.forceActiveFocus();
                 presenter.handleResultsRequest();
-                submitBtn.enabled = false;
             }
 
             Shortcut {

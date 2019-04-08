@@ -38,6 +38,8 @@ public:
     QString getFirstWord() const;
     QString getSecondWord() const;
 
+    bool isInputComplete() const;
+
     bool areSynonyms() const;
 
 signals:
@@ -45,6 +47,7 @@ signals:
     Q_SIGNAL void inputChanged();
     Q_SIGNAL void selectionChanged();
     Q_SIGNAL void statisticsChanged();
+    Q_SIGNAL void completionChanged();
     Q_SIGNAL void statusChanged(Game::StatusCodes status);
 
 private:

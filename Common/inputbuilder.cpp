@@ -61,12 +61,24 @@ QString InputBuilder::getSecondInputWord() const
     return secondInputWord;
 }
 
+bool InputBuilder::isInputComplete() const
+{
+    return (m_FirstWordInput.state == WordInputState::COMPLETED && m_SecondWordInput.state == WordInputState::COMPLETED);
+}
+
 void InputBuilder::resetInput()
 {
+    bool resetCompleteInput{m_FirstWordInput.state == WordInputState::COMPLETED && m_SecondWordInput.state == WordInputState::COMPLETED};
+
     m_FirstWordInput.indexes.clear();
     m_SecondWordInput.indexes.clear();
     m_FirstWordInput.state = WordInputState::EMPTY;
     m_SecondWordInput.state = WordInputState::EMPTY;
+
+    if (resetCompleteInput)
+    {
+        Q_EMIT completionChanged();
+    }
 
     Q_EMIT inputChanged();
 }
@@ -121,10 +133,10 @@ bool InputBuilder::_checkAndUpdateState(InputBuilder::WordInput &currentWordInpu
         }
         else if (m_pWordPairOwner->getMixedWordsPieces().at(index).pieceType == Game::PieceTypes::END_PIECE)
         {
-            if (otherWordInput.state != WordInputState::CLOSED)
+            if (otherWordInput.state != WordInputState::COMPLETED)
             {
                 isValid = true;
-                currentWordInput.state = WordInputState::CLOSED;
+                currentWordInput.state = WordInputState::COMPLETED;
             }
             else
             {
@@ -141,12 +153,13 @@ bool InputBuilder::_checkAndUpdateState(InputBuilder::WordInput &currentWordInpu
                 if (nrOfPiecesNotSelected == 1)
                 {
                     isValid = true;
-                    currentWordInput.state = WordInputState::CLOSED;
+                    currentWordInput.state = WordInputState::COMPLETED;
+                    Q_EMIT completionChanged();
                 }
             }
         }
         break;
-    case WordInputState::CLOSED:
+    case WordInputState::COMPLETED:
         break;
     }
 

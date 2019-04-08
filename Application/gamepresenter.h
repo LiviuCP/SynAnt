@@ -18,6 +18,7 @@ class GamePresenter : public QObject
     Q_PROPERTY(bool helpPaneVisible READ getHelpPaneVisible NOTIFY helpPaneVisibleChanged)
     Q_PROPERTY(bool mainPaneVisible READ getMainPaneVisible NOTIFY mainPaneVisibleChanged)
     Q_PROPERTY(bool resetEnabled READ getResetEnabled NOTIFY resetEnabledChanged)
+    Q_PROPERTY(bool submitEnabled READ getSubmitEnabled NOTIFY submitEnabledChanged)
     Q_PROPERTY(bool errorOccured READ getErrorOccured NOTIFY errorOccuredChanged)
     Q_PROPERTY(QList<QVariant> mixedWordsPiecesContent READ getMixedWordsPiecesContent NOTIFY mixedWordsChanged)
     Q_PROPERTY(QList<QVariant> mixedWordsPiecesTextColors READ getMixedWordsPiecesTextColors NOTIFY mixedWordsChanged)
@@ -116,6 +117,7 @@ public:
     bool getHelpPaneVisible() const;
     bool getMainPaneVisible() const;
     bool getResetEnabled() const;
+    bool getSubmitEnabled() const;
     bool getErrorOccured() const;
 
     QList<QVariant> getMixedWordsPiecesContent() const;
@@ -193,6 +195,7 @@ signals:
     Q_SIGNAL void helpPaneVisibleChanged();
     Q_SIGNAL void mainPaneVisibleChanged();
     Q_SIGNAL void resetEnabledChanged();
+    Q_SIGNAL void submitEnabledChanged();
     Q_SIGNAL void errorOccuredChanged();
     Q_SIGNAL void mixedWordsChanged();
     Q_SIGNAL void inputChanged();

@@ -46,6 +46,8 @@ GamePresenter::GamePresenter(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::selectionChanged, this, &GamePresenter::selectionChanged);
     Q_ASSERT(connected);
+    connected = connect(m_pGameFacade, &GameFacade::completionChanged, this, &GamePresenter::submitEnabledChanged);
+    Q_ASSERT(connected);
 }
 
 void GamePresenter::switchToPane(Pane pane)
@@ -181,6 +183,11 @@ bool GamePresenter::getMainPaneVisible() const
 bool GamePresenter::getResetEnabled() const
 {
     return m_StatisticsResetEnabled;
+}
+
+bool GamePresenter::getSubmitEnabled() const
+{
+    return m_pGameFacade->isInputComplete();
 }
 
 bool GamePresenter::getErrorOccured() const

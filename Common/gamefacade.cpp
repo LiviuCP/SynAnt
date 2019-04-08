@@ -21,6 +21,8 @@ GameFacade::GameFacade(QString applicationPath, QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pInputBuilder, &InputBuilder::inputChanged, this, &GameFacade::inputChanged);
     Q_ASSERT(connected);
+    connected = connect(m_pInputBuilder, &InputBuilder::completionChanged, this, &GameFacade::completionChanged);
+    Q_ASSERT(connected);
     connected = connect(m_pWordPairOwner, &WordPairOwner::selectionChanged, this, &GameFacade::selectionChanged);
     Q_ASSERT(connected);
     connected = connect(m_pScoreItem, &ScoreItem::statisticsUpdated, this, &GameFacade::statisticsChanged);
@@ -147,6 +149,11 @@ QString GameFacade::getFirstWord() const
 QString GameFacade::getSecondWord() const
 {
     return m_pWordPairOwner->getSecondWord();
+}
+
+bool GameFacade::isInputComplete() const
+{
+    return m_pInputBuilder->isInputComplete();
 }
 
 bool GameFacade::areSynonyms() const

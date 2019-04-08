@@ -20,9 +20,11 @@ public:
     const QVector<int> getSecondWordInputIndexes() const;
     QString getFirstInputWord() const;
     QString getSecondInputWord() const;
+    bool isInputComplete() const;
 
 signals:
     Q_SIGNAL void inputChanged();
+    Q_SIGNAL void completionChanged();
 
 public slots:
     void resetInput();
@@ -32,7 +34,7 @@ private:
     {
         EMPTY,
         BUILD_IN_PROGRESS,
-        CLOSED
+        COMPLETED
     };
 
     struct WordInput
