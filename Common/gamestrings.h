@@ -117,6 +117,9 @@ namespace GameStrings {
                                                              "A new pair of words is available below."
                                                         };
 
+    const QString c_PieceNotAddedMessage                {    "The selected wordpiece cannot be added to user input!"                                    };
+    const QString c_PieceSuccessfullyAddedMessage       {    "The selected wordpiece has been successfully added to user input"                         };
+
     const QString c_MissingWordsMessage                 {    "At least one of the words hasn't been entered.\n\nPlease try again!"                      };
     const QString c_IncorrectWordsMessage               {    "You didn't enter the correct words.\n\nPlease try again!"                                 };
     const QString c_InitialStatusMessage                {    "No user input so far."                                                                    };

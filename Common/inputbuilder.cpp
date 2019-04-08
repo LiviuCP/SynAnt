@@ -74,12 +74,15 @@ void InputBuilder::resetInput()
 bool InputBuilder::_addPieceToWordInput(InputBuilder::WordInput &currentWordInput, const InputBuilder::WordInput &otherWordInput, int index)
 {
     bool success{false};
+
     if (_checkAndUpdateState(currentWordInput, otherWordInput, index))
     {
-        Q_UNUSED(otherWordInput);
 
         currentWordInput.indexes.append(index);
         m_pWordPairOwner->updateWordPieceSelection(index, true);
+        success = true;
+
+        Q_EMIT inputChanged();
 
         qInfo("Index added. The word input now contains following indexes:");
         for (auto index : currentWordInput.indexes)
@@ -89,8 +92,6 @@ bool InputBuilder::_addPieceToWordInput(InputBuilder::WordInput &currentWordInpu
 
         qInfo("First word is now: %s", getFirstInputWord().toStdString().c_str());
         qInfo("Second word is now: %s", getSecondInputWord().toStdString().c_str());
-
-        Q_EMIT inputChanged();
     }
     else
     {

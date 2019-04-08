@@ -30,6 +30,8 @@ namespace Game
         NO_USER_INPUT,
         STATISTICS_RESET,
         LEVEL_CHANGED,
+        PIECE_NOT_ADDED,
+        PIECE_SUCCESSFULLY_ADDED,
         StatusCodesCount
     };
 

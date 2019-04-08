@@ -85,7 +85,7 @@ void GameFacade::selectWordPieceForFirstWord(int index)
         qInfo("");
         qInfo("Adding piece with index [%d] and content [%s] to first word input", index, m_pWordPairOwner->getMixedWordsPieces().at(index).content.toStdString().c_str());
 
-        Q_UNUSED(m_pInputBuilder->addPieceToFirstWordInput(index));
+        Q_EMIT statusChanged(m_pInputBuilder->addPieceToFirstWordInput(index) ? Game::StatusCodes::PIECE_SUCCESSFULLY_ADDED : Game::StatusCodes::PIECE_NOT_ADDED);
 
         qInfo("DONE");
     }
@@ -98,7 +98,7 @@ void GameFacade::selectWordPieceForSecondWord(int index)
         qInfo("");
         qInfo("Adding piece with index [%d] and content [%s] to second word input", index, m_pWordPairOwner->getMixedWordsPieces().at(index).content.toStdString().c_str());
 
-        Q_UNUSED(m_pInputBuilder->addPieceToSecondWordInput(index));
+        Q_EMIT statusChanged(m_pInputBuilder->addPieceToSecondWordInput(index) ? Game::StatusCodes::PIECE_SUCCESSFULLY_ADDED : Game::StatusCodes::PIECE_NOT_ADDED);
 
         qInfo("DONE");
     }
