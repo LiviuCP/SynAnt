@@ -95,19 +95,6 @@ bool InputBuilder::_addPieceToWordInput(InputBuilder::WordInput &currentWordInpu
         success = true;
 
         Q_EMIT inputChanged();
-
-        qInfo("Index added. The word input now contains following indexes:");
-        for (auto index : currentWordInput.indexes)
-        {
-            qInfo("%d", index);
-        }
-
-        qInfo("First word is now: %s", getFirstInputWord().toStdString().c_str());
-        qInfo("Second word is now: %s", getSecondInputWord().toStdString().c_str());
-    }
-    else
-    {
-        qInfo("Cannot add index, it doesn't follow the rules");
     }
 
     return success;
@@ -154,6 +141,7 @@ bool InputBuilder::_checkAndUpdateState(InputBuilder::WordInput &currentWordInpu
                 {
                     isValid = true;
                     currentWordInput.state = WordInputState::COMPLETED;
+
                     Q_EMIT completionChanged();
                 }
             }
