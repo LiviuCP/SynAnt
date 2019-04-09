@@ -21,8 +21,11 @@ public:
     void provideResultsToUser();
     void resetStatistics();
     void setLevel(Game::Level level);
-    void selectWordPieceForFirstWord(int index);
-    void selectWordPieceForSecondWord(int index);
+
+    void selectWordPieceForFirstInputWord(int wordPieceIndex);
+    void selectWordPieceForSecondInputWord(int wordPieceIndex);
+    void removeWordPiecesFromFirstInputWord(int inputRangeStart);
+    void removeWordPiecesFromSecondInputWord(int inputRangeStart);
 
     const QVector<Game::WordPiece> getMixedWordsPieces() const;
 

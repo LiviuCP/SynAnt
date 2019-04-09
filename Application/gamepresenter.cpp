@@ -150,14 +150,24 @@ void GamePresenter::switchToLevel(int level)
     }
 }
 
-void GamePresenter::selectWordPieceForFirstWord(int index)
+void GamePresenter::selectWordPieceForFirstInputWord(int wordPieceIndex)
 {
-    m_pGameFacade->selectWordPieceForFirstWord(index);
+    m_pGameFacade->selectWordPieceForFirstInputWord(wordPieceIndex);
 }
 
-void GamePresenter::selectWordPieceForSecondWord(int index)
+void GamePresenter::selectWordPieceForSecondInputWord(int wordPieceIndex)
 {
-    m_pGameFacade->selectWordPieceForSecondWord(index);
+    m_pGameFacade->selectWordPieceForSecondInputWord(wordPieceIndex);
+}
+
+void GamePresenter::removeWordPiecesFromFirstInputWord(int inputRangeStart)
+{
+    m_pGameFacade->removeWordPiecesFromFirstInputWord(inputRangeStart);
+}
+
+void GamePresenter::removeWordPiecesFromSecondInputWord(int inputRangeStart)
+{
+    m_pGameFacade->removeWordPiecesFromSecondInputWord(inputRangeStart);
 }
 
 bool GamePresenter::getIntroPaneVisible() const
@@ -620,6 +630,9 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         break;
     case Game::StatusCodes::PIECE_NOT_ADDED:
         m_MainPaneStatusMessage = GameStrings::c_PieceNotAddedMessage;
+        break;
+    case Game::StatusCodes::PIECES_REMOVED:
+        m_MainPaneStatusMessage = GameStrings::c_PiecesRemovedMessage;
         break;
     //reserved for future use
     default:

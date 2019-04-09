@@ -6,7 +6,6 @@ WordPairOwner::WordPairOwner(QObject *parent)
     , m_pWordMixer{nullptr}
     , m_AreSynonyms{false}
 {
-
 }
 
 void WordPairOwner::connectToWordMixer(WordMixer* pWordMixer)
@@ -17,11 +16,38 @@ void WordPairOwner::connectToWordMixer(WordMixer* pWordMixer)
     Q_ASSERT(connected);
 }
 
-void WordPairOwner::updateWordPieceSelection(int index, bool selected)
+void WordPairOwner::updateSingleWordPieceSelection(int wordPieceIndex, bool selected)
 {
-    if (m_MixedWordsPieces[index].isSelected != selected)
+    Q_ASSERT(wordPieceIndex >= 0 && wordPieceIndex < m_MixedWordsPieces.size());
+
+    if (m_MixedWordsPieces[wordPieceIndex].isSelected != selected)
     {
-        m_MixedWordsPieces[index].isSelected = selected;
+        m_MixedWordsPieces[wordPieceIndex].isSelected = selected;
+        Q_EMIT selectionChanged();
+    }
+}
+
+void WordPairOwner::updateMultipleWordPiecesSelection(QVector<int> wordPieceIndex, bool selected)
+{
+    bool isSelectionChanged{false};
+
+    for (auto index : wordPieceIndex)
+    {
+        Q_ASSERT(index >= 0 && index < m_MixedWordsPieces.size());
+
+        if (m_MixedWordsPieces[index].isSelected != selected)
+        {
+            m_MixedWordsPieces[index].isSelected = selected;
+
+            if (!isSelectionChanged)
+            {
+                isSelectionChanged = true;
+            }
+        }
+    }
+
+    if (isSelectionChanged)
+    {
         Q_EMIT selectionChanged();
     }
 }

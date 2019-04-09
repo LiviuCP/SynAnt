@@ -32,6 +32,7 @@ namespace Game
         LEVEL_CHANGED,
         PIECE_NOT_ADDED,
         PIECE_SUCCESSFULLY_ADDED,
+        PIECES_REMOVED,
         StatusCodesCount
     };
 

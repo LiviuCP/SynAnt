@@ -15,7 +15,8 @@ public:
     explicit WordPairOwner(QObject *parent = nullptr);
 
     void connectToWordMixer(WordMixer* pWordMixer);
-    void updateWordPieceSelection(int index, bool selected);
+    void updateSingleWordPieceSelection(int wordPieceIndex, bool selected);
+    void updateMultipleWordPiecesSelection(QVector<int> wordPieceIndexes, bool selected);
 
     const QVector<Game::WordPiece> getMixedWordsPieces() const;
 

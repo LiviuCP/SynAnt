@@ -112,8 +112,10 @@ public:
     Q_INVOKABLE void handleSubmitRequest();
     Q_INVOKABLE void handleResetRequest();
     Q_INVOKABLE void switchToLevel(int level);
-    Q_INVOKABLE void selectWordPieceForFirstWord(int index);
-    Q_INVOKABLE void selectWordPieceForSecondWord(int index);
+    Q_INVOKABLE void selectWordPieceForFirstInputWord(int wordPieceIndex);
+    Q_INVOKABLE void selectWordPieceForSecondInputWord(int wordPieceIndex);
+    Q_INVOKABLE void removeWordPiecesFromFirstInputWord(int inputRangeStart);
+    Q_INVOKABLE void removeWordPiecesFromSecondInputWord(int inputRangeStart);
 
     bool getIntroPaneVisible() const;
     bool getHelpPaneVisible() const;

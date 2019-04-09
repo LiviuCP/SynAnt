@@ -381,7 +381,7 @@ Item {
                     id: clickTimer
                     interval: 200
                     onTriggered: {
-                        presenter.selectWordPieceForFirstWord(index);
+                        presenter.selectWordPieceForFirstInputWord(index);
                     }
                 }
 
@@ -398,7 +398,7 @@ Item {
                     // single click for assigning piece to first word, double click for assigning to second word
                     onClicked: {
                         if (clickTimer.running) {
-                            presenter.selectWordPieceForSecondWord(index);
+                            presenter.selectWordPieceForSecondInputWord(index);
                             clickTimer.stop();
                         }
                         else {
@@ -437,6 +437,14 @@ Item {
                     text: modelData
                     color: presenter.firstWordInputPiecesTextColors[index]
                 }
+
+                MouseArea {
+                    anchors.fill: parent
+
+                    onClicked: {
+                        presenter.removeWordPiecesFromFirstInputWord(index);
+                    }
+                }
             }
         }
 
@@ -456,6 +464,14 @@ Item {
                     anchors.centerIn: parent
                     text: modelData
                     color: presenter.secondWordInputPiecesTextColors[index]
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+
+                    onClicked: {
+                        presenter.removeWordPiecesFromSecondInputWord(index);
+                    }
                 }
             }
         }

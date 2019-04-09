@@ -73,20 +73,32 @@ void GameFacade::setLevel(Game::Level level)
     Q_EMIT statusChanged(Game::StatusCodes::LEVEL_CHANGED);
 }
 
-void GameFacade::selectWordPieceForFirstWord(int index)
+void GameFacade::selectWordPieceForFirstInputWord(int wordPieceIndex)
 {
-    if (!m_pWordPairOwner->getMixedWordsPieces().at(index).isSelected)
+    if (!m_pWordPairOwner->getMixedWordsPieces().at(wordPieceIndex).isSelected)
     {
-        Q_EMIT statusChanged(m_pInputBuilder->addPieceToFirstWordInput(index) ? Game::StatusCodes::PIECE_SUCCESSFULLY_ADDED : Game::StatusCodes::PIECE_NOT_ADDED);
+        Q_EMIT statusChanged(m_pInputBuilder->addPieceToFirstWordInput(wordPieceIndex) ? Game::StatusCodes::PIECE_SUCCESSFULLY_ADDED : Game::StatusCodes::PIECE_NOT_ADDED);
     }
 }
 
-void GameFacade::selectWordPieceForSecondWord(int index)
+void GameFacade::selectWordPieceForSecondInputWord(int wordPieceIndex)
 {
-    if (!m_pWordPairOwner->getMixedWordsPieces().at(index).isSelected)
+    if (!m_pWordPairOwner->getMixedWordsPieces().at(wordPieceIndex).isSelected)
     {
-        Q_EMIT statusChanged(m_pInputBuilder->addPieceToSecondWordInput(index) ? Game::StatusCodes::PIECE_SUCCESSFULLY_ADDED : Game::StatusCodes::PIECE_NOT_ADDED);
+        Q_EMIT statusChanged(m_pInputBuilder->addPieceToSecondWordInput(wordPieceIndex) ? Game::StatusCodes::PIECE_SUCCESSFULLY_ADDED : Game::StatusCodes::PIECE_NOT_ADDED);
     }
+}
+
+void GameFacade::removeWordPiecesFromFirstInputWord(int inputRangeStart)
+{
+    m_pInputBuilder->removePiecesFromFirstWordInput(inputRangeStart);
+    Q_EMIT statusChanged(Game::StatusCodes::PIECES_REMOVED);
+}
+
+void GameFacade::removeWordPiecesFromSecondInputWord(int inputRangeStart)
+{
+    m_pInputBuilder->removePiecesFromSecondWordInput(inputRangeStart);
+    Q_EMIT statusChanged(Game::StatusCodes::PIECES_REMOVED);
 }
 
 const QVector<Game::WordPiece> GameFacade::getMixedWordsPieces() const
