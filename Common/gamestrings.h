@@ -212,6 +212,7 @@ namespace GameStrings {
 
     // colors
     const QString c_BackgroundColor                     {    "lightblue"                                                                                };
+    const QString c_BackgroundSelectedColor             {    "brown"                                                                                    };
     const QString c_BorderColor                         {    "black"                                                                                    };
     const QString c_TextColor                           {    "black"                                                                                    };
     const QString c_FatalErrorTextColor                 {    "red"                                                                                      };

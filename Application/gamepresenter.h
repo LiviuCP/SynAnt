@@ -25,8 +25,12 @@ class GamePresenter : public QObject
     Q_PROPERTY(QList<QVariant> mixedWordsPiecesSelections READ getMixedWordsPiecesSelections NOTIFY selectionChanged)
     Q_PROPERTY(QList<QVariant> firstWordInputPiecesContent READ getFirstWordInputPiecesContent NOTIFY inputChanged)
     Q_PROPERTY(QList<QVariant> firstWordInputPiecesTextColors READ getFirstWordInputPiecesTextColors NOTIFY inputChanged)
+    Q_PROPERTY(bool isFirstWordInputHovered READ getIsFirstWordInputHovered NOTIFY hoverChanged)
+    Q_PROPERTY(int firstWordInputHoverIndex READ getFirstWordInputHoverIndex NOTIFY hoverChanged)
     Q_PROPERTY(QList<QVariant> secondWordInputPiecesContent READ getSecondWordInputPiecesContent NOTIFY inputChanged)
     Q_PROPERTY(QList<QVariant> secondWordInputPiecesTextColors READ getSecondWordInputPiecesTextColors NOTIFY inputChanged)
+    Q_PROPERTY(bool isSecondWordInputHovered READ getIsSecondWordInputHovered NOTIFY hoverChanged)
+    Q_PROPERTY(int secondWordInputHoverIndex READ getSecondWordInputHoverIndex NOTIFY hoverChanged)
     Q_PROPERTY(int levelEasy READ getLevelEasy CONSTANT)
     Q_PROPERTY(int levelMedium READ getLevelMedium CONSTANT)
     Q_PROPERTY(int levelHard READ getLevelHard CONSTANT)
@@ -88,6 +92,7 @@ class GamePresenter : public QObject
 
     // color properties
     Q_PROPERTY(QColor backgroundColor READ getBackgroundColor CONSTANT)
+    Q_PROPERTY(QColor backgroundSelectedColor READ getBackgroundSelectedColor CONSTANT)
     Q_PROPERTY(QColor pushButtonColor READ getPushButtonColor CONSTANT)
     Q_PROPERTY(QColor borderColor READ getBorderColor CONSTANT)
     Q_PROPERTY(QColor textColor READ getTextColor CONSTANT)
@@ -116,6 +121,9 @@ public:
     Q_INVOKABLE void selectWordPieceForSecondInputWord(int wordPieceIndex);
     Q_INVOKABLE void removeWordPiecesFromFirstInputWord(int inputRangeStart);
     Q_INVOKABLE void removeWordPiecesFromSecondInputWord(int inputRangeStart);
+    Q_INVOKABLE void updateFirstWordInputHoverIndex(int index);
+    Q_INVOKABLE void updateSecondWordInputHoverIndex(int index);
+    Q_INVOKABLE void clearWordInputHoverIndexes();
 
     bool getIntroPaneVisible() const;
     bool getHelpPaneVisible() const;
@@ -129,8 +137,12 @@ public:
     QList<QVariant> getMixedWordsPiecesSelections() const;
     QList<QVariant> getFirstWordInputPiecesContent() const;
     QList<QVariant> getFirstWordInputPiecesTextColors() const;
+    bool getIsFirstWordInputHovered() const;
+    int getFirstWordInputHoverIndex() const;
     QList<QVariant> getSecondWordInputPiecesContent() const;
     QList<QVariant> getSecondWordInputPiecesTextColors() const;
+    bool getIsSecondWordInputHovered() const;
+    int getSecondWordInputHoverIndex() const;
 
     int getLevelEasy() const;
     int getLevelMedium() const;
@@ -191,6 +203,7 @@ public:
     QString getCloseButtonToolTip() const;
 
     QColor getBackgroundColor() const;
+    QColor getBackgroundSelectedColor() const;
     QColor getPushButtonColor() const;
     QColor getBorderColor() const;
     QColor getTextColor() const;
@@ -211,8 +224,10 @@ signals:
     Q_SIGNAL void mainPaneStatusMessageChanged();
     Q_SIGNAL void mainPaneStatisticsMessagesChanged();
     Q_SIGNAL void errorMessageChanged();
+    Q_SIGNAL void hoverChanged();
 
 private slots:
+    void _onInputChanged();
     void _onStatisticsChanged();
     void _onStatusChanged(Game::StatusCodes statusCode);
 
@@ -234,6 +249,9 @@ private:
     QString m_ErrorMessage;
 
     Pane m_CurrentPane;
+
+    int m_FirstWordInputHoverIndex;
+    int m_SecondWordInputHoverIndex;
 
     GameFacade* m_pGameFacade;
 };

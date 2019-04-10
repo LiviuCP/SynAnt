@@ -428,7 +428,7 @@ Item {
                 width: parent.width / mixedWordsRepeater.count
                 height: parent.height
 
-                color: paneColor
+                color: presenter.isFirstWordInputHovered && presenter.firstWordInputHoverIndex <= index ? presenter.backgroundSelectedColor : presenter.backgroundColor
                 border.color: borderColor
 
                 Text {
@@ -440,6 +440,10 @@ Item {
 
                 MouseArea {
                     anchors.fill: parent
+                    hoverEnabled: true
+
+                    onEntered: presenter.updateFirstWordInputHoverIndex(index)
+                    onExited: presenter.clearWordInputHoverIndexes()
 
                     onClicked: {
                         presenter.removeWordPiecesFromFirstInputWord(index);
@@ -456,7 +460,7 @@ Item {
                 width: parent.width / mixedWordsRepeater.count
                 height: parent.height
 
-                color: paneColor
+                color: presenter.isSecondWordInputHovered && presenter.secondWordInputHoverIndex <= index ? presenter.backgroundSelectedColor : presenter.backgroundColor
                 border.color: borderColor
 
                 Text {
@@ -468,6 +472,10 @@ Item {
 
                 MouseArea {
                     anchors.fill: parent
+                    hoverEnabled: true
+
+                    onEntered: presenter.updateSecondWordInputHoverIndex(index)
+                    onExited: presenter.clearWordInputHoverIndexes()
 
                     onClicked: {
                         presenter.removeWordPiecesFromSecondInputWord(index);

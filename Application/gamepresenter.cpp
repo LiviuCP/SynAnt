@@ -32,6 +32,8 @@ GamePresenter::GamePresenter(QObject *parent)
     , m_WindowTitle{GameStrings::c_IntroWindowTitle}
     , m_MainPaneStatusMessage {GameStrings::c_InitialStatusMessage}
     , m_CurrentPane {Pane::INTRO}
+    , m_FirstWordInputHoverIndex{-1}
+    , m_SecondWordInputHoverIndex{-1}
     , m_pGameFacade {new GameFacade{QGuiApplication::applicationDirPath(), this}}
 {
     Q_ASSERT(m_pGameFacade);
@@ -42,7 +44,7 @@ GamePresenter::GamePresenter(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::mixedWordsChanged, this, &GamePresenter::mixedWordsChanged);
     Q_ASSERT(connected);
-    connected = connect(m_pGameFacade, &GameFacade::inputChanged, this, &GamePresenter::inputChanged);
+    connected = connect(m_pGameFacade, &GameFacade::inputChanged, this, &GamePresenter::_onInputChanged);
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::selectionChanged, this, &GamePresenter::selectionChanged);
     Q_ASSERT(connected);
@@ -170,6 +172,26 @@ void GamePresenter::removeWordPiecesFromSecondInputWord(int inputRangeStart)
     m_pGameFacade->removeWordPiecesFromSecondInputWord(inputRangeStart);
 }
 
+void GamePresenter::updateFirstWordInputHoverIndex(int index)
+{
+    m_FirstWordInputHoverIndex = index;
+    Q_EMIT hoverChanged();
+}
+
+void GamePresenter::updateSecondWordInputHoverIndex(int index)
+{
+    m_SecondWordInputHoverIndex = index;
+    Q_EMIT hoverChanged();
+}
+
+void GamePresenter::clearWordInputHoverIndexes()
+{
+    m_FirstWordInputHoverIndex = -1;
+    m_SecondWordInputHoverIndex = -1;
+
+    Q_EMIT hoverChanged();
+}
+
 bool GamePresenter::getIntroPaneVisible() const
 {
     return m_IntroPaneVisible;
@@ -260,6 +282,16 @@ QList<QVariant> GamePresenter::getFirstWordInputPiecesTextColors() const
     return firstWordInputPiecesTextColors;
 }
 
+int GamePresenter::getFirstWordInputHoverIndex() const
+{
+    return m_FirstWordInputHoverIndex;
+}
+
+bool GamePresenter::getIsFirstWordInputHovered() const
+{
+    return (m_FirstWordInputHoverIndex != -1);
+}
+
 QList<QVariant> GamePresenter::getSecondWordInputPiecesContent() const
 {
     QList<QVariant> secondWordInputPiecesContent;
@@ -282,6 +314,16 @@ QList<QVariant> GamePresenter::getSecondWordInputPiecesTextColors() const
     }
 
     return secondWordInputPiecesTextColors;
+}
+
+bool GamePresenter::getIsSecondWordInputHovered() const
+{
+    return (m_SecondWordInputHoverIndex != -1);
+}
+
+int GamePresenter::getSecondWordInputHoverIndex() const
+{
+    return m_SecondWordInputHoverIndex;
 }
 
 int GamePresenter::getLevelEasy() const
@@ -549,6 +591,11 @@ QColor GamePresenter::getBackgroundColor() const
     return QColor{GameStrings::c_BackgroundColor};
 }
 
+QColor GamePresenter::getBackgroundSelectedColor() const
+{
+    return QColor{GameStrings::c_BackgroundSelectedColor};
+}
+
 QColor GamePresenter::getPushButtonColor() const
 {
     return QColor{GameStrings::c_PushButtonColor};
@@ -572,6 +619,12 @@ QColor GamePresenter::getFatalErrorTextColor() const
 QColor GamePresenter::getWordPieceSelectedColor() const
 {
     return QColor{GameStrings::c_WordPieceSelectedBackgroundColor};
+}
+
+void GamePresenter::_onInputChanged()
+{
+    clearWordInputHoverIndexes();
+    Q_EMIT inputChanged();
 }
 
 void GamePresenter::_onStatisticsChanged()
