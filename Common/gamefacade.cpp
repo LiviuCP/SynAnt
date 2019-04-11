@@ -79,6 +79,10 @@ void GameFacade::selectWordPieceForFirstInputWord(int wordPieceIndex)
     {
         Q_EMIT statusChanged(m_pInputBuilder->addPieceToFirstWordInput(wordPieceIndex) ? Game::StatusCodes::PIECE_SUCCESSFULLY_ADDED : Game::StatusCodes::PIECE_NOT_ADDED);
     }
+    else
+    {
+        Q_EMIT statusChanged(Game::StatusCodes::PIECE_ALREADY_ADDED);
+    }
 }
 
 void GameFacade::selectWordPieceForSecondInputWord(int wordPieceIndex)
@@ -86,6 +90,10 @@ void GameFacade::selectWordPieceForSecondInputWord(int wordPieceIndex)
     if (!m_pWordPairOwner->getMixedWordsPieces().at(wordPieceIndex).isSelected)
     {
         Q_EMIT statusChanged(m_pInputBuilder->addPieceToSecondWordInput(wordPieceIndex) ? Game::StatusCodes::PIECE_SUCCESSFULLY_ADDED : Game::StatusCodes::PIECE_NOT_ADDED);
+    }
+    else
+    {
+        Q_EMIT statusChanged(Game::StatusCodes::PIECE_ALREADY_ADDED);
     }
 }
 

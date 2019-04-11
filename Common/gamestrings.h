@@ -117,6 +117,7 @@ namespace GameStrings {
                                                              "A new pair of words is available below."
                                                         };
 
+    const QString c_PieceAlreadyAddedMessage            {    "The selected wordpiece has already been added to input!"                                  };
     const QString c_PieceNotAddedMessage                {    "The selected wordpiece cannot be added to user input!"                                    };
     const QString c_PieceSuccessfullyAddedMessage       {    "The selected wordpiece has been successfully added to user input"                         };
     const QString c_PiecesRemovedMessage                {    "One or more wordpieces has been removed from input"                                       };

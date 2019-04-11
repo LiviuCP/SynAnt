@@ -678,11 +678,14 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
     case Game::StatusCodes::LEVEL_CHANGED:
         m_MainPaneStatusMessage = GameStrings::c_LevelChangedMessage;
         break;
-    case Game::StatusCodes::PIECE_SUCCESSFULLY_ADDED:
-        m_MainPaneStatusMessage = GameStrings::c_PieceSuccessfullyAddedMessage;
+    case Game::StatusCodes::PIECE_ALREADY_ADDED:
+        m_MainPaneStatusMessage = GameStrings::c_PieceAlreadyAddedMessage;
         break;
     case Game::StatusCodes::PIECE_NOT_ADDED:
         m_MainPaneStatusMessage = GameStrings::c_PieceNotAddedMessage;
+        break;
+    case Game::StatusCodes::PIECE_SUCCESSFULLY_ADDED:
+        m_MainPaneStatusMessage = GameStrings::c_PieceSuccessfullyAddedMessage;
         break;
     case Game::StatusCodes::PIECES_REMOVED:
         m_MainPaneStatusMessage = GameStrings::c_PiecesRemovedMessage;
