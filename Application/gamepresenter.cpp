@@ -30,7 +30,6 @@ GamePresenter::GamePresenter(QObject *parent)
     , m_StatisticsResetEnabled {false}
     , m_ErrorOccured {false}
     , m_WindowTitle{GameStrings::c_IntroWindowTitle}
-    , m_MainPaneStatusMessage {GameStrings::c_InitialStatusMessage}
     , m_CurrentPane {Pane::INTRO}
     , m_FirstWordInputHoverIndex{-1}
     , m_SecondWordInputHoverIndex{-1}
@@ -659,6 +658,9 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
 {
     switch (statusCode)
     {
+    case Game::StatusCodes::NO_USER_INPUT:
+        m_MainPaneStatusMessage = GameStrings::c_InitialStatusMessage;
+        break;
     case Game::StatusCodes::SUCCESS:
         m_MainPaneStatusMessage = GameStrings::c_SuccessMessage.arg(m_pGameFacade->getFirstWord())
                                                                .arg(m_pGameFacade->getSecondWord())
@@ -690,9 +692,11 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
     case Game::StatusCodes::PIECES_REMOVED:
         m_MainPaneStatusMessage = GameStrings::c_PiecesRemovedMessage;
         break;
-    //reserved for future use
+    case Game::StatusCodes::ALL_PIECES_SELECTED:
+        m_MainPaneStatusMessage = GameStrings::c_AllPiecesAddedMessage;
+        break;
     default:
-        ;
+        m_MainPaneStatusMessage = GameStrings::c_DefaultStatusMessage;
     }
 
     Q_EMIT mainPaneStatusMessageChanged();

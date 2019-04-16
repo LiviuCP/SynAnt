@@ -34,6 +34,8 @@ namespace Game
         PIECE_NOT_ADDED,
         PIECE_SUCCESSFULLY_ADDED,
         PIECES_REMOVED,
+        ALL_PIECES_SELECTED,
+        DEFAULT,
         StatusCodesCount
     };
 
@@ -59,6 +61,8 @@ namespace Game
 
     static constexpr int c_ToolTipDelay{1000};
     static constexpr int c_ToolTipTimeout{4000};
+    static constexpr int c_StdStatusUpdateTimeout{1000};
+    static constexpr int c_ExtStatusUpdateTimeout{2000};
 
     enum class PieceTypes
     {

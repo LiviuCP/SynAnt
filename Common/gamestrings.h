@@ -84,7 +84,7 @@ namespace GameStrings {
     const QString c_FileName                            {    "data"                                                                                     };
     const QString c_NoFile                              {    ""                                                                                         };
 
-    // status and instructions messages
+    // general window messages
     const QString c_IntroWindowWelcomeMessage           {
                                                              "\n\t\tWelcome to SynAnt!\n\n\n"
                                                              "\nIt's simple!\n"
@@ -109,6 +109,20 @@ namespace GameStrings {
                                                              "\nPress Reset to reset the scores and number of pairs.\n"
                                                         };
 
+    // statistics messages
+    const QString c_HighscoresMessage                   {    "High-score: %1/%2"                                                                        };
+    const QString c_WordPairsMessage                    {    "Word pairs: %1/%2"                                                                        };
+
+    // status messages
+    const QString c_DefaultStatusMessage                {    "Please select a new word piece or delete one/more if necessary"                           };
+    const QString c_InitialStatusMessage                {    "No user input so far"                                                                    };
+
+    const QString c_PieceAlreadyAddedMessage            {    "The selected wordpiece has already been added to input!"                                  };
+    const QString c_PieceNotAddedMessage                {    "The selected wordpiece cannot be added to the input of the required word!"                };
+    const QString c_PieceSuccessfullyAddedMessage       {    "The selected wordpiece has been successfully added to user input"                         };
+    const QString c_PiecesRemovedMessage                {    "One or more wordpieces has been removed from input"                                       };
+    const QString c_AllPiecesAddedMessage               {    "All pieces selected. Hit Submit or correct the input if needed"                           };
+
     const QString c_SuccessMessage                      {
                                                              "Congrats! You entered the correct words."
                                                              "\n\nThe two words are:\n\n"
@@ -119,6 +133,8 @@ namespace GameStrings {
                                                              "\n\nA new pair of words is available below."
                                                         };
 
+    const QString c_IncorrectWordsMessage               {    "You didn't enter the correct words.\n\nPlease correct input and try again!"               };
+
     const QString c_RequestedByUserMessage              {
                                                              "\nThe correct words are:\n\n"
                                                              "\t%1\n"
@@ -128,22 +144,12 @@ namespace GameStrings {
                                                              "\n\nA new pair of words is available below."
                                                         };
 
+    const QString c_ScoresResetMessage                  {    "The statistics have been reset!\n"                                                        };
+
     const QString c_LevelChangedMessage                 {
-                                                             "Level changed.\n\n"
-                                                             "A new pair of words is available below."
+                                                             "Level changed\n\n"
+                                                             "A new pair of words is available below"
                                                         };
-
-    const QString c_PieceAlreadyAddedMessage            {    "The selected wordpiece has already been added to input!"                                  };
-    const QString c_PieceNotAddedMessage                {    "The selected wordpiece cannot be added to user input!"                                    };
-    const QString c_PieceSuccessfullyAddedMessage       {    "The selected wordpiece has been successfully added to user input"                         };
-    const QString c_PiecesRemovedMessage                {    "One or more wordpieces has been removed from input"                                       };
-
-    const QString c_MissingWordsMessage                 {    "At least one of the words hasn't been entered.\n\nPlease try again!"                      };
-    const QString c_IncorrectWordsMessage               {    "You didn't enter the correct words.\n\nPlease try again!"                                 };
-    const QString c_InitialStatusMessage                {    "No user input so far."                                                                    };
-    const QString c_ScoresResetMessage                  {    "\nScores reset.\n\nLevel unchanged.\n\nNo user input so far.\n"                           };
-    const QString c_HighscoresMessage                   {    "High-score: %1/%2"                                                                        };
-    const QString c_WordPairsMessage                    {    "Word pairs: %1/%2"                                                                        };
 
     // exception messages
     const QString c_FileNotFoundMessage                 {    "File not found!\n"                                                                        };

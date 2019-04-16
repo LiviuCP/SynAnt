@@ -12,20 +12,26 @@ GameFacade::GameFacade(QString applicationPath, QObject *parent)
     , m_pInputBuilder{new InputBuilder{this}}
     , m_pWordMixer{nullptr}
     , m_pScoreItem {new ScoreItem{this}}
+    , m_pStatusUpdateTimer{new QTimer{this}}
+    , m_CurrentStatusCode{Game::StatusCodes::DEFAULT}
+    , m_NextStatusCode{Game::StatusCodes::DEFAULT}
 {
     m_pWordMixer = new WordMixer{m_ApplicationPath + "/" + GameStrings::c_FileName, this};
     m_pWordPairOwner->connectToWordMixer(m_pWordMixer);
     m_pInputBuilder->connectToWordPairOwner(m_pWordPairOwner);
+    m_pStatusUpdateTimer->setSingleShot(true);
 
     bool connected = connect(m_pWordPairOwner, &WordPairOwner::mixedWordsAvailable, this, &GameFacade::mixedWordsChanged);
+    Q_ASSERT(connected);
+    connected = connect(m_pWordPairOwner, &WordPairOwner::selectionChanged, this, &GameFacade::selectionChanged);
     Q_ASSERT(connected);
     connected = connect(m_pInputBuilder, &InputBuilder::inputChanged, this, &GameFacade::inputChanged);
     Q_ASSERT(connected);
     connected = connect(m_pInputBuilder, &InputBuilder::completionChanged, this, &GameFacade::completionChanged);
     Q_ASSERT(connected);
-    connected = connect(m_pWordPairOwner, &WordPairOwner::selectionChanged, this, &GameFacade::selectionChanged);
-    Q_ASSERT(connected);
     connected = connect(m_pScoreItem, &ScoreItem::statisticsUpdated, this, &GameFacade::statisticsChanged);
+    Q_ASSERT(connected);
+    connected = connect(m_pStatusUpdateTimer, &QTimer::timeout, this, &GameFacade::_onStatusUpdateTimeout);
     Q_ASSERT(connected);
 }
 
@@ -33,6 +39,7 @@ void GameFacade::startGame()
 {
     Q_EMIT statisticsChanged();
     m_pWordMixer->mixWords();
+    _updateStatus(Game::StatusCodes::NO_USER_INPUT);
 }
 
 void GameFacade::handleSubmitRequest()
@@ -42,7 +49,7 @@ void GameFacade::handleSubmitRequest()
 
     Game::StatusCodes statusCode{success ? Game::StatusCodes::SUCCESS : Game::StatusCodes::INCORRECT_WORDS};
 
-    Q_EMIT statusChanged(statusCode);
+    _updateStatus(statusCode, success ? Game::StatusCodes::DEFAULT : Game::StatusCodes::ALL_PIECES_SELECTED);
 
     if (success)
     {
@@ -54,14 +61,14 @@ void GameFacade::handleSubmitRequest()
 void GameFacade::provideResultsToUser()
 {
     m_pScoreItem->updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
-    Q_EMIT statusChanged(Game::StatusCodes::REQUESTED_BY_USER);
+    _updateStatus(Game::StatusCodes::REQUESTED_BY_USER);
     m_pWordMixer->mixWords();
 }
 
 void GameFacade::resetStatistics()
 {
     m_pScoreItem->resetStatistics();
-    Q_EMIT statusChanged(Game::StatusCodes::STATISTICS_RESET);
+    _updateStatus(Game::StatusCodes::STATISTICS_RESET, m_pInputBuilder->isInputComplete() ? Game::StatusCodes::ALL_PIECES_SELECTED : Game::StatusCodes::DEFAULT);
 }
 
 void GameFacade::setLevel(Game::Level level)
@@ -70,18 +77,21 @@ void GameFacade::setLevel(Game::Level level)
     m_pScoreItem->setScoreIncrement(level);
     m_pWordMixer->mixWords();
 
-    Q_EMIT statusChanged(Game::StatusCodes::LEVEL_CHANGED);
+    _updateStatus(Game::StatusCodes::LEVEL_CHANGED);
 }
 
 void GameFacade::selectWordPieceForFirstInputWord(int wordPieceIndex)
 {
     if (!m_pWordPairOwner->getMixedWordsPieces().at(wordPieceIndex).isSelected)
     {
-        Q_EMIT statusChanged(m_pInputBuilder->addPieceToFirstWordInput(wordPieceIndex) ? Game::StatusCodes::PIECE_SUCCESSFULLY_ADDED : Game::StatusCodes::PIECE_NOT_ADDED);
+        // adding piece should always occur before updating status
+        bool pieceAdded{m_pInputBuilder->addPieceToFirstWordInput(wordPieceIndex)};
+        _updateStatus(pieceAdded ? Game::StatusCodes::PIECE_SUCCESSFULLY_ADDED : Game::StatusCodes::PIECE_NOT_ADDED,
+                      m_pInputBuilder->isInputComplete() ? Game::StatusCodes::ALL_PIECES_SELECTED : Game::StatusCodes::DEFAULT);
     }
     else
     {
-        Q_EMIT statusChanged(Game::StatusCodes::PIECE_ALREADY_ADDED);
+        _updateStatus(Game::StatusCodes::PIECE_ALREADY_ADDED, m_pInputBuilder->isInputComplete() ? Game::StatusCodes::ALL_PIECES_SELECTED : Game::StatusCodes::DEFAULT);
     }
 }
 
@@ -89,24 +99,27 @@ void GameFacade::selectWordPieceForSecondInputWord(int wordPieceIndex)
 {
     if (!m_pWordPairOwner->getMixedWordsPieces().at(wordPieceIndex).isSelected)
     {
-        Q_EMIT statusChanged(m_pInputBuilder->addPieceToSecondWordInput(wordPieceIndex) ? Game::StatusCodes::PIECE_SUCCESSFULLY_ADDED : Game::StatusCodes::PIECE_NOT_ADDED);
+        // adding piece should always occur before updating status
+        bool pieceAdded{m_pInputBuilder->addPieceToSecondWordInput(wordPieceIndex)};
+        _updateStatus(pieceAdded ? Game::StatusCodes::PIECE_SUCCESSFULLY_ADDED : Game::StatusCodes::PIECE_NOT_ADDED,
+                      m_pInputBuilder->isInputComplete() ? Game::StatusCodes::ALL_PIECES_SELECTED : Game::StatusCodes::DEFAULT);
     }
     else
     {
-        Q_EMIT statusChanged(Game::StatusCodes::PIECE_ALREADY_ADDED);
+        _updateStatus(Game::StatusCodes::PIECE_ALREADY_ADDED, m_pInputBuilder->isInputComplete() ? Game::StatusCodes::ALL_PIECES_SELECTED : Game::StatusCodes::DEFAULT);
     }
 }
 
 void GameFacade::removeWordPiecesFromFirstInputWord(int inputRangeStart)
 {
     m_pInputBuilder->removePiecesFromFirstWordInput(inputRangeStart);
-    Q_EMIT statusChanged(Game::StatusCodes::PIECES_REMOVED);
+    _updateStatus(Game::StatusCodes::PIECES_REMOVED);
 }
 
 void GameFacade::removeWordPiecesFromSecondInputWord(int inputRangeStart)
 {
     m_pInputBuilder->removePiecesFromSecondWordInput(inputRangeStart);
-    Q_EMIT statusChanged(Game::StatusCodes::PIECES_REMOVED);
+    _updateStatus(Game::StatusCodes::PIECES_REMOVED);
 }
 
 const QVector<Game::WordPiece> GameFacade::getMixedWordsPieces() const
@@ -162,4 +175,40 @@ bool GameFacade::isInputComplete() const
 bool GameFacade::areSynonyms() const
 {
     return m_pWordPairOwner->areSynonyms();
+}
+
+void GameFacade::_onStatusUpdateTimeout()
+{
+    Q_EMIT statusChanged(m_NextStatusCode);
+    m_CurrentStatusCode = m_NextStatusCode;
+}
+
+void GameFacade::_updateStatus(Game::StatusCodes tempStatusCode, Game::StatusCodes permStatusCode)
+{
+    if (tempStatusCode != m_CurrentStatusCode || permStatusCode != m_CurrentStatusCode)
+    {
+        // cancel any delayed status update, no more required
+        if (m_pStatusUpdateTimer->isActive())
+        {
+            m_pStatusUpdateTimer->stop();
+        }
+
+        if (tempStatusCode != m_CurrentStatusCode)
+        {
+            m_CurrentStatusCode = tempStatusCode;
+            Q_EMIT statusChanged(m_CurrentStatusCode);
+        }
+
+        if (permStatusCode != m_CurrentStatusCode)
+        {
+            m_pStatusUpdateTimer->setInterval(m_CurrentStatusCode == Game::StatusCodes::REQUESTED_BY_USER || m_CurrentStatusCode == Game::StatusCodes::SUCCESS ?
+                                              Game::c_ExtStatusUpdateTimeout : Game::c_StdStatusUpdateTimeout);
+            m_NextStatusCode = permStatusCode;
+            m_pStatusUpdateTimer->start();
+        }
+        else
+        {
+            m_NextStatusCode = m_CurrentStatusCode;
+        }
+    }
 }

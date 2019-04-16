@@ -2,6 +2,7 @@
 #define GAMEFACADE_H
 
 #include <QObject>
+#include <QTimer>
 
 #include "game.h"
 
@@ -47,17 +48,25 @@ public:
 signals:
     Q_SIGNAL void mixedWordsChanged();
     Q_SIGNAL void inputChanged();
+    Q_SIGNAL void completionChanged();
     Q_SIGNAL void selectionChanged();
     Q_SIGNAL void statisticsChanged();
-    Q_SIGNAL void completionChanged();
     Q_SIGNAL void statusChanged(Game::StatusCodes status);
 
+private slots:
+    void _onStatusUpdateTimeout();
+
 private:
+    void _updateStatus(Game::StatusCodes tempStatusCode, Game::StatusCodes permStatusCode = Game::StatusCodes::DEFAULT);
+
     QString m_ApplicationPath;
     WordPairOwner* m_pWordPairOwner;
     InputBuilder* m_pInputBuilder;
     WordMixer* m_pWordMixer;
     ScoreItem* m_pScoreItem;
+    QTimer* m_pStatusUpdateTimer;
+    Game::StatusCodes m_CurrentStatusCode;
+    Game::StatusCodes m_NextStatusCode;
 };
 
 #endif // GAMEFACADE_H
