@@ -39,7 +39,12 @@ void GameFacade::startGame()
 {
     Q_EMIT statisticsChanged();
     m_pWordMixer->mixWords();
-    _updateStatus(Game::StatusCodes::NO_USER_INPUT);
+    _updateStatus(Game::StatusCodes::GAME_STARTED);
+}
+
+void GameFacade::resumeGame()
+{
+    _updateStatus(Game::StatusCodes::GAME_RESUMED, m_pInputBuilder->isInputComplete() ? Game::StatusCodes::ALL_PIECES_SELECTED : Game::StatusCodes::DEFAULT);
 }
 
 void GameFacade::handleSubmitRequest()

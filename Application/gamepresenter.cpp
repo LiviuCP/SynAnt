@@ -92,6 +92,10 @@ void GamePresenter::switchToPane(Pane pane)
                     m_MainPaneInitialized = true;
                     m_pGameFacade -> startGame();
                 }
+                else
+                {
+                    m_pGameFacade -> resumeGame();
+                }
                 m_MainPaneVisible = true;
                 Q_EMIT mainPaneVisibleChanged();
                 break;
@@ -658,8 +662,11 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
 {
     switch (statusCode)
     {
-    case Game::StatusCodes::NO_USER_INPUT:
-        m_MainPaneStatusMessage = GameStrings::c_InitialStatusMessage;
+    case Game::StatusCodes::GAME_STARTED:
+        m_MainPaneStatusMessage = GameStrings::c_GameStartedMessage;
+        break;
+    case Game::StatusCodes::GAME_RESUMED:
+        m_MainPaneStatusMessage = GameStrings::c_GameResumedMessage;
         break;
     case Game::StatusCodes::SUCCESS:
         m_MainPaneStatusMessage = GameStrings::c_SuccessMessage.arg(m_pGameFacade->getFirstWord())

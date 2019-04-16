@@ -18,6 +18,7 @@ public:
     explicit GameFacade(QString applicationPath, QObject *parent = nullptr);
 
     void startGame();
+    void resumeGame();
     void handleSubmitRequest();
     void provideResultsToUser();
     void resetStatistics();

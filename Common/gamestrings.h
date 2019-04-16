@@ -115,7 +115,8 @@ namespace GameStrings {
 
     // status messages
     const QString c_DefaultStatusMessage                {    "Please select a new word piece or delete one/more if necessary"                           };
-    const QString c_InitialStatusMessage                {    "No user input so far"                                                                    };
+    const QString c_GameStartedMessage                  {    "Game started"                                                                             };
+    const QString c_GameResumedMessage                  {    "Game resumed"                                                                             };
 
     const QString c_PieceAlreadyAddedMessage            {    "The selected wordpiece has already been added to input!"                                  };
     const QString c_PieceNotAddedMessage                {    "The selected wordpiece cannot be added to the input of the required word!"                };
