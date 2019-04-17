@@ -224,6 +224,8 @@ namespace GameStrings {
     const QString c_ResetButtonToolTip                  {    "Click or hit ALT+R for resetting the scores and number of pairs."                         };
     const QString c_GameInstructionsToolTip             {    "Displays the game instructions."                                                          };
     const QString c_GameStatusToolTip                   {    "Displays the game status (e.g. if 2 correct words were entered)."                         };
+    const QString c_FirstWordInputToolTip               {    "Click to remove the selected chunk of pieces from the first word input."                  };
+    const QString c_SecondWordInputToolTip              {    "Click to remove the selected chunk of pieces from the second word input."                 };
     const QString c_MainWindowToolTip                   {    "This is where the action happens!"                                                        };
     const QString c_FatalErrorQuitButtonToolTip         {    "Click or hit ALT+C to exit the game."                                                     };
     const QString c_FatalErrorWindowToolTip             {    "A fatal error occurred. Corrective actions are required."                                 };

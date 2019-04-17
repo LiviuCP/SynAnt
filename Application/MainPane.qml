@@ -439,6 +439,7 @@ Item {
                 }
 
                 MouseArea {
+                    id: firstWordInputCurrentPieceMouseArea
                     anchors.fill: parent
                     hoverEnabled: true
 
@@ -448,6 +449,14 @@ Item {
                     onClicked: {
                         presenter.removeWordPiecesFromFirstInputWord(index);
                     }
+                }
+
+                ToolTip {
+                    id: firstWordInputCurrentPieceToolTip
+                    delay: presenter.toolTipDelay
+                    timeout: presenter.toolTipTimeout
+                    text: presenter.firstWordInputToolTip
+                    visible: firstWordInputCurrentPieceMouseArea.containsMouse
                 }
             }
         }
@@ -471,6 +480,7 @@ Item {
                 }
 
                 MouseArea {
+                    id: secondWordInputCurrentPieceMouseArea
                     anchors.fill: parent
                     hoverEnabled: true
 
@@ -480,6 +490,14 @@ Item {
                     onClicked: {
                         presenter.removeWordPiecesFromSecondInputWord(index);
                     }
+                }
+
+                ToolTip {
+                    id: secondWordInputCurrentPieceToolTip
+                    delay: presenter.toolTipDelay
+                    timeout: presenter.toolTipTimeout
+                    text: presenter.secondWordInputToolTip
+                    visible: secondWordInputCurrentPieceMouseArea.containsMouse
                 }
             }
         }

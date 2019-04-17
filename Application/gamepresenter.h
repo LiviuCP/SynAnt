@@ -80,6 +80,8 @@ class GamePresenter : public QObject
     Q_PROPERTY(QString wordPairsToolTip READ getWordPairsToolTip CONSTANT)
     Q_PROPERTY(QString gameInstructionsToolTip READ getGameInstructionsToolTip CONSTANT)
     Q_PROPERTY(QString gameStatusToolTip READ getGameStatusToolTip CONSTANT)
+    Q_PROPERTY(QString firstWordInputToolTip READ getFirstWordInputToolTip CONSTANT)
+    Q_PROPERTY(QString secondWordInputToolTip READ getSecondWordInputToolTip CONSTANT)
     Q_PROPERTY(QString playButtonToolTip READ getPlayButtonToolTip CONSTANT)
     Q_PROPERTY(QString helpButtonToolTip READ getHelpButtonToolTip CONSTANT)
     Q_PROPERTY(QString quitButtonToolTip READ getQuitButtonToolTip CONSTANT)
@@ -192,6 +194,8 @@ public:
     QString getWordPairsToolTip() const;
     QString getGameInstructionsToolTip() const;
     QString getGameStatusToolTip() const;
+    QString getFirstWordInputToolTip() const;
+    QString getSecondWordInputToolTip() const;
     QString getPlayButtonToolTip() const;
     QString getHelpButtonToolTip() const;
     QString getQuitButtonToolTip() const;

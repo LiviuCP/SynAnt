@@ -544,6 +544,16 @@ QString GamePresenter::getGameStatusToolTip() const
     return GameStrings::c_GameStatusToolTip;
 }
 
+QString GamePresenter::getFirstWordInputToolTip() const
+{
+    return GameStrings::c_FirstWordInputToolTip;
+}
+
+QString GamePresenter::getSecondWordInputToolTip() const
+{
+    return GameStrings::c_SecondWordInputToolTip;
+}
+
 QString GamePresenter::getPlayButtonToolTip() const
 {
     return GameStrings::c_PlayButtonToolTip;
