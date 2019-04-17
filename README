@@ -2,21 +2,33 @@
 
 This program retrieves a words pair that can either be synonyms or antonyms, divides them in (almost) equal pieces and mixes them. The user should guess the correct words.
 
-1. Supported Operating Systems
+1. Available Versions and Supported Operating Systems
 
-This program has been compiled on Linux (Fedora 28) using Qt 5.9.2 and a 64bit GCC-C++ compiler. It has been deployed on Fedora 28 and OpenSUSE 42.3 so far. The app is currently not supported on OS-X/Mac OS or Windows.
+Currently there are two versions on this repo: v1.2 and v2.0.
+
+In version 1.2 the program has been compiled on Linux (Fedora 28) using Qt 5.9.2 and a 64bit GCC-C++ compiler. It has been deployed on Fedora 28 and OpenSUSE 42.3 so far.
+
+Version 2.0 is currently under construction (see the branches containing v2.0 in the description for more information about the code).
+
+The app is currently not supported on any non-Linux operating system.
 
 2. Build 
 
-Currently there are 2 branches, each of them containing an implementation of the application: qWidgetsVersion and qmlVersion (the master branch currently replicates qmlVersion). Choose the branch you would like to use and then compile it.
+For version 1.2 there are 2 branches, each of them containing an implementation of the application:
+- SynAnt_v1.2_QWidgets
+- SynAnt_v1.2_QML
+
+Choose the branch you would like to use and then compile it.
 
 After compiling the code copy the file "data" in the Application sub-directory. Feel free to modify it by adding new word pairs.
 
 The file should keep its name ("data"), otherwise it won't be recognized by the app and an error will be triggered.
 
+Currently same steps can be followed for version 2.0, however this is subject to change as the version is work-in-progress. One thing to be mentioned is that the QWidgets support will be removed in version 2.0 and only the QML implementation will continue to be used.
+
 3. Deploying the app
 
-I used linuxdeployqt for having all necessary libs added to the application so it can run on Linux machines where Qt is not installed. In order to successfully create the deployable package please follow these steps:
+For version 1.2 I used linuxdeployqt for having all necessary libs added to the application so it can run on Linux machines where Qt is not installed. In order to successfully create the deployable package please follow these steps:
 - download linuxdeployqt from this GitHub page: https://github.com/probonopd/linuxdeployqt (check instructions from the page for more details)
 - Make the downloaded file executable: chmod a+x linuxdeployqt-continuous-x86_64.AppImage
 - locate the folder where the qmake executable resides. The directory should have a path similar to this: /path/to/Qt/5.9.2/gcc_64/bin
@@ -28,18 +40,20 @@ I used linuxdeployqt for having all necessary libs added to the application so i
 
 - build the application as RELEASE
 - run the linuxdeployqt as follows:
-  - for the qWidgetsVersion branch you only need to provide the path of the executable as argument:
+  - for the SynAnt_v1.2_QWidgets branch you only need to provide the path of the executable as argument:
     /path/to/linuxdeployqt-continuous-x86_64.AppImage /path/to/builddir/Application/SynAnt
-  - for the qmlVersion branch the directory containing the qml files should be provided too. This is located in the Application subdir of the source code directory:
+  - for the SynAnt_v1.2_QML branch the directory containing the qml files should be provided too. This is located in the Application subdir of the source code directory:
     /path/to/linuxdeployqt-continuous-x86_64.AppImage /path/to/builddir/Application/SynAnt -qmldir='/path/to/SynAnt/Application'
-- check that the build directory now contains following folders within the Application subdir: lib, plugins, qml (last one only for the qmlVersion branch)
+- check that the build directory now contains following folders within the Application subdir: lib, plugins, qml (last one only for the SynAnt_v1.2_QML branch)
 - copy the build directory onto a Linux machine where Qt is not installed and check that it runs successfully (should run exactly the same as on the Qt machine)
 
 Note: an error might trigger when running linuxdeployqt mentioning that libjasper.so.1 cannot be found. I solved this error by creating a symbolic link to libjasper.so.4. The symbolic link was placed into the same directory as the libjasper.so.4 file. You can use the locate command (don't forget to execute updatedb as sudo before running it) for finding the libjasper.so files.
 
+For version 2.0 the same deploy steps might be used at the moment as for the QML branch of v1.2, however this is subject to change as the version is under construction.
+
 4. Updating the "data" file
 
-Currently the file can only be updated manually. In a future version I'm planning to add functionality that allows "update through the app" without even needing to know the file name.
+Currently the file can only be updated manually. In a future version (probably 2.0) I'm planning to add functionality that allows "update through the app" without even needing to know the file name.
 
 Each row should contain one word pair. The 2 words from each pair are separated by a special character which is '=' for synonyms and '!' for antonyms. No rows should be left empty or with incorrect format (e.g. no separator/multiple separators) otherwise an exception will be triggered when reading the incorrect row and the program will stop.
 
