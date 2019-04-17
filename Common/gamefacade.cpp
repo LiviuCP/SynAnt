@@ -47,44 +47,6 @@ void GameFacade::resumeGame()
     _updateStatus(Game::StatusCodes::GAME_RESUMED, m_pInputBuilder->isInputComplete() ? Game::StatusCodes::ALL_PIECES_SELECTED : Game::StatusCodes::DEFAULT);
 }
 
-void GameFacade::handleSubmitRequest()
-{
-    bool success{(m_pInputBuilder->getFirstInputWord() == m_pWordPairOwner->getFirstWord() && m_pInputBuilder->getSecondInputWord() == m_pWordPairOwner->getSecondWord()) ||
-                 (m_pInputBuilder->getFirstInputWord() == m_pWordPairOwner->getSecondWord() && m_pInputBuilder->getSecondInputWord() == m_pWordPairOwner->getFirstWord())};
-
-    Game::StatusCodes statusCode{success ? Game::StatusCodes::SUCCESS : Game::StatusCodes::INCORRECT_WORDS};
-
-    _updateStatus(statusCode, success ? Game::StatusCodes::DEFAULT : Game::StatusCodes::ALL_PIECES_SELECTED);
-
-    if (success)
-    {
-        m_pScoreItem->updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
-        m_pWordMixer->mixWords();
-    }
-}
-
-void GameFacade::provideResultsToUser()
-{
-    m_pScoreItem->updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
-    _updateStatus(Game::StatusCodes::REQUESTED_BY_USER);
-    m_pWordMixer->mixWords();
-}
-
-void GameFacade::resetStatistics()
-{
-    m_pScoreItem->resetStatistics();
-    _updateStatus(Game::StatusCodes::STATISTICS_RESET, m_pInputBuilder->isInputComplete() ? Game::StatusCodes::ALL_PIECES_SELECTED : Game::StatusCodes::DEFAULT);
-}
-
-void GameFacade::setLevel(Game::Level level)
-{
-    m_pWordMixer->setWordPieceSize(level);
-    m_pScoreItem->setScoreIncrement(level);
-    m_pWordMixer->mixWords();
-
-    _updateStatus(Game::StatusCodes::LEVEL_CHANGED);
-}
-
 void GameFacade::selectWordPieceForFirstInputWord(int wordPieceIndex)
 {
     if (!m_pWordPairOwner->getMixedWordsPieces().at(wordPieceIndex).isSelected)
@@ -127,6 +89,57 @@ void GameFacade::removeWordPiecesFromSecondInputWord(int inputRangeStart)
     _updateStatus(Game::StatusCodes::PIECES_REMOVED);
 }
 
+void GameFacade::handleSubmitRequest()
+{
+    QString firstInputWord;
+    QString secondInputWord;
+
+    for (auto index : m_pInputBuilder->getFirstWordInputIndexes())
+    {
+        firstInputWord.append(m_pWordPairOwner->getMixedWordsPieces().at(index).content);
+    }
+
+    for (auto index : m_pInputBuilder->getSecondWordInputIndexes())
+    {
+        secondInputWord.append(m_pWordPairOwner->getMixedWordsPieces().at(index).content);
+    }
+
+    bool success{(firstInputWord == m_pWordPairOwner->getFirstReferenceWord() && secondInputWord == m_pWordPairOwner->getSecondReferenceWord()) ||
+                 (firstInputWord == m_pWordPairOwner->getSecondReferenceWord() && secondInputWord == m_pWordPairOwner->getFirstReferenceWord())};
+
+    Game::StatusCodes statusCode{success ? Game::StatusCodes::SUCCESS : Game::StatusCodes::INCORRECT_WORDS};
+
+    _updateStatus(statusCode, success ? Game::StatusCodes::DEFAULT : Game::StatusCodes::ALL_PIECES_SELECTED);
+
+    if (success)
+    {
+        m_pScoreItem->updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
+        m_pWordMixer->mixWords();
+    }
+}
+
+void GameFacade::provideResultsToUser()
+{
+    m_pScoreItem->updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
+    _updateStatus(Game::StatusCodes::REQUESTED_BY_USER);
+    m_pWordMixer->mixWords();
+}
+
+void GameFacade::setLevel(Game::Level level)
+{
+    m_pWordMixer->setWordPieceSize(level);
+    m_pScoreItem->setScoreIncrement(level);
+    m_pWordMixer->mixWords();
+
+    _updateStatus(Game::StatusCodes::LEVEL_CHANGED);
+}
+
+void GameFacade::resetStatistics()
+{
+    m_pScoreItem->resetStatistics();
+    _updateStatus(Game::StatusCodes::STATISTICS_RESET, m_pInputBuilder->isInputComplete() ? Game::StatusCodes::ALL_PIECES_SELECTED : Game::StatusCodes::DEFAULT);
+}
+
 const QVector<Game::WordPiece> GameFacade::getMixedWordsPieces() const
 {
     return m_pWordPairOwner->getMixedWordsPieces();
@@ -140,6 +153,21 @@ const QVector<int> GameFacade::getFirstWordInputIndexes() const
 const QVector<int> GameFacade::getSecondWordInputIndexes() const
 {
     return m_pInputBuilder->getSecondWordInputIndexes();
+}
+
+bool GameFacade::isInputComplete() const
+{
+    return m_pInputBuilder->isInputComplete();
+}
+
+QString GameFacade::getFirstReferenceWord() const
+{
+    return m_pWordPairOwner->getFirstReferenceWord();
+}
+
+QString GameFacade::getSecondReferenceWord() const
+{
+    return m_pWordPairOwner->getSecondReferenceWord();
 }
 
 int GameFacade::getObtainedScore() const
@@ -160,21 +188,6 @@ int GameFacade::getGuessedWordPairs() const
 int GameFacade::getTotalWordPairs() const
 {
     return m_pScoreItem->getTotalWordPairs();
-}
-
-QString GameFacade::getFirstWord() const
-{
-    return m_pWordPairOwner->getFirstWord();
-}
-
-QString GameFacade::getSecondWord() const
-{
-    return m_pWordPairOwner->getSecondWord();
-}
-
-bool GameFacade::isInputComplete() const
-{
-    return m_pInputBuilder->isInputComplete();
 }
 
 bool GameFacade::areSynonyms() const

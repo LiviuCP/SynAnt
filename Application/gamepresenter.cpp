@@ -669,16 +669,16 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         m_MainPaneStatusMessage = GameStrings::c_GameResumedMessage;
         break;
     case Game::StatusCodes::SUCCESS:
-        m_MainPaneStatusMessage = GameStrings::c_SuccessMessage.arg(m_pGameFacade->getFirstWord())
-                                                               .arg(m_pGameFacade->getSecondWord())
+        m_MainPaneStatusMessage = GameStrings::c_SuccessMessage.arg(m_pGameFacade->getFirstReferenceWord())
+                                                               .arg(m_pGameFacade->getSecondReferenceWord())
                                                                .arg(m_pGameFacade->areSynonyms() ? GameStrings::c_Synonyms : GameStrings::c_Antonyms);
         break;
     case Game::StatusCodes::INCORRECT_WORDS:
         m_MainPaneStatusMessage = GameStrings::c_IncorrectWordsMessage;
         break;
     case Game::StatusCodes::REQUESTED_BY_USER:
-        m_MainPaneStatusMessage = GameStrings::c_RequestedByUserMessage.arg(m_pGameFacade->getFirstWord())
-                                                                       .arg(m_pGameFacade->getSecondWord())
+        m_MainPaneStatusMessage = GameStrings::c_RequestedByUserMessage.arg(m_pGameFacade->getFirstReferenceWord())
+                                                                       .arg(m_pGameFacade->getSecondReferenceWord())
                                                                        .arg(m_pGameFacade->areSynonyms() ? GameStrings::c_Synonyms : GameStrings::c_Antonyms);
         break;
     case Game::StatusCodes::STATISTICS_RESET:

@@ -57,14 +57,14 @@ const QVector<Game::WordPiece> WordPairOwner::getMixedWordsPieces() const
     return m_MixedWordsPieces;
 }
 
-QString WordPairOwner::getFirstWord() const
+QString WordPairOwner::getFirstReferenceWord() const
 {
-    return m_FirstWord;
+    return m_FirstReferenceWord;
 }
 
-QString WordPairOwner::getSecondWord() const
+QString WordPairOwner::getSecondReferenceWord() const
 {
-    return m_SecondWord;
+    return m_SecondReferenceWord;
 }
 
 bool WordPairOwner::areSynonyms() const
@@ -76,8 +76,8 @@ void WordPairOwner::_onMixedWordsAvailable()
 {
     _buildMixedWordsPieces();
 
-    m_FirstWord = m_pWordMixer->getFirstWord();
-    m_SecondWord = m_pWordMixer->getSecondWord();
+    m_FirstReferenceWord = m_pWordMixer->getFirstWord();
+    m_SecondReferenceWord = m_pWordMixer->getSecondWord();
     m_AreSynonyms = m_pWordMixer->areSynonyms();
 
     Q_EMIT mixedWordsAvailable();

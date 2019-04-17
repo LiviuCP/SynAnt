@@ -1,3 +1,12 @@
+/*
+   This class connects the front-end UI part of the code (presenter) to the back-end code base:
+   1) Backend classes are being accessed by presenter through facade by executing function calls.
+   2) In return backend classes send signals to presenter through facade.
+   3) The facade checks the user input created by InputBuilder against the reference words contained in WordPairOwner.
+   4) The facade provides decoupling by hiding the backend functionality (WordMixer, ScoreItem, WordPairOwner, InputBuilder) entirely from presenter.
+   5) Last but not least the facade is the only responsible class for updating the status of the game (which is displayed in the status box of the main pane).
+*/
+
 #ifndef GAMEFACADE_H
 #define GAMEFACADE_H
 
@@ -19,30 +28,31 @@ public:
 
     void startGame();
     void resumeGame();
-    void handleSubmitRequest();
-    void provideResultsToUser();
-    void resetStatistics();
-    void setLevel(Game::Level level);
 
     void selectWordPieceForFirstInputWord(int wordPieceIndex);
     void selectWordPieceForSecondInputWord(int wordPieceIndex);
     void removeWordPiecesFromFirstInputWord(int inputRangeStart);
     void removeWordPiecesFromSecondInputWord(int inputRangeStart);
 
+    void handleSubmitRequest();
+    void provideResultsToUser();
+    void setLevel(Game::Level level);
+    void resetStatistics();
+
     const QVector<Game::WordPiece> getMixedWordsPieces() const;
 
     const QVector<int> getFirstWordInputIndexes() const;
     const QVector<int> getSecondWordInputIndexes() const;
 
+    bool isInputComplete() const;
+
+    QString getFirstReferenceWord() const;
+    QString getSecondReferenceWord() const;
+
     int getObtainedScore() const;
     int getTotalAvailableScore() const;
     int getGuessedWordPairs() const;
     int getTotalWordPairs() const;
-
-    QString getFirstWord() const;
-    QString getSecondWord() const;
-
-    bool isInputComplete() const;
 
     bool areSynonyms() const;
 

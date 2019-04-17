@@ -1,13 +1,11 @@
 /*
-
    This class fulfills following tasks:
    1) Reads a randomly chosen line from a file. The line contains 2 words which are either synonyms or antonyms.
    2) Puts the 2 words into separate strings.
    3) Divides each word in more pieces.
    4) Mixes the pieces from all words alltogether into a single array.
       The array is then displayed by the main window.
-   5) Hands over the original words to the facade for checking and sending to presenter for displaying.
-
+   5) Hands over the original words to an owner class (will be used by facade for user input checking or for displaying in the main window when user requests display of results)
 */
 
 

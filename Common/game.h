@@ -12,8 +12,6 @@
 
 namespace Game
 {
-    static constexpr int c_MinWordSize{5};
-
     enum class Level
     {
         EASY,
@@ -46,25 +44,6 @@ namespace Game
         PARTIAL_UPDATE
     };
 
-    const QMap<Game::Level, int> c_ScoreIncrements
-    {
-        {Game::Level::EASY,   1},
-        {Game::Level::MEDIUM, 2},
-        {Game::Level::HARD,   4}
-    };
-
-    const QMap<Game::Level, int> c_WordPieceSizes
-    {
-        {Game::Level::EASY,   3},
-        {Game::Level::MEDIUM, 2},
-        {Game::Level::HARD,   1}
-    };
-
-    static constexpr int c_ToolTipDelay{1000};
-    static constexpr int c_ToolTipTimeout{4000};
-    static constexpr int c_StdStatusUpdateTimeout{1000};
-    static constexpr int c_ExtStatusUpdateTimeout{2000};
-
     enum class PieceTypes
     {
         BEGIN_PIECE,
@@ -78,6 +57,27 @@ namespace Game
         QString content;
         PieceTypes pieceType;
         bool isSelected;
+    };
+
+    static constexpr int c_MinWordSize{5};
+
+    static constexpr int c_ToolTipDelay{1000};
+    static constexpr int c_ToolTipTimeout{4000};
+    static constexpr int c_StdStatusUpdateTimeout{1000};
+    static constexpr int c_ExtStatusUpdateTimeout{2000};
+
+    const QMap<Game::Level, int> c_ScoreIncrements
+    {
+        {Game::Level::EASY,   1},
+        {Game::Level::MEDIUM, 2},
+        {Game::Level::HARD,   4}
+    };
+
+    const QMap<Game::Level, int> c_WordPieceSizes
+    {
+        {Game::Level::EASY,   3},
+        {Game::Level::MEDIUM, 2},
+        {Game::Level::HARD,   1}
     };
 }
 

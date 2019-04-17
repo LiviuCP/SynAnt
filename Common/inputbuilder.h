@@ -1,3 +1,10 @@
+/*
+   This class creates the user input for each of the two words:
+   1) uses the pieces provided by word pair owner and assembles them into input words
+   2) enforces proper rules for input creation
+   3) provides the built input to the facade for checking against the reference words obtained from the WordPairOwner class
+*/
+
 #ifndef INPUTBUILDER_H
 #define INPUTBUILDER_H
 
@@ -13,15 +20,17 @@ class InputBuilder : public QObject
     Q_OBJECT
 public:
     explicit InputBuilder(QObject *parent = nullptr);
+
     void connectToWordPairOwner(WordPairOwner* pWordPairOwner);
+
     bool addPieceToFirstWordInput(int index);
     bool addPieceToSecondWordInput(int index);
     void removePiecesFromFirstWordInput(int rangeStart);
     void removePiecesFromSecondWordInput(int rangeStart);
+
     const QVector<int> getFirstWordInputIndexes() const;
     const QVector<int> getSecondWordInputIndexes() const;
-    QString getFirstInputWord() const;
-    QString getSecondInputWord() const;
+
     bool isInputComplete() const;
 
 signals:

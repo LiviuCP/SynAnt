@@ -47,30 +47,6 @@ const QVector<int> InputBuilder::getSecondWordInputIndexes() const
     return m_SecondWordInput.indexes;
 }
 
-QString InputBuilder::getFirstInputWord() const
-{
-    QString firstInputWord;
-
-    for (auto index : m_FirstWordInput.indexes)
-    {
-        firstInputWord.append(m_pWordPairOwner->getMixedWordsPieces().at(index).content);
-    }
-
-    return firstInputWord;
-}
-
-QString InputBuilder::getSecondInputWord() const
-{
-    QString secondInputWord;
-
-    for (auto index : m_SecondWordInput.indexes)
-    {
-        secondInputWord.append(m_pWordPairOwner->getMixedWordsPieces().at(index).content);
-    }
-
-    return secondInputWord;
-}
-
 bool InputBuilder::isInputComplete() const
 {
     return (m_FirstWordInput.state == WordInputState::COMPLETED && m_SecondWordInput.state == WordInputState::COMPLETED);

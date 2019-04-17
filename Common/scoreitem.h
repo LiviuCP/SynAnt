@@ -1,12 +1,10 @@
 /*
-
   This class implements the statistics that are associated with the correct guessing of words:
   1) Total score is the maximum score that could have been obtained by user if correctly guessing all words
   2) Obtained score is the one the user gets for the number of pairs correctly guessed without pressing the Show results button
   3) Guessed word pairs are the ones correctly guessed with pressing the Show results button
   4) Total word pairs include the ones retrieved by pressing Show results too
   5) Score increment depends on level (the higher the level the higher the increment)
-
 */
 
 #ifndef SCOREITEM_H
