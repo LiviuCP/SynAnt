@@ -393,7 +393,9 @@ Item {
                 }
 
                 MouseArea {
+                    id: mixedWordsCurrentPieceMouseArea
                     anchors.fill: parent
+                    hoverEnabled: true
 
                     // single click for assigning piece to first word, double click for assigning to second word
                     onClicked: {
@@ -405,6 +407,14 @@ Item {
                             clickTimer.restart();
                         }
                     }
+                }
+
+                ToolTip {
+                    id: mixedWordsCurrentPieceToolTip
+                    delay: presenter.toolTipDelay
+                    timeout: presenter.toolTipTimeout
+                    text: presenter.mixedWordsPiecesSelections[index] ? presenter.wordPieceAlreadySelectedToolTip : presenter.selectWordPieceToolTip
+                    visible: mixedWordsCurrentPieceMouseArea.containsMouse
                 }
             }
         }
