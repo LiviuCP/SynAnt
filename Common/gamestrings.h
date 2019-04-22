@@ -85,28 +85,12 @@ namespace GameStrings {
     const QString c_NoFile                              {    ""                                                                                         };
 
     // general window messages
-    const QString c_IntroWindowWelcomeMessage           {
-                                                             "\n\t\tWelcome to SynAnt!\n\n\n"
-                                                             "\nIt's simple!\n"
-                                                             "\nTwo words are divided into equal pieces and mixed with each other.\n"
-                                                             "\nYou just need to guess them.\n"
-                                                             "\nThe words can either be synonyms or antonyms.\n\n\n"
-                                                             "\nPress Play to enter the game or Help for more information.\n"
-                                                        };
-
     const QString c_HelpWindowMessage                   {
                                                              c_HelpWindowMessageString
                                                                  .arg(Game::c_MinWordSize)
                                                                  .arg(Game::c_ScoreIncrements[Game::Level::EASY])
                                                                  .arg(Game::c_ScoreIncrements[Game::Level::MEDIUM])
                                                                  .arg(Game::c_ScoreIncrements[Game::Level::HARD])
-                                                        };
-
-    const QString c_InstructionsMessage                 {
-                                                             "\nPlease enter the 2 words.\n"
-                                                             "\nHit Submit when ready.\n"
-                                                             "\nUse radio buttons to change difficulty level.\n"
-                                                             "\nPress Reset to reset the scores and number of pairs.\n"
                                                         };
 
     // statistics messages
@@ -166,79 +150,6 @@ namespace GameStrings {
     const QString c_FileNameMessage                     {    "\nFile: %1\n"                                                                             };
     const QString c_RowNumberMessage                    {    "\nRow number: %1\n"                                                                       };
 
-    // button names
-    const QString c_PlayButtonLabel                     {    "Play"                                                                                     };
-    const QString c_HelpButtonLabel                     {    "Help"                                                                                     };
-    const QString c_QuitButtonLabel                     {    "Quit"                                                                                     };
-    const QString c_OkButtonLabel                       {    "Ok"                                                                                       };
-    const QString c_SubmitButtonLabel                   {    "Submit"                                                                                   };
-    const QString c_ResultsButtonLabel                  {    "Show results"                                                                             };
-    const QString c_LevelEasyButtonLabel                {    "Easy"                                                                                     };
-    const QString c_LevelMediumButtonLabel              {    "Medium"                                                                                   };
-    const QString c_LevelHardButtonLabel                {    "Hard"                                                                                     };
-    const QString c_ResetButtonLabel                    {    "Reset"                                                                                    };
-    const QString c_FatalErrorQuitButtonLabel           {    "Close"                                                                                    };
-
-    // shortcuts
-    const QString c_PlayButtonShortcut                  {    "ALT+P"                                                                                    };
-    const QString c_HelpButtonShortcut                  {    "ALT+H"                                                                                    };
-    const QString c_QuitButtonShortcut                  {    "ALT+Q"                                                                                    };
-    const QString c_OkButtonShortcut                    {    "ALT+O"                                                                                    };
-    const QString c_SubmitButtonShortcut                {    "ALT+S"                                                                                    };
-    const QString c_ResultsButtonShortcut               {    "ALT+B"                                                                                    };
-    const QString c_LevelEasyButtonShortcut             {    "ALT+1"                                                                                    };
-    const QString c_LevelMediumButtonShortcut           {    "ALT+2"                                                                                    };
-    const QString c_LevelHardButtonShortcut             {    "ALT+3"                                                                                    };
-    const QString c_ResetShortcut                       {    "ALT+R"                                                                                    };
-    const QString c_FatalErrorQuitButtonShortcut        {    "ALT+C"                                                                                    };
-
-    // tooltips
-    const QString c_HighscoresToolTip                   {
-                                                             "Displays the game scores:\n"
-                                                             "\t1) Current score obtained by user\n"
-                                                             "\t2) Maximum possible score if all word pairs had been guessed."
-                                                        };
-
-    const QString c_WordPairsToolTip                    {
-                                                             "Displays the number of word pairs: \n"
-                                                             "\t1) Current number of pairs the user has guessed so far\n"
-                                                             "\t2) Total number of pairs presented to user so far."
-                                                        };
-
-    const QString c_LevelButtonsToolTip                 {
-                                                             "Choose the desired difficulty level. \n"
-                                                             "Click radio button or hit: \n"
-                                                             "\t1) ALT+1 for Easy\n"
-                                                             "\t2) ALT+2 for Medium\n"
-                                                             "\t3) ALT+3 for Hard\n"
-                                                        };
-
-    const QString c_PlayButtonToolTip                   {    "Click or hit ALT+P to play."                                                              };
-    const QString c_HelpButtonToolTip                   {    "Click or hit ALT+H for accessing the detailed game instructions."                         };
-    const QString c_QuitButtonToolTip                   {    "Click or hit ALT+Q to exit application."                                                  };
-    const QString c_IntroWindowToolTip                  {    "Welcome to SynAnt"                                                                        };
-    const QString c_OkButtonToolTip                     {    "Click or hit ALT+O to return to game."                                                    };
-    const QString c_HelpWindowToolTip                   {    "Please read the detailed game instructions."                                              };
-    const QString c_SubmitButtonToolTip                 {    "Click or hit ALT+S after entering the 2 words."                                           };
-    const QString c_ResultsButtonToolTip                {    "Click or hit ALT+B to have the correct words displayed."                                  };
-    const QString c_ResetButtonToolTip                  {    "Click or hit ALT+R for resetting the scores and number of pairs."                         };
-    const QString c_GameInstructionsToolTip             {    "Displays the game instructions."                                                          };
-    const QString c_GameStatusToolTip                   {    "Displays the game status (e.g. if 2 correct words were entered)."                         };
-
-    const QString c_SelectWordPieceToolTip              {
-                                                             "Single click to add the word piece to the first word input.\n"
-                                                             "Double click to add the word piece to the second word input."
-                                                        };
-
-    const QString c_WordPieceAlreadySelectedToolTip     {    "Already added word piece to input!"                                                       };
-
-    const QString c_FirstWordInputToolTip               {    "Click to remove the selected chunk of pieces from the first word input."                  };
-    const QString c_SecondWordInputToolTip              {    "Click to remove the selected chunk of pieces from the second word input."                 };
-
-    const QString c_MainWindowToolTip                   {    "This is where the action happens!"                                                        };
-    const QString c_FatalErrorQuitButtonToolTip         {    "Click or hit ALT+C to exit the game."                                                     };
-    const QString c_FatalErrorWindowToolTip             {    "A fatal error occurred. Corrective actions are required."                                 };
-
     // window titles
     const QString c_IntroWindowTitle                    {    "SynAnt - Welcome"                                                                         };
     const QString c_HelpWindowTitle                     {    "SynAnt - Help"                                                                            };
@@ -246,16 +157,9 @@ namespace GameStrings {
     const QString c_FatalErrorWindowTitle               {    "Fatal Error!"                                                                             };
 
     // colors
-    const QString c_BackgroundColor                     {    "lightblue"                                                                                };
-    const QString c_BackgroundSelectedColor             {    "brown"                                                                                    };
-    const QString c_BorderColor                         {    "black"                                                                                    };
-    const QString c_TextColor                           {    "black"                                                                                    };
-    const QString c_FatalErrorTextColor                 {    "red"                                                                                      };
     const QString c_WordFirstPieceTextColor             {    "blue"                                                                                     };
     const QString c_WordMiddlePieceTextColor            {    "black"                                                                                    };
     const QString c_WordLastPieceTextColor              {    "red"                                                                                      };
-    const QString c_WordPieceSelectedBackgroundColor    {    "grey"                                                                                     };
-    const QString c_PushButtonColor                     {    "lightgrey"                                                                                };
 
     // miscellaneous
     const QString c_FirstWordLowerCase                  {    "first"                                                                                    };

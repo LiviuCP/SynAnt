@@ -39,69 +39,11 @@ class GamePresenter : public QObject
 
     // text properties
     Q_PROPERTY(QString windowTitle READ getWindowTitle NOTIFY windowTitleChanged)
-
-    Q_PROPERTY(QString introPaneMessage READ getIntroPaneMessage CONSTANT)
-    Q_PROPERTY(QString helpPaneMessage READ getHelpPaneMessage CONSTANT)
-    Q_PROPERTY(QString mainPaneInstructionsMessage READ getMainPaneInstructionsMessage CONSTANT)
+    Q_PROPERTY(QString helpPaneMessage READ getHelpPaneMessage CONSTANT) // if feasible: to be moved later to GameStrings.qml
     Q_PROPERTY(QString mainPaneStatusMessage READ getMainPaneStatusMessage NOTIFY mainPaneStatusMessageChanged)
     Q_PROPERTY(QString mainPaneScoreMessage READ getMainPaneScoreMessage NOTIFY mainPaneStatisticsMessagesChanged)
     Q_PROPERTY(QString mainPaneWordPairsMessage READ getMainPaneWordPairsMessage NOTIFY mainPaneStatisticsMessagesChanged)
     Q_PROPERTY(QString errorMessage READ getErrorMessage NOTIFY errorMessageChanged)
-
-    Q_PROPERTY(QString playButtonLabel READ getPlayButtonLabel CONSTANT)
-    Q_PROPERTY(QString helpButtonLabel READ getHelpButtonLabel CONSTANT)
-    Q_PROPERTY(QString quitButtonLabel READ getQuitButtonLabel CONSTANT)
-    Q_PROPERTY(QString submitButtonLabel READ getSubmitButtonLabel CONSTANT)
-    Q_PROPERTY(QString resultsButtonLabel READ getResultsButtonLabel CONSTANT)
-    Q_PROPERTY(QString resetButtonLabel READ getResetButtonLabel CONSTANT)
-    Q_PROPERTY(QString okButtonLabel READ getOkButtonLabel CONSTANT)
-    Q_PROPERTY(QString levelEasyButtonLabel READ getLevelEasyButtonLabel CONSTANT)
-    Q_PROPERTY(QString levelMediumButtonLabel READ getLevelMediumButtonLabel CONSTANT)
-    Q_PROPERTY(QString levelHardButtonLabel READ getLevelHardButtonLabel CONSTANT)
-    Q_PROPERTY(QString closeButtonLabel READ getCloseButtonLabel CONSTANT)
-
-    Q_PROPERTY(QString playButtonShortcut READ getPlayButtonShortcut CONSTANT)
-    Q_PROPERTY(QString helpButtonShortcut READ getHelpButtonShortcut CONSTANT)
-    Q_PROPERTY(QString quitButtonShortcut READ getQuitButtonShortcut CONSTANT)
-    Q_PROPERTY(QString okButtonShortcut READ getOkButtonShortcut CONSTANT)
-    Q_PROPERTY(QString submitButtonShortcut READ getSubmitButtonShortcut CONSTANT)
-    Q_PROPERTY(QString resultsButtonShortcut READ getResultsButtonShortcut CONSTANT)
-    Q_PROPERTY(QString resetButtonShortcut READ getResetButtonShortcut CONSTANT)
-    Q_PROPERTY(QString levelEasyButtonShortcut READ getLevelEasyButtonShortcut CONSTANT)
-    Q_PROPERTY(QString levelMediumButtonShortcut READ getLevelMediumButtonShortcut CONSTANT)
-    Q_PROPERTY(QString levelHardButtonShortcut READ getLevelHardButtonShortcut CONSTANT)
-    Q_PROPERTY(QString closeButtonShortcut READ getCloseButtonShortcut CONSTANT)
-
-    Q_PROPERTY(QString introPaneToolTip READ getIntroPaneToolTip CONSTANT)
-    Q_PROPERTY(QString helpPaneToolTip READ getHelpPaneToolTip CONSTANT)
-    Q_PROPERTY(QString mainPaneToolTip READ getMainPaneToolTip CONSTANT)
-    Q_PROPERTY(QString errorPaneToolTip READ getErrorPaneToolTip CONSTANT)
-    Q_PROPERTY(QString highscoresToolTip READ getHighscoresToolTip CONSTANT)
-    Q_PROPERTY(QString wordPairsToolTip READ getWordPairsToolTip CONSTANT)
-    Q_PROPERTY(QString gameInstructionsToolTip READ getGameInstructionsToolTip CONSTANT)
-    Q_PROPERTY(QString gameStatusToolTip READ getGameStatusToolTip CONSTANT)
-    Q_PROPERTY(QString selectWordPieceToolTip READ getSelectWordPieceToolTip CONSTANT)
-    Q_PROPERTY(QString wordPieceAlreadySelectedToolTip READ getWordPieceAlreadySelectedToolTip CONSTANT)
-    Q_PROPERTY(QString firstWordInputToolTip READ getFirstWordInputToolTip CONSTANT)
-    Q_PROPERTY(QString secondWordInputToolTip READ getSecondWordInputToolTip CONSTANT)
-    Q_PROPERTY(QString playButtonToolTip READ getPlayButtonToolTip CONSTANT)
-    Q_PROPERTY(QString helpButtonToolTip READ getHelpButtonToolTip CONSTANT)
-    Q_PROPERTY(QString quitButtonToolTip READ getQuitButtonToolTip CONSTANT)
-    Q_PROPERTY(QString okButtonToolTip READ getOkButtonToolTip CONSTANT)
-    Q_PROPERTY(QString submitButtonToolTip READ getSubmitButtonToolTip CONSTANT)
-    Q_PROPERTY(QString resultsButtonToolTip READ getResultsButtonToolTip CONSTANT)
-    Q_PROPERTY(QString resetButtonToolTip READ getResetButtonToolTip CONSTANT)
-    Q_PROPERTY(QString levelButtonsToolTip READ getLevelButtonsToolTip CONSTANT)
-    Q_PROPERTY(QString closeButtonToolTip READ getCloseButtonToolTip CONSTANT)
-
-    // color properties
-    Q_PROPERTY(QColor backgroundColor READ getBackgroundColor CONSTANT)
-    Q_PROPERTY(QColor backgroundSelectedColor READ getBackgroundSelectedColor CONSTANT)
-    Q_PROPERTY(QColor pushButtonColor READ getPushButtonColor CONSTANT)
-    Q_PROPERTY(QColor borderColor READ getBorderColor CONSTANT)
-    Q_PROPERTY(QColor textColor READ getTextColor CONSTANT)
-    Q_PROPERTY(QColor fatalErrorTextColor READ getFatalErrorTextColor CONSTANT)
-    Q_PROPERTY(QColor wordPieceSelectedColor READ getWordPieceSelectedColor CONSTANT)
 
 public:
     enum class Pane
@@ -156,67 +98,11 @@ public:
 
     QString getWindowTitle() const;
 
-    QString getIntroPaneMessage() const;
     QString getHelpPaneMessage() const;
-    QString getMainPaneInstructionsMessage() const;
     QString getMainPaneStatusMessage() const;
     QString getMainPaneScoreMessage() const;
     QString getMainPaneWordPairsMessage() const;
     QString getErrorMessage() const;
-
-    QString getPlayButtonLabel() const;
-    QString getHelpButtonLabel() const;
-    QString getQuitButtonLabel() const;
-    QString getSubmitButtonLabel() const;
-    QString getResultsButtonLabel() const;
-    QString getResetButtonLabel() const;
-    QString getLevelEasyButtonLabel() const;
-    QString getLevelMediumButtonLabel() const;
-    QString getLevelHardButtonLabel() const;
-    QString getOkButtonLabel() const;
-    QString getCloseButtonLabel() const;
-
-    QString getPlayButtonShortcut() const;
-    QString getHelpButtonShortcut() const;
-    QString getQuitButtonShortcut() const;
-    QString getSubmitButtonShortcut() const;
-    QString getResultsButtonShortcut() const;
-    QString getResetButtonShortcut() const;
-    QString getLevelEasyButtonShortcut() const;
-    QString getLevelMediumButtonShortcut() const;
-    QString getLevelHardButtonShortcut() const;
-    QString getOkButtonShortcut() const;
-    QString getCloseButtonShortcut() const;
-
-    QString getIntroPaneToolTip() const;
-    QString getHelpPaneToolTip() const;
-    QString getMainPaneToolTip() const;
-    QString getErrorPaneToolTip() const;
-    QString getHighscoresToolTip() const;
-    QString getWordPairsToolTip() const;
-    QString getGameInstructionsToolTip() const;
-    QString getGameStatusToolTip() const;
-    QString getSelectWordPieceToolTip() const;
-    QString getWordPieceAlreadySelectedToolTip() const;
-    QString getFirstWordInputToolTip() const;
-    QString getSecondWordInputToolTip() const;
-    QString getPlayButtonToolTip() const;
-    QString getHelpButtonToolTip() const;
-    QString getQuitButtonToolTip() const;
-    QString getSubmitButtonToolTip() const;
-    QString getResultsButtonToolTip() const;
-    QString getResetButtonToolTip() const;
-    QString getLevelButtonsToolTip() const;
-    QString getOkButtonToolTip() const;
-    QString getCloseButtonToolTip() const;
-
-    QColor getBackgroundColor() const;
-    QColor getBackgroundSelectedColor() const;
-    QColor getPushButtonColor() const;
-    QColor getBorderColor() const;
-    QColor getTextColor() const;
-    QColor getFatalErrorTextColor() const;
-    QColor getWordPieceSelectedColor() const;
 
 signals:
     Q_SIGNAL void introPaneVisibleChanged();

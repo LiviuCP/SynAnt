@@ -2,6 +2,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import GameManagers 1.0
+import GameUtils 1.0
 
 Item {
     id: introPane
@@ -13,14 +14,6 @@ Item {
 
     readonly property double bottomBtnsMinWidth: (introPaneRect.width - 2 * bottomBtnsLayout.spacing) / 3
 
-    readonly property double pressedButtonOpacity: 0.5
-    readonly property double releasedButtonOpacity: 1.0
-
-    readonly property color paneColor: presenter.backgroundColor
-    readonly property color buttonColor: presenter.pushButtonColor
-    readonly property color borderColor: presenter.borderColor
-    readonly property color textColor: presenter.textColor
-
     MouseArea {
         id: introPaneMouseArea
         anchors.fill: parent
@@ -31,7 +24,7 @@ Item {
         id: introPaneToolTip
         delay: presenter.toolTipDelay
         timeout: presenter.toolTipTimeout
-        text: presenter.introPaneToolTip
+        text: GameStrings.introPaneToolTip
         visible: introPaneMouseArea.containsMouse
     }
 
@@ -40,18 +33,18 @@ Item {
         anchors.top: parent.top
         width: parent.width
         height: introPaneRectHeight
-        color: paneColor
+        color: Styles.backgroundColor
 
         border {
-            color: borderColor
+            color: Styles.borderColor
         }
 
         Text {
             id: introPaneText
             anchors.fill: parent
             anchors.leftMargin: parent.width * 0.005
-            text: presenter.introPaneMessage
-            color: textColor
+            text: GameStrings.introPaneMessage
+            color: Styles.textColor
         }
     }
 
@@ -70,90 +63,90 @@ Item {
             id: playBtn
 
             contentItem: Text {
-                text: presenter.playButtonLabel
-                color: textColor
+                text: GameStrings.playButtonLabel
+                color: Styles.textColor
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
 
             background: Rectangle {
-                color: buttonColor
-                border.color: borderColor
+                color: Styles.pushButtonColor
+                border.color: Styles.borderColor
                 border.width: width * 0.005
                 radius: width * 0.01
             }
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
-            ToolTip.text: presenter.playButtonToolTip
+            ToolTip.text: GameStrings.playButtonToolTip
             ToolTip.delay: presenter.toolTipDelay
             ToolTip.timeout: presenter.toolTipTimeout
             ToolTip.visible: hovered
 
             onClicked: presenter.switchToPane(GamePresenter.MAIN)
-            onPressed: opacity = pressedButtonOpacity
-            onReleased: opacity = releasedButtonOpacity
-            onCanceled: opacity = releasedButtonOpacity
+            onPressed: opacity = Styles.pressedButtonOpacity
+            onReleased: opacity = Styles.releasedButtonOpacity
+            onCanceled: opacity = Styles.releasedButtonOpacity
         }
 
         Button {
             id: helpBtn
 
             contentItem: Text {
-                text: presenter.helpButtonLabel
-                color: textColor
+                text: GameStrings.helpButtonLabel
+                color: Styles.textColor
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
 
             background: Rectangle {
-                color: buttonColor
-                border.color: borderColor
+                color: Styles.pushButtonColor
+                border.color: Styles.borderColor
                 border.width: width * 0.005
                 radius: width * 0.01
             }
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
-            ToolTip.text: presenter.helpButtonToolTip
+            ToolTip.text: GameStrings.helpButtonToolTip
             ToolTip.delay: presenter.toolTipDelay
             ToolTip.timeout: presenter.toolTipTimeout
             ToolTip.visible: hovered
 
             onClicked: presenter.switchToPane(GamePresenter.HELP)
-            onPressed: opacity = pressedButtonOpacity
-            onReleased: opacity = releasedButtonOpacity
-            onCanceled: opacity = releasedButtonOpacity
+            onPressed: opacity = Styles.pressedButtonOpacity
+            onReleased: opacity = Styles.releasedButtonOpacity
+            onCanceled: opacity = Styles.releasedButtonOpacity
         }
 
         Button {
             id: quitBtn
 
             contentItem: Text {
-                text: presenter.quitButtonLabel
-                color: textColor
+                text: GameStrings.quitButtonLabel
+                color: Styles.textColor
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
 
             background: Rectangle {
-                color: buttonColor
-                border.color: borderColor
+                color: Styles.pushButtonColor
+                border.color: Styles.borderColor
                 border.width: width * 0.005
                 radius: width * 0.01
             }
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
-            ToolTip.text: presenter.quitButtonToolTip
+            ToolTip.text: GameStrings.quitButtonToolTip
             ToolTip.delay: presenter.toolTipDelay
             ToolTip.timeout: presenter.toolTipTimeout
             ToolTip.visible: hovered
 
             onClicked: Qt.quit()
-            onPressed: opacity = pressedButtonOpacity
-            onReleased: opacity = releasedButtonOpacity
-            onCanceled: opacity = releasedButtonOpacity
+            onPressed: opacity = Styles.pressedButtonOpacity
+            onReleased: opacity = Styles.releasedButtonOpacity
+            onCanceled: opacity = Styles.releasedButtonOpacity
         }
     }
 }

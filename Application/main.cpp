@@ -9,7 +9,10 @@
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    qmlRegisterType<GamePresenter>("GameManagers",1,0,"GamePresenter");
+
+    qmlRegisterType<GamePresenter>("GameManagers", 1, 0, "GamePresenter");
+    qmlRegisterSingletonType(QUrl("qrc:///GameStrings.qml"), "GameUtils", 1, 0, "GameStrings");
+    qmlRegisterSingletonType(QUrl("qrc:///Styles.qml"), "GameUtils", 1, 0, "Styles");
 
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;

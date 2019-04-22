@@ -6,5 +6,7 @@
         <file>HelpPane.qml</file>
         <file>ErrorPane.qml</file>
         <file>ErrorDialog.qml</file>
+        <file>GameStrings.qml</file>
+        <file>Styles.qml</file>
     </qresource>
 </RCC>

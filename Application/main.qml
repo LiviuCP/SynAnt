@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Window 2.3
 import GameManagers 1.0
+import GameUtils 1.0
 
 ApplicationWindow {
     visible: true
@@ -18,7 +19,7 @@ ApplicationWindow {
     y: (Qt.application.screens[0].height - minimumHeight)/2
 
     title: gamePresenter.windowTitle
-    color: gamePresenter.backgroundColor
+    color: Styles.backgroundColor
 
     property double windowMargins: width * 0.01
 
@@ -61,21 +62,21 @@ ApplicationWindow {
     // shortcuts shared among multiple panes
 
     Shortcut {
-        sequence: gamePresenter.playButtonShortcut
+        sequence: GameStrings.playButtonShortcut
         onActivated: {
             gamePresenter.switchToPane(GamePresenter.MAIN);
         }
     }
 
     Shortcut {
-        sequence: gamePresenter.helpButtonShortcut
+        sequence: GameStrings.helpButtonShortcut
         onActivated: {
             gamePresenter.switchToPane(GamePresenter.HELP);
         }
     }
 
     Shortcut {
-        sequence: gamePresenter.quitButtonShortcut
+        sequence: GameStrings.quitButtonShortcut
         onActivated: {
             Qt.quit();
         }

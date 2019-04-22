@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import GameUtils 1.0
 
 Item {
     id: errorPane
@@ -12,15 +13,6 @@ Item {
 
     readonly property double bottomBtnsMinWidth: errorPaneRect.width / 3
 
-    readonly property double pressedButtonOpacity: 0.5
-    readonly property double releasedButtonOpacity: 1.0
-
-    readonly property color paneColor: presenter.backgroundColor
-    readonly property color buttonColor: presenter.pushButtonColor
-    readonly property color borderColor: presenter.borderColor
-    readonly property color textColor: presenter.textColor
-    readonly property color fatalErrorTextColor: presenter.fatalErrorTextColor
-
     MouseArea {
         id: errorPaneMouseArea
         anchors.fill: parent
@@ -31,7 +23,7 @@ Item {
         id: errorPaneToolTip
         delay: presenter.toolTipDelay
         timeout: presenter.toolTipTimeout
-        text: presenter.errorPaneToolTip
+        text: GameStrings.errorPaneToolTip
         visible: errorPaneMouseArea.containsMouse
     }
 
@@ -40,16 +32,16 @@ Item {
         anchors.top: parent.top
         width: parent.width
         height: errorPaneRectHeight
-        color: paneColor
+        color: Styles.backgroundColor
 
         border {
-            color: borderColor
+            color: Styles.borderColor
         }
 
         Text {
             id: errorPaneText
             text: presenter.errorMessage
-            color: fatalErrorTextColor
+            color: Styles.fatalErrorTextColor
 
             font.pointSize: 12
             minimumPointSize: 8
@@ -78,15 +70,15 @@ Item {
             id: closeBtn
 
             contentItem: Text {
-                text: presenter.closeButtonLabel
-                color: textColor
+                text: GameStrings.closeButtonLabel
+                color: Styles.textColor
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
 
             background: Rectangle {
-                color: buttonColor
-                border.color: borderColor
+                color: Styles.pushButtonColor
+                border.color: Styles.borderColor
                 border.width: width * 0.005
                 radius: width * 0.01
             }
@@ -94,22 +86,22 @@ Item {
             Layout.minimumWidth: bottomBtnsMinWidth
             Layout.alignment: Layout.Center
 
-            ToolTip.text: presenter.closeButtonToolTip
+            ToolTip.text: GameStrings.closeButtonToolTip
             ToolTip.delay: presenter.toolTipDelay
             ToolTip.timeout: presenter.toolTipTimeout
             ToolTip.visible: hovered
 
             Shortcut {
-                sequence: presenter.closeButtonShortcut
+                sequence: GameStrings.closeButtonShortcut
                 onActivated: {
                     Qt.quit();
                 }
             }
 
             onClicked: Qt.quit();
-            onPressed: opacity = pressedButtonOpacity
-            onReleased: opacity = releasedButtonOpacity
-            onCanceled: opacity = releasedButtonOpacity
+            onPressed: opacity = Styles.pressedButtonOpacity
+            onReleased: opacity = Styles.releasedButtonOpacity
+            onCanceled: opacity = Styles.releasedButtonOpacity
         }
     }
 }
