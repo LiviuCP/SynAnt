@@ -17,24 +17,21 @@ void InputBuilder::connectToWordPairOwner(WordPairOwner* pWordPairOwner)
     Q_ASSERT(connected);
 }
 
-bool InputBuilder::addPieceToFirstWordInput(int index)
+bool InputBuilder::addPieceToInputWord(Game::InputWordNumber inputWordNumber, int index)
 {
-    return _addPieceToWordInput(m_FirstWordInput, m_SecondWordInput, index);
+    return (inputWordNumber == Game::InputWordNumber::ONE ? _addPieceToInputWord(m_FirstWordInput, m_SecondWordInput, index) : _addPieceToInputWord(m_SecondWordInput, m_FirstWordInput, index));
 }
 
-bool InputBuilder::addPieceToSecondWordInput(int index)
+void InputBuilder::removePiecesFromInputWord(Game::InputWordNumber inputWordNumber, int rangeStart)
 {
-    return _addPieceToWordInput(m_SecondWordInput, m_FirstWordInput, index);
-}
-
-void InputBuilder::removePiecesFromFirstWordInput(int rangeStart)
-{
-    _removePiecesFromWordInput(m_FirstWordInput, m_SecondWordInput, rangeStart);
-}
-
-void InputBuilder::removePiecesFromSecondWordInput(int rangeStart)
-{
-    _removePiecesFromWordInput(m_SecondWordInput, m_FirstWordInput, rangeStart);
+    if (inputWordNumber == Game::InputWordNumber::ONE)
+    {
+        _removePiecesFromWordInput(m_FirstWordInput, m_SecondWordInput, rangeStart);
+    }
+    else
+    {
+        _removePiecesFromWordInput(m_SecondWordInput, m_FirstWordInput, rangeStart);
+    }
 }
 
 const QVector<int> InputBuilder::getFirstWordInputIndexes() const
@@ -69,7 +66,7 @@ void InputBuilder::resetInput()
     Q_EMIT inputChanged();
 }
 
-bool InputBuilder::_addPieceToWordInput(InputBuilder::WordInput &currentWordInput, const InputBuilder::WordInput &otherWordInput, int pieceIndex)
+bool InputBuilder::_addPieceToInputWord(InputBuilder::WordInput &currentWordInput, const InputBuilder::WordInput &otherWordInput, int pieceIndex)
 {
     bool success{false};
 

@@ -47,12 +47,13 @@ void GameFacade::resumeGame()
     _updateStatus(Game::StatusCodes::GAME_RESUMED, m_pInputBuilder->isInputComplete() ? Game::StatusCodes::ALL_PIECES_SELECTED : Game::StatusCodes::DEFAULT);
 }
 
-void GameFacade::selectWordPieceForFirstInputWord(int wordPieceIndex)
+void GameFacade::addWordPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex)
 {
     if (!m_pWordPairOwner->getMixedWordsPieces().at(wordPieceIndex).isSelected)
     {
         // adding piece should always occur before updating status
-        bool pieceAdded{m_pInputBuilder->addPieceToFirstWordInput(wordPieceIndex)};
+        bool pieceAdded{m_pInputBuilder->addPieceToInputWord(inputWordNumber, wordPieceIndex)};
+
         _updateStatus(pieceAdded ? Game::StatusCodes::PIECE_SUCCESSFULLY_ADDED : Game::StatusCodes::PIECE_NOT_ADDED,
                       m_pInputBuilder->isInputComplete() ? Game::StatusCodes::ALL_PIECES_SELECTED : Game::StatusCodes::DEFAULT);
     }
@@ -62,30 +63,9 @@ void GameFacade::selectWordPieceForFirstInputWord(int wordPieceIndex)
     }
 }
 
-void GameFacade::selectWordPieceForSecondInputWord(int wordPieceIndex)
+void GameFacade::removeWordPiecesFromInputWord(Game::InputWordNumber inputWordNumber, int inputRangeStart)
 {
-    if (!m_pWordPairOwner->getMixedWordsPieces().at(wordPieceIndex).isSelected)
-    {
-        // adding piece should always occur before updating status
-        bool pieceAdded{m_pInputBuilder->addPieceToSecondWordInput(wordPieceIndex)};
-        _updateStatus(pieceAdded ? Game::StatusCodes::PIECE_SUCCESSFULLY_ADDED : Game::StatusCodes::PIECE_NOT_ADDED,
-                      m_pInputBuilder->isInputComplete() ? Game::StatusCodes::ALL_PIECES_SELECTED : Game::StatusCodes::DEFAULT);
-    }
-    else
-    {
-        _updateStatus(Game::StatusCodes::PIECE_ALREADY_ADDED, m_pInputBuilder->isInputComplete() ? Game::StatusCodes::ALL_PIECES_SELECTED : Game::StatusCodes::DEFAULT);
-    }
-}
-
-void GameFacade::removeWordPiecesFromFirstInputWord(int inputRangeStart)
-{
-    m_pInputBuilder->removePiecesFromFirstWordInput(inputRangeStart);
-    _updateStatus(Game::StatusCodes::PIECES_REMOVED);
-}
-
-void GameFacade::removeWordPiecesFromSecondInputWord(int inputRangeStart)
-{
-    m_pInputBuilder->removePiecesFromSecondWordInput(inputRangeStart);
+    m_pInputBuilder->removePiecesFromInputWord(inputWordNumber, inputRangeStart);
     _updateStatus(Game::StatusCodes::PIECES_REMOVED);
 }
 

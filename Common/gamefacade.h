@@ -29,10 +29,8 @@ public:
     void startGame();
     void resumeGame();
 
-    void selectWordPieceForFirstInputWord(int wordPieceIndex);
-    void selectWordPieceForSecondInputWord(int wordPieceIndex);
-    void removeWordPiecesFromFirstInputWord(int inputRangeStart);
-    void removeWordPiecesFromSecondInputWord(int inputRangeStart);
+    void addWordPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex);
+    void removeWordPiecesFromInputWord(Game::InputWordNumber inputWordNumber, int inputRangeStart);
 
     void handleSubmitRequest();
     void provideResultsToUser();

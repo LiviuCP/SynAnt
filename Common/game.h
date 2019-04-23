@@ -12,6 +12,13 @@
 
 namespace Game
 {
+    enum class InputWordNumber
+    {
+        ONE,
+        TWO,
+        NrOfWords
+    };
+
     enum class Level
     {
         EASY,

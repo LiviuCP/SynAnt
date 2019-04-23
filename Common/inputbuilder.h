@@ -23,10 +23,8 @@ public:
 
     void connectToWordPairOwner(WordPairOwner* pWordPairOwner);
 
-    bool addPieceToFirstWordInput(int index);
-    bool addPieceToSecondWordInput(int index);
-    void removePiecesFromFirstWordInput(int rangeStart);
-    void removePiecesFromSecondWordInput(int rangeStart);
+    bool addPieceToInputWord(Game::InputWordNumber inputWordNumber, int index);
+    void removePiecesFromInputWord(Game::InputWordNumber inputWordNumber, int rangeStart);
 
     const QVector<int> getFirstWordInputIndexes() const;
     const QVector<int> getSecondWordInputIndexes() const;
@@ -56,7 +54,7 @@ private:
         WordInputState state;
     };
 
-    bool _addPieceToWordInput(WordInput& currentWordInput, const WordInput& otherWordInput, int pieceIndex);
+    bool _addPieceToInputWord(WordInput& currentWordInput, const WordInput& otherWordInput, int pieceIndex);
     bool _checkAndUpdateState(WordInput& currentWordInput, const WordInput& otherWordInput, int pieceIndex);
     void _removePiecesFromWordInput(WordInput& currentWordInput, const WordInput& otherWordInput, int rangeStart);
 

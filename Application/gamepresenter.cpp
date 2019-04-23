@@ -157,22 +157,22 @@ void GamePresenter::switchToLevel(int level)
 
 void GamePresenter::selectWordPieceForFirstInputWord(int wordPieceIndex)
 {
-    m_pGameFacade->selectWordPieceForFirstInputWord(wordPieceIndex);
+    m_pGameFacade->addWordPieceToInputWord(Game::InputWordNumber::ONE, wordPieceIndex);
 }
 
 void GamePresenter::selectWordPieceForSecondInputWord(int wordPieceIndex)
 {
-    m_pGameFacade->selectWordPieceForSecondInputWord(wordPieceIndex);
+    m_pGameFacade->addWordPieceToInputWord(Game::InputWordNumber::TWO, wordPieceIndex);
 }
 
 void GamePresenter::removeWordPiecesFromFirstInputWord(int inputRangeStart)
 {
-    m_pGameFacade->removeWordPiecesFromFirstInputWord(inputRangeStart);
+    m_pGameFacade->removeWordPiecesFromInputWord(Game::InputWordNumber::ONE, inputRangeStart);
 }
 
 void GamePresenter::removeWordPiecesFromSecondInputWord(int inputRangeStart)
 {
-    m_pGameFacade->removeWordPiecesFromSecondInputWord(inputRangeStart);
+    m_pGameFacade->removeWordPiecesFromInputWord(Game::InputWordNumber::TWO, inputRangeStart);
 }
 
 void GamePresenter::updateFirstWordInputHoverIndex(int index)
