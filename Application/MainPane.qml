@@ -365,7 +365,9 @@ Item {
                 width: parent.width / mixedWordsRepeater.count
                 height: parent.height
 
-                color: presenter.mixedWordsPiecesSelections[index] ? Styles.wordPieceSelectedColor : Styles.backgroundColor
+                visible: !presenter.mixedWordsPiecesSelections[index]
+
+                color: Styles.backgroundColor
                 border.color: Styles.borderColor
 
                 Timer {

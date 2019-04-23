@@ -36,7 +36,6 @@ namespace Game
         GAME_RESUMED,
         STATISTICS_RESET,
         LEVEL_CHANGED,
-        PIECE_ALREADY_ADDED,
         PIECE_NOT_ADDED,
         PIECE_SUCCESSFULLY_ADDED,
         PIECES_REMOVED,

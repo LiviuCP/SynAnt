@@ -57,10 +57,6 @@ void GameFacade::addWordPieceToInputWord(Game::InputWordNumber inputWordNumber, 
         _updateStatus(pieceAdded ? Game::StatusCodes::PIECE_SUCCESSFULLY_ADDED : Game::StatusCodes::PIECE_NOT_ADDED,
                       m_pInputBuilder->isInputComplete() ? Game::StatusCodes::ALL_PIECES_SELECTED : Game::StatusCodes::DEFAULT);
     }
-    else
-    {
-        _updateStatus(Game::StatusCodes::PIECE_ALREADY_ADDED, m_pInputBuilder->isInputComplete() ? Game::StatusCodes::ALL_PIECES_SELECTED : Game::StatusCodes::DEFAULT);
-    }
 }
 
 void GameFacade::removeWordPiecesFromInputWord(Game::InputWordNumber inputWordNumber, int inputRangeStart)
