@@ -426,10 +426,14 @@ Item {
             model: presenter.firstWordInputPiecesContent
 
             Rectangle {
+                property bool isHoverSelected: presenter.isFirstWordInputHovered && presenter.firstWordInputHoverIndex <= index
+
                 width: parent.width / mixedWordsRepeater.count
                 height: parent.height
 
-                color: presenter.isFirstWordInputHovered && presenter.firstWordInputHoverIndex <= index ? Styles.markedForDeletionColor : Styles.backgroundColor
+                opacity: isHoverSelected ? Styles.hoverOpacity : Styles.defaultOpacity
+
+                color: isHoverSelected ? Styles.markedForDeletionColor : Styles.backgroundColor
                 border.color: Styles.borderColor
 
                 Text {
@@ -467,10 +471,14 @@ Item {
             model: presenter.secondWordInputPiecesContent
 
             Rectangle {
+                property bool isHoverSelected: presenter.isSecondWordInputHovered && presenter.secondWordInputHoverIndex <= index
+
                 width: parent.width / mixedWordsRepeater.count
                 height: parent.height
 
-                color: presenter.isSecondWordInputHovered && presenter.secondWordInputHoverIndex <= index ? Styles.markedForDeletionColor : Styles.backgroundColor
+                opacity: isHoverSelected ? Styles.hoverOpacity : Styles.defaultOpacity
+
+                color: isHoverSelected ? Styles.markedForDeletionColor : Styles.backgroundColor
                 border.color: Styles.borderColor
 
                 Text {
