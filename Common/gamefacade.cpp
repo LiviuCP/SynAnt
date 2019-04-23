@@ -183,7 +183,9 @@ void GameFacade::_onStatusUpdateTimeout()
 
 void GameFacade::_updateStatus(Game::StatusCodes tempStatusCode, Game::StatusCodes permStatusCode)
 {
-    if (tempStatusCode != m_CurrentStatusCode || permStatusCode != m_CurrentStatusCode)
+    bool isTempStatusCodeValid{tempStatusCode != m_CurrentStatusCode || tempStatusCode == Game::StatusCodes::REQUESTED_BY_USER};
+
+    if (isTempStatusCodeValid || permStatusCode != m_CurrentStatusCode)
     {
         // cancel any delayed status update, no more required
         if (m_pStatusUpdateTimer->isActive())
@@ -191,7 +193,7 @@ void GameFacade::_updateStatus(Game::StatusCodes tempStatusCode, Game::StatusCod
             m_pStatusUpdateTimer->stop();
         }
 
-        if (tempStatusCode != m_CurrentStatusCode)
+        if (isTempStatusCodeValid)
         {
             m_CurrentStatusCode = tempStatusCode;
             Q_EMIT statusChanged(m_CurrentStatusCode);
