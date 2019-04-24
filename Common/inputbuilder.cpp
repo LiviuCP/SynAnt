@@ -34,6 +34,57 @@ void InputBuilder::removePiecesFromInputWord(Game::InputWordNumber inputWordNumb
     }
 }
 
+bool InputBuilder::clearInput()
+{
+    bool firstWordInputCleared{false};
+    bool secondWordInputCleared{false};
+    bool success{false};
+
+    WordInputState initialFirstWordInputState{m_FirstWordInput.state};
+    WordInputState initialSecondWordInputState{m_SecondWordInput.state};
+
+    QVector<int> removedPieceIndexes;
+
+    if (m_FirstWordInput.state != WordInputState::EMPTY)
+    {
+        for (auto index : m_FirstWordInput.indexes)
+        {
+            removedPieceIndexes.append(index);
+        }
+
+        m_FirstWordInput.indexes.clear();
+        m_FirstWordInput.state = WordInputState::EMPTY;
+        firstWordInputCleared = true;
+    }
+
+    if (m_SecondWordInput.state != WordInputState::EMPTY)
+    {
+        for (auto index : m_SecondWordInput.indexes)
+        {
+            removedPieceIndexes.append(index);
+        }
+
+        m_SecondWordInput.indexes.clear();
+        m_SecondWordInput.state = WordInputState::EMPTY;
+        secondWordInputCleared = true;
+    }
+
+    if (firstWordInputCleared || secondWordInputCleared)
+    {
+        m_pWordPairOwner->updateMultipleWordPiecesSelection(removedPieceIndexes, false);
+        success = true;
+
+        if (initialFirstWordInputState == WordInputState::COMPLETED && initialSecondWordInputState == WordInputState::COMPLETED)
+        {
+            Q_EMIT completionChanged();
+        }
+
+        Q_EMIT inputChanged();
+    }
+
+    return success;
+}
+
 const QVector<int> InputBuilder::getFirstWordInputIndexes() const
 {
     return m_FirstWordInput.indexes;

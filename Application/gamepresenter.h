@@ -18,6 +18,7 @@ class GamePresenter : public QObject
     Q_PROPERTY(bool helpPaneVisible READ getHelpPaneVisible NOTIFY helpPaneVisibleChanged)
     Q_PROPERTY(bool mainPaneVisible READ getMainPaneVisible NOTIFY mainPaneVisibleChanged)
     Q_PROPERTY(bool resetEnabled READ getResetEnabled NOTIFY resetEnabledChanged)
+    Q_PROPERTY(bool clearInputEnabled READ getClearInputEnabled NOTIFY clearInputEnabledChanged)
     Q_PROPERTY(bool submitEnabled READ getSubmitEnabled NOTIFY submitEnabledChanged)
     Q_PROPERTY(bool errorOccured READ getErrorOccured NOTIFY errorOccuredChanged)
     Q_PROPERTY(QList<QVariant> mixedWordsPiecesContent READ getMixedWordsPiecesContent NOTIFY mixedWordsChanged)
@@ -67,6 +68,7 @@ public:
     Q_INVOKABLE void selectWordPieceForSecondInputWord(int wordPieceIndex);
     Q_INVOKABLE void removeWordPiecesFromFirstInputWord(int inputRangeStart);
     Q_INVOKABLE void removeWordPiecesFromSecondInputWord(int inputRangeStart);
+    Q_INVOKABLE void clearInput();
     Q_INVOKABLE void updateFirstWordInputHoverIndex(int index);
     Q_INVOKABLE void updateSecondWordInputHoverIndex(int index);
     Q_INVOKABLE void clearWordInputHoverIndexes();
@@ -75,6 +77,7 @@ public:
     bool getHelpPaneVisible() const;
     bool getMainPaneVisible() const;
     bool getResetEnabled() const;
+    bool getClearInputEnabled() const;
     bool getSubmitEnabled() const;
     bool getErrorOccured() const;
 
@@ -109,6 +112,7 @@ signals:
     Q_SIGNAL void helpPaneVisibleChanged();
     Q_SIGNAL void mainPaneVisibleChanged();
     Q_SIGNAL void resetEnabledChanged();
+    Q_SIGNAL void clearInputEnabledChanged();
     Q_SIGNAL void submitEnabledChanged();
     Q_SIGNAL void errorOccuredChanged();
     Q_SIGNAL void mixedWordsChanged();
@@ -134,6 +138,7 @@ private:
     bool m_MainPaneInitialized;
 
     bool m_StatisticsResetEnabled;
+    bool m_ClearInputEnabled;
     bool m_ErrorOccured;
 
     QString m_WindowTitle;

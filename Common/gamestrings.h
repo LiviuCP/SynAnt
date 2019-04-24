@@ -106,6 +106,7 @@ namespace GameStrings {
     const QString c_PieceSuccessfullyAddedMessage       {    "The selected wordpiece has been successfully added to user input"                         };
     const QString c_PiecesRemovedMessage                {    "One or more wordpieces has been removed from input"                                       };
     const QString c_AllPiecesAddedMessage               {    "All pieces selected. Hit Submit or correct the input if needed"                           };
+    const QString c_AllPiecesRemovedMessage             {    "All pieces have been removed from user input"                                             };
 
     const QString c_SuccessMessage                      {
                                                              "Congrats! You entered the correct words."

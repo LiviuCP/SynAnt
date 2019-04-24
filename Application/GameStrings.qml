@@ -21,6 +21,7 @@ QtObject {
     readonly property string helpButtonLabel:                   "Help"
     readonly property string quitButtonLabel:                   "Quit"
     readonly property string submitButtonLabel:                 "Submit"
+    readonly property string clearInputButtonLabel:             "Clear input"
     readonly property string resultsButtonLabel:                "Show results"
     readonly property string resetButtonLabel:                  "Reset"
     readonly property string okButtonLabel:                     "Ok"
@@ -33,6 +34,7 @@ QtObject {
     readonly property string helpButtonShortcut:                "ALT+H"
     readonly property string quitButtonShortcut:                "ALT+Q"
     readonly property string submitButtonShortcut:              "ALT+S"
+    readonly property string clearInputButtonShortcut:          "ALT+Z"
     readonly property string resultsButtonShortcut:             "ALT+B"
     readonly property string resetButtonShortcut:               "ALT+R"
     readonly property string okButtonShortcut:                  "ALT+O"
@@ -64,6 +66,7 @@ QtObject {
     readonly property string quitButtonToolTip:                 "Click or hit ALT+Q to exit application."
     readonly property string okButtonToolTip:                   "Click or hit ALT+O to return to game."
     readonly property string submitButtonToolTip:               "Click or hit ALT+S after entering the 2 words."
+    readonly property string clearInputButtonToolTip:           "Click or hit ALT+Z to clear the user input."
     readonly property string resultsButtonToolTip:              "Click or hit ALT+B to have the correct words displayed."
     readonly property string resetButtonToolTip:                "Click or hit ALT+R for resetting the scores and number of pairs."
     readonly property string levelButtonsToolTip:               "Choose the desired difficulty level.

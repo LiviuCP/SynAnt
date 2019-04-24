@@ -31,6 +31,7 @@ public:
 
     void addWordPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex);
     void removeWordPiecesFromInputWord(Game::InputWordNumber inputWordNumber, int inputRangeStart);
+    void clearInput();
 
     void handleSubmitRequest();
     void provideResultsToUser();

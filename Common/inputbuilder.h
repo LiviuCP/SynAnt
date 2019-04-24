@@ -25,6 +25,7 @@ public:
 
     bool addPieceToInputWord(Game::InputWordNumber inputWordNumber, int index);
     void removePiecesFromInputWord(Game::InputWordNumber inputWordNumber, int rangeStart);
+    bool clearInput();
 
     const QVector<int> getFirstWordInputIndexes() const;
     const QVector<int> getSecondWordInputIndexes() const;

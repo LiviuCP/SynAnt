@@ -65,6 +65,14 @@ void GameFacade::removeWordPiecesFromInputWord(Game::InputWordNumber inputWordNu
     _updateStatus(Game::StatusCodes::PIECES_REMOVED);
 }
 
+void GameFacade::clearInput()
+{
+    if (m_pInputBuilder->clearInput())
+    {
+        _updateStatus(Game::StatusCodes::USER_INPUT_CLEARED);
+    }
+}
+
 void GameFacade::handleSubmitRequest()
 {
     QString firstInputWord;

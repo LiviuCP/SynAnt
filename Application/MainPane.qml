@@ -15,7 +15,7 @@ Item {
     readonly property double wordsEntryLayoutHeight: height * 0.05
     readonly property double bottomBtnsLayoutHeight: height * 0.1
 
-    readonly property double bottomBtnsMinWidth: (infoLevelsAndStatusLayout.width - 3 * bottomBtnsLayout.spacing) * 0.25
+    readonly property double bottomBtnsMinWidth: (infoLevelsAndStatusLayout.width - 4 * bottomBtnsLayout.spacing) * 0.2
 
     MouseArea {
         id: mainPaneMouseArea
@@ -560,6 +560,46 @@ Item {
             }
 
             onClicked: presenter.handleSubmitRequest()
+            onPressed: opacity = Styles.pressedButtonOpacity
+            onReleased: opacity = Styles.releasedButtonOpacity
+            onCanceled: opacity = Styles.releasedButtonOpacity
+        }
+
+        Button {
+            id: clearInputBtn
+            enabled: presenter.clearInputEnabled
+
+            contentItem: Text {
+                text: GameStrings.clearInputButtonLabel
+                color: Styles.textColor
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                opacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
+            }
+
+            background: Rectangle {
+                color: Styles.pushButtonColor
+                border.color: Styles.borderColor
+                border.width: width * 0.005
+                radius: width * 0.01
+                opacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
+            }
+
+            Layout.minimumWidth: bottomBtnsMinWidth
+
+            ToolTip.text: GameStrings.clearInputButtonToolTip
+            ToolTip.delay: presenter.toolTipDelay
+            ToolTip.timeout: presenter.toolTipTimeout
+            ToolTip.visible: hovered
+
+            Shortcut {
+                sequence: GameStrings.clearInputButtonShortcut
+                onActivated: {
+                    presenter.clearInput();
+                }
+            }
+
+            onClicked: presenter.clearInput()
             onPressed: opacity = Styles.pressedButtonOpacity
             onReleased: opacity = Styles.releasedButtonOpacity
             onCanceled: opacity = Styles.releasedButtonOpacity

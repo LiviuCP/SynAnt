@@ -28,6 +28,7 @@ GamePresenter::GamePresenter(QObject *parent)
     , m_MainPaneVisible {false}
     , m_MainPaneInitialized {false}
     , m_StatisticsResetEnabled {false}
+    , m_ClearInputEnabled{false}
     , m_ErrorOccured {false}
     , m_WindowTitle{GameStrings::c_IntroWindowTitle}
     , m_CurrentPane {Pane::INTRO}
@@ -175,6 +176,11 @@ void GamePresenter::removeWordPiecesFromSecondInputWord(int inputRangeStart)
     m_pGameFacade->removeWordPiecesFromInputWord(Game::InputWordNumber::TWO, inputRangeStart);
 }
 
+void GamePresenter::clearInput()
+{
+    m_pGameFacade->clearInput();
+}
+
 void GamePresenter::updateFirstWordInputHoverIndex(int index)
 {
     m_FirstWordInputHoverIndex = index;
@@ -213,6 +219,11 @@ bool GamePresenter::getMainPaneVisible() const
 bool GamePresenter::getResetEnabled() const
 {
     return m_StatisticsResetEnabled;
+}
+
+bool GamePresenter::getClearInputEnabled() const
+{
+    return m_ClearInputEnabled;
 }
 
 bool GamePresenter::getSubmitEnabled() const
@@ -387,6 +398,18 @@ QString GamePresenter::getErrorMessage() const
 void GamePresenter::_onInputChanged()
 {
     clearWordInputHoverIndexes();
+
+    if ((m_pGameFacade->getFirstWordInputIndexes().size() != 0 || m_pGameFacade->getSecondWordInputIndexes().size() != 0) && !m_ClearInputEnabled)
+    {
+        m_ClearInputEnabled = true;
+        Q_EMIT clearInputEnabledChanged();
+    }
+    else if ((m_pGameFacade->getFirstWordInputIndexes().size() == 0 && m_pGameFacade->getSecondWordInputIndexes().size() == 0) && m_ClearInputEnabled)
+    {
+        m_ClearInputEnabled = false;
+        Q_EMIT clearInputEnabledChanged();
+    }
+
     Q_EMIT inputChanged();
 }
 
@@ -455,6 +478,9 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         break;
     case Game::StatusCodes::PIECES_REMOVED:
         m_MainPaneStatusMessage = GameStrings::c_PiecesRemovedMessage;
+        break;
+    case Game::StatusCodes::USER_INPUT_CLEARED:
+        m_MainPaneStatusMessage = GameStrings::c_AllPiecesRemovedMessage;
         break;
     case Game::StatusCodes::ALL_PIECES_SELECTED:
         m_MainPaneStatusMessage = GameStrings::c_AllPiecesAddedMessage;

@@ -39,6 +39,7 @@ namespace Game
         PIECE_NOT_ADDED,
         PIECE_SUCCESSFULLY_ADDED,
         PIECES_REMOVED,
+        USER_INPUT_CLEARED,
         ALL_PIECES_SELECTED,
         DEFAULT,
         StatusCodesCount
