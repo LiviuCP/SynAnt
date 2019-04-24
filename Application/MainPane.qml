@@ -468,6 +468,13 @@ Item {
             }
         }
 
+        Shortcut {
+            sequence: GameStrings.clearFirstInputWordShortcut
+            onActivated: {
+                presenter.clearFirstInputWord();
+            }
+        }
+
         Repeater {
             id: secondWordInputRepeater
             model: presenter.secondWordInputPiecesContent
@@ -510,6 +517,13 @@ Item {
                     text: GameStrings.secondWordInputToolTip
                     visible: secondWordInputCurrentPieceMouseArea.containsMouse
                 }
+            }
+        }
+
+        Shortcut {
+            sequence: GameStrings.clearSecondInputWordShortcut
+            onActivated: {
+                presenter.clearSecondInputWord();
             }
         }
     }

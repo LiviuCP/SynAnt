@@ -35,6 +35,8 @@ QtObject {
     readonly property string quitButtonShortcut:                "ALT+Q"
     readonly property string submitButtonShortcut:              "ALT+S"
     readonly property string clearInputButtonShortcut:          "ALT+Z"
+    readonly property string clearFirstInputWordShortcut:       "ALT+4"
+    readonly property string clearSecondInputWordShortcut:      "ALT+5"
     readonly property string resultsButtonShortcut:             "ALT+B"
     readonly property string resetButtonShortcut:               "ALT+R"
     readonly property string okButtonShortcut:                  "ALT+O"

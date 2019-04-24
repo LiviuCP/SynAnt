@@ -69,6 +69,8 @@ public:
     Q_INVOKABLE void removeWordPiecesFromFirstInputWord(int inputRangeStart);
     Q_INVOKABLE void removeWordPiecesFromSecondInputWord(int inputRangeStart);
     Q_INVOKABLE void clearInput();
+    Q_INVOKABLE void clearFirstInputWord();
+    Q_INVOKABLE void clearSecondInputWord();
     Q_INVOKABLE void updateFirstWordInputHoverIndex(int index);
     Q_INVOKABLE void updateSecondWordInputHoverIndex(int index);
     Q_INVOKABLE void clearWordInputHoverIndexes();

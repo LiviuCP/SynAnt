@@ -181,6 +181,22 @@ void GamePresenter::clearInput()
     m_pGameFacade->clearInput();
 }
 
+void GamePresenter::clearFirstInputWord()
+{
+    if (!m_pGameFacade->getFirstWordInputIndexes().empty())
+    {
+        m_pGameFacade->removeWordPiecesFromInputWord(Game::InputWordNumber::ONE, 0);
+    }
+}
+
+void GamePresenter::clearSecondInputWord()
+{
+    if (!m_pGameFacade->getSecondWordInputIndexes().empty())
+    {
+        m_pGameFacade->removeWordPiecesFromInputWord(Game::InputWordNumber::TWO, 0);
+    }
+}
+
 void GamePresenter::updateFirstWordInputHoverIndex(int index)
 {
     m_FirstWordInputHoverIndex = index;
