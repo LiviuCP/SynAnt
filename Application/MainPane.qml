@@ -128,11 +128,11 @@ Item {
                 color: Styles.pushButtonColor
                 border.color: Styles.borderColor
                 border.width: width * 0.005
-                radius: width * 0.01
+                radius: width * 0.025
                 opacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
             }
 
-            Layout.minimumWidth: quitBtn.width
+            Layout.minimumWidth: statusRect.width
             Layout.alignment: Qt.AlignRight
 
             ToolTip.text: GameStrings.resetButtonToolTip
@@ -555,7 +555,7 @@ Item {
                 color: Styles.pushButtonColor
                 border.color: Styles.borderColor
                 border.width: width * 0.005
-                radius: width * 0.01
+                radius: width * 0.025
                 opacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
             }
 
@@ -595,7 +595,7 @@ Item {
                 color: Styles.pushButtonColor
                 border.color: Styles.borderColor
                 border.width: width * 0.005
-                radius: width * 0.01
+                radius: width * 0.025
                 opacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
             }
 
@@ -633,7 +633,7 @@ Item {
                 color: Styles.pushButtonColor
                 border.color: Styles.borderColor
                 border.width: width * 0.005
-                radius: width * 0.01
+                radius: width * 0.025
             }
 
             Layout.minimumWidth: bottomBtnsMinWidth
@@ -663,7 +663,7 @@ Item {
                 color: Styles.pushButtonColor
                 border.color: Styles.borderColor
                 border.width: width * 0.005
-                radius: width * 0.01
+                radius: width * 0.025
             }
 
             Layout.minimumWidth: bottomBtnsMinWidth
@@ -700,7 +700,7 @@ Item {
                 color: Styles.pushButtonColor
                 border.color: Styles.borderColor
                 border.width: width * 0.005
-                radius: width * 0.01
+                radius: width * 0.025
             }
 
             Layout.minimumWidth: bottomBtnsMinWidth - parent.spacing * 0.25
