@@ -38,7 +38,9 @@ public:
     void setLevel(Game::Level level);
     void resetStatistics();
 
-    const QVector<Game::WordPiece> getMixedWordsPieces() const;
+    QVector<QString> getMixedWordsPiecesContent() const;
+    QVector<Game::PieceTypes> getMixedWordsPiecesTypes() const;
+    QVector<bool> getAreMixedWordsPiecesSelected() const;
 
     const QVector<int> getFirstWordInputIndexes() const;
     const QVector<int> getSecondWordInputIndexes() const;

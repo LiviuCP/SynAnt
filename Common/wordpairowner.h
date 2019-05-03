@@ -30,7 +30,9 @@ public:
     void updateSingleWordPieceSelection(int wordPieceIndex, bool selected);
     void updateMultipleWordPiecesSelection(QVector<int> wordPieceIndexes, bool selected);
 
-    const QVector<Game::WordPiece> getMixedWordsPieces() const;
+    QVector<QString> getMixedWordsPiecesContent() const;
+    QVector<Game::PieceTypes> getMixedWordsPiecesTypes() const;
+    QVector<bool> getAreMixedWordsPiecesSelected() const;
 
     QString getFirstReferenceWord() const;
     QString getSecondReferenceWord() const;
@@ -47,10 +49,17 @@ private slots:
 private:
     void _buildMixedWordsPieces();
 
+    struct WordPiece
+    {
+        QString content;
+        Game::PieceTypes pieceType;
+        bool isSelected;
+    };
+
     WordMixer* m_pWordMixer;
     QString m_FirstReferenceWord;
     QString m_SecondReferenceWord;
-    QVector<Game::WordPiece> m_MixedWordsPieces;
+    QVector<WordPiece> m_MixedWordsPieces;
     bool m_AreSynonyms;
 
 };

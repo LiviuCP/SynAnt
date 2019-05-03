@@ -52,9 +52,40 @@ void WordPairOwner::updateMultipleWordPiecesSelection(QVector<int> wordPieceInde
     }
 }
 
-const QVector<Game::WordPiece> WordPairOwner::getMixedWordsPieces() const
+QVector<QString> WordPairOwner::getMixedWordsPiecesContent() const
 {
-    return m_MixedWordsPieces;
+    QVector<QString> content;
+
+    for (const auto& piece : m_MixedWordsPieces)
+    {
+        content.append(piece.content);
+    }
+
+    return content;
+}
+
+QVector<Game::PieceTypes> WordPairOwner::getMixedWordsPiecesTypes() const
+{
+    QVector<Game::PieceTypes> piecesTypes;
+
+    for (const auto& piece : m_MixedWordsPieces)
+    {
+        piecesTypes.append(piece.pieceType);
+    }
+
+    return piecesTypes;
+}
+
+QVector<bool> WordPairOwner::getAreMixedWordsPiecesSelected() const
+{
+    QVector<bool> areWordPiecesSelected;
+
+    for (const auto& piece : m_MixedWordsPieces)
+    {
+        areWordPiecesSelected.append(piece.isSelected);
+    }
+
+    return areWordPiecesSelected;
 }
 
 QString WordPairOwner::getFirstReferenceWord() const

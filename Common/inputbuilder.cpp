@@ -141,18 +141,18 @@ bool InputBuilder::_checkAndUpdateState(InputBuilder::WordInput &currentWordInpu
     switch (currentWordInput.state)
     {
     case WordInputState::EMPTY:
-        if (m_pWordPairOwner->getMixedWordsPieces().at(pieceIndex).pieceType == Game::PieceTypes::BEGIN_PIECE)
+        if (m_pWordPairOwner->getMixedWordsPiecesTypes().at(pieceIndex) == Game::PieceTypes::BEGIN_PIECE)
         {
             isValid = true;
             currentWordInput.state = WordInputState::BUILD_IN_PROGRESS;
         }
         break;
     case WordInputState::BUILD_IN_PROGRESS:
-        if (m_pWordPairOwner->getMixedWordsPieces().at(pieceIndex).pieceType == Game::PieceTypes::MIDDLE_PIECE)
+        if (m_pWordPairOwner->getMixedWordsPiecesTypes().at(pieceIndex) == Game::PieceTypes::MIDDLE_PIECE)
         {
             isValid = true;
         }
-        else if (m_pWordPairOwner->getMixedWordsPieces().at(pieceIndex).pieceType == Game::PieceTypes::END_PIECE)
+        else if (m_pWordPairOwner->getMixedWordsPiecesTypes().at(pieceIndex) == Game::PieceTypes::END_PIECE)
         {
             if (otherWordInput.state != WordInputState::COMPLETED)
             {
@@ -163,9 +163,9 @@ bool InputBuilder::_checkAndUpdateState(InputBuilder::WordInput &currentWordInpu
             {
                 int nrOfPiecesNotSelected{0};
 
-                for (auto piece : m_pWordPairOwner->getMixedWordsPieces())
+                for (auto isPieceSelected : m_pWordPairOwner->getAreMixedWordsPiecesSelected())
                 {
-                    if (!piece.isSelected)
+                    if (!isPieceSelected)
                     {
                         ++nrOfPiecesNotSelected;
                     }

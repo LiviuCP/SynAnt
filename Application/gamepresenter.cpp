@@ -256,9 +256,9 @@ QList<QVariant> GamePresenter::getMixedWordsPiecesContent() const
 {
     QList<QVariant> mixedWordsPiecesContent;
 
-    for (auto piece : m_pGameFacade->getMixedWordsPieces())
+    for (auto pieceContent : m_pGameFacade->getMixedWordsPiecesContent())
     {
-        mixedWordsPiecesContent.append(piece.content);
+        mixedWordsPiecesContent.append(pieceContent);
     }
 
     return mixedWordsPiecesContent;
@@ -268,9 +268,9 @@ QList<QVariant> GamePresenter::getMixedWordsPiecesTextColors() const
 {
     QList<QVariant> mixedWordsPiecesTextColors;
 
-    for (auto piece : m_pGameFacade->getMixedWordsPieces())
+    for (auto pieceType : m_pGameFacade->getMixedWordsPiecesTypes())
     {
-        mixedWordsPiecesTextColors.append(c_WordPieceTextColors[piece.pieceType]);
+        mixedWordsPiecesTextColors.append(c_WordPieceTextColors[pieceType]);
     }
 
     return mixedWordsPiecesTextColors;
@@ -280,9 +280,9 @@ QList<QVariant> GamePresenter::getMixedWordsPiecesSelections() const
 {
     QList<QVariant> mixedWordsPiecesSelections;
 
-    for (auto piece : m_pGameFacade->getMixedWordsPieces())
+    for (auto isPieceSelected : m_pGameFacade->getAreMixedWordsPiecesSelected())
     {
-        mixedWordsPiecesSelections.append(piece.isSelected);
+        mixedWordsPiecesSelections.append(isPieceSelected);
     }
 
     return mixedWordsPiecesSelections;
@@ -294,7 +294,7 @@ QList<QVariant> GamePresenter::getFirstWordInputPiecesContent() const
 
     for (auto index : m_pGameFacade->getFirstWordInputIndexes())
     {
-        firstWordInputPiecesContent.append(m_pGameFacade->getMixedWordsPieces().at(index).content);
+        firstWordInputPiecesContent.append(m_pGameFacade->getMixedWordsPiecesContent().at(index));
     }
 
     return firstWordInputPiecesContent;
@@ -306,7 +306,7 @@ QList<QVariant> GamePresenter::getFirstWordInputPiecesTextColors() const
 
     for (auto index : m_pGameFacade->getFirstWordInputIndexes())
     {
-        firstWordInputPiecesTextColors.append(c_WordPieceTextColors[m_pGameFacade->getMixedWordsPieces().at(index).pieceType]);
+        firstWordInputPiecesTextColors.append(c_WordPieceTextColors[m_pGameFacade->getMixedWordsPiecesTypes().at(index)]);
     }
 
     return firstWordInputPiecesTextColors;
@@ -328,7 +328,7 @@ QList<QVariant> GamePresenter::getSecondWordInputPiecesContent() const
 
     for (auto index : m_pGameFacade->getSecondWordInputIndexes())
     {
-        secondWordInputPiecesContent.append(m_pGameFacade->getMixedWordsPieces().at(index).content);
+        secondWordInputPiecesContent.append(m_pGameFacade->getMixedWordsPiecesContent().at(index));
     }
 
     return secondWordInputPiecesContent;
@@ -340,7 +340,7 @@ QList<QVariant> GamePresenter::getSecondWordInputPiecesTextColors() const
 
     for (auto index : m_pGameFacade->getSecondWordInputIndexes())
     {
-        secondWordInputPiecesTextColors.append(c_WordPieceTextColors[m_pGameFacade->getMixedWordsPieces().at(index).pieceType]);
+        secondWordInputPiecesTextColors.append(c_WordPieceTextColors[m_pGameFacade->getMixedWordsPiecesTypes().at(index)]);
     }
 
     return secondWordInputPiecesTextColors;

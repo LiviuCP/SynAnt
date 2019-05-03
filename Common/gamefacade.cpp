@@ -49,7 +49,7 @@ void GameFacade::resumeGame()
 
 void GameFacade::addWordPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex)
 {
-    if (!m_pWordPairOwner->getMixedWordsPieces().at(wordPieceIndex).isSelected)
+    if (!m_pWordPairOwner->getAreMixedWordsPiecesSelected().at(wordPieceIndex))
     {
         // adding piece should always occur before updating status
         bool pieceAdded{m_pInputBuilder->addPieceToInputWord(inputWordNumber, wordPieceIndex)};
@@ -75,17 +75,19 @@ void GameFacade::clearInput()
 
 void GameFacade::handleSubmitRequest()
 {
+    QVector<QString> mixedWordPiecesContent{m_pWordPairOwner->getMixedWordsPiecesContent()};
+
     QString firstInputWord;
     QString secondInputWord;
 
     for (auto index : m_pInputBuilder->getFirstWordInputIndexes())
     {
-        firstInputWord.append(m_pWordPairOwner->getMixedWordsPieces().at(index).content);
+        firstInputWord.append(mixedWordPiecesContent.at(index));
     }
 
     for (auto index : m_pInputBuilder->getSecondWordInputIndexes())
     {
-        secondInputWord.append(m_pWordPairOwner->getMixedWordsPieces().at(index).content);
+        secondInputWord.append(mixedWordPiecesContent.at(index));
     }
 
     bool success{(firstInputWord == m_pWordPairOwner->getFirstReferenceWord() && secondInputWord == m_pWordPairOwner->getSecondReferenceWord()) ||
@@ -124,9 +126,19 @@ void GameFacade::resetStatistics()
     _updateStatus(Game::StatusCodes::STATISTICS_RESET, m_pInputBuilder->isInputComplete() ? Game::StatusCodes::ALL_PIECES_SELECTED : Game::StatusCodes::DEFAULT);
 }
 
-const QVector<Game::WordPiece> GameFacade::getMixedWordsPieces() const
+QVector<QString> GameFacade::getMixedWordsPiecesContent() const
 {
-    return m_pWordPairOwner->getMixedWordsPieces();
+    return m_pWordPairOwner->getMixedWordsPiecesContent();
+}
+
+QVector<Game::PieceTypes> GameFacade::getMixedWordsPiecesTypes() const
+{
+    return m_pWordPairOwner->getMixedWordsPiecesTypes();
+}
+
+QVector<bool> GameFacade::getAreMixedWordsPiecesSelected() const
+{
+    return m_pWordPairOwner->getAreMixedWordsPiecesSelected();
 }
 
 const QVector<int> GameFacade::getFirstWordInputIndexes() const

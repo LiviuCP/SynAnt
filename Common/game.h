@@ -59,13 +59,6 @@ namespace Game
         PieceTypesCount
     };
 
-    struct WordPiece
-    {
-        QString content;
-        PieceTypes pieceType;
-        bool isSelected;
-    };
-
     static constexpr int c_MinWordSize{5};
 
     static constexpr int c_ToolTipDelay{1000};
