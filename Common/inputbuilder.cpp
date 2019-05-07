@@ -1,25 +1,16 @@
 #include "inputbuilder.h"
-#include "wordpairowner.h"
 
 InputBuilder::InputBuilder(QObject *parent)
     : QObject(parent)
-    , m_pWordPairOwner{nullptr}
     , m_FirstWordInput{}
     , m_SecondWordInput{}
+    , m_CanCloseInput{false}
 {
 }
 
-void InputBuilder::connectToWordPairOwner(WordPairOwner* pWordPairOwner)
+bool InputBuilder::addPieceToInputWord(Game::InputWordNumber inputWordNumber, int index, Game::PieceTypes pieceType)
 {
-    Q_ASSERT(pWordPairOwner);
-    m_pWordPairOwner = pWordPairOwner;
-    bool connected{connect(m_pWordPairOwner, &WordPairOwner::mixedWordsAvailable, this, &InputBuilder::resetInput)};
-    Q_ASSERT(connected);
-}
-
-bool InputBuilder::addPieceToInputWord(Game::InputWordNumber inputWordNumber, int index)
-{
-    return (inputWordNumber == Game::InputWordNumber::ONE ? _addPieceToInputWord(m_FirstWordInput, m_SecondWordInput, index) : _addPieceToInputWord(m_SecondWordInput, m_FirstWordInput, index));
+    return (inputWordNumber == Game::InputWordNumber::ONE ? _addPieceToInputWord(m_FirstWordInput, m_SecondWordInput, index, pieceType) : _addPieceToInputWord(m_SecondWordInput, m_FirstWordInput, index, pieceType));
 }
 
 void InputBuilder::removePiecesFromInputWord(Game::InputWordNumber inputWordNumber, int rangeStart)
@@ -32,6 +23,9 @@ void InputBuilder::removePiecesFromInputWord(Game::InputWordNumber inputWordNumb
     {
         _removePiecesFromWordInput(m_SecondWordInput, m_FirstWordInput, rangeStart);
     }
+
+    // confirmation will be required again when selecting an end piece while the other word is already closed
+    m_CanCloseInput = false;
 }
 
 bool InputBuilder::clearInput()
@@ -71,18 +65,25 @@ bool InputBuilder::clearInput()
 
     if (firstWordInputCleared || secondWordInputCleared)
     {
-        m_pWordPairOwner->updateMultipleWordPiecesSelection(removedPieceIndexes, false);
         success = true;
+        m_CanCloseInput = false;
+
+        Q_EMIT piecesRemovedFromInput(removedPieceIndexes);
 
         if (initialFirstWordInputState == WordInputState::COMPLETED && initialSecondWordInputState == WordInputState::COMPLETED)
         {
-            Q_EMIT completionChanged();
+            Q_EMIT inputCompletionChanged();
         }
 
         Q_EMIT inputChanged();
     }
 
     return success;
+}
+
+void InputBuilder::setCloseInputPermission(bool allowed)
+{
+    m_CanCloseInput = allowed;
 }
 
 const QVector<int> InputBuilder::getFirstWordInputIndexes() const
@@ -100,7 +101,7 @@ bool InputBuilder::isInputComplete() const
     return (m_FirstWordInput.state == WordInputState::COMPLETED && m_SecondWordInput.state == WordInputState::COMPLETED);
 }
 
-void InputBuilder::resetInput()
+void InputBuilder::onNewPiecesAvailable()
 {
     bool resetCompleteInput{m_FirstWordInput.state == WordInputState::COMPLETED && m_SecondWordInput.state == WordInputState::COMPLETED};
 
@@ -111,21 +112,21 @@ void InputBuilder::resetInput()
 
     if (resetCompleteInput)
     {
-        Q_EMIT completionChanged();
+        Q_EMIT inputCompletionChanged();
     }
 
     Q_EMIT inputChanged();
 }
 
-bool InputBuilder::_addPieceToInputWord(InputBuilder::WordInput &currentWordInput, const InputBuilder::WordInput &otherWordInput, int pieceIndex)
+bool InputBuilder::_addPieceToInputWord(InputBuilder::WordInput &currentWordInput, const InputBuilder::WordInput &otherWordInput, int pieceIndex, Game::PieceTypes pieceType)
 {
     bool success{false};
 
-    if (_checkAndUpdateState(currentWordInput, otherWordInput, pieceIndex))
+    if (_checkAndUpdateState(currentWordInput, otherWordInput, pieceType))
     {
 
         currentWordInput.indexes.append(pieceIndex);
-        m_pWordPairOwner->updateSingleWordPieceSelection(pieceIndex, true);
+        Q_EMIT pieceAddedToInput(pieceIndex);
         success = true;
 
         Q_EMIT inputChanged();
@@ -134,25 +135,25 @@ bool InputBuilder::_addPieceToInputWord(InputBuilder::WordInput &currentWordInpu
     return success;
 }
 
-bool InputBuilder::_checkAndUpdateState(InputBuilder::WordInput &currentWordInput, const InputBuilder::WordInput& otherWordInput, int pieceIndex)
+bool InputBuilder::_checkAndUpdateState(InputBuilder::WordInput &currentWordInput, const InputBuilder::WordInput& otherWordInput, Game::PieceTypes pieceType)
 {
     bool isValid{false};
 
     switch (currentWordInput.state)
     {
     case WordInputState::EMPTY:
-        if (m_pWordPairOwner->getMixedWordsPiecesTypes().at(pieceIndex) == Game::PieceTypes::BEGIN_PIECE)
+        if (pieceType == Game::PieceTypes::BEGIN_PIECE)
         {
             isValid = true;
             currentWordInput.state = WordInputState::BUILD_IN_PROGRESS;
         }
         break;
     case WordInputState::BUILD_IN_PROGRESS:
-        if (m_pWordPairOwner->getMixedWordsPiecesTypes().at(pieceIndex) == Game::PieceTypes::MIDDLE_PIECE)
+        if (pieceType == Game::PieceTypes::MIDDLE_PIECE)
         {
             isValid = true;
         }
-        else if (m_pWordPairOwner->getMixedWordsPiecesTypes().at(pieceIndex) == Game::PieceTypes::END_PIECE)
+        else if (pieceType == Game::PieceTypes::END_PIECE)
         {
             if (otherWordInput.state != WordInputState::COMPLETED)
             {
@@ -161,22 +162,14 @@ bool InputBuilder::_checkAndUpdateState(InputBuilder::WordInput &currentWordInpu
             }
             else
             {
-                int nrOfPiecesNotSelected{0};
+                Q_EMIT closeInputPermissionRequested();
 
-                for (auto isPieceSelected : m_pWordPairOwner->getAreMixedWordsPiecesSelected())
-                {
-                    if (!isPieceSelected)
-                    {
-                        ++nrOfPiecesNotSelected;
-                    }
-                }
-
-                if (nrOfPiecesNotSelected == 1)
+                if(m_CanCloseInput)
                 {
                     isValid = true;
                     currentWordInput.state = WordInputState::COMPLETED;
 
-                    Q_EMIT completionChanged();
+                    Q_EMIT inputCompletionChanged();
                 }
             }
         }
@@ -200,9 +193,9 @@ void InputBuilder::_removePiecesFromWordInput(InputBuilder::WordInput &currentWo
     }
 
     currentWordInput.indexes.remove(rangeStart, currentWordInput.indexes.size()-rangeStart);
-    Q_EMIT inputChanged();
 
-    m_pWordPairOwner->updateMultipleWordPiecesSelection(removedPieceIndexes, false);
+    Q_EMIT inputChanged();
+    Q_EMIT piecesRemovedFromInput(removedPieceIndexes);
 
     if (currentWordInput.state == WordInputState::BUILD_IN_PROGRESS)
     {
@@ -214,7 +207,7 @@ void InputBuilder::_removePiecesFromWordInput(InputBuilder::WordInput &currentWo
 
         if (otherWordInput.state == WordInputState::COMPLETED)
         {
-            Q_EMIT completionChanged();
+            Q_EMIT inputCompletionChanged();
         }
     }
 }

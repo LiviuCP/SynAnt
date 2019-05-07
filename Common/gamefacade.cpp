@@ -18,7 +18,6 @@ GameFacade::GameFacade(QString applicationPath, QObject *parent)
 {
     m_pWordMixer = new WordMixer{m_ApplicationPath + "/" + GameStrings::c_FileName, this};
     m_pWordPairOwner->connectToWordMixer(m_pWordMixer);
-    m_pInputBuilder->connectToWordPairOwner(m_pWordPairOwner);
     m_pStatusUpdateTimer->setSingleShot(true);
 
     bool connected = connect(m_pWordPairOwner, &WordPairOwner::mixedWordsAvailable, this, &GameFacade::mixedWordsChanged);
@@ -27,11 +26,19 @@ GameFacade::GameFacade(QString applicationPath, QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pInputBuilder, &InputBuilder::inputChanged, this, &GameFacade::inputChanged);
     Q_ASSERT(connected);
-    connected = connect(m_pInputBuilder, &InputBuilder::completionChanged, this, &GameFacade::completionChanged);
+    connected = connect(m_pInputBuilder, &InputBuilder::inputCompletionChanged, this, &GameFacade::completionChanged);
+    Q_ASSERT(connected);
+    connected = connect(m_pInputBuilder, &InputBuilder::closeInputPermissionRequested, this, &GameFacade::_onCloseInputPermissionRequested);
     Q_ASSERT(connected);
     connected = connect(m_pScoreItem, &ScoreItem::statisticsUpdated, this, &GameFacade::statisticsChanged);
     Q_ASSERT(connected);
     connected = connect(m_pStatusUpdateTimer, &QTimer::timeout, this, &GameFacade::_onStatusUpdateTimeout);
+    Q_ASSERT(connected);
+    connected = connect(m_pWordPairOwner, &WordPairOwner::mixedWordsAvailable, m_pInputBuilder, &InputBuilder::onNewPiecesAvailable);
+    Q_ASSERT(connected);
+    connected = connect(m_pInputBuilder, &InputBuilder::pieceAddedToInput, m_pWordPairOwner, &WordPairOwner::onPieceAddedToInput);
+    Q_ASSERT(connected);
+    connected = connect(m_pInputBuilder, &InputBuilder::piecesRemovedFromInput, m_pWordPairOwner, &WordPairOwner::onPiecesRemovedFromInput);
     Q_ASSERT(connected);
 }
 
@@ -49,10 +56,11 @@ void GameFacade::resumeGame()
 
 void GameFacade::addWordPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex)
 {
-    if (!m_pWordPairOwner->getAreMixedWordsPiecesSelected().at(wordPieceIndex))
+    if (!m_pWordPairOwner->getIsWordPieceSelected(wordPieceIndex))
     {
         // adding piece should always occur before updating status
-        bool pieceAdded{m_pInputBuilder->addPieceToInputWord(inputWordNumber, wordPieceIndex)};
+        Game::PieceTypes pieceType{m_pWordPairOwner->getWordPieceType(wordPieceIndex)};
+        bool pieceAdded{m_pInputBuilder->addPieceToInputWord(inputWordNumber, wordPieceIndex, pieceType)};
 
         _updateStatus(pieceAdded ? Game::StatusCodes::PIECE_SUCCESSFULLY_ADDED : Game::StatusCodes::PIECE_NOT_ADDED,
                       m_pInputBuilder->isInputComplete() ? Game::StatusCodes::ALL_PIECES_SELECTED : Game::StatusCodes::DEFAULT);
@@ -138,7 +146,7 @@ QVector<Game::PieceTypes> GameFacade::getMixedWordsPiecesTypes() const
 
 QVector<bool> GameFacade::getAreMixedWordsPiecesSelected() const
 {
-    return m_pWordPairOwner->getAreMixedWordsPiecesSelected();
+    return m_pWordPairOwner->getAreMixedWordsPiecesAddedToInput();
 }
 
 const QVector<int> GameFacade::getFirstWordInputIndexes() const
@@ -189,6 +197,11 @@ int GameFacade::getTotalWordPairs() const
 bool GameFacade::areSynonyms() const
 {
     return m_pWordPairOwner->areSynonyms();
+}
+
+void GameFacade::_onCloseInputPermissionRequested()
+{
+    m_pInputBuilder->setCloseInputPermission(m_pWordPairOwner->isLastAvailableWordPiece());
 }
 
 void GameFacade::_onStatusUpdateTimeout()

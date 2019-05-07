@@ -66,6 +66,7 @@ signals:
     Q_SIGNAL void statusChanged(Game::StatusCodes status);
 
 private slots:
+    void _onCloseInputPermissionRequested();
     void _onStatusUpdateTimeout();
 
 private:

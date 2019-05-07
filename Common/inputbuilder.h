@@ -13,19 +13,16 @@
 
 #include "game.h"
 
-class WordPairOwner;
-
 class InputBuilder : public QObject
 {
     Q_OBJECT
 public:
     explicit InputBuilder(QObject *parent = nullptr);
 
-    void connectToWordPairOwner(WordPairOwner* pWordPairOwner);
-
-    bool addPieceToInputWord(Game::InputWordNumber inputWordNumber, int index);
+    bool addPieceToInputWord(Game::InputWordNumber inputWordNumber, int index, Game::PieceTypes pieceType);
     void removePiecesFromInputWord(Game::InputWordNumber inputWordNumber, int rangeStart);
     bool clearInput();
+    void setCloseInputPermission(bool allowed);
 
     const QVector<int> getFirstWordInputIndexes() const;
     const QVector<int> getSecondWordInputIndexes() const;
@@ -33,11 +30,14 @@ public:
     bool isInputComplete() const;
 
 signals:
+    Q_SIGNAL void closeInputPermissionRequested();
+    Q_SIGNAL void pieceAddedToInput(int index);
+    Q_SIGNAL void piecesRemovedFromInput(QVector<int> indexes);
     Q_SIGNAL void inputChanged();
-    Q_SIGNAL void completionChanged();
+    Q_SIGNAL void inputCompletionChanged();
 
 public slots:
-    void resetInput();
+    void onNewPiecesAvailable();
 
 private:
     enum class WordInputState
@@ -55,13 +55,13 @@ private:
         WordInputState state;
     };
 
-    bool _addPieceToInputWord(WordInput& currentWordInput, const WordInput& otherWordInput, int pieceIndex);
-    bool _checkAndUpdateState(WordInput& currentWordInput, const WordInput& otherWordInput, int pieceIndex);
+    bool _addPieceToInputWord(WordInput& currentWordInput, const WordInput& otherWordInput, int pieceIndex, Game::PieceTypes pieceType);
+    bool _checkAndUpdateState(WordInput& currentWordInput, const WordInput& otherWordInput, Game::PieceTypes pieceType);
     void _removePiecesFromWordInput(WordInput& currentWordInput, const WordInput& otherWordInput, int rangeStart);
 
-    WordPairOwner* m_pWordPairOwner;
     WordInput m_FirstWordInput;
     WordInput m_SecondWordInput;
+    bool m_CanCloseInput;
 };
 
 #endif // INPUTBUILDER_H
