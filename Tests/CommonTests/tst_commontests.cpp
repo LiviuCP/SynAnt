@@ -6,6 +6,7 @@
 
 #include "../../Common/wordmixer.h"
 #include "../../Common/scoreitem.h"
+#include "../../Common/datasource.h"
 #include "../../Common/gamestrings.h"
 
 class CommonTests : public QObject
@@ -36,41 +37,38 @@ void CommonTests::testManualWordsEntry()
     const QString firstWord{"firstword"};
     const QString secondWord{"secondword"};
 
-    std::unique_ptr<WordMixer> pWordMixer{new WordMixer{GameStrings::c_NoFile}};
+    std::unique_ptr<WordMixer> pWordMixer{new WordMixer{}};
 
-    pWordMixer->setFirstWord(firstWord);
-    pWordMixer->setSecondWord(secondWord);
-
-    pWordMixer->mixWords();
+    pWordMixer->mixWords(QPair<QString, QString>{firstWord, secondWord}, true);
 
     QVERIFY2(firstWord==pWordMixer->getFirstWord() && secondWord==pWordMixer->getSecondWord() , "Manual words entry does not work properly");
 }
 
 void CommonTests::testWordPairsAreCorrect()
 {
-    std::unique_ptr<WordMixer> pWordMixer{new WordMixer{GameStrings::c_NoFile}};
+    std::unique_ptr<DataSource> pDataSource{new DataSource{GameStrings::c_NoFile}};
 
     // empty row
-    QVERIFY_EXCEPTION_THROWN(pWordMixer->fetchWordsFromRowContent(""), std::exception);
+    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest(""), std::exception);
 
     // illegal chars (including capitals)
-    QVERIFY_EXCEPTION_THROWN(pWordMixer->fetchWordsFromRowContent("firstWord!secondword"), std::exception);
-    QVERIFY_EXCEPTION_THROWN(pWordMixer->fetchWordsFromRowContent("firstword!second&word"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("firstWord!secondword"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("firstword!second&word"), std::exception);
 
     // no separator
-    QVERIFY_EXCEPTION_THROWN(pWordMixer->fetchWordsFromRowContent("firstwordsecondword"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("firstwordsecondword"), std::exception);
 
     // multiple separators
-    QVERIFY_EXCEPTION_THROWN(pWordMixer->fetchWordsFromRowContent("firs!tword!secondword"), std::exception);
-    QVERIFY_EXCEPTION_THROWN(pWordMixer->fetchWordsFromRowContent("firs!tword=secondword"), std::exception);
-    QVERIFY_EXCEPTION_THROWN(pWordMixer->fetchWordsFromRowContent("firs=tword!secondword"), std::exception);
-    QVERIFY_EXCEPTION_THROWN(pWordMixer->fetchWordsFromRowContent("firs=tword=secondword"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("firs!tword!secondword"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("firs!tword=secondword"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("firs=tword!secondword"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("firs=tword=secondword"), std::exception);
 
     // less than minimum required number of chars per word
-    QVERIFY_EXCEPTION_THROWN(pWordMixer->fetchWordsFromRowContent("abcd!secondword"), std::exception);
-    QVERIFY_EXCEPTION_THROWN(pWordMixer->fetchWordsFromRowContent("abcd=secondword"), std::exception);
-    QVERIFY_EXCEPTION_THROWN(pWordMixer->fetchWordsFromRowContent("firstword=efgh"), std::exception);
-    QVERIFY_EXCEPTION_THROWN(pWordMixer->fetchWordsFromRowContent("firstword!efgh"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("abcd!secondword"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("abcd=secondword"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("firstword=efgh"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("firstword!efgh"), std::exception);
 }
 
 void CommonTests::testWordsAreCorrectlyMixed()
@@ -78,21 +76,18 @@ void CommonTests::testWordsAreCorrectlyMixed()
     const QString firstWord{"firstword"};
     const QString secondWord{"secondword"};
 
-    std::unique_ptr<WordMixer> pWordMixer{new WordMixer{GameStrings::c_NoFile}};
-
-    pWordMixer->setFirstWord(firstWord);
-    pWordMixer->setSecondWord(secondWord);
+    std::unique_ptr<WordMixer> pWordMixer{new WordMixer{}};
 
     pWordMixer->setWordPieceSize(Game::Level::EASY);
-    pWordMixer->mixWords();
+    pWordMixer->mixWords(QPair<QString, QString>{firstWord, secondWord}, true);
     _checkCorrectMixing(pWordMixer->getMixedWordsPiecesContent(), QVector<QString>{"fir", "stw", "ord", "sec", "ond", "wor", "d"}, "easy");
 
     pWordMixer->setWordPieceSize(Game::Level::MEDIUM);
-    pWordMixer->mixWords();
+    pWordMixer->mixWords(QPair<QString, QString>{firstWord, secondWord}, true);
     _checkCorrectMixing(pWordMixer->getMixedWordsPiecesContent(), QVector<QString>{"fi", "rs", "tw", "or", "d", "se", "co", "nd", "wo", "rd"}, "medium");
 
     pWordMixer->setWordPieceSize(Game::Level::HARD);
-    pWordMixer->mixWords();
+    pWordMixer->mixWords(QPair<QString, QString>{firstWord, secondWord}, true);
     _checkCorrectMixing(pWordMixer->getMixedWordsPiecesContent(), QVector<QString>{"f", "i", "r", "s", "t", "w", "o", "r", "d", "s", "e", "c", "o", "n", "d", "w", "o", "r", "d"},
                         "hard");
 }
@@ -107,13 +102,11 @@ void CommonTests::testFirstLastPieceIndexesAreCorrect()
     const char* secondWordFirstPieceIndexNotCorrect{"Index of the first piece of second word in the mixed words array is not correct"};
     const char* secondWordLastPieceIndexNotCorrect{"Index of the last piece of second word in the mixed words array is not correct"};
 
-    std::unique_ptr<WordMixer> pWordMixer{new WordMixer{GameStrings::c_NoFile}};
-
-    pWordMixer->setFirstWord(firstWord);
-    pWordMixer->setSecondWord(secondWord);
+    std::unique_ptr<WordMixer> pWordMixer{new WordMixer{}};
 
     pWordMixer->setWordPieceSize(Game::Level::EASY);
-    pWordMixer->mixWords();
+    // for testing purposes we always assume the words are synonyms
+    pWordMixer->mixWords(QPair<QString, QString>{firstWord, secondWord}, true);
 
     QVERIFY2(pWordMixer->getMixedWordsPiecesContent()[pWordMixer->getFirstWordFirstPieceIndex()] == "wor", firstWordFirstPieceIndexNotCorrect);
     QVERIFY2(pWordMixer->getMixedWordsPiecesContent()[pWordMixer->getFirstWordLastPieceIndex()] == "e", firstWordLastPieceIndexNotCorrect);
@@ -121,7 +114,7 @@ void CommonTests::testFirstLastPieceIndexesAreCorrect()
     QVERIFY2(pWordMixer->getMixedWordsPiecesContent()[pWordMixer->getSecondWordLastPieceIndex()] == "d", secondWordLastPieceIndexNotCorrect);
 
     pWordMixer->setWordPieceSize(Game::Level::MEDIUM);
-    pWordMixer->mixWords();
+    pWordMixer->mixWords(QPair<QString, QString>{firstWord, secondWord}, true);
 
     QVERIFY2(pWordMixer->getMixedWordsPiecesContent()[pWordMixer->getFirstWordFirstPieceIndex()] == "wo", firstWordFirstPieceIndexNotCorrect);
     QVERIFY2(pWordMixer->getMixedWordsPiecesContent()[pWordMixer->getFirstWordLastPieceIndex()] == "e", firstWordLastPieceIndexNotCorrect);
@@ -129,7 +122,7 @@ void CommonTests::testFirstLastPieceIndexesAreCorrect()
     QVERIFY2(pWordMixer->getMixedWordsPiecesContent()[pWordMixer->getSecondWordLastPieceIndex()] == "rd", secondWordLastPieceIndexNotCorrect);
 
     pWordMixer->setWordPieceSize(Game::Level::HARD);
-    pWordMixer->mixWords();
+    pWordMixer->mixWords(QPair<QString, QString>{firstWord, secondWord}, true);
 
     QVERIFY2(pWordMixer->getMixedWordsPiecesContent()[pWordMixer->getFirstWordFirstPieceIndex()] == "w", firstWordFirstPieceIndexNotCorrect);
     QVERIFY2(pWordMixer->getMixedWordsPiecesContent()[pWordMixer->getFirstWordLastPieceIndex()] == "e", firstWordLastPieceIndexNotCorrect);

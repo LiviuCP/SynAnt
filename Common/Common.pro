@@ -29,7 +29,9 @@ SOURCES += \
         exceptions.cpp \
         gamefacade.cpp \
         wordpairowner.cpp \
-        inputbuilder.cpp
+        inputbuilder.cpp \
+        datasource.cpp \
+        datasourceaccess.cpp
 
 HEADERS += \
         common.h \
@@ -41,7 +43,9 @@ HEADERS += \
         exceptions.h \
         gamefacade.h \
         wordpairowner.h \
-        inputbuilder.h
+        inputbuilder.h \
+        datasource.h \
+        datasourceaccess.h
 
 unix {
     target.path = /usr/lib

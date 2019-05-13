@@ -2,8 +2,9 @@
    This class connects the front-end UI part of the code (presenter) to the back-end code base:
    1) Backend classes are being accessed by presenter through facade by executing function calls.
    2) In return backend classes send signals to presenter through facade.
+
    3) The facade checks the user input created by InputBuilder against the reference words contained in WordPairOwner.
-   4) The facade provides decoupling by hiding the backend functionality (WordMixer, ScoreItem, WordPairOwner, InputBuilder) entirely from presenter.
+   4) The facade provides decoupling by hiding the backend functionality (WordMixer, ScoreItem, WordPairOwner, InputBuilder, DataSource and DataSourceAccess) entirely from presenter.
    5) Last but not least the facade is the only responsible class for updating the status of the game (which is displayed in the status box of the main pane).
 */
 
@@ -15,9 +16,11 @@
 
 #include "game.h"
 
+class DataSource;
+class DataSourceAccess;
+class WordMixer;
 class WordPairOwner;
 class InputBuilder;
-class WordMixer;
 class ScoreItem;
 
 class GameFacade : public QObject
@@ -68,14 +71,17 @@ signals:
 private slots:
     void _onCloseInputPermissionRequested();
     void _onStatusUpdateTimeout();
+    void _onDataReady();
 
 private:
     void _updateStatus(Game::StatusCodes tempStatusCode, Game::StatusCodes permStatusCode = Game::StatusCodes::DEFAULT);
 
     QString m_ApplicationPath;
+    DataSource* m_pDataSource;
+    DataSourceAccess* m_pDataSourceAccess;
+    WordMixer* m_pWordMixer;
     WordPairOwner* m_pWordPairOwner;
     InputBuilder* m_pInputBuilder;
-    WordMixer* m_pWordMixer;
     ScoreItem* m_pScoreItem;
     QTimer* m_pStatusUpdateTimer;
     Game::StatusCodes m_CurrentStatusCode;

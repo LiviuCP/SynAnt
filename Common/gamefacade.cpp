@@ -1,22 +1,26 @@
 #include "gamefacade.h"
+#include "datasource.h"
+#include "datasourceaccess.h"
+#include "wordmixer.h"
 #include "wordpairowner.h"
 #include "inputbuilder.h"
-#include "wordmixer.h"
 #include "scoreitem.h"
 #include "gamestrings.h"
 
 GameFacade::GameFacade(QString applicationPath, QObject *parent)
     : QObject(parent)
     , m_ApplicationPath{applicationPath}
+    , m_pDataSourceAccess{new DataSourceAccess{this}}
+    , m_pWordMixer{new WordMixer{this}}
     , m_pWordPairOwner{new WordPairOwner{this}}
     , m_pInputBuilder{new InputBuilder{this}}
-    , m_pWordMixer{nullptr}
     , m_pScoreItem {new ScoreItem{this}}
     , m_pStatusUpdateTimer{new QTimer{this}}
     , m_CurrentStatusCode{Game::StatusCodes::DEFAULT}
     , m_NextStatusCode{Game::StatusCodes::DEFAULT}
 {
-    m_pWordMixer = new WordMixer{m_ApplicationPath + "/" + GameStrings::c_FileName, this};
+    m_pDataSource = new DataSource{m_ApplicationPath + "/" + GameStrings::c_FileName, this};
+    m_pDataSourceAccess->connectToDataSource(m_pDataSource);
     m_pWordPairOwner->connectToWordMixer(m_pWordMixer);
     m_pStatusUpdateTimer->setSingleShot(true);
 
@@ -40,12 +44,16 @@ GameFacade::GameFacade(QString applicationPath, QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pInputBuilder, &InputBuilder::piecesRemovedFromInput, m_pWordPairOwner, &WordPairOwner::onPiecesRemovedFromInput);
     Q_ASSERT(connected);
+    connected = connect(m_pDataSource, &DataSource::dataReady, this, &GameFacade::_onDataReady);
+    Q_ASSERT(connected);
+
+    m_pDataSource->init();
 }
 
 void GameFacade::startGame()
 {
     Q_EMIT statisticsChanged();
-    m_pWordMixer->mixWords();
+    m_pDataSourceAccess->requestNewDataSourceEntry();
     _updateStatus(Game::StatusCodes::GAME_STARTED);
 }
 
@@ -102,13 +110,12 @@ void GameFacade::handleSubmitRequest()
                  (firstInputWord == m_pWordPairOwner->getSecondReferenceWord() && secondInputWord == m_pWordPairOwner->getFirstReferenceWord())};
 
     Game::StatusCodes statusCode{success ? Game::StatusCodes::SUCCESS : Game::StatusCodes::INCORRECT_WORDS};
-
     _updateStatus(statusCode, success ? Game::StatusCodes::DEFAULT : Game::StatusCodes::ALL_PIECES_SELECTED);
 
     if (success)
     {
         m_pScoreItem->updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
-        m_pWordMixer->mixWords();
+        m_pDataSourceAccess->requestNewDataSourceEntry();
     }
 }
 
@@ -116,15 +123,14 @@ void GameFacade::provideResultsToUser()
 {
     m_pScoreItem->updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
     _updateStatus(Game::StatusCodes::REQUESTED_BY_USER);
-    m_pWordMixer->mixWords();
+    m_pDataSourceAccess->requestNewDataSourceEntry();
 }
 
 void GameFacade::setLevel(Game::Level level)
 {
     m_pWordMixer->setWordPieceSize(level);
     m_pScoreItem->setScoreIncrement(level);
-    m_pWordMixer->mixWords();
-
+    m_pDataSourceAccess->requestNewDataSourceEntry();
     _updateStatus(Game::StatusCodes::LEVEL_CHANGED);
 }
 
@@ -208,6 +214,12 @@ void GameFacade::_onStatusUpdateTimeout()
 {
     Q_EMIT statusChanged(m_NextStatusCode);
     m_CurrentStatusCode = m_NextStatusCode;
+}
+
+void GameFacade::_onDataReady()
+{
+    bool connected{connect(m_pDataSource, &DataSource::entryFetched, m_pWordMixer, &WordMixer::mixWords)};
+    Q_ASSERT(connected);
 }
 
 void GameFacade::_updateStatus(Game::StatusCodes tempStatusCode, Game::StatusCodes permStatusCode)
