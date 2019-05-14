@@ -29,8 +29,8 @@ private:
     int _generateEntryNumber();
 
     DataSource* m_pDataSource;
-    int m_AvailableEntries;
-    std::default_random_engine m_RowNumberEngine;
+    std::default_random_engine m_ChooseEntryNumberEngine;
+    QVector<bool> m_EntryUsedStatuses;
 };
 
 #endif // DATASOURCEACCESS_H

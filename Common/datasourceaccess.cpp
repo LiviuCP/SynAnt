@@ -5,8 +5,8 @@ DataSourceAccess::DataSourceAccess(QObject *parent)
     : QObject(parent)
     , m_pDataSource{nullptr}
 {
-    std::random_device rDev1{};
-    m_RowNumberEngine.seed(rDev1());
+    std::random_device randomDevice{};
+    m_ChooseEntryNumberEngine.seed(randomDevice());
 }
 
 void DataSourceAccess::connectToDataSource(DataSource *pDataSource)
@@ -22,15 +22,38 @@ void DataSourceAccess::requestNewDataSourceEntry()
     int dataEntryNumber(_generateEntryNumber());
 
     m_pDataSource->fetchDataEntry(dataEntryNumber);
+    m_EntryUsedStatuses[dataEntryNumber] = true;
 }
 
 void DataSourceAccess::onDataSourceReady()
 {
-    m_AvailableEntries = m_pDataSource->getNrOfEntries();
+    m_EntryUsedStatuses.fill(false, m_pDataSource->getNrOfEntries());
 }
 
 int DataSourceAccess::_generateEntryNumber()
 {
-    std::uniform_int_distribution<int> rowNumberDist{0, m_AvailableEntries - 1};
-    return rowNumberDist(m_RowNumberEngine);
+    int alreadyAccessedEntriesCount{m_EntryUsedStatuses.count(true)};
+
+    if (alreadyAccessedEntriesCount == m_EntryUsedStatuses.size())
+    {
+        m_EntryUsedStatuses.fill(false);
+        alreadyAccessedEntriesCount = 0;
+    }
+
+    std::uniform_int_distribution<int> chooseEntryNumberDist{0, m_EntryUsedStatuses.size() - alreadyAccessedEntriesCount-1};
+
+    int chosenAvailableEntryRelativeNr{chooseEntryNumberDist(m_ChooseEntryNumberEngine)};
+    int chosenAvailableEntryAbsoluteNr{-1};
+
+    for (int iterationNr{0}; iterationNr <= chosenAvailableEntryRelativeNr; ++iterationNr)
+    {
+        ++chosenAvailableEntryAbsoluteNr;
+
+        while(m_EntryUsedStatuses[chosenAvailableEntryAbsoluteNr])
+        {
+            ++chosenAvailableEntryAbsoluteNr;
+        }
+    }
+
+    return chosenAvailableEntryAbsoluteNr;
 }
