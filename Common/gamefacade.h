@@ -2,10 +2,10 @@
    This class connects the front-end UI part of the code (presenter) to the back-end code base:
    1) Backend classes are being accessed by presenter through facade by executing function calls.
    2) In return backend classes send signals to presenter through facade.
-
    3) The facade checks the user input created by InputBuilder against the reference words contained in WordPairOwner.
-   4) The facade provides decoupling by hiding the backend functionality (WordMixer, ScoreItem, WordPairOwner, InputBuilder, DataSource and DataSourceAccess) entirely from presenter.
-   5) Last but not least the facade is the only responsible class for updating the status of the game (which is displayed in the status box of the main pane).
+   4) The facade intermediates the data communication between source and consumer (WordMixer).
+   5) The facade provides decoupling by hiding the backend functionality (WordMixer, ScoreItem, WordPairOwner, InputBuilder, DataSource and DataSourceAccess) entirely from presenter.
+   6) Last but not least the facade is the only responsible class for updating the status of the game (which is displayed in the status box of the main pane).
 */
 
 #ifndef GAMEFACADE_H
@@ -17,7 +17,7 @@
 #include "game.h"
 
 class DataSource;
-class DataSourceAccess;
+class DataSourceAccessHelper;
 class WordMixer;
 class WordPairOwner;
 class InputBuilder;
@@ -78,7 +78,7 @@ private:
 
     QString m_ApplicationPath;
     DataSource* m_pDataSource;
-    DataSourceAccess* m_pDataSourceAccess;
+    DataSourceAccessHelper* m_pDataSourceAccess;
     WordMixer* m_pWordMixer;
     WordPairOwner* m_pWordPairOwner;
     InputBuilder* m_pInputBuilder;

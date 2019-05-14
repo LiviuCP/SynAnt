@@ -1,37 +1,22 @@
 #include "datasourceaccess.h"
 #include "datasource.h"
 
-DataSourceAccess::DataSourceAccess(QObject *parent)
+DataSourceAccessHelper::DataSourceAccessHelper(QObject *parent)
     : QObject(parent)
-    , m_pDataSource{nullptr}
 {
     std::random_device randomDevice{};
     m_ChooseEntryNumberEngine.seed(randomDevice());
 }
 
-void DataSourceAccess::connectToDataSource(DataSource *pDataSource)
+void DataSourceAccessHelper::setEntriesTable(int nrOfEntries)
 {
-    Q_ASSERT(pDataSource);
-    m_pDataSource = pDataSource;
-    bool connected = connect(m_pDataSource, &DataSource::dataReady, this, &DataSourceAccess::onDataSourceReady);
-    Q_ASSERT(connected);
+    m_EntryUsedStatuses.fill(false, nrOfEntries);
 }
 
-void DataSourceAccess::requestNewDataSourceEntry()
+int DataSourceAccessHelper::generateEntryNumber()
 {
-    int dataEntryNumber(_generateEntryNumber());
+    Q_ASSERT(m_EntryUsedStatuses.size());
 
-    m_pDataSource->fetchDataEntry(dataEntryNumber);
-    m_EntryUsedStatuses[dataEntryNumber] = true;
-}
-
-void DataSourceAccess::onDataSourceReady()
-{
-    m_EntryUsedStatuses.fill(false, m_pDataSource->getNrOfEntries());
-}
-
-int DataSourceAccess::_generateEntryNumber()
-{
     int alreadyAccessedEntriesCount{m_EntryUsedStatuses.count(true)};
 
     if (alreadyAccessedEntriesCount == m_EntryUsedStatuses.size())
@@ -54,6 +39,8 @@ int DataSourceAccess::_generateEntryNumber()
             ++chosenAvailableEntryAbsoluteNr;
         }
     }
+
+    m_EntryUsedStatuses[chosenAvailableEntryAbsoluteNr] = true;
 
     return chosenAvailableEntryAbsoluteNr;
 }

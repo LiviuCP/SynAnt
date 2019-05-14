@@ -10,7 +10,7 @@
 GameFacade::GameFacade(QString applicationPath, QObject *parent)
     : QObject(parent)
     , m_ApplicationPath{applicationPath}
-    , m_pDataSourceAccess{new DataSourceAccess{this}}
+    , m_pDataSourceAccess{new DataSourceAccessHelper{this}}
     , m_pWordMixer{new WordMixer{this}}
     , m_pWordPairOwner{new WordPairOwner{this}}
     , m_pInputBuilder{new InputBuilder{this}}
@@ -20,7 +20,6 @@ GameFacade::GameFacade(QString applicationPath, QObject *parent)
     , m_NextStatusCode{Game::StatusCodes::DEFAULT}
 {
     m_pDataSource = new DataSource{m_ApplicationPath + "/" + GameStrings::c_FileName, this};
-    m_pDataSourceAccess->connectToDataSource(m_pDataSource);
     m_pWordPairOwner->connectToWordMixer(m_pWordMixer);
     m_pStatusUpdateTimer->setSingleShot(true);
 
@@ -53,7 +52,7 @@ GameFacade::GameFacade(QString applicationPath, QObject *parent)
 void GameFacade::startGame()
 {
     Q_EMIT statisticsChanged();
-    m_pDataSourceAccess->requestNewDataSourceEntry();
+    m_pDataSource->fetchDataEntry(m_pDataSourceAccess->generateEntryNumber());
     _updateStatus(Game::StatusCodes::GAME_STARTED);
 }
 
@@ -115,7 +114,7 @@ void GameFacade::handleSubmitRequest()
     if (success)
     {
         m_pScoreItem->updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
-        m_pDataSourceAccess->requestNewDataSourceEntry();
+        m_pDataSource->fetchDataEntry(m_pDataSourceAccess->generateEntryNumber());
     }
 }
 
@@ -123,14 +122,14 @@ void GameFacade::provideResultsToUser()
 {
     m_pScoreItem->updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
     _updateStatus(Game::StatusCodes::REQUESTED_BY_USER);
-    m_pDataSourceAccess->requestNewDataSourceEntry();
+    m_pDataSource->fetchDataEntry(m_pDataSourceAccess->generateEntryNumber());
 }
 
 void GameFacade::setLevel(Game::Level level)
 {
     m_pWordMixer->setWordPieceSize(level);
     m_pScoreItem->setScoreIncrement(level);
-    m_pDataSourceAccess->requestNewDataSourceEntry();
+    m_pDataSource->fetchDataEntry(m_pDataSourceAccess->generateEntryNumber());
     _updateStatus(Game::StatusCodes::LEVEL_CHANGED);
 }
 
@@ -218,6 +217,8 @@ void GameFacade::_onStatusUpdateTimeout()
 
 void GameFacade::_onDataReady()
 {
+    m_pDataSourceAccess->setEntriesTable(m_pDataSource->getNrOfEntries());
+
     bool connected{connect(m_pDataSource, &DataSource::entryFetched, m_pWordMixer, &WordMixer::mixWords)};
     Q_ASSERT(connected);
 }

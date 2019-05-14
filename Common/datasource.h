@@ -2,7 +2,7 @@
    This class fulfills following tasks:
    1) Connects to a raw data file.
    2) Reads the raw data, processes it to word pair entries and stores each obtained entry into a processed data array.
-   3) Based on a received valid entry number it hands over the requested data entry to the consumer class (WordMixer)
+   3) Based on a received valid entry number it hands over the requested data entry to the consumer class (WordMixer).
 */
 
 #ifndef DATASOURCE_H
