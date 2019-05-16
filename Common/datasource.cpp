@@ -15,7 +15,7 @@ DataSource::DataSource(const QString &dataFilePath, QObject *parent)
 {
     QFileInfo dataSourceFileStatus{dataFilePath};
 
-    if (!dataSourceFileStatus.exists())
+    if (parent && !dataSourceFileStatus.exists())
     {
         throw FileException{GameStrings::c_FileNotFoundMessage, dataFilePath};
     }
