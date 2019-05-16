@@ -20,6 +20,16 @@ GameFacade::GameFacade(QString applicationPath, QObject *parent)
     , m_NextStatusCode{Game::StatusCodes::DEFAULT}
 {
     m_pDataSource = new DataSource{m_ApplicationPath + "/" + GameStrings::c_FileName, this};
+
+    // all QObjects used by application (except the QML registered ones) should be parented (the non-parented ones would only be used in tests)
+    Q_ASSERT(m_pDataSource->parent());
+    Q_ASSERT(m_pDataSourceAccessHelper->parent());
+    Q_ASSERT(m_pWordMixer->parent());
+    Q_ASSERT(m_pWordPairOwner->parent());
+    Q_ASSERT(m_pInputBuilder->parent());
+    Q_ASSERT(m_pScoreItem->parent());
+    Q_ASSERT(m_pStatusUpdateTimer->parent());
+
     m_pWordPairOwner->connectToWordMixer(m_pWordMixer);
     m_pStatusUpdateTimer->setSingleShot(true);
 

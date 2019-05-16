@@ -36,7 +36,8 @@ GamePresenter::GamePresenter(QObject *parent)
     , m_SecondWordInputHoverIndex{-1}
     , m_pGameFacade {new GameFacade{QGuiApplication::applicationDirPath(), this}}
 {
-    Q_ASSERT(m_pGameFacade);
+    // all QObjects used by application (except the QML registered ones) should be parented (the non-parented ones would only be used in tests)
+    Q_ASSERT(m_pGameFacade->parent());
 
     bool connected{connect(m_pGameFacade, &GameFacade::statisticsChanged, this, &GamePresenter::_onStatisticsChanged)};
     Q_ASSERT(connected);
