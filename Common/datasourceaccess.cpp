@@ -10,12 +10,18 @@ DataSourceAccessHelper::DataSourceAccessHelper(QObject *parent)
 
 void DataSourceAccessHelper::setEntriesTable(int nrOfEntries)
 {
+    Q_ASSERT(nrOfEntries > 0);
     m_EntryUsedStatuses.fill(false, nrOfEntries);
+}
+
+void DataSourceAccessHelper::resetUsedEntries()
+{
+    m_EntryUsedStatuses.fill(false, m_EntryUsedStatuses.size());
 }
 
 int DataSourceAccessHelper::generateEntryNumber()
 {
-    Q_ASSERT(m_EntryUsedStatuses.size());
+    Q_ASSERT(m_EntryUsedStatuses.size() > 0);
 
     int alreadyAccessedEntriesCount{m_EntryUsedStatuses.count(true)};
 
@@ -43,4 +49,14 @@ int DataSourceAccessHelper::generateEntryNumber()
     m_EntryUsedStatuses[chosenAvailableEntryAbsoluteNr] = true;
 
     return chosenAvailableEntryAbsoluteNr;
+}
+
+int DataSourceAccessHelper::getNrOfUsedEntries() const
+{
+    return m_EntryUsedStatuses.count(true);
+}
+
+int DataSourceAccessHelper::getTotalNrOfEntries() const
+{
+    return m_EntryUsedStatuses.size();
 }

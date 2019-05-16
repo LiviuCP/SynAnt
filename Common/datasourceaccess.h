@@ -17,8 +17,13 @@ class DataSourceAccessHelper : public QObject
     Q_OBJECT
 public:
     explicit DataSourceAccessHelper(QObject *parent = nullptr);
+
     void setEntriesTable(int nrOfEntries);
+    void resetUsedEntries();
     int generateEntryNumber();
+
+    int getNrOfUsedEntries() const;
+    int getTotalNrOfEntries() const;
 
 private:
     std::default_random_engine m_ChooseEntryNumberEngine;

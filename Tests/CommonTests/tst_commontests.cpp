@@ -7,6 +7,7 @@
 #include "../../Common/wordmixer.h"
 #include "../../Common/scoreitem.h"
 #include "../../Common/datasource.h"
+#include "../../Common/datasourceaccess.h"
 #include "../../Common/gamestrings.h"
 
 class CommonTests : public QObject
@@ -26,6 +27,11 @@ private Q_SLOTS:
     void testWordsAreCorrectlyMixed();
     void testFirstLastPieceIndexesAreCorrect();
     void testStatisticsCorrectlyUpdated();
+    void testDataSourceAccessHelperSetTable();
+    void testDataSourceAccessHelperUsedEntries();
+    void testDataSourceAccessHelperUseAllEntries();
+    void testDataSourceAccessHelperSelfReset();
+    void testDataSourceAccessHelperResetUsedEntries();
 };
 
 CommonTests::CommonTests()
@@ -184,6 +190,114 @@ void CommonTests::testStatisticsCorrectlyUpdated()
 
     _checkCorrectStatistics(*pScoreItem, 1, 2, Game::c_ScoreIncrements[Game::Level::HARD], 2 * Game::c_ScoreIncrements[Game::Level::HARD],
             "Checking statistics after reset and then setting level to hard and running a full and partial update");
+}
+
+void CommonTests::testDataSourceAccessHelperSetTable()
+{
+    auto setAndChangeNumberOfEntries = [](DataSourceAccessHelper& dataSourceAccessHelper, int firstSetupNrOfEntries, int secondSetupNrOfEntries)
+    {
+        dataSourceAccessHelper.setEntriesTable(firstSetupNrOfEntries);
+        Q_UNUSED(dataSourceAccessHelper.generateEntryNumber());
+        dataSourceAccessHelper.setEntriesTable(secondSetupNrOfEntries);
+    };
+
+    {
+        std::unique_ptr<DataSourceAccessHelper> pDataSourceAccessHelper{new DataSourceAccessHelper{}};
+        pDataSourceAccessHelper->setEntriesTable(4);
+
+        QVERIFY2(pDataSourceAccessHelper->getNrOfUsedEntries() == 0, "The number of used entries is not correct!");
+        QVERIFY2(pDataSourceAccessHelper->getTotalNrOfEntries() == 4, "The total number of entries is not correct!");
+    }
+
+    {
+        std::unique_ptr<DataSourceAccessHelper> pDataSourceAccessHelper{new DataSourceAccessHelper{}};
+        setAndChangeNumberOfEntries(*pDataSourceAccessHelper, 5, 5);
+
+        QVERIFY2(pDataSourceAccessHelper->getNrOfUsedEntries() == 0, "The number of used entries after second setup is not correct!");
+        QVERIFY2(pDataSourceAccessHelper->getTotalNrOfEntries() == 5, "The total number of entries after second setup is not correct!");
+    }
+
+    {
+        std::unique_ptr<DataSourceAccessHelper> pDataSourceAccessHelper{new DataSourceAccessHelper{}};
+        setAndChangeNumberOfEntries(*pDataSourceAccessHelper, 5, 4);
+
+        QVERIFY2(pDataSourceAccessHelper->getNrOfUsedEntries() == 0, "The number of used entries after second setup is not correct!");
+        QVERIFY2(pDataSourceAccessHelper->getTotalNrOfEntries() == 4, "The total number of entries after second setup is not correct!");
+    }
+
+    {
+        std::unique_ptr<DataSourceAccessHelper> pDataSourceAccessHelper{new DataSourceAccessHelper{}};
+        setAndChangeNumberOfEntries(*pDataSourceAccessHelper, 5, 6);
+
+        QVERIFY2(pDataSourceAccessHelper->getNrOfUsedEntries() == 0, "The number of used entries after second setup is not correct!");
+        QVERIFY2(pDataSourceAccessHelper->getTotalNrOfEntries() == 6, "The total number of entries after second setup is not correct!");
+    }
+}
+
+void CommonTests::testDataSourceAccessHelperUsedEntries()
+{
+    std::unique_ptr<DataSourceAccessHelper> pDataSourceAccessHelper{new DataSourceAccessHelper{}};
+
+    pDataSourceAccessHelper->setEntriesTable(5);
+
+    Q_UNUSED(pDataSourceAccessHelper->generateEntryNumber());
+    Q_UNUSED(pDataSourceAccessHelper->generateEntryNumber());
+    Q_UNUSED(pDataSourceAccessHelper->generateEntryNumber());
+    Q_UNUSED(pDataSourceAccessHelper->generateEntryNumber());
+
+    QVERIFY2(pDataSourceAccessHelper->getNrOfUsedEntries() == 4, "The number of used entries has not been correctly updated!");
+}
+
+void CommonTests::testDataSourceAccessHelperUseAllEntries()
+{
+    std::unique_ptr<DataSourceAccessHelper> pDataSourceAccessHelper{new DataSourceAccessHelper{}};
+
+    const int nrOfEntries{10};
+    QVector<int> usedEntryNumbers;
+
+    pDataSourceAccessHelper->setEntriesTable(nrOfEntries);
+
+    for (int entry{0}; entry < nrOfEntries; ++entry)
+    {
+        usedEntryNumbers.append(pDataSourceAccessHelper->generateEntryNumber());
+    }
+
+    std::sort(usedEntryNumbers.begin(), usedEntryNumbers.end());
+
+    bool allEntriesUsed{true};
+    for (int entry{0}; entry < nrOfEntries; ++entry)
+    {
+        allEntriesUsed = allEntriesUsed && (usedEntryNumbers[entry] == entry);
+    }
+
+    QVERIFY2(allEntriesUsed, "Not all entries have been used. Duplicate entry numbers have been generated");
+}
+
+void CommonTests::testDataSourceAccessHelperSelfReset()
+{
+    std::unique_ptr<DataSourceAccessHelper> pDataSourceAccessHelper{new DataSourceAccessHelper{}};
+
+    pDataSourceAccessHelper->setEntriesTable(3);
+
+    Q_UNUSED(pDataSourceAccessHelper->generateEntryNumber());
+    Q_UNUSED(pDataSourceAccessHelper->generateEntryNumber());
+    Q_UNUSED(pDataSourceAccessHelper->generateEntryNumber());
+    Q_UNUSED(pDataSourceAccessHelper->generateEntryNumber());
+
+    QVERIFY2(pDataSourceAccessHelper->getNrOfUsedEntries() == 1, "The used number of entries after self-reset is not correct");
+    QVERIFY2(pDataSourceAccessHelper->getTotalNrOfEntries() == 3, "The total number of entries after self-reset is not correct");
+}
+
+void CommonTests::testDataSourceAccessHelperResetUsedEntries()
+{
+    std::unique_ptr<DataSourceAccessHelper> pDataSourceAccessHelper{new DataSourceAccessHelper{}};
+
+    pDataSourceAccessHelper->setEntriesTable(3);
+    Q_UNUSED(pDataSourceAccessHelper->generateEntryNumber());
+    pDataSourceAccessHelper->resetUsedEntries();
+
+    QVERIFY2(pDataSourceAccessHelper->getNrOfUsedEntries() == 0, "The number of used entries has not been correctly reset!");
+    QVERIFY2(pDataSourceAccessHelper->getTotalNrOfEntries() == 3, "The total number of entries after reset is not correct");
 }
 
 void CommonTests::_checkCorrectMixing(QVector<QString> mixedWords, QVector<QString> splitWords, const QString& level)
