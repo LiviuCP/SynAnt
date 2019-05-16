@@ -78,7 +78,7 @@ private:
 
     QString m_ApplicationPath;
     DataSource* m_pDataSource;
-    DataSourceAccessHelper* m_pDataSourceAccess;
+    DataSourceAccessHelper* m_pDataSourceAccessHelper;
     WordMixer* m_pWordMixer;
     WordPairOwner* m_pWordPairOwner;
     InputBuilder* m_pInputBuilder;

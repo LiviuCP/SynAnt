@@ -10,7 +10,7 @@
 GameFacade::GameFacade(QString applicationPath, QObject *parent)
     : QObject(parent)
     , m_ApplicationPath{applicationPath}
-    , m_pDataSourceAccess{new DataSourceAccessHelper{this}}
+    , m_pDataSourceAccessHelper{new DataSourceAccessHelper{this}}
     , m_pWordMixer{new WordMixer{this}}
     , m_pWordPairOwner{new WordPairOwner{this}}
     , m_pInputBuilder{new InputBuilder{this}}
@@ -52,7 +52,7 @@ GameFacade::GameFacade(QString applicationPath, QObject *parent)
 void GameFacade::startGame()
 {
     Q_EMIT statisticsChanged();
-    m_pDataSource->fetchDataEntry(m_pDataSourceAccess->generateEntryNumber());
+    m_pDataSource->fetchDataEntry(m_pDataSourceAccessHelper->generateEntryNumber());
     _updateStatus(Game::StatusCodes::GAME_STARTED);
 }
 
@@ -114,7 +114,7 @@ void GameFacade::handleSubmitRequest()
     if (success)
     {
         m_pScoreItem->updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
-        m_pDataSource->fetchDataEntry(m_pDataSourceAccess->generateEntryNumber());
+        m_pDataSource->fetchDataEntry(m_pDataSourceAccessHelper->generateEntryNumber());
     }
 }
 
@@ -122,14 +122,14 @@ void GameFacade::provideResultsToUser()
 {
     m_pScoreItem->updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
     _updateStatus(Game::StatusCodes::REQUESTED_BY_USER);
-    m_pDataSource->fetchDataEntry(m_pDataSourceAccess->generateEntryNumber());
+    m_pDataSource->fetchDataEntry(m_pDataSourceAccessHelper->generateEntryNumber());
 }
 
 void GameFacade::setLevel(Game::Level level)
 {
     m_pWordMixer->setWordPieceSize(level);
     m_pScoreItem->setScoreIncrement(level);
-    m_pDataSource->fetchDataEntry(m_pDataSourceAccess->generateEntryNumber());
+    m_pDataSource->fetchDataEntry(m_pDataSourceAccessHelper->generateEntryNumber());
     _updateStatus(Game::StatusCodes::LEVEL_CHANGED);
 }
 
@@ -217,7 +217,7 @@ void GameFacade::_onStatusUpdateTimeout()
 
 void GameFacade::_onDataReady()
 {
-    m_pDataSourceAccess->setEntriesTable(m_pDataSource->getNrOfEntries());
+    m_pDataSourceAccessHelper->setEntriesTable(m_pDataSource->getNrOfEntries());
 
     bool connected{connect(m_pDataSource, &DataSource::entryFetched, m_pWordMixer, &WordMixer::mixWords)};
     Q_ASSERT(connected);
