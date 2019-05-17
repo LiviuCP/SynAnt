@@ -97,7 +97,7 @@ DataSource::DataEntry DataSource::_createProcessedDataEntry(const QString& rawDa
         }
         if (word.size() < Game::c_MinWordSize)
         {
-            throw WordException{GameStrings::c_LessThanMinCharsMessage.arg(wordIdentifier), m_DataFilePath, rowNumber};
+            throw WordException{GameStrings::c_LessThanMinWordCharsMessage.arg(wordIdentifier), m_DataFilePath, rowNumber};
         }
     };
 
@@ -106,6 +106,12 @@ DataSource::DataEntry DataSource::_createProcessedDataEntry(const QString& rawDa
     if (rawDataEntry.size() == 0)
     {
         throw WordException{GameStrings::c_EmptyRowMessage, m_DataFilePath, rowNumber};
+    }
+
+    // total number of characters of the two words (excluding separator) should not be lower than the minimum required otherwise the game might become trivial
+    if (rawDataEntry.size()-1 < Game::c_MinPairSize)
+    {
+        throw WordException{GameStrings::c_LessThanMinPairCharsMessage, m_DataFilePath, rowNumber};
     }
 
     int synonymsSeparatorIndex{rawDataEntry.indexOf(c_SynonymsSeparator)};
