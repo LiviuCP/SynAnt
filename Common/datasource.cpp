@@ -153,6 +153,12 @@ DataSource::DataEntry DataSource::_createProcessedDataEntry(const QString& rawDa
     currentDataEntry.secondWord = rawDataEntry.mid(separatorIndex+1);
     checkWordIsCorrect(currentDataEntry.secondWord, GameStrings::c_SecondWordCamelCase);
 
+    // don't allow identical words
+    if (currentDataEntry.firstWord == currentDataEntry.secondWord)
+    {
+        throw WordException{GameStrings::c_SameWordsInPairMessage, m_DataFilePath, rowNumber};
+    }
+
     return currentDataEntry;
 }
 
