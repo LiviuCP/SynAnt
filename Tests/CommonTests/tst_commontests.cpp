@@ -84,6 +84,9 @@ void CommonTests::testWordPairsAreCorrect()
     QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("abcdefghijklmnop=onmlkjihgfedcba"), std::exception);
     QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("abcdefghijklmnop!onmlkjihgfedcba"), std::exception);
 
+    // same words in pair
+    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("abcdefghij=abcdefghij"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("abcdefghij!abcdefghij"), std::exception);
 }
 
 void CommonTests::testWordsAreCorrectlyMixed()
