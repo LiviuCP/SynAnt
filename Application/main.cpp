@@ -6,16 +6,16 @@
 #include "../Common/exceptions.h"
 
 
+void registerDataTypesForQML();
+
 int main(int argc, char *argv[])
 {
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-
-    qmlRegisterType<GamePresenter>("GameManagers", 1, 0, "GamePresenter");
-    qmlRegisterSingletonType(QUrl("qrc:///GameStrings.qml"), "GameUtils", 1, 0, "GameStrings");
-    qmlRegisterSingletonType(QUrl("qrc:///Styles.qml"), "GameUtils", 1, 0, "Styles");
-
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
+
+    registerDataTypesForQML();
+
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     try
     {
@@ -39,4 +39,12 @@ int main(int argc, char *argv[])
 
         return app.exec();
     }
+}
+
+void registerDataTypesForQML()
+{
+    qmlRegisterType<GamePresenter>("GameManagers", 1, 0, "GamePresenter");
+
+    qmlRegisterSingletonType(QUrl("qrc:///GameStrings.qml"), "GameUtils", 1, 0, "GameStrings");
+    qmlRegisterSingletonType(QUrl("qrc:///Styles.qml"), "GameUtils", 1, 0, "Styles");
 }
