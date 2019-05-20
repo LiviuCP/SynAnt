@@ -114,6 +114,12 @@ DataSource::DataEntry DataSource::_createProcessedDataEntry(const QString& rawDa
         throw WordException{GameStrings::c_LessThanMinPairCharsMessage, m_DataFilePath, rowNumber};
     }
 
+    // total maximum number of characters per pair is necessary for UI space/aesthetic reasons
+    if (rawDataEntry.size()-1 > Game::c_MaxPairSize)
+    {
+        throw WordException{GameStrings::c_GreaterThanMaxPairCharsMessage, m_DataFilePath, rowNumber};
+    }
+
     int synonymsSeparatorIndex{rawDataEntry.indexOf(c_SynonymsSeparator)};
     int antonymsSeparatorIndex{rawDataEntry.indexOf(c_AntonymsSeparator)};
     int separatorIndex{-1};

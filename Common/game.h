@@ -61,6 +61,7 @@ namespace Game
 
     static constexpr int c_MinWordSize{5};
     static constexpr int c_MinPairSize{15};
+    static constexpr int c_MaxPairSize{30};
 
     static constexpr int c_ToolTipDelay{1000};
     static constexpr int c_ToolTipTimeout{4000};

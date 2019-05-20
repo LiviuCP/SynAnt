@@ -153,6 +153,7 @@ namespace GameStrings {
     const QString c_IllegalCharactersMessage            {    "%1 word contains illegal characters!\n"                                                   };
     const QString c_LessThanMinWordCharsMessage         {    "%1 word has less than the minimum required number of characters!\n"                       };
     const QString c_LessThanMinPairCharsMessage         {    "The words pair has less than the minimum required total number of characters!\n"          };
+    const QString c_GreaterThanMaxPairCharsMessage      {    "The words pair has more than the maximum allowed total number of characters!\n"           };
 
     const QString c_FileNameMessage                     {    "\nFile: %1\n"                                                                             };
     const QString c_RowNumberMessage                    {    "\nRow number: %1\n"                                                                       };
