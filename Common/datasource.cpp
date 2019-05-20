@@ -95,6 +95,7 @@ DataSource::DataEntry DataSource::_createProcessedDataEntry(const QString& rawDa
                 throw WordException{GameStrings::c_IllegalCharactersMessage.arg(wordIdentifier), m_DataFilePath, rowNumber};
             }
         }
+
         if (word.size() < Game::c_MinWordSize)
         {
             throw WordException{GameStrings::c_LessThanMinWordCharsMessage.arg(wordIdentifier), m_DataFilePath, rowNumber};
