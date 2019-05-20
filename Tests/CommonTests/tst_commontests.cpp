@@ -75,6 +75,15 @@ void CommonTests::testWordPairsAreCorrect()
     QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("abcd=secondword"), std::exception);
     QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("firstword=efgh"), std::exception);
     QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("firstword!efgh"), std::exception);
+
+    // less than minimum required total number of chars per pair
+    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("abcdefg=hijklmn"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("abcdefg!hijklmn"), std::exception);
+
+    // more than maximum allowed total number of chars per pair
+    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("abcdefghijklmnop=onmlkjihgfedcba"), std::exception);
+    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("abcdefghijklmnop!onmlkjihgfedcba"), std::exception);
+
 }
 
 void CommonTests::testWordsAreCorrectlyMixed()
