@@ -31,7 +31,7 @@ SOURCES += \
         wordpairowner.cpp \
         inputbuilder.cpp \
         datasource.cpp \
-        datasourceaccess.cpp
+        datasourceaccesshelper.cpp
 
 HEADERS += \
         common.h \
@@ -45,7 +45,7 @@ HEADERS += \
         wordpairowner.h \
         inputbuilder.h \
         datasource.h \
-        datasourceaccess.h
+        datasourceaccesshelper.h
 
 unix {
     target.path = /usr/lib

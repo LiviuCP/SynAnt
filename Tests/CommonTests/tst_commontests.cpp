@@ -7,7 +7,7 @@
 #include "../../Common/wordmixer.h"
 #include "../../Common/scoreitem.h"
 #include "../../Common/datasource.h"
-#include "../../Common/datasourceaccess.h"
+#include "../../Common/datasourceaccesshelper.h"
 #include "../../Common/gamestrings.h"
 
 class CommonTests : public QObject
