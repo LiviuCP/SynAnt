@@ -1,5 +1,5 @@
 #include "wordpairowner.h"
-#include "wordmixer.h"
+#include "wordmixerproxy.h"
 
 void WordPairOwner::onPieceAddedToInput(int wordPieceIndex)
 {
@@ -11,19 +11,34 @@ void WordPairOwner::onPiecesRemovedFromInput(QVector<int> wordPieceIndexes)
     _updateMultipleWordPiecesStatus(wordPieceIndexes, false);
 }
 
+void WordPairOwner::onMixedWordsAvailable()
+{
+    Q_ASSERT(m_pWordMixerProxy);
+
+    _buildMixedWordsPiecesArray();
+
+    m_FirstReferenceWord = m_pWordMixerProxy->getFirstWord();
+    m_SecondReferenceWord = m_pWordMixerProxy->getSecondWord();
+    m_AreSynonyms = m_pWordMixerProxy->areSynonyms();
+
+    Q_EMIT mixedWordsAvailable();
+}
+
 WordPairOwner::WordPairOwner(QObject *parent)
     : QObject{parent}
-    , m_pWordMixer{nullptr}
+    , m_pWordMixerProxy{nullptr}
     , m_AreSynonyms{false}
 {
 }
 
-void WordPairOwner::connectToWordMixer(WordMixer* pWordMixer)
+void WordPairOwner::setWordMixerProxy(WordMixerProxy* pWordMixerProxy)
 {
-    Q_ASSERT(pWordMixer);
-    m_pWordMixer = pWordMixer;
-    bool connected{connect(m_pWordMixer, &WordMixer::mixedWordsChanged, this, &WordPairOwner::_onMixedWordsAvailable)};
-    Q_ASSERT(connected);
+    Q_ASSERT(pWordMixerProxy);
+
+    if (!m_pWordMixerProxy)
+    {
+        m_pWordMixerProxy = pWordMixerProxy;
+    }
 }
 
 QVector<QString> WordPairOwner::getMixedWordsPiecesContent() const
@@ -107,37 +122,27 @@ bool WordPairOwner::isLastAvailableWordPiece() const
 
 bool WordPairOwner::areSynonyms() const
 {
-    return m_pWordMixer->areSynonyms();
-}
-
-void WordPairOwner::_onMixedWordsAvailable()
-{
-    _buildMixedWordsPiecesArray();
-
-    m_FirstReferenceWord = m_pWordMixer->getFirstWord();
-    m_SecondReferenceWord = m_pWordMixer->getSecondWord();
-    m_AreSynonyms = m_pWordMixer->areSynonyms();
-
-    Q_EMIT mixedWordsAvailable();
+    Q_ASSERT(m_pWordMixerProxy);
+    return m_pWordMixerProxy->areSynonyms();
 }
 
 void WordPairOwner::_buildMixedWordsPiecesArray()
 {
     m_MixedWordsPieces.clear();
-    m_MixedWordsPieces.resize(m_pWordMixer->getMixedWordsPiecesContent().size());
+    m_MixedWordsPieces.resize(m_pWordMixerProxy->getMixedWordsPiecesContent().size());
 
     int index{0};
 
     for (auto& piece : m_MixedWordsPieces)
     {
-        piece.content = m_pWordMixer->getMixedWordsPiecesContent().at(index);
+        piece.content = m_pWordMixerProxy->getMixedWordsPiecesContent().at(index);
         piece.isAddedToInput = false;
 
-        if (index == m_pWordMixer->getFirstWordFirstPieceIndex() || index == m_pWordMixer->getSecondWordFirstPieceIndex())
+        if (index == m_pWordMixerProxy->getFirstWordFirstPieceIndex() || index == m_pWordMixerProxy->getSecondWordFirstPieceIndex())
         {
             piece.pieceType = Game::PieceTypes::BEGIN_PIECE;
         }
-        else if (index == m_pWordMixer->getFirstWordLastPieceIndex() || index == m_pWordMixer->getSecondWordLastPieceIndex())
+        else if (index == m_pWordMixerProxy->getFirstWordLastPieceIndex() || index == m_pWordMixerProxy->getSecondWordLastPieceIndex())
         {
             piece.pieceType = Game::PieceTypes::END_PIECE;
         }

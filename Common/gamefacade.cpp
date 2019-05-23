@@ -1,4 +1,5 @@
 #include "gamefacade.h"
+#include "gamefunctionalityproxy.h"
 #include "datasource.h"
 #include "datasourceaccesshelper.h"
 #include "wordmixer.h"
@@ -7,21 +8,22 @@
 #include "scoreitem.h"
 #include "gamestrings.h"
 
-GameFacade::GameFacade(QString applicationPath, QObject *parent)
+GameFacade::GameFacade(QObject *parent)
     : QObject(parent)
-    , m_ApplicationPath{applicationPath}
-    , m_pDataSourceAccessHelper{new DataSourceAccessHelper{this}}
-    , m_pWordMixer{new WordMixer{this}}
-    , m_pWordPairOwner{new WordPairOwner{this}}
-    , m_pInputBuilder{new InputBuilder{this}}
-    , m_pScoreItem {new ScoreItem{this}}
+    , m_pGameFunctionalityProxy{new GameFunctionalityProxy{this}}
     , m_pStatusUpdateTimer{new QTimer{this}}
     , m_CurrentStatusCode{Game::StatusCodes::DEFAULT}
     , m_NextStatusCode{Game::StatusCodes::DEFAULT}
 {
-    m_pDataSource = new DataSource{m_ApplicationPath + "/" + GameStrings::c_FileName, this};
+    m_pDataSource = m_pGameFunctionalityProxy->getDataSource();
+    m_pDataSourceAccessHelper = m_pGameFunctionalityProxy->getDataSourceAccessHelper();
+    m_pWordMixer = m_pGameFunctionalityProxy->getWordMixer();
+    m_pWordPairOwner = m_pGameFunctionalityProxy->getWordPairOwner();
+    m_pInputBuilder = m_pGameFunctionalityProxy->getInputBuilder();
+    m_pScoreItem = m_pGameFunctionalityProxy->getScoreItem();
 
     // all QObjects used by application (except the QML registered ones) should be parented (the non-parented ones would only be used in tests)
+    Q_ASSERT(this->parent());
     Q_ASSERT(m_pDataSource->parent());
     Q_ASSERT(m_pDataSourceAccessHelper->parent());
     Q_ASSERT(m_pWordMixer->parent());
@@ -30,10 +32,9 @@ GameFacade::GameFacade(QString applicationPath, QObject *parent)
     Q_ASSERT(m_pScoreItem->parent());
     Q_ASSERT(m_pStatusUpdateTimer->parent());
 
-    m_pWordPairOwner->connectToWordMixer(m_pWordMixer);
     m_pStatusUpdateTimer->setSingleShot(true);
 
-    bool connected = connect(m_pWordPairOwner, &WordPairOwner::mixedWordsAvailable, this, &GameFacade::mixedWordsChanged);
+    bool connected{connect(m_pWordPairOwner, &WordPairOwner::mixedWordsAvailable, this, &GameFacade::mixedWordsChanged)};
     Q_ASSERT(connected);
     connected = connect(m_pWordPairOwner, &WordPairOwner::selectionChanged, this, &GameFacade::selectionChanged);
     Q_ASSERT(connected);
@@ -46,12 +47,6 @@ GameFacade::GameFacade(QString applicationPath, QObject *parent)
     connected = connect(m_pScoreItem, &ScoreItem::statisticsUpdated, this, &GameFacade::statisticsChanged);
     Q_ASSERT(connected);
     connected = connect(m_pStatusUpdateTimer, &QTimer::timeout, this, &GameFacade::_onStatusUpdateTimeout);
-    Q_ASSERT(connected);
-    connected = connect(m_pWordPairOwner, &WordPairOwner::mixedWordsAvailable, m_pInputBuilder, &InputBuilder::onNewPiecesAvailable);
-    Q_ASSERT(connected);
-    connected = connect(m_pInputBuilder, &InputBuilder::pieceAddedToInput, m_pWordPairOwner, &WordPairOwner::onPieceAddedToInput);
-    Q_ASSERT(connected);
-    connected = connect(m_pInputBuilder, &InputBuilder::piecesRemovedFromInput, m_pWordPairOwner, &WordPairOwner::onPiecesRemovedFromInput);
     Q_ASSERT(connected);
     connected = connect(m_pDataSource, &DataSource::dataReady, this, &GameFacade::_onDataReady);
     Q_ASSERT(connected);

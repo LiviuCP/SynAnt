@@ -4,6 +4,7 @@
 
 #include "gamepresenter.h"
 #include "../Common/exceptions.h"
+#include "../Common/gameinitproxy.h"
 
 
 void registerDataTypesForQML();
@@ -12,6 +13,7 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
+    GameInitProxy gameInitProxy;
 
     registerDataTypesForQML();
 
@@ -19,6 +21,7 @@ int main(int argc, char *argv[])
 
     try
     {
+        gameInitProxy.setDataSource(app.applicationDirPath());
         engine.load(QUrl(QLatin1String("qrc:/main.qml")));
 
         if (engine.rootObjects().isEmpty())

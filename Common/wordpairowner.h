@@ -17,7 +17,7 @@
 
 #include "game.h"
 
-class WordMixer;
+class WordMixerProxy;
 
 class WordPairOwner : public QObject
 {
@@ -25,11 +25,12 @@ class WordPairOwner : public QObject
 public slots:
     void onPieceAddedToInput(int wordPieceIndex);
     void onPiecesRemovedFromInput(QVector<int> wordPieceIndexes);
+    void onMixedWordsAvailable();
 
 public:
     explicit WordPairOwner(QObject *parent = nullptr);
 
-    void connectToWordMixer(WordMixer* pWordMixer);
+    void setWordMixerProxy(WordMixerProxy* pWordMixerProxy);
 
     QVector<QString> getMixedWordsPiecesContent() const;
     QVector<Game::PieceTypes> getMixedWordsPiecesTypes() const;
@@ -47,9 +48,6 @@ signals:
     Q_SIGNAL void mixedWordsAvailable();
     Q_SIGNAL void selectionChanged();
 
-private slots:
-    void _onMixedWordsAvailable();
-
 private:
     void _buildMixedWordsPiecesArray();
     void _updateSingleWordPieceStatus(int wordPieceIndex, bool addedToInput);
@@ -64,7 +62,7 @@ private:
         bool isAddedToInput;
     };
 
-    WordMixer* m_pWordMixer;
+    WordMixerProxy* m_pWordMixerProxy;
     QString m_FirstReferenceWord;
     QString m_SecondReferenceWord;
     QVector<WordPiece> m_MixedWordsPieces;

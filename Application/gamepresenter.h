@@ -8,6 +8,7 @@
 #include "../Common/game.h"
 
 class GameFacade;
+class GameProxy;
 
 class GamePresenter : public QObject
 {
@@ -109,6 +110,8 @@ public:
     QString getMainPaneWordPairsMessage() const;
     QString getErrorMessage() const;
 
+    ~GamePresenter();
+
 signals:
     Q_SIGNAL void introPaneVisibleChanged();
     Q_SIGNAL void helpPaneVisibleChanged();
@@ -155,6 +158,7 @@ private:
     int m_SecondWordInputHoverIndex;
 
     GameFacade* m_pGameFacade;
+    GameProxy* m_pGameProxy;
 };
 
 #endif // GAMEPRESENTER_H

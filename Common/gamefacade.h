@@ -16,6 +16,7 @@
 
 #include "game.h"
 
+class GameFunctionalityProxy;
 class DataSource;
 class DataSourceAccessHelper;
 class WordMixer;
@@ -27,7 +28,7 @@ class GameFacade : public QObject
 {
     Q_OBJECT
 public:
-    explicit GameFacade(QString applicationPath, QObject *parent = nullptr);
+    explicit GameFacade(QObject *parent = nullptr);
 
     void startGame();
     void resumeGame();
@@ -76,7 +77,7 @@ private slots:
 private:
     void _updateStatus(Game::StatusCodes tempStatusCode, Game::StatusCodes permStatusCode = Game::StatusCodes::DEFAULT);
 
-    QString m_ApplicationPath;
+    GameFunctionalityProxy* m_pGameFunctionalityProxy;
     DataSource* m_pDataSource;
     DataSourceAccessHelper* m_pDataSourceAccessHelper;
     WordMixer* m_pWordMixer;

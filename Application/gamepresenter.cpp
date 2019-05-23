@@ -5,6 +5,7 @@
 #include "../Common/gamefacade.h"
 #include "../Common/gamestrings.h"
 #include "../Common/exceptions.h"
+#include "../Common/gameproxy.h"
 
 static const QMap<GamePresenter::Pane, QString> c_WindowTitles
 {
@@ -34,10 +35,11 @@ GamePresenter::GamePresenter(QObject *parent)
     , m_CurrentPane {Pane::INTRO}
     , m_FirstWordInputHoverIndex{-1}
     , m_SecondWordInputHoverIndex{-1}
-    , m_pGameFacade {new GameFacade{QGuiApplication::applicationDirPath(), this}}
+    , m_pGameFacade{nullptr}
+    , m_pGameProxy {new GameProxy{this}}
 {
-    // all QObjects used by application (except the QML registered ones) should be parented (the non-parented ones would only be used in tests)
-    Q_ASSERT(m_pGameFacade->parent());
+    m_pGameFacade = m_pGameProxy->getFacade();
+    Q_ASSERT(m_pGameFacade);
 
     bool connected{connect(m_pGameFacade, &GameFacade::statisticsChanged, this, &GamePresenter::_onStatisticsChanged)};
     Q_ASSERT(connected);
@@ -410,6 +412,11 @@ QString GamePresenter::getMainPaneWordPairsMessage() const
 QString GamePresenter::getErrorMessage() const
 {
     return m_ErrorMessage;
+}
+
+GamePresenter::~GamePresenter()
+{
+    m_pGameProxy->releaseResources();
 }
 
 void GamePresenter::_onInputChanged()

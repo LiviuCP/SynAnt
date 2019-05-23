@@ -1,6 +1,5 @@
 #include <QFile>
 #include <QTextStream>
-#include <QFileInfo>
 
 #include "datasource.h"
 #include "exceptions.h"
@@ -11,16 +10,9 @@ static constexpr char c_AntonymsSeparator{'!'};
 
 DataSource::DataSource(const QString &dataFilePath, QObject *parent)
     : QObject (parent)
+    , m_DataFilePath{dataFilePath}
     , m_DataEntries{}
 {
-    QFileInfo dataSourceFileStatus{dataFilePath};
-
-    if (parent && !dataSourceFileStatus.exists())
-    {
-        throw FileException{GameStrings::c_FileNotFoundMessage, dataFilePath};
-    }
-
-    m_DataFilePath = dataFilePath;
 }
 
 void DataSource::init()
@@ -28,12 +20,6 @@ void DataSource::init()
     QVector<QString> rawData;
 
     _loadRawData(rawData);
-
-    if (rawData.size() == 0)
-    {
-        throw FileException{GameStrings::c_EmptyFileMessage, m_DataFilePath};
-    }
-
     _createProcessedDataEntries(rawData);
 }
 
@@ -59,6 +45,7 @@ void DataSource::processRawDataEntryForTest(const QString &rawDataEntry)
 void DataSource::_loadRawData(QVector<QString>& rawData)
 {
     QFile wordPairsFile(m_DataFilePath);
+
     if (!wordPairsFile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         throw FileException{GameStrings::c_CannotOpenFileMessage, m_DataFilePath};

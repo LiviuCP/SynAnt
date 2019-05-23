@@ -31,7 +31,12 @@ SOURCES += \
         wordpairowner.cpp \
         inputbuilder.cpp \
         datasource.cpp \
-        datasourceaccesshelper.cpp
+        datasourceaccesshelper.cpp \
+        gamemanager.cpp \
+        gameinitproxy.cpp \
+        wordmixerproxy.cpp \
+        gamefunctionalityproxy.cpp \
+        gameproxy.cpp
 
 HEADERS += \
         common.h \
@@ -45,7 +50,12 @@ HEADERS += \
         wordpairowner.h \
         inputbuilder.h \
         datasource.h \
-        datasourceaccesshelper.h
+        datasourceaccesshelper.h \
+        gamemanager.h \
+        gameinitproxy.h \
+        wordmixerproxy.h \
+        gamefunctionalityproxy.h \
+        gameproxy.h
 
 unix {
     target.path = /usr/lib
