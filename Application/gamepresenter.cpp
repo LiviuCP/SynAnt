@@ -2,10 +2,10 @@
 #include <QVector>
 
 #include "gamepresenter.h"
-#include "../Common/gamefacade.h"
-#include "../Common/gamestrings.h"
-#include "../Common/exceptions.h"
-#include "../Common/gameproxy.h"
+#include "../Common/Management/gamefacade.h"
+#include "../Common/Utilities/gamestrings.h"
+#include "../Common/Utilities/exceptions.h"
+#include "../Common/Proxies/gameproxy.h"
 
 static const QMap<GamePresenter::Pane, QString> c_WindowTitles
 {

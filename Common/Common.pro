@@ -24,38 +24,38 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         common.cpp \
-        wordmixer.cpp \
-        scoreitem.cpp \
-        exceptions.cpp \
-        gamefacade.cpp \
-        wordpairowner.cpp \
-        inputbuilder.cpp \
-        datasource.cpp \
-        datasourceaccesshelper.cpp \
-        gamemanager.cpp \
-        gameinitproxy.cpp \
-        wordmixerproxy.cpp \
-        gamefunctionalityproxy.cpp \
-        gameproxy.cpp
+        CoreFunctionality/wordmixer.cpp \
+        CoreFunctionality/wordpairowner.cpp \
+        CoreFunctionality/inputbuilder.cpp \
+        DataAccess/datasource.cpp \
+        DataAccess/datasourceaccesshelper.cpp \
+        Management/gamemanager.cpp \
+        Management/gamefacade.cpp \
+        Proxies/gameinitproxy.cpp \
+        Proxies/gamefunctionalityproxy.cpp \
+        Proxies/gameproxy.cpp \
+        Proxies/wordmixerproxy.cpp \
+        Utilities/scoreitem.cpp \
+        Utilities/exceptions.cpp
 
 HEADERS += \
         common.h \
         common_global.h \
-        wordmixer.h \
-        scoreitem.h \
-        game.h \
-        gamestrings.h \
-        exceptions.h \
-        gamefacade.h \
-        wordpairowner.h \
-        inputbuilder.h \
-        datasource.h \
-        datasourceaccesshelper.h \
-        gamemanager.h \
-        gameinitproxy.h \
-        wordmixerproxy.h \
-        gamefunctionalityproxy.h \
-        gameproxy.h
+        CoreFunctionality/wordmixer.h \
+        CoreFunctionality/wordpairowner.h \
+        CoreFunctionality/inputbuilder.h \
+        DataAccess/datasource.h \
+        DataAccess/datasourceaccesshelper.h \
+        Management/gamemanager.h \
+        Management/gamefacade.h \
+        Proxies/gameinitproxy.h \
+        Proxies/gamefunctionalityproxy.h \
+        Proxies/gameproxy.h \
+        Proxies/wordmixerproxy.h \
+        Utilities/scoreitem.h \
+        Utilities/exceptions.h \
+        Utilities/game.h \
+        Utilities/gamestrings.h
 
 unix {
     target.path = /usr/lib

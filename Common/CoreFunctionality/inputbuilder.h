@@ -11,7 +11,7 @@
 #include <QObject>
 #include <QVector>
 
-#include "game.h"
+#include "../Utilities/game.h"
 
 class InputBuilder : public QObject
 {

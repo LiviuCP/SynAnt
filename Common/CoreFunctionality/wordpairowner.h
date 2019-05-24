@@ -15,7 +15,7 @@
 #include <QObject>
 #include <QVector>
 
-#include "game.h"
+#include "../Utilities/game.h"
 
 class WordMixerProxy;
 

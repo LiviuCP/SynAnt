@@ -5,7 +5,7 @@
 #include <QVariant>
 #include <QColor>
 
-#include "../Common/game.h"
+#include "../Common/Utilities/game.h"
 
 class GameFacade;
 class GameProxy;

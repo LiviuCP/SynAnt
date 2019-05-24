@@ -14,7 +14,7 @@
 #include <QObject>
 #include <QTimer>
 
-#include "game.h"
+#include "../Utilities/game.h"
 
 class GameFunctionalityProxy;
 class DataSource;

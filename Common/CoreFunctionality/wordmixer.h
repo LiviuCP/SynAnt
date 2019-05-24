@@ -18,7 +18,7 @@
 
 #include <random>
 
-#include "game.h"
+#include "../Utilities/game.h"
 
 class WordMixer : public QObject
 {

@@ -1,5 +1,5 @@
 #include "wordpairowner.h"
-#include "wordmixerproxy.h"
+#include "Proxies/wordmixerproxy.h"
 
 void WordPairOwner::onPieceAddedToInput(int wordPieceIndex)
 {

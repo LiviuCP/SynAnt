@@ -1,5 +1,5 @@
 #include "wordmixerproxy.h"
-#include "wordmixer.h"
+#include "../CoreFunctionality/wordmixer.h"
 
 WordMixerProxy::WordMixerProxy(WordMixer* pWordMixer, QObject *parent)
     : QObject(parent)

@@ -3,8 +3,8 @@
 #include <QQmlComponent>
 
 #include "gamepresenter.h"
-#include "../Common/exceptions.h"
-#include "../Common/gameinitproxy.h"
+#include "../Common/Utilities/exceptions.h"
+#include "../Common/Proxies/gameinitproxy.h"
 
 
 void registerDataTypesForQML();

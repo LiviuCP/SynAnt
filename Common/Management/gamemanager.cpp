@@ -3,15 +3,15 @@
 
 #include "gamemanager.h"
 #include "gamefacade.h"
-#include "datasource.h"
-#include "datasourceaccesshelper.h"
-#include "wordmixer.h"
-#include "wordmixerproxy.h"
-#include "wordpairowner.h"
-#include "inputbuilder.h"
-#include "scoreitem.h"
-#include "gamestrings.h"
-#include "exceptions.h"
+#include "DataAccess/datasource.h"
+#include "DataAccess/datasourceaccesshelper.h"
+#include "CoreFunctionality/wordmixer.h"
+#include "Proxies/wordmixerproxy.h"
+#include "CoreFunctionality/wordpairowner.h"
+#include "CoreFunctionality/inputbuilder.h"
+#include "Utilities/scoreitem.h"
+#include "Utilities/gamestrings.h"
+#include "Utilities/exceptions.h"
 
 GameManager* GameManager::s_pGameManager = nullptr;
 

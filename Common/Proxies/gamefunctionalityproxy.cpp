@@ -1,5 +1,5 @@
 #include "gamefunctionalityproxy.h"
-#include "gamemanager.h"
+#include "../Management/gamemanager.h"
 
 GameFunctionalityProxy::GameFunctionalityProxy(QObject *parent)
     : QObject(parent)

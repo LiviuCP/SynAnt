@@ -1,12 +1,12 @@
 #include "gamefacade.h"
-#include "gamefunctionalityproxy.h"
-#include "datasource.h"
-#include "datasourceaccesshelper.h"
-#include "wordmixer.h"
-#include "wordpairowner.h"
-#include "inputbuilder.h"
-#include "scoreitem.h"
-#include "gamestrings.h"
+#include "Proxies/gamefunctionalityproxy.h"
+#include "DataAccess/datasource.h"
+#include "DataAccess/datasourceaccesshelper.h"
+#include "CoreFunctionality/wordmixer.h"
+#include "CoreFunctionality/wordpairowner.h"
+#include "CoreFunctionality/inputbuilder.h"
+#include "Utilities/scoreitem.h"
+#include "Utilities/gamestrings.h"
 
 GameFacade::GameFacade(QObject *parent)
     : QObject(parent)

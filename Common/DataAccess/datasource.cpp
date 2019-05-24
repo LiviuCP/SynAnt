@@ -2,8 +2,8 @@
 #include <QTextStream>
 
 #include "datasource.h"
-#include "exceptions.h"
-#include "gamestrings.h"
+#include "Utilities/exceptions.h"
+#include "Utilities/gamestrings.h"
 
 static constexpr char c_SynonymsSeparator{'='};
 static constexpr char c_AntonymsSeparator{'!'};

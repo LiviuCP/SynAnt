@@ -4,11 +4,11 @@
 
 #include <memory>
 
-#include "../../Common/wordmixer.h"
-#include "../../Common/scoreitem.h"
-#include "../../Common/datasource.h"
-#include "../../Common/datasourceaccesshelper.h"
-#include "../../Common/gamestrings.h"
+#include "../../Common/CoreFunctionality/wordmixer.h"
+#include "../../Common/Utilities/scoreitem.h"
+#include "../../Common/DataAccess/datasource.h"
+#include "../../Common/DataAccess/datasourceaccesshelper.h"
+#include "../../Common/Utilities/gamestrings.h"
 
 class CommonTests : public QObject
 {
