@@ -1,4 +1,6 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
-    CommonTests
+    CoreFunctionalityTests \
+    DataAccessTests \
+    UtilitiesTests

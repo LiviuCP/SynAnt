@@ -1,9 +1,3 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2018-08-16T09:06:43
-#
-#-------------------------------------------------
-
 QT       += testlib
 
 QT       -= gui
@@ -27,7 +21,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
-        tst_commontests.cpp
+    tst_corefunctionalitytests.cpp
 
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
