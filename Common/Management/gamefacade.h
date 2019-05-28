@@ -60,10 +60,12 @@ public:
     int getGuessedWordPairs() const;
     int getTotalWordPairs() const;
 
+    bool isDataAvailable() const;
     bool areSynonyms() const;
 
 signals:
     Q_SIGNAL void mixedWordsChanged();
+    Q_SIGNAL void dataAvailableChanged();
     Q_SIGNAL void inputChanged();
     Q_SIGNAL void completionChanged();
     Q_SIGNAL void selectionChanged();
@@ -88,6 +90,7 @@ private:
     QTimer* m_pStatusUpdateTimer;
     Game::StatusCodes m_CurrentStatusCode;
     Game::StatusCodes m_NextStatusCode;
+    bool m_IsDataAvailable;
 };
 
 #endif // GAMEFACADE_H

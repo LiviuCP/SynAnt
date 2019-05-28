@@ -10,7 +10,6 @@ class CoreFunctionalityTests : public QObject
 
 public:
     CoreFunctionalityTests();
-    ~CoreFunctionalityTests();
 
 private slots:
     void testManualWordsEntry();
@@ -23,12 +22,6 @@ private:
 
 CoreFunctionalityTests::CoreFunctionalityTests()
 {
-
-}
-
-CoreFunctionalityTests::~CoreFunctionalityTests()
-{
-
 }
 
 void CoreFunctionalityTests::testManualWordsEntry()

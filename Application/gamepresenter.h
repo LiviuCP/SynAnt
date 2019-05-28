@@ -18,6 +18,7 @@ class GamePresenter : public QObject
     Q_PROPERTY(bool introPaneVisible READ getIntroPaneVisible NOTIFY introPaneVisibleChanged)
     Q_PROPERTY(bool helpPaneVisible READ getHelpPaneVisible NOTIFY helpPaneVisibleChanged)
     Q_PROPERTY(bool mainPaneVisible READ getMainPaneVisible NOTIFY mainPaneVisibleChanged)
+    Q_PROPERTY(bool playEnabled READ isPlayEnabled NOTIFY playEnabledChanged)
     Q_PROPERTY(bool resetEnabled READ getResetEnabled NOTIFY resetEnabledChanged)
     Q_PROPERTY(bool clearInputEnabled READ getClearInputEnabled NOTIFY clearInputEnabledChanged)
     Q_PROPERTY(bool submitEnabled READ getSubmitEnabled NOTIFY submitEnabledChanged)
@@ -79,6 +80,7 @@ public:
     bool getIntroPaneVisible() const;
     bool getHelpPaneVisible() const;
     bool getMainPaneVisible() const;
+    bool isPlayEnabled() const;
     bool getResetEnabled() const;
     bool getClearInputEnabled() const;
     bool getSubmitEnabled() const;
@@ -110,12 +112,13 @@ public:
     QString getMainPaneWordPairsMessage() const;
     QString getErrorMessage() const;
 
-    ~GamePresenter();
+    virtual ~GamePresenter();
 
 signals:
     Q_SIGNAL void introPaneVisibleChanged();
     Q_SIGNAL void helpPaneVisibleChanged();
     Q_SIGNAL void mainPaneVisibleChanged();
+    Q_SIGNAL void playEnabledChanged();
     Q_SIGNAL void resetEnabledChanged();
     Q_SIGNAL void clearInputEnabledChanged();
     Q_SIGNAL void submitEnabledChanged();

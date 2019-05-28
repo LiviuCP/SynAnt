@@ -17,12 +17,14 @@ class DataSource : public QObject
 public:
     explicit DataSource(const QString& fileName, QObject *parent = nullptr);
 
-    void init();
     void fetchDataEntry(int entryNumber);
     int getNrOfEntries();
 
     // for test purposes only
     void processRawDataEntryForTest(const QString& rawDataEntry);
+
+public slots:
+    void onReadDataRequestReceived();
 
 signals:
     Q_SIGNAL void dataReady();

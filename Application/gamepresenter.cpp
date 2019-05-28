@@ -47,6 +47,8 @@ GamePresenter::GamePresenter(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::mixedWordsChanged, this, &GamePresenter::mixedWordsChanged);
     Q_ASSERT(connected);
+    connected = connect(m_pGameFacade, &GameFacade::dataAvailableChanged, this, &GamePresenter::playEnabledChanged);
+    Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::inputChanged, this, &GamePresenter::_onInputChanged);
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::selectionChanged, this, &GamePresenter::selectionChanged);
@@ -233,6 +235,11 @@ bool GamePresenter::getHelpPaneVisible() const
 bool GamePresenter::getMainPaneVisible() const
 {
     return m_MainPaneVisible;
+}
+
+bool GamePresenter::isPlayEnabled() const
+{
+    return m_pGameFacade->isDataAvailable();
 }
 
 bool GamePresenter::getResetEnabled() const

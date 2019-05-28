@@ -15,6 +15,7 @@ GameFacade::GameFacade(QObject *parent)
     , m_pStatusUpdateTimer{new QTimer{this}}
     , m_CurrentStatusCode{Game::StatusCodes::DEFAULT}
     , m_NextStatusCode{Game::StatusCodes::DEFAULT}
+    , m_IsDataAvailable{false}
 {
     m_pDataSourceProxy = m_pGameFunctionalityProxy->getDataSourceProxy();
     m_pDataSourceAccessHelper = m_pGameFunctionalityProxy->getDataSourceAccessHelper();
@@ -203,6 +204,11 @@ int GameFacade::getTotalWordPairs() const
     return m_pScoreItem->getTotalWordPairs();
 }
 
+bool GameFacade::isDataAvailable() const
+{
+    return m_IsDataAvailable;
+}
+
 bool GameFacade::areSynonyms() const
 {
     return m_pWordPairOwner->areSynonyms();
@@ -225,6 +231,10 @@ void GameFacade::_onDataReady()
 
     bool connected{connect(m_pDataSourceProxy, &DataSourceProxy::entryFetched, m_pWordMixer, &WordMixer::mixWords)};
     Q_ASSERT(connected);
+
+    m_IsDataAvailable = true;
+
+    Q_EMIT dataAvailableChanged();
 }
 
 void GameFacade::_updateStatus(Game::StatusCodes tempStatusCode, Game::StatusCodes permStatusCode)

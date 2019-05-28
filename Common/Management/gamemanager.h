@@ -48,8 +48,11 @@ public:
     InputBuilder* getInputBuilder() const;
     ScoreItem* getScoreItem() const;
 
+    virtual ~GameManager();
+
 signals:
     Q_SIGNAL void dataSourceSetupCompleted();
+    Q_SIGNAL void readData();
 
 private slots:
     void _onDataSourceSetupCompleted();
@@ -68,6 +71,7 @@ private:
     WordPairOwner* m_pWordPairOwner;
     InputBuilder* m_pInputBuilder;
     ScoreItem* m_pScoreItem;
+    QThread* m_pDataSourceReadThread;
 };
 
 #endif // GAMEMANAGER_H

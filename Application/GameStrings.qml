@@ -10,7 +10,8 @@ QtObject {
                                                                  \nTwo words are divided into equal pieces and mixed with each other.
                                                                  \nYou just need to guess them.
                                                                  \nThe words can either be synonyms or antonyms.\n\n
-                                                                 \nPress Play to enter the game or Help for more information."
+                                                                 \nPlease wait until data gets loaded.
+                                                                 \nAs soon as button is active press Play to enter the game or Help for more information."
 
     readonly property string mainPaneInstructionsMessage:       "\nPlease enter the 2 words.
                                                                  \nHit Submit when ready.

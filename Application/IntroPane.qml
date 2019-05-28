@@ -61,12 +61,14 @@ Item {
 
         Button {
             id: playBtn
+            enabled: presenter.playEnabled
 
             contentItem: Text {
                 text: GameStrings.playButtonLabel
                 color: Styles.textColor
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
+                opacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
             }
 
             background: Rectangle {
@@ -74,6 +76,7 @@ Item {
                 border.color: Styles.borderColor
                 border.width: width * 0.005
                 radius: width * 0.01
+                opacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
             }
 
             Layout.minimumWidth: bottomBtnsMinWidth

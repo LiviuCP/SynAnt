@@ -1,5 +1,6 @@
 #include <QFile>
 #include <QTextStream>
+#include <QThread>
 
 #include "datasource.h"
 #include "Utilities/exceptions.h"
@@ -13,14 +14,6 @@ DataSource::DataSource(const QString &dataFilePath, QObject *parent)
     , m_DataFilePath{dataFilePath}
     , m_DataEntries{}
 {
-}
-
-void DataSource::init()
-{
-    QVector<QString> rawData;
-
-    _loadRawData(rawData);
-    _createProcessedDataEntries(rawData);
 }
 
 void DataSource::fetchDataEntry(int entryNumber)
@@ -40,6 +33,19 @@ void DataSource::processRawDataEntryForTest(const QString &rawDataEntry)
 {
     // row number is irrelevant as the method is only for testing purposes and no data is read from a file or database
     Q_UNUSED(_createProcessedDataEntry(rawDataEntry, -1));
+}
+
+void DataSource::onReadDataRequestReceived()
+{
+    QVector<QString> rawData;
+
+    // for simulation purposes only (to be removed later)
+    QThread::usleep(5000000);
+
+    _loadRawData(rawData);
+    _createProcessedDataEntries(rawData);
+
+    Q_EMIT dataReady();
 }
 
 void DataSource::_loadRawData(QVector<QString>& rawData)
@@ -67,8 +73,6 @@ void DataSource::_createProcessedDataEntries(const QVector<QString>& rawData)
     {
         m_DataEntries.append(_createProcessedDataEntry(rawData[row], row));
     }
-
-    Q_EMIT dataReady();
 }
 
 DataSource::DataEntry DataSource::_createProcessedDataEntry(const QString& rawDataEntry, int rowNumber)

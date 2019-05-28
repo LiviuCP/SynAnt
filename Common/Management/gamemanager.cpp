@@ -1,5 +1,6 @@
 #include <QFileInfo>
 #include <QFile>
+#include <QThread>
 
 #include "gamemanager.h"
 #include "gamefacade.h"
@@ -45,6 +46,7 @@ GameManager::GameManager(QObject *parent)
     , m_pWordPairOwner{new WordPairOwner{this}}
     , m_pInputBuilder{new InputBuilder{this}}
     , m_pScoreItem {new ScoreItem{this}}
+    , m_pDataSourceReadThread{nullptr}
 {
     m_pWordMixerProxy = new WordMixerProxy{m_pWordMixer, this};
 
@@ -79,8 +81,22 @@ void GameManager::setDataSource(const QString &dataDirPath)
 
         dataFile.close();
 
-        m_pDataSource = new DataSource{dataFilePath, this};
+        m_pDataSource = new DataSource{dataFilePath};
+        m_pDataSourceReadThread = new QThread{this};
         m_pDataSourceProxy = new DataSourceProxy{m_pDataSource, this};
+
+        m_pDataSource->moveToThread(m_pDataSourceReadThread);
+
+        bool connected{connect(m_pDataSourceReadThread, &QThread::finished, m_pDataSource, &DataSource::deleteLater)};
+        Q_ASSERT(connected);
+        connected = connect(this, &GameManager::readData, m_pDataSource, &DataSource::onReadDataRequestReceived, Qt::QueuedConnection);
+        Q_ASSERT(connected);
+        connected = connect(m_pDataSource, &DataSource::dataReady, m_pDataSourceProxy, &DataSourceProxy::dataReady, Qt::QueuedConnection);
+        Q_ASSERT(connected);
+        connected = connect(m_pDataSource, &DataSource::entryFetched, m_pDataSourceProxy, &DataSourceProxy::entryFetched, Qt::QueuedConnection);
+        Q_ASSERT(connected);
+
+        m_pDataSourceReadThread->start();
 
         Q_EMIT dataSourceSetupCompleted();
     }
@@ -121,6 +137,12 @@ ScoreItem* GameManager::getScoreItem() const
     return m_pScoreItem;
 }
 
+GameManager::~GameManager()
+{
+    m_pDataSourceReadThread->quit();
+    m_pDataSourceReadThread->wait();
+}
+
 void GameManager::_onDataSourceSetupCompleted()
 {
     // do all external backend connections except the ones to the facade (facade will build them itself)
@@ -132,14 +154,10 @@ void GameManager::_onDataSourceSetupCompleted()
     Q_ASSERT(connected);
     connected = connect(m_pInputBuilder, &InputBuilder::piecesRemovedFromInput, m_pWordPairOwner, &WordPairOwner::onPiecesRemovedFromInput);
     Q_ASSERT(connected);
-    connected = connect(m_pDataSource, &DataSource::dataReady, m_pDataSourceProxy, &DataSourceProxy::dataReady);
-    Q_ASSERT(connected);
-    connected = connect(m_pDataSource, &DataSource::entryFetched, m_pDataSourceProxy, &DataSourceProxy::entryFetched);
-    Q_ASSERT(connected);
 
     m_pWordPairOwner->setWordMixerProxy(m_pWordMixerProxy);
 
     m_pGameFacade = new GameFacade{this};
 
-    m_pDataSource->init();
+    Q_EMIT readData();
 }

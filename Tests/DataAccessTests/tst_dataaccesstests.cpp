@@ -12,7 +12,6 @@ class DataAccessTests : public QObject
 
 public:
     DataAccessTests();
-    ~DataAccessTests();
 
 private slots:
     void testWordPairsAreCorrect();
@@ -25,12 +24,6 @@ private slots:
 
 DataAccessTests::DataAccessTests()
 {
-
-}
-
-DataAccessTests::~DataAccessTests()
-{
-
 }
 
 void DataAccessTests::testWordPairsAreCorrect()
