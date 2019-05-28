@@ -3,15 +3,16 @@
 
 #include "gamemanager.h"
 #include "gamefacade.h"
-#include "DataAccess/datasource.h"
-#include "DataAccess/datasourceaccesshelper.h"
-#include "CoreFunctionality/wordmixer.h"
-#include "Proxies/wordmixerproxy.h"
-#include "CoreFunctionality/wordpairowner.h"
-#include "CoreFunctionality/inputbuilder.h"
-#include "Utilities/scoreitem.h"
-#include "Utilities/gamestrings.h"
-#include "Utilities/exceptions.h"
+#include "../CoreFunctionality/wordmixer.h"
+#include "../CoreFunctionality/wordpairowner.h"
+#include "../CoreFunctionality/inputbuilder.h"
+#include "../DataAccess/datasource.h"
+#include "../DataAccess/datasourceaccesshelper.h"
+#include "../Proxies/datasourceproxy.h"
+#include "../Proxies/wordmixerproxy.h"
+#include "../Utilities/scoreitem.h"
+#include "../Utilities/gamestrings.h"
+#include "../Utilities/exceptions.h"
 
 GameManager* GameManager::s_pGameManager = nullptr;
 
@@ -38,6 +39,7 @@ GameManager::GameManager(QObject *parent)
     : QObject(parent)
     , m_pGameFacade{nullptr}
     , m_pDataSource{nullptr}
+    , m_pDataSourceProxy{nullptr}
     , m_pDataSourceAccessHelper{new DataSourceAccessHelper{this}}
     , m_pWordMixer{new WordMixer{this}}
     , m_pWordPairOwner{new WordPairOwner{this}}
@@ -78,6 +80,7 @@ void GameManager::setDataSource(const QString &dataDirPath)
         dataFile.close();
 
         m_pDataSource = new DataSource{dataFilePath, this};
+        m_pDataSourceProxy = new DataSourceProxy{m_pDataSource, this};
 
         Q_EMIT dataSourceSetupCompleted();
     }
@@ -88,9 +91,9 @@ GameFacade* GameManager::getFacade() const
     return m_pGameFacade;
 }
 
-DataSource* GameManager::getDataSource() const
+DataSourceProxy* GameManager::getDataSourceProxy() const
 {
-    return m_pDataSource;
+    return m_pDataSourceProxy;
 }
 
 DataSourceAccessHelper *GameManager::getDataSourceAccessHelper() const
@@ -129,8 +132,14 @@ void GameManager::_onDataSourceSetupCompleted()
     Q_ASSERT(connected);
     connected = connect(m_pInputBuilder, &InputBuilder::piecesRemovedFromInput, m_pWordPairOwner, &WordPairOwner::onPiecesRemovedFromInput);
     Q_ASSERT(connected);
+    connected = connect(m_pDataSource, &DataSource::dataReady, m_pDataSourceProxy, &DataSourceProxy::dataReady);
+    Q_ASSERT(connected);
+    connected = connect(m_pDataSource, &DataSource::entryFetched, m_pDataSourceProxy, &DataSourceProxy::entryFetched);
+    Q_ASSERT(connected);
 
     m_pWordPairOwner->setWordMixerProxy(m_pWordMixerProxy);
 
     m_pGameFacade = new GameFacade{this};
+
+    m_pDataSource->init();
 }

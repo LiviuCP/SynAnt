@@ -23,6 +23,7 @@
 
 class GameFacade;
 class DataSource;
+class DataSourceProxy;
 class DataSourceAccessHelper;
 class WordMixer;
 class WordMixerProxy;
@@ -40,7 +41,7 @@ public:
     void setDataSource(const QString& dataDirPath);
 
     GameFacade* getFacade() const;
-    DataSource* getDataSource() const;
+    DataSourceProxy* getDataSourceProxy() const;
     DataSourceAccessHelper* getDataSourceAccessHelper() const;
     WordMixer* getWordMixer() const;
     WordPairOwner* getWordPairOwner() const;
@@ -60,6 +61,7 @@ private:
 
     GameFacade* m_pGameFacade;
     DataSource* m_pDataSource;
+    DataSourceProxy* m_pDataSourceProxy;
     DataSourceAccessHelper* m_pDataSourceAccessHelper;
     WordMixer* m_pWordMixer;
     WordMixerProxy* m_pWordMixerProxy;

@@ -7,6 +7,7 @@
 
 class GameManager;
 class DataSource;
+class DataSourceProxy;
 class DataSourceAccessHelper;
 class WordMixer;
 class WordPairOwner;
@@ -19,7 +20,7 @@ class GameFunctionalityProxy : public QObject
 public:
     explicit GameFunctionalityProxy(QObject *parent = nullptr);
 
-    DataSource* getDataSource() const;
+    DataSourceProxy* getDataSourceProxy() const;
     DataSourceAccessHelper* getDataSourceAccessHelper() const;
     WordMixer* getWordMixer() const;
     WordPairOwner* getWordPairOwner() const;

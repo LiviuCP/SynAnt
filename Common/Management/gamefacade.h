@@ -18,6 +18,7 @@
 
 class GameFunctionalityProxy;
 class DataSource;
+class DataSourceProxy;
 class DataSourceAccessHelper;
 class WordMixer;
 class WordPairOwner;
@@ -78,7 +79,7 @@ private:
     void _updateStatus(Game::StatusCodes tempStatusCode, Game::StatusCodes permStatusCode = Game::StatusCodes::DEFAULT);
 
     GameFunctionalityProxy* m_pGameFunctionalityProxy;
-    DataSource* m_pDataSource;
+    DataSourceProxy* m_pDataSourceProxy;
     DataSourceAccessHelper* m_pDataSourceAccessHelper;
     WordMixer* m_pWordMixer;
     WordPairOwner* m_pWordPairOwner;

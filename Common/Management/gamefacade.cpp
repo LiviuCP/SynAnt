@@ -1,12 +1,13 @@
 #include "gamefacade.h"
-#include "Proxies/gamefunctionalityproxy.h"
-#include "DataAccess/datasource.h"
-#include "DataAccess/datasourceaccesshelper.h"
-#include "CoreFunctionality/wordmixer.h"
-#include "CoreFunctionality/wordpairowner.h"
-#include "CoreFunctionality/inputbuilder.h"
-#include "Utilities/scoreitem.h"
-#include "Utilities/gamestrings.h"
+#include "../CoreFunctionality/wordmixer.h"
+#include "../CoreFunctionality/wordpairowner.h"
+#include "../CoreFunctionality/inputbuilder.h"
+#include "../DataAccess/datasource.h"
+#include "../DataAccess/datasourceaccesshelper.h"
+#include "../Proxies/gamefunctionalityproxy.h"
+#include "../Proxies/datasourceproxy.h"
+#include "../Utilities/scoreitem.h"
+#include "../Utilities/gamestrings.h"
 
 GameFacade::GameFacade(QObject *parent)
     : QObject(parent)
@@ -15,7 +16,7 @@ GameFacade::GameFacade(QObject *parent)
     , m_CurrentStatusCode{Game::StatusCodes::DEFAULT}
     , m_NextStatusCode{Game::StatusCodes::DEFAULT}
 {
-    m_pDataSource = m_pGameFunctionalityProxy->getDataSource();
+    m_pDataSourceProxy = m_pGameFunctionalityProxy->getDataSourceProxy();
     m_pDataSourceAccessHelper = m_pGameFunctionalityProxy->getDataSourceAccessHelper();
     m_pWordMixer = m_pGameFunctionalityProxy->getWordMixer();
     m_pWordPairOwner = m_pGameFunctionalityProxy->getWordPairOwner();
@@ -24,7 +25,7 @@ GameFacade::GameFacade(QObject *parent)
 
     // all QObjects used by application (except the QML registered ones) should be parented (the non-parented ones would only be used in tests)
     Q_ASSERT(this->parent());
-    Q_ASSERT(m_pDataSource->parent());
+    Q_ASSERT(m_pDataSourceProxy->parent());
     Q_ASSERT(m_pDataSourceAccessHelper->parent());
     Q_ASSERT(m_pWordMixer->parent());
     Q_ASSERT(m_pWordPairOwner->parent());
@@ -48,16 +49,14 @@ GameFacade::GameFacade(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pStatusUpdateTimer, &QTimer::timeout, this, &GameFacade::_onStatusUpdateTimeout);
     Q_ASSERT(connected);
-    connected = connect(m_pDataSource, &DataSource::dataReady, this, &GameFacade::_onDataReady);
+    connected = connect(m_pDataSourceProxy, &DataSourceProxy::dataReady, this, &GameFacade::_onDataReady);
     Q_ASSERT(connected);
-
-    m_pDataSource->init();
 }
 
 void GameFacade::startGame()
 {
     Q_EMIT statisticsChanged();
-    m_pDataSource->fetchDataEntry(m_pDataSourceAccessHelper->generateEntryNumber());
+    m_pDataSourceProxy->fetchDataEntry(m_pDataSourceAccessHelper->generateEntryNumber());
     _updateStatus(Game::StatusCodes::GAME_STARTED);
 }
 
@@ -119,7 +118,7 @@ void GameFacade::handleSubmitRequest()
     if (success)
     {
         m_pScoreItem->updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
-        m_pDataSource->fetchDataEntry(m_pDataSourceAccessHelper->generateEntryNumber());
+        m_pDataSourceProxy->fetchDataEntry(m_pDataSourceAccessHelper->generateEntryNumber());
     }
 }
 
@@ -127,14 +126,14 @@ void GameFacade::provideResultsToUser()
 {
     m_pScoreItem->updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
     _updateStatus(Game::StatusCodes::REQUESTED_BY_USER);
-    m_pDataSource->fetchDataEntry(m_pDataSourceAccessHelper->generateEntryNumber());
+    m_pDataSourceProxy->fetchDataEntry(m_pDataSourceAccessHelper->generateEntryNumber());
 }
 
 void GameFacade::setLevel(Game::Level level)
 {
     m_pWordMixer->setWordPieceSize(level);
     m_pScoreItem->setScoreIncrement(level);
-    m_pDataSource->fetchDataEntry(m_pDataSourceAccessHelper->generateEntryNumber());
+    m_pDataSourceProxy->fetchDataEntry(m_pDataSourceAccessHelper->generateEntryNumber());
     _updateStatus(Game::StatusCodes::LEVEL_CHANGED);
 }
 
@@ -222,9 +221,9 @@ void GameFacade::_onStatusUpdateTimeout()
 
 void GameFacade::_onDataReady()
 {
-    m_pDataSourceAccessHelper->setEntriesTable(m_pDataSource->getNrOfEntries());
+    m_pDataSourceAccessHelper->setEntriesTable(m_pDataSourceProxy->getNrOfEntries());
 
-    bool connected{connect(m_pDataSource, &DataSource::entryFetched, m_pWordMixer, &WordMixer::mixWords)};
+    bool connected{connect(m_pDataSourceProxy, &DataSourceProxy::entryFetched, m_pWordMixer, &WordMixer::mixWords)};
     Q_ASSERT(connected);
 }
 
