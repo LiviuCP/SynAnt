@@ -83,12 +83,12 @@ void GameManager::setDataSource(const QString &dataDirPath)
     }
 }
 
-GameFacade *GameManager::getFacade() const
+GameFacade* GameManager::getFacade() const
 {
     return m_pGameFacade;
 }
 
-DataSource *GameManager::getDataSource() const
+DataSource* GameManager::getDataSource() const
 {
     return m_pDataSource;
 }
@@ -98,22 +98,22 @@ DataSourceAccessHelper *GameManager::getDataSourceAccessHelper() const
     return m_pDataSourceAccessHelper;
 }
 
-WordMixer *GameManager::getWordMixer() const
+WordMixer* GameManager::getWordMixer() const
 {
     return m_pWordMixer;
 }
 
-WordPairOwner *GameManager::getWordPairOwner() const
+WordPairOwner* GameManager::getWordPairOwner() const
 {
     return m_pWordPairOwner;
 }
 
-InputBuilder *GameManager::getInputBuilder() const
+InputBuilder* GameManager::getInputBuilder() const
 {
     return m_pInputBuilder;
 }
 
-ScoreItem *GameManager::getScoreItem() const
+ScoreItem* GameManager::getScoreItem() const
 {
     return m_pScoreItem;
 }
