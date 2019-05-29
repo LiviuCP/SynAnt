@@ -33,6 +33,7 @@ GamePresenter::GamePresenter(QObject *parent)
     , m_ErrorOccured {false}
     , m_WindowTitle{GameStrings::c_IntroWindowTitle}
     , m_CurrentPane {Pane::INTRO}
+    , m_PreviousPane{Pane::INTRO}
     , m_FirstWordInputHoverIndex{-1}
     , m_SecondWordInputHoverIndex{-1}
     , m_pGameFacade{nullptr}
@@ -60,6 +61,7 @@ GamePresenter::GamePresenter(QObject *parent)
 void GamePresenter::switchToPane(Pane pane)
 {
     Q_ASSERT(static_cast<int>(pane) >= 0 && static_cast<int>(pane) < static_cast<int>(Pane::Nr_Of_Panes));
+    Q_ASSERT(!(m_CurrentPane == Pane::MAIN && pane == Pane::INTRO));
 
     if (m_CurrentPane != pane)
     {
@@ -69,15 +71,12 @@ void GamePresenter::switchToPane(Pane pane)
             {
             case Pane::INTRO:
                 m_IntroPaneVisible = false;
-                Q_EMIT introPaneVisibleChanged();
                 break;
             case Pane::HELP:
                 m_HelpPaneVisible = false;
-                Q_EMIT helpPaneVisibleChanged();
                 break;
             case Pane::MAIN:
                 m_MainPaneVisible = false;
-                Q_EMIT mainPaneVisibleChanged();
                 break;
             default:
                 Q_ASSERT(false);
@@ -86,11 +85,10 @@ void GamePresenter::switchToPane(Pane pane)
             switch(pane)
             {
             case Pane::INTRO:
-                Q_ASSERT(false);
+                m_IntroPaneVisible = true;
                 break;
             case Pane::HELP:
                 m_HelpPaneVisible = true;
-                Q_EMIT helpPaneVisibleChanged();
                 break;
             case Pane::MAIN:
                 if (!m_MainPaneInitialized)
@@ -102,14 +100,17 @@ void GamePresenter::switchToPane(Pane pane)
                 {
                     m_pGameFacade -> resumeGame();
                 }
+
                 m_MainPaneVisible = true;
-                Q_EMIT mainPaneVisibleChanged();
                 break;
             default:
                 Q_ASSERT(false);
             }
 
+            m_PreviousPane = m_CurrentPane;
             m_CurrentPane = pane;
+
+            Q_EMIT currentPaneChanged();
             Q_EMIT windowTitleChanged();
         }
         catch (const GameException& exception)
@@ -220,6 +221,11 @@ void GamePresenter::clearWordInputHoverIndexes()
     m_SecondWordInputHoverIndex = -1;
 
     Q_EMIT hoverChanged();
+}
+
+GamePresenter::Pane GamePresenter::getPreviousPane() const
+{
+    return m_PreviousPane;
 }
 
 bool GamePresenter::getIntroPaneVisible() const
@@ -528,15 +534,15 @@ void GamePresenter::_launchErrorPane(const QString& errorMessage)
     switch (m_CurrentPane) {
     case Pane::INTRO:
         m_IntroPaneVisible = false;
-        Q_EMIT introPaneVisibleChanged();
+        Q_EMIT currentPaneChanged();
         break;
     case Pane::HELP:
         m_HelpPaneVisible = false;
-        Q_EMIT helpPaneVisibleChanged();
+        Q_EMIT currentPaneChanged();
         break;
     case Pane::MAIN:
         m_MainPaneVisible = false;
-        Q_EMIT mainPaneVisibleChanged();
+        Q_EMIT currentPaneChanged();
         break;
     default:
         Q_ASSERT(static_cast<int>(m_CurrentPane) >= 0 && static_cast<int>(m_CurrentPane) < static_cast<int>(Pane::Nr_Of_Panes));

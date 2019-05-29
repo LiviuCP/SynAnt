@@ -80,9 +80,8 @@ static const QString c_HelpWindowMessageString          {
                                                              "\n32) For the Show results button the key combination is ALT+B. "
                                                              "For Clear input the shortcut ALT+Z could be used.\n"
                                                              "\n33) Hit ALT+1/2/3 for setting the difficulty levels to "
-                                                             "easy/medium/hard.\n"
-                                                             "\n\nPlease wait until data gets loaded (button Ok gets active).\n"
-                                                             "\nPress Ok to proceed (or return) to game.\n"
+                                                             "easy/medium/hard.\n\n"
+                                                             "\nPress Ok to return to previous page.\n"
                                                         };
 
 namespace GameStrings {

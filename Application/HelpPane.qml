@@ -71,14 +71,12 @@ Item {
 
         Button {
             id: okBtn
-            enabled: presenter.playEnabled
 
             contentItem: Text {
                 text: GameStrings.okButtonLabel
                 color: Styles.textColor
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                opacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
             }
 
             background: Rectangle {
@@ -86,7 +84,6 @@ Item {
                 border.color: Styles.borderColor
                 border.width: width * 0.002
                 radius: width * 0.01
-                opacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
             }
 
             Layout.minimumWidth: bottomBtnsMinWidth
@@ -99,11 +96,11 @@ Item {
             Shortcut {
                 sequence: GameStrings.okButtonShortcut
                 onActivated: {
-                    presenter.switchToPane(GamePresenter.MAIN);
+                    presenter.switchToPane(presenter.previousPane);
                 }
             }
 
-            onClicked: presenter.switchToPane(GamePresenter.MAIN)
+            onClicked: presenter.switchToPane(presenter.previousPane)
             onPressed: opacity = Styles.pressedButtonOpacity
             onReleased: opacity = Styles.releasedButtonOpacity
             onCanceled: opacity = Styles.releasedButtonOpacity

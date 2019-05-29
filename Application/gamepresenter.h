@@ -15,9 +15,10 @@ class GamePresenter : public QObject
     Q_OBJECT
 
     // functionality properties
-    Q_PROPERTY(bool introPaneVisible READ getIntroPaneVisible NOTIFY introPaneVisibleChanged)
-    Q_PROPERTY(bool helpPaneVisible READ getHelpPaneVisible NOTIFY helpPaneVisibleChanged)
-    Q_PROPERTY(bool mainPaneVisible READ getMainPaneVisible NOTIFY mainPaneVisibleChanged)
+    Q_PROPERTY(Pane previousPane READ getPreviousPane NOTIFY currentPaneChanged)
+    Q_PROPERTY(bool introPaneVisible READ getIntroPaneVisible NOTIFY currentPaneChanged)
+    Q_PROPERTY(bool helpPaneVisible READ getHelpPaneVisible NOTIFY currentPaneChanged)
+    Q_PROPERTY(bool mainPaneVisible READ getMainPaneVisible NOTIFY currentPaneChanged)
     Q_PROPERTY(bool playEnabled READ isPlayEnabled NOTIFY playEnabledChanged)
     Q_PROPERTY(bool resetEnabled READ getResetEnabled NOTIFY resetEnabledChanged)
     Q_PROPERTY(bool clearInputEnabled READ getClearInputEnabled NOTIFY clearInputEnabledChanged)
@@ -77,6 +78,8 @@ public:
     Q_INVOKABLE void updateSecondWordInputHoverIndex(int index);
     Q_INVOKABLE void clearWordInputHoverIndexes();
 
+    Pane getPreviousPane() const;
+
     bool getIntroPaneVisible() const;
     bool getHelpPaneVisible() const;
     bool getMainPaneVisible() const;
@@ -115,9 +118,7 @@ public:
     virtual ~GamePresenter();
 
 signals:
-    Q_SIGNAL void introPaneVisibleChanged();
-    Q_SIGNAL void helpPaneVisibleChanged();
-    Q_SIGNAL void mainPaneVisibleChanged();
+    Q_SIGNAL void currentPaneChanged();
     Q_SIGNAL void playEnabledChanged();
     Q_SIGNAL void resetEnabledChanged();
     Q_SIGNAL void clearInputEnabledChanged();
@@ -156,6 +157,7 @@ private:
     QString m_ErrorMessage;
 
     Pane m_CurrentPane;
+    Pane m_PreviousPane;
 
     int m_FirstWordInputHoverIndex;
     int m_SecondWordInputHoverIndex;

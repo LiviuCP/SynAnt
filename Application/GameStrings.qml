@@ -67,7 +67,7 @@ QtObject {
     readonly property string playButtonToolTip:                 "Click or hit ALT+P to play."
     readonly property string helpButtonToolTip:                 "Click or hit ALT+H for accessing the detailed game instructions."
     readonly property string quitButtonToolTip:                 "Click or hit ALT+Q to exit application."
-    readonly property string okButtonToolTip:                   "Click or hit ALT+O to return to game."
+    readonly property string okButtonToolTip:                   "Click or hit ALT+O to return to previous page."
     readonly property string submitButtonToolTip:               "Click or hit ALT+S after entering the 2 words."
     readonly property string clearInputButtonToolTip:           "Click or hit ALT+Z to clear the user input."
     readonly property string resultsButtonToolTip:              "Click or hit ALT+B to have the correct words displayed."
