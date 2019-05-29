@@ -64,6 +64,7 @@ namespace Game
     static constexpr int c_MaxPairSize{30};
 
     static constexpr int c_ToolTipDelay{1000};
+    static constexpr int c_LoadDataThreadDelay{4000};
     static constexpr int c_ToolTipTimeout{4000};
     static constexpr int c_StdStatusUpdateTimeout{1000};
     static constexpr int c_ExtStatusUpdateTimeout{2000};

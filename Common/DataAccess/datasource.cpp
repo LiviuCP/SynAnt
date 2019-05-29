@@ -40,7 +40,7 @@ void DataSource::onReadDataRequestReceived()
     QVector<QString> rawData;
 
     // for simulation purposes only (to be removed later)
-    QThread::usleep(5000000);
+    QThread::msleep(Game::c_LoadDataThreadDelay);
 
     _loadRawData(rawData);
     _createProcessedDataEntries(rawData);
