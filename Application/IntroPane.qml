@@ -43,7 +43,7 @@ Item {
             id: introPaneText
             anchors.fill: parent
             anchors.leftMargin: parent.width * 0.005
-            text: GameStrings.introPaneMessage
+            text: presenter.introPaneMessage
             color: Styles.textColor
         }
     }

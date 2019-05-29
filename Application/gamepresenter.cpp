@@ -56,6 +56,8 @@ GamePresenter::GamePresenter(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::completionChanged, this, &GamePresenter::submitEnabledChanged);
     Q_ASSERT(connected);
+
+    m_pGameFacade->init();
 }
 
 void GamePresenter::switchToPane(Pane pane)
@@ -402,6 +404,11 @@ QString GamePresenter::getWindowTitle() const
     return c_WindowTitles[m_CurrentPane];
 }
 
+QString GamePresenter::getIntroPaneMessage() const
+{
+    return m_IntroPaneMessage;
+}
+
 QString GamePresenter::getHelpPaneMessage() const
 {
     return GameStrings::c_HelpWindowMessage;
@@ -482,6 +489,12 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
 {
     switch (statusCode)
     {
+    case Game::StatusCodes::LOADING_DATA:
+        m_IntroPaneMessage = GameStrings::c_DataLoadingMessage;
+        break;
+    case Game::StatusCodes::DATA_LOAD_COMPLETE:
+        m_IntroPaneMessage = GameStrings::c_DataReadyMessage;
+        break;
     case Game::StatusCodes::GAME_STARTED:
         m_MainPaneStatusMessage = GameStrings::c_GameStartedMessage;
         break;
@@ -526,7 +539,14 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         m_MainPaneStatusMessage = GameStrings::c_DefaultStatusMessage;
     }
 
-    Q_EMIT mainPaneStatusMessageChanged();
+    if (statusCode == Game::StatusCodes::LOADING_DATA || statusCode == Game::StatusCodes::DATA_LOAD_COMPLETE)
+    {
+        Q_EMIT introPaneMessageChanged();
+    }
+    else
+    {
+        Q_EMIT mainPaneStatusMessageChanged();
+    }
 }
 
 void GamePresenter::_launchErrorPane(const QString& errorMessage)

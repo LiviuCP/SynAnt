@@ -13,8 +13,6 @@ GameFacade::GameFacade(QObject *parent)
     : QObject(parent)
     , m_pGameFunctionalityProxy{new GameFunctionalityProxy{this}}
     , m_pStatusUpdateTimer{new QTimer{this}}
-    , m_CurrentStatusCode{Game::StatusCodes::DEFAULT}
-    , m_NextStatusCode{Game::StatusCodes::DEFAULT}
     , m_IsDataAvailable{false}
 {
     m_pDataSourceProxy = m_pGameFunctionalityProxy->getDataSourceProxy();
@@ -52,6 +50,11 @@ GameFacade::GameFacade(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pDataSourceProxy, &DataSourceProxy::dataReady, this, &GameFacade::_onDataReady);
     Q_ASSERT(connected);
+}
+
+void GameFacade::init()
+{
+    _updateStatus(Game::StatusCodes::LOADING_DATA, Game::StatusCodes::LOADING_DATA);
 }
 
 void GameFacade::startGame()
@@ -235,6 +238,8 @@ void GameFacade::_onDataReady()
     m_IsDataAvailable = true;
 
     Q_EMIT dataAvailableChanged();
+
+    _updateStatus(Game::StatusCodes::DATA_LOAD_COMPLETE, Game::StatusCodes::DATA_LOAD_COMPLETE);
 }
 
 void GameFacade::_updateStatus(Game::StatusCodes tempStatusCode, Game::StatusCodes permStatusCode)

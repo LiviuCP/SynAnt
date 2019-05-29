@@ -43,6 +43,7 @@ class GamePresenter : public QObject
 
     // text properties
     Q_PROPERTY(QString windowTitle READ getWindowTitle NOTIFY windowTitleChanged)
+    Q_PROPERTY(QString introPaneMessage READ getIntroPaneMessage NOTIFY introPaneMessageChanged)
     Q_PROPERTY(QString helpPaneMessage READ getHelpPaneMessage CONSTANT) // if feasible: to be moved later to GameStrings.qml
     Q_PROPERTY(QString mainPaneStatusMessage READ getMainPaneStatusMessage NOTIFY mainPaneStatusMessageChanged)
     Q_PROPERTY(QString mainPaneScoreMessage READ getMainPaneScoreMessage NOTIFY mainPaneStatisticsMessagesChanged)
@@ -109,6 +110,7 @@ public:
 
     QString getWindowTitle() const;
 
+    QString getIntroPaneMessage() const;
     QString getHelpPaneMessage() const;
     QString getMainPaneStatusMessage() const;
     QString getMainPaneScoreMessage() const;
@@ -128,6 +130,7 @@ signals:
     Q_SIGNAL void inputChanged();
     Q_SIGNAL void selectionChanged();
     Q_SIGNAL void windowTitleChanged();
+    Q_SIGNAL void introPaneMessageChanged();
     Q_SIGNAL void mainPaneStatusMessageChanged();
     Q_SIGNAL void mainPaneStatisticsMessagesChanged();
     Q_SIGNAL void errorMessageChanged();
@@ -151,6 +154,7 @@ private:
     bool m_ErrorOccured;
 
     QString m_WindowTitle;
+    QString m_IntroPaneMessage;
     QString m_MainPaneStatusMessage;
     QString m_MainPaneScoreMessage;
     QString m_MainPaneWordPairsMessage;

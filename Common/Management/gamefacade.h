@@ -31,6 +31,8 @@ class GameFacade : public QObject
 public:
     explicit GameFacade(QObject *parent = nullptr);
 
+    void init();
+
     void startGame();
     void resumeGame();
 

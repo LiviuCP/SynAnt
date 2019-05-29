@@ -104,6 +104,17 @@ namespace GameStrings {
     const QString c_WordPairsMessage                    {    "Word pairs: %1/%2"                                                                        };
 
     // status messages
+    const QString c_DataLoadingMessage                  {    "Loading data. Please wait"                                                                };
+
+    const QString c_DataReadyMessage                    {
+                                                             "\n\t\tWelcome to SynAnt!\n\n\n"
+                                                             "\nIt's simple!\n"
+                                                             "\nTwo words are divided into equal pieces and mixed with each other.\n"
+                                                             "\nYou just need to guess them.\n"
+                                                             "\nThe words can either be synonyms or antonyms.\n\n\n"
+                                                             "\nPress Play to enter the game or Help for more information."
+                                                        };
+
     const QString c_DefaultStatusMessage                {    "Please select a new word piece or delete one/more if necessary"                           };
     const QString c_GameStartedMessage                  {    "Game started"                                                                             };
     const QString c_GameResumedMessage                  {    "Game resumed"                                                                             };

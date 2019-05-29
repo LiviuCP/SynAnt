@@ -32,6 +32,8 @@ namespace Game
         SUCCESS,
         INCORRECT_WORDS,
         REQUESTED_BY_USER,
+        LOADING_DATA,
+        DATA_LOAD_COMPLETE,
         GAME_STARTED,
         GAME_RESUMED,
         STATISTICS_RESET,

@@ -39,11 +39,11 @@ void DataSource::onReadDataRequestReceived()
 {
     QVector<QString> rawData;
 
-    // for simulation purposes only (to be removed later)
-    QThread::msleep(Game::c_LoadDataThreadDelay);
-
     _loadRawData(rawData);
     _createProcessedDataEntries(rawData);
+
+    // for sync purposes only
+    QThread::msleep(Game::c_LoadDataThreadDelay);
 
     Q_EMIT dataReady();
 }
