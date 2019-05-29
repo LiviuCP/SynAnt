@@ -63,6 +63,7 @@ ApplicationWindow {
 
     Shortcut {
         sequence: GameStrings.playButtonShortcut
+        enabled: gamePresenter.playEnabled
         onActivated: {
             gamePresenter.switchToPane(GamePresenter.MAIN);
         }
