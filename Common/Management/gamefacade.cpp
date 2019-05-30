@@ -56,7 +56,14 @@ GameFacade::GameFacade(QObject *parent)
 
 void GameFacade::init()
 {
-    _updateStatus(Game::StatusCodes::LOADING_DATA, Game::StatusCodes::LOADING_DATA);
+    if (m_CurrentStatusCode == Game::StatusCodes::NOT_INITIALIZED && m_NextStatusCode == Game::StatusCodes::NOT_INITIALIZED)
+    {
+        _updateStatus(Game::StatusCodes::LOADING_DATA, Game::StatusCodes::LOADING_DATA);
+    }
+    else
+    {
+        qWarning("Status codes initialization error or wrong usage of the function");
+    }
 }
 
 void GameFacade::startGame()
