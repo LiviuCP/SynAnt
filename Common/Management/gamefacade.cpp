@@ -13,6 +13,8 @@ GameFacade::GameFacade(QObject *parent)
     : QObject(parent)
     , m_pGameFunctionalityProxy{new GameFunctionalityProxy{this}}
     , m_pStatusUpdateTimer{new QTimer{this}}
+    , m_CurrentStatusCode{Game::StatusCodes::NOT_INITIALIZED}
+    , m_NextStatusCode{Game::StatusCodes::NOT_INITIALIZED}
     , m_IsDataAvailable{false}
 {
     m_pDataSourceProxy = m_pGameFunctionalityProxy->getDataSourceProxy();
