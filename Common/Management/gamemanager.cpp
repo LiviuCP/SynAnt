@@ -102,6 +102,11 @@ void GameManager::setDataSource(const QString &dataDirPath)
     }
 }
 
+void GameManager::loadData()
+{
+    Q_EMIT readData();
+}
+
 GameFacade* GameManager::getFacade() const
 {
     return m_pGameFacade;
@@ -145,6 +150,8 @@ GameManager::~GameManager()
 
 void GameManager::_onDataSourceSetupCompleted()
 {
+    Q_ASSERT(m_pDataSourceReadThread->isRunning());
+
     // do all external backend connections except the ones to the facade (facade will build them itself)
     bool connected{connect(m_pWordPairOwner, &WordPairOwner::mixedWordsAvailable, m_pInputBuilder, &InputBuilder::onNewPiecesAvailable)};
     Q_ASSERT(connected);
@@ -158,6 +165,4 @@ void GameManager::_onDataSourceSetupCompleted()
     m_pWordPairOwner->setWordMixerProxy(m_pWordMixerProxy);
 
     m_pGameFacade = new GameFacade{this};
-
-    Q_EMIT readData();
 }

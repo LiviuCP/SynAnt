@@ -29,7 +29,7 @@ namespace Game
 
     enum class StatusCodes
     {
-        NOT_INITIALIZED,
+        INVALID,
         SUCCESS,
         INCORRECT_WORDS,
         REQUESTED_BY_USER,

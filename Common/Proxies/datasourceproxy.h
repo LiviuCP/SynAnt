@@ -4,6 +4,7 @@
 #include <QObject>
 
 class DataSource;
+class GameManager;
 
 class DataSourceProxy : public QObject
 {
@@ -11,6 +12,7 @@ class DataSourceProxy : public QObject
 public:
     explicit DataSourceProxy(DataSource* pDataSource, QObject *parent = nullptr);
 
+    void loadData();
     void fetchDataEntry(int entryNumber);
     int getNrOfEntries();
 

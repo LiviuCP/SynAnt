@@ -13,8 +13,8 @@ GameFacade::GameFacade(QObject *parent)
     : QObject(parent)
     , m_pGameFunctionalityProxy{new GameFunctionalityProxy{this}}
     , m_pStatusUpdateTimer{new QTimer{this}}
-    , m_CurrentStatusCode{Game::StatusCodes::NOT_INITIALIZED}
-    , m_NextStatusCode{Game::StatusCodes::NOT_INITIALIZED}
+    , m_CurrentStatusCode{Game::StatusCodes::INVALID}
+    , m_NextStatusCode{Game::StatusCodes::INVALID}
     , m_IsDataAvailable{false}
 {
     m_pDataSourceProxy = m_pGameFunctionalityProxy->getDataSourceProxy();
@@ -56,8 +56,9 @@ GameFacade::GameFacade(QObject *parent)
 
 void GameFacade::init()
 {
-    if (m_CurrentStatusCode == Game::StatusCodes::NOT_INITIALIZED && m_NextStatusCode == Game::StatusCodes::NOT_INITIALIZED)
+    if (m_CurrentStatusCode == Game::StatusCodes::INVALID && m_NextStatusCode == Game::StatusCodes::INVALID)
     {
+        m_pDataSourceProxy->loadData();
         _updateStatus(Game::StatusCodes::LOADING_DATA, Game::StatusCodes::LOADING_DATA);
     }
     else
@@ -68,6 +69,8 @@ void GameFacade::init()
 
 void GameFacade::startGame()
 {
+    Q_ASSERT(m_CurrentStatusCode == Game::StatusCodes::DATA_LOAD_COMPLETE);
+
     Q_EMIT statisticsChanged();
     m_pDataSourceProxy->fetchDataEntry(m_pDataSourceAccessHelper->generateEntryNumber());
     _updateStatus(Game::StatusCodes::GAME_STARTED);

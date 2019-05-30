@@ -39,6 +39,7 @@ public:
     static void releaseResources();
 
     void setDataSource(const QString& dataDirPath);
+    void loadData();
 
     GameFacade* getFacade() const;
     DataSourceProxy* getDataSourceProxy() const;
