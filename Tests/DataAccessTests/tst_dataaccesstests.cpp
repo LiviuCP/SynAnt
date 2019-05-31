@@ -2,9 +2,9 @@
 
 #include <memory>
 
-#include "../../Common/DataAccess/datasource.h"
-#include "../../Common/DataAccess/datasourceaccesshelper.h"
-#include "../../Common/Utilities/gamestrings.h"
+#include "../../SystemFunctionality/DataAccess/datasource.h"
+#include "../../SystemFunctionality/DataAccess/datasourceaccesshelper.h"
+#include "../../SystemFunctionality/Utilities/gamestrings.h"
 
 class DataAccessTests : public QObject
 {

@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "../../Common/Utilities/scoreitem.h"
+#include "../../SystemFunctionality/Utilities/scoreitem.h"
 
 class UtilitiesTests : public QObject
 {

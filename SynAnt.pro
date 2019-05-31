@@ -2,8 +2,9 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     Application \
-    Tests \
-    Common
+    SystemFunctionality \
+    Tests
 
-Application.depends = Common
-Tests.depends = Common
+
+Application.depends = SystemFunctionality
+Tests.depends = SystemFunctionality

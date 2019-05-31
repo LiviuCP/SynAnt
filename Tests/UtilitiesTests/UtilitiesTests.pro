@@ -2,7 +2,7 @@ QT       += testlib
 
 QT       -= gui
 
-TARGET = tst_commontests
+TARGET = tst_utilitiestests
 CONFIG   += console
 CONFIG   -= app_bundle
 
@@ -27,6 +27,6 @@ DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
 HEADERS += \
 
-QMAKE_LFLAGS += "-Wl,-rpath,\'$$top_builddir/Common\'"
+QMAKE_LFLAGS += "-Wl,-rpath,\'$$top_builddir/SystemFunctionality\'"
 
-LIBS += -L$$top_builddir/Common -lCommon
+LIBS += -L$$top_builddir/SystemFunctionality -lSystemFunctionality
