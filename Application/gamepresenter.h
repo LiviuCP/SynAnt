@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QVariant>
 #include <QColor>
+#include <QTimer>
 
 #include "../SystemFunctionality/Utilities/game.h"
 
@@ -142,6 +143,7 @@ private slots:
     void _onStatusChanged(Game::StatusCodes statusCode);
 
 private:
+    void _updateStatusMessage(const QString& message, Pane pane);
     void _launchErrorPane(const QString& errorMessage);
 
     bool m_IntroPaneVisible;
@@ -168,6 +170,8 @@ private:
 
     GameFacade* m_pGameFacade;
     GameProxy* m_pGameProxy;
+
+    QTimer* m_pStatusUpdateTimer;
 };
 
 #endif // GAMEPRESENTER_H

@@ -76,12 +76,9 @@ signals:
 
 private slots:
     void _onCloseInputPermissionRequested();
-    void _onStatusUpdateTimeout();
     void _onDataReady();
 
 private:
-    void _updateStatus(Game::StatusCodes tempStatusCode, Game::StatusCodes permStatusCode = Game::StatusCodes::DEFAULT);
-
     GameFunctionalityProxy* m_pGameFunctionalityProxy;
     DataSourceProxy* m_pDataSourceProxy;
     DataSourceAccessHelper* m_pDataSourceAccessHelper;
@@ -89,9 +86,7 @@ private:
     WordPairOwner* m_pWordPairOwner;
     InputBuilder* m_pInputBuilder;
     ScoreItem* m_pScoreItem;
-    QTimer* m_pStatusUpdateTimer;
     Game::StatusCodes m_CurrentStatusCode;
-    Game::StatusCodes m_NextStatusCode;
     bool m_IsDataAvailable;
 };
 
