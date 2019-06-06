@@ -117,6 +117,7 @@ namespace GameStrings {
 
     const QString c_DefaultStatusMessage                {    "Please select a new word piece or delete one/more if necessary"                           };
     const QString c_GameStartedMessage                  {    "Game started"                                                                             };
+    const QString c_GamePausedMessage                   {    "Game paused"                                                                              };
     const QString c_GameResumedMessage                  {    "Game resumed"                                                                             };
 
     const QString c_PieceNotAddedMessage                {    "The selected wordpiece cannot be added to the input of the required word!"                };

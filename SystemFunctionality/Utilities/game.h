@@ -36,6 +36,7 @@ namespace Game
         LOADING_DATA,
         DATA_LOAD_COMPLETE,
         GAME_STARTED,
+        GAME_PAUSED,
         GAME_RESUMED_COMPLETE_INPUT,
         GAME_RESUMED_INCOMPLETE_INPUT,
         STATISTICS_RESET_COMPLETE_INPUT,
@@ -68,6 +69,7 @@ namespace Game
     static constexpr int c_MaxPairSize{30};
 
     static constexpr int c_ToolTipDelay{1000};
+    static constexpr int c_PaneSwitchingDelay{250};
     static constexpr int c_LoadDataThreadDelay{4000};
     static constexpr int c_ToolTipTimeout{4000};
     static constexpr int c_ShortStatusUpdateDelay{1000};

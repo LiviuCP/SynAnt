@@ -71,6 +71,15 @@ void GamePresenter::switchToPane(Pane pane)
     Q_ASSERT(static_cast<int>(pane) >= 0 && static_cast<int>(pane) < static_cast<int>(Pane::Nr_Of_Panes));
     Q_ASSERT(!(m_CurrentPane == Pane::MAIN && pane == Pane::INTRO));
 
+    bool delayedSwitchingRequested{false};
+    bool isGamePausingRequired{false};
+
+    auto triggerPaneSwitching = [this]()
+    {
+        Q_EMIT currentPaneChanged();
+        Q_EMIT windowTitleChanged();
+    };
+
     if (m_CurrentPane != pane)
     {
         try
@@ -85,6 +94,7 @@ void GamePresenter::switchToPane(Pane pane)
                 break;
             case Pane::MAIN:
                 m_MainPaneVisible = false;
+                isGamePausingRequired = true;
                 break;
             default:
                 Q_ASSERT(false);
@@ -96,6 +106,11 @@ void GamePresenter::switchToPane(Pane pane)
                 m_IntroPaneVisible = true;
                 break;
             case Pane::HELP:
+                if (isGamePausingRequired)
+                {
+                    m_pGameFacade->pauseGame();
+                    delayedSwitchingRequested = true;
+                }
                 m_HelpPaneVisible = true;
                 break;
             case Pane::MAIN:
@@ -118,8 +133,14 @@ void GamePresenter::switchToPane(Pane pane)
             m_PreviousPane = m_CurrentPane;
             m_CurrentPane = pane;
 
-            Q_EMIT currentPaneChanged();
-            Q_EMIT windowTitleChanged();
+            if (delayedSwitchingRequested)
+            {
+                QTimer::singleShot(Game::c_PaneSwitchingDelay, this, [triggerPaneSwitching](){triggerPaneSwitching();});
+            }
+            else
+            {
+                triggerPaneSwitching();
+            }
         }
         catch (const GameException& exception)
         {
@@ -509,6 +530,9 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
     case Game::StatusCodes::GAME_STARTED:
         _updateStatusMessage(GameStrings::c_GameStartedMessage, Pane::MAIN, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
+        break;
+    case Game::StatusCodes::GAME_PAUSED:
+        _updateStatusMessage(GameStrings::c_GamePausedMessage, Pane::MAIN, Game::c_NoDelay);
         break;
     case Game::StatusCodes::GAME_RESUMED_COMPLETE_INPUT:
         _updateStatusMessage(GameStrings::c_GameResumedMessage, Pane::MAIN, Game::c_NoDelay);

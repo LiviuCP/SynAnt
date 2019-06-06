@@ -76,6 +76,11 @@ void GameFacade::resumeGame()
                                                                                   : Game::StatusCodes::GAME_RESUMED_INCOMPLETE_INPUT);
 }
 
+void GameFacade::pauseGame()
+{
+    Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::GAME_PAUSED);
+}
+
 void GameFacade::addWordPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex)
 {
     if (!m_pWordPairOwner->getIsWordPieceSelected(wordPieceIndex))
