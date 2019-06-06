@@ -143,7 +143,8 @@ private slots:
     void _onStatusChanged(Game::StatusCodes statusCode);
 
 private:
-    void _updateStatusMessage(const QString& message, Pane pane);
+    void _updateStatusMessage(const QString& message, Pane pane, int delay);
+    void _updateMessage();
     void _launchErrorPane(const QString& errorMessage);
 
     bool m_IntroPaneVisible;
@@ -161,9 +162,11 @@ private:
     QString m_MainPaneScoreMessage;
     QString m_MainPaneWordPairsMessage;
     QString m_ErrorMessage;
+    QString m_CurrentStatusMessage;
 
     Pane m_CurrentPane;
     Pane m_PreviousPane;
+    Pane m_StatusUpdatePane;
 
     int m_FirstWordInputHoverIndex;
     int m_SecondWordInputHoverIndex;

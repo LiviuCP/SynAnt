@@ -34,6 +34,7 @@ GamePresenter::GamePresenter(QObject *parent)
     , m_WindowTitle{GameStrings::c_IntroWindowTitle}
     , m_CurrentPane {Pane::INTRO}
     , m_PreviousPane{Pane::INTRO}
+    , m_StatusUpdatePane{Pane::INTRO}
     , m_FirstWordInputHoverIndex{-1}
     , m_SecondWordInputHoverIndex{-1}
     , m_pGameFacade{nullptr}
@@ -42,6 +43,8 @@ GamePresenter::GamePresenter(QObject *parent)
 {
     m_pGameFacade = m_pGameProxy->getFacade();
     Q_ASSERT(m_pGameFacade);
+
+    m_pStatusUpdateTimer->setSingleShot(true);
 
     bool connected{connect(m_pGameFacade, &GameFacade::statisticsChanged, this, &GamePresenter::_onStatisticsChanged)};
     Q_ASSERT(connected);
@@ -56,6 +59,8 @@ GamePresenter::GamePresenter(QObject *parent)
     connected = connect(m_pGameFacade, &GameFacade::selectionChanged, this, &GamePresenter::selectionChanged);
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::completionChanged, this, &GamePresenter::submitEnabledChanged);
+    Q_ASSERT(connected);
+    connected = connect(m_pStatusUpdateTimer, &QTimer::timeout, this, &GamePresenter::_updateMessage);
     Q_ASSERT(connected);
 
     m_pGameFacade->init();
@@ -496,100 +501,115 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
     switch (statusCode)
     {
     case Game::StatusCodes::LOADING_DATA:
-        _updateStatusMessage(GameStrings::c_DataLoadingMessage, Pane::INTRO);
+        _updateStatusMessage(GameStrings::c_DataLoadingMessage, Pane::INTRO, Game::c_NoDelay);
         break;
     case Game::StatusCodes::DATA_LOAD_COMPLETE:
-        _updateStatusMessage(GameStrings::c_DataReadyMessage, Pane::INTRO);
+        _updateStatusMessage(GameStrings::c_DataReadyMessage, Pane::INTRO, Game::c_NoDelay);
         break;
     case Game::StatusCodes::GAME_STARTED:
-        _updateStatusMessage(GameStrings::c_GameStartedMessage, Pane::MAIN);
-        QTimer::singleShot(Game::c_StdStatusUpdateTimeout, m_pStatusUpdateTimer, [this](){_updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN);});
+        _updateStatusMessage(GameStrings::c_GameStartedMessage, Pane::MAIN, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::GAME_RESUMED_COMPLETE_INPUT:
-        _updateStatusMessage(GameStrings::c_GameResumedMessage, Pane::MAIN);
-        QTimer::singleShot(Game::c_StdStatusUpdateTimeout, m_pStatusUpdateTimer, [this](){_updateStatusMessage(GameStrings::c_AllPiecesAddedMessage, Pane::MAIN);});
+        _updateStatusMessage(GameStrings::c_GameResumedMessage, Pane::MAIN, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_AllPiecesAddedMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::GAME_RESUMED_INCOMPLETE_INPUT:
-        _updateStatusMessage(GameStrings::c_GameResumedMessage, Pane::MAIN);
-        QTimer::singleShot(Game::c_StdStatusUpdateTimeout, m_pStatusUpdateTimer, [this](){_updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN);});
+        _updateStatusMessage(GameStrings::c_GameResumedMessage, Pane::MAIN, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::SUCCESS:
         {
             QString message{GameStrings::c_SuccessMessage.arg(m_pGameFacade->getFirstReferenceWord())
                                                          .arg(m_pGameFacade->getSecondReferenceWord())
                                                          .arg(m_pGameFacade->areSynonyms() ? GameStrings::c_Synonyms : GameStrings::c_Antonyms)};
-            _updateStatusMessage(message, Pane::MAIN);
+            _updateStatusMessage(message, Pane::MAIN, Game::c_NoDelay);
         }
-        QTimer::singleShot(Game::c_ExtStatusUpdateTimeout, m_pStatusUpdateTimer, [this](){_updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN);});
+        _updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN, Game::c_LongStatusUpdateDelay);
         break;
     case Game::StatusCodes::INCORRECT_WORDS:
-        _updateStatusMessage(GameStrings::c_IncorrectWordsMessage, Pane::MAIN);
-        QTimer::singleShot(Game::c_StdStatusUpdateTimeout, m_pStatusUpdateTimer, [this](){_updateStatusMessage(GameStrings::c_AllPiecesAddedMessage, Pane::MAIN);});
+        _updateStatusMessage(GameStrings::c_IncorrectWordsMessage, Pane::MAIN, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_AllPiecesAddedMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::REQUESTED_BY_USER:
         {
             QString message = GameStrings::c_RequestedByUserMessage.arg(m_pGameFacade->getFirstReferenceWord())
                                                                    .arg(m_pGameFacade->getSecondReferenceWord())
                                                                    .arg(m_pGameFacade->areSynonyms() ? GameStrings::c_Synonyms : GameStrings::c_Antonyms);
-            _updateStatusMessage(message, Pane::MAIN);
+            _updateStatusMessage(message, Pane::MAIN, Game::c_NoDelay);
         }
-        QTimer::singleShot(Game::c_ExtStatusUpdateTimeout, m_pStatusUpdateTimer, [this](){_updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN);});
+        _updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN, Game::c_LongStatusUpdateDelay);
         break;
     case Game::StatusCodes::STATISTICS_RESET_COMPLETE_INPUT:
-        _updateStatusMessage(GameStrings::c_ScoresResetMessage, Pane::MAIN);
-        QTimer::singleShot(Game::c_StdStatusUpdateTimeout, m_pStatusUpdateTimer, [this](){_updateStatusMessage(GameStrings::c_AllPiecesAddedMessage, Pane::MAIN);});
+        _updateStatusMessage(GameStrings::c_ScoresResetMessage, Pane::MAIN, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_AllPiecesAddedMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::STATISTICS_RESET_INCOMPLETE_INPUT:
-        _updateStatusMessage(GameStrings::c_ScoresResetMessage, Pane::MAIN);
-        QTimer::singleShot(Game::c_StdStatusUpdateTimeout, m_pStatusUpdateTimer, [this](){_updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN);});
+        _updateStatusMessage(GameStrings::c_ScoresResetMessage, Pane::MAIN, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::LEVEL_CHANGED:
-        _updateStatusMessage(GameStrings::c_LevelChangedMessage, Pane::MAIN);
-        QTimer::singleShot(Game::c_StdStatusUpdateTimeout, m_pStatusUpdateTimer, [this](){_updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN);});
+        _updateStatusMessage(GameStrings::c_LevelChangedMessage, Pane::MAIN, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::PIECE_NOT_ADDED:
-        _updateStatusMessage(GameStrings::c_PieceNotAddedMessage, Pane::MAIN);
-        QTimer::singleShot(Game::c_StdStatusUpdateTimeout, m_pStatusUpdateTimer, [this](){_updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN);});
+        _updateStatusMessage(GameStrings::c_PieceNotAddedMessage, Pane::MAIN, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::PIECE_ADDED_COMPLETE_INPUT:
-        _updateStatusMessage(GameStrings::c_PieceSuccessfullyAddedMessage, Pane::MAIN);
-        QTimer::singleShot(Game::c_StdStatusUpdateTimeout, m_pStatusUpdateTimer, [this](){_updateStatusMessage(GameStrings::c_AllPiecesAddedMessage, Pane::MAIN);});
+        _updateStatusMessage(GameStrings::c_PieceSuccessfullyAddedMessage, Pane::MAIN, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_AllPiecesAddedMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::PIECE_ADDED_INCOMPLETE_INPUT:
-        _updateStatusMessage(GameStrings::c_PieceSuccessfullyAddedMessage, Pane::MAIN);
-        QTimer::singleShot(Game::c_StdStatusUpdateTimeout, m_pStatusUpdateTimer, [this](){_updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN);});
+        _updateStatusMessage(GameStrings::c_PieceSuccessfullyAddedMessage, Pane::MAIN, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::PIECES_REMOVED:
-        _updateStatusMessage(GameStrings::c_PiecesRemovedMessage, Pane::MAIN);
-        QTimer::singleShot(Game::c_StdStatusUpdateTimeout, m_pStatusUpdateTimer, [this](){_updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN);});
+        _updateStatusMessage(GameStrings::c_PiecesRemovedMessage, Pane::MAIN, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::USER_INPUT_CLEARED:
-        _updateStatusMessage(GameStrings::c_AllPiecesRemovedMessage, Pane::MAIN);
-        QTimer::singleShot(Game::c_StdStatusUpdateTimeout, m_pStatusUpdateTimer, [this](){_updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN);});
+        _updateStatusMessage(GameStrings::c_AllPiecesRemovedMessage, Pane::MAIN, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
         break;
     default:
         Q_ASSERT(false);
     }
 }
 
-void GamePresenter::_updateStatusMessage(const QString &message, GamePresenter::Pane pane)
+void GamePresenter::_updateStatusMessage(const QString& message, GamePresenter::Pane pane, int delay)
 {
-    switch(pane)
+    m_CurrentStatusMessage = message;
+    m_StatusUpdatePane = pane;
+
+    if (delay > 0)
+    {
+        m_pStatusUpdateTimer->start(delay);
+    }
+    else
+    {
+        _updateMessage();
+    }
+}
+
+void GamePresenter::_updateMessage()
+{
+    switch(m_StatusUpdatePane)
     {
     case Pane::INTRO:
-        m_IntroPaneMessage = message;
+        m_IntroPaneMessage = m_CurrentStatusMessage;
         Q_EMIT introPaneMessageChanged();
         break;
     case Pane::HELP:
         break;
     case Pane::MAIN:
-        m_MainPaneStatusMessage = message;
+        m_MainPaneStatusMessage = m_CurrentStatusMessage;
         Q_EMIT mainPaneStatusMessageChanged();
         break;
     case Pane::ERROR:
         break;
     default:
-        Q_ASSERT(static_cast<int>(m_CurrentPane) >= 0 && static_cast<int>(m_CurrentPane) < static_cast<int>(Pane::Nr_Of_Panes));
+        Q_ASSERT(static_cast<int>(m_StatusUpdatePane) >= 0 && static_cast<int>(m_StatusUpdatePane) < static_cast<int>(Pane::Nr_Of_Panes));
     }
 }
 
