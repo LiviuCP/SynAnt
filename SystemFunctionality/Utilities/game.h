@@ -39,6 +39,7 @@ namespace Game
         GAME_PAUSED,
         GAME_RESUMED_COMPLETE_INPUT,
         GAME_RESUMED_INCOMPLETE_INPUT,
+        GAME_STOPPED,
         STATISTICS_RESET_COMPLETE_INPUT,
         STATISTICS_RESET_INCOMPLETE_INPUT,
         LEVEL_CHANGED,
@@ -74,6 +75,7 @@ namespace Game
     static constexpr int c_ToolTipTimeout{4000};
     static constexpr int c_ShortStatusUpdateDelay{1000};
     static constexpr int c_LongStatusUpdateDelay{2000};
+    static constexpr int c_GameQuitDelay{200};
     static constexpr int c_NoDelay{-1};
 
     const QMap<Game::Level, int> c_ScoreIncrements

@@ -252,6 +252,19 @@ void GamePresenter::clearWordInputHoverIndexes()
     Q_EMIT hoverChanged();
 }
 
+void GamePresenter::quit()
+{
+    // involve facade only if the user accessed the main pane
+    if (m_MainPaneInitialized)
+    {
+        m_pGameFacade->quitGame();
+    }
+    else
+    {
+        QGuiApplication::quit();
+    }
+}
+
 GamePresenter::Pane GamePresenter::getPreviousPane() const
 {
     return m_PreviousPane;
@@ -541,6 +554,17 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
     case Game::StatusCodes::GAME_RESUMED_INCOMPLETE_INPUT:
         _updateStatusMessage(GameStrings::c_GameResumedMessage, Pane::MAIN, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
+        break;
+    case Game::StatusCodes::GAME_STOPPED:
+        if (m_MainPaneVisible)
+        {
+            _updateStatusMessage(GameStrings::c_GameStoppedMessage, Pane::MAIN, Game::c_NoDelay);
+            QTimer::singleShot(Game::c_GameQuitDelay, this, [](){QGuiApplication::quit();});
+        }
+        else
+        {
+            QGuiApplication::quit();
+        }
         break;
     case Game::StatusCodes::SUCCESS:
         {

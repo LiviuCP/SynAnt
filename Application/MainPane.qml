@@ -710,7 +710,7 @@ Item {
             ToolTip.timeout: presenter.toolTipTimeout
             ToolTip.visible: hovered
 
-            onClicked: Qt.quit()
+            onClicked: presenter.quit()
             onPressed: opacity = Styles.pressedButtonOpacity
             onReleased: opacity = Styles.releasedButtonOpacity
             onCanceled: opacity = Styles.releasedButtonOpacity

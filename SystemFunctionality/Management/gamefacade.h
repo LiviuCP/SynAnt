@@ -36,6 +36,7 @@ public:
     void startGame();
     void resumeGame();
     void pauseGame();
+    void quitGame();
 
     void addWordPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex);
     void removeWordPiecesFromInputWord(Game::InputWordNumber inputWordNumber, int inputRangeStart);
@@ -89,6 +90,7 @@ private:
     ScoreItem* m_pScoreItem;
     Game::StatusCodes m_CurrentStatusCode;
     bool m_IsDataAvailable;
+    bool m_IsGameStarted;
 };
 
 #endif // GAMEFACADE_H

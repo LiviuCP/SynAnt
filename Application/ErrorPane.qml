@@ -94,11 +94,11 @@ Item {
             Shortcut {
                 sequence: GameStrings.closeButtonShortcut
                 onActivated: {
-                    Qt.quit();
+                    presenter.quit();
                 }
             }
 
-            onClicked: Qt.quit();
+            onClicked: presenter.quit();
             onPressed: opacity = Styles.pressedButtonOpacity
             onReleased: opacity = Styles.releasedButtonOpacity
             onCanceled: opacity = Styles.releasedButtonOpacity

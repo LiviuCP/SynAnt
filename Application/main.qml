@@ -79,7 +79,7 @@ ApplicationWindow {
     Shortcut {
         sequence: GameStrings.quitButtonShortcut
         onActivated: {
-            Qt.quit();
+            gamePresenter.quit();
         }
     }
 }

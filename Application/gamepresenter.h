@@ -79,6 +79,7 @@ public:
     Q_INVOKABLE void updateFirstWordInputHoverIndex(int index);
     Q_INVOKABLE void updateSecondWordInputHoverIndex(int index);
     Q_INVOKABLE void clearWordInputHoverIndexes();
+    Q_INVOKABLE void quit();
 
     Pane getPreviousPane() const;
 

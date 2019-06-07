@@ -14,6 +14,7 @@ GameFacade::GameFacade(QObject *parent)
     , m_pGameFunctionalityProxy{new GameFunctionalityProxy{this}}
     , m_CurrentStatusCode{Game::StatusCodes::INVALID}
     , m_IsDataAvailable{false}
+    , m_IsGameStarted{false}
 {
     m_pDataSourceProxy = m_pGameFunctionalityProxy->getDataSourceProxy();
     m_pDataSourceAccessHelper = m_pGameFunctionalityProxy->getDataSourceAccessHelper();
@@ -68,17 +69,27 @@ void GameFacade::startGame()
 
     Q_EMIT statisticsChanged();
     Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::GAME_STARTED);
+
+    m_IsGameStarted = true;
 }
 
 void GameFacade::resumeGame()
 {
+    Q_ASSERT(m_CurrentStatusCode == Game::StatusCodes::GAME_PAUSED);
     Q_EMIT statusChanged(m_CurrentStatusCode = m_pInputBuilder->isInputComplete() ? Game::StatusCodes::GAME_RESUMED_COMPLETE_INPUT
                                                                                   : Game::StatusCodes::GAME_RESUMED_INCOMPLETE_INPUT);
 }
 
 void GameFacade::pauseGame()
 {
+    Q_ASSERT(m_IsGameStarted);
     Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::GAME_PAUSED);
+}
+
+void GameFacade::quitGame()
+{
+    Q_ASSERT(m_IsGameStarted);
+    Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::GAME_STOPPED);
 }
 
 void GameFacade::addWordPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex)
