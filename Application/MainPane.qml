@@ -43,7 +43,7 @@ Item {
         Rectangle {
             id: highscoresRect
 
-            Layout.minimumWidth: parent.width / 3
+            Layout.minimumWidth: (infoRect.width - scoresLayout.spacing) / 2
             Layout.minimumHeight: parent.height / 2
 
             color: Styles.backgroundColor
@@ -79,9 +79,8 @@ Item {
         Rectangle {
             id: wordPairsRect
 
-            Layout.minimumWidth: parent.width / 3
+            Layout.minimumWidth: (infoRect.width - scoresLayout.spacing) / 2
             Layout.minimumHeight: parent.height / 2
-            Layout.leftMargin: parent.width * (-0.04)
 
             color: Styles.backgroundColor
 
@@ -128,12 +127,13 @@ Item {
                 color: Styles.pushButtonColor
                 border.color: Styles.borderColor
                 border.width: width * 0.005
-                radius: width * 0.025
+                radius: width * 0.035
                 opacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
             }
 
-            Layout.minimumWidth: statusRect.width
+            Layout.minimumWidth: resultsBtn.width
             Layout.alignment: Qt.AlignRight
+            Layout.leftMargin: 0.05 * mainPane.width
 
             ToolTip.text: GameStrings.resetButtonToolTip
             ToolTip.delay: presenter.toolTipDelay
@@ -157,6 +157,38 @@ Item {
             onReleased: opacity = Styles.releasedButtonOpacity
             onCanceled: opacity = Styles.releasedButtonOpacity
         }
+
+        Button {
+            id: dataEntryBtn
+
+            contentItem: Text {
+                text: GameStrings.dataEntryButtonLabel
+                color: Styles.textColor
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            background: Rectangle {
+                color: Styles.pushButtonColor
+                border.color: Styles.borderColor
+                border.width: width * 0.005
+                radius: width * 0.035
+            }
+
+            Layout.minimumWidth: quitBtn.width
+
+            ToolTip.text: GameStrings.dataEntryButtonToolTip
+            ToolTip.delay: presenter.toolTipDelay
+            ToolTip.timeout: presenter.toolTipTimeout
+            ToolTip.visible: hovered
+
+            onClicked: presenter.switchToPane(GamePresenter.DATA_ENTRY)
+            onPressed: opacity = Styles.pressedButtonOpacity
+            onReleased: opacity = Styles.releasedButtonOpacity
+            onCanceled: opacity = Styles.releasedButtonOpacity
+        }
+
+
     }
 
     RowLayout {
@@ -555,7 +587,7 @@ Item {
                 color: Styles.pushButtonColor
                 border.color: Styles.borderColor
                 border.width: width * 0.005
-                radius: width * 0.025
+                radius: width * 0.035
                 opacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
             }
 
@@ -595,7 +627,7 @@ Item {
                 color: Styles.pushButtonColor
                 border.color: Styles.borderColor
                 border.width: width * 0.005
-                radius: width * 0.025
+                radius: width * 0.035
                 opacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
             }
 
@@ -633,7 +665,7 @@ Item {
                 color: Styles.pushButtonColor
                 border.color: Styles.borderColor
                 border.width: width * 0.005
-                radius: width * 0.025
+                radius: width * 0.035
             }
 
             Layout.minimumWidth: bottomBtnsMinWidth
@@ -663,7 +695,7 @@ Item {
                 color: Styles.pushButtonColor
                 border.color: Styles.borderColor
                 border.width: width * 0.005
-                radius: width * 0.025
+                radius: width * 0.035
             }
 
             Layout.minimumWidth: bottomBtnsMinWidth
@@ -700,10 +732,10 @@ Item {
                 color: Styles.pushButtonColor
                 border.color: Styles.borderColor
                 border.width: width * 0.005
-                radius: width * 0.025
+                radius: width * 0.035
             }
 
-            Layout.minimumWidth: bottomBtnsMinWidth - parent.spacing * 0.25
+            Layout.minimumWidth: bottomBtnsMinWidth - parent.spacing * 0.2
 
             ToolTip.text: GameStrings.quitButtonToolTip
             ToolTip.delay: presenter.toolTipDelay

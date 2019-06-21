@@ -30,7 +30,9 @@ namespace Game
     enum class StatusCodes
     {
         INVALID,
+        INVALID_DATA_ENTRY,
         SUCCESS,
+        DATA_ENTRY_SUCCESS,
         INCORRECT_WORDS,
         REQUESTED_BY_USER,
         LOADING_DATA,
@@ -40,6 +42,7 @@ namespace Game
         GAME_RESUMED_COMPLETE_INPUT,
         GAME_RESUMED_INCOMPLETE_INPUT,
         GAME_STOPPED,
+        WORD_ENTRY_STARTED,
         STATISTICS_RESET_COMPLETE_INPUT,
         STATISTICS_RESET_INCOMPLETE_INPUT,
         LEVEL_CHANGED,
@@ -72,6 +75,7 @@ namespace Game
     static constexpr int c_ToolTipDelay{1000};
     static constexpr int c_PaneSwitchingDelay{250};
     static constexpr int c_LoadDataThreadDelay{4000};
+    static constexpr int c_WriteDataThreadDelay{100};
     static constexpr int c_ToolTipTimeout{4000};
     static constexpr int c_ShortStatusUpdateDelay{1000};
     static constexpr int c_LongStatusUpdateDelay{2000};

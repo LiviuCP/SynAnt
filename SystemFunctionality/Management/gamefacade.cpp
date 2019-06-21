@@ -15,6 +15,7 @@ GameFacade::GameFacade(QObject *parent)
     , m_CurrentStatusCode{Game::StatusCodes::INVALID}
     , m_IsDataAvailable{false}
     , m_IsGameStarted{false}
+    , m_IsGamePaused{false}
 {
     m_pDataSourceProxy = m_pGameFunctionalityProxy->getDataSourceProxy();
     m_pDataSourceAccessHelper = m_pGameFunctionalityProxy->getDataSourceAccessHelper();
@@ -46,6 +47,8 @@ GameFacade::GameFacade(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pDataSourceProxy, &DataSourceProxy::dataReady, this, &GameFacade::_onDataReady);
     Q_ASSERT(connected);
+    connected = connect(m_pDataSourceProxy, &DataSourceProxy::writeDataFinished, this, &GameFacade::_onWriteDataFinished);
+    Q_ASSERT(connected);
 }
 
 void GameFacade::init()
@@ -63,7 +66,7 @@ void GameFacade::init()
 
 void GameFacade::startGame()
 {
-    Q_ASSERT(m_CurrentStatusCode == Game::StatusCodes::DATA_LOAD_COMPLETE);
+    Q_ASSERT(m_IsDataAvailable);
 
     m_pDataSourceProxy->fetchDataEntry(m_pDataSourceAccessHelper->generateEntryNumber());
 
@@ -75,7 +78,8 @@ void GameFacade::startGame()
 
 void GameFacade::resumeGame()
 {
-    Q_ASSERT(m_CurrentStatusCode == Game::StatusCodes::GAME_PAUSED);
+    Q_ASSERT(m_IsGamePaused);
+    m_IsGamePaused = false;
     Q_EMIT statusChanged(m_CurrentStatusCode = m_pInputBuilder->isInputComplete() ? Game::StatusCodes::GAME_RESUMED_COMPLETE_INPUT
                                                                                   : Game::StatusCodes::GAME_RESUMED_INCOMPLETE_INPUT);
 }
@@ -83,6 +87,7 @@ void GameFacade::resumeGame()
 void GameFacade::pauseGame()
 {
     Q_ASSERT(m_IsGameStarted);
+    m_IsGamePaused = true;
     Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::GAME_PAUSED);
 }
 
@@ -90,6 +95,11 @@ void GameFacade::quitGame()
 {
     Q_ASSERT(m_IsGameStarted);
     Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::GAME_STOPPED);
+}
+
+void GameFacade::startWordEntry()
+{
+    Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::WORD_ENTRY_STARTED);
 }
 
 void GameFacade::addWordPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex)
@@ -147,6 +157,11 @@ void GameFacade::handleSubmitRequest()
         m_pScoreItem->updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
         m_pDataSourceProxy->fetchDataEntry(m_pDataSourceAccessHelper->generateEntryNumber());
     }
+}
+
+void GameFacade::requestAddPairToData(const QString &firstWord, const QString &secondWord, bool areSynonyms)
+{
+    m_pDataSourceProxy->requestAddPairToDataSource(QPair<QString, QString>{firstWord, secondWord}, areSynonyms);
 }
 
 void GameFacade::provideResultsToUser()
@@ -259,4 +274,16 @@ void GameFacade::_onDataReady()
     Q_EMIT dataAvailableChanged();
 
     Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_LOAD_COMPLETE);
+}
+
+void GameFacade::_onWriteDataFinished(bool success)
+{
+    if (success)
+    {
+        Q_EMIT statusChanged(Game::StatusCodes::DATA_ENTRY_SUCCESS);
+    }
+    else
+    {
+        Q_EMIT statusChanged(Game::StatusCodes::INVALID_DATA_ENTRY);
+    }
 }

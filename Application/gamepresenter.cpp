@@ -12,6 +12,7 @@ static const QMap<GamePresenter::Pane, QString> c_WindowTitles
     {GamePresenter::Pane::INTRO, GameStrings::c_IntroWindowTitle},
     {GamePresenter::Pane::HELP, GameStrings::c_HelpWindowTitle},
     {GamePresenter::Pane::MAIN, GameStrings::c_MainWindowTitle},
+    {GamePresenter::Pane::DATA_ENTRY, GameStrings::c_DataEntryWindowTitle},
     {GamePresenter::Pane::ERROR, GameStrings::c_FatalErrorWindowTitle}
 };
 
@@ -27,14 +28,15 @@ GamePresenter::GamePresenter(QObject *parent)
     , m_IntroPaneVisible {true}
     , m_HelpPaneVisible {false}
     , m_MainPaneVisible {false}
+    , m_DataEntryPaneVisible{false}
     , m_MainPaneInitialized {false}
     , m_StatisticsResetEnabled {false}
     , m_ClearInputEnabled{false}
     , m_ErrorOccured {false}
     , m_WindowTitle{GameStrings::c_IntroWindowTitle}
     , m_CurrentPane {Pane::INTRO}
-    , m_PreviousPane{Pane::INTRO}
     , m_StatusUpdatePane{Pane::INTRO}
+    , m_PreviousPanesStack{}
     , m_FirstWordInputHoverIndex{-1}
     , m_SecondWordInputHoverIndex{-1}
     , m_pGameFacade{nullptr}
@@ -66,87 +68,29 @@ GamePresenter::GamePresenter(QObject *parent)
     m_pGameFacade->init();
 }
 
-void GamePresenter::switchToPane(Pane pane)
+void GamePresenter::switchToPane(GamePresenter::Pane pane)
 {
-    Q_ASSERT(static_cast<int>(pane) >= 0 && static_cast<int>(pane) < static_cast<int>(Pane::Nr_Of_Panes));
-    Q_ASSERT(!(m_CurrentPane == Pane::MAIN && pane == Pane::INTRO));
+    m_PreviousPanesStack.append(m_CurrentPane);
+    _switchToPane(pane);
 
-    bool delayedSwitchingRequested{false};
-    bool isGamePausingRequired{false};
-
-    auto triggerPaneSwitching = [this]()
+    if (pane == GamePresenter::Pane::DATA_ENTRY)
     {
-        Q_EMIT currentPaneChanged();
-        Q_EMIT windowTitleChanged();
-    };
-
-    if (m_CurrentPane != pane)
-    {
-        try
-        {
-            switch(m_CurrentPane)
-            {
-            case Pane::INTRO:
-                m_IntroPaneVisible = false;
-                break;
-            case Pane::HELP:
-                m_HelpPaneVisible = false;
-                break;
-            case Pane::MAIN:
-                m_MainPaneVisible = false;
-                isGamePausingRequired = true;
-                break;
-            default:
-                Q_ASSERT(false);
-            }
-
-            switch(pane)
-            {
-            case Pane::INTRO:
-                m_IntroPaneVisible = true;
-                break;
-            case Pane::HELP:
-                if (isGamePausingRequired)
-                {
-                    m_pGameFacade->pauseGame();
-                    delayedSwitchingRequested = true;
-                }
-                m_HelpPaneVisible = true;
-                break;
-            case Pane::MAIN:
-                if (!m_MainPaneInitialized)
-                {
-                    m_MainPaneInitialized = true;
-                    m_pGameFacade -> startGame();
-                }
-                else
-                {
-                    m_pGameFacade -> resumeGame();
-                }
-
-                m_MainPaneVisible = true;
-                break;
-            default:
-                Q_ASSERT(false);
-            }
-
-            m_PreviousPane = m_CurrentPane;
-            m_CurrentPane = pane;
-
-            if (delayedSwitchingRequested)
-            {
-                QTimer::singleShot(Game::c_PaneSwitchingDelay, this, [triggerPaneSwitching](){triggerPaneSwitching();});
-            }
-            else
-            {
-                triggerPaneSwitching();
-            }
-        }
-        catch (const GameException& exception)
-        {
-            _launchErrorPane(exception.getDescription());
-        }
+        m_pGameFacade->startWordEntry();
     }
+}
+
+void GamePresenter::goBack()
+{
+    Q_ASSERT(!m_PreviousPanesStack.isEmpty());
+    Pane previousPane{m_PreviousPanesStack.last()};
+    m_PreviousPanesStack.pop_back();
+
+    _switchToPane(previousPane);
+}
+
+void GamePresenter::handleAddWordsPairRequest(const QString& firstWord, const QString& secondWord, bool areSynonyms)
+{
+    m_pGameFacade->requestAddPairToData(firstWord, secondWord, areSynonyms);
 }
 
 void GamePresenter::handleResultsRequest()
@@ -265,11 +209,6 @@ void GamePresenter::quit()
     }
 }
 
-GamePresenter::Pane GamePresenter::getPreviousPane() const
-{
-    return m_PreviousPane;
-}
-
 bool GamePresenter::getIntroPaneVisible() const
 {
     return m_IntroPaneVisible;
@@ -283,6 +222,11 @@ bool GamePresenter::getHelpPaneVisible() const
 bool GamePresenter::getMainPaneVisible() const
 {
     return m_MainPaneVisible;
+}
+
+bool GamePresenter::getDataEntryPaneVisible() const
+{
+    return m_DataEntryPaneVisible;
 }
 
 bool GamePresenter::isPlayEnabled() const
@@ -469,6 +413,11 @@ QString GamePresenter::getMainPaneWordPairsMessage() const
     return m_MainPaneWordPairsMessage;
 }
 
+QString GamePresenter::getDataEntryPaneStatusMessage() const
+{
+    return m_DataEntryPaneStatusMessage;
+}
+
 QString GamePresenter::getErrorMessage() const
 {
     return m_ErrorMessage;
@@ -620,8 +569,114 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         _updateStatusMessage(GameStrings::c_AllPiecesRemovedMessage, Pane::MAIN, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
         break;
+    case Game::StatusCodes::WORD_ENTRY_STARTED:
+        _updateStatusMessage(GameStrings::c_WordEntryStartMessage, Pane::DATA_ENTRY, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_DefaultPairEntryStatusMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
+        break;
+    case Game::StatusCodes::DATA_ENTRY_SUCCESS:
+        Q_EMIT dataEntrySucceeded();
+        _updateStatusMessage(GameStrings::c_DataEntrySuccessMessage, Pane::DATA_ENTRY, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_DefaultPairEntryStatusMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
+        break;
+    case Game::StatusCodes::INVALID_DATA_ENTRY:
+        _updateStatusMessage(GameStrings::c_DataEntryIncorrectPairMessage, Pane::DATA_ENTRY, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_DefaultPairEntryStatusMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
+        break;
     default:
         Q_ASSERT(false);
+    }
+}
+
+void GamePresenter::_switchToPane(Pane pane)
+{
+    Q_ASSERT(static_cast<int>(pane) >= 0 && static_cast<int>(pane) < static_cast<int>(Pane::Nr_Of_Panes));
+    Q_ASSERT(!(m_CurrentPane == Pane::MAIN && pane == Pane::INTRO));
+
+    bool delayedSwitchingRequested{false};
+    bool isGamePausingRequired{false};
+
+    auto triggerPaneSwitching = [this]()
+    {
+        Q_EMIT currentPaneChanged();
+        Q_EMIT windowTitleChanged();
+    };
+
+    if (m_CurrentPane != pane)
+    {
+        try
+        {
+            switch(m_CurrentPane)
+            {
+            case Pane::INTRO:
+                m_IntroPaneVisible = false;
+                break;
+            case Pane::HELP:
+                m_HelpPaneVisible = false;
+                break;
+            case Pane::MAIN:
+                m_MainPaneVisible = false;
+                isGamePausingRequired = true;
+                break;
+            case Pane::DATA_ENTRY:
+                m_DataEntryPaneVisible = false;
+                break;
+            default:
+                Q_ASSERT(false);
+            }
+
+            switch(pane)
+            {
+            case Pane::INTRO:
+                m_IntroPaneVisible = true;
+                break;
+            case Pane::HELP:
+                if (isGamePausingRequired)
+                {
+                    m_pGameFacade->pauseGame();
+                    delayedSwitchingRequested = true;
+                }
+                m_HelpPaneVisible = true;
+                break;
+            case Pane::MAIN:
+                if (!m_MainPaneInitialized)
+                {
+                    m_MainPaneInitialized = true;
+                    m_pGameFacade -> startGame();
+                }
+                else
+                {
+                    m_pGameFacade -> resumeGame();
+                }
+
+                m_MainPaneVisible = true;
+                break;
+            case Pane::DATA_ENTRY:
+                if (isGamePausingRequired)
+                {
+                    m_pGameFacade->pauseGame();
+                    delayedSwitchingRequested = true;
+                }
+                m_DataEntryPaneVisible = true;
+                break;
+            default:
+                Q_ASSERT(false);
+            }
+
+            m_CurrentPane = pane;
+
+            if (delayedSwitchingRequested)
+            {
+                QTimer::singleShot(Game::c_PaneSwitchingDelay, this, [triggerPaneSwitching](){triggerPaneSwitching();});
+            }
+            else
+            {
+                triggerPaneSwitching();
+            }
+        }
+        catch (const GameException& exception)
+        {
+            _launchErrorPane(exception.getDescription());
+        }
     }
 }
 
@@ -653,6 +708,10 @@ void GamePresenter::_updateMessage()
     case Pane::MAIN:
         m_MainPaneStatusMessage = m_CurrentStatusMessage;
         Q_EMIT mainPaneStatusMessageChanged();
+        break;
+    case Pane::DATA_ENTRY:
+        m_DataEntryPaneStatusMessage = m_CurrentStatusMessage;
+        Q_EMIT dataEntryPaneStatusMessageChanged();
         break;
     case Pane::ERROR:
         break;

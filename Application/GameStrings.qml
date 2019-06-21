@@ -21,6 +21,11 @@ QtObject {
     readonly property string levelEasyButtonLabel:              "Easy"
     readonly property string levelMediumButtonLabel:            "Medium"
     readonly property string levelHardButtonLabel:              "Hard"
+    readonly property string dataEntryButtonLabel:              "Enter new pairs"
+    readonly property string synonymsSelectionButtonLabel:      "Synonyms"
+    readonly property string antonymsSelectionButtonLabel:      "Antonyms"
+    readonly property string addPairButtonLabel:                "Add pair"
+    readonly property string backButtonLabel:                   "Back"
     readonly property string closeButtonLabel:                  "Close"
 
     readonly property string playButtonShortcut:                "ALT+P"
@@ -36,11 +41,15 @@ QtObject {
     readonly property string levelEasyButtonShortcut:           "ALT+1"
     readonly property string levelMediumButtonShortcut:         "ALT+2"
     readonly property string levelHardButtonShortcut:           "ALT+3"
+    readonly property string dataEntryButtonShortcut:           "ALT+E"
+    readonly property string addPairButtonShortcut:             "ALT+A"
+    readonly property string backButtonShortcut:                "ALT+K"
     readonly property string closeButtonShortcut:               "ALT+C"
 
     readonly property string introPaneToolTip:                  "Welcome to SynAnt"
     readonly property string helpPaneToolTip:                   "Please read the detailed game instructions."
     readonly property string mainPaneToolTip:                   "This is where the action happens!"
+    readonly property string dataEntryPaneToolTip:              "Please feel free to add new pairs to the game."
     readonly property string errorPaneToolTip:                  "A fatal error occurred. Corrective actions are required."
 
     readonly property string highscoresToolTip:                 "Displays the game scores:
@@ -66,7 +75,10 @@ QtObject {
     readonly property string resetButtonToolTip:                "Click or hit ALT+R for resetting the scores and number of pairs."
     readonly property string levelButtonsToolTip:               "Choose the desired difficulty level.
                                                                  \nClick radio button or hit: \n1) ALT+1 for Easy \n2) ALT+2 for Medium \n3) ALT+3 for Hard"
-
+    readonly property string dataEntryButtonToolTip:            "Click or hit ALT+E to go to the new word pairs entry page"
+    readonly property string addPairButtonToolTip:              "Click or hit ALT+A to add the new word pair"
+    readonly property string backButtonToolTip:                 "Click or hit ALT+K to go to previous page"
     readonly property string closeButtonToolTip:                "A fatal error occurred. Click button or hit ALT+C to exit the game."
-
+    readonly property string dataEntryFirstWordToolTip:         "Enter the first word from the pair to be added to database."
+    readonly property string dataEntrySecondWordToolTip:        "Enter the second word from the pair to be added to database."
 }

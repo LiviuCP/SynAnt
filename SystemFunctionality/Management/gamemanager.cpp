@@ -46,7 +46,7 @@ GameManager::GameManager(QObject *parent)
     , m_pWordPairOwner{new WordPairOwner{this}}
     , m_pInputBuilder{new InputBuilder{this}}
     , m_pScoreItem {new ScoreItem{this}}
-    , m_pDataSourceReadThread{nullptr}
+    , m_pDataSourceThread{nullptr}
 {
     m_pWordMixerProxy = new WordMixerProxy{m_pWordMixer, this};
 
@@ -82,21 +82,25 @@ void GameManager::setDataSource(const QString &dataDirPath)
         dataFile.close();
 
         m_pDataSource = new DataSource{dataFilePath};
-        m_pDataSourceReadThread = new QThread{this};
+        m_pDataSourceThread = new QThread{this};
         m_pDataSourceProxy = new DataSourceProxy{m_pDataSource, this};
 
-        m_pDataSource->moveToThread(m_pDataSourceReadThread);
+        m_pDataSource->moveToThread(m_pDataSourceThread);
 
-        bool connected{connect(m_pDataSourceReadThread, &QThread::finished, m_pDataSource, &DataSource::deleteLater)};
+        bool connected{connect(m_pDataSourceThread, &QThread::finished, m_pDataSource, &DataSource::deleteLater)};
         Q_ASSERT(connected);
         connected = connect(this, &GameManager::readData, m_pDataSource, &DataSource::onReadDataRequestReceived, Qt::QueuedConnection);
         Q_ASSERT(connected);
+        connected = connect(this, &GameManager::writeDataRequested, m_pDataSource, &DataSource::onWriteDataRequestReceived, Qt::QueuedConnection);
+        Q_ASSERT(connected);
         connected = connect(m_pDataSource, &DataSource::dataReady, m_pDataSourceProxy, &DataSourceProxy::dataReady, Qt::QueuedConnection);
+        Q_ASSERT(connected);
+        connected = connect(m_pDataSource, &DataSource::writeDataFinished, m_pDataSourceProxy, &DataSourceProxy::writeDataFinished, Qt::QueuedConnection);
         Q_ASSERT(connected);
         connected = connect(m_pDataSource, &DataSource::entryFetched, m_pDataSourceProxy, &DataSourceProxy::entryFetched, Qt::QueuedConnection);
         Q_ASSERT(connected);
 
-        m_pDataSourceReadThread->start();
+        m_pDataSourceThread->start();
 
         Q_EMIT dataSourceSetupCompleted();
     }
@@ -105,6 +109,11 @@ void GameManager::setDataSource(const QString &dataDirPath)
 void GameManager::loadData()
 {
     Q_EMIT readData();
+}
+
+void GameManager::requestAddPairToDataSource(QPair<QString, QString> newWordsPair, bool areSynonyms)
+{
+    Q_EMIT writeDataRequested(newWordsPair, areSynonyms);
 }
 
 GameFacade* GameManager::getFacade() const
@@ -144,13 +153,13 @@ ScoreItem* GameManager::getScoreItem() const
 
 GameManager::~GameManager()
 {
-    m_pDataSourceReadThread->quit();
-    m_pDataSourceReadThread->wait();
+    m_pDataSourceThread->quit();
+    m_pDataSourceThread->wait();
 }
 
 void GameManager::_onDataSourceSetupCompleted()
 {
-    Q_ASSERT(m_pDataSourceReadThread->isRunning());
+    Q_ASSERT(m_pDataSourceThread->isRunning());
 
     // do all external backend connections except the ones to the facade (facade will build them itself)
     bool connected{connect(m_pWordPairOwner, &WordPairOwner::mixedWordsAvailable, m_pInputBuilder, &InputBuilder::onNewPiecesAvailable)};

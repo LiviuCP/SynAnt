@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QVariant>
+#include <QVector>
 #include <QColor>
 #include <QTimer>
 
@@ -16,10 +17,10 @@ class GamePresenter : public QObject
     Q_OBJECT
 
     // functionality properties
-    Q_PROPERTY(Pane previousPane READ getPreviousPane NOTIFY currentPaneChanged)
     Q_PROPERTY(bool introPaneVisible READ getIntroPaneVisible NOTIFY currentPaneChanged)
     Q_PROPERTY(bool helpPaneVisible READ getHelpPaneVisible NOTIFY currentPaneChanged)
     Q_PROPERTY(bool mainPaneVisible READ getMainPaneVisible NOTIFY currentPaneChanged)
+    Q_PROPERTY(bool dataEntryPaneVisible READ getDataEntryPaneVisible NOTIFY currentPaneChanged)
     Q_PROPERTY(bool playEnabled READ isPlayEnabled NOTIFY playEnabledChanged)
     Q_PROPERTY(bool resetEnabled READ getResetEnabled NOTIFY resetEnabledChanged)
     Q_PROPERTY(bool clearInputEnabled READ getClearInputEnabled NOTIFY clearInputEnabledChanged)
@@ -49,6 +50,7 @@ class GamePresenter : public QObject
     Q_PROPERTY(QString mainPaneStatusMessage READ getMainPaneStatusMessage NOTIFY mainPaneStatusMessageChanged)
     Q_PROPERTY(QString mainPaneScoreMessage READ getMainPaneScoreMessage NOTIFY mainPaneStatisticsMessagesChanged)
     Q_PROPERTY(QString mainPaneWordPairsMessage READ getMainPaneWordPairsMessage NOTIFY mainPaneStatisticsMessagesChanged)
+    Q_PROPERTY(QString dataEntryPaneStatusMessage READ getDataEntryPaneStatusMessage NOTIFY dataEntryPaneStatusMessageChanged)
     Q_PROPERTY(QString errorMessage READ getErrorMessage NOTIFY errorMessageChanged)
 
 public:
@@ -57,6 +59,7 @@ public:
         INTRO,
         HELP,
         MAIN,
+        DATA_ENTRY,
         ERROR,
         Nr_Of_Panes
     };
@@ -65,6 +68,8 @@ public:
     explicit GamePresenter(QObject *parent = nullptr);
 
     Q_INVOKABLE void switchToPane(Pane pane);
+    Q_INVOKABLE void goBack();
+    Q_INVOKABLE void handleAddWordsPairRequest(const QString& firstWord, const QString& secondWord, bool areSynonyms);
     Q_INVOKABLE void handleResultsRequest();
     Q_INVOKABLE void handleSubmitRequest();
     Q_INVOKABLE void handleResetRequest();
@@ -81,11 +86,10 @@ public:
     Q_INVOKABLE void clearWordInputHoverIndexes();
     Q_INVOKABLE void quit();
 
-    Pane getPreviousPane() const;
-
     bool getIntroPaneVisible() const;
     bool getHelpPaneVisible() const;
     bool getMainPaneVisible() const;
+    bool getDataEntryPaneVisible() const;
     bool isPlayEnabled() const;
     bool getResetEnabled() const;
     bool getClearInputEnabled() const;
@@ -117,6 +121,7 @@ public:
     QString getMainPaneStatusMessage() const;
     QString getMainPaneScoreMessage() const;
     QString getMainPaneWordPairsMessage() const;
+    QString getDataEntryPaneStatusMessage() const;
     QString getErrorMessage() const;
 
     virtual ~GamePresenter();
@@ -135,6 +140,8 @@ signals:
     Q_SIGNAL void introPaneMessageChanged();
     Q_SIGNAL void mainPaneStatusMessageChanged();
     Q_SIGNAL void mainPaneStatisticsMessagesChanged();
+    Q_SIGNAL void dataEntryPaneStatusMessageChanged();
+    Q_SIGNAL void dataEntrySucceeded();
     Q_SIGNAL void errorMessageChanged();
     Q_SIGNAL void hoverChanged();
 
@@ -144,6 +151,7 @@ private slots:
     void _onStatusChanged(Game::StatusCodes statusCode);
 
 private:
+    void _switchToPane(Pane pane);
     void _updateStatusMessage(const QString& message, Pane pane, int delay);
     void _updateMessage();
     void _launchErrorPane(const QString& errorMessage);
@@ -151,6 +159,7 @@ private:
     bool m_IntroPaneVisible;
     bool m_HelpPaneVisible;
     bool m_MainPaneVisible;
+    bool m_DataEntryPaneVisible;
     bool m_MainPaneInitialized;
 
     bool m_StatisticsResetEnabled;
@@ -162,12 +171,13 @@ private:
     QString m_MainPaneStatusMessage;
     QString m_MainPaneScoreMessage;
     QString m_MainPaneWordPairsMessage;
+    QString m_DataEntryPaneStatusMessage;
     QString m_ErrorMessage;
     QString m_CurrentStatusMessage;
 
     Pane m_CurrentPane;
-    Pane m_PreviousPane;
     Pane m_StatusUpdatePane;
+    QVector<Pane> m_PreviousPanesStack;
 
     int m_FirstWordInputHoverIndex;
     int m_SecondWordInputHoverIndex;

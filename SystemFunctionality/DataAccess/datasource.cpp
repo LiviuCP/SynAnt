@@ -48,6 +48,30 @@ void DataSource::onReadDataRequestReceived()
     Q_EMIT dataReady();
 }
 
+void DataSource::onWriteDataRequestReceived(QPair<QString, QString> newWordsPair, bool areSynonyms)
+{
+    QString rawDataEntry;
+    QFile wordPairsFile(m_DataFilePath);
+
+    if(!wordPairsFile.open(QIODevice::Append))
+    {
+        throw FileException{GameStrings::c_CannotOpenFileMessage, m_DataFilePath};
+    }
+
+    bool success{_createRawDataEntry(rawDataEntry, newWordsPair.first, newWordsPair.second, areSynonyms)};
+
+    if (success)
+    {
+        QTextStream lineWriter{&wordPairsFile};
+        lineWriter << rawDataEntry << endl;
+
+        // for sync purposes only
+        QThread::msleep(Game::c_WriteDataThreadDelay);
+    }
+
+    Q_EMIT writeDataFinished(success);
+}
+
 void DataSource::_loadRawData(QVector<QString>& rawData)
 {
     QFile wordPairsFile(m_DataFilePath);
@@ -152,6 +176,38 @@ DataSource::DataEntry DataSource::_createProcessedDataEntry(const QString& rawDa
     }
 
     return currentDataEntry;
+}
+
+bool DataSource::_createRawDataEntry(QString& rawDataEntry, const QString &firstWord, const QString &secondWord, bool areSynonyms)
+{
+    auto hasValidCharacters = [](const QString &word)
+    {
+        bool areAllCharactersValid{true};
+        for (auto currentCharacter : word)
+        {
+            if (!(currentCharacter.isLower()))
+            {
+                areAllCharactersValid = false;
+                break;
+            }
+        }
+        return areAllCharactersValid;
+    };
+
+    bool success{true};
+
+    success = success && (firstWord.size() >= Game::c_MinWordSize && secondWord.size() >= Game::c_MinWordSize);
+    success = success && (firstWord.size() + secondWord.size() >= Game::c_MinPairSize);
+    success = success && (firstWord.size() + secondWord.size() <= Game::c_MaxPairSize);
+    success = success && (hasValidCharacters(firstWord) && hasValidCharacters(secondWord));
+    success = success && (firstWord != secondWord);
+
+    if (success)
+    {
+        rawDataEntry = firstWord + (areSynonyms ? c_SynonymsSeparator : c_AntonymsSeparator) + secondWord;
+    }
+
+    return success;
 }
 
 DataSource::DataEntry::DataEntry()

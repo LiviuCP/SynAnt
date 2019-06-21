@@ -43,6 +43,14 @@ ApplicationWindow {
         anchors.margins: windowMargins
     }
 
+    DataEntryPane {
+        id: dataEntryPane
+        presenter: gamePresenter
+        visible: gamePresenter.dataEntryPaneVisible
+        anchors.fill: parent
+        anchors.margins: windowMargins
+    }
+
     HelpPane {
         id: helpPane
         presenter: gamePresenter
@@ -66,6 +74,14 @@ ApplicationWindow {
         enabled: gamePresenter.playEnabled
         onActivated: {
             gamePresenter.switchToPane(GamePresenter.MAIN);
+        }
+    }
+
+    Shortcut {
+        sequence: GameStrings.dataEntryButtonShortcut
+        enabled: gamePresenter.playEnabled
+        onActivated: {
+            gamePresenter.switchToPane(GamePresenter.DATA_ENTRY);
         }
     }
 

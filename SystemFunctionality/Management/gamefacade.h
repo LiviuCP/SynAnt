@@ -38,11 +38,14 @@ public:
     void pauseGame();
     void quitGame();
 
+    void startWordEntry();
+
     void addWordPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex);
     void removeWordPiecesFromInputWord(Game::InputWordNumber inputWordNumber, int inputRangeStart);
     void clearInput();
 
     void handleSubmitRequest();
+    void requestAddPairToData(const QString& firstWord, const QString& secondWord, bool areSynonyms);
     void provideResultsToUser();
     void setLevel(Game::Level level);
     void resetStatistics();
@@ -79,6 +82,7 @@ signals:
 private slots:
     void _onCloseInputPermissionRequested();
     void _onDataReady();
+    void _onWriteDataFinished(bool success);
 
 private:
     GameFunctionalityProxy* m_pGameFunctionalityProxy;
@@ -91,6 +95,7 @@ private:
     Game::StatusCodes m_CurrentStatusCode;
     bool m_IsDataAvailable;
     bool m_IsGameStarted;
+    bool m_IsGamePaused;
 };
 
 #endif // GAMEFACADE_H

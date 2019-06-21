@@ -13,6 +13,11 @@ void DataSourceProxy::loadData()
     GameManager::getManager()->loadData();
 }
 
+void DataSourceProxy::requestAddPairToDataSource(QPair<QString, QString> newWordsPair, bool areSynonyms)
+{
+    GameManager::getManager()->requestAddPairToDataSource(newWordsPair, areSynonyms);
+}
+
 void DataSourceProxy::fetchDataEntry(int entryNumber)
 {
     m_pDataSource->fetchDataEntry(entryNumber);

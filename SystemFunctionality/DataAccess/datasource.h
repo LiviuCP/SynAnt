@@ -25,10 +25,12 @@ public:
 
 public slots:
     void onReadDataRequestReceived();
+    void onWriteDataRequestReceived(QPair<QString, QString> newWordsPair, bool areSynonyms);
 
 signals:
     Q_SIGNAL void dataReady();
     Q_SIGNAL void entryFetched(QPair<QString, QString> newWordsPair, bool areSynonyms);
+    Q_SIGNAL void writeDataFinished(bool success);
 
 private:
     struct DataEntry
@@ -43,6 +45,7 @@ private:
     void _loadRawData(QVector<QString>& rawData);
     void _createProcessedDataEntries(const QVector<QString>& rawData);
     DataEntry _createProcessedDataEntry(const QString& rawDataEntry, int rowNumber);
+    bool _createRawDataEntry(QString& rawDataEntry, const QString& firstWord, const QString& secondWord, bool areSynonyms);
 
     QString m_DataFilePath;
     QVector<DataEntry> m_DataEntries;

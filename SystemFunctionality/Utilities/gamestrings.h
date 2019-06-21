@@ -116,6 +116,8 @@ namespace GameStrings {
                                                         };
 
     const QString c_DefaultStatusMessage                {    "Please select a new word piece or delete one/more if necessary"                           };
+    const QString c_DefaultPairEntryStatusMessage       {    "Please enter a new pair of words.\n\nChoose if they are synonyms or antonyms"             };
+    const QString c_WordEntryStartMessage               {    "Word entry started"                                                                       };
     const QString c_GameStartedMessage                  {    "Game started"                                                                             };
     const QString c_GamePausedMessage                   {    "Game paused"                                                                              };
     const QString c_GameResumedMessage                  {    "Game resumed"                                                                             };
@@ -137,7 +139,9 @@ namespace GameStrings {
                                                              "\n\nA new pair of words is available below."
                                                         };
 
+    const QString c_DataEntrySuccessMessage             {    "The new pair has been successfully added.\n\nIt will be available when game is restarted" };
     const QString c_IncorrectWordsMessage               {    "You didn't enter the correct words.\n\nPlease correct input and try again!"               };
+    const QString c_DataEntryIncorrectPairMessage       {    "The new words pair has not been correctly entered.\n\nPlease correct and try again!"      };
 
     const QString c_RequestedByUserMessage              {
                                                              "\nThe correct words are:\n\n"
@@ -176,6 +180,7 @@ namespace GameStrings {
     const QString c_IntroWindowTitle                    {    "SynAnt - Welcome"                                                                         };
     const QString c_HelpWindowTitle                     {    "SynAnt - Help"                                                                            };
     const QString c_MainWindowTitle                     {    "SynAnt - Let's Play!"                                                                     };
+    const QString c_DataEntryWindowTitle                {    "SynAnt - Enter New Word Pairs"                                                            };
     const QString c_FatalErrorWindowTitle               {    "Fatal Error!"                                                                             };
 
     // colors

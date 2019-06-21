@@ -96,11 +96,11 @@ Item {
             Shortcut {
                 sequence: GameStrings.okButtonShortcut
                 onActivated: {
-                    presenter.switchToPane(presenter.previousPane);
+                    presenter.goBack();
                 }
             }
 
-            onClicked: presenter.switchToPane(presenter.previousPane)
+            onClicked: presenter.goBack()
             onPressed: opacity = Styles.pressedButtonOpacity
             onReleased: opacity = Styles.releasedButtonOpacity
             onCanceled: opacity = Styles.releasedButtonOpacity

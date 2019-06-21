@@ -40,6 +40,7 @@ public:
 
     void setDataSource(const QString& dataDirPath);
     void loadData();
+    void requestAddPairToDataSource(QPair<QString, QString> newWordsPair, bool areSynonyms);
 
     GameFacade* getFacade() const;
     DataSourceProxy* getDataSourceProxy() const;
@@ -54,6 +55,7 @@ public:
 signals:
     Q_SIGNAL void dataSourceSetupCompleted();
     Q_SIGNAL void readData();
+    Q_SIGNAL void writeDataRequested(QPair<QString, QString> newWordsPair, bool areSynonyms);
 
 private slots:
     void _onDataSourceSetupCompleted();
@@ -72,7 +74,7 @@ private:
     WordPairOwner* m_pWordPairOwner;
     InputBuilder* m_pInputBuilder;
     ScoreItem* m_pScoreItem;
-    QThread* m_pDataSourceReadThread;
+    QThread* m_pDataSourceThread;
 };
 
 #endif // GAMEMANAGER_H
