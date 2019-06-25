@@ -94,7 +94,7 @@ Item {
 
         Button {
             id: dataEntryBtn
-            enabled: presenter.playEnabled
+            enabled: presenter.dataEntryEnabled
 
             contentItem: Text {
                 text: GameStrings.dataEntryButtonLabel

@@ -23,15 +23,3 @@ const QString FileException::getDescription() const noexcept
     return {GameException::getDescription() + GameStrings::c_FileNameMessage.arg(m_FileName)};
 }
 
-WordException::WordException(QString description, QString fileName, int rowNumber)
-    : FileException{description, fileName}
-    , m_RowNumber{rowNumber}
-{
-}
-
-const QString WordException::getDescription() const noexcept
-{
-    return {FileException::getDescription() + GameStrings::c_RowNumberMessage.arg(m_RowNumber)};
-}
-
-

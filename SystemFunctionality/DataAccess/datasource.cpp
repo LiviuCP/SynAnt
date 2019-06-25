@@ -29,23 +29,32 @@ int DataSource::getNrOfEntries()
     return m_DataEntries.size();
 }
 
-void DataSource::processRawDataEntryForTest(const QString &rawDataEntry)
+bool DataSource::processRawDataEntryForTest(const QString &rawDataEntry)
 {
     // row number is irrelevant as the method is only for testing purposes and no data is read from a file or database
-    Q_UNUSED(_createProcessedDataEntry(rawDataEntry, -1));
+    DataEntry dataEntry;
+    return _createProcessedDataEntry(dataEntry, rawDataEntry);
 }
 
 void DataSource::onReadDataRequestReceived()
 {
+    bool success{true};
+
     QVector<QString> rawData;
 
-    _loadRawData(rawData);
-    _createProcessedDataEntries(rawData);
+    if (_loadRawData(rawData))
+    {
+        _createProcessedDataEntries(rawData);
 
-    // for sync purposes only
-    QThread::msleep(Game::c_LoadDataThreadDelay);
+        // for sync purposes only
+        QThread::msleep(Game::c_LoadDataThreadDelay);
+    }
+    else
+    {
+        success = false;
+    }
 
-    Q_EMIT dataReady();
+    Q_EMIT readDataFinished(success);
 }
 
 void DataSource::onWriteDataRequestReceived(QPair<QString, QString> newWordsPair, bool areSynonyms)
@@ -72,110 +81,98 @@ void DataSource::onWriteDataRequestReceived(QPair<QString, QString> newWordsPair
     Q_EMIT writeDataFinished(success);
 }
 
-void DataSource::_loadRawData(QVector<QString>& rawData)
+bool DataSource::_loadRawData(QVector<QString>& rawData)
 {
+    bool success{true};
+
     QFile wordPairsFile(m_DataFilePath);
 
     if (!wordPairsFile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        throw FileException{GameStrings::c_CannotOpenFileMessage, m_DataFilePath};
+        success = false;
     }
-
-    QTextStream lineReader{&wordPairsFile};
-
-    while (!lineReader.atEnd())
+    else
     {
-        rawData.append(lineReader.readLine());
+        QTextStream lineReader{&wordPairsFile};
+
+        while (!lineReader.atEnd())
+        {
+            rawData.append(lineReader.readLine());
+        }
+
+        wordPairsFile.close();
     }
 
-    wordPairsFile.close();
+    return success;
 }
 
 void DataSource::_createProcessedDataEntries(const QVector<QString>& rawData)
 {
     for (int row{0}; row < rawData.size(); ++row)
     {
-        m_DataEntries.append(_createProcessedDataEntry(rawData[row], row));
+        DataEntry dataEntry;
+
+        if (_createProcessedDataEntry(dataEntry, rawData[row]))
+        {
+            m_DataEntries.append(dataEntry);
+        }
     }
 }
 
-DataSource::DataEntry DataSource::_createProcessedDataEntry(const QString& rawDataEntry, int rowNumber)
+bool DataSource::_createProcessedDataEntry(DataEntry& dataEntry, const QString& rawDataEntry)
 {
-    auto checkWordIsCorrect = [this, rowNumber](const QString &word, const QString &wordIdentifier)
+    auto isValidWord = [](const QString &word)
     {
+        bool success{true};
+
         for (auto currentCharacter : word)
         {
-            if (!(currentCharacter.isLower()))
+            if (!currentCharacter.isLower())
             {
-                throw WordException{GameStrings::c_IllegalCharactersMessage.arg(wordIdentifier), m_DataFilePath, rowNumber};
+                success = false;
+                break;
             }
         }
 
-        if (word.size() < Game::c_MinWordSize)
-        {
-            throw WordException{GameStrings::c_LessThanMinWordCharsMessage.arg(wordIdentifier), m_DataFilePath, rowNumber};
-        }
+        return (success && (word.size() >= Game::c_MinWordSize));
     };
 
-    DataEntry currentDataEntry;
+    bool success{true};
 
-    if (rawDataEntry.size() == 0)
-    {
-        throw WordException{GameStrings::c_EmptyRowMessage, m_DataFilePath, rowNumber};
-    }
+    success = success && (rawDataEntry.size() != 0);
 
     // total number of characters of the two words (excluding separator) should not be lower than the minimum required otherwise the game might become trivial
-    if (rawDataEntry.size()-1 < Game::c_MinPairSize)
-    {
-        throw WordException{GameStrings::c_LessThanMinPairCharsMessage, m_DataFilePath, rowNumber};
-    }
+    success = success && (rawDataEntry.size()-1 >= Game::c_MinPairSize);
 
     // total maximum number of characters per pair is necessary for UI space/aesthetic reasons
-    if (rawDataEntry.size()-1 > Game::c_MaxPairSize)
-    {
-        throw WordException{GameStrings::c_GreaterThanMaxPairCharsMessage, m_DataFilePath, rowNumber};
-    }
+    success = success && (rawDataEntry.size()-1 <= Game::c_MaxPairSize);
 
     int synonymsSeparatorIndex{rawDataEntry.indexOf(c_SynonymsSeparator)};
     int antonymsSeparatorIndex{rawDataEntry.indexOf(c_AntonymsSeparator)};
     int separatorIndex{-1};
 
-    if (synonymsSeparatorIndex != rawDataEntry.lastIndexOf(c_SynonymsSeparator) || antonymsSeparatorIndex != rawDataEntry.lastIndexOf(c_AntonymsSeparator))
+    // there should be exactly one separator (either = for synonyms or ! for antonyms)
+    success = success && (synonymsSeparatorIndex == rawDataEntry.lastIndexOf(c_SynonymsSeparator));
+    success = success && (antonymsSeparatorIndex == rawDataEntry.lastIndexOf(c_AntonymsSeparator));
+    success = success && (synonymsSeparatorIndex != antonymsSeparatorIndex);
+    success = success && (synonymsSeparatorIndex == -1 || antonymsSeparatorIndex == -1);
+
+    if (success)
     {
-        throw WordException{GameStrings::c_MultipleSeparatorsMessage, m_DataFilePath, rowNumber};
-    }
-    else if (synonymsSeparatorIndex == antonymsSeparatorIndex)
-    {
-        throw WordException{GameStrings::c_NoSeparatorMessage, m_DataFilePath, rowNumber};
-    }
-    else if ((synonymsSeparatorIndex != -1) && (antonymsSeparatorIndex != -1))
-    {
-        throw WordException{GameStrings::c_MultipleSeparatorsMessage, m_DataFilePath, rowNumber};
-    }
-    else if (synonymsSeparatorIndex != -1)
-    {
-        currentDataEntry.areSynonyms = true;
-        separatorIndex = synonymsSeparatorIndex;
-    }
-    else
-    {
-        currentDataEntry.areSynonyms = false;
-        separatorIndex = antonymsSeparatorIndex;
+        separatorIndex = synonymsSeparatorIndex != -1 ? synonymsSeparatorIndex : antonymsSeparatorIndex;
+
+        dataEntry.areSynonyms = synonymsSeparatorIndex != -1 ? true : false;
+        dataEntry.firstWord = rawDataEntry.left(separatorIndex);
+        dataEntry.secondWord = rawDataEntry.mid(separatorIndex+1);
+
+        // don't allow words containing invalid characters (only small letters allowed)
+        success = success && (isValidWord(dataEntry.firstWord) && isValidWord(dataEntry.secondWord));
+
+        // don't allow identical words
+        success = success && (dataEntry.firstWord != dataEntry.secondWord);
     }
 
-    currentDataEntry.firstWord = rawDataEntry.left(separatorIndex);
-    checkWordIsCorrect(currentDataEntry.firstWord, GameStrings::c_FirstWordCamelCase);
-
-    currentDataEntry.secondWord = rawDataEntry.mid(separatorIndex+1);
-    checkWordIsCorrect(currentDataEntry.secondWord, GameStrings::c_SecondWordCamelCase);
-
-    // don't allow identical words
-    if (currentDataEntry.firstWord == currentDataEntry.secondWord)
-    {
-        throw WordException{GameStrings::c_SameWordsInPairMessage, m_DataFilePath, rowNumber};
-    }
-
-    return currentDataEntry;
+    return success;
 }
 
 bool DataSource::_createRawDataEntry(QString& rawDataEntry, const QString &firstWord, const QString &secondWord, bool areSynonyms)

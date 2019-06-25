@@ -115,6 +115,11 @@ namespace GameStrings {
                                                              "\nPress Play to enter the game or Help for more information."
                                                         };
 
+    const QString c_NoValidEntriesMessage               {
+                                                             "No valid entries could be loaded from database.\n\n"
+                                                             "Please use the data entry page to add pairs.\n\n"
+                                                             "Then exit and re-open the application so the pairs become available."
+                                                        };
     const QString c_DefaultStatusMessage                {    "Please select a new word piece or delete one/more if necessary"                           };
     const QString c_DefaultPairEntryStatusMessage       {    "Please enter a new pair of words.\n\nChoose if they are synonyms or antonyms"             };
     const QString c_WordEntryStartMessage               {    "Word entry started"                                                                       };
@@ -163,15 +168,6 @@ namespace GameStrings {
     const QString c_FileNotFoundMessage                 {    "File not found!\n"                                                                        };
     const QString c_CannotOpenFileMessage               {    "File cannot be opened!\n"                                                                 };
     const QString c_EmptyFileMessage                    {    "Empty file!\n"                                                                            };
-
-    const QString c_EmptyRowMessage                     {    "An empty row has been read from file!\n"                                                  };
-    const QString c_MultipleSeparatorsMessage           {    "Multiple separators!\n"                                                                   };
-    const QString c_NoSeparatorMessage                  {    "No separator found!\n"                                                                    };
-    const QString c_IllegalCharactersMessage            {    "%1 word contains illegal characters!\n"                                                   };
-    const QString c_SameWordsInPairMessage              {    "The word pair contains identical words!\n"                                                };
-    const QString c_LessThanMinWordCharsMessage         {    "%1 word has less than the minimum required number of characters!\n"                       };
-    const QString c_LessThanMinPairCharsMessage         {    "The words pair has less than the minimum required total number of characters!\n"          };
-    const QString c_GreaterThanMaxPairCharsMessage      {    "The words pair has more than the maximum allowed total number of characters!\n"           };
 
     const QString c_FileNameMessage                     {    "\nFile: %1\n"                                                                             };
     const QString c_RowNumberMessage                    {    "\nRow number: %1\n"                                                                       };

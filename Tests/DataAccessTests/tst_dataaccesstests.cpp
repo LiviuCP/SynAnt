@@ -15,6 +15,7 @@ public:
 
 private slots:
     void testWordPairsAreCorrect();
+    void testWordPairsAreNotCorrect();
     void testDataSourceAccessHelperSetTable();
     void testDataSourceAccessHelperUsedEntries();
     void testDataSourceAccessHelperUseAllEntries();
@@ -30,39 +31,59 @@ void DataAccessTests::testWordPairsAreCorrect()
 {
     std::unique_ptr<DataSource> pDataSource{new DataSource{GameStrings::c_NoFile}};
 
+    QVERIFY(pDataSource->processRawDataEntryForTest("abcde=fghijklmno"));
+    QVERIFY(pDataSource->processRawDataEntryForTest("abcde!fghijklmno"));
+    QVERIFY(pDataSource->processRawDataEntryForTest("abcdefghij=klmno"));
+    QVERIFY(pDataSource->processRawDataEntryForTest("abcdefghij!klmno"));
+    QVERIFY(pDataSource->processRawDataEntryForTest("abcdefghijklmno=onmlkjihgfedcba"));
+    QVERIFY(pDataSource->processRawDataEntryForTest("abcdefghijklmno!onmlkjihgfedcba"));
+    QVERIFY(pDataSource->processRawDataEntryForTest("abcdefgh=ijklmnopqrstuv"));
+    QVERIFY(pDataSource->processRawDataEntryForTest("abcdefgh!ijklmnopqrstuv"));
+    QVERIFY(pDataSource->processRawDataEntryForTest("abcdefghijklmn=opqrstuv"));
+    QVERIFY(pDataSource->processRawDataEntryForTest("abcdefghijklmn!opqrstuv"));
+    QVERIFY(pDataSource->processRawDataEntryForTest("abcde=fghijklmnopqrstuvxyzedcba"));
+    QVERIFY(pDataSource->processRawDataEntryForTest("abcde!fghijklmnopqrstuvxyzedcba"));
+    QVERIFY(pDataSource->processRawDataEntryForTest("abcdefghijklmnopqrstuvxyz=edcba"));
+    QVERIFY(pDataSource->processRawDataEntryForTest("abcdefghijklmnopqrstuvxyz!edcba"));
+}
+
+void DataAccessTests::testWordPairsAreNotCorrect()
+{
+    std::unique_ptr<DataSource> pDataSource{new DataSource{GameStrings::c_NoFile}};
+
     // empty row
-    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest(""), std::exception);
+    QVERIFY(!pDataSource->processRawDataEntryForTest(""));
 
     // illegal chars (including capitals)
-    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("firstWord!secondword"), std::exception);
-    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("firstword!second&word"), std::exception);
+    QVERIFY(!pDataSource->processRawDataEntryForTest("firstWord!secondword"));
+    QVERIFY(!pDataSource->processRawDataEntryForTest("firstword!second&word"));
 
     // no separator
-    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("firstwordsecondword"), std::exception);
+    QVERIFY(!pDataSource->processRawDataEntryForTest("firstwordsecondword"));
 
     // multiple separators
-    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("firs!tword!secondword"), std::exception);
-    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("firs!tword=secondword"), std::exception);
-    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("firs=tword!secondword"), std::exception);
-    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("firs=tword=secondword"), std::exception);
+    QVERIFY(!pDataSource->processRawDataEntryForTest("firs!tword!secondword"));
+    QVERIFY(!pDataSource->processRawDataEntryForTest("firs!tword=secondword"));
+    QVERIFY(!pDataSource->processRawDataEntryForTest("firs=tword!secondword"));
+    QVERIFY(!pDataSource->processRawDataEntryForTest("firs=tword=secondword"));
 
     // less than minimum required number of chars per word
-    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("abcd!secondword"), std::exception);
-    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("abcd=secondword"), std::exception);
-    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("firstword=efgh"), std::exception);
-    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("firstword!efgh"), std::exception);
+    QVERIFY(!pDataSource->processRawDataEntryForTest("abcd!secondword"));
+    QVERIFY(!pDataSource->processRawDataEntryForTest("abcd=secondword"));
+    QVERIFY(!pDataSource->processRawDataEntryForTest("firstword=efgh"));
+    QVERIFY(!pDataSource->processRawDataEntryForTest("firstword!efgh"));
 
     // less than minimum required total number of chars per pair
-    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("abcdefg=hijklmn"), std::exception);
-    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("abcdefg!hijklmn"), std::exception);
+    QVERIFY(!pDataSource->processRawDataEntryForTest("abcdefg=hijklmn"));
+    QVERIFY(!pDataSource->processRawDataEntryForTest("abcdefg!hijklmn"));
 
     // more than maximum allowed total number of chars per pair
-    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("abcdefghijklmnop=onmlkjihgfedcba"), std::exception);
-    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("abcdefghijklmnop!onmlkjihgfedcba"), std::exception);
+    QVERIFY(!pDataSource->processRawDataEntryForTest("abcdefghijklmnop=onmlkjihgfedcba"));
+    QVERIFY(!pDataSource->processRawDataEntryForTest("abcdefghijklmnop!onmlkjihgfedcba"));
 
     // same words in pair
-    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("abcdefghij=abcdefghij"), std::exception);
-    QVERIFY_EXCEPTION_THROWN(pDataSource->processRawDataEntryForTest("abcdefghij!abcdefghij"), std::exception);
+    QVERIFY(!pDataSource->processRawDataEntryForTest("abcdefghij=abcdefghij"));
+    QVERIFY(!pDataSource->processRawDataEntryForTest("abcdefghij!abcdefghij"));
 }
 
 void DataAccessTests::testDataSourceAccessHelperSetTable()

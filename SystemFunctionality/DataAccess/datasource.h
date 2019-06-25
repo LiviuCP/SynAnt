@@ -21,14 +21,14 @@ public:
     int getNrOfEntries();
 
     // for test purposes only
-    void processRawDataEntryForTest(const QString& rawDataEntry);
+    bool processRawDataEntryForTest(const QString& rawDataEntry);
 
 public slots:
     void onReadDataRequestReceived();
     void onWriteDataRequestReceived(QPair<QString, QString> newWordsPair, bool areSynonyms);
 
 signals:
-    Q_SIGNAL void dataReady();
+    Q_SIGNAL void readDataFinished(bool success);
     Q_SIGNAL void entryFetched(QPair<QString, QString> newWordsPair, bool areSynonyms);
     Q_SIGNAL void writeDataFinished(bool success);
 
@@ -42,9 +42,9 @@ private:
         bool areSynonyms;
     };
 
-    void _loadRawData(QVector<QString>& rawData);
+    bool _loadRawData(QVector<QString>& rawData);
     void _createProcessedDataEntries(const QVector<QString>& rawData);
-    DataEntry _createProcessedDataEntry(const QString& rawDataEntry, int rowNumber);
+    bool _createProcessedDataEntry(DataEntry& dataEntry, const QString& rawDataEntry);
     bool _createRawDataEntry(QString& rawDataEntry, const QString& firstWord, const QString& secondWord, bool areSynonyms);
 
     QString m_DataFilePath;

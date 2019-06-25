@@ -160,12 +160,14 @@ Item {
 
         Button {
             id: dataEntryBtn
+            enabled: presenter.dataEntryEnabled
 
             contentItem: Text {
                 text: GameStrings.dataEntryButtonLabel
                 color: Styles.textColor
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
+                opacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
             }
 
             background: Rectangle {
@@ -173,6 +175,7 @@ Item {
                 border.color: Styles.borderColor
                 border.width: width * 0.005
                 radius: width * 0.035
+                opacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
             }
 
             Layout.minimumWidth: quitBtn.width

@@ -68,11 +68,13 @@ public:
     int getTotalWordPairs() const;
 
     bool isDataAvailable() const;
+    bool isDataEntryAllowed() const;
     bool areSynonyms() const;
 
 signals:
     Q_SIGNAL void mixedWordsChanged();
     Q_SIGNAL void dataAvailableChanged();
+    Q_SIGNAL void dataEntryAllowed();
     Q_SIGNAL void inputChanged();
     Q_SIGNAL void completionChanged();
     Q_SIGNAL void selectionChanged();
@@ -81,7 +83,7 @@ signals:
 
 private slots:
     void _onCloseInputPermissionRequested();
-    void _onDataReady();
+    void _onReadDataFinished(bool success);
     void _onWriteDataFinished(bool success);
 
 private:
@@ -94,6 +96,7 @@ private:
     ScoreItem* m_pScoreItem;
     Game::StatusCodes m_CurrentStatusCode;
     bool m_IsDataAvailable;
+    bool m_IsDataEntryAllowed;
     bool m_IsGameStarted;
     bool m_IsGamePaused;
 };

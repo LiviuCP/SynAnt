@@ -14,6 +14,7 @@ GameFacade::GameFacade(QObject *parent)
     , m_pGameFunctionalityProxy{new GameFunctionalityProxy{this}}
     , m_CurrentStatusCode{Game::StatusCodes::INVALID}
     , m_IsDataAvailable{false}
+    , m_IsDataEntryAllowed{false}
     , m_IsGameStarted{false}
     , m_IsGamePaused{false}
 {
@@ -45,7 +46,7 @@ GameFacade::GameFacade(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pScoreItem, &ScoreItem::statisticsUpdated, this, &GameFacade::statisticsChanged);
     Q_ASSERT(connected);
-    connected = connect(m_pDataSourceProxy, &DataSourceProxy::dataReady, this, &GameFacade::_onDataReady);
+    connected = connect(m_pDataSourceProxy, &DataSourceProxy::readDataFinished, this, &GameFacade::_onReadDataFinished);
     Q_ASSERT(connected);
     connected = connect(m_pDataSourceProxy, &DataSourceProxy::writeDataFinished, this, &GameFacade::_onWriteDataFinished);
     Q_ASSERT(connected);
@@ -252,6 +253,11 @@ bool GameFacade::isDataAvailable() const
     return m_IsDataAvailable;
 }
 
+bool GameFacade::isDataEntryAllowed() const
+{
+    return m_IsDataEntryAllowed;
+}
+
 bool GameFacade::areSynonyms() const
 {
     return m_pWordPairOwner->areSynonyms();
@@ -262,18 +268,36 @@ void GameFacade::_onCloseInputPermissionRequested()
     m_pInputBuilder->setCloseInputPermission(m_pWordPairOwner->isLastAvailableWordPiece());
 }
 
-void GameFacade::_onDataReady()
+void GameFacade::_onReadDataFinished(bool success)
 {
-    m_pDataSourceAccessHelper->setEntriesTable(m_pDataSourceProxy->getNrOfEntries());
+    if (success)
+    {
+        int nrOfEntries{m_pDataSourceProxy->getNrOfEntries()};
 
-    bool connected{connect(m_pDataSourceProxy, &DataSourceProxy::entryFetched, m_pWordMixer, &WordMixer::mixWords)};
-    Q_ASSERT(connected);
+        if (nrOfEntries != 0)
+        {
+            m_pDataSourceAccessHelper->setEntriesTable(nrOfEntries);
 
-    m_IsDataAvailable = true;
+            bool connected{connect(m_pDataSourceProxy, &DataSourceProxy::entryFetched, m_pWordMixer, &WordMixer::mixWords)};
+            Q_ASSERT(connected);
 
-    Q_EMIT dataAvailableChanged();
+            m_IsDataAvailable = true;
 
-    Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_LOAD_COMPLETE);
+            Q_EMIT dataAvailableChanged();
+            Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_LOAD_COMPLETE);
+        }
+        else
+        {
+            Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_LOAD_NO_VALID_ENTRIES);
+        }
+
+        m_IsDataEntryAllowed = true;
+        Q_EMIT dataEntryAllowed();
+    }
+    else
+    {
+        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_LOAD_ERROR);
+    }
 }
 
 void GameFacade::_onWriteDataFinished(bool success)

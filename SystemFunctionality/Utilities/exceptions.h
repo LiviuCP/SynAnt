@@ -24,14 +24,4 @@ private:
     QString m_FileName;
 };
 
-class WordException : public FileException
-{
-public:
-    WordException() = delete;
-    WordException(QString description, QString fileName, int rowNumber);
-    const QString getDescription() const noexcept override;
-private:
-    int m_RowNumber;
-};
-
 #endif // EXCEPTIONS_H

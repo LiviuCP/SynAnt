@@ -79,7 +79,7 @@ ApplicationWindow {
 
     Shortcut {
         sequence: GameStrings.dataEntryButtonShortcut
-        enabled: gamePresenter.playEnabled
+        enabled: gamePresenter.dataEntryEnabled
         onActivated: {
             gamePresenter.switchToPane(GamePresenter.DATA_ENTRY);
         }

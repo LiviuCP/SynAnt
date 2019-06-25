@@ -37,6 +37,8 @@ namespace Game
         REQUESTED_BY_USER,
         LOADING_DATA,
         DATA_LOAD_COMPLETE,
+        DATA_LOAD_NO_VALID_ENTRIES,
+        DATA_LOAD_ERROR,
         GAME_STARTED,
         GAME_PAUSED,
         GAME_RESUMED_COMPLETE_INPUT,
