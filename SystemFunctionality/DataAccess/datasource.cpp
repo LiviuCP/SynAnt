@@ -64,21 +64,23 @@ void DataSource::onWriteDataRequestReceived(QPair<QString, QString> newWordsPair
 
     if(!wordPairsFile.open(QIODevice::Append))
     {
-        throw FileException{GameStrings::c_CannotOpenFileMessage, m_DataFilePath};
+        Q_EMIT dataEntrySaveError();
     }
-
-    bool success{_createRawDataEntry(rawDataEntry, newWordsPair.first, newWordsPair.second, areSynonyms)};
-
-    if (success)
+    else
     {
-        QTextStream lineWriter{&wordPairsFile};
-        lineWriter << rawDataEntry << endl;
+        bool success{_createRawDataEntry(rawDataEntry, newWordsPair.first, newWordsPair.second, areSynonyms)};
 
-        // for sync purposes only
-        QThread::msleep(Game::c_WriteDataThreadDelay);
+        if (success)
+        {
+            QTextStream lineWriter{&wordPairsFile};
+            lineWriter << rawDataEntry << endl;
+
+            // for sync purposes only
+            QThread::msleep(Game::c_WriteDataThreadDelay);
+        }
+
+        Q_EMIT writeDataFinished(success);
     }
-
-    Q_EMIT writeDataFinished(success);
 }
 
 bool DataSource::_loadRawData(QVector<QString>& rawData)

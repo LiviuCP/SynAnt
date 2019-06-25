@@ -21,6 +21,7 @@ signals:
     Q_SIGNAL void readDataFinished(bool success);
     Q_SIGNAL void writeDataFinished(bool success);
     Q_SIGNAL void entryFetched(QPair<QString, QString> newWordsPair, bool areSynonyms);
+    Q_SIGNAL void dataEntrySaveError();
 
 private:
     DataSource* m_pDataSource;

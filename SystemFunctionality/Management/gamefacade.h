@@ -85,6 +85,7 @@ private slots:
     void _onCloseInputPermissionRequested();
     void _onReadDataFinished(bool success);
     void _onWriteDataFinished(bool success);
+    void _onDataEntrySaveError();
 
 private:
     GameFunctionalityProxy* m_pGameFunctionalityProxy;

@@ -50,6 +50,8 @@ GameFacade::GameFacade(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pDataSourceProxy, &DataSourceProxy::writeDataFinished, this, &GameFacade::_onWriteDataFinished);
     Q_ASSERT(connected);
+    connected = connect(m_pDataSourceProxy, &DataSourceProxy::dataEntrySaveError, this, &GameFacade::_onDataEntrySaveError);
+    Q_ASSERT(connected);
 }
 
 void GameFacade::init()
@@ -302,12 +304,10 @@ void GameFacade::_onReadDataFinished(bool success)
 
 void GameFacade::_onWriteDataFinished(bool success)
 {
-    if (success)
-    {
-        Q_EMIT statusChanged(Game::StatusCodes::DATA_ENTRY_SUCCESS);
-    }
-    else
-    {
-        Q_EMIT statusChanged(Game::StatusCodes::INVALID_DATA_ENTRY);
-    }
+    Q_EMIT statusChanged(success ? Game::StatusCodes::DATA_ENTRY_SUCCESS : Game::StatusCodes::INVALID_DATA_ENTRY);
+}
+
+void GameFacade::_onDataEntrySaveError()
+{
+    Q_EMIT statusChanged(Game::StatusCodes::DATA_ENTRY_SAVE_ERROR);
 }

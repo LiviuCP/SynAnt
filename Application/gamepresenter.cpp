@@ -481,6 +481,9 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
     case Game::StatusCodes::DATA_LOAD_ERROR:
         _launchErrorPane(GameStrings::c_CannotOpenFileMessage);
         break;
+    case Game::StatusCodes::DATA_ENTRY_SAVE_ERROR:
+        _launchErrorPane(GameStrings::c_CannotSaveDataMessage);
+        break;
     case Game::StatusCodes::GAME_STARTED:
         _updateStatusMessage(GameStrings::c_GameStartedMessage, Pane::MAIN, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
