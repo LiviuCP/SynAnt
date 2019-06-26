@@ -573,6 +573,12 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         _updateStatusMessage(GameStrings::c_DataEntrySuccessMessage, Pane::DATA_ENTRY, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DefaultPairEntryStatusMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
         break;
+    case Game::StatusCodes::DATA_GOT_AVAILABLE:
+        Q_EMIT dataEntrySucceeded();
+        _updateStatusMessage(GameStrings::c_DataEntrySuccessMessage, Pane::DATA_ENTRY, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_DataReadyMessage, Pane::INTRO, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_DefaultPairEntryStatusMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
+        break;
     case Game::StatusCodes::INVALID_DATA_ENTRY:
         _updateStatusMessage(GameStrings::c_DataEntryIncorrectPairMessage, Pane::DATA_ENTRY, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DefaultPairEntryStatusMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);

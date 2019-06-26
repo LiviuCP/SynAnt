@@ -118,7 +118,7 @@ namespace GameStrings {
     const QString c_NoValidEntriesMessage               {
                                                              "No valid entries could be loaded from database.\n\n"
                                                              "Please use the data entry page to add pairs.\n\n"
-                                                             "Then exit and re-open the application so the pairs become available."
+                                                             "Then return to intro page and press Play."
                                                         };
     const QString c_DefaultStatusMessage                {    "Please select a new word piece or delete one/more if necessary"                           };
     const QString c_DefaultPairEntryStatusMessage       {    "Please enter a new pair of words.\n\nChoose if they are synonyms or antonyms"             };

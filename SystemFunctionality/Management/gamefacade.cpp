@@ -279,13 +279,8 @@ void GameFacade::_onReadDataFinished(bool success)
         if (nrOfEntries != 0)
         {
             m_pDataSourceAccessHelper->setEntriesTable(nrOfEntries);
+            _connectDataSourceToWordMixer();
 
-            bool connected{connect(m_pDataSourceProxy, &DataSourceProxy::entryFetched, m_pWordMixer, &WordMixer::mixWords)};
-            Q_ASSERT(connected);
-
-            m_IsDataAvailable = true;
-
-            Q_EMIT dataAvailableChanged();
             Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_LOAD_COMPLETE);
         }
         else
@@ -304,15 +299,32 @@ void GameFacade::_onReadDataFinished(bool success)
 
 void GameFacade::_onWriteDataFinished(bool success)
 {
+    int initialNrOfEntries{m_pDataSourceAccessHelper->getTotalNrOfEntries()};
+
     if (success)
     {
         m_pDataSourceAccessHelper->appendNewEntry();
+
+        // if no data was initially available enable playing if user enters valid data
+        if (initialNrOfEntries == 0)
+        {
+            _connectDataSourceToWordMixer();
+        }
     }
 
-    Q_EMIT statusChanged(success ? Game::StatusCodes::DATA_ENTRY_SUCCESS : Game::StatusCodes::INVALID_DATA_ENTRY);
+    Q_EMIT statusChanged(success ? (initialNrOfEntries == 0 ? Game::StatusCodes::DATA_GOT_AVAILABLE : Game::StatusCodes::DATA_ENTRY_SUCCESS) : Game::StatusCodes::INVALID_DATA_ENTRY);
 }
 
 void GameFacade::_onDataEntrySaveError()
 {
     Q_EMIT statusChanged(Game::StatusCodes::DATA_ENTRY_SAVE_ERROR);
+}
+
+void GameFacade::_connectDataSourceToWordMixer()
+{
+    bool connected{connect(m_pDataSourceProxy, &DataSourceProxy::entryFetched, m_pWordMixer, &WordMixer::mixWords)};
+    Q_ASSERT(connected);
+
+    m_IsDataAvailable = true;
+    Q_EMIT dataAvailableChanged();
 }

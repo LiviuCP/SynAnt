@@ -86,6 +86,7 @@ private slots:
     void _onReadDataFinished(bool success);
     void _onWriteDataFinished(bool success);
     void _onDataEntrySaveError();
+    void _connectDataSourceToWordMixer();
 
 private:
     GameFunctionalityProxy* m_pGameFunctionalityProxy;
