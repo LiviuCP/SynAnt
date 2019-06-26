@@ -186,10 +186,6 @@ namespace GameStrings {
     const QString c_WordLastPieceTextColor              {    "red"                                                                                      };
 
     // miscellaneous
-    const QString c_FirstWordLowerCase                  {    "first"                                                                                    };
-    const QString c_FirstWordCamelCase                  {    "First"                                                                                    };
-    const QString c_SecondWordLowerCase                 {    "second"                                                                                   };
-    const QString c_SecondWordCamelCase                 {    "Second"                                                                                   };
     const QString c_Synonyms                            {    "synonyms"                                                                                 };
     const QString c_Antonyms                            {    "antonyms"                                                                                 };
 
