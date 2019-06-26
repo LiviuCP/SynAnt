@@ -48,6 +48,7 @@ private:
     void _createProcessedDataEntries(const QVector<QString>& rawData);
     bool _createProcessedDataEntry(DataEntry& dataEntry, const QString& rawDataEntry);
     bool _createRawDataEntry(QString& rawDataEntry, const QString& firstWord, const QString& secondWord, bool areSynonyms);
+    bool _entryAlreadyExists(const DataEntry& dataEntry);
 
     QString m_DataFilePath;
     QVector<DataEntry> m_DataEntries;

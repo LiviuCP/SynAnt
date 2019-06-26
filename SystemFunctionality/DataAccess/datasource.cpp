@@ -184,6 +184,7 @@ bool DataSource::_createRawDataEntry(QString& rawDataEntry, const QString &first
     auto hasValidCharacters = [](const QString &word)
     {
         bool areAllCharactersValid{true};
+
         for (auto currentCharacter : word)
         {
             if (!(currentCharacter.isLower()))
@@ -192,6 +193,7 @@ bool DataSource::_createRawDataEntry(QString& rawDataEntry, const QString &first
                 break;
             }
         }
+
         return areAllCharactersValid;
     };
 
@@ -202,6 +204,7 @@ bool DataSource::_createRawDataEntry(QString& rawDataEntry, const QString &first
     success = success && (firstWord.size() + secondWord.size() <= Game::c_MaxPairSize);
     success = success && (hasValidCharacters(firstWord) && hasValidCharacters(secondWord));
     success = success && (firstWord != secondWord);
+    success = success && !_entryAlreadyExists(DataEntry{firstWord, secondWord, areSynonyms});
 
     if (success)
     {
@@ -209,6 +212,23 @@ bool DataSource::_createRawDataEntry(QString& rawDataEntry, const QString &first
     }
 
     return success;
+}
+
+bool DataSource::_entryAlreadyExists(const DataSource::DataEntry &dataEntry)
+{
+    bool entryExists{false};
+
+    for (auto currentEntry: m_DataEntries)
+    {
+        if ((dataEntry.firstWord == currentEntry.firstWord && dataEntry.secondWord == currentEntry.secondWord) ||
+            (dataEntry.firstWord == currentEntry.secondWord && dataEntry.secondWord == currentEntry.firstWord))
+        {
+            entryExists = true;
+            break;
+        }
+    }
+
+    return entryExists;
 }
 
 DataSource::DataEntry::DataEntry()
