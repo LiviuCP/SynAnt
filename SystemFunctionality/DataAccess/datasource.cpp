@@ -75,6 +75,8 @@ void DataSource::onWriteDataRequestReceived(QPair<QString, QString> newWordsPair
             QTextStream lineWriter{&wordPairsFile};
             lineWriter << rawDataEntry << endl;
 
+            m_DataEntries.append(DataEntry{newWordsPair.first, newWordsPair.second, areSynonyms});
+
             // for sync purposes only
             QThread::msleep(Game::c_WriteDataThreadDelay);
         }
@@ -210,5 +212,12 @@ bool DataSource::_createRawDataEntry(QString& rawDataEntry, const QString &first
 }
 
 DataSource::DataEntry::DataEntry()
+{
+}
+
+DataSource::DataEntry::DataEntry(const QString &firstWord, const QString &secondWord, bool areSynonyms)
+    : firstWord{firstWord}
+    , secondWord{secondWord}
+    , areSynonyms{areSynonyms}
 {
 }

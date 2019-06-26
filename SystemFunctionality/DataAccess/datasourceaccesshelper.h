@@ -20,6 +20,7 @@ public:
 
     void setEntriesTable(int nrOfEntries);
     void resetUsedEntries();
+    void appendNewEntry();
     int generateEntryNumber();
 
     int getNrOfUsedEntries() const;

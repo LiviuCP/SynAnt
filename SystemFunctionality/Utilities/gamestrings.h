@@ -144,7 +144,7 @@ namespace GameStrings {
                                                              "\n\nA new pair of words is available below."
                                                         };
 
-    const QString c_DataEntrySuccessMessage             {    "The new pair has been successfully added.\n\nIt will be available when game is restarted" };
+    const QString c_DataEntrySuccessMessage             {    "The new pair has been successfully added.\n\nIt will be available at once when playing"   };
     const QString c_IncorrectWordsMessage               {    "You didn't enter the correct words.\n\nPlease correct input and try again!"               };
     const QString c_DataEntryIncorrectPairMessage       {    "The new words pair has not been correctly entered.\n\nPlease correct and try again!"      };
 

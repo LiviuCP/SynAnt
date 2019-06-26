@@ -304,6 +304,11 @@ void GameFacade::_onReadDataFinished(bool success)
 
 void GameFacade::_onWriteDataFinished(bool success)
 {
+    if (success)
+    {
+        m_pDataSourceAccessHelper->appendNewEntry();
+    }
+
     Q_EMIT statusChanged(success ? Game::StatusCodes::DATA_ENTRY_SUCCESS : Game::StatusCodes::INVALID_DATA_ENTRY);
 }
 

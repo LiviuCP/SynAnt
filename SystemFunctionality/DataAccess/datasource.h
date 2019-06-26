@@ -37,6 +37,7 @@ private:
     struct DataEntry
     {
         DataEntry();
+        DataEntry(const QString& firstWord, const QString& secondWord, bool areSynonyms);
 
         QString firstWord;
         QString secondWord;
