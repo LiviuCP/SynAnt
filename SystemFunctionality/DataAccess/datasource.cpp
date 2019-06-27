@@ -62,15 +62,14 @@ void DataSource::onWriteDataToDbRequested(QPair<QString, QString> newWordsPair, 
     QString rawDataEntry;
     QFile wordPairsFile(m_DataFilePath);
 
-    if(!wordPairsFile.open(QIODevice::Append))
+    if (_createRawDataEntry(rawDataEntry, newWordsPair.first, newWordsPair.second, areSynonyms))
     {
-        Q_EMIT writeDataToDbErrorOccured();
-    }
-    else
-    {
-        bool success{_createRawDataEntry(rawDataEntry, newWordsPair.first, newWordsPair.second, areSynonyms)};
-
-        if (success)
+        if(!wordPairsFile.open(QIODevice::Append))
+        {
+            // user entered data valid but error when writing to DB
+            Q_EMIT writeDataToDbErrorOccured();
+        }
+        else
         {
             QTextStream lineWriter{&wordPairsFile};
             lineWriter << rawDataEntry << endl;
@@ -79,9 +78,15 @@ void DataSource::onWriteDataToDbRequested(QPair<QString, QString> newWordsPair, 
 
             // for sync purposes only
             QThread::msleep(Game::c_WriteDataThreadDelay);
-        }
 
-        Q_EMIT writeDataToDbFinished(success);
+            // user entered data written successfully to DB
+            Q_EMIT writeDataToDbFinished(true);
+        }
+    }
+    else
+    {
+        // no write error but invalid data entered by user
+        Q_EMIT writeDataToDbFinished(false);
     }
 }
 
