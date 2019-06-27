@@ -83,9 +83,9 @@ signals:
 
 private slots:
     void _onCloseInputPermissionRequested();
-    void _onReadDataFinished(bool success);
-    void _onWriteDataFinished(bool success);
-    void _onDataEntrySaveError();
+    void _onReadDataFromDbFinished(bool success);
+    void _onWriteDataToDbFinished(bool success);
+    void _onWriteDataToDbErrorOccured();
     void _connectDataSourceToWordMixer();
 
 private:

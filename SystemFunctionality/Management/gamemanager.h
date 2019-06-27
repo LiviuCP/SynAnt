@@ -39,8 +39,8 @@ public:
     static void releaseResources();
 
     void setDataSource(const QString& dataDirPath);
-    void loadData();
-    void requestAddPairToDataSource(QPair<QString, QString> newWordsPair, bool areSynonyms);
+    void loadDataFromDb();
+    void saveDataToDbIfValid(QPair<QString, QString> newWordsPair, bool areSynonyms);
 
     GameFacade* getFacade() const;
     DataSourceProxy* getDataSourceProxy() const;
@@ -54,8 +54,8 @@ public:
 
 signals:
     Q_SIGNAL void dataSourceSetupCompleted();
-    Q_SIGNAL void readData();
-    Q_SIGNAL void writeDataRequested(QPair<QString, QString> newWordsPair, bool areSynonyms);
+    Q_SIGNAL void readDataFromDb();
+    Q_SIGNAL void writeDataToDbIfValid(QPair<QString, QString> newWordsPair, bool areSynonyms);
 
 private slots:
     void _onDataSourceSetupCompleted();

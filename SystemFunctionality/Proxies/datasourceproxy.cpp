@@ -8,22 +8,22 @@ DataSourceProxy::DataSourceProxy(DataSource* pDataSource, QObject *parent)
 {
 }
 
-void DataSourceProxy::loadData()
+void DataSourceProxy::loadDataFromDb()
 {
-    GameManager::getManager()->loadData();
+    GameManager::getManager()->loadDataFromDb();
 }
 
-void DataSourceProxy::requestAddPairToDataSource(QPair<QString, QString> newWordsPair, bool areSynonyms)
+void DataSourceProxy::saveDataToDbIfValid(QPair<QString, QString> newWordsPair, bool areSynonyms)
 {
-    GameManager::getManager()->requestAddPairToDataSource(newWordsPair, areSynonyms);
+    GameManager::getManager()->saveDataToDbIfValid(newWordsPair, areSynonyms);
 }
 
-void DataSourceProxy::fetchDataEntry(int entryNumber)
+void DataSourceProxy::provideDataEntryToConsumer(int entryNumber)
 {
-    m_pDataSource->fetchDataEntry(entryNumber);
+    m_pDataSource->provideDataEntryToConsumer(entryNumber);
 }
 
-int DataSourceProxy::getNrOfEntries()
+int DataSourceProxy::getNrOfValidEntries()
 {
-    return m_pDataSource->getNrOfEntries();
+    return m_pDataSource->getNrOfValidEntries();
 }

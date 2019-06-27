@@ -1,7 +1,5 @@
 /*
-
   This file contains specific items that are used by multiple classes (e.g. enum classes)
-
 */
 
 #ifndef GAME_H
@@ -29,24 +27,24 @@ namespace Game
 
     enum class StatusCodes
     {
-        INVALID,
-        INVALID_DATA_ENTRY,
-        SUCCESS,
-        DATA_ENTRY_SUCCESS,
-        INCORRECT_WORDS,
-        REQUESTED_BY_USER,
+        NO_DATA_LOADING_REQUESTED,
         LOADING_DATA,
-        DATA_LOAD_COMPLETE,
-        DATA_LOAD_NO_VALID_ENTRIES,
-        DATA_LOAD_ERROR,
-        DATA_ENTRY_SAVE_ERROR,
+        DATA_LOADING_COMPLETE,
+        NO_VALID_DATA_ENTRIES_LOADED,
+        DATA_LOADING_ERROR,
+        DATA_ENTRY_SAVING_ERROR,
         DATA_GOT_AVAILABLE,
+        DATA_ENTRY_STARTED,
+        DATA_ENTRY_SUCCESS,
+        INVALID_DATA_ENTRY,
         GAME_STARTED,
         GAME_PAUSED,
         GAME_RESUMED_COMPLETE_INPUT,
         GAME_RESUMED_INCOMPLETE_INPUT,
         GAME_STOPPED,
-        WORD_ENTRY_STARTED,
+        CORRECT_USER_INPUT,
+        INCORRECT_USER_INPUT,
+        REQUESTED_BY_USER,
         STATISTICS_RESET_COMPLETE_INPUT,
         STATISTICS_RESET_INCOMPLETE_INPUT,
         LEVEL_CHANGED,

@@ -89,17 +89,17 @@ void GameManager::setDataSource(const QString &dataDirPath)
 
         bool connected{connect(m_pDataSourceThread, &QThread::finished, m_pDataSource, &DataSource::deleteLater)};
         Q_ASSERT(connected);
-        connected = connect(this, &GameManager::readData, m_pDataSource, &DataSource::onReadDataRequestReceived, Qt::QueuedConnection);
+        connected = connect(this, &GameManager::readDataFromDb, m_pDataSource, &DataSource::onReadDataFromDbRequested, Qt::QueuedConnection);
         Q_ASSERT(connected);
-        connected = connect(this, &GameManager::writeDataRequested, m_pDataSource, &DataSource::onWriteDataRequestReceived, Qt::QueuedConnection);
+        connected = connect(this, &GameManager::writeDataToDbIfValid, m_pDataSource, &DataSource::onWriteDataToDbRequested, Qt::QueuedConnection);
         Q_ASSERT(connected);
-        connected = connect(m_pDataSource, &DataSource::readDataFinished, m_pDataSourceProxy, &DataSourceProxy::readDataFinished, Qt::QueuedConnection);
+        connected = connect(m_pDataSource, &DataSource::readDataFromDbFinished, m_pDataSourceProxy, &DataSourceProxy::readDataFromDbFinished, Qt::QueuedConnection);
         Q_ASSERT(connected);
-        connected = connect(m_pDataSource, &DataSource::writeDataFinished, m_pDataSourceProxy, &DataSourceProxy::writeDataFinished, Qt::QueuedConnection);
+        connected = connect(m_pDataSource, &DataSource::writeDataToDbFinished, m_pDataSourceProxy, &DataSourceProxy::writeDataToDbFinished, Qt::QueuedConnection);
         Q_ASSERT(connected);
-        connected = connect(m_pDataSource, &DataSource::dataEntrySaveError, m_pDataSourceProxy, &DataSourceProxy::dataEntrySaveError, Qt::QueuedConnection);
+        connected = connect(m_pDataSource, &DataSource::writeDataToDbErrorOccured, m_pDataSourceProxy, &DataSourceProxy::writeDataToDbErrorOccured, Qt::QueuedConnection);
         Q_ASSERT(connected);
-        connected = connect(m_pDataSource, &DataSource::entryFetched, m_pDataSourceProxy, &DataSourceProxy::entryFetched, Qt::QueuedConnection);
+        connected = connect(m_pDataSource, &DataSource::entryProvidedToConsumer, m_pDataSourceProxy, &DataSourceProxy::entryProvidedToConsumer, Qt::QueuedConnection);
         Q_ASSERT(connected);
 
         m_pDataSourceThread->start();
@@ -108,14 +108,14 @@ void GameManager::setDataSource(const QString &dataDirPath)
     }
 }
 
-void GameManager::loadData()
+void GameManager::loadDataFromDb()
 {
-    Q_EMIT readData();
+    Q_EMIT readDataFromDb();
 }
 
-void GameManager::requestAddPairToDataSource(QPair<QString, QString> newWordsPair, bool areSynonyms)
+void GameManager::saveDataToDbIfValid(QPair<QString, QString> newWordsPair, bool areSynonyms)
 {
-    Q_EMIT writeDataRequested(newWordsPair, areSynonyms);
+    Q_EMIT writeDataToDbIfValid(newWordsPair, areSynonyms);
 }
 
 GameFacade* GameManager::getFacade() const

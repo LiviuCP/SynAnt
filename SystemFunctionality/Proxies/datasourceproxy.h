@@ -12,16 +12,16 @@ class DataSourceProxy : public QObject
 public:
     explicit DataSourceProxy(DataSource* pDataSource, QObject *parent = nullptr);
 
-    void loadData();
-    void requestAddPairToDataSource(QPair<QString, QString> newWordsPair, bool areSynonyms);
-    void fetchDataEntry(int entryNumber);
-    int getNrOfEntries();
+    void loadDataFromDb();
+    void saveDataToDbIfValid(QPair<QString, QString> newWordsPair, bool areSynonyms);
+    void provideDataEntryToConsumer(int entryNumber);
+    int getNrOfValidEntries();
 
 signals:
-    Q_SIGNAL void readDataFinished(bool success);
-    Q_SIGNAL void writeDataFinished(bool success);
-    Q_SIGNAL void entryFetched(QPair<QString, QString> newWordsPair, bool areSynonyms);
-    Q_SIGNAL void dataEntrySaveError();
+    Q_SIGNAL void readDataFromDbFinished(bool success);
+    Q_SIGNAL void writeDataToDbFinished(bool success);
+    Q_SIGNAL void writeDataToDbErrorOccured();
+    Q_SIGNAL void entryProvidedToConsumer(QPair<QString, QString> newWordsPair, bool areSynonyms);
 
 private:
     DataSource* m_pDataSource;

@@ -16,15 +16,15 @@ DataSource::DataSource(const QString &dataFilePath, QObject *parent)
 {
 }
 
-void DataSource::fetchDataEntry(int entryNumber)
+void DataSource::provideDataEntryToConsumer(int entryNumber)
 {
     Q_ASSERT(entryNumber >= 0 && entryNumber < m_DataEntries.size());
 
     DataEntry fetchedDataEntry{m_DataEntries[entryNumber]};
-    Q_EMIT entryFetched(QPair<QString, QString>(fetchedDataEntry.firstWord, fetchedDataEntry.secondWord), fetchedDataEntry.areSynonyms);
+    Q_EMIT entryProvidedToConsumer(QPair<QString, QString>(fetchedDataEntry.firstWord, fetchedDataEntry.secondWord), fetchedDataEntry.areSynonyms);
 }
 
-int DataSource::getNrOfEntries()
+int DataSource::getNrOfValidEntries()
 {
     return m_DataEntries.size();
 }
@@ -36,7 +36,7 @@ bool DataSource::processRawDataEntryForTest(const QString &rawDataEntry)
     return _createProcessedDataEntry(dataEntry, rawDataEntry);
 }
 
-void DataSource::onReadDataRequestReceived()
+void DataSource::onReadDataFromDbRequested()
 {
     bool success{true};
 
@@ -54,17 +54,17 @@ void DataSource::onReadDataRequestReceived()
         success = false;
     }
 
-    Q_EMIT readDataFinished(success);
+    Q_EMIT readDataFromDbFinished(success);
 }
 
-void DataSource::onWriteDataRequestReceived(QPair<QString, QString> newWordsPair, bool areSynonyms)
+void DataSource::onWriteDataToDbRequested(QPair<QString, QString> newWordsPair, bool areSynonyms)
 {
     QString rawDataEntry;
     QFile wordPairsFile(m_DataFilePath);
 
     if(!wordPairsFile.open(QIODevice::Append))
     {
-        Q_EMIT dataEntrySaveError();
+        Q_EMIT writeDataToDbErrorOccured();
     }
     else
     {
@@ -81,7 +81,7 @@ void DataSource::onWriteDataRequestReceived(QPair<QString, QString> newWordsPair
             QThread::msleep(Game::c_WriteDataThreadDelay);
         }
 
-        Q_EMIT writeDataFinished(success);
+        Q_EMIT writeDataToDbFinished(success);
     }
 }
 

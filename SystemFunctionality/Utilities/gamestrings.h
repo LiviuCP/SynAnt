@@ -1,7 +1,5 @@
 /*
-
   String literals used by the game window classes etc.
-
 */
 
 #ifndef GAMESTRINGS_H
@@ -106,7 +104,7 @@ namespace GameStrings {
     // status messages
     const QString c_DataLoadingMessage                  {    "Loading data. Please wait"                                                                };
 
-    const QString c_DataReadyMessage                    {
+    const QString c_DataAvailableMessage                {
                                                              "\n\t\tWelcome to SynAnt!\n\n\n"
                                                              "\nIt's simple!\n"
                                                              "\nTwo words are divided into equal pieces and mixed with each other.\n"
@@ -115,26 +113,27 @@ namespace GameStrings {
                                                              "\nPress Play to enter the game or Help for more information."
                                                         };
 
-    const QString c_NoValidEntriesMessage               {
+    const QString c_NoValidEntriesLoadedMessage         {
                                                              "No valid entries could be loaded from database.\n\n"
                                                              "Please use the data entry page to add pairs.\n\n"
                                                              "Then return to intro page and press Play."
                                                         };
+
     const QString c_DefaultStatusMessage                {    "Please select a new word piece or delete one/more if necessary"                           };
-    const QString c_DefaultPairEntryStatusMessage       {    "Please enter a new pair of words.\n\nChoose if they are synonyms or antonyms"             };
-    const QString c_WordEntryStartMessage               {    "Word entry started"                                                                       };
+    const QString c_DataEntryStartMessage               {    "Word pairs entry started"                                                                 };
+    const QString c_DataEntryRequestMessage             {    "Please enter a new pair of words.\n\nChoose if they are synonyms or antonyms"             };
     const QString c_GameStartedMessage                  {    "Game started"                                                                             };
     const QString c_GamePausedMessage                   {    "Game paused"                                                                              };
     const QString c_GameResumedMessage                  {    "Game resumed"                                                                             };
     const QString c_GameStoppedMessage                  {    "Exiting game"                                                                             };
 
-    const QString c_PieceNotAddedMessage                {    "The selected wordpiece cannot be added to the input of the required word!"                };
-    const QString c_PieceSuccessfullyAddedMessage       {    "The selected wordpiece has been successfully added to user input"                         };
-    const QString c_PiecesRemovedMessage                {    "One or more wordpieces has been removed from input"                                       };
+    const QString c_PieceNotAddedToInputMessage         {    "The selected wordpiece cannot be added to the input of the required word!"                };
+    const QString c_PieceAddedToInputMessage            {    "The selected wordpiece has been successfully added to user input"                         };
+    const QString c_PiecesRemovedFromInputMessage       {    "One or more wordpieces has been removed from input"                                       };
     const QString c_AllPiecesAddedMessage               {    "All pieces selected. Hit Submit or correct the input if needed"                           };
     const QString c_AllPiecesRemovedMessage             {    "All pieces have been removed from user input"                                             };
 
-    const QString c_SuccessMessage                      {
+    const QString c_CorrectUserInputMessage             {
                                                              "Congrats! You entered the correct words."
                                                              "\n\nThe two words are:\n\n"
                                                              "\t%1\n"
@@ -144,11 +143,11 @@ namespace GameStrings {
                                                              "\n\nA new pair of words is available below."
                                                         };
 
+    const QString c_IncorrectUserInputMessage           {    "You didn't enter the correct words.\n\nPlease correct input and try again!"               };
     const QString c_DataEntrySuccessMessage             {    "The new pair has been successfully added.\n\nIt will be available at once when playing"   };
-    const QString c_IncorrectWordsMessage               {    "You didn't enter the correct words.\n\nPlease correct input and try again!"               };
     const QString c_DataEntryIncorrectPairMessage       {    "The new words pair has not been correctly entered.\n\nPlease correct and try again!"      };
 
-    const QString c_RequestedByUserMessage              {
+    const QString c_ResultsRequestedByUserMessage       {
                                                              "\nThe correct words are:\n\n"
                                                              "\t%1\n"
                                                              "\t%2\n"
@@ -164,14 +163,13 @@ namespace GameStrings {
                                                              "A new pair of words is available below"
                                                         };
 
-    // exception messages
+    // fatal error messages
     const QString c_FileNotFoundMessage                 {    "File not found!\n"                                                                        };
     const QString c_CannotOpenFileMessage               {    "File cannot be opened!\n"                                                                 };
     const QString c_CannotSaveDataMessage               {    "An error occured when saving the word pair(s)!"                                           };
     const QString c_EmptyFileMessage                    {    "Empty file!\n"                                                                            };
 
     const QString c_FileNameMessage                     {    "\nFile: %1\n"                                                                             };
-    const QString c_RowNumberMessage                    {    "\nRow number: %1\n"                                                                       };
 
     // window titles
     const QString c_IntroWindowTitle                    {    "SynAnt - Welcome"                                                                         };

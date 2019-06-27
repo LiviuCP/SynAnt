@@ -12,7 +12,7 @@
 GameFacade::GameFacade(QObject *parent)
     : QObject(parent)
     , m_pGameFunctionalityProxy{new GameFunctionalityProxy{this}}
-    , m_CurrentStatusCode{Game::StatusCodes::INVALID}
+    , m_CurrentStatusCode{Game::StatusCodes::NO_DATA_LOADING_REQUESTED}
     , m_IsDataAvailable{false}
     , m_IsDataEntryAllowed{false}
     , m_IsGameStarted{false}
@@ -46,19 +46,19 @@ GameFacade::GameFacade(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pScoreItem, &ScoreItem::statisticsUpdated, this, &GameFacade::statisticsChanged);
     Q_ASSERT(connected);
-    connected = connect(m_pDataSourceProxy, &DataSourceProxy::readDataFinished, this, &GameFacade::_onReadDataFinished);
+    connected = connect(m_pDataSourceProxy, &DataSourceProxy::readDataFromDbFinished, this, &GameFacade::_onReadDataFromDbFinished);
     Q_ASSERT(connected);
-    connected = connect(m_pDataSourceProxy, &DataSourceProxy::writeDataFinished, this, &GameFacade::_onWriteDataFinished);
+    connected = connect(m_pDataSourceProxy, &DataSourceProxy::writeDataToDbFinished, this, &GameFacade::_onWriteDataToDbFinished);
     Q_ASSERT(connected);
-    connected = connect(m_pDataSourceProxy, &DataSourceProxy::dataEntrySaveError, this, &GameFacade::_onDataEntrySaveError);
+    connected = connect(m_pDataSourceProxy, &DataSourceProxy::writeDataToDbErrorOccured, this, &GameFacade::_onWriteDataToDbErrorOccured);
     Q_ASSERT(connected);
 }
 
 void GameFacade::init()
 {
-    if (m_CurrentStatusCode == Game::StatusCodes::INVALID)
+    if (m_CurrentStatusCode == Game::StatusCodes::NO_DATA_LOADING_REQUESTED)
     {
-        m_pDataSourceProxy->loadData();
+        m_pDataSourceProxy->loadDataFromDb();
         Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::LOADING_DATA);
     }
     else
@@ -71,7 +71,7 @@ void GameFacade::startGame()
 {
     Q_ASSERT(m_IsDataAvailable);
 
-    m_pDataSourceProxy->fetchDataEntry(m_pDataSourceAccessHelper->generateEntryNumber());
+    m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
 
     Q_EMIT statisticsChanged();
     Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::GAME_STARTED);
@@ -102,7 +102,7 @@ void GameFacade::quitGame()
 
 void GameFacade::startWordEntry()
 {
-    Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::WORD_ENTRY_STARTED);
+    Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_ENTRY_STARTED);
 }
 
 void GameFacade::addWordPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex)
@@ -153,32 +153,32 @@ void GameFacade::handleSubmitRequest()
     bool success{(firstInputWord == m_pWordPairOwner->getFirstReferenceWord() && secondInputWord == m_pWordPairOwner->getSecondReferenceWord()) ||
                  (firstInputWord == m_pWordPairOwner->getSecondReferenceWord() && secondInputWord == m_pWordPairOwner->getFirstReferenceWord())};
 
-    Q_EMIT statusChanged(m_CurrentStatusCode = success ? Game::StatusCodes::SUCCESS : Game::StatusCodes::INCORRECT_WORDS);
+    Q_EMIT statusChanged(m_CurrentStatusCode = success ? Game::StatusCodes::CORRECT_USER_INPUT : Game::StatusCodes::INCORRECT_USER_INPUT);
 
     if (success)
     {
         m_pScoreItem->updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
-        m_pDataSourceProxy->fetchDataEntry(m_pDataSourceAccessHelper->generateEntryNumber());
+        m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
     }
 }
 
 void GameFacade::requestAddPairToData(const QString &firstWord, const QString &secondWord, bool areSynonyms)
 {
-    m_pDataSourceProxy->requestAddPairToDataSource(QPair<QString, QString>{firstWord, secondWord}, areSynonyms);
+    m_pDataSourceProxy->saveDataToDbIfValid(QPair<QString, QString>{firstWord, secondWord}, areSynonyms);
 }
 
 void GameFacade::provideResultsToUser()
 {
     m_pScoreItem->updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
     Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::REQUESTED_BY_USER);
-    m_pDataSourceProxy->fetchDataEntry(m_pDataSourceAccessHelper->generateEntryNumber());
+    m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
 }
 
 void GameFacade::setLevel(Game::Level level)
 {
     m_pWordMixer->setWordPieceSize(level);
     m_pScoreItem->setScoreIncrement(level);
-    m_pDataSourceProxy->fetchDataEntry(m_pDataSourceAccessHelper->generateEntryNumber());
+    m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
 
     Q_EMIT statusChanged(Game::StatusCodes::LEVEL_CHANGED);
 }
@@ -270,22 +270,22 @@ void GameFacade::_onCloseInputPermissionRequested()
     m_pInputBuilder->setCloseInputPermission(m_pWordPairOwner->isLastAvailableWordPiece());
 }
 
-void GameFacade::_onReadDataFinished(bool success)
+void GameFacade::_onReadDataFromDbFinished(bool success)
 {
     if (success)
     {
-        int nrOfEntries{m_pDataSourceProxy->getNrOfEntries()};
+        int nrOfEntries{m_pDataSourceProxy->getNrOfValidEntries()};
 
         if (nrOfEntries != 0)
         {
             m_pDataSourceAccessHelper->setEntriesTable(nrOfEntries);
             _connectDataSourceToWordMixer();
 
-            Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_LOAD_COMPLETE);
+            Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_LOADING_COMPLETE);
         }
         else
         {
-            Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_LOAD_NO_VALID_ENTRIES);
+            Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::NO_VALID_DATA_ENTRIES_LOADED);
         }
 
         m_IsDataEntryAllowed = true;
@@ -293,11 +293,11 @@ void GameFacade::_onReadDataFinished(bool success)
     }
     else
     {
-        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_LOAD_ERROR);
+        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_LOADING_ERROR);
     }
 }
 
-void GameFacade::_onWriteDataFinished(bool success)
+void GameFacade::_onWriteDataToDbFinished(bool success)
 {
     int initialNrOfEntries{m_pDataSourceAccessHelper->getTotalNrOfEntries()};
 
@@ -315,14 +315,14 @@ void GameFacade::_onWriteDataFinished(bool success)
     Q_EMIT statusChanged(success ? (initialNrOfEntries == 0 ? Game::StatusCodes::DATA_GOT_AVAILABLE : Game::StatusCodes::DATA_ENTRY_SUCCESS) : Game::StatusCodes::INVALID_DATA_ENTRY);
 }
 
-void GameFacade::_onDataEntrySaveError()
+void GameFacade::_onWriteDataToDbErrorOccured()
 {
-    Q_EMIT statusChanged(Game::StatusCodes::DATA_ENTRY_SAVE_ERROR);
+    Q_EMIT statusChanged(Game::StatusCodes::DATA_ENTRY_SAVING_ERROR);
 }
 
 void GameFacade::_connectDataSourceToWordMixer()
 {
-    bool connected{connect(m_pDataSourceProxy, &DataSourceProxy::entryFetched, m_pWordMixer, &WordMixer::mixWords)};
+    bool connected{connect(m_pDataSourceProxy, &DataSourceProxy::entryProvidedToConsumer, m_pWordMixer, &WordMixer::mixWords)};
     Q_ASSERT(connected);
 
     m_IsDataAvailable = true;
