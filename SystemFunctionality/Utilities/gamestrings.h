@@ -164,12 +164,9 @@ namespace GameStrings {
                                                         };
 
     // fatal error messages
-    const QString c_FileNotFoundMessage                 {    "File not found!\n"                                                                        };
-    const QString c_CannotOpenFileMessage               {    "File cannot be opened!\n"                                                                 };
+    const QString c_CannotCreateFileMessage             {    "File not found. Attempt to create it failed!"                                             };
+    const QString c_CannotOpenFileMessage               {    "File cannot be opened for reading!\n"                                                     };
     const QString c_CannotSaveDataMessage               {    "An error occured when saving the word pair(s)!"                                           };
-    const QString c_EmptyFileMessage                    {    "Empty file!\n"                                                                            };
-
-    const QString c_FileNameMessage                     {    "\nFile: %1\n"                                                                             };
 
     // window titles
     const QString c_IntroWindowTitle                    {    "SynAnt - Welcome"                                                                         };
@@ -184,6 +181,7 @@ namespace GameStrings {
     const QString c_WordLastPieceTextColor              {    "red"                                                                                      };
 
     // miscellaneous
+    const QString c_FileNameMessage                     {    "\nFile: %1\n"                                                                             };
     const QString c_Synonyms                            {    "synonyms"                                                                                 };
     const QString c_Antonyms                            {    "antonyms"                                                                                 };
 

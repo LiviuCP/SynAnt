@@ -59,28 +59,27 @@ void GameManager::setDataSource(const QString &dataDirPath)
     if (!m_pDataSource)
     {
         QString dataFilePath{dataDirPath + "/" + GameStrings::c_FileName};
+        QFile dataFile{dataFilePath};
 
-        // manager only checks that that data file exists, can be opened and is not empty, all other checks to be done by DataSource
+        // manager only checks that that data file exists and can be opened, all other checks to be done by DataSource
         if (!QFileInfo{dataFilePath}.exists())
         {
-            throw FileException{GameStrings::c_FileNotFoundMessage, dataFilePath};
-        }
+            if (!dataFile.open(QIODevice::WriteOnly | QIODevice::Text))
+            {
+                throw FileException{GameStrings::c_CannotCreateFileMessage, dataFilePath};
+            }
 
-        QFile dataFile{dataFilePath};
+            dataFile.close();
+        }
 
         if (!dataFile.open(QIODevice::ReadOnly | QIODevice::Text))
         {
             throw FileException{GameStrings::c_CannotOpenFileMessage, dataFilePath};
         }
 
-        if (dataFile.readLine().size() == 0)
-        {
-            dataFile.close();
-            throw FileException{GameStrings::c_EmptyFileMessage, dataFilePath};
-        }
-
         dataFile.close();
 
+        // create the data source and assign it to a separate thread
         m_pDataSource = new DataSource{dataFilePath};
         m_pDataSourceThread = new QThread{this};
         m_pDataSourceProxy = new DataSourceProxy{m_pDataSource, this};
