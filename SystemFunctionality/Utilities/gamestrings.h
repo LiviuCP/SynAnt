@@ -11,7 +11,8 @@
 
 static const QString c_HelpWindowMessageString          {
                                                              "\n\n 1) The words can be in any language depending on the data file content.\n"
-                                                             "\n 2) Minimum word size is %1 characters. \n"
+                                                             "\n 2) Minimum word size is %1 characters. Minimum total pair size is %2 characters. "
+                                                             "The total pair size should not exceed %3 characters.\n"
                                                              "\n 3) Each word is divided in equal parts, "
                                                              "except the last part, which might have a smaller number of characters.\n"
                                                              "\n 4) The parts (pieces) from both words are mixed with each other.\n"
@@ -66,7 +67,7 @@ static const QString c_HelpWindowMessageString          {
                                                              "\n26) It also determines the obtained score for correctly guessing "
                                                              "a pair of words.\n"
                                                              "\n27) The  score obtained for each correctly guessed pair is: "
-                                                             "%2 point/s (easy), %3 points (medium), %4 points (hard).\n"
+                                                             "%4 point/s (easy), %5 points (medium), %6 points (hard).\n"
                                                              "\n28) When changing the difficulty level, the score and number of word "
                                                              "pairs remain unchanged.\n"
                                                              "\n29) However, when the level is changed, a new pair of words "
@@ -78,7 +79,17 @@ static const QString c_HelpWindowMessageString          {
                                                              "\n32) For the Show results button the key combination is ALT+B. "
                                                              "For Clear input the shortcut ALT+Z could be used.\n"
                                                              "\n33) Hit ALT+1/2/3 for setting the difficulty levels to "
-                                                             "easy/medium/hard.\n\n"
+                                                             "easy/medium/hard.\n"
+                                                             "\n34) Use the data entry page to enter additional word pairs. "
+                                                             "Press the Enter new pairs button or hit ALT+E to access the page. "
+                                                             "Press Add pair or hit ALT+A to submit each new pair. "
+                                                             "Press Back or hit ALT+K to return to previous page.\n"
+                                                             "\n35) Following rules should be followed when adding new word pairs:\n"
+                                                             " - the constraints mentioned at point 2) are enforced \n"
+                                                             " - the words should not contain other characters than small letters \n"
+                                                             " - the words from each pair should not be identical \n"
+                                                             " - no duplicate pairs are allowed even if the order of the two words is different \n"
+                                                             " - both words should be entered, otherwise the Add pair button is disabled \n"
                                                              "\nPress Ok to return to previous page.\n"
                                                         };
 
@@ -92,6 +103,8 @@ namespace GameStrings {
     const QString c_HelpWindowMessage                   {
                                                              c_HelpWindowMessageString
                                                                  .arg(Game::c_MinWordSize)
+                                                                 .arg(Game::c_MinPairSize)
+                                                                 .arg(Game::c_MaxPairSize)
                                                                  .arg(Game::c_ScoreIncrements[Game::Level::EASY])
                                                                  .arg(Game::c_ScoreIncrements[Game::Level::MEDIUM])
                                                                  .arg(Game::c_ScoreIncrements[Game::Level::HARD])
