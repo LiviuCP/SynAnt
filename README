@@ -20,11 +20,9 @@ For version 1.2 there are 2 branches, each of them containing an implementation 
 
 Choose the branch you would like to use and then compile it.
 
-After compiling the code copy the file "data" in the Application sub-directory. Feel free to modify it by adding new word pairs.
+For v1.2 after compiling the code copy the file "data" in the Application sub-directory. Feel free to modify it by adding new word pairs. The file should keep its name ("data"), otherwise it won't be recognized by the app and an error will be triggered. For v2.0 this step is no longer needed as if the file does not exist or is empty it will automatically be created and the user will be redirected to a data entry section where new word pairs can be added.
 
-The file should keep its name ("data"), otherwise it won't be recognized by the app and an error will be triggered.
-
-Currently same steps can be followed for version 2.0, however this is subject to change as the version is work-in-progress. One thing to be mentioned is that the QWidgets support will be removed in version 2.0 and only the QML implementation will continue to be used.
+As the v2.0 is currently work in progress the README file will continue to get updated to reflect the changes. One thing to be mentioned is that the QWidgets support will be removed in version 2.0 and only the QML implementation will continue to be used.
 
 3. Deploying the app
 
@@ -53,7 +51,7 @@ For version 2.0 the same deploy steps might be used at the moment as for the QML
 
 4. Updating the "data" file
 
-Currently the file can only be updated manually. In a future version (probably 2.0) I'm planning to add functionality that allows "update through the app" without even needing to know the file name.
+The data file should only be updated manually for version 1.2. See above sections for more information.
 
 Each row should contain one word pair. The 2 words from each pair are separated by a special character which is '=' for synonyms and '!' for antonyms. No rows should be left empty or with incorrect format (e.g. no separator/multiple separators) otherwise an exception will be triggered when reading the incorrect row and the program will stop.
 
