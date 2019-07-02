@@ -198,6 +198,9 @@ namespace GameStrings {
     const QString c_Synonyms                            {    "synonyms"                                                                                 };
     const QString c_Antonyms                            {    "antonyms"                                                                                 };
 
+    static constexpr char c_SynonymsSeparator{'='};
+    static constexpr char c_AntonymsSeparator{'!'};
+
 }
 
 #endif // GAMESTRINGS_H

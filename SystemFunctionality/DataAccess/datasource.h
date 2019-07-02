@@ -17,25 +17,6 @@ class DataSource : public QObject
 {
     Q_OBJECT
 public:
-    explicit DataSource(const QString& fileName, QObject *parent = nullptr);
-
-    void provideDataEntryToConsumer(int entryNumber);
-    int getNrOfValidEntries();
-
-    // for test purposes only
-    bool processRawDataEntryForTest(const QString& rawDataEntry);
-
-public slots:
-    void onReadDataFromDbRequested();
-    void onWriteDataToDbRequested(QPair<QString, QString> newWordsPair, bool areSynonyms);
-
-signals:
-    Q_SIGNAL void readDataFromDbFinished(bool success);
-    Q_SIGNAL void writeDataToDbFinished(bool success);
-    Q_SIGNAL void writeDataToDbErrorOccured();
-    Q_SIGNAL void entryProvidedToConsumer(QPair<QString, QString> newWordsPair, bool areSynonyms);
-
-private:
     struct DataEntry
     {
         DataEntry();
@@ -46,9 +27,23 @@ private:
         bool areSynonyms;
     };
 
-    bool _loadRawData(QVector<QString>& rawData);
-    void _createProcessedDataEntries(const QVector<QString>& rawData);
-    bool _createProcessedDataEntry(DataEntry& dataEntry, const QString& rawDataEntry);
+    explicit DataSource(const QString& fileName, QObject *parent = nullptr);
+
+    void updateDataEntries(QVector<DataEntry> dataEntries, bool append);
+    void provideDataEntryToConsumer(int entryNumber);
+    int getNrOfValidEntries() const;
+    QString getDataFilePath() const;
+
+public slots:
+    void onWriteDataToDbRequested(QPair<QString, QString> newWordsPair, bool areSynonyms);
+
+signals:
+    Q_SIGNAL void writeDataToDbFinished(bool success);
+    Q_SIGNAL void writeDataToDbErrorOccured();
+    Q_SIGNAL void entryProvidedToConsumer(QPair<QString, QString> newWordsPair, bool areSynonyms);
+    Q_SIGNAL void entriesUpdated();
+
+private:
     bool _createRawDataEntry(QString& rawDataEntry, const QString& firstWord, const QString& secondWord, bool areSynonyms);
     bool _entryAlreadyExists(const DataEntry& dataEntry);
 

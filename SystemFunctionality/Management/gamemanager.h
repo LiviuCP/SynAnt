@@ -23,6 +23,7 @@
 
 class GameFacade;
 class DataSource;
+class DataSourceLoader;
 class DataSourceProxy;
 class DataSourceAccessHelper;
 class WordMixer;
@@ -67,6 +68,7 @@ private:
 
     GameFacade* m_pGameFacade;
     DataSource* m_pDataSource;
+    DataSourceLoader* m_pDataSourceLoader;
     DataSourceProxy* m_pDataSourceProxy;
     DataSourceAccessHelper* m_pDataSourceAccessHelper;
     WordMixer* m_pWordMixer;
@@ -74,7 +76,7 @@ private:
     WordPairOwner* m_pWordPairOwner;
     InputBuilder* m_pInputBuilder;
     ScoreItem* m_pScoreItem;
-    QThread* m_pDataSourceThread;
+    QThread* m_pDataSourceLoaderThread;
 };
 
 #endif // GAMEMANAGER_H

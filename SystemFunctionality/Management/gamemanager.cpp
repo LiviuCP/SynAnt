@@ -8,6 +8,7 @@
 #include "../CoreFunctionality/wordpairowner.h"
 #include "../CoreFunctionality/inputbuilder.h"
 #include "../DataAccess/datasource.h"
+#include "../DataAccess/datasourceloader.h"
 #include "../DataAccess/datasourceaccesshelper.h"
 #include "../Proxies/datasourceproxy.h"
 #include "../Proxies/wordmixerproxy.h"
@@ -40,13 +41,14 @@ GameManager::GameManager(QObject *parent)
     : QObject(parent)
     , m_pGameFacade{nullptr}
     , m_pDataSource{nullptr}
+    , m_pDataSourceLoader{nullptr}
     , m_pDataSourceProxy{nullptr}
     , m_pDataSourceAccessHelper{new DataSourceAccessHelper{this}}
     , m_pWordMixer{new WordMixer{this}}
     , m_pWordPairOwner{new WordPairOwner{this}}
     , m_pInputBuilder{new InputBuilder{this}}
     , m_pScoreItem {new ScoreItem{this}}
-    , m_pDataSourceThread{nullptr}
+    , m_pDataSourceLoaderThread{nullptr}
 {
     m_pWordMixerProxy = new WordMixerProxy{m_pWordMixer, this};
 
@@ -80,28 +82,29 @@ void GameManager::setDataSource(const QString &dataDirPath)
         dataFile.close();
 
         // create the data source and assign it to a separate thread
-        m_pDataSource = new DataSource{dataFilePath};
-        m_pDataSourceThread = new QThread{this};
+        m_pDataSource = new DataSource{dataFilePath, this};
+        m_pDataSourceLoader = new DataSourceLoader{m_pDataSource};
+        m_pDataSourceLoaderThread = new QThread{this};
         m_pDataSourceProxy = new DataSourceProxy{m_pDataSource, this};
 
-        m_pDataSource->moveToThread(m_pDataSourceThread);
+        m_pDataSourceLoader->moveToThread(m_pDataSourceLoaderThread);
 
-        bool connected{connect(m_pDataSourceThread, &QThread::finished, m_pDataSource, &DataSource::deleteLater)};
+        bool connected{connect(m_pDataSourceLoaderThread, &QThread::finished, m_pDataSourceLoader, &DataSource::deleteLater)};
         Q_ASSERT(connected);
-        connected = connect(this, &GameManager::readDataFromDb, m_pDataSource, &DataSource::onReadDataFromDbRequested, Qt::QueuedConnection);
+        connected = connect(this, &GameManager::readDataFromDb, m_pDataSourceLoader, &DataSourceLoader::onLoadDataFromDbRequested, Qt::QueuedConnection);
         Q_ASSERT(connected);
-        connected = connect(this, &GameManager::writeDataToDbIfValid, m_pDataSource, &DataSource::onWriteDataToDbRequested, Qt::QueuedConnection);
+        connected = connect(this, &GameManager::writeDataToDbIfValid, m_pDataSource, &DataSource::onWriteDataToDbRequested, Qt::DirectConnection);
         Q_ASSERT(connected);
-        connected = connect(m_pDataSource, &DataSource::readDataFromDbFinished, m_pDataSourceProxy, &DataSourceProxy::readDataFromDbFinished, Qt::QueuedConnection);
+        connected = connect(m_pDataSourceLoader, &DataSourceLoader::readDataFromDbFinished, m_pDataSourceProxy, &DataSourceProxy::readDataFromDbFinished, Qt::QueuedConnection);
         Q_ASSERT(connected);
-        connected = connect(m_pDataSource, &DataSource::writeDataToDbFinished, m_pDataSourceProxy, &DataSourceProxy::writeDataToDbFinished, Qt::QueuedConnection);
+        connected = connect(m_pDataSource, &DataSource::writeDataToDbFinished, m_pDataSourceProxy, &DataSourceProxy::writeDataToDbFinished, Qt::DirectConnection);
         Q_ASSERT(connected);
-        connected = connect(m_pDataSource, &DataSource::writeDataToDbErrorOccured, m_pDataSourceProxy, &DataSourceProxy::writeDataToDbErrorOccured, Qt::QueuedConnection);
+        connected = connect(m_pDataSource, &DataSource::writeDataToDbErrorOccured, m_pDataSourceProxy, &DataSourceProxy::writeDataToDbErrorOccured, Qt::DirectConnection);
         Q_ASSERT(connected);
-        connected = connect(m_pDataSource, &DataSource::entryProvidedToConsumer, m_pDataSourceProxy, &DataSourceProxy::entryProvidedToConsumer, Qt::QueuedConnection);
+        connected = connect(m_pDataSource, &DataSource::entryProvidedToConsumer, m_pDataSourceProxy, &DataSourceProxy::entryProvidedToConsumer, Qt::DirectConnection);
         Q_ASSERT(connected);
 
-        m_pDataSourceThread->start();
+        m_pDataSourceLoaderThread->start();
 
         Q_EMIT dataSourceSetupCompleted();
     }
@@ -154,13 +157,13 @@ ScoreItem* GameManager::getScoreItem() const
 
 GameManager::~GameManager()
 {
-    m_pDataSourceThread->quit();
-    m_pDataSourceThread->wait();
+    m_pDataSourceLoaderThread->quit();
+    m_pDataSourceLoaderThread->wait();
 }
 
 void GameManager::_onDataSourceSetupCompleted()
 {
-    Q_ASSERT(m_pDataSourceThread->isRunning());
+    Q_ASSERT(m_pDataSourceLoaderThread->isRunning());
 
     // do all external backend connections except the ones to the facade (facade will build them itself)
     bool connected{connect(m_pWordPairOwner, &WordPairOwner::mixedWordsAvailable, m_pInputBuilder, &InputBuilder::onNewPiecesAvailable)};

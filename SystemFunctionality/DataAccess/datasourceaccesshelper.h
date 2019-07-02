@@ -10,8 +10,6 @@
 #include <QObject>
 #include <QVector>
 
-class DataSource;
-
 class DataSourceAccessHelper : public QObject
 {
     Q_OBJECT

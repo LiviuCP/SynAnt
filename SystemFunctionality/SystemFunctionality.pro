@@ -27,6 +27,7 @@ SOURCES += \
         CoreFunctionality/wordpairowner.cpp \
         CoreFunctionality/inputbuilder.cpp \
         DataAccess/datasource.cpp \
+        DataAccess/datasourceloader.cpp \
         DataAccess/datasourceaccesshelper.cpp \
         Management/gamemanager.cpp \
         Management/gamefacade.cpp \
@@ -44,6 +45,7 @@ HEADERS += \
         CoreFunctionality/wordpairowner.h \
         CoreFunctionality/inputbuilder.h \
         DataAccess/datasource.h \
+        DataAccess/datasourceloader.h \
         DataAccess/datasourceaccesshelper.h \
         Management/gamemanager.h \
         Management/gamefacade.h \
