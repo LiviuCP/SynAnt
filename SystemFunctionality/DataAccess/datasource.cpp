@@ -1,20 +1,19 @@
-#include <QFile>
-#include <QTextStream>
-#include <QThread>
+#include <QMutexLocker>
 
 #include "datasource.h"
-#include "Utilities/exceptions.h"
-#include "Utilities/gamestrings.h"
 
 DataSource::DataSource(const QString &dataFilePath, QObject *parent)
     : QObject (parent)
     , m_DataFilePath{dataFilePath}
     , m_DataEntries{}
+    , m_DataSourceMutex{}
 {
 }
 
 void DataSource::updateDataEntries(QVector<DataSource::DataEntry> dataEntries, bool append)
 {
+    QMutexLocker mutexLocker{&m_DataSourceMutex};
+
     if (append)
     {
         m_DataEntries.append(dataEntries);
@@ -23,12 +22,12 @@ void DataSource::updateDataEntries(QVector<DataSource::DataEntry> dataEntries, b
     {
         m_DataEntries = dataEntries;
     }
-
-    Q_EMIT entriesUpdated();
 }
 
 void DataSource::provideDataEntryToConsumer(int entryNumber)
 {
+    QMutexLocker mutexLocker{&m_DataSourceMutex};
+
     Q_ASSERT(entryNumber >= 0 && entryNumber < m_DataEntries.size());
 
     DataEntry fetchedDataEntry{m_DataEntries[entryNumber]};
@@ -37,6 +36,7 @@ void DataSource::provideDataEntryToConsumer(int entryNumber)
 
 int DataSource::getNrOfValidEntries() const
 {
+    QMutexLocker mutexLocker{&m_DataSourceMutex};
     return m_DataEntries.size();
 }
 
@@ -45,76 +45,10 @@ QString DataSource::getDataFilePath() const
     return m_DataFilePath;
 }
 
-void DataSource::onWriteDataToDbRequested(QPair<QString, QString> newWordsPair, bool areSynonyms)
+bool DataSource::entryAlreadyExists(const DataSource::DataEntry &dataEntry)
 {
-    QString rawDataEntry;
-    QFile wordPairsFile(m_DataFilePath);
+    QMutexLocker mutexLocker{&m_DataSourceMutex};
 
-    if (_createRawDataEntry(rawDataEntry, newWordsPair.first, newWordsPair.second, areSynonyms))
-    {
-        if(!wordPairsFile.open(QIODevice::Append))
-        {
-            // user entered data valid but error when writing to DB
-            Q_EMIT writeDataToDbErrorOccured();
-        }
-        else
-        {
-            QTextStream lineWriter{&wordPairsFile};
-            lineWriter << rawDataEntry << endl;
-
-            m_DataEntries.append(DataEntry{newWordsPair.first, newWordsPair.second, areSynonyms});
-
-            // for sync purposes only
-            QThread::msleep(Game::c_WriteDataThreadDelay);
-
-            // user entered data written successfully to DB
-            Q_EMIT writeDataToDbFinished(true);
-        }
-    }
-    else
-    {
-        // no write error but invalid data entered by user
-        Q_EMIT writeDataToDbFinished(false);
-    }
-}
-
-bool DataSource::_createRawDataEntry(QString& rawDataEntry, const QString &firstWord, const QString &secondWord, bool areSynonyms)
-{
-    auto hasValidCharacters = [](const QString &word)
-    {
-        bool areAllCharactersValid{true};
-
-        for (auto currentCharacter : word)
-        {
-            if (!(currentCharacter.isLower()))
-            {
-                areAllCharactersValid = false;
-                break;
-            }
-        }
-
-        return areAllCharactersValid;
-    };
-
-    bool success{true};
-
-    success = success && (firstWord.size() >= Game::c_MinWordSize && secondWord.size() >= Game::c_MinWordSize);
-    success = success && (firstWord.size() + secondWord.size() >= Game::c_MinPairSize);
-    success = success && (firstWord.size() + secondWord.size() <= Game::c_MaxPairSize);
-    success = success && (hasValidCharacters(firstWord) && hasValidCharacters(secondWord));
-    success = success && (firstWord != secondWord);
-    success = success && !_entryAlreadyExists(DataEntry{firstWord, secondWord, areSynonyms});
-
-    if (success)
-    {
-        rawDataEntry = firstWord + (areSynonyms ? GameStrings::c_SynonymsSeparator : GameStrings::c_AntonymsSeparator) + secondWord;
-    }
-
-    return success;
-}
-
-bool DataSource::_entryAlreadyExists(const DataSource::DataEntry &dataEntry)
-{
     bool entryExists{false};
 
     for (auto currentEntry: m_DataEntries)

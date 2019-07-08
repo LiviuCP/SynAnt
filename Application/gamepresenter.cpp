@@ -56,7 +56,11 @@ GamePresenter::GamePresenter(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::dataAvailableChanged, this, &GamePresenter::playEnabledChanged);
     Q_ASSERT(connected);
-    connected = connect(m_pGameFacade, &GameFacade::dataEntryAllowed, this, &GamePresenter::dataEntryEnabledChanged);
+    connected = connect(m_pGameFacade, &GameFacade::dataEntryAllowedChanged, this, &GamePresenter::dataEntryEnabledChanged);
+    Q_ASSERT(connected);
+    connected = connect(m_pGameFacade, &GameFacade::addWordsPairAllowedChanged, this, &GamePresenter::addWordsPairEnabledChanged);
+    Q_ASSERT(connected);
+    connected = connect(m_pGameFacade, &GameFacade::saveNewPairsToDbAllowedChanged, this, &GamePresenter::saveNewPairsEnabledChanged);
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::inputChanged, this, &GamePresenter::_onInputChanged);
     Q_ASSERT(connected);
@@ -93,6 +97,11 @@ void GamePresenter::goBack()
 void GamePresenter::handleAddWordsPairRequest(const QString& firstWord, const QString& secondWord, bool areSynonyms)
 {
     m_pGameFacade->requestAddPairToData(firstWord, secondWord, areSynonyms);
+}
+
+void GamePresenter::handleSaveNewWordPairsRequest()
+{
+    m_pGameFacade->requestSaveDataToDb();
 }
 
 void GamePresenter::handleResultsRequest()
@@ -218,6 +227,16 @@ bool GamePresenter::isPlayEnabled() const
 bool GamePresenter::isDataEntryEnabled() const
 {
     return m_pGameFacade->isDataEntryAllowed();
+}
+
+bool GamePresenter::isAddDataEntryEnabled() const
+{
+    return m_pGameFacade->isAddingToCacheAllowed();
+}
+
+bool GamePresenter::isSaveDataEntriesEnabled() const
+{
+    return m_pGameFacade->isSavingToDbAllowed();
 }
 
 bool GamePresenter::getResetEnabled() const
@@ -483,6 +502,10 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         break;
     case Game::StatusCodes::DATA_ENTRY_SAVING_ERROR:
         _launchErrorPane(GameStrings::c_CannotSaveDataMessage);
+        break;
+    case Game::StatusCodes::DATA_SUCCESSFULLY_SAVED:
+        _updateStatusMessage(GameStrings::c_DataSuccessfullySavedMessage, Pane::DATA_ENTRY, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::GAME_STARTED:
         _updateStatusMessage(GameStrings::c_GameStartedMessage, Pane::MAIN, Game::c_NoDelay);

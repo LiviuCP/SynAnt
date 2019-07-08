@@ -17,7 +17,6 @@
 #include "../Utilities/game.h"
 
 class GameFunctionalityProxy;
-class DataSource;
 class DataSourceProxy;
 class DataSourceAccessHelper;
 class WordMixer;
@@ -46,6 +45,7 @@ public:
 
     void handleSubmitRequest();
     void requestAddPairToData(const QString& firstWord, const QString& secondWord, bool areSynonyms);
+    void requestSaveDataToDb();
     void provideResultsToUser();
     void setLevel(Game::Level level);
     void resetStatistics();
@@ -69,12 +69,16 @@ public:
 
     bool isDataAvailable() const;
     bool isDataEntryAllowed() const;
+    bool isAddingToCacheAllowed() const;
+    bool isSavingToDbAllowed() const;
     bool areSynonyms() const;
 
 signals:
-    Q_SIGNAL void mixedWordsChanged();
     Q_SIGNAL void dataAvailableChanged();
-    Q_SIGNAL void dataEntryAllowed();
+    Q_SIGNAL void dataEntryAllowedChanged();
+    Q_SIGNAL void addWordsPairAllowedChanged();
+    Q_SIGNAL void saveNewPairsToDbAllowedChanged();
+    Q_SIGNAL void mixedWordsChanged();
     Q_SIGNAL void inputChanged();
     Q_SIGNAL void completionChanged();
     Q_SIGNAL void selectionChanged();
@@ -84,11 +88,18 @@ signals:
 private slots:
     void _onCloseInputPermissionRequested();
     void _onReadDataFromDbFinished(bool success);
-    void _onWriteDataToDbFinished(bool success);
+    void _onNewWordsPairValidated(bool isValid);
+    void _onNewWordsPairAddedToCache();
+    void _onWriteDataToDbFinished(int nrOfEntries);
     void _onWriteDataToDbErrorOccured();
     void _connectDataSourceToWordMixer();
 
 private:
+    void _enableAddToCache();
+    void _disableAddToCache();
+    void _enableSaveToDb();
+    void _disableSaveToDb();
+
     GameFunctionalityProxy* m_pGameFunctionalityProxy;
     DataSourceProxy* m_pDataSourceProxy;
     DataSourceAccessHelper* m_pDataSourceAccessHelper;
@@ -99,6 +110,8 @@ private:
     Game::StatusCodes m_CurrentStatusCode;
     bool m_IsDataAvailable;
     bool m_IsDataEntryAllowed;
+    bool m_IsAddingToCacheAllowed;
+    bool m_IsSavingToDbAllowed;
     bool m_IsGameStarted;
     bool m_IsGamePaused;
 };

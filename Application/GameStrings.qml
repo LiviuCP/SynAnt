@@ -26,6 +26,7 @@ QtObject {
     readonly property string antonymsSelectionButtonLabel:      "Antonyms"
     readonly property string addPairButtonLabel:                "Add pair"
     readonly property string backButtonLabel:                   "Back"
+    readonly property string saveButtonLabel:                   "Save"
     readonly property string closeButtonLabel:                  "Close"
 
     readonly property string playButtonShortcut:                "ALT+P"
@@ -44,6 +45,7 @@ QtObject {
     readonly property string dataEntryButtonShortcut:           "ALT+E"
     readonly property string addPairButtonShortcut:             "ALT+A"
     readonly property string backButtonShortcut:                "ALT+K"
+    readonly property string saveButtonShortcut:                "CTRL+S"
     readonly property string closeButtonShortcut:               "ALT+C"
 
     readonly property string introPaneToolTip:                  "Welcome to SynAnt"
@@ -78,6 +80,7 @@ QtObject {
     readonly property string dataEntryButtonToolTip:            "Click or hit ALT+E to go to the new word pairs entry page"
     readonly property string addPairButtonToolTip:              "Click or hit ALT+A to add the new word pair"
     readonly property string backButtonToolTip:                 "Click or hit ALT+K to go to previous page"
+    readonly property string saveButtonToolTip:                 "Click or hit CTRL+S to save the added entries to database"
     readonly property string closeButtonToolTip:                "A fatal error occurred. Click button or hit ALT+C to exit the game."
     readonly property string dataEntryFirstWordToolTip:         "Enter the first word from the pair to be added to database."
     readonly property string dataEntrySecondWordToolTip:        "Enter the second word from the pair to be added to database."

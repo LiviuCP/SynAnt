@@ -24,6 +24,8 @@
 class GameFacade;
 class DataSource;
 class DataSourceLoader;
+class DataEntryValidator;
+class DataEntryCache;
 class DataSourceProxy;
 class DataSourceAccessHelper;
 class WordMixer;
@@ -38,12 +40,16 @@ class GameManager : public QObject
 public:
     static GameManager* getManager();
     static void releaseResources();
+    static bool isManagerSetup();
 
     void setDataSource(const QString& dataDirPath);
     void loadDataFromDb();
-    void saveDataToDbIfValid(QPair<QString, QString> newWordsPair, bool areSynonyms);
+    void saveDataToDb();
 
     GameFacade* getFacade() const;
+    DataSource* getDataSource() const;
+    DataEntryValidator* getDataEntryValidator() const;
+    DataEntryCache* getDataEntryCache() const;
     DataSourceProxy* getDataSourceProxy() const;
     DataSourceAccessHelper* getDataSourceAccessHelper() const;
     WordMixer* getWordMixer() const;
@@ -56,7 +62,7 @@ public:
 signals:
     Q_SIGNAL void dataSourceSetupCompleted();
     Q_SIGNAL void readDataFromDb();
-    Q_SIGNAL void writeDataToDbIfValid(QPair<QString, QString> newWordsPair, bool areSynonyms);
+    Q_SIGNAL void writeDataToDb();
 
 private slots:
     void _onDataSourceSetupCompleted();
@@ -69,6 +75,8 @@ private:
     GameFacade* m_pGameFacade;
     DataSource* m_pDataSource;
     DataSourceLoader* m_pDataSourceLoader;
+    DataEntryValidator* m_pDataEntryValidator;
+    DataEntryCache* m_pDataEntryCache;
     DataSourceProxy* m_pDataSourceProxy;
     DataSourceAccessHelper* m_pDataSourceAccessHelper;
     WordMixer* m_pWordMixer;
@@ -77,6 +85,7 @@ private:
     InputBuilder* m_pInputBuilder;
     ScoreItem* m_pScoreItem;
     QThread* m_pDataSourceLoaderThread;
+    QThread* m_pDataEntryCacheThread;
 };
 
 #endif // GAMEMANAGER_H

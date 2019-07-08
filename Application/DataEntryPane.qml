@@ -13,7 +13,7 @@ Item {
     readonly property double wordsEntryLayoutHeight: height * 0.05
     readonly property double synAntRadioButtonLayoutHeight: height * 0.05
     readonly property double bottomBtnsLayoutHeight: height * 0.1
-    readonly property double bottomBtnsMinWidth: (dataEntryStatusBox.width - 3 * bottomBtnsLayout.spacing) / 4
+    readonly property double bottomBtnsMinWidth: (dataEntryStatusBox.width - 4 * bottomBtnsLayout.spacing) / 5
 
     MouseArea {
         id: entryPaneMouseArea
@@ -104,8 +104,6 @@ Item {
                     forceActiveFocus();
                 }
             }
-
-            Keys.onReleased: addPairBtn.enabled = (firstWordTextField.text.length != 0 && secondWordTextField.text.length != 0) ? true : false
         }
 
         TextField {
@@ -119,8 +117,6 @@ Item {
             ToolTip.delay: presenter.toolTipDelay
             ToolTip.timeout: presenter.toolTipTimeout
             ToolTip.visible: hovered
-
-            Keys.onReleased: addPairBtn.enabled = (firstWordTextField.text.length != 0 && secondWordTextField.text.length != 0) ? true : false
         }
     }
 
@@ -137,7 +133,7 @@ Item {
 
         Button {
             id: addPairBtn
-            enabled: false
+            enabled: presenter.addDataEntryEnabled
 
             contentItem: Text {
                 text: GameStrings.addPairButtonLabel
@@ -244,6 +240,47 @@ Item {
         }
 
         Button {
+            id: saveBtn
+            enabled: presenter.saveEntriesEnabled
+
+            contentItem: Text {
+                text: GameStrings.saveButtonLabel
+                color: Styles.textColor
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                opacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
+            }
+
+            background: Rectangle {
+                color: Styles.pushButtonColor
+                border.color: Styles.borderColor
+                border.width: width * 0.005
+                radius: width * 0.025
+                opacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
+            }
+
+            Layout.minimumWidth: bottomBtnsMinWidth
+
+            ToolTip.text: GameStrings.saveButtonToolTip
+            ToolTip.delay: presenter.toolTipDelay
+            ToolTip.timeout: presenter.toolTipTimeout
+            ToolTip.visible: hovered
+
+            Shortcut {
+                sequence: GameStrings.saveButtonShortcut
+                enabled: saveBtn.enabled
+                onActivated: {
+                    presenter.handleSaveNewWordPairsRequest();
+                }
+            }
+
+            onClicked: presenter.handleSaveNewWordPairsRequest()
+            onPressed: opacity = Styles.pressedButtonOpacity
+            onReleased: opacity = Styles.releasedButtonOpacity
+            onCanceled: opacity = Styles.releasedButtonOpacity
+        }
+
+        Button {
             id: quitBtn
 
             contentItem: Text {
@@ -279,7 +316,6 @@ Item {
         onDataEntrySucceeded: {
             firstWordTextField.clear();
             secondWordTextField.clear();
-            addPairBtn.enabled = false;
             firstWordTextField.forceActiveFocus();
         }
     }

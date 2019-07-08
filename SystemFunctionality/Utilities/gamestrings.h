@@ -82,7 +82,8 @@ static const QString c_HelpWindowMessageString          {
                                                              "easy/medium/hard.\n"
                                                              "\n34) Use the data entry page to enter additional word pairs. "
                                                              "Press the Enter new pairs button or hit ALT+E to access the page. "
-                                                             "Press Add pair or hit ALT+A to submit each new pair. "
+                                                             "Press Add pair or hit ALT+A to validate each new pair. "
+                                                             "Press Save or hit CTRL+S to save the validated entries to database."
                                                              "Press Back or hit ALT+K to return to previous page.\n"
                                                              "\n35) Following rules should be followed when adding new word pairs:\n"
                                                              " - the constraints mentioned at point 2) are enforced \n"
@@ -135,6 +136,7 @@ namespace GameStrings {
     const QString c_DefaultStatusMessage                {    "Please select a new word piece or delete one/more if necessary"                           };
     const QString c_DataEntryStartMessage               {    "Word pairs entry started"                                                                 };
     const QString c_DataEntryRequestMessage             {    "Please enter a new pair of words.\n\nChoose if they are synonyms or antonyms"             };
+    const QString c_DataSuccessfullySavedMessage        {    "The entries have been successfully saved to database"                                     };
     const QString c_GameStartedMessage                  {    "Game started"                                                                             };
     const QString c_GamePausedMessage                   {    "Game paused"                                                                              };
     const QString c_GameResumedMessage                  {    "Game resumed"                                                                             };
@@ -157,7 +159,11 @@ namespace GameStrings {
                                                         };
 
     const QString c_IncorrectUserInputMessage           {    "You didn't enter the correct words.\n\nPlease correct input and try again!"               };
-    const QString c_DataEntrySuccessMessage             {    "The new pair has been successfully added.\n\nIt will be available at once when playing"   };
+    const QString c_DataEntrySuccessMessage             {
+                                                             "The new pair has been successfully added to validated pairs.\n\n"
+                                                             "Press Save to add the already validated pairs to game database "
+                                                             "and make the available for playing."
+                                                        };
     const QString c_DataEntryIncorrectPairMessage       {    "The new words pair has not been correctly entered.\n\nPlease correct and try again!"      };
 
     const QString c_ResultsRequestedByUserMessage       {

@@ -1,3 +1,9 @@
+/*
+   This class fulfills following tasks:
+   1) Loads the valid word pairs from database
+   2) Hands the loaded data to the datasource
+*/
+
 #ifndef DATASOURCELOADER_H
 #define DATASOURCELOADER_H
 

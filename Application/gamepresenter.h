@@ -23,6 +23,8 @@ class GamePresenter : public QObject
     Q_PROPERTY(bool dataEntryPaneVisible READ getDataEntryPaneVisible NOTIFY currentPaneChanged)
     Q_PROPERTY(bool playEnabled READ isPlayEnabled NOTIFY playEnabledChanged)
     Q_PROPERTY(bool dataEntryEnabled READ isDataEntryEnabled NOTIFY dataEntryEnabledChanged)
+    Q_PROPERTY(bool addDataEntryEnabled READ isAddDataEntryEnabled NOTIFY addWordsPairEnabledChanged)
+    Q_PROPERTY(bool saveEntriesEnabled READ isSaveDataEntriesEnabled NOTIFY saveNewPairsEnabledChanged)
     Q_PROPERTY(bool resetEnabled READ getResetEnabled NOTIFY resetEnabledChanged)
     Q_PROPERTY(bool clearInputEnabled READ getClearInputEnabled NOTIFY clearInputEnabledChanged)
     Q_PROPERTY(bool submitEnabled READ getSubmitEnabled NOTIFY submitEnabledChanged)
@@ -71,6 +73,7 @@ public:
     Q_INVOKABLE void switchToPane(Pane pane);
     Q_INVOKABLE void goBack();
     Q_INVOKABLE void handleAddWordsPairRequest(const QString& firstWord, const QString& secondWord, bool areSynonyms);
+    Q_INVOKABLE void handleSaveNewWordPairsRequest();
     Q_INVOKABLE void handleResultsRequest();
     Q_INVOKABLE void handleSubmitRequest();
     Q_INVOKABLE void handleResetRequest();
@@ -93,6 +96,8 @@ public:
     bool getDataEntryPaneVisible() const;
     bool isPlayEnabled() const;
     bool isDataEntryEnabled() const;
+    bool isAddDataEntryEnabled() const;
+    bool isSaveDataEntriesEnabled() const;
     bool getResetEnabled() const;
     bool getClearInputEnabled() const;
     bool getSubmitEnabled() const;
@@ -132,6 +137,8 @@ signals:
     Q_SIGNAL void currentPaneChanged();
     Q_SIGNAL void playEnabledChanged();
     Q_SIGNAL void dataEntryEnabledChanged();
+    Q_SIGNAL void addWordsPairEnabledChanged();
+    Q_SIGNAL void saveNewPairsEnabledChanged();
     Q_SIGNAL void resetEnabledChanged();
     Q_SIGNAL void clearInputEnabledChanged();
     Q_SIGNAL void submitEnabledChanged();

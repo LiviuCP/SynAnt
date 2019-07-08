@@ -28,6 +28,7 @@ SOURCES += \
         CoreFunctionality/inputbuilder.cpp \
         DataAccess/datasource.cpp \
         DataAccess/datasourceloader.cpp \
+        DataAccess/dataentryvalidator.cpp \
         DataAccess/datasourceaccesshelper.cpp \
         Management/gamemanager.cpp \
         Management/gamefacade.cpp \
@@ -38,7 +39,8 @@ SOURCES += \
         Proxies/wordmixerproxy.cpp \
         Utilities/scoreitem.cpp \
         Utilities/exceptions.cpp \
-        systemfunctionality.cpp
+        systemfunctionality.cpp \
+    DataAccess/dataentrycache.cpp
 
 HEADERS += \
         CoreFunctionality/wordmixer.h \
@@ -46,6 +48,7 @@ HEADERS += \
         CoreFunctionality/inputbuilder.h \
         DataAccess/datasource.h \
         DataAccess/datasourceloader.h \
+        DataAccess/dataentryvalidator.h \
         DataAccess/datasourceaccesshelper.h \
         Management/gamemanager.h \
         Management/gamefacade.h \
@@ -59,7 +62,8 @@ HEADERS += \
         Utilities/game.h \
         Utilities/gamestrings.h \
         systemfunctionality.h \
-        systemfunctionality_global.h
+        systemfunctionality_global.h \
+    DataAccess/dataentrycache.h
 
 unix {
     target.path = /usr/lib

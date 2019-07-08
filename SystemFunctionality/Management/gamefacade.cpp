@@ -15,6 +15,8 @@ GameFacade::GameFacade(QObject *parent)
     , m_CurrentStatusCode{Game::StatusCodes::NO_DATA_LOADING_REQUESTED}
     , m_IsDataAvailable{false}
     , m_IsDataEntryAllowed{false}
+    , m_IsAddingToCacheAllowed{true}
+    , m_IsSavingToDbAllowed{false}
     , m_IsGameStarted{false}
     , m_IsGamePaused{false}
 {
@@ -48,9 +50,13 @@ GameFacade::GameFacade(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pDataSourceProxy, &DataSourceProxy::readDataFromDbFinished, this, &GameFacade::_onReadDataFromDbFinished);
     Q_ASSERT(connected);
-    connected = connect(m_pDataSourceProxy, &DataSourceProxy::writeDataToDbFinished, this, &GameFacade::_onWriteDataToDbFinished);
-    Q_ASSERT(connected);
     connected = connect(m_pDataSourceProxy, &DataSourceProxy::writeDataToDbErrorOccured, this, &GameFacade::_onWriteDataToDbErrorOccured);
+    Q_ASSERT(connected);
+    connected = connect(m_pDataSourceProxy, &DataSourceProxy::newWordsPairAddedToCache, this, &GameFacade::_onNewWordsPairAddedToCache);
+    Q_ASSERT(connected);
+    connected = connect(m_pDataSourceProxy, &DataSourceProxy::newWordsPairValidated, this, &GameFacade::_onNewWordsPairValidated);
+    Q_ASSERT(connected);
+    connected = connect(m_pDataSourceProxy, &DataSourceProxy::writeDataToDbFinished, this, &GameFacade::_onWriteDataToDbFinished);
     Q_ASSERT(connected);
 }
 
@@ -164,7 +170,14 @@ void GameFacade::handleSubmitRequest()
 
 void GameFacade::requestAddPairToData(const QString &firstWord, const QString &secondWord, bool areSynonyms)
 {
-    m_pDataSourceProxy->saveDataToDbIfValid(QPair<QString, QString>{firstWord, secondWord}, areSynonyms);
+    _disableAddToCache();
+    m_pDataSourceProxy->validateWordsPair(QPair<QString, QString>{firstWord, secondWord}, areSynonyms);
+}
+
+void GameFacade::requestSaveDataToDb()
+{
+    _disableSaveToDb();
+    m_pDataSourceProxy->saveDataToDb();
 }
 
 void GameFacade::provideResultsToUser()
@@ -260,6 +273,16 @@ bool GameFacade::isDataEntryAllowed() const
     return m_IsDataEntryAllowed;
 }
 
+bool GameFacade::isAddingToCacheAllowed() const
+{
+    return m_IsAddingToCacheAllowed;
+}
+
+bool GameFacade::isSavingToDbAllowed() const
+{
+    return m_IsSavingToDbAllowed;
+}
+
 bool GameFacade::areSynonyms() const
 {
     return m_pWordPairOwner->areSynonyms();
@@ -289,7 +312,7 @@ void GameFacade::_onReadDataFromDbFinished(bool success)
         }
 
         m_IsDataEntryAllowed = true;
-        Q_EMIT dataEntryAllowed();
+        Q_EMIT dataEntryAllowedChanged();
     }
     else
     {
@@ -297,26 +320,40 @@ void GameFacade::_onReadDataFromDbFinished(bool success)
     }
 }
 
-void GameFacade::_onWriteDataToDbFinished(bool success)
+void GameFacade::_onNewWordsPairValidated(bool isValid)
+{
+    // restore add to cache capability so the user can re-add the entry after modifying the words
+    if (!isValid)
+    {
+        _enableAddToCache();
+    }
+
+    Q_EMIT statusChanged(isValid ? Game::StatusCodes::DATA_ENTRY_SUCCESS : Game::StatusCodes::INVALID_DATA_ENTRY);
+}
+
+void GameFacade::_onNewWordsPairAddedToCache()
+{
+    _enableAddToCache();
+    _enableSaveToDb();
+}
+
+void GameFacade::_onWriteDataToDbFinished(int nrOfEntries)
 {
     int initialNrOfEntries{m_pDataSourceAccessHelper->getTotalNrOfEntries()};
 
-    if (success)
-    {
-        m_pDataSourceAccessHelper->appendNewEntry();
+    m_pDataSourceAccessHelper->addEntries(nrOfEntries);
 
-        // if no data was initially available enable playing if user enters valid data
-        if (initialNrOfEntries == 0)
-        {
-            _connectDataSourceToWordMixer();
-        }
+    if (initialNrOfEntries == 0)
+    {
+        _connectDataSourceToWordMixer();
     }
 
-    Q_EMIT statusChanged(success ? (initialNrOfEntries == 0 ? Game::StatusCodes::DATA_GOT_AVAILABLE : Game::StatusCodes::DATA_ENTRY_SUCCESS) : Game::StatusCodes::INVALID_DATA_ENTRY);
+    Q_EMIT statusChanged(initialNrOfEntries == 0 ? Game::StatusCodes::DATA_GOT_AVAILABLE : Game::StatusCodes::DATA_SUCCESSFULLY_SAVED);
 }
 
 void GameFacade::_onWriteDataToDbErrorOccured()
 {
+    _enableSaveToDb();
     Q_EMIT statusChanged(Game::StatusCodes::DATA_ENTRY_SAVING_ERROR);
 }
 
@@ -327,4 +364,40 @@ void GameFacade::_connectDataSourceToWordMixer()
 
     m_IsDataAvailable = true;
     Q_EMIT dataAvailableChanged();
+}
+
+void GameFacade::_enableAddToCache()
+{
+    if (!m_IsAddingToCacheAllowed)
+    {
+        m_IsAddingToCacheAllowed = true;
+        Q_EMIT addWordsPairAllowedChanged();
+    }
+}
+
+void GameFacade::_disableAddToCache()
+{
+    if (m_IsAddingToCacheAllowed)
+    {
+        m_IsAddingToCacheAllowed = false;
+        Q_EMIT addWordsPairAllowedChanged();
+    }
+}
+
+void GameFacade::_enableSaveToDb()
+{
+    if (!m_IsSavingToDbAllowed)
+    {
+        m_IsSavingToDbAllowed = true;
+        Q_EMIT saveNewPairsToDbAllowedChanged();
+    }
+}
+
+void GameFacade::_disableSaveToDb()
+{
+    if (m_IsSavingToDbAllowed)
+    {
+        m_IsSavingToDbAllowed = false;
+        Q_EMIT saveNewPairsToDbAllowedChanged();
+    }
 }

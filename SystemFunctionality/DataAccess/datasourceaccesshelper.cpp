@@ -18,9 +18,12 @@ void DataSourceAccessHelper::resetUsedEntries()
     m_EntryUsedStatuses.fill(false, m_EntryUsedStatuses.size());
 }
 
-void DataSourceAccessHelper::appendNewEntry()
+void DataSourceAccessHelper::addEntries(int nrOfEntries)
 {
-    m_EntryUsedStatuses.append(false);
+    Q_ASSERT(nrOfEntries > 0);
+    QVector<bool> newEntriesUsedStatuses;
+    newEntriesUsedStatuses.fill(false, nrOfEntries);
+    m_EntryUsedStatuses.append(newEntriesUsedStatuses);
 }
 
 int DataSourceAccessHelper::generateEntryNumber()
