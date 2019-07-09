@@ -22,6 +22,7 @@ QtObject {
     readonly property string levelMediumButtonLabel:            "Medium"
     readonly property string levelHardButtonLabel:              "Hard"
     readonly property string dataEntryButtonLabel:              "Enter new pairs"
+    readonly property string dataEntryClearButtonLabel:         "Clear"
     readonly property string synonymsSelectionButtonLabel:      "Synonyms"
     readonly property string antonymsSelectionButtonLabel:      "Antonyms"
     readonly property string addPairButtonLabel:                "Add pair"
@@ -44,6 +45,7 @@ QtObject {
     readonly property string levelMediumButtonShortcut:         "ALT+2"
     readonly property string levelHardButtonShortcut:           "ALT+3"
     readonly property string dataEntryButtonShortcut:           "ALT+E"
+    readonly property string dataEntryClearButtonShortcut:      "CTRL+Q"
     readonly property string addPairButtonShortcut:             "ALT+A"
     readonly property string backButtonShortcut:                "ALT+K"
     readonly property string saveButtonShortcut:                "CTRL+S"
@@ -80,6 +82,7 @@ QtObject {
     readonly property string levelButtonsToolTip:               "Choose the desired difficulty level.
                                                                  \nClick radio button or hit: \n1) ALT+1 for Easy \n2) ALT+2 for Medium \n3) ALT+3 for Hard"
     readonly property string dataEntryButtonToolTip:            "Click or hit ALT+E to go to the new word pairs entry page"
+    readonly property string dataEntryClearButtonToolTip:       "Click or hit CTRL+Q to clear the data entry text fields."
     readonly property string addPairButtonToolTip:              "Click or hit ALT+A to add the new word pair"
     readonly property string backButtonToolTip:                 "Click or hit ALT+K to go to previous page"
     readonly property string saveButtonToolTip:                 "Click or hit CTRL+S to save the added entries to database"

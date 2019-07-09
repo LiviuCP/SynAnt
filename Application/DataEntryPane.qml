@@ -15,6 +15,13 @@ Item {
     readonly property double bottomBtnsLayoutHeight: height * 0.1
     readonly property double bottomBtnsMinWidth: (dataEntryStatusBox.width - 5 * bottomBtnsLayout.spacing) / 6
 
+    function clearTextFields() {
+        firstWordTextField.clear();
+        secondWordTextField.clear();
+        firstWordTextField.forceActiveFocus();
+        clearBtn.enabled = false;
+    }
+
     MouseArea {
         id: entryPaneMouseArea
         anchors.fill: parent
@@ -91,7 +98,7 @@ Item {
         TextField {
             id: firstWordTextField
 
-            Layout.minimumWidth: parent.width * 0.49
+            Layout.minimumWidth: parent.width * 0.414
             Layout.minimumHeight: parent.height
 
             ToolTip.text: GameStrings.dataEntryFirstWordToolTip
@@ -104,12 +111,14 @@ Item {
                     forceActiveFocus();
                 }
             }
+
+            Keys.onReleased: clearBtn.enabled = (firstWordTextField.text.length != 0 || secondWordTextField.text.length != 0) ? true : false
         }
 
         TextField {
             id: secondWordTextField
 
-            Layout.minimumWidth: parent.width * 0.49
+            Layout.minimumWidth: parent.width * 0.414
             Layout.minimumHeight: parent.height
             Layout.alignment: Qt.AlignRight
 
@@ -117,6 +126,51 @@ Item {
             ToolTip.delay: presenter.toolTipDelay
             ToolTip.timeout: presenter.toolTipTimeout
             ToolTip.visible: hovered
+
+            Keys.onReleased: clearBtn.enabled = (firstWordTextField.text.length != 0 || secondWordTextField.text.length != 0) ? true : false
+        }
+
+        Button {
+            id: clearBtn
+            enabled: false
+
+            contentItem: Text {
+                text: GameStrings.dataEntryClearButtonLabel
+                color: Styles.textColor
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                opacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
+            }
+
+            background: Rectangle {
+                color: Styles.pushButtonColor
+                border.color: Styles.borderColor
+                border.width: width * 0.005
+                radius: width * 0.05
+                opacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
+            }
+
+            Layout.minimumWidth: bottomBtnsMinWidth
+
+            ToolTip.text: GameStrings.dataEntryClearButtonToolTip
+            ToolTip.delay: presenter.toolTipDelay
+            ToolTip.timeout: presenter.toolTipTimeout
+            ToolTip.visible: hovered
+
+            Shortcut {
+                sequence: GameStrings.dataEntryClearButtonShortcut
+                enabled: clearBtn.enabled && clearBtn.visible
+                onActivated: {
+                    dataEntryPane.clearTextFields();
+                }
+            }
+
+            onClicked: dataEntryPane.clearTextFields()
+            onPressed: opacity = Styles.pressedButtonOpacity
+            onReleased: opacity = Styles.releasedButtonOpacity
+            onCanceled: opacity = Styles.releasedButtonOpacity
+
+
         }
     }
 
