@@ -32,6 +32,11 @@ void DataSourceProxy::saveDataToDb()
     GameManager::getManager()->saveDataToDb();
 }
 
+void DataSourceProxy::resetDataEntryCache()
+{
+    GameManager::getManager()->resetDataEntryCache();
+}
+
 void DataSourceProxy::provideDataEntryToConsumer(int entryNumber)
 {
     m_pDataSource->provideDataEntryToConsumer(entryNumber);

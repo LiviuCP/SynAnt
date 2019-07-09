@@ -62,6 +62,8 @@ GamePresenter::GamePresenter(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::saveNewPairsToDbAllowedChanged, this, &GamePresenter::saveNewPairsEnabledChanged);
     Q_ASSERT(connected);
+    connected = connect(m_pGameFacade, &GameFacade::resetCacheAllowedChanged, this, &GamePresenter::clearDataEntryBufferEnabledChanged);
+    Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::inputChanged, this, &GamePresenter::_onInputChanged);
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::selectionChanged, this, &GamePresenter::selectionChanged);
@@ -97,6 +99,11 @@ void GamePresenter::goBack()
 void GamePresenter::handleAddWordsPairRequest(const QString& firstWord, const QString& secondWord, bool areSynonyms)
 {
     m_pGameFacade->requestAddPairToData(firstWord, secondWord, areSynonyms);
+}
+
+void GamePresenter::handleClearDataEntryBufferRequest()
+{
+    m_pGameFacade->resetDataEntryCache();
 }
 
 void GamePresenter::handleSaveNewWordPairsRequest()
@@ -232,6 +239,11 @@ bool GamePresenter::isDataEntryEnabled() const
 bool GamePresenter::isAddDataEntryEnabled() const
 {
     return m_pGameFacade->isAddingToCacheAllowed();
+}
+
+bool GamePresenter::isClearDataEntryBufferEnabled() const
+{
+    return m_pGameFacade->isCacheResetAllowed();
 }
 
 bool GamePresenter::isSaveDataEntriesEnabled() const
@@ -604,6 +616,10 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         break;
     case Game::StatusCodes::INVALID_DATA_ENTRY:
         _updateStatusMessage(GameStrings::c_DataEntryIncorrectPairMessage, Pane::DATA_ENTRY, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
+        break;
+    case Game::StatusCodes::CACHE_RESET:
+        _updateStatusMessage(GameStrings::c_DataEntryCacheResetMessage, Pane::DATA_ENTRY, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
         break;
     default:

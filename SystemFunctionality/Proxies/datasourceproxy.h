@@ -16,7 +16,7 @@ public:
 
     void loadDataFromDb();
     void saveDataToDb();
-    void saveDataToDbIfValid(QPair<QString, QString> newWordsPair, bool areSynonyms);
+    void resetDataEntryCache();
     void provideDataEntryToConsumer(int entryNumber);
     void validateWordsPair(QPair<QString, QString> newWordsPair, bool areSynonyms);
     int getNrOfValidEntries();

@@ -127,6 +127,8 @@ void GameManager::setDataSource(const QString &dataDirPath)
         Q_ASSERT(connected);
         connected = connect(this, &GameManager::writeDataToDb, m_pDataEntryCache, &DataEntryCache::onWriteDataToDbRequested, Qt::QueuedConnection);
         Q_ASSERT(connected);
+        connected = connect(this, &GameManager::resetCacheRequested, m_pDataEntryCache, &DataEntryCache::onResetCacheRequested, Qt::QueuedConnection);
+        Q_ASSERT(connected);
         // validator
         connected = connect(m_pDataEntryValidator, &DataEntryValidator::newWordsPairValidated, m_pDataSourceProxy, &DataSourceProxy::newWordsPairValidated);
         Q_ASSERT(connected);
@@ -151,6 +153,11 @@ void GameManager::loadDataFromDb()
 void GameManager::saveDataToDb()
 {
     Q_EMIT writeDataToDb();
+}
+
+void GameManager::resetDataEntryCache()
+{
+    Q_EMIT resetCacheRequested();
 }
 
 GameFacade* GameManager::getFacade() const

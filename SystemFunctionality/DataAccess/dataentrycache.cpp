@@ -25,6 +25,12 @@ void DataEntryCache::onAddEntryToCacheRequested(DataSource::DataEntry dataEntry)
     Q_EMIT newWordsPairAddedToCache();
 }
 
+void DataEntryCache::onResetCacheRequested()
+{
+    m_CacheEntries.clear();
+    Q_EMIT cacheReset();
+}
+
 void DataEntryCache::onWriteDataToDbRequested()
 {
     QFile wordPairsFile(m_pDataSource->getDataFilePath());

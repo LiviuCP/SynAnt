@@ -45,6 +45,7 @@ public:
     void setDataSource(const QString& dataDirPath);
     void loadDataFromDb();
     void saveDataToDb();
+    void resetDataEntryCache();
 
     GameFacade* getFacade() const;
     DataSource* getDataSource() const;
@@ -63,6 +64,7 @@ signals:
     Q_SIGNAL void dataSourceSetupCompleted();
     Q_SIGNAL void readDataFromDb();
     Q_SIGNAL void writeDataToDb();
+    Q_SIGNAL void resetCacheRequested();
 
 private slots:
     void _onDataSourceSetupCompleted();

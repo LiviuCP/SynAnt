@@ -13,7 +13,7 @@ Item {
     readonly property double wordsEntryLayoutHeight: height * 0.05
     readonly property double synAntRadioButtonLayoutHeight: height * 0.05
     readonly property double bottomBtnsLayoutHeight: height * 0.1
-    readonly property double bottomBtnsMinWidth: (dataEntryStatusBox.width - 4 * bottomBtnsLayout.spacing) / 5
+    readonly property double bottomBtnsMinWidth: (dataEntryStatusBox.width - 5 * bottomBtnsLayout.spacing) / 6
 
     MouseArea {
         id: entryPaneMouseArea
@@ -147,7 +147,7 @@ Item {
                 color: Styles.pushButtonColor
                 border.color: Styles.borderColor
                 border.width: width * 0.005
-                radius: width * 0.025
+                radius: width * 0.05
                 opacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
             }
 
@@ -186,7 +186,7 @@ Item {
                 color: Styles.pushButtonColor
                 border.color: Styles.borderColor
                 border.width: width * 0.005
-                radius: width * 0.025
+                radius: width * 0.05
             }
 
             Layout.minimumWidth: bottomBtnsMinWidth
@@ -223,7 +223,7 @@ Item {
                 color: Styles.pushButtonColor
                 border.color: Styles.borderColor
                 border.width: width * 0.005
-                radius: width * 0.025
+                radius: width * 0.05
             }
 
             Layout.minimumWidth: bottomBtnsMinWidth
@@ -234,6 +234,47 @@ Item {
             ToolTip.visible: hovered
 
             onClicked: presenter.switchToPane(GamePresenter.HELP)
+            onPressed: opacity = Styles.pressedButtonOpacity
+            onReleased: opacity = Styles.releasedButtonOpacity
+            onCanceled: opacity = Styles.releasedButtonOpacity
+        }
+
+        Button {
+            id: discardBtn
+            enabled: presenter.clearDataEntryBufferEnabled
+
+            contentItem: Text {
+                text: GameStrings.discardButtonLabel
+                color: Styles.textColor
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                opacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
+            }
+
+            background: Rectangle {
+                color: Styles.pushButtonColor
+                border.color: Styles.borderColor
+                border.width: width * 0.005
+                radius: width * 0.05
+                opacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
+            }
+
+            Layout.minimumWidth: bottomBtnsMinWidth
+
+            ToolTip.text: GameStrings.discardButtonToolTip
+            ToolTip.delay: presenter.toolTipDelay
+            ToolTip.timeout: presenter.toolTipTimeout
+            ToolTip.visible: hovered
+
+            Shortcut {
+                sequence: GameStrings.discardButtonShortcut
+                enabled: discardBtn.enabled
+                onActivated: {
+                    presenter.handleClearDataEntryBufferRequest();
+                }
+            }
+
+            onClicked: presenter.handleClearDataEntryBufferRequest()
             onPressed: opacity = Styles.pressedButtonOpacity
             onReleased: opacity = Styles.releasedButtonOpacity
             onCanceled: opacity = Styles.releasedButtonOpacity
@@ -255,7 +296,7 @@ Item {
                 color: Styles.pushButtonColor
                 border.color: Styles.borderColor
                 border.width: width * 0.005
-                radius: width * 0.025
+                radius: width * 0.05
                 opacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
             }
 
@@ -294,7 +335,7 @@ Item {
                 color: Styles.pushButtonColor
                 border.color: Styles.borderColor
                 border.width: width * 0.005
-                radius: width * 0.025
+                radius: width * 0.05
             }
 
             Layout.minimumWidth: bottomBtnsMinWidth

@@ -20,6 +20,7 @@ public:
 
 public slots:
     void onAddEntryToCacheRequested(DataSource::DataEntry dataEntry);
+    void onResetCacheRequested();
     void onWriteDataToDbRequested();
 
 signals:

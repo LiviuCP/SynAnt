@@ -16,6 +16,7 @@ GameFacade::GameFacade(QObject *parent)
     , m_IsDataAvailable{false}
     , m_IsDataEntryAllowed{false}
     , m_IsAddingToCacheAllowed{true}
+    , m_IsCacheResetAllowed{false}
     , m_IsSavingToDbAllowed{false}
     , m_IsGameStarted{false}
     , m_IsGamePaused{false}
@@ -53,6 +54,8 @@ GameFacade::GameFacade(QObject *parent)
     connected = connect(m_pDataSourceProxy, &DataSourceProxy::writeDataToDbErrorOccured, this, &GameFacade::_onWriteDataToDbErrorOccured);
     Q_ASSERT(connected);
     connected = connect(m_pDataSourceProxy, &DataSourceProxy::newWordsPairAddedToCache, this, &GameFacade::_onNewWordsPairAddedToCache);
+    Q_ASSERT(connected);
+    connected = connect(m_pDataSourceProxy, &DataSourceProxy::cacheReset, this, &GameFacade::_onCacheReset);
     Q_ASSERT(connected);
     connected = connect(m_pDataSourceProxy, &DataSourceProxy::newWordsPairValidated, this, &GameFacade::_onNewWordsPairValidated);
     Q_ASSERT(connected);
@@ -176,8 +179,18 @@ void GameFacade::requestAddPairToData(const QString &firstWord, const QString &s
 
 void GameFacade::requestSaveDataToDb()
 {
+    _disableAddToCache();
     _disableSaveToDb();
+    _disableCacheReset();
+
     m_pDataSourceProxy->saveDataToDb();
+}
+
+void GameFacade::resetDataEntryCache()
+{
+    _disableSaveToDb();
+    _disableCacheReset();
+    m_pDataSourceProxy->resetDataEntryCache();
 }
 
 void GameFacade::provideResultsToUser()
@@ -278,6 +291,11 @@ bool GameFacade::isAddingToCacheAllowed() const
     return m_IsAddingToCacheAllowed;
 }
 
+bool GameFacade::isCacheResetAllowed() const
+{
+    return m_IsCacheResetAllowed;
+}
+
 bool GameFacade::isSavingToDbAllowed() const
 {
     return m_IsSavingToDbAllowed;
@@ -334,7 +352,14 @@ void GameFacade::_onNewWordsPairValidated(bool isValid)
 void GameFacade::_onNewWordsPairAddedToCache()
 {
     _enableAddToCache();
+    _enableCacheReset();
     _enableSaveToDb();
+}
+
+void GameFacade::_onCacheReset()
+{
+    _enableAddToCache();
+    Q_EMIT statusChanged(Game::StatusCodes::CACHE_RESET);
 }
 
 void GameFacade::_onWriteDataToDbFinished(int nrOfEntries)
@@ -348,12 +373,13 @@ void GameFacade::_onWriteDataToDbFinished(int nrOfEntries)
         _connectDataSourceToWordMixer();
     }
 
+    _enableAddToCache();
+
     Q_EMIT statusChanged(initialNrOfEntries == 0 ? Game::StatusCodes::DATA_GOT_AVAILABLE : Game::StatusCodes::DATA_SUCCESSFULLY_SAVED);
 }
 
 void GameFacade::_onWriteDataToDbErrorOccured()
 {
-    _enableSaveToDb();
     Q_EMIT statusChanged(Game::StatusCodes::DATA_ENTRY_SAVING_ERROR);
 }
 
@@ -381,6 +407,24 @@ void GameFacade::_disableAddToCache()
     {
         m_IsAddingToCacheAllowed = false;
         Q_EMIT addWordsPairAllowedChanged();
+    }
+}
+
+void GameFacade::_enableCacheReset()
+{
+    if (!m_IsCacheResetAllowed)
+    {
+        m_IsCacheResetAllowed = true;
+        Q_EMIT resetCacheAllowedChanged();
+    }
+}
+
+void GameFacade::_disableCacheReset()
+{
+    if (m_IsCacheResetAllowed)
+    {
+        m_IsCacheResetAllowed = false;
+        Q_EMIT resetCacheAllowedChanged();
     }
 }
 
