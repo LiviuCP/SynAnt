@@ -49,6 +49,8 @@ Item {
 
         Text {
             text: presenter.dataEntryPaneStatusMessage;
+            wrapMode: Text.WordWrap
+            anchors.fill: parent
         }
     }
 
