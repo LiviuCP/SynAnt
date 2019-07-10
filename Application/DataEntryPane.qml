@@ -410,10 +410,6 @@ Item {
 
     Connections {
         target: presenter
-        onDataEntrySucceeded: {
-            firstWordTextField.clear();
-            secondWordTextField.clear();
-            firstWordTextField.forceActiveFocus();
-        }
+        onDataEntrySucceeded: clearTextFields()
     }
 }
