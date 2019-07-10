@@ -5,11 +5,16 @@ import QtQuick 2.7
 QtObject {
     id: gameStrings
 
+    // titles, messages etc.
+    readonly property string fatalErrorWindowTitle:             "Fatal Error!"
+    readonly property string fatalErrorWindowObjectName:        "errorDialog"
+
     readonly property string mainPaneInstructionsMessage:       "\nPlease enter the 2 words.
                                                                  \nHit Submit when ready.
                                                                  \nUse radio buttons to change difficulty level.
                                                                  \nPress Reset to reset the scores and number of pairs."
 
+    // labels
     readonly property string playButtonLabel:                   "Play"
     readonly property string helpButtonLabel:                   "Help"
     readonly property string quitButtonLabel:                   "Quit"
@@ -31,6 +36,7 @@ QtObject {
     readonly property string saveButtonLabel:                   "Save"
     readonly property string closeButtonLabel:                  "Close"
 
+    // shortcuts
     readonly property string playButtonShortcut:                "ALT+P"
     readonly property string helpButtonShortcut:                "ALT+H"
     readonly property string quitButtonShortcut:                "ALT+Q"
@@ -52,6 +58,7 @@ QtObject {
     readonly property string discardButtonShortcut:             "CTRL+D"
     readonly property string closeButtonShortcut:               "ALT+C"
 
+    // tooltips
     readonly property string introPaneToolTip:                  "Welcome to SynAnt"
     readonly property string helpPaneToolTip:                   "Please read the detailed game instructions."
     readonly property string mainPaneToolTip:                   "This is where the action happens!"

@@ -14,6 +14,7 @@ Item {
     readonly property double synAntRadioButtonLayoutHeight: height * 0.05
     readonly property double bottomBtnsLayoutHeight: height * 0.1
     readonly property double bottomBtnsMinWidth: (dataEntryStatusBox.width - 5 * bottomBtnsLayout.spacing) / 6
+    readonly property double buttonRadiusRatio: 0.05
 
     function clearTextFields() {
         firstWordTextField.clear();
@@ -24,28 +25,28 @@ Item {
 
     MouseArea {
         id: entryPaneMouseArea
+
         anchors.fill: parent
         hoverEnabled: true
     }
 
     ToolTip {
-        id: dataEntryPaneToolTip
-        delay: presenter.toolTipDelay
-        timeout: presenter.toolTipTimeout
         text: GameStrings.dataEntryPaneToolTip
         visible: entryPaneMouseArea.containsMouse
+        delay: presenter.toolTipDelay
+        timeout: presenter.toolTipTimeout
     }
 
     Rectangle {
         id: dataEntryStatusBox
-        anchors.top: parent.top
+
         width: parent.width
         height: dataEntryPaneRectHeight
-        color: Styles.backgroundColor
 
-        border {
-            color: Styles.borderColor
-        }
+        anchors.top: parent.top
+
+        color: Styles.backgroundColor
+        border.color: Styles.borderColor
 
         Text {
             text: presenter.dataEntryPaneStatusMessage;
@@ -57,45 +58,41 @@ Item {
     RowLayout {
         id: synAntRadioButtonsLayout
 
-        anchors.top: dataEntryStatusBox.bottom
-        anchors.left: dataEntryStatusBox.left
-        anchors.right: dataEntryStatusBox.right
-        anchors.topMargin: parent.width * 0.01
-
         height: wordsEntryLayoutHeight
+
+        anchors {
+            top: dataEntryStatusBox.bottom
+            topMargin: parent.width * 0.01
+            left: dataEntryStatusBox.left
+            right: dataEntryStatusBox.right
+        }
 
         RadioButton {
             id: synonymsSelectionButton
             checked: true
-
             text: GameStrings.synonymsSelectionButtonLabel
-
-            onToggled: {
-                checked = true;
-            }
+            onToggled: checked = true
         }
 
         RadioButton {
             id: antonymsSelectionButton
             checked: false
-
             text: GameStrings.antonymsSelectionButtonLabel
-
-            onToggled: {
-                checked = true;
-            }
+            onToggled: checked = true
         }
     }
 
     RowLayout {
         id: wordsEntryLayout
 
-        anchors.top: synAntRadioButtonsLayout.bottom
-        anchors.left: synAntRadioButtonsLayout.left
-        anchors.right: synAntRadioButtonsLayout.right
-        anchors.topMargin: parent.width * 0.05
-
         height: wordsEntryLayoutHeight
+
+        anchors {
+            top: synAntRadioButtonsLayout.bottom
+            topMargin: parent.width * 0.05
+            left: synAntRadioButtonsLayout.left
+            right: synAntRadioButtonsLayout.right
+        }
 
         TextField {
             id: firstWordTextField
@@ -103,10 +100,12 @@ Item {
             Layout.minimumWidth: parent.width * 0.414
             Layout.minimumHeight: parent.height
 
-            ToolTip.text: GameStrings.dataEntryFirstWordToolTip
-            ToolTip.delay: presenter.toolTipDelay
-            ToolTip.timeout: presenter.toolTipTimeout
-            ToolTip.visible: hovered
+            ToolTip {
+                text: GameStrings.dataEntryFirstWordToolTip
+                visible: firstWordTextField.hovered
+                delay: presenter.toolTipDelay
+                timeout: presenter.toolTipTimeout
+            }
 
             onVisibleChanged: {
                 if (visible) {
@@ -124,17 +123,22 @@ Item {
             Layout.minimumHeight: parent.height
             Layout.alignment: Qt.AlignRight
 
-            ToolTip.text: GameStrings.dataEntrySecondWordToolTip
-            ToolTip.delay: presenter.toolTipDelay
-            ToolTip.timeout: presenter.toolTipTimeout
-            ToolTip.visible: hovered
+            ToolTip {
+                text: GameStrings.dataEntrySecondWordToolTip
+                visible: secondWordTextField.hovered
+                delay: presenter.toolTipDelay
+                timeout: presenter.toolTipTimeout
+            }
 
             Keys.onReleased: clearBtn.enabled = (firstWordTextField.text.length != 0 || secondWordTextField.text.length != 0) ? true : false
         }
 
         Button {
             id: clearBtn
+
             enabled: false
+
+            Layout.minimumWidth: bottomBtnsMinWidth
 
             contentItem: Text {
                 text: GameStrings.dataEntryClearButtonLabel
@@ -146,50 +150,54 @@ Item {
 
             background: Rectangle {
                 color: Styles.pushButtonColor
-                border.color: Styles.borderColor
-                border.width: width * 0.005
-                radius: width * 0.05
                 opacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
+                radius: width * buttonRadiusRatio
+
+                border {
+                    color: Styles.borderColor
+                    width: width * 0.005
+                }
             }
 
-            Layout.minimumWidth: bottomBtnsMinWidth
-
-            ToolTip.text: GameStrings.dataEntryClearButtonToolTip
-            ToolTip.delay: presenter.toolTipDelay
-            ToolTip.timeout: presenter.toolTipTimeout
-            ToolTip.visible: hovered
+            ToolTip {
+                text: GameStrings.dataEntryClearButtonToolTip
+                visible: clearBtn.hovered
+                delay: presenter.toolTipDelay
+                timeout: presenter.toolTipTimeout
+            }
 
             Shortcut {
                 sequence: GameStrings.dataEntryClearButtonShortcut
                 enabled: clearBtn.enabled && clearBtn.visible
-                onActivated: {
-                    dataEntryPane.clearTextFields();
-                }
+                onActivated: dataEntryPane.clearTextFields()
             }
 
             onClicked: dataEntryPane.clearTextFields()
             onPressed: opacity = Styles.pressedButtonOpacity
             onReleased: opacity = Styles.releasedButtonOpacity
             onCanceled: opacity = Styles.releasedButtonOpacity
-
-
         }
     }
 
     RowLayout {
         id: bottomBtnsLayout
 
-        anchors.top: wordsEntryLayout.bottom
-        anchors.bottom: parent.bottom
-        anchors.topMargin: parent.height * 0.05
-        anchors.left: wordsEntryLayout.left
-        anchors.right: wordsEntryLayout.right
-
         height: bottomBtnsLayoutHeight
+
+        anchors {
+            top: wordsEntryLayout.bottom
+            topMargin: parent.height * 0.05
+            bottom: parent.bottom
+            left: wordsEntryLayout.left
+            right: wordsEntryLayout.right
+        }
 
         Button {
             id: addPairBtn
+
             enabled: presenter.addDataEntryEnabled
+
+            Layout.minimumWidth: bottomBtnsMinWidth
 
             contentItem: Text {
                 text: GameStrings.addPairButtonLabel
@@ -201,25 +209,26 @@ Item {
 
             background: Rectangle {
                 color: Styles.pushButtonColor
-                border.color: Styles.borderColor
-                border.width: width * 0.005
-                radius: width * 0.05
                 opacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
+                radius: width * buttonRadiusRatio
+
+                border {
+                    color: Styles.borderColor
+                    width: width * 0.005
+                }
             }
 
-            Layout.minimumWidth: bottomBtnsMinWidth
-
-            ToolTip.text: GameStrings.addPairButtonToolTip
-            ToolTip.delay: presenter.toolTipDelay
-            ToolTip.timeout: presenter.toolTipTimeout
-            ToolTip.visible: hovered
+            ToolTip {
+                text: GameStrings.addPairButtonToolTip
+                visible: addPairBtn.hovered
+                delay: presenter.toolTipDelay
+                timeout: presenter.toolTipTimeout
+            }
 
             Shortcut {
                 sequence: GameStrings.addPairButtonShortcut
                 enabled: addPairBtn.enabled
-                onActivated: {
-                    presenter.handleAddWordsPairRequest(firstWordTextField.text, secondWordTextField.text, synonymsSelectionButton.checked);
-                }
+                onActivated: presenter.handleAddWordsPairRequest(firstWordTextField.text, secondWordTextField.text, synonymsSelectionButton.checked)
             }
 
             onClicked: presenter.handleAddWordsPairRequest(firstWordTextField.text, secondWordTextField.text, synonymsSelectionButton.checked)
@@ -231,6 +240,8 @@ Item {
         Button {
             id: backBtn
 
+            Layout.minimumWidth: bottomBtnsMinWidth
+
             contentItem: Text {
                 text: GameStrings.backButtonLabel
                 color: Styles.textColor
@@ -240,23 +251,24 @@ Item {
 
             background: Rectangle {
                 color: Styles.pushButtonColor
-                border.color: Styles.borderColor
-                border.width: width * 0.005
-                radius: width * 0.05
+                radius: width * buttonRadiusRatio
+
+                border {
+                    color: Styles.borderColor
+                    width: width * 0.005
+                }
             }
 
-            Layout.minimumWidth: bottomBtnsMinWidth
-
-            ToolTip.text: GameStrings.backButtonToolTip
-            ToolTip.delay: presenter.toolTipDelay
-            ToolTip.timeout: presenter.toolTipTimeout
-            ToolTip.visible: hovered
+            ToolTip {
+                text: GameStrings.backButtonToolTip
+                visible: backBtn.hovered
+                delay: presenter.toolTipDelay
+                timeout: presenter.toolTipTimeout
+            }
 
             Shortcut {
                 sequence: GameStrings.backButtonShortcut
-                onActivated: {
-                    presenter.goBack();
-                }
+                onActivated: presenter.goBack()
             }
 
             onClicked: presenter.goBack()
@@ -268,6 +280,8 @@ Item {
         Button {
             id: helpBtn
 
+            Layout.minimumWidth: bottomBtnsMinWidth
+
             contentItem: Text {
                 text: GameStrings.helpButtonLabel
                 color: Styles.textColor
@@ -277,17 +291,20 @@ Item {
 
             background: Rectangle {
                 color: Styles.pushButtonColor
-                border.color: Styles.borderColor
-                border.width: width * 0.005
-                radius: width * 0.05
+                radius: width * buttonRadiusRatio
+
+                border {
+                    color: Styles.borderColor
+                    width: width * 0.005
+                }
             }
 
-            Layout.minimumWidth: bottomBtnsMinWidth
-
-            ToolTip.text: GameStrings.helpButtonToolTip
-            ToolTip.delay: presenter.toolTipDelay
-            ToolTip.timeout: presenter.toolTipTimeout
-            ToolTip.visible: hovered
+            ToolTip {
+                text: GameStrings.helpButtonToolTip
+                visible: helpBtn.hovered
+                delay: presenter.toolTipDelay
+                timeout: presenter.toolTipTimeout
+            }
 
             onClicked: presenter.switchToPane(GamePresenter.HELP)
             onPressed: opacity = Styles.pressedButtonOpacity
@@ -297,7 +314,10 @@ Item {
 
         Button {
             id: discardBtn
+
             enabled: presenter.clearDataEntryBufferEnabled
+
+            Layout.minimumWidth: bottomBtnsMinWidth
 
             contentItem: Text {
                 text: GameStrings.discardButtonLabel
@@ -309,25 +329,26 @@ Item {
 
             background: Rectangle {
                 color: Styles.pushButtonColor
-                border.color: Styles.borderColor
-                border.width: width * 0.005
-                radius: width * 0.05
                 opacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
+                radius: width * buttonRadiusRatio
+
+                border {
+                    color: Styles.borderColor
+                    width: width * 0.005
+                }
             }
 
-            Layout.minimumWidth: bottomBtnsMinWidth
-
-            ToolTip.text: GameStrings.discardButtonToolTip
-            ToolTip.delay: presenter.toolTipDelay
-            ToolTip.timeout: presenter.toolTipTimeout
-            ToolTip.visible: hovered
+            ToolTip {
+                text: GameStrings.discardButtonToolTip
+                visible: discardBtn.hovered
+                delay: presenter.toolTipDelay
+                timeout: presenter.toolTipTimeout
+            }
 
             Shortcut {
                 sequence: GameStrings.discardButtonShortcut
                 enabled: discardBtn.enabled
-                onActivated: {
-                    presenter.handleClearDataEntryBufferRequest();
-                }
+                onActivated: presenter.handleClearDataEntryBufferRequest()
             }
 
             onClicked: presenter.handleClearDataEntryBufferRequest()
@@ -338,7 +359,10 @@ Item {
 
         Button {
             id: saveBtn
+
             enabled: presenter.saveEntriesEnabled
+
+            Layout.minimumWidth: bottomBtnsMinWidth
 
             contentItem: Text {
                 text: GameStrings.saveButtonLabel
@@ -350,25 +374,26 @@ Item {
 
             background: Rectangle {
                 color: Styles.pushButtonColor
-                border.color: Styles.borderColor
-                border.width: width * 0.005
-                radius: width * 0.05
                 opacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
+                radius: width * buttonRadiusRatio
+
+                border {
+                    color: Styles.borderColor
+                    width: width * 0.005
+                }
             }
 
-            Layout.minimumWidth: bottomBtnsMinWidth
-
-            ToolTip.text: GameStrings.saveButtonToolTip
-            ToolTip.delay: presenter.toolTipDelay
-            ToolTip.timeout: presenter.toolTipTimeout
-            ToolTip.visible: hovered
+            ToolTip {
+                text: GameStrings.saveButtonToolTip
+                visible: saveBtn.hovered
+                delay: presenter.toolTipDelay
+                timeout: presenter.toolTipTimeout
+            }
 
             Shortcut {
                 sequence: GameStrings.saveButtonShortcut
                 enabled: saveBtn.enabled
-                onActivated: {
-                    presenter.handleSaveNewWordPairsRequest();
-                }
+                onActivated: presenter.handleSaveNewWordPairsRequest()
             }
 
             onClicked: presenter.handleSaveNewWordPairsRequest()
@@ -380,6 +405,8 @@ Item {
         Button {
             id: quitBtn
 
+            Layout.minimumWidth: bottomBtnsMinWidth
+
             contentItem: Text {
                 text: GameStrings.quitButtonLabel
                 color: Styles.textColor
@@ -389,17 +416,20 @@ Item {
 
             background: Rectangle {
                 color: Styles.pushButtonColor
-                border.color: Styles.borderColor
-                border.width: width * 0.005
-                radius: width * 0.05
+                radius: width * buttonRadiusRatio
+
+                border {
+                    color: Styles.borderColor
+                    width: width * 0.005
+                }
             }
 
-            Layout.minimumWidth: bottomBtnsMinWidth
-
-            ToolTip.text: GameStrings.quitButtonToolTip
-            ToolTip.delay: presenter.toolTipDelay
-            ToolTip.timeout: presenter.toolTipTimeout
-            ToolTip.visible: hovered
+            ToolTip {
+                text: GameStrings.quitButtonToolTip
+                visible: quitBtn.hovered
+                delay: presenter.toolTipDelay
+                timeout: presenter.toolTipTimeout
+            }
 
             onClicked: presenter.quit()
             onPressed: opacity = Styles.pressedButtonOpacity

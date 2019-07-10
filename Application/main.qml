@@ -6,20 +6,21 @@ import GameManagers 1.0
 import GameUtils 1.0
 
 ApplicationWindow {
-    visible: true
+    id: game
 
-    width: 640
-    height: 480
-    minimumWidth: 640
-    minimumHeight: 480
+    title: gamePresenter.windowTitle
+    visible: true
+    color: Styles.backgroundColor
 
     screen: Qt.application.screens[0]
 
     x: (Qt.application.screens[0].width - minimumWidth)/2
     y: (Qt.application.screens[0].height - minimumHeight)/2
 
-    title: gamePresenter.windowTitle
-    color: Styles.backgroundColor
+    width: 640
+    height: 480
+    minimumWidth: 640
+    minimumHeight: 480
 
     property double windowMargins: width * 0.01
 
@@ -29,42 +30,62 @@ ApplicationWindow {
 
     IntroPane {
         id: introPane
+
         presenter: gamePresenter
         visible: gamePresenter.introPaneVisible
-        anchors.fill: parent
-        anchors.margins: windowMargins
+
+        anchors {
+            fill: parent
+            margins: windowMargins
+        }
     }
 
     MainPane {
         id: mainPane
+
         presenter: gamePresenter
         visible: gamePresenter.mainPaneVisible
-        anchors.fill: parent
-        anchors.margins: windowMargins
+
+        anchors {
+            fill: parent
+            margins: windowMargins
+        }
     }
 
     DataEntryPane {
         id: dataEntryPane
+
         presenter: gamePresenter
         visible: gamePresenter.dataEntryPaneVisible
-        anchors.fill: parent
-        anchors.margins: windowMargins
+
+        anchors {
+            fill: parent
+            margins: windowMargins
+        }
     }
 
     HelpPane {
         id: helpPane
+
         presenter: gamePresenter
         visible: gamePresenter.helpPaneVisible
-        anchors.fill: parent
-        anchors.margins: windowMargins
+
+        anchors {
+            fill: parent
+            margins: windowMargins
+        }
     }
 
     ErrorPane {
         id: errorPane
+
         presenter: gamePresenter
         visible: gamePresenter.errorOccured
-        anchors.fill: parent
-        anchors.margins: windowMargins
+
+        anchors {
+            fill: parent
+            margins: windowMargins
+        }
     }
 
     // shortcuts shared among multiple panes
@@ -72,30 +93,22 @@ ApplicationWindow {
     Shortcut {
         sequence: GameStrings.playButtonShortcut
         enabled: gamePresenter.playEnabled
-        onActivated: {
-            gamePresenter.switchToPane(GamePresenter.MAIN);
-        }
+        onActivated: gamePresenter.switchToPane(GamePresenter.MAIN)
     }
 
     Shortcut {
         sequence: GameStrings.dataEntryButtonShortcut
         enabled: gamePresenter.dataEntryEnabled
-        onActivated: {
-            gamePresenter.switchToPane(GamePresenter.DATA_ENTRY);
-        }
+        onActivated: gamePresenter.switchToPane(GamePresenter.DATA_ENTRY)
     }
 
     Shortcut {
         sequence: GameStrings.helpButtonShortcut
-        onActivated: {
-            gamePresenter.switchToPane(GamePresenter.HELP);
-        }
+        onActivated: gamePresenter.switchToPane(GamePresenter.HELP)
     }
 
     Shortcut {
         sequence: GameStrings.quitButtonShortcut
-        onActivated: {
-            gamePresenter.quit();
-        }
+        onActivated: gamePresenter.quit()
     }
 }

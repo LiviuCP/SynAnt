@@ -1,20 +1,15 @@
 import QtQuick 2.7
 import QtQuick.Dialogs 1.1
+import GameUtils 1.0
 
 Item {
-    readonly property string windowTitle: "Fatal Error!"
-    readonly property string windowName: "errorDialog"
-
     MessageDialog {
         id: errorDialog
 
-        objectName: windowName
-        title: windowTitle
+        title: GameStrings.fatalErrorWindowTitle
+        objectName: GameStrings.fatalErrorWindowObjectName
 
-        onAccepted: {
-            Qt.quit()
-        }
-
+        onAccepted: Qt.quit()
         Component.onCompleted: visible = true
     }
 }
