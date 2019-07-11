@@ -100,6 +100,13 @@ Item {
                 timeout: presenter.toolTipTimeout
             }
 
+            Shortcut {
+                sequence: GameStrings.playButtonShortcut
+                enabled: presenter.playEnabled && presenter.introPaneVisible
+
+                onActivated: presenter.switchToPane(GamePresenter.MAIN)
+            }
+
             onClicked: presenter.switchToPane(GamePresenter.MAIN)
             onPressed: opacity = Styles.pressedButtonOpacity
             onReleased: opacity = Styles.releasedButtonOpacity

@@ -149,6 +149,8 @@ Item {
 
             Shortcut {
                 sequence: GameStrings.resetButtonShortcut
+                enabled: presenter.mainPaneVisible
+
                 onActivated: presenter.handleResetRequest()
             }
 
@@ -280,6 +282,7 @@ Item {
 
                     Shortcut {
                         sequence: GameStrings.levelEasyButtonShortcut
+                        enabled: presenter.mainPaneVisible
 
                         onActivated: {
                             if (!easyLvlBtn.checked) {
@@ -303,6 +306,7 @@ Item {
 
                     Shortcut {
                         sequence: GameStrings.levelMediumButtonShortcut
+                        enabled: presenter.mainPaneVisible
 
                         onActivated: {
                             if (!mediumLvlBtn.checked) {
@@ -326,6 +330,7 @@ Item {
 
                     Shortcut {
                         sequence: GameStrings.levelHardButtonShortcut
+                        enabled: presenter.mainPaneVisible
 
                         onActivated: {
                             if (!hardLvlBtn.checked) {
@@ -511,6 +516,8 @@ Item {
 
         Shortcut {
             sequence: GameStrings.clearFirstInputWordShortcut
+            enabled: presenter.mainPaneVisible
+
             onActivated: presenter.clearFirstInputWord()
         }
 
@@ -559,6 +566,8 @@ Item {
 
         Shortcut {
             sequence: GameStrings.clearSecondInputWordShortcut
+            enabled: presenter.mainPaneVisible
+
             onActivated: presenter.clearSecondInputWord()
         }
     }
@@ -609,6 +618,8 @@ Item {
 
             Shortcut {
                 sequence: GameStrings.submitButtonShortcut
+                enabled: presenter.mainPaneVisible
+
                 onActivated: presenter.handleSubmitRequest()
             }
 
@@ -653,6 +664,8 @@ Item {
 
             Shortcut {
                 sequence: GameStrings.clearInputButtonShortcut
+                enabled: presenter.mainPaneVisible
+
                 onActivated: presenter.clearInput()
             }
 
@@ -728,6 +741,8 @@ Item {
 
             Shortcut {
                 sequence: GameStrings.resultsButtonShortcut
+                enabled: presenter.mainPaneVisible
+
                 onActivated: presenter.handleResultsRequest()
             }
 

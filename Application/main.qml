@@ -91,24 +91,23 @@ ApplicationWindow {
     // shortcuts shared among multiple panes
 
     Shortcut {
-        sequence: GameStrings.playButtonShortcut
-        enabled: gamePresenter.playEnabled
-        onActivated: gamePresenter.switchToPane(GamePresenter.MAIN)
-    }
-
-    Shortcut {
         sequence: GameStrings.dataEntryButtonShortcut
-        enabled: gamePresenter.dataEntryEnabled
+        enabled: gamePresenter.dataEntryEnabled && (gamePresenter.introPaneVisible || gamePresenter.mainPaneVisible)
+
         onActivated: gamePresenter.switchToPane(GamePresenter.DATA_ENTRY)
     }
 
     Shortcut {
         sequence: GameStrings.helpButtonShortcut
+        enabled: gamePresenter.introPaneVisible || gamePresenter.mainPaneVisible || gamePresenter.dataEntryPaneVisible
+
         onActivated: gamePresenter.switchToPane(GamePresenter.HELP)
     }
 
     Shortcut {
         sequence: GameStrings.quitButtonShortcut
+        enabled: gamePresenter.introPaneVisible || gamePresenter.helpPaneVisible || gamePresenter.mainPaneVisible || gamePresenter.dataEntryPaneVisible
+
         onActivated: gamePresenter.quit()
     }
 }

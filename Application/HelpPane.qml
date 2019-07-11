@@ -105,6 +105,8 @@ Item {
 
             Shortcut {
                 sequence: GameStrings.okButtonShortcut
+                enabled: presenter.helpPaneVisible
+
                 onActivated: presenter.goBack()
             }
 

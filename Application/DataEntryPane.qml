@@ -168,7 +168,8 @@ Item {
 
             Shortcut {
                 sequence: GameStrings.dataEntryClearButtonShortcut
-                enabled: clearBtn.enabled && clearBtn.visible
+                enabled: clearBtn.enabled && presenter.dataEntryPaneVisible
+
                 onActivated: dataEntryPane.clearTextFields()
             }
 
@@ -227,7 +228,8 @@ Item {
 
             Shortcut {
                 sequence: GameStrings.addPairButtonShortcut
-                enabled: addPairBtn.enabled
+                enabled: addPairBtn.enabled && presenter.dataEntryPaneVisible
+
                 onActivated: presenter.handleAddWordsPairRequest(firstWordTextField.text, secondWordTextField.text, synonymsSelectionButton.checked)
             }
 
@@ -268,6 +270,8 @@ Item {
 
             Shortcut {
                 sequence: GameStrings.backButtonShortcut
+                enabled: presenter.dataEntryPaneVisible
+
                 onActivated: presenter.goBack()
             }
 
@@ -347,7 +351,8 @@ Item {
 
             Shortcut {
                 sequence: GameStrings.discardButtonShortcut
-                enabled: discardBtn.enabled
+                enabled: discardBtn.enabled && presenter.dataEntryPaneVisible
+
                 onActivated: presenter.handleClearDataEntryBufferRequest()
             }
 
@@ -392,7 +397,8 @@ Item {
 
             Shortcut {
                 sequence: GameStrings.saveButtonShortcut
-                enabled: saveBtn.enabled
+                enabled: saveBtn.enabled && presenter.dataEntryPaneVisible
+
                 onActivated: presenter.handleSaveNewWordPairsRequest()
             }
 
