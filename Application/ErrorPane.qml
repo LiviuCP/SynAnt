@@ -102,7 +102,7 @@ Item {
 
             Shortcut {
                 sequence: GameStrings.closeButtonShortcut
-                enabled: closeBtn.visible
+                enabled: presenter.errorOccured
 
                 onActivated: presenter.quit()
             }
