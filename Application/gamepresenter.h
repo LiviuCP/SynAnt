@@ -50,7 +50,7 @@ class GamePresenter : public QObject
     Q_PROPERTY(int toolTipTimeout READ getToolTipTimeout CONSTANT)
 
     // text properties
-    Q_PROPERTY(QString windowTitle READ getWindowTitle NOTIFY windowTitleChanged)
+    Q_PROPERTY(QString windowTitle READ getWindowTitle NOTIFY currentPaneChanged)
     Q_PROPERTY(QString introPaneMessage READ getIntroPaneMessage NOTIFY introPaneMessageChanged)
     Q_PROPERTY(QString helpPaneMessage READ getHelpPaneMessage CONSTANT) // if feasible: to be moved later to GameStrings.qml
     Q_PROPERTY(QString mainPaneStatusMessage READ getMainPaneStatusMessage NOTIFY mainPaneStatusMessageChanged)
@@ -159,7 +159,6 @@ signals:
     Q_SIGNAL void mixedWordsChanged();
     Q_SIGNAL void inputChanged();
     Q_SIGNAL void selectionChanged();
-    Q_SIGNAL void windowTitleChanged();
     Q_SIGNAL void introPaneMessageChanged();
     Q_SIGNAL void mainPaneStatusMessageChanged();
     Q_SIGNAL void mainPaneStatisticsMessagesChanged();

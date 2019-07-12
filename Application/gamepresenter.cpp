@@ -105,7 +105,6 @@ void GamePresenter::goBack()
         }
 
         Q_EMIT currentPaneChanged();
-        Q_EMIT windowTitleChanged();
 
         m_pGameFacade->resumeWordEntry();
     }
@@ -143,7 +142,6 @@ void GamePresenter::promptForSavingNewEntries()
     m_PromptSaveExitPaneVisible = true;
 
     Q_EMIT currentPaneChanged();
-    Q_EMIT windowTitleChanged();
 }
 
 void GamePresenter::handleResultsRequest()
@@ -696,7 +694,6 @@ void GamePresenter::_switchToPane(Pane pane)
     auto triggerPaneSwitching = [this]()
     {
         Q_EMIT currentPaneChanged();
-        Q_EMIT windowTitleChanged();
     };
 
     if (m_CurrentPane != pane)
@@ -841,5 +838,4 @@ void GamePresenter::_launchErrorPane(const QString& errorMessage)
     Q_EMIT currentPaneChanged();
     Q_EMIT errorMessageChanged();
     Q_EMIT errorOccuredChanged();
-    Q_EMIT windowTitleChanged();
 }
