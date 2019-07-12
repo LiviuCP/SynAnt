@@ -120,6 +120,13 @@ ApplicationWindow {
         sequence: GameStrings.quitButtonShortcut
         enabled: gamePresenter.introPaneVisible || gamePresenter.helpPaneVisible || gamePresenter.mainPaneVisible || gamePresenter.dataEntryPaneVisible
 
-        onActivated: gamePresenter.quit()
+        onActivated: {
+            if (gamePresenter.dataEntryPaneVisible && gamePresenter.saveEntriesEnabled) {
+                gamePresenter.quitDeferred = true;
+                gamePresenter.promptForSavingNewEntries();
+            } else {
+                gamePresenter.quit();
+            }
+        }
     }
 }

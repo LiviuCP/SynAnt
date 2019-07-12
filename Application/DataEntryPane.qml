@@ -23,6 +23,14 @@ Item {
         clearBtn.enabled = false;
     }
 
+    function handleBackButtonAction() {
+        if (presenter.saveEntriesEnabled) {
+            presenter.promptForSavingNewEntries();
+        } else {
+            presenter.goBack();
+        }
+    }
+
     MouseArea {
         id: entryPaneMouseArea
 
@@ -272,17 +280,10 @@ Item {
                 sequence: GameStrings.backButtonShortcut
                 enabled: presenter.dataEntryPaneVisible
 
-                onActivated: presenter.goBack()
+                onActivated: dataEntryPane.handleBackButtonAction()
             }
 
-            onClicked: {
-                if (presenter.saveEntriesEnabled) {
-                    presenter.promptForSavingNewEntries();
-                } else {
-                    presenter.goBack();
-                }
-            }
-
+            onClicked: dataEntryPane.handleBackButtonAction()
             onPressed: opacity = Styles.pressedButtonOpacity
             onReleased: opacity = Styles.releasedButtonOpacity
             onCanceled: opacity = Styles.releasedButtonOpacity
