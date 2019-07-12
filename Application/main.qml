@@ -64,6 +64,18 @@ ApplicationWindow {
         }
     }
 
+    PromptSaveExitPane {
+        id: promptSaveExitPane
+
+        presenter: gamePresenter
+        visible: gamePresenter.promptSaveExitPaneVisible
+
+        anchors {
+            fill: parent
+            margins: windowMargins
+        }
+    }
+
     HelpPane {
         id: helpPane
 

@@ -114,6 +114,11 @@ void GameFacade::startWordEntry()
     Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_ENTRY_STARTED);
 }
 
+void GameFacade::resumeWordEntry()
+{
+    Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_ENTRY_RESUMED);
+}
+
 void GameFacade::addWordPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex)
 {
     if (!m_pWordPairOwner->getIsWordPieceSelected(wordPieceIndex))

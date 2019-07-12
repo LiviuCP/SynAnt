@@ -275,7 +275,14 @@ Item {
                 onActivated: presenter.goBack()
             }
 
-            onClicked: presenter.goBack()
+            onClicked: {
+                if (presenter.saveEntriesEnabled) {
+                    presenter.promptForSavingNewEntries();
+                } else {
+                    presenter.goBack();
+                }
+            }
+
             onPressed: opacity = Styles.pressedButtonOpacity
             onReleased: opacity = Styles.releasedButtonOpacity
             onCanceled: opacity = Styles.releasedButtonOpacity
@@ -437,7 +444,15 @@ Item {
                 timeout: presenter.toolTipTimeout
             }
 
-            onClicked: presenter.quit()
+            onClicked: {
+                if (presenter.saveEntriesEnabled) {
+                    presenter.quitDeferred = true;
+                    presenter.promptForSavingNewEntries();
+                } else {
+                    presenter.quit();
+                }
+            }
+
             onPressed: opacity = Styles.pressedButtonOpacity
             onReleased: opacity = Styles.releasedButtonOpacity
             onCanceled: opacity = Styles.releasedButtonOpacity

@@ -13,6 +13,7 @@ static const QMap<GamePresenter::Pane, QString> c_WindowTitles
     {GamePresenter::Pane::HELP, GameStrings::c_HelpWindowTitle},
     {GamePresenter::Pane::MAIN, GameStrings::c_MainWindowTitle},
     {GamePresenter::Pane::DATA_ENTRY, GameStrings::c_DataEntryWindowTitle},
+    {GamePresenter::Pane::PROMPT_SAVE_EXIT, GameStrings::c_PromptSaveExitWindowTitle},
     {GamePresenter::Pane::ERROR, GameStrings::c_FatalErrorWindowTitle}
 };
 
@@ -29,6 +30,7 @@ GamePresenter::GamePresenter(QObject *parent)
     , m_HelpPaneVisible {false}
     , m_MainPaneVisible {false}
     , m_DataEntryPaneVisible{false}
+    , m_PromptSaveExitPaneVisible{false}
     , m_MainPaneInitialized {false}
     , m_StatisticsResetEnabled {false}
     , m_ClearInputEnabled{false}
@@ -89,11 +91,30 @@ void GamePresenter::switchToPane(GamePresenter::Pane pane)
 
 void GamePresenter::goBack()
 {
-    Q_ASSERT(!m_PreviousPanesStack.isEmpty());
-    Pane previousPane{m_PreviousPanesStack.last()};
-    m_PreviousPanesStack.pop_back();
+    if (m_CurrentPane == Pane::PROMPT_SAVE_EXIT)
+    {
+        m_CurrentPane = Pane::DATA_ENTRY;
+        m_PromptSaveExitPaneVisible = false;
+        m_DataEntryPaneVisible = true;
+        m_PreviousPanesStack.pop_back();
 
-    _switchToPane(previousPane);
+        if (m_QuitDeferred)
+        {
+            m_QuitDeferred = false;
+            Q_EMIT quitDeferredChanged();
+        }
+
+        Q_EMIT currentPaneChanged();
+        Q_EMIT windowTitleChanged();
+
+        m_pGameFacade->resumeWordEntry();
+    }
+    else
+    {
+        Pane previousPane{m_PreviousPanesStack.last()};
+        m_PreviousPanesStack.pop_back();
+        _switchToPane(previousPane);
+    }
 }
 
 void GamePresenter::handleAddWordsPairRequest(const QString& firstWord, const QString& secondWord, bool areSynonyms)
@@ -109,6 +130,20 @@ void GamePresenter::handleClearDataEntryBufferRequest()
 void GamePresenter::handleSaveNewWordPairsRequest()
 {
     m_pGameFacade->requestSaveDataToDb();
+}
+
+void GamePresenter::promptForSavingNewEntries()
+{
+    Q_ASSERT(m_CurrentPane == Pane::DATA_ENTRY);
+
+    m_PreviousPanesStack.append(m_CurrentPane);
+    m_CurrentPane = Pane::PROMPT_SAVE_EXIT;
+
+    m_DataEntryPaneVisible = false;
+    m_PromptSaveExitPaneVisible = true;
+
+    Q_EMIT currentPaneChanged();
+    Q_EMIT windowTitleChanged();
 }
 
 void GamePresenter::handleResultsRequest()
@@ -226,6 +261,11 @@ bool GamePresenter::getDataEntryPaneVisible() const
     return m_DataEntryPaneVisible;
 }
 
+bool GamePresenter::getPromptSaveExitPaneVisible() const
+{
+    return m_PromptSaveExitPaneVisible;
+}
+
 bool GamePresenter::isPlayEnabled() const
 {
     return m_pGameFacade->isDataAvailable();
@@ -269,6 +309,20 @@ bool GamePresenter::getSubmitEnabled() const
 bool GamePresenter::getErrorOccured() const
 {
     return m_ErrorOccured;
+}
+
+bool GamePresenter::getQuitDeferred() const
+{
+    return m_QuitDeferred;
+}
+
+void GamePresenter::setQuitDeferred(bool deferred)
+{
+    if (m_QuitDeferred != deferred)
+    {
+        m_QuitDeferred = deferred;
+        Q_EMIT quitDeferredChanged();
+    }
 }
 
 QList<QVariant> GamePresenter::getMixedWordsPiecesContent() const
@@ -603,6 +657,10 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         _updateStatusMessage(GameStrings::c_DataEntryStartMessage, Pane::DATA_ENTRY, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
         break;
+    case Game::StatusCodes::DATA_ENTRY_RESUMED:
+        _updateStatusMessage(GameStrings::c_DataEntryResumeMessage, Pane::DATA_ENTRY, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
+        break;
     case Game::StatusCodes::DATA_ENTRY_SUCCESS:
         Q_EMIT dataEntrySucceeded();
         _updateStatusMessage(GameStrings::c_DataEntrySuccessMessage, Pane::DATA_ENTRY, Game::c_NoDelay);
@@ -768,6 +826,9 @@ void GamePresenter::_launchErrorPane(const QString& errorMessage)
         break;
     case Pane::DATA_ENTRY:
         m_DataEntryPaneVisible = false;
+        break;
+    case Pane::PROMPT_SAVE_EXIT:
+        m_PromptSaveExitPaneVisible = false;
         break;
     default:
         Q_ASSERT(static_cast<int>(m_CurrentPane) >= 0 && static_cast<int>(m_CurrentPane) < static_cast<int>(Pane::Nr_Of_Panes));

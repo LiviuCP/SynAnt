@@ -36,6 +36,7 @@ namespace Game
         DATA_ENTRY_SAVING_ERROR,
         DATA_GOT_AVAILABLE,
         DATA_ENTRY_STARTED,
+        DATA_ENTRY_RESUMED,
         DATA_ENTRY_SUCCESS,
         INVALID_DATA_ENTRY,
         CACHE_RESET,

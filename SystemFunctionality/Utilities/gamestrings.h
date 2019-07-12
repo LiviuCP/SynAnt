@@ -135,6 +135,7 @@ namespace GameStrings {
 
     const QString c_DefaultStatusMessage                {    "Please select a new word piece or delete one/more if necessary"                           };
     const QString c_DataEntryStartMessage               {    "Word pairs entry started"                                                                 };
+    const QString c_DataEntryResumeMessage              {    "Data entry resumed. There are entries pending to be saved!"                               };
     const QString c_DataEntryRequestMessage             {    "Please enter a new pair of words.\n\nChoose if they are synonyms or antonyms"             };
     const QString c_DataSuccessfullySavedMessage        {    "The entries have been successfully saved to database"                                     };
     const QString c_GameStartedMessage                  {    "Game started"                                                                             };
@@ -195,6 +196,7 @@ namespace GameStrings {
     const QString c_HelpWindowTitle                     {    "SynAnt - Help"                                                                            };
     const QString c_MainWindowTitle                     {    "SynAnt - Let's Play!"                                                                     };
     const QString c_DataEntryWindowTitle                {    "SynAnt - Enter New Word Pairs"                                                            };
+    const QString c_PromptSaveExitWindowTitle           {    "SynAnt - Save Data"                                                                       };
     const QString c_FatalErrorWindowTitle               {    "Fatal Error!"                                                                             };
 
     // colors

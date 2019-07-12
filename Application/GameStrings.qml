@@ -14,6 +14,8 @@ QtObject {
                                                                  \nUse radio buttons to change difficulty level.
                                                                  \nPress Reset to reset the scores and number of pairs."
 
+    readonly property string promptSaveBeforeExitMessage:       "\n\n\n\n\tDo you want to save the added word pairs before exiting?\n"
+
     // labels
     readonly property string playButtonLabel:                   "Play"
     readonly property string helpButtonLabel:                   "Help"
@@ -34,6 +36,9 @@ QtObject {
     readonly property string backButtonLabel:                   "Back"
     readonly property string discardButtonLabel:                "Discard"
     readonly property string saveButtonLabel:                   "Save"
+    readonly property string yesButtonLabel:                    "Yes"
+    readonly property string noButtonLabel:                     "No"
+    readonly property string cancelButtonLabel:                 "Cancel"
     readonly property string closeButtonLabel:                  "Close"
 
     // shortcuts
@@ -56,6 +61,9 @@ QtObject {
     readonly property string backButtonShortcut:                "ALT+K"
     readonly property string saveButtonShortcut:                "CTRL+S"
     readonly property string discardButtonShortcut:             "CTRL+D"
+    readonly property string yesButtonShortcut:                 "CTRL+Y"
+    readonly property string noButtonShortcut:                  "CTRL+N"
+    readonly property string cancelButtonShortcut:              "CTRL+W"
     readonly property string closeButtonShortcut:               "ALT+C"
 
     // tooltips
@@ -63,6 +71,7 @@ QtObject {
     readonly property string helpPaneToolTip:                   "Please read the detailed game instructions."
     readonly property string mainPaneToolTip:                   "This is where the action happens!"
     readonly property string dataEntryPaneToolTip:              "Please feel free to add new pairs to the game."
+    readonly property string promptPaneToolTip:                 "Please choose one of the below options."
     readonly property string errorPaneToolTip:                  "A fatal error occurred. Corrective actions are required."
 
     readonly property string highscoresToolTip:                 "Displays the game scores:
@@ -94,6 +103,9 @@ QtObject {
     readonly property string backButtonToolTip:                 "Click or hit ALT+K to go to previous page"
     readonly property string saveButtonToolTip:                 "Click or hit CTRL+S to save the added entries to database"
     readonly property string discardButtonToolTip:              "Click or hit CTRL+S to discard the added entries"
+    readonly property string yesButtonToolTip:                  "Click or hit CTRL+Y to save and exit the application"
+    readonly property string noButtonToolTip:                   "Click or hit CTRL+N to exit the application without saving"
+    readonly property string cancelButtonToolTip:               "Click or hit CTRL+W to return to data entry dialog"
     readonly property string closeButtonToolTip:                "A fatal error occurred. Click button or hit ALT+C to exit the game."
     readonly property string dataEntryFirstWordToolTip:         "Enter the first word from the pair to be added to database."
     readonly property string dataEntrySecondWordToolTip:        "Enter the second word from the pair to be added to database."

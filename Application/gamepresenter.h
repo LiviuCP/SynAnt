@@ -21,6 +21,7 @@ class GamePresenter : public QObject
     Q_PROPERTY(bool helpPaneVisible READ getHelpPaneVisible NOTIFY currentPaneChanged)
     Q_PROPERTY(bool mainPaneVisible READ getMainPaneVisible NOTIFY currentPaneChanged)
     Q_PROPERTY(bool dataEntryPaneVisible READ getDataEntryPaneVisible NOTIFY currentPaneChanged)
+    Q_PROPERTY(bool promptSaveExitPaneVisible READ getPromptSaveExitPaneVisible NOTIFY currentPaneChanged)
     Q_PROPERTY(bool playEnabled READ isPlayEnabled NOTIFY playEnabledChanged)
     Q_PROPERTY(bool dataEntryEnabled READ isDataEntryEnabled NOTIFY dataEntryEnabledChanged)
     Q_PROPERTY(bool addDataEntryEnabled READ isAddDataEntryEnabled NOTIFY addWordsPairEnabledChanged)
@@ -30,6 +31,7 @@ class GamePresenter : public QObject
     Q_PROPERTY(bool clearInputEnabled READ getClearInputEnabled NOTIFY clearInputEnabledChanged)
     Q_PROPERTY(bool submitEnabled READ getSubmitEnabled NOTIFY submitEnabledChanged)
     Q_PROPERTY(bool errorOccured READ getErrorOccured NOTIFY errorOccuredChanged)
+    Q_PROPERTY(bool quitDeferred READ getQuitDeferred WRITE setQuitDeferred NOTIFY quitDeferredChanged)
     Q_PROPERTY(QList<QVariant> mixedWordsPiecesContent READ getMixedWordsPiecesContent NOTIFY mixedWordsChanged)
     Q_PROPERTY(QList<QVariant> mixedWordsPiecesTextColors READ getMixedWordsPiecesTextColors NOTIFY mixedWordsChanged)
     Q_PROPERTY(QList<QVariant> mixedWordsPiecesSelections READ getMixedWordsPiecesSelections NOTIFY selectionChanged)
@@ -64,6 +66,7 @@ public:
         HELP,
         MAIN,
         DATA_ENTRY,
+        PROMPT_SAVE_EXIT,
         ERROR,
         Nr_Of_Panes
     };
@@ -76,6 +79,7 @@ public:
     Q_INVOKABLE void handleAddWordsPairRequest(const QString& firstWord, const QString& secondWord, bool areSynonyms);
     Q_INVOKABLE void handleClearDataEntryBufferRequest();
     Q_INVOKABLE void handleSaveNewWordPairsRequest();
+    Q_INVOKABLE void promptForSavingNewEntries();
     Q_INVOKABLE void handleResultsRequest();
     Q_INVOKABLE void handleSubmitRequest();
     Q_INVOKABLE void handleResetRequest();
@@ -96,6 +100,7 @@ public:
     bool getHelpPaneVisible() const;
     bool getMainPaneVisible() const;
     bool getDataEntryPaneVisible() const;
+    bool getPromptSaveExitPaneVisible() const;
     bool isPlayEnabled() const;
     bool isDataEntryEnabled() const;
     bool isAddDataEntryEnabled() const;
@@ -105,6 +110,9 @@ public:
     bool getClearInputEnabled() const;
     bool getSubmitEnabled() const;
     bool getErrorOccured() const;
+    bool getQuitDeferred() const;
+
+    void setQuitDeferred(bool deferred);
 
     QList<QVariant> getMixedWordsPiecesContent() const;
     QList<QVariant> getMixedWordsPiecesTextColors() const;
@@ -147,6 +155,7 @@ signals:
     Q_SIGNAL void clearInputEnabledChanged();
     Q_SIGNAL void submitEnabledChanged();
     Q_SIGNAL void errorOccuredChanged();
+    Q_SIGNAL void quitDeferredChanged();
     Q_SIGNAL void mixedWordsChanged();
     Q_SIGNAL void inputChanged();
     Q_SIGNAL void selectionChanged();
@@ -174,11 +183,13 @@ private:
     bool m_HelpPaneVisible;
     bool m_MainPaneVisible;
     bool m_DataEntryPaneVisible;
+    bool m_PromptSaveExitPaneVisible;
     bool m_MainPaneInitialized;
 
     bool m_StatisticsResetEnabled;
     bool m_ClearInputEnabled;
     bool m_ErrorOccured;
+    bool m_QuitDeferred;
 
     QString m_WindowTitle;
     QString m_IntroPaneMessage;
