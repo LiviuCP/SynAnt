@@ -361,10 +361,17 @@ Item {
                 sequence: GameStrings.discardButtonShortcut
                 enabled: discardBtn.enabled && presenter.dataEntryPaneVisible
 
-                onActivated: presenter.handleClearDataEntryBufferRequest()
+                onActivated: {
+                    presenter.handleClearDataEntryBufferRequest();
+                    firstWordTextField.forceActiveFocus();
+                }
             }
 
-            onClicked: presenter.handleClearDataEntryBufferRequest()
+            onClicked: {
+                presenter.handleClearDataEntryBufferRequest();
+                firstWordTextField.forceActiveFocus();
+            }
+
             onPressed: opacity = Styles.pressedButtonOpacity
             onReleased: opacity = Styles.releasedButtonOpacity
             onCanceled: opacity = Styles.releasedButtonOpacity
@@ -407,10 +414,17 @@ Item {
                 sequence: GameStrings.saveButtonShortcut
                 enabled: saveBtn.enabled && presenter.dataEntryPaneVisible
 
-                onActivated: presenter.handleSaveNewWordPairsRequest()
+                onActivated: {
+                    presenter.handleSaveNewWordPairsRequest();
+                    firstWordTextField.forceActiveFocus();
+                }
             }
 
-            onClicked: presenter.handleSaveNewWordPairsRequest()
+            onClicked: {
+                presenter.handleSaveNewWordPairsRequest();
+                firstWordTextField.forceActiveFocus();
+            }
+
             onPressed: opacity = Styles.pressedButtonOpacity
             onReleased: opacity = Styles.releasedButtonOpacity
             onCanceled: opacity = Styles.releasedButtonOpacity
