@@ -168,7 +168,7 @@ namespace GameStrings {
                                                         };
 
     const QString c_DataEntryIncorrectPairMessage       {    "The new words pair has not been correctly entered.\n\nPlease correct and try again!"      };
-    const QString c_DataEntryCacheResetMessage          {    "The data entry buffer has been cleared"                                                   };
+    const QString c_DataEntryCacheResetMessage          {    "The unsaved entries been discarded"                                                       };
 
     const QString c_ResultsRequestedByUserMessage       {
                                                              "\nThe correct words are:\n\n"

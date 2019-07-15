@@ -32,15 +32,15 @@ GamePresenter::GamePresenter(QObject *parent)
     , m_DataEntryPaneVisible{false}
     , m_PromptSaveExitPaneVisible{false}
     , m_MainPaneInitialized {false}
-    , m_StatisticsResetEnabled {false}
-    , m_ClearInputEnabled{false}
+    , m_MainPaneStatisticsResetEnabled {false}
+    , m_ClearMainPaneInputEnabled{false}
     , m_ErrorOccured {false}
     , m_WindowTitle{GameStrings::c_IntroWindowTitle}
     , m_CurrentPane {Pane::INTRO}
     , m_StatusUpdatePane{Pane::INTRO}
     , m_PreviousPanesStack{}
-    , m_FirstWordInputHoverIndex{-1}
-    , m_SecondWordInputHoverIndex{-1}
+    , m_FirstWordInputPiecesHoverIndex{-1}
+    , m_SecondWordInputPiecesHoverIndex{-1}
     , m_pGameFacade{nullptr}
     , m_pGameProxy {new GameProxy{this}}
     , m_pStatusUpdateTimer {new QTimer{this}}
@@ -62,15 +62,15 @@ GamePresenter::GamePresenter(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::addWordsPairAllowedChanged, this, &GamePresenter::addWordsPairEnabledChanged);
     Q_ASSERT(connected);
-    connected = connect(m_pGameFacade, &GameFacade::saveNewPairsToDbAllowedChanged, this, &GamePresenter::saveNewPairsEnabledChanged);
+    connected = connect(m_pGameFacade, &GameFacade::saveNewPairsToDbAllowedChanged, this, &GamePresenter::saveAddedWordPairsEnabledChanged);
     Q_ASSERT(connected);
-    connected = connect(m_pGameFacade, &GameFacade::resetCacheAllowedChanged, this, &GamePresenter::clearDataEntryBufferEnabledChanged);
+    connected = connect(m_pGameFacade, &GameFacade::resetCacheAllowedChanged, this, &GamePresenter::discardAddedWordPairsEnabledChanged);
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::inputChanged, this, &GamePresenter::_onInputChanged);
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::selectionChanged, this, &GamePresenter::selectionChanged);
     Q_ASSERT(connected);
-    connected = connect(m_pGameFacade, &GameFacade::completionChanged, this, &GamePresenter::submitEnabledChanged);
+    connected = connect(m_pGameFacade, &GameFacade::completionChanged, this, &GamePresenter::submitMainPaneInputEnabledChanged);
     Q_ASSERT(connected);
     connected = connect(m_pStatusUpdateTimer, &QTimer::timeout, this, &GamePresenter::_updateMessage);
     Q_ASSERT(connected);
@@ -101,7 +101,7 @@ void GamePresenter::goBack()
         if (m_QuitDeferred)
         {
             m_QuitDeferred = false;
-            Q_EMIT quitDeferredChanged();
+            Q_EMIT quitGameDeferredChanged();
         }
 
         Q_EMIT currentPaneChanged();
@@ -121,17 +121,17 @@ void GamePresenter::handleAddWordsPairRequest(const QString& firstWord, const QS
     m_pGameFacade->requestAddPairToData(firstWord, secondWord, areSynonyms);
 }
 
-void GamePresenter::handleClearDataEntryBufferRequest()
+void GamePresenter::handleClearAddedWordPairsRequest()
 {
     m_pGameFacade->resetDataEntryCache();
 }
 
-void GamePresenter::handleSaveNewWordPairsRequest()
+void GamePresenter::handleSaveAddedWordPairsRequest()
 {
     m_pGameFacade->requestSaveDataToDb();
 }
 
-void GamePresenter::promptForSavingNewEntries()
+void GamePresenter::promptForSavingAddedWordPairs()
 {
     Q_ASSERT(m_CurrentPane == Pane::DATA_ENTRY);
 
@@ -144,17 +144,17 @@ void GamePresenter::promptForSavingNewEntries()
     Q_EMIT currentPaneChanged();
 }
 
-void GamePresenter::handleResultsRequest()
+void GamePresenter::handleDisplayCorrectWordsPairRequest()
 {
     m_pGameFacade->provideResultsToUser();
 }
 
-void GamePresenter::handleSubmitRequest()
+void GamePresenter::handleSubmitMainPaneInputRequest()
 {
     m_pGameFacade->handleSubmitRequest();
 }
 
-void GamePresenter::handleResetRequest()
+void GamePresenter::handleMainPaneStatisticsResetRequest()
 {
     m_pGameFacade -> resetStatistics();
 }
@@ -185,12 +185,12 @@ void GamePresenter::removeWordPiecesFromSecondInputWord(int inputRangeStart)
     m_pGameFacade->removeWordPiecesFromInputWord(Game::InputWordNumber::TWO, inputRangeStart);
 }
 
-void GamePresenter::clearInput()
+void GamePresenter::clearMainPaneInput()
 {
     m_pGameFacade->clearInput();
 }
 
-void GamePresenter::clearFirstInputWord()
+void GamePresenter::clearMainPaneFirstInputWord()
 {
     if (!m_pGameFacade->getFirstWordInputIndexes().empty())
     {
@@ -198,7 +198,7 @@ void GamePresenter::clearFirstInputWord()
     }
 }
 
-void GamePresenter::clearSecondInputWord()
+void GamePresenter::clearMainPaneSecondInputWord()
 {
     if (!m_pGameFacade->getSecondWordInputIndexes().empty())
     {
@@ -208,20 +208,20 @@ void GamePresenter::clearSecondInputWord()
 
 void GamePresenter::updateFirstWordInputHoverIndex(int index)
 {
-    m_FirstWordInputHoverIndex = index;
+    m_FirstWordInputPiecesHoverIndex = index;
     Q_EMIT hoverChanged();
 }
 
 void GamePresenter::updateSecondWordInputHoverIndex(int index)
 {
-    m_SecondWordInputHoverIndex = index;
+    m_SecondWordInputPiecesHoverIndex = index;
     Q_EMIT hoverChanged();
 }
 
 void GamePresenter::clearWordInputHoverIndexes()
 {
-    m_FirstWordInputHoverIndex = -1;
-    m_SecondWordInputHoverIndex = -1;
+    m_FirstWordInputPiecesHoverIndex = -1;
+    m_SecondWordInputPiecesHoverIndex = -1;
 
     Q_EMIT hoverChanged();
 }
@@ -274,32 +274,32 @@ bool GamePresenter::isDataEntryEnabled() const
     return m_pGameFacade->isDataEntryAllowed();
 }
 
-bool GamePresenter::isAddDataEntryEnabled() const
+bool GamePresenter::isAddWordsPairEnabled() const
 {
     return m_pGameFacade->isAddingToCacheAllowed();
 }
 
-bool GamePresenter::isClearDataEntryBufferEnabled() const
+bool GamePresenter::isDiscardAddedWordPairsEnabled() const
 {
     return m_pGameFacade->isCacheResetAllowed();
 }
 
-bool GamePresenter::isSaveDataEntriesEnabled() const
+bool GamePresenter::isSaveAddedWordPairsEnabled() const
 {
     return m_pGameFacade->isSavingToDbAllowed();
 }
 
-bool GamePresenter::getResetEnabled() const
+bool GamePresenter::getMainPaneStatisticsResetEnabled() const
 {
-    return m_StatisticsResetEnabled;
+    return m_MainPaneStatisticsResetEnabled;
 }
 
-bool GamePresenter::getClearInputEnabled() const
+bool GamePresenter::getClearMainPaneInputEnabled() const
 {
-    return m_ClearInputEnabled;
+    return m_ClearMainPaneInputEnabled;
 }
 
-bool GamePresenter::getSubmitEnabled() const
+bool GamePresenter::getSubmitMainPaneInputEnabled() const
 {
     return m_pGameFacade->isInputComplete();
 }
@@ -309,17 +309,17 @@ bool GamePresenter::getErrorOccured() const
     return m_ErrorOccured;
 }
 
-bool GamePresenter::getQuitDeferred() const
+bool GamePresenter::getQuitGameDeferred() const
 {
     return m_QuitDeferred;
 }
 
-void GamePresenter::setQuitDeferred(bool deferred)
+void GamePresenter::setQuitGameDeferred(bool deferred)
 {
     if (m_QuitDeferred != deferred)
     {
         m_QuitDeferred = deferred;
-        Q_EMIT quitDeferredChanged();
+        Q_EMIT quitGameDeferredChanged();
     }
 }
 
@@ -383,14 +383,14 @@ QList<QVariant> GamePresenter::getFirstWordInputPiecesTextColors() const
     return firstWordInputPiecesTextColors;
 }
 
-int GamePresenter::getFirstWordInputHoverIndex() const
+int GamePresenter::getFirstWordInputPiecesHoverIndex() const
 {
-    return m_FirstWordInputHoverIndex;
+    return m_FirstWordInputPiecesHoverIndex;
 }
 
-bool GamePresenter::getIsFirstWordInputHovered() const
+bool GamePresenter::getAreFirstWordInputPiecesHovered() const
 {
-    return (m_FirstWordInputHoverIndex != -1);
+    return (m_FirstWordInputPiecesHoverIndex != -1);
 }
 
 QList<QVariant> GamePresenter::getSecondWordInputPiecesContent() const
@@ -417,14 +417,14 @@ QList<QVariant> GamePresenter::getSecondWordInputPiecesTextColors() const
     return secondWordInputPiecesTextColors;
 }
 
-bool GamePresenter::getIsSecondWordInputHovered() const
+bool GamePresenter::getAreSecondWordInputPiecesHovered() const
 {
-    return (m_SecondWordInputHoverIndex != -1);
+    return (m_SecondWordInputPiecesHoverIndex != -1);
 }
 
-int GamePresenter::getSecondWordInputHoverIndex() const
+int GamePresenter::getSecondWordInputPiecesHoverIndex() const
 {
-    return m_SecondWordInputHoverIndex;
+    return m_SecondWordInputPiecesHoverIndex;
 }
 
 int GamePresenter::getLevelEasy() const
@@ -501,15 +501,15 @@ void GamePresenter::_onInputChanged()
 {
     clearWordInputHoverIndexes();
 
-    if ((m_pGameFacade->getFirstWordInputIndexes().size() != 0 || m_pGameFacade->getSecondWordInputIndexes().size() != 0) && !m_ClearInputEnabled)
+    if ((m_pGameFacade->getFirstWordInputIndexes().size() != 0 || m_pGameFacade->getSecondWordInputIndexes().size() != 0) && !m_ClearMainPaneInputEnabled)
     {
-        m_ClearInputEnabled = true;
-        Q_EMIT clearInputEnabledChanged();
+        m_ClearMainPaneInputEnabled = true;
+        Q_EMIT clearMainPaneInputEnabledChanged();
     }
-    else if ((m_pGameFacade->getFirstWordInputIndexes().size() == 0 && m_pGameFacade->getSecondWordInputIndexes().size() == 0) && m_ClearInputEnabled)
+    else if ((m_pGameFacade->getFirstWordInputIndexes().size() == 0 && m_pGameFacade->getSecondWordInputIndexes().size() == 0) && m_ClearMainPaneInputEnabled)
     {
-        m_ClearInputEnabled = false;
-        Q_EMIT clearInputEnabledChanged();
+        m_ClearMainPaneInputEnabled = false;
+        Q_EMIT clearMainPaneInputEnabledChanged();
     }
 
     Q_EMIT inputChanged();
@@ -524,15 +524,15 @@ void GamePresenter::_onStatisticsChanged()
 
     bool emptyStatistics{obtainedScore == 0 && totalAvailableScore == 0 && guessedWordPairs == 0 && totalWordPairs == 0};
 
-    if (!m_StatisticsResetEnabled && !emptyStatistics)
+    if (!m_MainPaneStatisticsResetEnabled && !emptyStatistics)
     {
-        m_StatisticsResetEnabled = true;
-        Q_EMIT resetEnabledChanged();
+        m_MainPaneStatisticsResetEnabled = true;
+        Q_EMIT mainPaneStatisticsResetEnabledChanged();
     }
-    else if (m_StatisticsResetEnabled && emptyStatistics)
+    else if (m_MainPaneStatisticsResetEnabled && emptyStatistics)
     {
-        m_StatisticsResetEnabled = false;
-        Q_EMIT resetEnabledChanged();
+        m_MainPaneStatisticsResetEnabled = false;
+        Q_EMIT mainPaneStatisticsResetEnabledChanged();
     }
 
     m_MainPaneScoreMessage = GameStrings::c_HighscoresMessage.arg(obtainedScore)

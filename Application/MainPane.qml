@@ -115,14 +115,14 @@ Item {
         Button {
             id: resetBtn
 
-            enabled: presenter.resetEnabled
+            enabled: presenter.mainPaneStatisticsResetEnabled
 
             Layout.minimumWidth: resultsBtn.width
             Layout.alignment: Qt.AlignRight
             Layout.leftMargin: 0.05 * mainPane.width
 
             contentItem: Text {
-                text: GameStrings.resetButtonLabel
+                text: GameStrings.mainPaneStatisticsResetButtonLabel
                 color: Styles.textColor
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
@@ -141,20 +141,20 @@ Item {
             }
 
             ToolTip {
-                text: GameStrings.resetButtonToolTip
+                text: GameStrings.mainPaneResetButtonToolTip
                 visible: resetBtn.hovered
                 delay: presenter.toolTipDelay
                 timeout: presenter.toolTipTimeout
             }
 
             Shortcut {
-                sequence: GameStrings.resetButtonShortcut
+                sequence: GameStrings.mainPaneResetButtonShortcut
                 enabled: presenter.mainPaneVisible
 
-                onActivated: presenter.handleResetRequest()
+                onActivated: presenter.handleMainPaneStatisticsResetRequest()
             }
 
-            onClicked: presenter.handleResetRequest()
+            onClicked: presenter.handleMainPaneStatisticsResetRequest()
             onPressed: opacity = Styles.pressedButtonOpacity
             onReleased: opacity = Styles.releasedButtonOpacity
             onCanceled: opacity = Styles.releasedButtonOpacity
@@ -228,7 +228,7 @@ Item {
             }
 
             ToolTip {
-                text: GameStrings.gameInstructionsToolTip
+                text: GameStrings.mainPaneInstructionsBoxToolTip
                 visible: infoMouseArea.containsMouse
                 delay: presenter.toolTipDelay
                 timeout: presenter.toolTipTimeout
@@ -366,7 +366,7 @@ Item {
             }
 
             ToolTip {
-                text: GameStrings.gameStatusToolTip
+                text: GameStrings.mainPaneStatusBoxToolTip
                 visible: statusMouseArea.containsMouse
                 delay: presenter.toolTipDelay
                 timeout: presenter.toolTipTimeout
@@ -477,7 +477,7 @@ Item {
             model: presenter.firstWordInputPiecesContent
 
             Rectangle {
-                property bool isHoverSelected: presenter.isFirstWordInputHovered && presenter.firstWordInputHoverIndex <= index
+                property bool isHoverSelected: presenter.areFirstWordInputPiecesHovered && presenter.firstWordInputPiecesHoverIndex <= index
 
                 width: parent.width / mixedWordsRepeater.count
                 height: parent.height
@@ -506,7 +506,7 @@ Item {
                 }
 
                 ToolTip {
-                    text: GameStrings.firstWordInputToolTip
+                    text: GameStrings.mainPaneFirstWordInputToolTip
                     visible: firstWordInputCurrentPieceMouseArea.containsMouse
                     delay: presenter.toolTipDelay
                     timeout: presenter.toolTipTimeout
@@ -515,10 +515,10 @@ Item {
         }
 
         Shortcut {
-            sequence: GameStrings.clearFirstInputWordShortcut
+            sequence: GameStrings.clearMainPaneFirstInputWordShortcut
             enabled: presenter.mainPaneVisible
 
-            onActivated: presenter.clearFirstInputWord()
+            onActivated: presenter.clearMainPaneFirstInputWord()
         }
 
         Repeater {
@@ -527,7 +527,7 @@ Item {
             model: presenter.secondWordInputPiecesContent
 
             Rectangle {
-                property bool isHoverSelected: presenter.isSecondWordInputHovered && presenter.secondWordInputHoverIndex <= index
+                property bool isHoverSelected: presenter.areSecondWordInputPiecesHovered && presenter.secondWordInputPiecesHoverIndex <= index
 
                 width: parent.width / mixedWordsRepeater.count
                 height: parent.height
@@ -556,7 +556,7 @@ Item {
                 }
 
                 ToolTip {
-                    text: GameStrings.secondWordInputToolTip
+                    text: GameStrings.mainPaneSecondWordInputToolTip
                     visible: secondWordInputCurrentPieceMouseArea.containsMouse
                     delay: presenter.toolTipDelay
                     timeout: presenter.toolTipTimeout
@@ -565,10 +565,10 @@ Item {
         }
 
         Shortcut {
-            sequence: GameStrings.clearSecondInputWordShortcut
+            sequence: GameStrings.clearMainPaneSecondInputWordShortcut
             enabled: presenter.mainPaneVisible
 
-            onActivated: presenter.clearSecondInputWord()
+            onActivated: presenter.clearMainPaneSecondInputWord()
         }
     }
 
@@ -586,7 +586,7 @@ Item {
         Button {
             id: submitBtn
 
-            enabled: presenter.submitEnabled
+            enabled: presenter.submitMainPaneInputEnabled
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -620,10 +620,10 @@ Item {
                 sequence: GameStrings.submitButtonShortcut
                 enabled: presenter.mainPaneVisible
 
-                onActivated: presenter.handleSubmitRequest()
+                onActivated: presenter.handleSubmitMainPaneInputRequest()
             }
 
-            onClicked: presenter.handleSubmitRequest()
+            onClicked: presenter.handleSubmitMainPaneInputRequest()
             onPressed: opacity = Styles.pressedButtonOpacity
             onReleased: opacity = Styles.releasedButtonOpacity
             onCanceled: opacity = Styles.releasedButtonOpacity
@@ -632,12 +632,12 @@ Item {
         Button {
             id: clearInputBtn
 
-            enabled: presenter.clearInputEnabled
+            enabled: presenter.clearMainPaneInputEnabled
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
             contentItem: Text {
-                text: GameStrings.clearInputButtonLabel
+                text: GameStrings.clearMainPaneInputButtonLabel
                 color: Styles.textColor
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
@@ -656,20 +656,20 @@ Item {
             }
 
             ToolTip {
-                text: GameStrings.clearInputButtonToolTip
+                text: GameStrings.clearMainPaneInputButtonToolTip
                 visible: clearInputBtn.hovered
                 delay: presenter.toolTipDelay
                 timeout: presenter.toolTipTimeout
             }
 
             Shortcut {
-                sequence: GameStrings.clearInputButtonShortcut
+                sequence: GameStrings.clearMainPaneInputButtonShortcut
                 enabled: presenter.mainPaneVisible
 
-                onActivated: presenter.clearInput()
+                onActivated: presenter.clearMainPaneInput()
             }
 
-            onClicked: presenter.clearInput()
+            onClicked: presenter.clearMainPaneInput()
             onPressed: opacity = Styles.pressedButtonOpacity
             onReleased: opacity = Styles.releasedButtonOpacity
             onCanceled: opacity = Styles.releasedButtonOpacity
@@ -743,10 +743,10 @@ Item {
                 sequence: GameStrings.resultsButtonShortcut
                 enabled: presenter.mainPaneVisible
 
-                onActivated: presenter.handleResultsRequest()
+                onActivated: presenter.handleDisplayCorrectWordsPairRequest()
             }
 
-            onClicked: presenter.handleResultsRequest()
+            onClicked: presenter.handleDisplayCorrectWordsPairRequest()
             onPressed: opacity = Styles.pressedButtonOpacity
             onReleased: opacity = Styles.releasedButtonOpacity
             onCanceled: opacity = Styles.releasedButtonOpacity

@@ -121,9 +121,9 @@ ApplicationWindow {
         enabled: gamePresenter.introPaneVisible || gamePresenter.helpPaneVisible || gamePresenter.mainPaneVisible || gamePresenter.dataEntryPaneVisible
 
         onActivated: {
-            if (gamePresenter.dataEntryPaneVisible && gamePresenter.saveEntriesEnabled) {
-                gamePresenter.quitDeferred = true;
-                gamePresenter.promptForSavingNewEntries();
+            if (gamePresenter.dataEntryPaneVisible && gamePresenter.saveAddedWordPairsEnabled) {
+                gamePresenter.quitGameDeferred = true;
+                gamePresenter.promptForSavingAddedWordPairs();
             } else {
                 gamePresenter.quit();
             }

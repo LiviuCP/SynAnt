@@ -24,8 +24,8 @@ Item {
     }
 
     function handleBackButtonAction() {
-        if (presenter.saveEntriesEnabled) {
-            presenter.promptForSavingNewEntries();
+        if (presenter.saveAddedWordPairsEnabled) {
+            presenter.promptForSavingAddedWordPairs();
         } else {
             presenter.goBack();
         }
@@ -204,7 +204,7 @@ Item {
         Button {
             id: addPairBtn
 
-            enabled: presenter.addDataEntryEnabled
+            enabled: presenter.addWordsPairEnabled
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -327,7 +327,7 @@ Item {
         Button {
             id: discardBtn
 
-            enabled: presenter.clearDataEntryBufferEnabled
+            enabled: presenter.discardAddedWordPairsEnabled
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -362,13 +362,13 @@ Item {
                 enabled: discardBtn.enabled && presenter.dataEntryPaneVisible
 
                 onActivated: {
-                    presenter.handleClearDataEntryBufferRequest();
+                    presenter.handleClearAddedWordPairsRequest();
                     firstWordTextField.forceActiveFocus();
                 }
             }
 
             onClicked: {
-                presenter.handleClearDataEntryBufferRequest();
+                presenter.handleClearAddedWordPairsRequest();
                 firstWordTextField.forceActiveFocus();
             }
 
@@ -380,7 +380,7 @@ Item {
         Button {
             id: saveBtn
 
-            enabled: presenter.saveEntriesEnabled
+            enabled: presenter.saveAddedWordPairsEnabled
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -415,13 +415,13 @@ Item {
                 enabled: saveBtn.enabled && presenter.dataEntryPaneVisible
 
                 onActivated: {
-                    presenter.handleSaveNewWordPairsRequest();
+                    presenter.handleSaveAddedWordPairsRequest();
                     firstWordTextField.forceActiveFocus();
                 }
             }
 
             onClicked: {
-                presenter.handleSaveNewWordPairsRequest();
+                presenter.handleSaveAddedWordPairsRequest();
                 firstWordTextField.forceActiveFocus();
             }
 
@@ -460,9 +460,9 @@ Item {
             }
 
             onClicked: {
-                if (presenter.saveEntriesEnabled) {
-                    presenter.quitDeferred = true;
-                    presenter.promptForSavingNewEntries();
+                if (presenter.saveAddedWordPairsEnabled) {
+                    presenter.quitGameDeferred = true;
+                    presenter.promptForSavingAddedWordPairs();
                 } else {
                     presenter.quit();
                 }

@@ -15,7 +15,7 @@ Item {
     readonly property double buttonRadiusRatio: 0.025
 
     function quitOrExitDataEntry() {
-        if (presenter.quitDeferred) {
+        if (presenter.quitGameDeferred) {
             presenter.quit();
         } else {
             // user should return to the page that was visited before arriving to the data entry page (from which the prompt was issued)
@@ -105,13 +105,13 @@ Item {
                 enabled: presenter.promptSaveExitPaneVisible
 
                 onActivated: {
-                    presenter.handleSaveNewWordPairsRequest();
+                    presenter.handleSaveAddedWordPairsRequest();
                     promptSaveExitPane.quitOrExitDataEntry();
                 }
             }
 
             onClicked: {
-                presenter.handleSaveNewWordPairsRequest();
+                presenter.handleSaveAddedWordPairsRequest();
                 promptSaveExitPane.quitOrExitDataEntry();
             }
 
@@ -154,13 +154,13 @@ Item {
                 enabled: presenter.promptSaveExitPaneVisible
 
                 onActivated: {
-                    presenter.handleClearDataEntryBufferRequest();
+                    presenter.handleClearAddedWordPairsRequest();
                     promptSaveExitPane.quitOrExitDataEntry();
                 }
             }
 
             onClicked: {
-                presenter.handleClearDataEntryBufferRequest();
+                presenter.handleClearAddedWordPairsRequest();
                 promptSaveExitPane.quitOrExitDataEntry();
             }
 

@@ -16,40 +16,41 @@ class GamePresenter : public QObject
 {
     Q_OBJECT
 
-    // functionality properties
+    /* pane visibility properties */
     Q_PROPERTY(bool introPaneVisible READ getIntroPaneVisible NOTIFY currentPaneChanged)
     Q_PROPERTY(bool helpPaneVisible READ getHelpPaneVisible NOTIFY currentPaneChanged)
     Q_PROPERTY(bool mainPaneVisible READ getMainPaneVisible NOTIFY currentPaneChanged)
     Q_PROPERTY(bool dataEntryPaneVisible READ getDataEntryPaneVisible NOTIFY currentPaneChanged)
     Q_PROPERTY(bool promptSaveExitPaneVisible READ getPromptSaveExitPaneVisible NOTIFY currentPaneChanged)
+
+    /* functionality enabling properties */
     Q_PROPERTY(bool playEnabled READ isPlayEnabled NOTIFY playEnabledChanged)
     Q_PROPERTY(bool dataEntryEnabled READ isDataEntryEnabled NOTIFY dataEntryEnabledChanged)
-    Q_PROPERTY(bool addDataEntryEnabled READ isAddDataEntryEnabled NOTIFY addWordsPairEnabledChanged)
-    Q_PROPERTY(bool clearDataEntryBufferEnabled READ isClearDataEntryBufferEnabled NOTIFY clearDataEntryBufferEnabledChanged)
-    Q_PROPERTY(bool saveEntriesEnabled READ isSaveDataEntriesEnabled NOTIFY saveNewPairsEnabledChanged)
-    Q_PROPERTY(bool resetEnabled READ getResetEnabled NOTIFY resetEnabledChanged)
-    Q_PROPERTY(bool clearInputEnabled READ getClearInputEnabled NOTIFY clearInputEnabledChanged)
-    Q_PROPERTY(bool submitEnabled READ getSubmitEnabled NOTIFY submitEnabledChanged)
-    Q_PROPERTY(bool errorOccured READ getErrorOccured NOTIFY errorOccuredChanged)
-    Q_PROPERTY(bool quitDeferred READ getQuitDeferred WRITE setQuitDeferred NOTIFY quitDeferredChanged)
+    Q_PROPERTY(bool addWordsPairEnabled READ isAddWordsPairEnabled NOTIFY addWordsPairEnabledChanged)
+    Q_PROPERTY(bool discardAddedWordPairsEnabled READ isDiscardAddedWordPairsEnabled NOTIFY discardAddedWordPairsEnabledChanged)
+    Q_PROPERTY(bool saveAddedWordPairsEnabled READ isSaveAddedWordPairsEnabled NOTIFY saveAddedWordPairsEnabledChanged)
+    Q_PROPERTY(bool submitMainPaneInputEnabled READ getSubmitMainPaneInputEnabled NOTIFY submitMainPaneInputEnabledChanged)
+    Q_PROPERTY(bool clearMainPaneInputEnabled READ getClearMainPaneInputEnabled NOTIFY clearMainPaneInputEnabledChanged)
+    Q_PROPERTY(bool mainPaneStatisticsResetEnabled READ getMainPaneStatisticsResetEnabled NOTIFY mainPaneStatisticsResetEnabledChanged)
+
+    /* game and user input properties */
     Q_PROPERTY(QList<QVariant> mixedWordsPiecesContent READ getMixedWordsPiecesContent NOTIFY mixedWordsChanged)
     Q_PROPERTY(QList<QVariant> mixedWordsPiecesTextColors READ getMixedWordsPiecesTextColors NOTIFY mixedWordsChanged)
     Q_PROPERTY(QList<QVariant> mixedWordsPiecesSelections READ getMixedWordsPiecesSelections NOTIFY selectionChanged)
     Q_PROPERTY(QList<QVariant> firstWordInputPiecesContent READ getFirstWordInputPiecesContent NOTIFY inputChanged)
     Q_PROPERTY(QList<QVariant> firstWordInputPiecesTextColors READ getFirstWordInputPiecesTextColors NOTIFY inputChanged)
-    Q_PROPERTY(bool isFirstWordInputHovered READ getIsFirstWordInputHovered NOTIFY hoverChanged)
-    Q_PROPERTY(int firstWordInputHoverIndex READ getFirstWordInputHoverIndex NOTIFY hoverChanged)
+    Q_PROPERTY(bool areFirstWordInputPiecesHovered READ getAreFirstWordInputPiecesHovered NOTIFY hoverChanged)
+    Q_PROPERTY(int firstWordInputPiecesHoverIndex READ getFirstWordInputPiecesHoverIndex NOTIFY hoverChanged)
     Q_PROPERTY(QList<QVariant> secondWordInputPiecesContent READ getSecondWordInputPiecesContent NOTIFY inputChanged)
     Q_PROPERTY(QList<QVariant> secondWordInputPiecesTextColors READ getSecondWordInputPiecesTextColors NOTIFY inputChanged)
-    Q_PROPERTY(bool isSecondWordInputHovered READ getIsSecondWordInputHovered NOTIFY hoverChanged)
-    Q_PROPERTY(int secondWordInputHoverIndex READ getSecondWordInputHoverIndex NOTIFY hoverChanged)
+    Q_PROPERTY(bool areSecondWordInputPiecesHovered READ getAreSecondWordInputPiecesHovered NOTIFY hoverChanged)
+    Q_PROPERTY(int secondWordInputPiecesHoverIndex READ getSecondWordInputPiecesHoverIndex NOTIFY hoverChanged)
+    // need to use these three properties as Q_ENUM cannot be used with the Level enum (it si not part of the presenter class)
     Q_PROPERTY(int levelEasy READ getLevelEasy CONSTANT)
     Q_PROPERTY(int levelMedium READ getLevelMedium CONSTANT)
     Q_PROPERTY(int levelHard READ getLevelHard CONSTANT)
-    Q_PROPERTY(int toolTipDelay READ getToolTipDelay CONSTANT)
-    Q_PROPERTY(int toolTipTimeout READ getToolTipTimeout CONSTANT)
 
-    // text properties
+    /* text properties */
     Q_PROPERTY(QString windowTitle READ getWindowTitle NOTIFY currentPaneChanged)
     Q_PROPERTY(QString introPaneMessage READ getIntroPaneMessage NOTIFY introPaneMessageChanged)
     Q_PROPERTY(QString helpPaneMessage READ getHelpPaneMessage CONSTANT) // if feasible: to be moved later to GameStrings.qml
@@ -58,6 +59,12 @@ class GamePresenter : public QObject
     Q_PROPERTY(QString mainPaneWordPairsMessage READ getMainPaneWordPairsMessage NOTIFY mainPaneStatisticsMessagesChanged)
     Q_PROPERTY(QString dataEntryPaneStatusMessage READ getDataEntryPaneStatusMessage NOTIFY dataEntryPaneStatusMessageChanged)
     Q_PROPERTY(QString errorMessage READ getErrorMessage NOTIFY errorMessageChanged)
+
+    /* miscellaneous */
+    Q_PROPERTY(bool errorOccured READ getErrorOccured NOTIFY errorOccuredChanged)
+    Q_PROPERTY(bool quitGameDeferred READ getQuitGameDeferred WRITE setQuitGameDeferred NOTIFY quitGameDeferredChanged)
+    Q_PROPERTY(int toolTipDelay READ getToolTipDelay CONSTANT)
+    Q_PROPERTY(int toolTipTimeout READ getToolTipTimeout CONSTANT)
 
 public:
     enum class Pane
@@ -77,20 +84,20 @@ public:
     Q_INVOKABLE void switchToPane(Pane pane);
     Q_INVOKABLE void goBack();
     Q_INVOKABLE void handleAddWordsPairRequest(const QString& firstWord, const QString& secondWord, bool areSynonyms);
-    Q_INVOKABLE void handleClearDataEntryBufferRequest();
-    Q_INVOKABLE void handleSaveNewWordPairsRequest();
-    Q_INVOKABLE void promptForSavingNewEntries();
-    Q_INVOKABLE void handleResultsRequest();
-    Q_INVOKABLE void handleSubmitRequest();
-    Q_INVOKABLE void handleResetRequest();
+    Q_INVOKABLE void handleClearAddedWordPairsRequest();
+    Q_INVOKABLE void handleSaveAddedWordPairsRequest();
+    Q_INVOKABLE void promptForSavingAddedWordPairs();
+    Q_INVOKABLE void handleDisplayCorrectWordsPairRequest();
+    Q_INVOKABLE void handleSubmitMainPaneInputRequest();
+    Q_INVOKABLE void handleMainPaneStatisticsResetRequest();
     Q_INVOKABLE void switchToLevel(int level);
     Q_INVOKABLE void selectWordPieceForFirstInputWord(int wordPieceIndex);
     Q_INVOKABLE void selectWordPieceForSecondInputWord(int wordPieceIndex);
     Q_INVOKABLE void removeWordPiecesFromFirstInputWord(int inputRangeStart);
     Q_INVOKABLE void removeWordPiecesFromSecondInputWord(int inputRangeStart);
-    Q_INVOKABLE void clearInput();
-    Q_INVOKABLE void clearFirstInputWord();
-    Q_INVOKABLE void clearSecondInputWord();
+    Q_INVOKABLE void clearMainPaneInput();
+    Q_INVOKABLE void clearMainPaneFirstInputWord();
+    Q_INVOKABLE void clearMainPaneSecondInputWord();
     Q_INVOKABLE void updateFirstWordInputHoverIndex(int index);
     Q_INVOKABLE void updateSecondWordInputHoverIndex(int index);
     Q_INVOKABLE void clearWordInputHoverIndexes();
@@ -103,28 +110,28 @@ public:
     bool getPromptSaveExitPaneVisible() const;
     bool isPlayEnabled() const;
     bool isDataEntryEnabled() const;
-    bool isAddDataEntryEnabled() const;
-    bool isClearDataEntryBufferEnabled() const;
-    bool isSaveDataEntriesEnabled() const;
-    bool getResetEnabled() const;
-    bool getClearInputEnabled() const;
-    bool getSubmitEnabled() const;
+    bool isAddWordsPairEnabled() const;
+    bool isDiscardAddedWordPairsEnabled() const;
+    bool isSaveAddedWordPairsEnabled() const;
+    bool getMainPaneStatisticsResetEnabled() const;
+    bool getClearMainPaneInputEnabled() const;
+    bool getSubmitMainPaneInputEnabled() const;
     bool getErrorOccured() const;
-    bool getQuitDeferred() const;
+    bool getQuitGameDeferred() const;
 
-    void setQuitDeferred(bool deferred);
+    void setQuitGameDeferred(bool deferred);
 
     QList<QVariant> getMixedWordsPiecesContent() const;
     QList<QVariant> getMixedWordsPiecesTextColors() const;
     QList<QVariant> getMixedWordsPiecesSelections() const;
     QList<QVariant> getFirstWordInputPiecesContent() const;
     QList<QVariant> getFirstWordInputPiecesTextColors() const;
-    bool getIsFirstWordInputHovered() const;
-    int getFirstWordInputHoverIndex() const;
+    bool getAreFirstWordInputPiecesHovered() const;
+    int getFirstWordInputPiecesHoverIndex() const;
     QList<QVariant> getSecondWordInputPiecesContent() const;
     QList<QVariant> getSecondWordInputPiecesTextColors() const;
-    bool getIsSecondWordInputHovered() const;
-    int getSecondWordInputHoverIndex() const;
+    bool getAreSecondWordInputPiecesHovered() const;
+    int getSecondWordInputPiecesHoverIndex() const;
 
     int getLevelEasy() const;
     int getLevelMedium() const;
@@ -149,13 +156,13 @@ signals:
     Q_SIGNAL void playEnabledChanged();
     Q_SIGNAL void dataEntryEnabledChanged();
     Q_SIGNAL void addWordsPairEnabledChanged();
-    Q_SIGNAL void clearDataEntryBufferEnabledChanged();
-    Q_SIGNAL void saveNewPairsEnabledChanged();
-    Q_SIGNAL void resetEnabledChanged();
-    Q_SIGNAL void clearInputEnabledChanged();
-    Q_SIGNAL void submitEnabledChanged();
+    Q_SIGNAL void discardAddedWordPairsEnabledChanged();
+    Q_SIGNAL void saveAddedWordPairsEnabledChanged();
+    Q_SIGNAL void mainPaneStatisticsResetEnabledChanged();
+    Q_SIGNAL void clearMainPaneInputEnabledChanged();
+    Q_SIGNAL void submitMainPaneInputEnabledChanged();
     Q_SIGNAL void errorOccuredChanged();
-    Q_SIGNAL void quitDeferredChanged();
+    Q_SIGNAL void quitGameDeferredChanged();
     Q_SIGNAL void mixedWordsChanged();
     Q_SIGNAL void inputChanged();
     Q_SIGNAL void selectionChanged();
@@ -185,8 +192,8 @@ private:
     bool m_PromptSaveExitPaneVisible;
     bool m_MainPaneInitialized;
 
-    bool m_StatisticsResetEnabled;
-    bool m_ClearInputEnabled;
+    bool m_MainPaneStatisticsResetEnabled;
+    bool m_ClearMainPaneInputEnabled;
     bool m_ErrorOccured;
     bool m_QuitDeferred;
 
@@ -203,8 +210,8 @@ private:
     Pane m_StatusUpdatePane;
     QVector<Pane> m_PreviousPanesStack;
 
-    int m_FirstWordInputHoverIndex;
-    int m_SecondWordInputHoverIndex;
+    int m_FirstWordInputPiecesHoverIndex;
+    int m_SecondWordInputPiecesHoverIndex;
 
     GameFacade* m_pGameFacade;
     GameProxy* m_pGameProxy;
