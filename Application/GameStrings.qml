@@ -102,7 +102,7 @@ QtObject {
     readonly property string addPairButtonToolTip:              "Click or hit ALT+A to add the new word pair"
     readonly property string backButtonToolTip:                 "Click or hit ALT+K to go to previous page"
     readonly property string saveButtonToolTip:                 "Click or hit CTRL+S to save the added entries to database"
-    readonly property string discardButtonToolTip:              "Click or hit CTRL+S to discard the added entries"
+    readonly property string discardButtonToolTip:              "Click or hit CTRL+D to discard the added entries"
     readonly property string yesButtonToolTip:                  "Click or hit CTRL+Y to save and exit the application"
     readonly property string noButtonToolTip:                   "Click or hit CTRL+N to exit the application without saving"
     readonly property string cancelButtonToolTip:               "Click or hit CTRL+W to return to data entry dialog"
