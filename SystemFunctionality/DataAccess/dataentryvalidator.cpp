@@ -16,10 +16,12 @@ void DataEntryValidator::validateWordsPair(QPair<QString, QString> newWordsPair,
 
     if (isEntryValid)
     {
-        addEntryToCacheRequested(dataEntry);
+        entryValidated(dataEntry);
     }
-
-    Q_EMIT newWordsPairValidated(isEntryValid);
+    else
+    {
+        Q_EMIT invalidWordsPairAddedByUser();
+    }
 }
 
 bool DataEntryValidator::_isValidDataEntry(DataSource::DataEntry& dataEntry, const QString &firstWord, const QString &secondWord, bool areSynonyms)

@@ -20,8 +20,8 @@ public:
     void validateWordsPair(QPair<QString, QString> newWordsPair, bool areSynonyms);
 
 signals:
-    Q_SIGNAL void newWordsPairValidated(bool isValid);
-    Q_SIGNAL void addEntryToCacheRequested(DataSource::DataEntry rawDataEntry);
+    Q_SIGNAL void invalidWordsPairAddedByUser();
+    Q_SIGNAL void entryValidated(DataSource::DataEntry rawDataEntry);
 
 private:
     bool _isValidDataEntry(DataSource::DataEntry& rawDataEntry, const QString& firstWord, const QString& secondWord, bool areSynonyms);

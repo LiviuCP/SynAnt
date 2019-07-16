@@ -40,12 +40,14 @@ class GameManager : public QObject
 public:
     static GameManager* getManager();
     static void releaseResources();
-    static bool isManagerSetup();
 
     void setDataSource(const QString& dataDirPath);
     void loadDataFromDb();
     void saveDataToDb();
     void resetDataEntryCache();
+    void requestWriteToCache(QPair<QString, QString> newWordsPair, bool areSynonyms);
+    void provideDataEntryToConsumer(int entryNumber);
+    int getNrOfValidEntries() const;
 
     GameFacade* getFacade() const;
     DataSource* getDataSource() const;

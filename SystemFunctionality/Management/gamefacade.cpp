@@ -57,7 +57,7 @@ GameFacade::GameFacade(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pDataSourceProxy, &DataSourceProxy::cacheReset, this, &GameFacade::_onCacheReset);
     Q_ASSERT(connected);
-    connected = connect(m_pDataSourceProxy, &DataSourceProxy::newWordsPairValidated, this, &GameFacade::_onNewWordsPairValidated);
+    connected = connect(m_pDataSourceProxy, &DataSourceProxy::invalidWordsPairAddedByUser, this, &GameFacade::_onInvalidWordsPairAddedByUser);
     Q_ASSERT(connected);
     connected = connect(m_pDataSourceProxy, &DataSourceProxy::writeDataToDbFinished, this, &GameFacade::_onWriteDataToDbFinished);
     Q_ASSERT(connected);
@@ -179,7 +179,7 @@ void GameFacade::handleSubmitRequest()
 void GameFacade::requestAddPairToData(const QString &firstWord, const QString &secondWord, bool areSynonyms)
 {
     _disableAddToCache();
-    m_pDataSourceProxy->validateWordsPair(QPair<QString, QString>{firstWord, secondWord}, areSynonyms);
+    m_pDataSourceProxy->requestWriteToCache(QPair<QString, QString>{firstWord, secondWord}, areSynonyms);
 }
 
 void GameFacade::requestSaveDataToDb()
@@ -343,15 +343,12 @@ void GameFacade::_onReadDataFromDbFinished(bool success)
     }
 }
 
-void GameFacade::_onNewWordsPairValidated(bool isValid)
+void GameFacade::_onInvalidWordsPairAddedByUser()
 {
     // restore add to cache capability so the user can re-add the entry after modifying the words
-    if (!isValid)
-    {
-        _enableAddToCache();
-    }
+    _enableAddToCache();
 
-    Q_EMIT statusChanged(isValid ? Game::StatusCodes::DATA_ENTRY_SUCCESS : Game::StatusCodes::INVALID_DATA_ENTRY);
+    Q_EMIT statusChanged(Game::StatusCodes::INVALID_DATA_ENTRY);
 }
 
 void GameFacade::_onNewWordsPairAddedToCache()
@@ -359,6 +356,8 @@ void GameFacade::_onNewWordsPairAddedToCache()
     _enableAddToCache();
     _enableCacheReset();
     _enableSaveToDb();
+
+    Q_EMIT statusChanged(Game::StatusCodes::DATA_ENTRY_SUCCESS);
 }
 
 void GameFacade::_onCacheReset()

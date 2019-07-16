@@ -3,9 +3,6 @@
 
 #include <QObject>
 
-class DataSource;
-class DataEntryValidator;
-class DataEntryCache;
 class GameManager;
 
 class DataSourceProxy : public QObject
@@ -18,11 +15,11 @@ public:
     void saveDataToDb();
     void resetDataEntryCache();
     void provideDataEntryToConsumer(int entryNumber);
-    void validateWordsPair(QPair<QString, QString> newWordsPair, bool areSynonyms);
+    void requestWriteToCache(QPair<QString, QString> newWordsPair, bool areSynonyms);
     int getNrOfValidEntries();
-    int getNrOfCachedEntries();
 
 signals:
+    Q_SIGNAL void invalidWordsPairAddedByUser();
     Q_SIGNAL void newWordsPairValidated(bool isValid);
     Q_SIGNAL void newWordsPairAddedToCache();
     Q_SIGNAL void cacheReset();
@@ -30,11 +27,6 @@ signals:
     Q_SIGNAL void writeDataToDbFinished(int nrOfEntries);
     Q_SIGNAL void writeDataToDbErrorOccured();
     Q_SIGNAL void entryProvidedToConsumer(QPair<QString, QString> newWordsPair, bool areSynonyms);
-
-private:
-    DataSource* m_pDataSource;
-    DataEntryValidator* m_pDataEntryValidator;
-    DataEntryCache* m_pDataEntryCache;
 };
 
 #endif // DATASOURCEPROXY_H

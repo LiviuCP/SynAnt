@@ -16,10 +16,9 @@ class DataEntryCache : public QObject
     Q_OBJECT
 public:
     explicit DataEntryCache(DataSource* pDataSource, QObject *parent = nullptr);
-    int getNrOfCachedEntries() const;
 
 public slots:
-    void onAddEntryToCacheRequested(DataSource::DataEntry dataEntry);
+    void onValidEntryReceived(DataSource::DataEntry dataEntry);
     void onResetCacheRequested();
     void onWriteDataToDbRequested();
 

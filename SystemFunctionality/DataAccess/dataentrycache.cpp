@@ -14,12 +14,7 @@ DataEntryCache::DataEntryCache(DataSource* pDataSource, QObject *parent)
     Q_ASSERT(pDataSource);
 }
 
-int DataEntryCache::getNrOfCachedEntries() const
-{
-    return m_CacheEntries.size();
-}
-
-void DataEntryCache::onAddEntryToCacheRequested(DataSource::DataEntry dataEntry)
+void DataEntryCache::onValidEntryReceived(DataSource::DataEntry dataEntry)
 {
     m_CacheEntries.append(dataEntry);
     Q_EMIT newWordsPairAddedToCache();

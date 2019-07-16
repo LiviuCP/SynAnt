@@ -92,7 +92,7 @@ signals:
 private slots:
     void _onCloseInputPermissionRequested();
     void _onReadDataFromDbFinished(bool success);
-    void _onNewWordsPairValidated(bool isValid);
+    void _onInvalidWordsPairAddedByUser();
     void _onNewWordsPairAddedToCache();
     void _onCacheReset();
     void _onWriteDataToDbFinished(int nrOfEntries);
