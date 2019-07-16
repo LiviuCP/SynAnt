@@ -12,7 +12,8 @@ QtObject {
     readonly property string mainPaneInstructionsMessage:                           "\nPlease enter the 2 words.
                                                                                     \nHit Submit when ready.
                                                                                     \nUse radio buttons to change difficulty level.
-                                                                                    \nPress Reset to reset the scores and number of pairs."
+                                                                                    \nPress Reset to reset the scores and number of pairs.
+                                                                                    \nPress Help for more info."
 
     readonly property string promptSaveBeforeExitMessage:                           "\n\n\n\n\tDo you want to save the added word pairs before exiting?\n"
 
