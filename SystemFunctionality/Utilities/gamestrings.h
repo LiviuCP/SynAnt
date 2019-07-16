@@ -137,7 +137,7 @@ namespace GameStrings {
     const QString c_DataEntryStartMessage               {    "Word pairs entry started"                                                                 };
     const QString c_DataEntryResumeMessage              {    "Data entry resumed. There are entries pending to be saved!"                               };
     const QString c_DataEntryRequestMessage             {    "Please enter a new pair of words.\n\nChoose if they are synonyms or antonyms"             };
-    const QString c_DataSuccessfullySavedMessage        {    "The entries have been successfully saved to database"                                     };
+    const QString c_DataSuccessfullySavedMessage        {    "The added word pairs have been successfully saved to database"                            };
     const QString c_GameStartedMessage                  {    "Game started"                                                                             };
     const QString c_GamePausedMessage                   {    "Game paused"                                                                              };
     const QString c_GameResumedMessage                  {    "Game resumed"                                                                             };
