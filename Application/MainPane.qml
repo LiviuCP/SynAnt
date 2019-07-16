@@ -716,7 +716,7 @@ Item {
             Layout.minimumWidth: bottomBtnsMinWidth
 
             contentItem: Text {
-                text: GameStrings.resultsButtonLabel
+                text: GameStrings.showPairButtonLabel
                 color: Styles.textColor
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
@@ -733,14 +733,14 @@ Item {
             }
 
             ToolTip {
-                text: GameStrings.resultsButtonToolTip
+                text: GameStrings.showPairButtonToolTip
                 visible: resultsBtn.hovered
                 delay: presenter.toolTipDelay
                 timeout: presenter.toolTipTimeout
             }
 
             Shortcut {
-                sequence: GameStrings.resultsButtonShortcut
+                sequence: GameStrings.showPairButtonShortcut
                 enabled: presenter.mainPaneVisible
 
                 onActivated: presenter.handleDisplayCorrectWordsPairRequest()
