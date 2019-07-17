@@ -68,6 +68,7 @@ public:
     int getTotalAvailableScore() const;
     int getGuessedWordPairs() const;
     int getTotalWordPairs() const;
+    int getCachedWordPairs() const;
 
     bool isDataAvailable() const;
     bool isDataEntryAllowed() const;
@@ -119,6 +120,7 @@ private:
     bool m_IsDataEntryAllowed;
     bool m_IsAddingToCacheAllowed;
     bool m_IsCacheResetAllowed;
+    int m_CachedWordPairs;
     bool m_IsSavingToDbAllowed;
     bool m_IsGameStarted;
     bool m_IsGamePaused;
