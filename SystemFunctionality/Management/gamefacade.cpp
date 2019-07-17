@@ -143,7 +143,7 @@ void GameFacade::clearInput()
 {
     if (m_pInputBuilder->clearInput())
     {
-        Q_EMIT statusChanged(Game::StatusCodes::USER_INPUT_CLEARED);
+        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::USER_INPUT_CLEARED);
     }
 }
 
@@ -211,7 +211,7 @@ void GameFacade::setLevel(Game::Level level)
     m_pScoreItem->setScoreIncrement(level);
     m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
 
-    Q_EMIT statusChanged(Game::StatusCodes::LEVEL_CHANGED);
+    Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::LEVEL_CHANGED);
 }
 
 void GameFacade::resetStatistics()
@@ -348,7 +348,7 @@ void GameFacade::_onInvalidWordsPairAddedByUser()
     // restore add to cache capability so the user can re-add the entry after modifying the words
     _enableAddToCache();
 
-    Q_EMIT statusChanged(Game::StatusCodes::INVALID_DATA_ENTRY);
+    Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::INVALID_DATA_ENTRY);
 }
 
 void GameFacade::_onNewWordsPairAddedToCache()
@@ -357,13 +357,14 @@ void GameFacade::_onNewWordsPairAddedToCache()
     _enableCacheReset();
     _enableSaveToDb();
 
-    Q_EMIT statusChanged(Game::StatusCodes::DATA_ENTRY_SUCCESS);
+    Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_ENTRY_SUCCESS);
 }
 
 void GameFacade::_onCacheReset()
 {
     _enableAddToCache();
-    Q_EMIT statusChanged(Game::StatusCodes::CACHE_RESET);
+
+    Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::CACHE_RESET);
 }
 
 void GameFacade::_onWriteDataToDbFinished(int nrOfEntries)
@@ -379,12 +380,12 @@ void GameFacade::_onWriteDataToDbFinished(int nrOfEntries)
 
     _enableAddToCache();
 
-    Q_EMIT statusChanged(initialNrOfEntries == 0 ? Game::StatusCodes::DATA_GOT_AVAILABLE : Game::StatusCodes::DATA_SUCCESSFULLY_SAVED);
+    Q_EMIT statusChanged(m_CurrentStatusCode = initialNrOfEntries == 0 ? Game::StatusCodes::DATA_GOT_AVAILABLE : Game::StatusCodes::DATA_SUCCESSFULLY_SAVED);
 }
 
 void GameFacade::_onWriteDataToDbErrorOccured()
 {
-    Q_EMIT statusChanged(Game::StatusCodes::DATA_ENTRY_SAVING_ERROR);
+    Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_ENTRY_SAVING_ERROR);
 }
 
 void GameFacade::_connectDataSourceToWordMixer()
