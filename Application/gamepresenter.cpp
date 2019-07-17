@@ -750,6 +750,11 @@ void GamePresenter::_switchToPane(Pane pane)
                 m_pGameFacade->pauseGame();
                 delayedSwitchingRequested = true;
             }
+            else if (m_CurrentPane == Pane::HELP)
+            {
+                m_pGameFacade->resumeWordEntry();
+            }
+
             m_DataEntryPaneVisible = true;
             break;
         default:
