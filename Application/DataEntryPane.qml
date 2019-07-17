@@ -477,5 +477,6 @@ Item {
     Connections {
         target: presenter
         onDataEntrySucceeded: clearTextFields()
+        onDataEntryInvalid: firstWordTextField.forceActiveFocus()
     }
 }

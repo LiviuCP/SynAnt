@@ -171,6 +171,7 @@ signals:
     Q_SIGNAL void mainPaneStatisticsMessagesChanged();
     Q_SIGNAL void dataEntryPaneStatusMessageChanged();
     Q_SIGNAL void dataEntrySucceeded();
+    Q_SIGNAL void dataEntryInvalid();
     Q_SIGNAL void errorMessageChanged();
     Q_SIGNAL void hoverChanged();
 
