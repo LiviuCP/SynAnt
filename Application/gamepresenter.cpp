@@ -60,7 +60,7 @@ GamePresenter::GamePresenter(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::dataEntryAllowedChanged, this, &GamePresenter::dataEntryEnabledChanged);
     Q_ASSERT(connected);
-    connected = connect(m_pGameFacade, &GameFacade::addWordsPairAllowedChanged, this, &GamePresenter::addWordsPairEnabledChanged);
+    connected = connect(m_pGameFacade, &GameFacade::addPairToCacheAllowedChanged, this, &GamePresenter::addWordsPairEnabledChanged);
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::saveNewPairsToDbAllowedChanged, this, &GamePresenter::saveAddedWordPairsEnabledChanged);
     Q_ASSERT(connected);
@@ -118,12 +118,12 @@ void GamePresenter::goBack()
 
 void GamePresenter::handleAddWordsPairRequest(const QString& firstWord, const QString& secondWord, bool areSynonyms)
 {
-    m_pGameFacade->requestAddPairToData(firstWord, secondWord, areSynonyms);
+    m_pGameFacade->requestAddPairToCache(firstWord, secondWord, areSynonyms);
 }
 
 void GamePresenter::handleClearAddedWordPairsRequest()
 {
-    m_pGameFacade->resetDataEntryCache();
+    m_pGameFacade->requestCacheReset();
 }
 
 void GamePresenter::handleSaveAddedWordPairsRequest()
@@ -146,7 +146,7 @@ void GamePresenter::promptForSavingAddedWordPairs()
 
 void GamePresenter::handleDisplayCorrectWordsPairRequest()
 {
-    m_pGameFacade->provideResultsToUser();
+    m_pGameFacade->provideCorrectWordsPairToUser();
 }
 
 void GamePresenter::handleSubmitMainPaneInputRequest()
@@ -156,7 +156,7 @@ void GamePresenter::handleSubmitMainPaneInputRequest()
 
 void GamePresenter::handleMainPaneStatisticsResetRequest()
 {
-    m_pGameFacade -> resetStatistics();
+    m_pGameFacade -> resetGameStatistics();
 }
 
 void GamePresenter::switchToLevel(int level)

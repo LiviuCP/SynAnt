@@ -1,4 +1,4 @@
-/*
+﻿/*
    This class connects the front-end UI part of the code (presenter) to the back-end code base:
    1) Backend classes are being accessed by presenter through facade by executing function calls.
    2) In return backend classes send signals to presenter through facade.
@@ -45,12 +45,12 @@ public:
     void clearInput();
 
     void handleSubmitRequest();
-    void requestAddPairToData(const QString& firstWord, const QString& secondWord, bool areSynonyms);
+    void requestAddPairToCache(const QString& firstWord, const QString& secondWord, bool areSynonyms);
     void requestSaveDataToDb();
-    void resetDataEntryCache();
-    void provideResultsToUser();
+    void requestCacheReset();
+    void provideCorrectWordsPairToUser();
     void setLevel(Game::Level level);
-    void resetStatistics();
+    void resetGameStatistics();
 
     QVector<QString> getMixedWordsPiecesContent() const;
     QVector<Game::PieceTypes> getMixedWordsPiecesTypes() const;
@@ -80,7 +80,7 @@ public:
 signals:
     Q_SIGNAL void dataAvailableChanged();
     Q_SIGNAL void dataEntryAllowedChanged();
-    Q_SIGNAL void addWordsPairAllowedChanged();
+    Q_SIGNAL void addPairToCacheAllowedChanged();
     Q_SIGNAL void resetCacheAllowedChanged();
     Q_SIGNAL void saveNewPairsToDbAllowedChanged();
     Q_SIGNAL void mixedWordsChanged();
@@ -101,12 +101,12 @@ private slots:
     void _connectDataSourceToWordMixer();
 
 private:
-    void _enableAddToCache();
-    void _disableAddToCache();
-    void _enableCacheReset();
-    void _disableCacheReset();
-    void _enableSaveToDb();
-    void _disableSaveToDb();
+    void _allowAddToCache();
+    void _blockAddToCache();
+    void _allowCacheReset();
+    void _blockCacheReset();
+    void _allowSaveToDb();
+    void _blockSaveToDb();
 
     GameFunctionalityProxy* m_pGameFunctionalityProxy;
     DataSourceProxy* m_pDataSourceProxy;
@@ -119,7 +119,7 @@ private:
     bool m_IsDataAvailable;
     bool m_IsDataEntryAllowed;
     bool m_IsAddingToCacheAllowed;
-    bool m_IsCacheResetAllowed;
+    bool m_IsResettingCacheAllowed;
     int m_CachedWordPairs;
     bool m_IsSavingToDbAllowed;
     bool m_IsGameStarted;
