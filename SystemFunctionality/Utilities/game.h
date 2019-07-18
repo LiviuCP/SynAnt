@@ -38,6 +38,7 @@ namespace Game
         DATA_ENTRY_STARTED,
         DATA_ENTRY_RESUMED,
         DATA_ENTRY_SUCCESS,
+        PAIR_ALREADY_ADDED,
         INVALID_DATA_ENTRY,
         CACHE_RESET,
         GAME_STARTED,

@@ -168,7 +168,9 @@ namespace GameStrings {
                                                              "and make the available for playing."
                                                         };
 
-    const QString c_DataEntryInvalidPairMessage       {
+    const QString c_PairAlreadyAddedMessage             {    "The pair has already been added. Please save added pairs to database or discard them"     };
+
+    const QString c_DataEntryInvalidPairMessage         {
                                                              "The new words pair has not been correctly entered.\n\n"
                                                              "%1\n\n"
                                                              "Please correct and try again!"

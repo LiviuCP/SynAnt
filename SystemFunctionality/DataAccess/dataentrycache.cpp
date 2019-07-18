@@ -16,8 +16,16 @@ DataEntryCache::DataEntryCache(DataSource* pDataSource, QObject *parent)
 
 void DataEntryCache::onValidEntryReceived(DataSource::DataEntry dataEntry)
 {
-    m_CacheEntries.append(dataEntry);
-    Q_EMIT newWordsPairAddedToCache();
+    if (!m_CacheEntries.contains(dataEntry))
+    {
+        m_CacheEntries.append(dataEntry);
+        Q_EMIT newWordsPairAddedToCache();
+    }
+    else
+    {
+        Q_EMIT wordsPairAlreadyContainedInCache();
+    }
+
 }
 
 void DataEntryCache::onResetCacheRequested()

@@ -669,6 +669,10 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         _updateStatusMessage(GameStrings::c_DataEntryResumeMessage.arg(m_pGameFacade->getCachedWordPairs()), Pane::DATA_ENTRY, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
         break;
+    case Game::StatusCodes::PAIR_ALREADY_ADDED:
+        _updateStatusMessage(GameStrings::c_PairAlreadyAddedMessage, Pane::DATA_ENTRY, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
+        break;
     case Game::StatusCodes::DATA_ENTRY_SUCCESS:
         Q_EMIT dataEntrySucceeded();
         _updateStatusMessage(GameStrings::c_DataEntrySuccessMessage.arg(m_pGameFacade->getCachedWordPairs()), Pane::DATA_ENTRY, Game::c_NoDelay);

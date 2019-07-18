@@ -117,6 +117,8 @@ void GameManager::setDataSource(const QString &dataDirPath)
         Q_ASSERT(connected);
         connected = connect(m_pDataEntryCache, &DataEntryCache::newWordsPairAddedToCache, m_pDataSourceProxy, &DataSourceProxy::newWordsPairAddedToCache, Qt::QueuedConnection);
         Q_ASSERT(connected);
+        connected = connect(m_pDataEntryCache, &DataEntryCache::wordsPairAlreadyContainedInCache, m_pDataSourceProxy, &DataSourceProxy::wordsPairAlreadyContainedInCache, Qt::QueuedConnection);
+        Q_ASSERT(connected);
         connected = connect(m_pDataEntryCache, &DataEntryCache::cacheReset, m_pDataSourceProxy, &DataSourceProxy::cacheReset, Qt::QueuedConnection);
         Q_ASSERT(connected);
         connected = connect(this, &GameManager::writeDataToDb, m_pDataEntryCache, &DataEntryCache::onWriteDataToDbRequested, Qt::QueuedConnection);

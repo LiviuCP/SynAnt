@@ -49,19 +49,7 @@ bool DataSource::entryAlreadyExists(const DataSource::DataEntry &dataEntry)
 {
     QMutexLocker mutexLocker{&m_DataSourceMutex};
 
-    bool entryExists{false};
-
-    for (auto currentEntry: m_DataEntries)
-    {
-        if ((dataEntry.firstWord == currentEntry.firstWord && dataEntry.secondWord == currentEntry.secondWord) ||
-            (dataEntry.firstWord == currentEntry.secondWord && dataEntry.secondWord == currentEntry.firstWord))
-        {
-            entryExists = true;
-            break;
-        }
-    }
-
-    return entryExists;
+    return m_DataEntries.contains(dataEntry);
 }
 
 DataSource::DataEntry::DataEntry()
@@ -73,4 +61,10 @@ DataSource::DataEntry::DataEntry(const QString &firstWord, const QString &second
     , secondWord{secondWord}
     , areSynonyms{areSynonyms}
 {
+}
+
+bool DataSource::DataEntry::operator==(const DataSource::DataEntry& dataEntry) const
+{
+    // for the moment the synonym/antonym flag is not taken into consideration
+    return ((firstWord == dataEntry.firstWord && secondWord == dataEntry.secondWord) || (firstWord == dataEntry.secondWord && secondWord == dataEntry.firstWord));
 }

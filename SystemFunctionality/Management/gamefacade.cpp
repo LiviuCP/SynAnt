@@ -56,6 +56,8 @@ GameFacade::GameFacade(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pDataSourceProxy, &DataSourceProxy::newWordsPairAddedToCache, this, &GameFacade::_onNewWordsPairAddedToCache);
     Q_ASSERT(connected);
+    connected = connect(m_pDataSourceProxy, &DataSourceProxy::wordsPairAlreadyContainedInCache, this, &GameFacade::_onWordsPairAlreadyContainedInCache);
+    Q_ASSERT(connected);
     connected = connect(m_pDataSourceProxy, &DataSourceProxy::cacheReset, this, &GameFacade::_onCacheReset);
     Q_ASSERT(connected);
     connected = connect(m_pDataSourceProxy, &DataSourceProxy::invalidWordsPairAddedByUser, this, &GameFacade::_onInvalidWordsPairAddedByUser);
@@ -380,6 +382,15 @@ void GameFacade::_onNewWordsPairAddedToCache()
     _allowSaveToDb();
 
     Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_ENTRY_SUCCESS);
+}
+
+void GameFacade::_onWordsPairAlreadyContainedInCache()
+{
+    _allowAddToCache();
+    _allowCacheReset();
+    _allowSaveToDb();
+
+    Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::PAIR_ALREADY_ADDED);
 }
 
 void GameFacade::_onCacheReset()

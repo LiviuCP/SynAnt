@@ -96,6 +96,7 @@ private slots:
     void _onReadDataFromDbFinished(bool success);
     void _onInvalidWordsPairAddedByUser();
     void _onNewWordsPairAddedToCache();
+    void _onWordsPairAlreadyContainedInCache();
     void _onCacheReset();
     void _onWriteDataToDbFinished(int nrOfEntries);
     void _onWriteDataToDbErrorOccured();

@@ -23,6 +23,8 @@ public:
         QString firstWord;
         QString secondWord;
         bool areSynonyms;
+
+        bool operator==(const DataEntry& dataEntry) const;
     };
 
     explicit DataSource(const QString& fileName, QObject *parent = nullptr);

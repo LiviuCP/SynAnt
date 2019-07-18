@@ -25,6 +25,7 @@ public slots:
 
 signals:
     Q_SIGNAL void newWordsPairAddedToCache();
+    Q_SIGNAL void wordsPairAlreadyContainedInCache();
     Q_SIGNAL void cacheReset();
     Q_SIGNAL void writeDataToDbFinished(int nrOfEntries);
     Q_SIGNAL void writeDataToDbErrorOccured();
