@@ -169,6 +169,11 @@ int GameManager::getNrOfValidEntries() const
     return m_pDataSource->getNrOfValidEntries();
 }
 
+Game::ValidationCodes GameManager::getPairEntryValidationCode() const
+{
+    return m_pDataEntryValidator->getValidationCode();
+}
+
 GameFacade* GameManager::getFacade() const
 {
     return m_pGameFacade;

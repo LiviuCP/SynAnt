@@ -69,6 +69,7 @@ public:
     int getGuessedWordPairs() const;
     int getTotalWordPairs() const;
     int getCachedWordPairs() const;
+    Game::ValidationCodes getDataEntryValidationCode() const;
 
     bool isDataAvailable() const;
     bool isDataEntryAllowed() const;

@@ -3,6 +3,8 @@
 
 #include <QObject>
 
+#include "../Utilities/game.h"
+
 class GameManager;
 
 class DataSourceProxy : public QObject
@@ -17,6 +19,7 @@ public:
     void provideDataEntryToConsumer(int entryNumber);
     void requestWriteToCache(QPair<QString, QString> newWordsPair, bool areSynonyms);
     int getNrOfValidEntries();
+    Game::ValidationCodes getPairEntryValidationCode() const;
 
 signals:
     Q_SIGNAL void invalidWordsPairAddedByUser();

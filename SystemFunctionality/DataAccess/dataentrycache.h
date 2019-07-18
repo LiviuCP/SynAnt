@@ -9,6 +9,7 @@
 
 #include <QObject>
 #include <QVector>
+
 #include "datasource.h"
 
 class DataEntryCache : public QObject

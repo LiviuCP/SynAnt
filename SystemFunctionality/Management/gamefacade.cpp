@@ -296,6 +296,11 @@ int GameFacade::getCachedWordPairs() const
     return m_CachedWordPairs;
 }
 
+Game::ValidationCodes GameFacade::getDataEntryValidationCode() const
+{
+    return m_pDataSourceProxy->getPairEntryValidationCode();
+}
+
 bool GameFacade::isDataAvailable() const
 {
     return m_IsDataAvailable;

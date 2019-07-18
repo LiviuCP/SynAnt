@@ -59,6 +59,19 @@ namespace Game
         StatusCodesCount
     };
 
+    enum class ValidationCodes
+    {
+        NO_PAIR_VALIDATED,
+        VALID_PAIR,
+        LESS_MIN_CHARS_PER_WORD,
+        LESS_MIN_TOTAL_PAIR_CHARS,
+        MORE_MAX_TOTAL_PAIR_CHARS,
+        INVALID_CHARACTERS,
+        PAIR_ALREADY_EXISTS,
+        IDENTICAL_WORDS,
+        ReasonCodesCount
+    };
+
     enum class StatisticsUpdate
     {
         FULL_UPDATE,

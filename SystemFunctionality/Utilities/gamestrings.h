@@ -168,7 +168,12 @@ namespace GameStrings {
                                                              "and make the available for playing."
                                                         };
 
-    const QString c_DataEntryIncorrectPairMessage       {    "The new words pair has not been correctly entered.\n\nPlease correct and try again!"      };
+    const QString c_DataEntryInvalidPairMessage       {
+                                                             "The new words pair has not been correctly entered.\n\n"
+                                                             "%1\n\n"
+                                                             "Please correct and try again!"
+                                                        };
+
     const QString c_DataEntryCacheResetMessage          {    "The unsaved entries been discarded"                                                       };
 
     const QString c_ResultsRequestedByUserMessage       {
@@ -186,6 +191,14 @@ namespace GameStrings {
                                                              "Level changed\n\n"
                                                              "A new pair of words is available below"
                                                         };
+
+    // invalid pair entry error messages
+    const QString c_WordHasLessThanMinimumCharacters    {    "At least one word has less than minimum required number of characters."                   };
+    const QString c_PairHasLessThanMinimumCharacters    {    "The entered word pair has less than the minimum required number of characters."           };
+    const QString c_PairHasMoreThanMaximumCharacters    {    "The entered word pair has more than the allowed maximum number of characters."            };
+    const QString c_InvalidCharacters                   {    "At least one of the words contains invalid characters."                                   };
+    const QString c_PairHasIdenticalWords               {    "The entered word pair has identical words."                                               };
+    const QString c_PairAlreadyExists                   {    "The entered word pair already exists."                                                    };
 
     // fatal error messages
     const QString c_CannotCreateFileMessage             {    "File not found. Attempt to create it failed!"                                             };

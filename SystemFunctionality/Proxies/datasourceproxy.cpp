@@ -35,3 +35,8 @@ int DataSourceProxy::getNrOfValidEntries()
 {
     return GameManager::getManager()->getNrOfValidEntries();
 }
+
+Game::ValidationCodes DataSourceProxy::getPairEntryValidationCode() const
+{
+    return GameManager::getManager()->getPairEntryValidationCode();
+}

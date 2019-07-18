@@ -10,6 +10,7 @@
 #include <QObject>
 
 #include "datasource.h"
+#include "../Utilities/game.h"
 
 class DataEntryValidator : public QObject
 {
@@ -18,6 +19,7 @@ public:
     explicit DataEntryValidator(DataSource* pDataSource, QObject *parent = nullptr);
 
     void validateWordsPair(QPair<QString, QString> newWordsPair, bool areSynonyms);
+    Game::ValidationCodes getValidationCode() const;
 
 signals:
     Q_SIGNAL void invalidWordsPairAddedByUser();
@@ -26,6 +28,7 @@ signals:
 private:
     bool _isValidDataEntry(DataSource::DataEntry& rawDataEntry, const QString& firstWord, const QString& secondWord, bool areSynonyms);
 
+    Game::ValidationCodes m_ValidationCode;
     DataSource* m_pDataSource;
 };
 

@@ -21,6 +21,8 @@
 
 #include <QObject>
 
+#include "../Utilities/game.h"
+
 class GameFacade;
 class DataSource;
 class DataSourceLoader;
@@ -48,6 +50,7 @@ public:
     void requestWriteToCache(QPair<QString, QString> newWordsPair, bool areSynonyms);
     void provideDataEntryToConsumer(int entryNumber);
     int getNrOfValidEntries() const;
+    Game::ValidationCodes getPairEntryValidationCode() const;
 
     GameFacade* getFacade() const;
     DataSource* getDataSource() const;

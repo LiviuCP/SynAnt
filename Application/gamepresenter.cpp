@@ -24,6 +24,16 @@ static const QMap<Game::PieceTypes, QColor> c_WordPieceTextColors
     {Game::PieceTypes::END_PIECE, GameStrings::c_WordLastPieceTextColor}
 };
 
+static const QMap<Game::ValidationCodes, QString> c_InvalidPairEntryReasonMessages
+{
+    {Game::ValidationCodes::LESS_MIN_CHARS_PER_WORD, GameStrings::c_WordHasLessThanMinimumCharacters},
+    {Game::ValidationCodes::LESS_MIN_TOTAL_PAIR_CHARS, GameStrings::c_PairHasLessThanMinimumCharacters},
+    {Game::ValidationCodes::MORE_MAX_TOTAL_PAIR_CHARS, GameStrings::c_PairHasMoreThanMaximumCharacters},
+    {Game::ValidationCodes::INVALID_CHARACTERS, GameStrings::c_InvalidCharacters},
+    {Game::ValidationCodes::IDENTICAL_WORDS, GameStrings::c_PairHasIdenticalWords},
+    {Game::ValidationCodes::PAIR_ALREADY_EXISTS, GameStrings::c_PairAlreadyExists}
+};
+
 GamePresenter::GamePresenter(QObject *parent)
     : QObject(parent)
     , m_IntroPaneVisible {true}
@@ -671,7 +681,8 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::INVALID_DATA_ENTRY:
-        _updateStatusMessage(GameStrings::c_DataEntryIncorrectPairMessage, Pane::DATA_ENTRY, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_DataEntryInvalidPairMessage.arg(c_InvalidPairEntryReasonMessages[m_pGameFacade->getDataEntryValidationCode()]),
+                            Pane::DATA_ENTRY, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
         Q_EMIT dataEntryInvalid();
         break;
