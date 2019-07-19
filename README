@@ -51,11 +51,11 @@ For version 2.0 the same deploy steps might be used at the moment as for the QML
 
 4. Updating the "data" file
 
-The data file should only be updated manually for version 1.2. See above sections for more information.
+The data file can only be updated manually for version 1.2. See above sections for more information.
 
-Each row should contain one word pair. The 2 words from each pair are separated by a special character which is '=' for synonyms and '!' for antonyms. No rows should be left empty or with incorrect format (e.g. no separator/multiple separators) otherwise an exception will be triggered when reading the incorrect row and the program will stop.
+Each row should contain one word pair. The 2 words from each pair are separated by a special character which is '=' for synonyms and '!' for antonyms. No rows should be left empty or with incorrect format (e.g. no separator/multiple separators) otherwise an exception will be triggered when reading the incorrect row and the program will stop. The minimum word size is 5 characters.
 
-The minimum word size is 5 characters and is determined by the c_MinWordSize constant from Common/game.h.
+Starting with version 2.0 the data is being updated by using a data entry dialog page. This is a significant improvement comparing to previous versions as it is even possible to start the game without having a data file (the user will need to enter at least one word pair so the game can be played). So no more manual updating is required anymore. For more information check the Help dialog.
 
 5. Further info
 
