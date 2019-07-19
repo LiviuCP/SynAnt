@@ -91,7 +91,8 @@ QtObject {
     readonly property string mainPaneSecondWordInputToolTip:                        "Click to remove the selected chunk of pieces from the second word input."
     readonly property string playButtonToolTip:                                     "Click or hit ALT+P to play."
     readonly property string helpButtonToolTip:                                     "Click or hit ALT+H for accessing the detailed game instructions."
-    readonly property string quitButtonToolTip:                                     "Click or hit ALT+Q to exit application."
+    readonly property string quitButtonToolTip:                                     "Click or hit ALT+Q to exit application.
+                                                                                    \nThe application will exit only after completing all load/save operations."
     readonly property string okButtonToolTip:                                       "Click or hit ALT+O to return to previous page."
     readonly property string submitButtonToolTip:                                   "Click or hit ALT+S after entering the 2 words."
     readonly property string clearMainPaneInputButtonToolTip:                       "Click or hit ALT+Z to clear the user input."
