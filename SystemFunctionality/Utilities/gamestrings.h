@@ -133,7 +133,7 @@ namespace GameStrings {
                                                              "Then return to intro page and press Play."
                                                         };
 
-    const QString c_DefaultStatusMessage                {    "Please select a new word piece or delete one/more if necessary"                           };
+    const QString c_SelectOrDeleteWordPiecesMessage     {    "Please select a new word piece or delete one/more if necessary"                           };
     const QString c_DataEntryStartMessage               {    "Word pairs entry started"                                                                 };
     const QString c_DataEntryResumeMessage              {    "Data entry resumed. There are %1 entries pending to be saved!"                            };
     const QString c_DataEntryRequestMessage             {    "Please enter a new pair of words.\n\nChoose if they are synonyms or antonyms"             };
@@ -179,7 +179,7 @@ namespace GameStrings {
 
     const QString c_DataEntryCacheResetMessage          {    "The unsaved entries been discarded"                                                       };
 
-    const QString c_ResultsRequestedByUserMessage       {
+    const QString c_ShowPairRequestedByUserMessage      {
                                                              "\nThe correct words are:\n\n"
                                                              "\t%1\n"
                                                              "\t%2\n"

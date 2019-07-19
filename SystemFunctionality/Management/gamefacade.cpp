@@ -223,7 +223,7 @@ void GameFacade::requestCacheReset()
 void GameFacade::provideCorrectWordsPairToUser()
 {
     m_pScoreItem->updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
-    Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::REQUESTED_BY_USER);
+    Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::SOLUTION_REQUESTED_BY_USER);
     m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
 }
 
@@ -380,7 +380,7 @@ void GameFacade::_onInvalidWordsPairAddedByUser()
     // restore add to cache capability so the user can re-add the entry after modifying the words
     _allowAddToCache();
 
-    Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::INVALID_DATA_ENTRY);
+    Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_ENTRY_INVALID);
 }
 
 void GameFacade::_onNewWordsPairAddedToCache()

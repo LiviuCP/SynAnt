@@ -586,7 +586,7 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         break;
     case Game::StatusCodes::GAME_STARTED:
         _updateStatusMessage(GameStrings::c_GameStartedMessage, Pane::MAIN, Game::c_NoDelay);
-        _updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
+        _updateStatusMessage(GameStrings::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::GAME_PAUSED:
         _updateStatusMessage(GameStrings::c_GamePausedMessage, Pane::MAIN, Game::c_NoDelay);
@@ -597,7 +597,7 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         break;
     case Game::StatusCodes::GAME_RESUMED_INCOMPLETE_INPUT:
         _updateStatusMessage(GameStrings::c_GameResumedMessage, Pane::MAIN, Game::c_NoDelay);
-        _updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
+        _updateStatusMessage(GameStrings::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::GAME_STOPPED:
         if (m_MainPaneVisible)
@@ -617,20 +617,20 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
                                                          .arg(m_pGameFacade->areSynonyms() ? GameStrings::c_Synonyms : GameStrings::c_Antonyms)};
             _updateStatusMessage(message, Pane::MAIN, Game::c_NoDelay);
         }
-        _updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN, Game::c_LongStatusUpdateDelay);
+        _updateStatusMessage(GameStrings::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::c_LongStatusUpdateDelay);
         break;
     case Game::StatusCodes::INCORRECT_USER_INPUT:
         _updateStatusMessage(GameStrings::c_IncorrectUserInputMessage, Pane::MAIN, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_AllPiecesAddedMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
         break;
-    case Game::StatusCodes::REQUESTED_BY_USER:
+    case Game::StatusCodes::SOLUTION_REQUESTED_BY_USER:
         {
-            QString message = GameStrings::c_ResultsRequestedByUserMessage.arg(m_pGameFacade->getFirstReferenceWord())
+            QString message = GameStrings::c_ShowPairRequestedByUserMessage.arg(m_pGameFacade->getFirstReferenceWord())
                                                                    .arg(m_pGameFacade->getSecondReferenceWord())
                                                                    .arg(m_pGameFacade->areSynonyms() ? GameStrings::c_Synonyms : GameStrings::c_Antonyms);
             _updateStatusMessage(message, Pane::MAIN, Game::c_NoDelay);
         }
-        _updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN, Game::c_LongStatusUpdateDelay);
+        _updateStatusMessage(GameStrings::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::c_LongStatusUpdateDelay);
         break;
     case Game::StatusCodes::STATISTICS_RESET_COMPLETE_INPUT:
         _updateStatusMessage(GameStrings::c_ScoresResetMessage, Pane::MAIN, Game::c_NoDelay);
@@ -638,15 +638,15 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         break;
     case Game::StatusCodes::STATISTICS_RESET_INCOMPLETE_INPUT:
         _updateStatusMessage(GameStrings::c_ScoresResetMessage, Pane::MAIN, Game::c_NoDelay);
-        _updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
+        _updateStatusMessage(GameStrings::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::LEVEL_CHANGED:
         _updateStatusMessage(GameStrings::c_LevelChangedMessage, Pane::MAIN, Game::c_NoDelay);
-        _updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
+        _updateStatusMessage(GameStrings::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::PIECE_NOT_ADDED:
         _updateStatusMessage(GameStrings::c_PieceNotAddedToInputMessage, Pane::MAIN, Game::c_NoDelay);
-        _updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
+        _updateStatusMessage(GameStrings::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::PIECE_ADDED_COMPLETE_INPUT:
         _updateStatusMessage(GameStrings::c_PieceAddedToInputMessage, Pane::MAIN, Game::c_NoDelay);
@@ -654,15 +654,15 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         break;
     case Game::StatusCodes::PIECE_ADDED_INCOMPLETE_INPUT:
         _updateStatusMessage(GameStrings::c_PieceAddedToInputMessage, Pane::MAIN, Game::c_NoDelay);
-        _updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
+        _updateStatusMessage(GameStrings::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::PIECES_REMOVED:
         _updateStatusMessage(GameStrings::c_PiecesRemovedFromInputMessage, Pane::MAIN, Game::c_NoDelay);
-        _updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
+        _updateStatusMessage(GameStrings::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::USER_INPUT_CLEARED:
         _updateStatusMessage(GameStrings::c_AllPiecesRemovedMessage, Pane::MAIN, Game::c_NoDelay);
-        _updateStatusMessage(GameStrings::c_DefaultStatusMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
+        _updateStatusMessage(GameStrings::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::DATA_ENTRY_STARTED:
         _updateStatusMessage(GameStrings::c_DataEntryStartMessage, Pane::DATA_ENTRY, Game::c_NoDelay);
@@ -687,7 +687,7 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         _updateStatusMessage(GameStrings::c_DataAvailableMessage, Pane::INTRO, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
         break;
-    case Game::StatusCodes::INVALID_DATA_ENTRY:
+    case Game::StatusCodes::DATA_ENTRY_INVALID:
         _updateStatusMessage(GameStrings::c_DataEntryInvalidPairMessage.arg(c_InvalidPairEntryReasonMessages[m_pGameFacade->getDataEntryValidationCode()]),
                             Pane::DATA_ENTRY, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
