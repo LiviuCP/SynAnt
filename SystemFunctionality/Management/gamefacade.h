@@ -124,6 +124,7 @@ private:
     bool m_IsResettingCacheAllowed;
     int m_CachedWordPairs;
     bool m_IsSavingToDbAllowed;
+    bool m_IsSavingInProgress;
     bool m_IsGameStarted;
     bool m_IsGamePaused;
 };

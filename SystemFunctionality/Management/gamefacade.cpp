@@ -19,6 +19,7 @@ GameFacade::GameFacade(QObject *parent)
     , m_IsResettingCacheAllowed{false}
     , m_CachedWordPairs{0}
     , m_IsSavingToDbAllowed{false}
+    , m_IsSavingInProgress{false}
     , m_IsGameStarted{false}
     , m_IsGamePaused{false}
 {
@@ -114,12 +115,18 @@ void GameFacade::quitGame()
 
 void GameFacade::startWordEntry()
 {
-    Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_ENTRY_STARTED);
+    if (!m_IsSavingInProgress)
+    {
+        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_ENTRY_STARTED);
+    }
 }
 
 void GameFacade::resumeWordEntry()
 {
-    Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_ENTRY_RESUMED);
+    if (!m_IsSavingInProgress)
+    {
+        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_ENTRY_RESUMED);
+    }
 }
 
 void GameFacade::addWordPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex)
@@ -195,6 +202,9 @@ void GameFacade::requestSaveDataToDb()
         _blockAddToCache();
         _blockSaveToDb();
         _blockCacheReset();
+
+        m_IsSavingInProgress = true;
+        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_SAVE_IN_PROGRESS);
 
         m_pDataSourceProxy->saveDataToDb();
     }
@@ -416,6 +426,7 @@ void GameFacade::_onWriteDataToDbFinished(int nrOfEntries)
 
     _allowAddToCache();
 
+    m_IsSavingInProgress = false;
     Q_EMIT statusChanged(m_CurrentStatusCode = initialNrOfEntries == 0 ? Game::StatusCodes::DATA_GOT_AVAILABLE : Game::StatusCodes::DATA_SUCCESSFULLY_SAVED);
 
     // don't reset this variable prior to changing status (is used by presenter)

@@ -32,6 +32,7 @@ namespace Game
         DATA_LOADING_COMPLETE,
         NO_VALID_DATA_ENTRIES_LOADED,
         DATA_LOADING_ERROR,
+        DATA_SAVE_IN_PROGRESS,
         DATA_SUCCESSFULLY_SAVED,
         DATA_ENTRY_SAVING_ERROR,
         DATA_GOT_AVAILABLE,
@@ -94,7 +95,7 @@ namespace Game
     static constexpr int c_ToolTipDelay{1000};
     static constexpr int c_PaneSwitchingDelay{250};
     static constexpr int c_LoadDataThreadDelay{4000};
-    static constexpr int c_WriteDataThreadDelay{100};
+    static constexpr int c_WriteDataThreadDelay{500};
     static constexpr int c_ToolTipTimeout{4000};
     static constexpr int c_ShortStatusUpdateDelay{1000};
     static constexpr int c_LongStatusUpdateDelay{2000};
