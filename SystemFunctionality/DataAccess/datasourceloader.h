@@ -17,9 +17,6 @@ class DataSourceLoader : public QObject
 public:
     explicit DataSourceLoader(DataSource* pDataSource, QObject *parent = nullptr);
 
-    // for test purposes only
-    bool processRawDataEntryForTest(const QString& rawDataEntry);
-
 public slots:
     void onLoadDataFromDbRequested();
 
@@ -27,9 +24,9 @@ signals:
     Q_SIGNAL void readDataFromDbFinished(bool success);
 
 private:
-    bool _loadRawData(QVector<QString>& rawData);
-    void _convertToValidDataEntries(const QVector<QString>& rawData);
-    bool _createValidDataEntry(DataSource::DataEntry& dataEntry, const QString& rawDataEntry);
+    bool _loadEntriesFromDb(QVector<DataSource::DataEntry>& dbEntries);
+    void _validateLoadedDataEntries(const QVector<DataSource::DataEntry> dbEntries);
+    bool _isValidDataEntry(const DataSource::DataEntry& dataEntry);
 
     QVector<DataSource::DataEntry> m_ValidDataEntries;
     DataSource* m_pDataSource;

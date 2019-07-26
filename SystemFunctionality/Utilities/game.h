@@ -88,6 +88,8 @@ namespace Game
         PieceTypesCount
     };
 
+    static constexpr int c_RequiredNrOfDbTableFields{5};
+
     static constexpr int c_MinWordSize{5};
     static constexpr int c_MinPairSize{15};
     static constexpr int c_MaxPairSize{30};

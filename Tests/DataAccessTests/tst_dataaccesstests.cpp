@@ -15,8 +15,6 @@ public:
     DataAccessTests();
 
 private slots:
-    void testWordPairsAreCorrect();
-    void testWordPairsAreNotCorrect();
     void testDataSourceAccessHelperSetTable();
     void testDataSourceAccessHelperUsedEntries();
     void testDataSourceAccessHelperUseAllEntries();
@@ -26,65 +24,6 @@ private slots:
 
 DataAccessTests::DataAccessTests()
 {
-}
-
-void DataAccessTests::testWordPairsAreCorrect()
-{
-    std::unique_ptr<DataSourceLoader> pDataSourceLoader{new DataSourceLoader{new DataSource{GameStrings::c_NoFile}}};
-
-    QVERIFY(pDataSourceLoader->processRawDataEntryForTest("abcde=fghijklmno"));
-    QVERIFY(pDataSourceLoader->processRawDataEntryForTest("abcde!fghijklmno"));
-    QVERIFY(pDataSourceLoader->processRawDataEntryForTest("abcdefghij=klmno"));
-    QVERIFY(pDataSourceLoader->processRawDataEntryForTest("abcdefghij!klmno"));
-    QVERIFY(pDataSourceLoader->processRawDataEntryForTest("abcdefghijklmno=onmlkjihgfedcba"));
-    QVERIFY(pDataSourceLoader->processRawDataEntryForTest("abcdefghijklmno!onmlkjihgfedcba"));
-    QVERIFY(pDataSourceLoader->processRawDataEntryForTest("abcdefgh=ijklmnopqrstuv"));
-    QVERIFY(pDataSourceLoader->processRawDataEntryForTest("abcdefgh!ijklmnopqrstuv"));
-    QVERIFY(pDataSourceLoader->processRawDataEntryForTest("abcdefghijklmn=opqrstuv"));
-    QVERIFY(pDataSourceLoader->processRawDataEntryForTest("abcdefghijklmn!opqrstuv"));
-    QVERIFY(pDataSourceLoader->processRawDataEntryForTest("abcde=fghijklmnopqrstuvxyzedcba"));
-    QVERIFY(pDataSourceLoader->processRawDataEntryForTest("abcde!fghijklmnopqrstuvxyzedcba"));
-    QVERIFY(pDataSourceLoader->processRawDataEntryForTest("abcdefghijklmnopqrstuvxyz=edcba"));
-    QVERIFY(pDataSourceLoader->processRawDataEntryForTest("abcdefghijklmnopqrstuvxyz!edcba"));
-}
-
-void DataAccessTests::testWordPairsAreNotCorrect()
-{
-    std::unique_ptr<DataSourceLoader> pDataSourceLoader{new DataSourceLoader{new DataSource{GameStrings::c_NoFile}}};
-
-    // empty row
-    QVERIFY(!pDataSourceLoader->processRawDataEntryForTest(""));
-
-    // illegal chars (including capitals)
-    QVERIFY(!pDataSourceLoader->processRawDataEntryForTest("firstWord!secondword"));
-    QVERIFY(!pDataSourceLoader->processRawDataEntryForTest("firstword!second&word"));
-
-    // no separator
-    QVERIFY(!pDataSourceLoader->processRawDataEntryForTest("firstwordsecondword"));
-
-    // multiple separators
-    QVERIFY(!pDataSourceLoader->processRawDataEntryForTest("firs!tword!secondword"));
-    QVERIFY(!pDataSourceLoader->processRawDataEntryForTest("firs!tword=secondword"));
-    QVERIFY(!pDataSourceLoader->processRawDataEntryForTest("firs=tword!secondword"));
-    QVERIFY(!pDataSourceLoader->processRawDataEntryForTest("firs=tword=secondword"));
-
-    // less than minimum required number of chars per word
-    QVERIFY(!pDataSourceLoader->processRawDataEntryForTest("abcd!secondword"));
-    QVERIFY(!pDataSourceLoader->processRawDataEntryForTest("abcd=secondword"));
-    QVERIFY(!pDataSourceLoader->processRawDataEntryForTest("firstword=efgh"));
-    QVERIFY(!pDataSourceLoader->processRawDataEntryForTest("firstword!efgh"));
-
-    // less than minimum required total number of chars per pair
-    QVERIFY(!pDataSourceLoader->processRawDataEntryForTest("abcdefg=hijklmn"));
-    QVERIFY(!pDataSourceLoader->processRawDataEntryForTest("abcdefg!hijklmn"));
-
-    // more than maximum allowed total number of chars per pair
-    QVERIFY(!pDataSourceLoader->processRawDataEntryForTest("abcdefghijklmnop=onmlkjihgfedcba"));
-    QVERIFY(!pDataSourceLoader->processRawDataEntryForTest("abcdefghijklmnop!onmlkjihgfedcba"));
-
-    // same words in pair
-    QVERIFY(!pDataSourceLoader->processRawDataEntryForTest("abcdefghij=abcdefghij"));
-    QVERIFY(!pDataSourceLoader->processRawDataEntryForTest("abcdefghij!abcdefghij"));
 }
 
 void DataAccessTests::testDataSourceAccessHelperSetTable()

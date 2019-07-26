@@ -1,7 +1,8 @@
-#include <QFile>
-#include <QTextStream>
 #include <QVector>
 #include <QThread>
+#include <QSqlDatabase>
+#include <QSqlField>
+#include <QSqlQuery>
 
 #include "datasourceloader.h"
 #include "../Utilities/gamestrings.h"
@@ -13,22 +14,15 @@ DataSourceLoader::DataSourceLoader(DataSource* pDataSource, QObject *parent)
     Q_ASSERT(m_pDataSource);
 }
 
-bool DataSourceLoader::processRawDataEntryForTest(const QString &rawDataEntry)
-{
-    // row number is irrelevant as the method is only for testing purposes and no data is read from a file or database
-    DataSource::DataEntry dataEntry;
-    return _createValidDataEntry(dataEntry, rawDataEntry);
-}
-
 void DataSourceLoader::onLoadDataFromDbRequested()
 {
     bool success{true};
 
-    QVector<QString> rawData;
+    QVector<DataSource::DataEntry> loadedDataEntries;
 
-    if (_loadRawData(rawData))
+    if (_loadEntriesFromDb(loadedDataEntries))
     {
-        _convertToValidDataEntries(rawData);
+        _validateLoadedDataEntries(loadedDataEntries);
 
         m_pDataSource->updateDataEntries(m_ValidDataEntries, false);
 
@@ -43,45 +37,60 @@ void DataSourceLoader::onLoadDataFromDbRequested()
     Q_EMIT readDataFromDbFinished(success);
 }
 
-bool DataSourceLoader::_loadRawData(QVector<QString>& rawData)
+bool DataSourceLoader::_loadEntriesFromDb(QVector<DataSource::DataEntry>& dbEntries)
 {
     bool success{true};
 
-    QFile wordPairsFile(m_pDataSource->getDataFilePath());
+    Q_UNUSED(QSqlDatabase::addDatabase(GameStrings::c_DbDriverName));
 
-    if (!wordPairsFile.open(QIODevice::ReadOnly | QIODevice::Text))
+    // ensure all database related objects are destroyed before the connection is removed
     {
-        success = false;
-    }
-    else
-    {
-        QTextStream lineReader{&wordPairsFile};
+        QSqlDatabase db{QSqlDatabase::database(QSqlDatabase::defaultConnection)};
 
-        while (!lineReader.atEnd())
+        db.setDatabaseName(m_pDataSource->getDataFilePath());
+
+        if (db.open())
         {
-            rawData.append(lineReader.readLine());
-        }
+            QSqlQuery retrieveDataQuery{GameStrings::c_RetrieveAllEntriesQuery};
+            if (retrieveDataQuery.isActive())
+            {
+                while (retrieveDataQuery.next())
+                {
+                    dbEntries.append(DataSource::DataEntry{retrieveDataQuery.value(1).toString(),                       // field 1: first word
+                                                           retrieveDataQuery.value(2).toString(),                       // field 2: second word
+                                                           static_cast<bool>(retrieveDataQuery.value(3).toInt())});     // field 3: synonym/antonym flag
+                }
+            }
+            else
+            {
+                success = false;
+            }
 
-        wordPairsFile.close();
+            db.close();
+        }
+        else
+        {
+            success = false;
+        }
     }
+
+    QSqlDatabase::removeDatabase(QSqlDatabase::defaultConnection);
 
     return success;
 }
 
-void DataSourceLoader::_convertToValidDataEntries(const QVector<QString> &rawData)
+void DataSourceLoader::_validateLoadedDataEntries(const QVector<DataSource::DataEntry> dbEntries)
 {
-    for (int row{0}; row < rawData.size(); ++row)
+    for (int row{0}; row < dbEntries.size(); ++row)
     {
-        DataSource::DataEntry dataEntry;
-
-        if (_createValidDataEntry(dataEntry, rawData[row]))
+        if (_isValidDataEntry(dbEntries[row]))
         {
-            m_ValidDataEntries.append(dataEntry);
+            m_ValidDataEntries.append(dbEntries[row]);
         }
     }
 }
 
-bool DataSourceLoader::_createValidDataEntry(DataSource::DataEntry &dataEntry, const QString &rawDataEntry)
+bool DataSourceLoader::_isValidDataEntry(const DataSource::DataEntry &dataEntry)
 {
     auto isValidWord = [](const QString &word)
     {
@@ -99,40 +108,21 @@ bool DataSourceLoader::_createValidDataEntry(DataSource::DataEntry &dataEntry, c
         return (success && (word.size() >= Game::c_MinWordSize));
     };
 
-    bool success{true};
+    bool isValidPair{true};
+    const int totalPairSize{dataEntry.firstWord.size() + dataEntry.secondWord.size()};
 
-    success = success && (rawDataEntry.size() != 0);
-
-    // total number of characters of the two words (excluding separator) should not be lower than the minimum required otherwise the game might become trivial
-    success = success && (rawDataEntry.size()-1 >= Game::c_MinPairSize);
-
-    // total maximum number of characters per pair is necessary for UI space/aesthetic reasons
-    success = success && (rawDataEntry.size()-1 <= Game::c_MaxPairSize);
-
-    int synonymsSeparatorIndex{rawDataEntry.indexOf(GameStrings::c_SynonymsSeparator)};
-    int antonymsSeparatorIndex{rawDataEntry.indexOf(GameStrings::c_AntonymsSeparator)};
-    int separatorIndex{-1};
-
-    // there should be exactly one separator (either = for synonyms or ! for antonyms)
-    success = success && (synonymsSeparatorIndex == rawDataEntry.lastIndexOf(GameStrings::c_SynonymsSeparator));
-    success = success && (antonymsSeparatorIndex == rawDataEntry.lastIndexOf(GameStrings::c_AntonymsSeparator));
-    success = success && (synonymsSeparatorIndex != antonymsSeparatorIndex);
-    success = success && (synonymsSeparatorIndex == -1 || antonymsSeparatorIndex == -1);
-
-    if (success)
+    if (totalPairSize < Game::c_MinPairSize || totalPairSize > Game::c_MaxPairSize)
     {
-        separatorIndex = synonymsSeparatorIndex != -1 ? synonymsSeparatorIndex : antonymsSeparatorIndex;
-
-        dataEntry.areSynonyms = synonymsSeparatorIndex != -1 ? true : false;
-        dataEntry.firstWord = rawDataEntry.left(separatorIndex);
-        dataEntry.secondWord = rawDataEntry.mid(separatorIndex+1);
-
-        // don't allow words containing invalid characters (only small letters allowed)
-        success = success && (isValidWord(dataEntry.firstWord) && isValidWord(dataEntry.secondWord));
-
-        // don't allow identical words
-        success = success && (dataEntry.firstWord != dataEntry.secondWord);
+        isValidPair = false;
+    }
+    else if (!isValidWord(dataEntry.firstWord) || !isValidWord(dataEntry.secondWord))
+    {
+        isValidPair = false;
+    }
+    else if (dataEntry.firstWord == dataEntry.secondWord)
+    {
+        isValidPair = false;
     }
 
-    return success;
+    return isValidPair;
 }

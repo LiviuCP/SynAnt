@@ -1,6 +1,7 @@
-#include <QFile>
-#include <QTextStream>
 #include <QThread>
+#include <QSqlDatabase>
+#include <QSqlField>
+#include <QSqlQuery>
 
 #include "dataentrycache.h"
 #include "../Utilities/game.h"
@@ -36,32 +37,49 @@ void DataEntryCache::onResetCacheRequested()
 
 void DataEntryCache::onWriteDataToDbRequested()
 {
-    QFile wordPairsFile(m_pDataSource->getDataFilePath());
+    Q_UNUSED(QSqlDatabase::addDatabase(GameStrings::c_DbDriverName));
 
-    if(!wordPairsFile.open(QIODevice::Append))
+    // ensure all database related objects are destroyed before the connection is removed
     {
-        // user entered data valid but error when writing to DB
-        Q_EMIT writeDataToDbErrorOccured();
-    }
-    else
-    {
-        QTextStream lineWriter{&wordPairsFile};
+        QSqlDatabase db{QSqlDatabase::database(QSqlDatabase::defaultConnection)};
 
-        for (auto entry : m_CacheEntries)
+        db.setDatabaseName(m_pDataSource->getDataFilePath());
+
+        if (db.open())
         {
-            QString rawDataEntry{entry.firstWord + (entry.areSynonyms ? GameStrings::c_SynonymsSeparator : GameStrings::c_AntonymsSeparator) + entry.secondWord};
-            lineWriter << rawDataEntry << endl;
+            QSqlQuery query;
+
+            for (auto entry : m_CacheEntries)
+            {
+                query.prepare(GameStrings::c_InsertEntryIntoDbQuery);
+
+                query.bindValue(GameStrings::c_FirstWordFieldPlaceholder, entry.firstWord);
+                query.bindValue(GameStrings::c_SecondWordFieldPlaceholder, entry.secondWord);
+                query.bindValue(GameStrings::c_AreSynonymsFieldPlaceholder, static_cast<int>(entry.areSynonyms));
+
+                if (!query.exec())
+                {
+                    Q_EMIT writeDataToDbErrorOccured();
+                }
+            }
+
+            db.close();
+
+            int nrOfSavedEntries{m_CacheEntries.size()};
+            m_pDataSource->updateDataEntries(m_CacheEntries, true);
+            m_CacheEntries.clear();
+
+            // for sync purposes only
+            QThread::msleep(Game::c_WriteDataThreadDelay);
+
+            Q_EMIT writeDataToDbFinished(nrOfSavedEntries);
         }
-
-        wordPairsFile.close();
-
-        int nrOfSavedEntries{m_CacheEntries.size()};
-        m_pDataSource->updateDataEntries(m_CacheEntries, true);
-        m_CacheEntries.clear();
-
-        // for sync purposes only
-        QThread::msleep(Game::c_WriteDataThreadDelay);
-
-        Q_EMIT writeDataToDbFinished(nrOfSavedEntries);
+        else
+        {
+            // user entered data valid but error when writing to DB
+            Q_EMIT writeDataToDbErrorOccured();
+        }
     }
+
+    QSqlDatabase::removeDatabase(QSqlDatabase::defaultConnection);
 }

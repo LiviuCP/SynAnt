@@ -27,7 +27,7 @@ public:
         bool operator==(const DataEntry& dataEntry) const;
     };
 
-    explicit DataSource(const QString& fileName, QObject *parent = nullptr);
+    explicit DataSource(const QString& dataBasePath, QObject *parent = nullptr);
 
     void updateDataEntries(QVector<DataEntry> dataEntries, bool append);
     void provideDataEntryToConsumer(int entryNumber);
@@ -39,7 +39,7 @@ signals:
     Q_SIGNAL void entryProvidedToConsumer(QPair<QString, QString> newWordsPair, bool areSynonyms);
 
 private:
-    QString m_DataFilePath;
+    QString m_DataBasePath;
     QVector<DataEntry> m_DataEntries;
     mutable QMutex m_DataSourceMutex;
 };

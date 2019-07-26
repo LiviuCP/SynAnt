@@ -107,9 +107,29 @@ static const QString c_HelpWindowMessageString          {
 
 namespace GameStrings {
 
-    //file name
-    const QString c_FileName                            {    "data"                                                                                     };
-    const QString c_NoFile                              {    ""                                                                                         };
+    // database related names
+    const QString c_DbDriverName                        {    "QSQLITE"                                                                                  };
+    const QString c_DatabaseName                        {    "data.db"                                                                                  };
+    const QString c_TableName                           {    "GameDataTable"                                                                            };
+    const QString c_IdFieldName                         {    "rowId"                                                                                    };
+    const QString c_FirstWordFieldName                  {    "firstWord"                                                                                };
+    const QString c_SecondWordFieldName                 {    "secondWord"                                                                               };
+    const QString c_AreSynonymsFieldName                {    "areSynonyms"                                                                              };
+    const QString c_LanguageFieldName                   {    "language"                                                                                 };
+    const QString c_FirstWordFieldPlaceholder           {    ":firstWord"                                                                               };
+    const QString c_SecondWordFieldPlaceholder          {    ":secondWord"                                                                              };
+    const QString c_AreSynonymsFieldPlaceholder         {    ":areSynonyms"                                                                             };
+
+    const QString c_CreateTableQuery                    {
+                                                             "CREATE TABLE GameDataTable (rowId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, "
+                                                             "firstWord TEXT, secondWord TEXT, areSynonyms INTEGER, language TEXT)"
+                                                        };
+
+    const QString c_RetrieveAllEntriesQuery             {    "SELECT * FROM GameDataTable WHERE language = 'EN'"                                        };
+    const QString c_InsertEntryIntoDbQuery              {
+                                                             "INSERT INTO GameDataTable(firstWord, secondWord, areSynonyms, language) "
+                                                             "VALUES(:firstWord, :secondWord, :areSynonyms, 'EN')"
+                                                        };
 
     // general window messages
     const QString c_HelpWindowMessage                   {
@@ -215,6 +235,10 @@ namespace GameStrings {
     const QString c_PairAlreadyExists                   {    "The entered word pair already exists."                                                    };
 
     // fatal error messages
+    const QString c_DatabaseDriverNotAvailable          {    "The SQLite driver is not available!"                                                      };
+    const QString c_CannotOpenDatabase                  {    "The database cannot be opened!"                                                           };
+    const QString c_CannotCreateTable                   {    "Cannot create database table!"                                                            };
+    const QString c_TableIsInvalid                      {    "The database table is invalid!"                                                           };
     const QString c_CannotCreateFileMessage             {    "File not found. Attempt to create it failed!"                                             };
     const QString c_CannotOpenFileMessage               {    "File cannot be opened for reading!\n"                                                     };
     const QString c_CannotSaveDataMessage               {    "An error occured when saving the word pair(s)!"                                           };

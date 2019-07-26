@@ -2,9 +2,9 @@
 
 #include "datasource.h"
 
-DataSource::DataSource(const QString &dataFilePath, QObject *parent)
+DataSource::DataSource(const QString &dataBasePath, QObject *parent)
     : QObject (parent)
-    , m_DataFilePath{dataFilePath}
+    , m_DataBasePath{dataBasePath}
     , m_DataEntries{}
     , m_DataSourceMutex{}
 {
@@ -42,7 +42,7 @@ int DataSource::getNrOfValidEntries() const
 
 QString DataSource::getDataFilePath() const
 {
-    return m_DataFilePath;
+    return m_DataBasePath;
 }
 
 bool DataSource::entryAlreadyExists(const DataSource::DataEntry &dataEntry)

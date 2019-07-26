@@ -1,6 +1,8 @@
-#include <QFileInfo>
-#include <QFile>
+#include <QDir>
 #include <QThread>
+#include <QSqlRecord>
+#include <QSqlField>
+#include <QSqlQuery>
 
 #include "gamemanager.h"
 #include "gamefacade.h"
@@ -17,6 +19,8 @@
 #include "../Utilities/scoreitem.h"
 #include "../Utilities/gamestrings.h"
 #include "../Utilities/exceptions.h"
+
+const QString c_DatabaseDriver{"QSQLITE"};
 
 GameManager* GameManager::s_pGameManager = nullptr;
 
@@ -53,6 +57,7 @@ GameManager::GameManager(QObject *parent)
     , m_pInputBuilder{new InputBuilder{this}}
     , m_pScoreItem {new ScoreItem{this}}
     , m_pDataSourceLoaderThread{nullptr}
+    , m_pDataEntryCacheThread{nullptr}
 {
     m_pWordMixerProxy = new WordMixerProxy{m_pWordMixer, this};
 
@@ -62,30 +67,15 @@ GameManager::GameManager(QObject *parent)
 
 void GameManager::setDataSource(const QString &dataDirPath)
 {
+    Q_ASSERT(QDir{dataDirPath}.exists());
+
     if (!m_pDataSource)
     {
-        QString dataFilePath{dataDirPath + "/" + GameStrings::c_FileName};
-        QFile dataFile{dataFilePath};
+        QString databasePath{dataDirPath + "/" + GameStrings::c_DatabaseName};
 
-        // manager only checks that that data file exists and can be opened, all other checks to be done by DataSource
-        if (!QFileInfo{dataFilePath}.exists())
-        {
-            if (!dataFile.open(QIODevice::WriteOnly | QIODevice::Text))
-            {
-                throw FileException{GameStrings::c_CannotCreateFileMessage, dataFilePath};
-            }
+        _setDatabase(databasePath);
 
-            dataFile.close();
-        }
-
-        if (!dataFile.open(QIODevice::ReadOnly | QIODevice::Text))
-        {
-            throw FileException{GameStrings::c_CannotOpenFileMessage, dataFilePath};
-        }
-
-        dataFile.close();
-
-        m_pDataSource = new DataSource{dataFilePath, this};
+        m_pDataSource = new DataSource{databasePath, this};
         m_pDataSourceLoader = new DataSourceLoader{m_pDataSource};
         m_pDataSourceLoaderThread = new QThread{this};
         m_pDataEntryValidator = new DataEntryValidator{m_pDataSource, this};
@@ -251,4 +241,69 @@ void GameManager::_onDataSourceSetupCompleted()
     m_pWordPairOwner->setWordMixerProxy(m_pWordMixerProxy);
 
     m_pGameFacade = new GameFacade{this};
+}
+
+void GameManager::_setDatabase(const QString& databasePath)
+{
+    if (QSqlDatabase::isDriverAvailable(GameStrings::c_DbDriverName))
+    {
+        QSqlDatabase db{QSqlDatabase::addDatabase(GameStrings::c_DbDriverName)};
+        db.setDatabaseName(databasePath);
+
+        if (db.open())
+        {
+            if (!db.tables().contains(GameStrings::c_TableName))
+            {
+                QSqlQuery createTableQuery;
+
+                createTableQuery.prepare(GameStrings::c_CreateTableQuery);
+
+                if (!createTableQuery.exec())
+                {
+                    throw GameException{GameStrings::c_CannotCreateTable};
+                }
+            }
+            else
+            {
+                bool isValidTable{true};
+
+                if (db.record(GameStrings::c_TableName).count() != Game::c_RequiredNrOfDbTableFields)
+                {
+                    isValidTable = false;
+                }
+                else if (db.record(GameStrings::c_TableName).field(0).name() != GameStrings::c_IdFieldName ||
+                         db.record(GameStrings::c_TableName).field(1).name() != GameStrings::c_FirstWordFieldName ||
+                         db.record(GameStrings::c_TableName).field(2).name() != GameStrings::c_SecondWordFieldName ||
+                         db.record(GameStrings::c_TableName).field(3).name() != GameStrings::c_AreSynonymsFieldName ||
+                         db.record(GameStrings::c_TableName).field(4).name() != GameStrings::c_LanguageFieldName)
+                {
+                    isValidTable = false;
+                }
+                else if (db.record(GameStrings::c_TableName).field(0).type() != QVariant::Int ||
+                         db.record(GameStrings::c_TableName).field(1).type() != QVariant::String ||
+                         db.record(GameStrings::c_TableName).field(2).type() != QVariant::String ||
+                         db.record(GameStrings::c_TableName).field(3).type() != QVariant::Int ||
+                         db.record(GameStrings::c_TableName).field(4).type() != QVariant::String)
+                {
+                    isValidTable = false;
+                }
+
+                if (!isValidTable)
+                {
+                    throw GameException{GameStrings::c_TableIsInvalid};
+                }
+            }
+            db.close();
+        }
+        else
+        {
+            throw FileException{GameStrings::c_CannotOpenDatabase, databasePath};
+        }
+    }
+    else
+    {
+        throw GameException{GameStrings::c_DatabaseDriverNotAvailable};
+    }
+
+    QSqlDatabase::removeDatabase(QSqlDatabase::defaultConnection);
 }

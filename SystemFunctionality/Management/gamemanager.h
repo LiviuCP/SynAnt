@@ -20,6 +20,7 @@
 #define GAMEMANAGER_H
 
 #include <QObject>
+#include <QSqlDatabase>
 
 #include "../Utilities/game.h"
 
@@ -76,6 +77,7 @@ private slots:
 
 private:
     explicit GameManager(QObject *parent = nullptr);
+    void _setDatabase(const QString& databasePath);
 
     static GameManager* s_pGameManager;
 
