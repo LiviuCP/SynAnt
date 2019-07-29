@@ -216,7 +216,7 @@ void GameFacade::requestCacheReset()
     {
         _blockSaveToDb();
         _blockCacheReset();
-        m_pDataSourceProxy->resetDataEntryCache();
+        m_pDataSourceProxy->requestCacheReset();
     }
 }
 
@@ -352,7 +352,7 @@ void GameFacade::_onReadDataFromDbFinished(bool success)
 {
     if (success)
     {
-        int nrOfEntries{m_pDataSourceProxy->getNrOfValidEntries()};
+        int nrOfEntries{m_pDataSourceProxy->getNrOfValidDataSourceEntries()};
 
         if (nrOfEntries != 0)
         {

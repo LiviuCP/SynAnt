@@ -15,10 +15,10 @@ public:
 
     void loadDataFromDb();
     void saveDataToDb();
-    void resetDataEntryCache();
+    void requestCacheReset();
     void provideDataEntryToConsumer(int entryNumber);
     void requestWriteToCache(QPair<QString, QString> newWordsPair, bool areSynonyms);
-    int getNrOfValidEntries();
+    int getNrOfValidDataSourceEntries();
     Game::ValidationCodes getPairEntryValidationCode() const;
 
 signals:

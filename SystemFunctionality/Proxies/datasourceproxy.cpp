@@ -16,9 +16,9 @@ void DataSourceProxy::saveDataToDb()
     GameManager::getManager()->saveDataToDb();
 }
 
-void DataSourceProxy::resetDataEntryCache()
+void DataSourceProxy::requestCacheReset()
 {
-    GameManager::getManager()->resetDataEntryCache();
+    GameManager::getManager()->requestCacheReset();
 }
 
 void DataSourceProxy::provideDataEntryToConsumer(int entryNumber)
@@ -31,9 +31,9 @@ void DataSourceProxy::requestWriteToCache(QPair<QString, QString> newWordsPair, 
     GameManager::getManager()->requestWriteToCache(newWordsPair, areSynonyms);
 }
 
-int DataSourceProxy::getNrOfValidEntries()
+int DataSourceProxy::getNrOfValidDataSourceEntries()
 {
-    return GameManager::getManager()->getNrOfValidEntries();
+    return GameManager::getManager()->getNrOfValidDataSourceEntries();
 }
 
 Game::ValidationCodes DataSourceProxy::getPairEntryValidationCode() const

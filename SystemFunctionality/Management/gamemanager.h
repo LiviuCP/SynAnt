@@ -1,15 +1,20 @@
 /*
    This class is responsible for building the backend of the game and can thus be considered the "backbone" of the application:
-   1) Creates the backend objects:
-      - GameFacade
-      - DataSource
-      - DataSourceAccessHelper
-      - WordMixer
-      - WordPairOwner
-      - InputBuilder
-      - ScoreItem
-   2) Connects the objects with each other
-   3) Is responsible for creating threads requested for the execution of methods belonging to backend objects
+
+    1) Creates the backend objects:
+       - GameFacade
+       - DataSource
+       - DataSourceAccessHelper
+       - DataSourceLoader
+       - DataEntryValidator
+       - DataEntryCache
+       - WordMixer
+       - WordPairOwner
+       - InputBuilder
+       - ScoreItem
+    2) Sets up database and manages the data connections (data source, loader, validator and cache); controls the data related functionality (loading, entry, validation, save to DB)
+    3) Makes the non-facade game components connections (InputBuilder, WordPairOwner, WordMixer)
+    4) Is responsible for creating/managing threads
 
    Other notes:
    - implemented as singleton so it is easily accessible from more parts of the code
@@ -47,10 +52,11 @@ public:
     void setDataSource(const QString& dataDirPath);
     void loadDataFromDb();
     void saveDataToDb();
-    void resetDataEntryCache();
     void requestWriteToCache(QPair<QString, QString> newWordsPair, bool areSynonyms);
+    void requestCacheReset();
     void provideDataEntryToConsumer(int entryNumber);
-    int getNrOfValidEntries() const;
+
+    int getNrOfValidDataSourceEntries() const;
     Game::ValidationCodes getPairEntryValidationCode() const;
 
     GameFacade* getFacade() const;
@@ -78,6 +84,8 @@ private slots:
 private:
     explicit GameManager(QObject *parent = nullptr);
     void _setDatabase(const QString& databasePath);
+    void _makeDataConnections();
+    void _registerMetaTypes();
 
     static GameManager* s_pGameManager;
 
