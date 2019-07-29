@@ -22,7 +22,7 @@ public:
     Game::ValidationCodes getValidationCode() const;
 
 signals:
-    Q_SIGNAL void invalidWordsPairAddedByUser();
+    Q_SIGNAL void addInvalidWordsPairRequested();
     Q_SIGNAL void entryValidated(DataSource::DataEntry rawDataEntry);
 
 private:

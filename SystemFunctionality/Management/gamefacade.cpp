@@ -51,7 +51,7 @@ GameFacade::GameFacade(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pScoreItem, &ScoreItem::statisticsUpdated, this, &GameFacade::statisticsChanged);
     Q_ASSERT(connected);
-    connected = connect(m_pDataSourceProxy, &DataSourceProxy::readDataFromDbFinished, this, &GameFacade::_onReadDataFromDbFinished);
+    connected = connect(m_pDataSourceProxy, &DataSourceProxy::loadDataFromDbFinished, this, &GameFacade::_onLoadDataFromDbFinished);
     Q_ASSERT(connected);
     connected = connect(m_pDataSourceProxy, &DataSourceProxy::writeDataToDbErrorOccured, this, &GameFacade::_onWriteDataToDbErrorOccured);
     Q_ASSERT(connected);
@@ -61,7 +61,7 @@ GameFacade::GameFacade(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pDataSourceProxy, &DataSourceProxy::cacheReset, this, &GameFacade::_onCacheReset);
     Q_ASSERT(connected);
-    connected = connect(m_pDataSourceProxy, &DataSourceProxy::invalidWordsPairAddedByUser, this, &GameFacade::_onInvalidWordsPairAddedByUser);
+    connected = connect(m_pDataSourceProxy, &DataSourceProxy::addInvalidWordsPairRequested, this, &GameFacade::_onAddInvalidWordsPairRequested);
     Q_ASSERT(connected);
     connected = connect(m_pDataSourceProxy, &DataSourceProxy::writeDataToDbFinished, this, &GameFacade::_onWriteDataToDbFinished);
     Q_ASSERT(connected);
@@ -348,7 +348,7 @@ void GameFacade::_onCloseInputPermissionRequested()
     m_pInputBuilder->setCloseInputPermission(m_pWordPairOwner->isLastAvailableWordPiece());
 }
 
-void GameFacade::_onReadDataFromDbFinished(bool success)
+void GameFacade::_onLoadDataFromDbFinished(bool success)
 {
     if (success)
     {
@@ -375,7 +375,7 @@ void GameFacade::_onReadDataFromDbFinished(bool success)
     }
 }
 
-void GameFacade::_onInvalidWordsPairAddedByUser()
+void GameFacade::_onAddInvalidWordsPairRequested()
 {
     // restore add to cache capability so the user can re-add the entry after modifying the words
     _allowAddToCache();
@@ -417,7 +417,7 @@ void GameFacade::_onWriteDataToDbFinished(int nrOfEntries)
 
     int initialNrOfEntries{m_pDataSourceAccessHelper->getTotalNrOfEntries()};
 
-    m_pDataSourceAccessHelper->addEntries(nrOfEntries);
+    m_pDataSourceAccessHelper->addEntriesToTable(nrOfEntries);
 
     if (initialNrOfEntries == 0)
     {

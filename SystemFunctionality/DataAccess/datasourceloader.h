@@ -21,7 +21,7 @@ public slots:
     void onLoadDataFromDbRequested();
 
 signals:
-    Q_SIGNAL void readDataFromDbFinished(bool success);
+    Q_SIGNAL void loadDataFromDbFinished(bool success);
 
 private:
     bool _loadEntriesFromDb(QVector<DataSource::DataEntry>& dbEntries);

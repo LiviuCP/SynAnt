@@ -283,7 +283,7 @@ void GameManager::_makeDataConnections()
     // loader
     bool connected{connect(m_pDataSourceLoaderThread, &QThread::finished, m_pDataSourceLoader, &DataSourceLoader::deleteLater)};
     Q_ASSERT(connected);
-    connected = connect(m_pDataSourceLoader, &DataSourceLoader::readDataFromDbFinished, m_pDataSourceProxy, &DataSourceProxy::readDataFromDbFinished, Qt::QueuedConnection);
+    connected = connect(m_pDataSourceLoader, &DataSourceLoader::loadDataFromDbFinished, m_pDataSourceProxy, &DataSourceProxy::loadDataFromDbFinished, Qt::QueuedConnection);
     Q_ASSERT(connected);
     connected = connect(this, &GameManager::readDataFromDb, m_pDataSourceLoader, &DataSourceLoader::onLoadDataFromDbRequested, Qt::QueuedConnection);
     Q_ASSERT(connected);
@@ -305,7 +305,7 @@ void GameManager::_makeDataConnections()
     connected = connect(this, &GameManager::resetCacheRequested, m_pDataEntryCache, &DataEntryCache::onResetCacheRequested, Qt::QueuedConnection);
     Q_ASSERT(connected);
     // validator
-    connected = connect(m_pDataEntryValidator, &DataEntryValidator::invalidWordsPairAddedByUser, m_pDataSourceProxy, &DataSourceProxy::invalidWordsPairAddedByUser, Qt::DirectConnection);
+    connected = connect(m_pDataEntryValidator, &DataEntryValidator::addInvalidWordsPairRequested, m_pDataSourceProxy, &DataSourceProxy::addInvalidWordsPairRequested, Qt::DirectConnection);
     Q_ASSERT(connected);
     connected = connect(m_pDataEntryValidator, &DataEntryValidator::entryValidated, m_pDataEntryCache, &DataEntryCache::onValidEntryReceived, Qt::QueuedConnection);
     Q_ASSERT(connected);

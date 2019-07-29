@@ -21,7 +21,7 @@ void DataEntryValidator::validateWordsPair(QPair<QString, QString> newWordsPair,
     }
     else
     {
-        Q_EMIT invalidWordsPairAddedByUser();
+        Q_EMIT addInvalidWordsPairRequested();
     }
 }
 

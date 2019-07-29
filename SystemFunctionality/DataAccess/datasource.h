@@ -31,6 +31,7 @@ public:
 
     void updateDataEntries(QVector<DataEntry> dataEntries, bool append);
     void provideDataEntryToConsumer(int entryNumber);
+
     int getNrOfValidEntries() const;
     QString getDataFilePath() const;
     bool entryAlreadyExists(const DataEntry& dataEntry);

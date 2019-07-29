@@ -34,7 +34,7 @@ void DataSourceLoader::onLoadDataFromDbRequested()
         success = false;
     }
 
-    Q_EMIT readDataFromDbFinished(success);
+    Q_EMIT loadDataFromDbFinished(success);
 }
 
 bool DataSourceLoader::_loadEntriesFromDb(QVector<DataSource::DataEntry>& dbEntries)

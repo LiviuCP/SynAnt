@@ -22,12 +22,12 @@ public:
     Game::ValidationCodes getPairEntryValidationCode() const;
 
 signals:
-    Q_SIGNAL void invalidWordsPairAddedByUser();
+    Q_SIGNAL void addInvalidWordsPairRequested();
     Q_SIGNAL void newWordsPairValidated(bool isValid);
     Q_SIGNAL void newWordsPairAddedToCache();
     Q_SIGNAL void wordsPairAlreadyContainedInCache();
     Q_SIGNAL void cacheReset();
-    Q_SIGNAL void readDataFromDbFinished(bool success);
+    Q_SIGNAL void loadDataFromDbFinished(bool success);
     Q_SIGNAL void writeDataToDbFinished(int nrOfEntries);
     Q_SIGNAL void writeDataToDbErrorOccured();
     Q_SIGNAL void entryProvidedToConsumer(QPair<QString, QString> newWordsPair, bool areSynonyms);

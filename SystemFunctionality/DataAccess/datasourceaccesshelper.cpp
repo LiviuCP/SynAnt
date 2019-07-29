@@ -18,7 +18,7 @@ void DataSourceAccessHelper::resetUsedEntries()
     m_EntryUsedStatuses.fill(false, m_EntryUsedStatuses.size());
 }
 
-void DataSourceAccessHelper::addEntries(int nrOfEntries)
+void DataSourceAccessHelper::addEntriesToTable(int nrOfEntries)
 {
     Q_ASSERT(nrOfEntries > 0);
     QVector<bool> newEntriesUsedStatuses;
