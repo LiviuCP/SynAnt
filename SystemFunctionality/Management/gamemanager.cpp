@@ -194,12 +194,12 @@ GameManager::~GameManager()
 
 void GameManager::_onDataSourceSetupCompleted()
 {
-    Q_ASSERT(m_pDataSourceLoaderThread->isRunning());
+    Q_ASSERT(m_pDataSourceLoaderThread->isRunning() && m_pDataEntryCacheThread->isRunning());
 
     // do all external backend connections except the ones to the facade (facade will build them itself)
-    bool connected{connect(m_pWordPairOwner, &WordPairOwner::mixedWordsAvailable, m_pInputBuilder, &InputBuilder::onNewPiecesAvailable)};
+    bool connected{connect(m_pWordPairOwner, &WordPairOwner::newWordPiecesAvailable, m_pInputBuilder, &InputBuilder::onNewWordPiecesAvailable)};
     Q_ASSERT(connected);
-    connected = connect(m_pWordMixer, &WordMixer::mixedWordsChanged, m_pWordPairOwner, &WordPairOwner::onMixedWordsAvailable);
+    connected = connect(m_pWordMixer, &WordMixer::mixedWordsChanged, m_pWordPairOwner, &WordPairOwner::onNewMixedWordsAvailable);
     Q_ASSERT(connected);
     connected = connect(m_pInputBuilder, &InputBuilder::pieceAddedToInput, m_pWordPairOwner, &WordPairOwner::onPieceAddedToInput);
     Q_ASSERT(connected);

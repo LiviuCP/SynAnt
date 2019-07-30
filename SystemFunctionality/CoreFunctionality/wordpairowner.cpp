@@ -11,7 +11,7 @@ void WordPairOwner::onPiecesRemovedFromInput(QVector<int> wordPieceIndexes)
     _updateMultipleWordPiecesStatus(wordPieceIndexes, false);
 }
 
-void WordPairOwner::onMixedWordsAvailable()
+void WordPairOwner::onNewMixedWordsAvailable()
 {
     Q_ASSERT(m_pWordMixerProxy);
 
@@ -21,7 +21,7 @@ void WordPairOwner::onMixedWordsAvailable()
     m_SecondReferenceWord = m_pWordMixerProxy->getSecondWord();
     m_AreSynonyms = m_pWordMixerProxy->areSynonyms();
 
-    Q_EMIT mixedWordsAvailable();
+    Q_EMIT newWordPiecesAvailable();
 }
 
 WordPairOwner::WordPairOwner(QObject *parent)
@@ -83,7 +83,7 @@ Game::PieceTypes WordPairOwner::getWordPieceType(int index) const
     return m_MixedWordsPieces.at(index).pieceType;
 }
 
-bool WordPairOwner::getIsWordPieceSelected(int index) const
+bool WordPairOwner::getIsWordPieceAddedToInput(int index) const
 {
     Q_ASSERT(index>=0 && index<m_MixedWordsPieces.size());
     return m_MixedWordsPieces.at(index).isAddedToInput;
@@ -99,7 +99,7 @@ QString WordPairOwner::getSecondReferenceWord() const
     return m_SecondReferenceWord;
 }
 
-bool WordPairOwner::isLastAvailableWordPiece() const
+bool WordPairOwner::isOnePieceLeftToAddToInput() const
 {
     bool result{false};
     int nrOfPiecesNotSelected{0};
@@ -122,8 +122,7 @@ bool WordPairOwner::isLastAvailableWordPiece() const
 
 bool WordPairOwner::areSynonyms() const
 {
-    Q_ASSERT(m_pWordMixerProxy);
-    return m_pWordMixerProxy->areSynonyms();
+    return m_AreSynonyms;
 }
 
 void WordPairOwner::_buildMixedWordsPiecesArray()
@@ -162,7 +161,7 @@ void WordPairOwner::_updateSingleWordPieceStatus(int wordPieceIndex, bool select
     if (m_MixedWordsPieces[wordPieceIndex].isAddedToInput != selected)
     {
         m_MixedWordsPieces[wordPieceIndex].isAddedToInput = selected;
-        Q_EMIT selectionChanged();
+        Q_EMIT piecesAddedToInputChanged();
     }
 }
 
@@ -188,7 +187,7 @@ void WordPairOwner::_updateMultipleWordPiecesStatus(QVector<int> wordPieceIndex,
 
     if (isSelectionChanged)
     {
-        Q_EMIT selectionChanged();
+        Q_EMIT piecesAddedToInputChanged();
     }
 }
 

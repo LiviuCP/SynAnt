@@ -4,7 +4,7 @@ InputBuilder::InputBuilder(QObject *parent)
     : QObject(parent)
     , m_FirstWordInput{}
     , m_SecondWordInput{}
-    , m_CanCloseInput{false}
+    , m_IsCloseInputAllowed{false}
 {
 }
 
@@ -24,66 +24,21 @@ void InputBuilder::removePiecesFromInputWord(Game::InputWordNumber inputWordNumb
         _removePiecesFromWordInput(m_SecondWordInput, m_FirstWordInput, rangeStart);
     }
 
-    // confirmation will be required again when selecting an end piece while the other word is already closed
-    m_CanCloseInput = false;
+    // approval will be required again when selecting an end piece while the other word is already closed
+    m_IsCloseInputAllowed = false;
 }
 
 bool InputBuilder::clearInput()
 {
-    bool firstWordInputCleared{false};
-    bool secondWordInputCleared{false};
-    bool success{false};
+    // approval will be required again when selecting an end piece while the other word is already closed
+    m_IsCloseInputAllowed = false;
 
-    WordInputState initialFirstWordInputState{m_FirstWordInput.state};
-    WordInputState initialSecondWordInputState{m_SecondWordInput.state};
-
-    QVector<int> removedPieceIndexes;
-
-    if (m_FirstWordInput.state != WordInputState::EMPTY)
-    {
-        for (auto index : m_FirstWordInput.indexes)
-        {
-            removedPieceIndexes.append(index);
-        }
-
-        m_FirstWordInput.indexes.clear();
-        m_FirstWordInput.state = WordInputState::EMPTY;
-        firstWordInputCleared = true;
-    }
-
-    if (m_SecondWordInput.state != WordInputState::EMPTY)
-    {
-        for (auto index : m_SecondWordInput.indexes)
-        {
-            removedPieceIndexes.append(index);
-        }
-
-        m_SecondWordInput.indexes.clear();
-        m_SecondWordInput.state = WordInputState::EMPTY;
-        secondWordInputCleared = true;
-    }
-
-    if (firstWordInputCleared || secondWordInputCleared)
-    {
-        success = true;
-        m_CanCloseInput = false;
-
-        Q_EMIT piecesRemovedFromInput(removedPieceIndexes);
-
-        if (initialFirstWordInputState == WordInputState::COMPLETED && initialSecondWordInputState == WordInputState::COMPLETED)
-        {
-            Q_EMIT inputCompletionChanged();
-        }
-
-        Q_EMIT inputChanged();
-    }
-
-    return success;
+    return _removePiecesFromWordInput(m_FirstWordInput, m_SecondWordInput, 0) || _removePiecesFromWordInput(m_SecondWordInput, m_FirstWordInput, 0);
 }
 
-void InputBuilder::setCloseInputPermission(bool allowed)
+void InputBuilder::setCloseInputAllowed()
 {
-    m_CanCloseInput = allowed;
+    m_IsCloseInputAllowed = true;
 }
 
 const QVector<int> InputBuilder::getFirstWordInputIndexes() const
@@ -101,7 +56,7 @@ bool InputBuilder::isInputComplete() const
     return (m_FirstWordInput.state == WordInputState::COMPLETED && m_SecondWordInput.state == WordInputState::COMPLETED);
 }
 
-void InputBuilder::onNewPiecesAvailable()
+void InputBuilder::onNewWordPiecesAvailable()
 {
     bool resetCompleteInput{m_FirstWordInput.state == WordInputState::COMPLETED && m_SecondWordInput.state == WordInputState::COMPLETED};
 
@@ -162,9 +117,7 @@ bool InputBuilder::_checkAndUpdateState(InputBuilder::WordInput &currentWordInpu
             }
             else
             {
-                Q_EMIT closeInputPermissionRequested();
-
-                if(m_CanCloseInput)
+                if(m_IsCloseInputAllowed)
                 {
                     isValid = true;
                     currentWordInput.state = WordInputState::COMPLETED;
@@ -181,35 +134,42 @@ bool InputBuilder::_checkAndUpdateState(InputBuilder::WordInput &currentWordInpu
     return isValid;
 }
 
-void InputBuilder::_removePiecesFromWordInput(InputBuilder::WordInput &currentWordInput, const InputBuilder::WordInput& otherWordInput, int rangeStart)
+bool InputBuilder::_removePiecesFromWordInput(InputBuilder::WordInput &currentWordInput, const InputBuilder::WordInput& otherWordInput, int rangeStart)
 {
-    Q_ASSERT(rangeStart>=0 && rangeStart < currentWordInput.indexes.size());
+    bool success{false};
 
-    QVector<int> removedPieceIndexes;
-
-    for (int index{rangeStart}; index<currentWordInput.indexes.size(); ++index)
+    if (rangeStart>=0 && rangeStart < currentWordInput.indexes.size())
     {
-        removedPieceIndexes.append(currentWordInput.indexes.at(index));
-    }
+        QVector<int> removedPieceIndexes;
 
-    currentWordInput.indexes.remove(rangeStart, currentWordInput.indexes.size()-rangeStart);
-
-    Q_EMIT inputChanged();
-    Q_EMIT piecesRemovedFromInput(removedPieceIndexes);
-
-    if (currentWordInput.state == WordInputState::BUILD_IN_PROGRESS)
-    {
-        currentWordInput.state = rangeStart > 0 ? WordInputState::BUILD_IN_PROGRESS : WordInputState::EMPTY;
-    }
-    else if (currentWordInput.state == WordInputState::COMPLETED)
-    {
-        currentWordInput.state = rangeStart > 0 ? WordInputState::BUILD_IN_PROGRESS : WordInputState::EMPTY;
-
-        if (otherWordInput.state == WordInputState::COMPLETED)
+        for (int index{rangeStart}; index<currentWordInput.indexes.size(); ++index)
         {
-            Q_EMIT inputCompletionChanged();
+            removedPieceIndexes.append(currentWordInput.indexes.at(index));
         }
+
+        currentWordInput.indexes.remove(rangeStart, currentWordInput.indexes.size()-rangeStart);
+
+        Q_EMIT inputChanged();
+        Q_EMIT piecesRemovedFromInput(removedPieceIndexes);
+
+        if (currentWordInput.state == WordInputState::BUILD_IN_PROGRESS)
+        {
+            currentWordInput.state = rangeStart > 0 ? WordInputState::BUILD_IN_PROGRESS : WordInputState::EMPTY;
+        }
+        else if (currentWordInput.state == WordInputState::COMPLETED)
+        {
+            currentWordInput.state = rangeStart > 0 ? WordInputState::BUILD_IN_PROGRESS : WordInputState::EMPTY;
+
+            if (otherWordInput.state == WordInputState::COMPLETED)
+            {
+                Q_EMIT inputCompletionChanged();
+            }
+        }
+
+        success = true;
     }
+
+    return success;
 }
 
 InputBuilder::WordInput::WordInput()

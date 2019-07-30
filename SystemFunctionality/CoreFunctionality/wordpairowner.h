@@ -25,7 +25,7 @@ class WordPairOwner : public QObject
 public slots:
     void onPieceAddedToInput(int wordPieceIndex);
     void onPiecesRemovedFromInput(QVector<int> wordPieceIndexes);
-    void onMixedWordsAvailable();
+    void onNewMixedWordsAvailable();
 
 public:
     explicit WordPairOwner(QObject *parent = nullptr);
@@ -36,17 +36,17 @@ public:
     QVector<Game::PieceTypes> getMixedWordsPiecesTypes() const;
     QVector<bool> getAreMixedWordsPiecesAddedToInput() const;
     Game::PieceTypes getWordPieceType(int index) const;
-    bool getIsWordPieceSelected(int index) const;
+    bool getIsWordPieceAddedToInput(int index) const;
 
     QString getFirstReferenceWord() const;
     QString getSecondReferenceWord() const;
 
-    bool isLastAvailableWordPiece() const;
+    bool isOnePieceLeftToAddToInput() const;
     bool areSynonyms() const;
 
 signals:
-    Q_SIGNAL void mixedWordsAvailable();
-    Q_SIGNAL void selectionChanged();
+    Q_SIGNAL void newWordPiecesAvailable();
+    Q_SIGNAL void piecesAddedToInputChanged();
 
 private:
     void _buildMixedWordsPiecesArray();

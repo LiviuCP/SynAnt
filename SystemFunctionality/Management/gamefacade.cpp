@@ -39,15 +39,13 @@ GameFacade::GameFacade(QObject *parent)
     Q_ASSERT(m_pInputBuilder->parent());
     Q_ASSERT(m_pScoreItem->parent());
 
-    bool connected{connect(m_pWordPairOwner, &WordPairOwner::mixedWordsAvailable, this, &GameFacade::mixedWordsChanged)};
+    bool connected{connect(m_pWordPairOwner, &WordPairOwner::newWordPiecesAvailable, this, &GameFacade::mixedWordsChanged)};
     Q_ASSERT(connected);
-    connected = connect(m_pWordPairOwner, &WordPairOwner::selectionChanged, this, &GameFacade::selectionChanged);
+    connected = connect(m_pWordPairOwner, &WordPairOwner::piecesAddedToInputChanged, this, &GameFacade::_onPiecesAddedToInputChanged);
     Q_ASSERT(connected);
     connected = connect(m_pInputBuilder, &InputBuilder::inputChanged, this, &GameFacade::inputChanged);
     Q_ASSERT(connected);
     connected = connect(m_pInputBuilder, &InputBuilder::inputCompletionChanged, this, &GameFacade::completionChanged);
-    Q_ASSERT(connected);
-    connected = connect(m_pInputBuilder, &InputBuilder::closeInputPermissionRequested, this, &GameFacade::_onCloseInputPermissionRequested);
     Q_ASSERT(connected);
     connected = connect(m_pScoreItem, &ScoreItem::statisticsUpdated, this, &GameFacade::statisticsChanged);
     Q_ASSERT(connected);
@@ -131,7 +129,7 @@ void GameFacade::resumeWordEntry()
 
 void GameFacade::addWordPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex)
 {
-    if (!m_pWordPairOwner->getIsWordPieceSelected(wordPieceIndex))
+    if (!m_pWordPairOwner->getIsWordPieceAddedToInput(wordPieceIndex))
     {
         // adding piece should always occur before updating status
         Game::PieceTypes pieceType{m_pWordPairOwner->getWordPieceType(wordPieceIndex)};
@@ -139,7 +137,7 @@ void GameFacade::addWordPieceToInputWord(Game::InputWordNumber inputWordNumber, 
 
         Q_EMIT statusChanged(m_CurrentStatusCode = pieceAdded ? (m_pInputBuilder->isInputComplete() ? Game::StatusCodes::PIECE_ADDED_COMPLETE_INPUT
                                                                                                     : Game::StatusCodes::PIECE_ADDED_INCOMPLETE_INPUT)
-                                                               : Game::StatusCodes::PIECE_NOT_ADDED);
+                                                              : Game::StatusCodes::PIECE_NOT_ADDED);
     }
 }
 
@@ -343,11 +341,6 @@ bool GameFacade::areSynonyms() const
     return m_pWordPairOwner->areSynonyms();
 }
 
-void GameFacade::_onCloseInputPermissionRequested()
-{
-    m_pInputBuilder->setCloseInputPermission(m_pWordPairOwner->isLastAvailableWordPiece());
-}
-
 void GameFacade::_onLoadDataFromDbFinished(bool success)
 {
     if (success)
@@ -445,6 +438,16 @@ void GameFacade::_connectDataSourceToWordMixer()
 
     m_IsDataAvailable = true;
     Q_EMIT dataAvailableChanged();
+}
+
+void GameFacade::_onPiecesAddedToInputChanged()
+{
+    if (m_pWordPairOwner->isOnePieceLeftToAddToInput())
+    {
+        m_pInputBuilder->setCloseInputAllowed();
+    }
+
+    Q_EMIT piecesAddedToInputChanged();
 }
 
 void GameFacade::_allowAddToCache()

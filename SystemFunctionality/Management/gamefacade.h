@@ -3,8 +3,8 @@
    1) Backend classes are being accessed by presenter through facade by executing function calls.
    2) In return backend classes send signals to presenter through facade.
    3) The facade checks the user input created by InputBuilder against the reference words contained in WordPairOwner.
-   4) The facade intermediates the data communication between source and consumer (WordMixer).
-   5) The facade provides decoupling by hiding the backend functionality (WordMixer, ScoreItem, WordPairOwner, InputBuilder, DataSource and DataSourceAccess) entirely from presenter.
+   4) The facade intermediates the communication between data access classes and consumer (WordMixer) by using the DataSourceProxy.
+   5) The facade provides decoupling by hiding the backend functionality (WordMixer, ScoreItem, WordPairOwner, InputBuilder and data access classes) entirely from presenter.
    6) Last but not least the facade is the only responsible class for updating the status of the game (which is displayed in the status box of the main pane).
 */
 
@@ -87,12 +87,11 @@ signals:
     Q_SIGNAL void mixedWordsChanged();
     Q_SIGNAL void inputChanged();
     Q_SIGNAL void completionChanged();
-    Q_SIGNAL void selectionChanged();
+    Q_SIGNAL void piecesAddedToInputChanged();
     Q_SIGNAL void statisticsChanged();
     Q_SIGNAL void statusChanged(Game::StatusCodes status);
 
 private slots:
-    void _onCloseInputPermissionRequested();
     void _onLoadDataFromDbFinished(bool success);
     void _onAddInvalidWordsPairRequested();
     void _onNewWordsPairAddedToCache();
@@ -101,6 +100,7 @@ private slots:
     void _onWriteDataToDbFinished(int nrOfEntries);
     void _onWriteDataToDbErrorOccured();
     void _connectDataSourceToWordMixer();
+    void _onPiecesAddedToInputChanged();
 
 private:
     void _allowAddToCache();

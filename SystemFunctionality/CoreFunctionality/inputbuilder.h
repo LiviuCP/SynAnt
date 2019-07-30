@@ -22,7 +22,9 @@ public:
     bool addPieceToInputWord(Game::InputWordNumber inputWordNumber, int index, Game::PieceTypes pieceType);
     void removePiecesFromInputWord(Game::InputWordNumber inputWordNumber, int rangeStart);
     bool clearInput();
-    void setCloseInputPermission(bool allowed);
+
+    // only to be called from "outside" (e.g. from facade) so an active close approval is provided
+    void setCloseInputAllowed();
 
     const QVector<int> getFirstWordInputIndexes() const;
     const QVector<int> getSecondWordInputIndexes() const;
@@ -30,14 +32,13 @@ public:
     bool isInputComplete() const;
 
 signals:
-    Q_SIGNAL void closeInputPermissionRequested();
     Q_SIGNAL void pieceAddedToInput(int index);
     Q_SIGNAL void piecesRemovedFromInput(QVector<int> indexes);
     Q_SIGNAL void inputChanged();
     Q_SIGNAL void inputCompletionChanged();
 
 public slots:
-    void onNewPiecesAvailable();
+    void onNewWordPiecesAvailable();
 
 private:
     enum class WordInputState
@@ -57,11 +58,11 @@ private:
 
     bool _addPieceToInputWord(WordInput& currentWordInput, const WordInput& otherWordInput, int pieceIndex, Game::PieceTypes pieceType);
     bool _checkAndUpdateState(WordInput& currentWordInput, const WordInput& otherWordInput, Game::PieceTypes pieceType);
-    void _removePiecesFromWordInput(WordInput& currentWordInput, const WordInput& otherWordInput, int rangeStart);
+    bool _removePiecesFromWordInput(WordInput& currentWordInput, const WordInput& otherWordInput, int rangeStart);
 
     WordInput m_FirstWordInput;
     WordInput m_SecondWordInput;
-    bool m_CanCloseInput;
+    bool m_IsCloseInputAllowed;
 };
 
 #endif // INPUTBUILDER_H

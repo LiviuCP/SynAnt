@@ -78,7 +78,7 @@ GamePresenter::GamePresenter(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::inputChanged, this, &GamePresenter::_onInputChanged);
     Q_ASSERT(connected);
-    connected = connect(m_pGameFacade, &GameFacade::selectionChanged, this, &GamePresenter::selectionChanged);
+    connected = connect(m_pGameFacade, &GameFacade::piecesAddedToInputChanged, this, &GamePresenter::selectionChanged);
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::completionChanged, this, &GamePresenter::submitMainPaneInputEnabledChanged);
     Q_ASSERT(connected);
