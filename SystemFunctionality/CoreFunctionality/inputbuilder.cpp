@@ -13,19 +13,26 @@ bool InputBuilder::addPieceToInputWord(Game::InputWordNumber inputWordNumber, in
     return (inputWordNumber == Game::InputWordNumber::ONE ? _addPieceToInputWord(m_FirstWordInput, m_SecondWordInput, index, pieceType) : _addPieceToInputWord(m_SecondWordInput, m_FirstWordInput, index, pieceType));
 }
 
-void InputBuilder::removePiecesFromInputWord(Game::InputWordNumber inputWordNumber, int rangeStart)
+bool InputBuilder::removePiecesFromInputWord(Game::InputWordNumber inputWordNumber, int rangeStart)
 {
+    bool success{false};
+
     if (inputWordNumber == Game::InputWordNumber::ONE)
     {
-        _removePiecesFromWordInput(m_FirstWordInput, m_SecondWordInput, rangeStart);
+        success = _removePiecesFromWordInput(m_FirstWordInput, m_SecondWordInput, rangeStart);
     }
     else
     {
-        _removePiecesFromWordInput(m_SecondWordInput, m_FirstWordInput, rangeStart);
+        success = _removePiecesFromWordInput(m_SecondWordInput, m_FirstWordInput, rangeStart);
     }
 
-    // approval will be required again when selecting an end piece while the other word is already closed
-    m_IsCloseInputAllowed = false;
+    if (success)
+    {
+        // approval will be required again when selecting an end piece while the other word is already closed
+        m_IsCloseInputAllowed = false;
+    }
+
+    return success;
 }
 
 bool InputBuilder::clearInput()

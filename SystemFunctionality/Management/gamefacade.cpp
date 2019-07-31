@@ -143,8 +143,10 @@ void GameFacade::addWordPieceToInputWord(Game::InputWordNumber inputWordNumber, 
 
 void GameFacade::removeWordPiecesFromInputWord(Game::InputWordNumber inputWordNumber, int inputRangeStart)
 {
-    m_pInputBuilder->removePiecesFromInputWord(inputWordNumber, inputRangeStart);
-    Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::PIECES_REMOVED);
+    if (m_pInputBuilder->removePiecesFromInputWord(inputWordNumber, inputRangeStart))
+    {
+        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::PIECES_REMOVED);
+    }
 }
 
 void GameFacade::clearInput()

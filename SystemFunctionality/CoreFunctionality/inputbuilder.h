@@ -20,7 +20,7 @@ public:
     explicit InputBuilder(QObject *parent = nullptr);
 
     bool addPieceToInputWord(Game::InputWordNumber inputWordNumber, int index, Game::PieceTypes pieceType);
-    void removePiecesFromInputWord(Game::InputWordNumber inputWordNumber, int rangeStart);
+    bool removePiecesFromInputWord(Game::InputWordNumber inputWordNumber, int rangeStart);
     bool clearInput();
 
     // only to be called from "outside" (e.g. from facade) so an active close approval is provided
