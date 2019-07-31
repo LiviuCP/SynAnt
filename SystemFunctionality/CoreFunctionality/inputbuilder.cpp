@@ -30,10 +30,18 @@ void InputBuilder::removePiecesFromInputWord(Game::InputWordNumber inputWordNumb
 
 bool InputBuilder::clearInput()
 {
-    // approval will be required again when selecting an end piece while the other word is already closed
-    m_IsCloseInputAllowed = false;
+    bool success{_removePiecesFromWordInput(m_FirstWordInput, m_SecondWordInput, 0)};
 
-    return _removePiecesFromWordInput(m_FirstWordInput, m_SecondWordInput, 0) || _removePiecesFromWordInput(m_SecondWordInput, m_FirstWordInput, 0);
+    // ensure the remove function is executed for both words
+    success = _removePiecesFromWordInput(m_SecondWordInput, m_FirstWordInput, 0) || success;
+
+    if (success)
+    {
+        // approval will be required again when selecting an end piece while the other word is already closed
+        m_IsCloseInputAllowed = false;
+    }
+
+    return success;
 }
 
 void InputBuilder::setCloseInputAllowed()
