@@ -34,6 +34,7 @@ class DataSource;
 class DataSourceLoader;
 class DataEntryValidator;
 class DataEntryCache;
+class DataEntryStatistics;
 class DataSourceProxy;
 class DataSourceAccessHelper;
 class WordMixer;
@@ -70,9 +71,15 @@ public:
     InputBuilder* getInputBuilder() const;
     ScoreItem* getScoreItem() const;
 
+    int getLastSavedNrOfCacheEntries() const;
+    int getCurrentNrOfCacheEntries() const;
+
     virtual ~GameManager();
 
 signals:
+    Q_SIGNAL void newWordsPairAddedToCache();
+    Q_SIGNAL void writeDataToDbFinished(int nrOfEntries);
+    Q_SIGNAL void cacheReset();
     Q_SIGNAL void dataSourceSetupCompleted();
     Q_SIGNAL void readDataFromDb();
     Q_SIGNAL void writeDataToDb();
@@ -94,6 +101,7 @@ private:
     DataSourceLoader* m_pDataSourceLoader;
     DataEntryValidator* m_pDataEntryValidator;
     DataEntryCache* m_pDataEntryCache;
+    DataEntryStatistics* m_pDataEntryStatistics;
     DataSourceProxy* m_pDataSourceProxy;
     DataSourceAccessHelper* m_pDataSourceAccessHelper;
     WordMixer* m_pWordMixer;

@@ -20,6 +20,8 @@ public:
     void requestWriteToCache(QPair<QString, QString> newWordsPair, bool areSynonyms);
     int getNrOfValidDataSourceEntries();
     Game::ValidationCodes getPairEntryValidationCode() const;
+    int getLastSavedNrOfCacheEntries() const;
+    int getCurrentNrOfCacheEntries() const;
 
 signals:
     Q_SIGNAL void addInvalidWordsPairRequested();

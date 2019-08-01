@@ -40,3 +40,13 @@ Game::ValidationCodes DataSourceProxy::getPairEntryValidationCode() const
 {
     return GameManager::getManager()->getPairEntryValidationCode();
 }
+
+int DataSourceProxy::getLastSavedNrOfCacheEntries() const
+{
+    return GameManager::getManager()->getLastSavedNrOfCacheEntries();
+}
+
+int DataSourceProxy::getCurrentNrOfCacheEntries() const
+{
+    return GameManager::getManager()->getCurrentNrOfCacheEntries();
+}

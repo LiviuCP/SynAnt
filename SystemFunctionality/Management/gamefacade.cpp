@@ -17,7 +17,6 @@ GameFacade::GameFacade(QObject *parent)
     , m_IsDataEntryAllowed{false}
     , m_IsAddingToCacheAllowed{true}
     , m_IsResettingCacheAllowed{false}
-    , m_CachedWordPairs{0}
     , m_IsSavingToDbAllowed{false}
     , m_IsSavingInProgress{false}
     , m_IsGameStarted{false}
@@ -303,9 +302,14 @@ int GameFacade::getTotalWordPairs() const
     return m_pScoreItem->getTotalWordPairs();
 }
 
-int GameFacade::getCachedWordPairs() const
+int GameFacade::getCurrentNrOfAddedWordPairs() const
 {
-    return m_CachedWordPairs;
+    return m_pDataSourceProxy->getCurrentNrOfCacheEntries();
+}
+
+int GameFacade::getLastSavedNrOfWordPairs() const
+{
+    return m_pDataSourceProxy->getLastSavedNrOfCacheEntries();
 }
 
 Game::ValidationCodes GameFacade::getDataEntryValidationCode() const
@@ -380,8 +384,6 @@ void GameFacade::_onAddInvalidWordsPairRequested()
 
 void GameFacade::_onNewWordsPairAddedToCache()
 {
-    ++m_CachedWordPairs;
-
     _allowAddToCache();
     _allowCacheReset();
     _allowSaveToDb();
@@ -400,7 +402,6 @@ void GameFacade::_onWordsPairAlreadyContainedInCache()
 
 void GameFacade::_onCacheReset()
 {
-    m_CachedWordPairs = 0;
     _allowAddToCache();
 
     Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::CACHE_RESET);
@@ -408,8 +409,6 @@ void GameFacade::_onCacheReset()
 
 void GameFacade::_onWriteDataToDbFinished(int nrOfEntries)
 {
-    Q_ASSERT(m_CachedWordPairs == nrOfEntries);
-
     int initialNrOfEntries{m_pDataSourceAccessHelper->getTotalNrOfEntries()};
 
     m_pDataSourceAccessHelper->addEntriesToTable(nrOfEntries);
@@ -423,9 +422,6 @@ void GameFacade::_onWriteDataToDbFinished(int nrOfEntries)
 
     m_IsSavingInProgress = false;
     Q_EMIT statusChanged(m_CurrentStatusCode = initialNrOfEntries == 0 ? Game::StatusCodes::DATA_GOT_AVAILABLE : Game::StatusCodes::DATA_SUCCESSFULLY_SAVED);
-
-    // don't reset this variable prior to changing status (is used by presenter)
-    m_CachedWordPairs = 0;
 }
 
 void GameFacade::_onWriteDataToDbErrorOccured()

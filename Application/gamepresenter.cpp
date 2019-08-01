@@ -581,7 +581,7 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         _updateStatusMessage(GameStrings::c_DataSaveInProgressMessage, Pane::DATA_ENTRY, Game::c_NoDelay);
         break;
     case Game::StatusCodes::DATA_SUCCESSFULLY_SAVED:
-        _updateStatusMessage(GameStrings::c_DataSuccessfullySavedMessage.arg(m_pGameFacade->getCachedWordPairs()), Pane::DATA_ENTRY, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_DataSuccessfullySavedMessage.arg(m_pGameFacade->getLastSavedNrOfWordPairs()), Pane::DATA_ENTRY, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::GAME_STARTED:
@@ -669,7 +669,7 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::DATA_ENTRY_RESUMED:
-        _updateStatusMessage(GameStrings::c_DataEntryResumeMessage.arg(m_pGameFacade->getCachedWordPairs()), Pane::DATA_ENTRY, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_DataEntryResumeMessage.arg(m_pGameFacade->getCurrentNrOfAddedWordPairs()), Pane::DATA_ENTRY, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::PAIR_ALREADY_ADDED:
@@ -678,12 +678,12 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         break;
     case Game::StatusCodes::DATA_ENTRY_SUCCESS:
         Q_EMIT dataEntrySucceeded();
-        _updateStatusMessage(GameStrings::c_DataEntrySuccessMessage.arg(m_pGameFacade->getCachedWordPairs()), Pane::DATA_ENTRY, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_DataEntrySuccessMessage.arg(m_pGameFacade->getCurrentNrOfAddedWordPairs()), Pane::DATA_ENTRY, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::DATA_GOT_AVAILABLE:
         Q_EMIT dataEntrySucceeded();
-        _updateStatusMessage(GameStrings::c_DataEntrySuccessMessage.arg(m_pGameFacade->getCachedWordPairs()), Pane::DATA_ENTRY, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_DataEntrySuccessMessage.arg(m_pGameFacade->getLastSavedNrOfWordPairs()), Pane::DATA_ENTRY, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DataAvailableMessage, Pane::INTRO, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
         break;
