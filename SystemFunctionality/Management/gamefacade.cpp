@@ -217,6 +217,8 @@ void GameFacade::requestCacheReset()
 {
     if (m_IsDataEntryAllowed && m_IsResettingCacheAllowed)
     {
+        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::RESET_CACHE_REQUESTED);
+
         _blockSaveToDb();
         _blockCacheReset();
         m_pDataSourceProxy->requestCacheReset();

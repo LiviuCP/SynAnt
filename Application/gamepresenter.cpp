@@ -693,6 +693,9 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
         Q_EMIT dataEntryInvalid();
         break;
+    case Game::StatusCodes::RESET_CACHE_REQUESTED:
+        _updateStatusMessage(GameStrings::c_DataEntryCacheResetRequestedMessage, Pane::DATA_ENTRY, Game::c_NoDelay);
+        break;
     case Game::StatusCodes::CACHE_RESET:
         _updateStatusMessage(GameStrings::c_DataEntryCacheResetMessage, Pane::DATA_ENTRY, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);

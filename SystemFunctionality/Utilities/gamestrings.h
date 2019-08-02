@@ -208,6 +208,7 @@ namespace GameStrings {
                                                              "Please correct and try again!"
                                                         };
 
+    const QString c_DataEntryCacheResetRequestedMessage {    "Discarding unsaved entries"                                                               };
     const QString c_DataEntryCacheResetMessage          {    "The unsaved entries been discarded"                                                       };
 
     const QString c_ShowPairRequestedByUserMessage      {

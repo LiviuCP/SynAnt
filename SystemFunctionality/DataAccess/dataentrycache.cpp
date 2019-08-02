@@ -32,6 +32,10 @@ void DataEntryCache::onValidEntryReceived(DataSource::DataEntry dataEntry)
 void DataEntryCache::onResetCacheRequested()
 {
     m_CacheEntries.clear();
+
+    // for sync purposes only
+    QThread::msleep(Game::c_ResetCacheDelay);
+
     Q_EMIT cacheReset();
 }
 

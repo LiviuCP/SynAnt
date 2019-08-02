@@ -41,6 +41,7 @@ namespace Game
         DATA_ENTRY_SUCCESS,
         PAIR_ALREADY_ADDED,
         DATA_ENTRY_INVALID,
+        RESET_CACHE_REQUESTED,
         CACHE_RESET,
         GAME_STARTED,
         GAME_PAUSED,
@@ -101,6 +102,7 @@ namespace Game
     static constexpr int c_PaneSwitchingDelay{250};
     static constexpr int c_LoadDataThreadDelay{4000};
     static constexpr int c_WriteDataThreadDelay{500};
+    static constexpr int c_ResetCacheDelay{250};
     static constexpr int c_ToolTipTimeout{4000};
     static constexpr int c_ShortStatusUpdateDelay{1000};
     static constexpr int c_LongStatusUpdateDelay{2000};
