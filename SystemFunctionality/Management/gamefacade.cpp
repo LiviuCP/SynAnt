@@ -68,8 +68,8 @@ void GameFacade::init()
 {
     if (m_CurrentStatusCode == Game::StatusCodes::NO_DATA_LOADING_REQUESTED)
     {
-        m_pDataSourceProxy->loadDataFromDb();
         Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::LOADING_DATA);
+        m_pDataSourceProxy->loadDataFromDb();
     }
     else
     {
@@ -105,6 +105,7 @@ void GameFacade::pauseGame()
 {
     Q_ASSERT(m_IsGameStarted);
     m_IsGamePaused = true;
+
     Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::GAME_PAUSED);
 }
 
@@ -236,9 +237,10 @@ void GameFacade::setLevel(Game::Level level)
 {
     m_pWordMixer->setWordPieceSize(level);
     m_pScoreItem->setScoreIncrement(level);
-    m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
 
     Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::LEVEL_CHANGED);
+
+    m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
 }
 
 void GameFacade::resetGameStatistics()
