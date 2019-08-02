@@ -77,7 +77,9 @@ namespace Game
     enum class StatisticsUpdate
     {
         FULL_UPDATE,
-        PARTIAL_UPDATE
+        PARTIAL_UPDATE,
+        RESET,
+        UpdateTypesCount
     };
 
     enum class PieceTypes

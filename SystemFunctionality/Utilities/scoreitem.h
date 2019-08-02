@@ -23,18 +23,15 @@ public:
     explicit ScoreItem(QObject *parent = nullptr);
 
     void updateStatistics(Game::StatisticsUpdate updateType);
-    void resetStatistics();
+    void setScoreIncrement(Game::Level level);
 
     int getObtainedScore() const;
     int getTotalAvailableScore() const;
     int getGuessedWordPairs() const;
     int getTotalWordPairs() const;
 
-public slots:
-    void setScoreIncrement(Game::Level level);
-
 signals:
-    Q_SIGNAL void statisticsUpdated();
+    Q_SIGNAL void statisticsUpdated(Game::StatisticsUpdate updateType);
 
 private:
     // total number is the maximum number that can be correctly guessed by user
@@ -42,6 +39,7 @@ private:
     int m_TotalAvailableScore;
     int m_GuessedWordPairs;
     int m_TotalWordPairs;
+
     int m_ScoreIncrement;
 };
 

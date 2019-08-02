@@ -46,7 +46,7 @@ GameFacade::GameFacade(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pInputBuilder, &InputBuilder::inputCompletionChanged, this, &GameFacade::completionChanged);
     Q_ASSERT(connected);
-    connected = connect(m_pScoreItem, &ScoreItem::statisticsUpdated, this, &GameFacade::statisticsChanged);
+    connected = connect(m_pScoreItem, &ScoreItem::statisticsUpdated, this, &GameFacade::_onStatisticsUpdated);
     Q_ASSERT(connected);
     connected = connect(m_pDataSourceProxy, &DataSourceProxy::loadDataFromDbFinished, this, &GameFacade::_onLoadDataFromDbFinished);
     Q_ASSERT(connected);
@@ -237,9 +237,7 @@ void GameFacade::setLevel(Game::Level level)
 
 void GameFacade::resetGameStatistics()
 {
-    m_pScoreItem->resetStatistics();
-    Q_EMIT statusChanged(m_CurrentStatusCode = m_pInputBuilder->isInputComplete() ? Game::StatusCodes::STATISTICS_RESET_COMPLETE_INPUT
-                                                                                  : Game::StatusCodes::STATISTICS_RESET_INCOMPLETE_INPUT);
+    m_pScoreItem->updateStatistics(Game::StatisticsUpdate::RESET);
 }
 
 QVector<QString> GameFacade::getMixedWordsPiecesContent() const
@@ -446,6 +444,18 @@ void GameFacade::_onPiecesAddedToInputChanged()
     }
 
     Q_EMIT piecesAddedToInputChanged();
+}
+
+void GameFacade::_onStatisticsUpdated(Game::StatisticsUpdate updateType)
+{
+    // for full and partial update no status message required (there are already status messages in the operations that trigger the full/partial update of statistics)
+    if (updateType == Game::StatisticsUpdate::RESET)
+    {
+        Q_EMIT statusChanged(m_CurrentStatusCode = m_pInputBuilder->isInputComplete() ? Game::StatusCodes::STATISTICS_RESET_COMPLETE_INPUT
+                                                                                      : Game::StatusCodes::STATISTICS_RESET_INCOMPLETE_INPUT);
+    }
+
+    Q_EMIT statisticsChanged();
 }
 
 void GameFacade::_allowAddToCache()

@@ -12,23 +12,41 @@ ScoreItem::ScoreItem(QObject *parent)
 
 void ScoreItem::updateStatistics(Game::StatisticsUpdate updateType)
 {
-    if (updateType == Game::StatisticsUpdate::FULL_UPDATE)
+    if (updateType == Game::StatisticsUpdate::RESET)
     {
-        m_ObtainedScore += m_ScoreIncrement;
-        m_GuessedWordPairs++;
+        if (m_TotalAvailableScore != 0 && m_TotalWordPairs != 0)
+        {
+            m_ObtainedScore = 0;
+            m_TotalAvailableScore = 0;
+            m_GuessedWordPairs = 0;
+            m_TotalWordPairs = 0;
+
+            Q_EMIT statisticsUpdated(updateType);
+        }
+        else
+        {
+            qWarning("attempt to reset null statistics");
+        }
     }
-    m_TotalAvailableScore += m_ScoreIncrement;
-    m_TotalWordPairs++;
-    Q_EMIT statisticsUpdated();
+    else
+    {
+        if (updateType == Game::StatisticsUpdate::FULL_UPDATE)
+        {
+            m_ObtainedScore += m_ScoreIncrement;
+            m_GuessedWordPairs++;
+        }
+
+        m_TotalAvailableScore += m_ScoreIncrement;
+        m_TotalWordPairs++;
+
+        Q_EMIT statisticsUpdated(updateType);
+    }
 }
 
-void ScoreItem::resetStatistics()
+void ScoreItem::setScoreIncrement(Game::Level level)
 {
-    m_ObtainedScore = 0;
-    m_TotalAvailableScore = 0;
-    m_GuessedWordPairs = 0;
-    m_TotalWordPairs = 0;
-    Q_EMIT statisticsUpdated();
+    Q_ASSERT(static_cast<int>(level) >= 0 && static_cast<int>(level) < static_cast<int>(Game::Level::NrOfLevels));
+    m_ScoreIncrement = Game::c_ScoreIncrements[level];
 }
 
 int ScoreItem::getObtainedScore() const
@@ -49,10 +67,4 @@ int ScoreItem::getGuessedWordPairs() const
 int ScoreItem::getTotalWordPairs() const
 {
     return m_TotalWordPairs;
-}
-
-void ScoreItem::setScoreIncrement(Game::Level level)
-{
-    Q_ASSERT(static_cast<int>(level) >= 0 && static_cast<int>(level) < static_cast<int>(Game::Level::NrOfLevels));
-    m_ScoreIncrement = Game::c_ScoreIncrements[level];
 }

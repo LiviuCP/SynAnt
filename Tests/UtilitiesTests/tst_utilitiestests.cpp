@@ -49,7 +49,7 @@ void UtilitiesTests::testStatisticsCorrectlyUpdated()
     _checkCorrectStatistics(*pScoreItem, referenceGuessedWordPairs, referenceTotalWordPairs, referenceObtainedScore, referenceTotalAvailableScore,
                             "Checking statistics after successively switching levels and running one full and one partial update per level");
 
-    pScoreItem->resetStatistics();
+    pScoreItem->updateStatistics(Game::StatisticsUpdate::RESET);
 
     _checkCorrectStatistics(*pScoreItem, 0, 0, 0, 0, "Checking statistics after reset");
 
@@ -60,7 +60,7 @@ void UtilitiesTests::testStatisticsCorrectlyUpdated()
     _checkCorrectStatistics(*pScoreItem, 1, 2, Game::c_ScoreIncrements[Game::Level::EASY], 2 * Game::c_ScoreIncrements[Game::Level::EASY],
                             "Checking statistics after setting level to easy and running a full and partial update");
 
-    pScoreItem->resetStatistics();
+    pScoreItem->updateStatistics(Game::StatisticsUpdate::RESET);
 
     pScoreItem->setScoreIncrement(Game::Level::MEDIUM);
     pScoreItem->updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
@@ -69,7 +69,7 @@ void UtilitiesTests::testStatisticsCorrectlyUpdated()
     _checkCorrectStatistics(*pScoreItem, 1, 2, Game::c_ScoreIncrements[Game::Level::MEDIUM], 2 * Game::c_ScoreIncrements[Game::Level::MEDIUM],
                             "Checking statistics after reset and then setting level to medium and running a full and partial update");
 
-    pScoreItem->resetStatistics();
+    pScoreItem->updateStatistics(Game::StatisticsUpdate::RESET);
 
     pScoreItem->setScoreIncrement(Game::Level::HARD);
     pScoreItem->updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);

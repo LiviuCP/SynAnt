@@ -102,6 +102,7 @@ private slots:
     void _onWriteDataToDbErrorOccured();
     void _connectDataSourceToWordMixer();
     void _onPiecesAddedToInputChanged();
+    void _onStatisticsUpdated(Game::StatisticsUpdate updateType);
 
 private:
     void _allowAddToCache();
