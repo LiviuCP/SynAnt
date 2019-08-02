@@ -79,20 +79,24 @@ void GameFacade::init()
 
 void GameFacade::startGame()
 {
-    Q_ASSERT(m_IsDataAvailable);
+    if (!m_IsGameStarted)
+    {
+        Q_ASSERT(m_IsDataAvailable);
 
-    m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
-    m_pScoreItem->initStatistics();
+        m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
+        m_pScoreItem->initStatistics();
 
-    Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::GAME_STARTED);
+        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::GAME_STARTED);
 
-    m_IsGameStarted = true;
+        m_IsGameStarted = true;
+    }
 }
 
 void GameFacade::resumeGame()
 {
     Q_ASSERT(m_IsGamePaused);
     m_IsGamePaused = false;
+
     Q_EMIT statusChanged(m_CurrentStatusCode = m_pInputBuilder->isInputComplete() ? Game::StatusCodes::GAME_RESUMED_COMPLETE_INPUT
                                                                                   : Game::StatusCodes::GAME_RESUMED_INCOMPLETE_INPUT);
 }
