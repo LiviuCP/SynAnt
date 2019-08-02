@@ -82,8 +82,8 @@ void GameFacade::startGame()
     Q_ASSERT(m_IsDataAvailable);
 
     m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
+    m_pScoreItem->initStatistics();
 
-    Q_EMIT statisticsChanged();
     Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::GAME_STARTED);
 
     m_IsGameStarted = true;

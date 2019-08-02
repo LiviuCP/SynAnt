@@ -76,6 +76,7 @@ namespace Game
 
     enum class StatisticsUpdate
     {
+        INIT,
         FULL_UPDATE,
         PARTIAL_UPDATE,
         RESET,

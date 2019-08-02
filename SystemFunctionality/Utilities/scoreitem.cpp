@@ -2,6 +2,7 @@
 
 ScoreItem::ScoreItem(QObject *parent)
     : QObject(parent)
+    , m_IsInitialized{false}
     , m_ObtainedScore{0}
     , m_TotalAvailableScore{0}
     , m_GuessedWordPairs{0}
@@ -10,8 +11,19 @@ ScoreItem::ScoreItem(QObject *parent)
 {
 }
 
+void ScoreItem::initStatistics()
+{
+    if (!m_IsInitialized)
+    {
+        m_IsInitialized = true;
+        Q_EMIT statisticsUpdated(Game::StatisticsUpdate::INIT);
+    }
+}
+
 void ScoreItem::updateStatistics(Game::StatisticsUpdate updateType)
 {
+    Q_ASSERT(m_IsInitialized);
+
     if (updateType == Game::StatisticsUpdate::RESET)
     {
         if (m_TotalAvailableScore != 0 && m_TotalWordPairs != 0)

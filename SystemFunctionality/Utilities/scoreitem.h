@@ -22,6 +22,7 @@ class ScoreItem : public QObject
 public:
     explicit ScoreItem(QObject *parent = nullptr);
 
+    void initStatistics();
     void updateStatistics(Game::StatisticsUpdate updateType);
     void setScoreIncrement(Game::Level level);
 
@@ -35,6 +36,8 @@ signals:
 
 private:
     // total number is the maximum number that can be correctly guessed by user
+    bool m_IsInitialized;
+
     int m_ObtainedScore;
     int m_TotalAvailableScore;
     int m_GuessedWordPairs;
