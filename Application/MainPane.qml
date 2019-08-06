@@ -416,7 +416,9 @@ Item {
                 visible: !presenter.mixedWordsPiecesSelections[index]
 
                 color: Styles.backgroundColor
-                border.color: Styles.borderColor
+
+                border.color: index === presenter.pieceSelectionCursorPosition ? Styles.selectedBorderColor : Styles.borderColor
+                border.width: index === presenter.pieceSelectionCursorPosition ? Styles.selectedBorderWidth : Styles.borderWidth
 
                 Timer {
                     id: clickTimer

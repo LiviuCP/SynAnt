@@ -100,6 +100,38 @@ ApplicationWindow {
         }
     }
 
+    // keys
+
+    Item {
+        id: mainPaneKeys
+
+        anchors.fill: parent
+        focus: mainPane.visible
+
+        onFocusChanged: {
+            if (mainPane.visible) {
+                forceActiveFocus();
+            }
+        }
+
+        Keys.onPressed: {
+            if (event.key === Qt.Key_S) {
+                if (gamePresenter.pieceSelectionCursorPosition === -1) {
+                    gamePresenter.enablePieceSelectionFromKeyboard();
+                } else {
+                    gamePresenter.disablePieceSelectionFromKeyboard();
+                }
+
+                event.accepted = true;
+            }
+        }
+
+        Keys.onLeftPressed: gamePresenter.movePieceSelectionCursorToLeft()
+        Keys.onRightPressed: gamePresenter.movePieceSelectionCursorToRight()
+        Keys.onDownPressed: gamePresenter.selectWordPieceForFirstInputWord(gamePresenter.pieceSelectionCursorPosition, true)
+        Keys.onUpPressed: gamePresenter.selectWordPieceForSecondInputWord(gamePresenter.pieceSelectionCursorPosition, true)
+    }
+
     // shortcuts shared among multiple panes
 
     Shortcut {

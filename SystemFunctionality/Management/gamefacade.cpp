@@ -42,6 +42,8 @@ GameFacade::GameFacade(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pWordPairOwner, &WordPairOwner::piecesAddedToInputChanged, this, &GameFacade::_onPiecesAddedToInputChanged);
     Q_ASSERT(connected);
+    connected = connect(m_pWordPairOwner, &WordPairOwner::persistentIndexChanged, this, &GameFacade::persistentPieceSelectionIndexChanged);
+    Q_ASSERT(connected);
     connected = connect(m_pInputBuilder, &InputBuilder::inputChanged, this, &GameFacade::inputChanged);
     Q_ASSERT(connected);
     connected = connect(m_pInputBuilder, &InputBuilder::inputCompletionChanged, this, &GameFacade::completionChanged);
@@ -129,6 +131,26 @@ void GameFacade::resumeWordEntry()
     {
         Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_ENTRY_RESUMED);
     }
+}
+
+void GameFacade::enablePersistentPieceSelection()
+{
+    m_pWordPairOwner->setPersistentPieceSelectionIndex();
+}
+
+void GameFacade::disablePersistentPieceSelection()
+{
+    m_pWordPairOwner->clearPersistentPieceSelectionIndex();
+}
+
+void GameFacade::increasePersistentPieceSelectionIndex()
+{
+    m_pWordPairOwner->increasePersistentPieceSelectionIndex();
+}
+
+void GameFacade::decreasePersistentPieceSelectionIndex()
+{
+    m_pWordPairOwner->decreasePersistentPieceSelectionIndex();
 }
 
 void GameFacade::addWordPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex)
@@ -271,6 +293,11 @@ const QVector<int> GameFacade::getFirstWordInputIndexes() const
 const QVector<int> GameFacade::getSecondWordInputIndexes() const
 {
     return m_pInputBuilder->getSecondWordInputIndexes();
+}
+
+int GameFacade::getPersistentPieceSelectionIndex() const
+{
+    return m_pWordPairOwner->getPersistentPieceSelectionIndex();
 }
 
 bool GameFacade::isInputComplete() const

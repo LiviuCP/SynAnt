@@ -82,6 +82,8 @@ GamePresenter::GamePresenter(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::completionChanged, this, &GamePresenter::submitMainPaneInputEnabledChanged);
     Q_ASSERT(connected);
+    connected = connect(m_pGameFacade, &GameFacade::persistentPieceSelectionIndexChanged, this, &GamePresenter::pieceSelectionCursorPositionChanged);
+    Q_ASSERT(connected);
     connected = connect(m_pStatusUpdateTimer, &QTimer::timeout, this, &GamePresenter::_updateMessage);
     Q_ASSERT(connected);
 
@@ -175,13 +177,43 @@ void GamePresenter::switchToLevel(int level)
     m_pGameFacade->setLevel(static_cast<Game::Level>(level));
 }
 
-void GamePresenter::selectWordPieceForFirstInputWord(int wordPieceIndex)
+void GamePresenter::enablePieceSelectionFromKeyboard()
 {
+    m_pGameFacade->enablePersistentPieceSelection();
+}
+
+void GamePresenter::disablePieceSelectionFromKeyboard()
+{
+    m_pGameFacade->disablePersistentPieceSelection();
+}
+
+void GamePresenter::movePieceSelectionCursorToLeft()
+{
+    m_pGameFacade->decreasePersistentPieceSelectionIndex();
+}
+
+void GamePresenter::movePieceSelectionCursorToRight()
+{
+    m_pGameFacade->increasePersistentPieceSelectionIndex();
+}
+
+void GamePresenter::selectWordPieceForFirstInputWord(int wordPieceIndex, bool fromKeyboard)
+{
+    if (!fromKeyboard && m_pGameFacade->getPersistentPieceSelectionIndex() != -1)
+    {
+        disablePieceSelectionFromKeyboard();
+    }
+
     m_pGameFacade->addWordPieceToInputWord(Game::InputWordNumber::ONE, wordPieceIndex);
 }
 
-void GamePresenter::selectWordPieceForSecondInputWord(int wordPieceIndex)
+void GamePresenter::selectWordPieceForSecondInputWord(int wordPieceIndex, bool fromKeyboard)
 {
+    if (!fromKeyboard && m_pGameFacade->getPersistentPieceSelectionIndex() != -1)
+    {
+        disablePieceSelectionFromKeyboard();
+    }
+
     m_pGameFacade->addWordPieceToInputWord(Game::InputWordNumber::TWO, wordPieceIndex);
 }
 
@@ -435,6 +467,11 @@ bool GamePresenter::getAreSecondWordInputPiecesHovered() const
 int GamePresenter::getSecondWordInputPiecesHoverIndex() const
 {
     return m_SecondWordInputPiecesHoverIndex;
+}
+
+int GamePresenter::getPieceSelectionCursorPosition() const
+{
+    return m_pGameFacade->getPersistentPieceSelectionIndex();
 }
 
 int GamePresenter::getLevelEasy() const
