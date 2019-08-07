@@ -487,7 +487,7 @@ Item {
                 opacity: isHoverSelected ? Styles.hoverOpacity : Styles.defaultOpacity
 
                 color: isHoverSelected ? Styles.markedForDeletionColor : Styles.backgroundColor
-                border.color: Styles.borderColor
+                border.color: Styles.firstWordInputBorderColor
 
                 Text {
                     font.pointSize: wordPieces.height * 0.4
@@ -537,7 +537,7 @@ Item {
                 opacity: isHoverSelected ? Styles.hoverOpacity : Styles.defaultOpacity
 
                 color: isHoverSelected ? Styles.markedForDeletionColor : Styles.backgroundColor
-                border.color: Styles.borderColor
+                border.color: Styles.secondWordInputBorderColor
 
                 Text {
                     font.pointSize: wordPieces.height * 0.4
