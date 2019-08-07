@@ -32,6 +32,7 @@ void UtilitiesTests::testStatisticsCorrectlyUpdated()
 
     std::unique_ptr<ScoreItem> pScoreItem{new ScoreItem{}};
 
+    pScoreItem->initStatistics();
     _checkCorrectStatistics(*pScoreItem, 0, 0, 0, 0, "Checking initial statistics");
 
     pScoreItem->setScoreIncrement(Game::Level::EASY);
