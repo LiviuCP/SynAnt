@@ -128,8 +128,17 @@ ApplicationWindow {
 
         Keys.onLeftPressed: gamePresenter.movePieceSelectionCursorToLeft()
         Keys.onRightPressed: gamePresenter.movePieceSelectionCursorToRight()
-        Keys.onDownPressed: gamePresenter.selectWordPieceForFirstInputWord(gamePresenter.pieceSelectionCursorPosition, true)
-        Keys.onUpPressed: gamePresenter.selectWordPieceForSecondInputWord(gamePresenter.pieceSelectionCursorPosition, true)
+        Keys.onDownPressed: {
+            if (gamePresenter.pieceSelectionCursorPosition !== -1) {
+                gamePresenter.selectWordPieceForFirstInputWord(gamePresenter.pieceSelectionCursorPosition, true);
+            }
+        }
+
+        Keys.onUpPressed: {
+            if (gamePresenter.pieceSelectionCursorPosition !== -1) {
+                gamePresenter.selectWordPieceForSecondInputWord(gamePresenter.pieceSelectionCursorPosition, true);
+            }
+        }
     }
 
     // shortcuts shared among multiple panes
