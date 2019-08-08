@@ -126,8 +126,22 @@ ApplicationWindow {
             }
         }
 
-        Keys.onLeftPressed: gamePresenter.movePieceSelectionCursorToLeft()
-        Keys.onRightPressed: gamePresenter.movePieceSelectionCursorToRight()
+        Keys.onLeftPressed: {
+            if (gamePresenter.pieceSelectionCursorPosition !== -1) {
+                gamePresenter.movePieceSelectionCursorToLeft();
+            } else if (gamePresenter.piecesRemovalFirstWordCursorPosition !== -1 || gamePresenter.piecesRemovalSecondWordCursorPosition != -1) {
+                gamePresenter.movePiecesRemovalCursorToLeft();
+            }
+        }
+
+        Keys.onRightPressed: {
+            if (gamePresenter.pieceSelectionCursorPosition !== -1) {
+                gamePresenter.movePieceSelectionCursorToRight();
+            } else if (gamePresenter.piecesRemovalFirstWordCursorPosition !== -1 ||gamePresenter.piecesRemovalSecondWordCursorPosition != -1) {
+                gamePresenter.movePiecesRemovalCursorToRight();
+            }
+        }
+
         Keys.onDownPressed: {
             if (gamePresenter.pieceSelectionCursorPosition !== -1) {
                 gamePresenter.selectWordPieceForFirstInputWord(gamePresenter.pieceSelectionCursorPosition, true);
@@ -138,6 +152,38 @@ ApplicationWindow {
             if (gamePresenter.pieceSelectionCursorPosition !== -1) {
                 gamePresenter.selectWordPieceForSecondInputWord(gamePresenter.pieceSelectionCursorPosition, true);
             }
+        }
+
+        Keys.onDigit1Pressed: {
+            if (gamePresenter.piecesRemovalFirstWordCursorPosition === -1) {
+                gamePresenter.enableFirstWordPiecesRemovalFromKeyboard();
+            } else {
+                gamePresenter.disablePiecesRemovalFromKeyboard();
+            }
+        }
+
+        Keys.onDigit2Pressed: {
+            if (gamePresenter.piecesRemovalSecondWordCursorPosition === -1) {
+                gamePresenter.enableSecondWordPiecesRemovalFromKeyboard();
+            } else {
+                gamePresenter.disablePiecesRemovalFromKeyboard();
+            }
+        }
+
+        function removeWordPieces() {
+            if (gamePresenter.piecesRemovalFirstWordCursorPosition !== -1) {
+                gamePresenter.removeWordPiecesFromFirstInputWord(gamePresenter.piecesRemovalFirstWordCursorPosition);
+            } else if (gamePresenter.piecesRemovalSecondWordCursorPosition !== -1) {
+                gamePresenter.removeWordPiecesFromSecondInputWord(gamePresenter.piecesRemovalSecondWordCursorPosition);
+            }
+        }
+
+        Keys.onReturnPressed: {
+            removeWordPieces();
+        }
+
+        Keys.onEnterPressed: {
+            removeWordPieces();
         }
     }
 

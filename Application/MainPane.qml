@@ -480,14 +480,17 @@ Item {
 
             Rectangle {
                 property bool isHoverSelected: presenter.areFirstWordInputPiecesHovered && presenter.firstWordInputPiecesHoverIndex <= index
+                property bool isKeyboardSelected: presenter.piecesRemovalFirstWordCursorPosition !== -1 && presenter.piecesRemovalFirstWordCursorPosition <= index
 
                 width: parent.width / mixedWordsRepeater.count
                 height: parent.height
 
-                opacity: isHoverSelected ? Styles.hoverOpacity : Styles.defaultOpacity
+                opacity: isHoverSelected ? Styles.hoverOpacity : (isKeyboardSelected ? Styles.hoverOpacity : Styles.defaultOpacity)
 
-                color: isHoverSelected ? Styles.markedForDeletionColor : Styles.backgroundColor
+                color: isHoverSelected ? Styles.markedForDeletionColor : (isKeyboardSelected ? Styles.markedForDeletionColor : Styles.backgroundColor)
+
                 border.color: Styles.firstWordInputBorderColor
+                border.width: index === presenter.piecesRemovalFirstWordCursorPosition ? Styles.selectedBorderWidth : Styles.borderWidth
 
                 Text {
                     font.pointSize: wordPieces.height * 0.4
@@ -530,14 +533,17 @@ Item {
 
             Rectangle {
                 property bool isHoverSelected: presenter.areSecondWordInputPiecesHovered && presenter.secondWordInputPiecesHoverIndex <= index
+                property bool isKeyboardSelected: presenter.piecesRemovalSecondWordCursorPosition !== -1 && presenter.piecesRemovalSecondWordCursorPosition <= index
 
                 width: parent.width / mixedWordsRepeater.count
                 height: parent.height
 
-                opacity: isHoverSelected ? Styles.hoverOpacity : Styles.defaultOpacity
+                opacity: isHoverSelected ? Styles.hoverOpacity : (isKeyboardSelected ? Styles.hoverOpacity : Styles.defaultOpacity)
 
-                color: isHoverSelected ? Styles.markedForDeletionColor : Styles.backgroundColor
+                color: isHoverSelected ? Styles.markedForDeletionColor : (isKeyboardSelected ? Styles.markedForDeletionColor : Styles.backgroundColor)
+
                 border.color: Styles.secondWordInputBorderColor
+                border.width: index === presenter.piecesRemovalSecondWordCursorPosition ? Styles.selectedBorderWidth : Styles.borderWidth
 
                 Text {
                     font.pointSize: wordPieces.height * 0.4
@@ -787,6 +793,18 @@ Item {
             onPressed: opacity = Styles.pressedButtonOpacity
             onReleased: opacity = Styles.releasedButtonOpacity
             onCanceled: opacity = Styles.releasedButtonOpacity
+        }
+    }
+
+    Connections {
+        target: presenter
+
+        // always disable and piece selection or removal operation FROM KEYBOARD if the mouse hover is active (the idea is to use EITHER mouse OR keyboard for operations)
+        onHoverChanged: {
+            if (presenter.areFirstWordInputPiecesHovered || presenter.areSecondWordInputPiecesHovered) {
+                presenter.disablePieceSelectionFromKeyboard();
+                presenter.disablePiecesRemovalFromKeyboard();
+            }
         }
     }
 }

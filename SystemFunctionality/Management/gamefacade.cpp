@@ -48,6 +48,8 @@ GameFacade::GameFacade(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pInputBuilder, &InputBuilder::inputCompletionChanged, this, &GameFacade::completionChanged);
     Q_ASSERT(connected);
+    connected = connect(m_pInputBuilder, &InputBuilder::persistentIndexesChanged, this, &GameFacade::persistentPiecesRemovalIndexesChanged);
+    Q_ASSERT(connected);
     connected = connect(m_pScoreItem, &ScoreItem::statisticsUpdated, this, &GameFacade::_onStatisticsUpdated);
     Q_ASSERT(connected);
     connected = connect(m_pDataSourceProxy, &DataSourceProxy::loadDataFromDbFinished, this, &GameFacade::_onLoadDataFromDbFinished);
@@ -151,6 +153,26 @@ void GameFacade::increasePersistentPieceSelectionIndex()
 void GameFacade::decreasePersistentPieceSelectionIndex()
 {
     m_pWordPairOwner->decreasePersistentPieceSelectionIndex();
+}
+
+void GameFacade::enablePersistentPiecesRemoval(Game::InputWordNumber inputWordNumber)
+{
+    m_pInputBuilder->setPersistentPiecesRemovalIndex(inputWordNumber);
+}
+
+void GameFacade::disablePersistentPiecesRemoval()
+{
+    m_pInputBuilder->clearPersistentPiecesRemovalIndexes();
+}
+
+void GameFacade::increasePersistentPiecesRemovalIndex()
+{
+    m_pInputBuilder->increasePersistentPiecesRemovalIndex();
+}
+
+void GameFacade::decreasePersistentPiecesRemovalIndex()
+{
+    m_pInputBuilder->decreasePersistentPiecesRemovalIndex();
 }
 
 void GameFacade::addWordPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex)
@@ -298,6 +320,16 @@ const QVector<int> GameFacade::getSecondWordInputIndexes() const
 int GameFacade::getPersistentPieceSelectionIndex() const
 {
     return m_pWordPairOwner->getPersistentPieceSelectionIndex();
+}
+
+int GameFacade::getFirstPersistentPiecesRemovalIndex() const
+{
+    return m_pInputBuilder->getFirstWordPersistentPiecesRemovalIndex();
+}
+
+int GameFacade::getSecondPersistentPiecesRemovalIndex() const
+{
+    return m_pInputBuilder->getSecondWordPersistentPiecesRemovalIndex();
 }
 
 bool GameFacade::isInputComplete() const

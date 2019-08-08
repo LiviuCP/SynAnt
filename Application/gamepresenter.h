@@ -46,6 +46,8 @@ class GamePresenter : public QObject
     Q_PROPERTY(bool areSecondWordInputPiecesHovered READ getAreSecondWordInputPiecesHovered NOTIFY hoverChanged)
     Q_PROPERTY(int secondWordInputPiecesHoverIndex READ getSecondWordInputPiecesHoverIndex NOTIFY hoverChanged)
     Q_PROPERTY(int pieceSelectionCursorPosition READ getPieceSelectionCursorPosition NOTIFY pieceSelectionCursorPositionChanged)
+    Q_PROPERTY(int piecesRemovalFirstWordCursorPosition READ getPiecesRemovalFirstWordCursorPosition NOTIFY piecesRemovalCursorPositionChanged)
+    Q_PROPERTY(int piecesRemovalSecondWordCursorPosition READ getPiecesRemovalSecondWordCursorPosition NOTIFY piecesRemovalCursorPositionChanged)
     // need to use these three properties as Q_ENUM cannot be used with the Level enum (it si not part of the presenter class)
     Q_PROPERTY(int levelEasy READ getLevelEasy CONSTANT)
     Q_PROPERTY(int levelMedium READ getLevelMedium CONSTANT)
@@ -96,10 +98,15 @@ public:
     Q_INVOKABLE void disablePieceSelectionFromKeyboard();
     Q_INVOKABLE void movePieceSelectionCursorToLeft();
     Q_INVOKABLE void movePieceSelectionCursorToRight();
+    Q_INVOKABLE void enableFirstWordPiecesRemovalFromKeyboard();
+    Q_INVOKABLE void enableSecondWordPiecesRemovalFromKeyboard();
+    Q_INVOKABLE void disablePiecesRemovalFromKeyboard();
+    Q_INVOKABLE void movePiecesRemovalCursorToLeft();
+    Q_INVOKABLE void movePiecesRemovalCursorToRight();
     Q_INVOKABLE void selectWordPieceForFirstInputWord(int wordPieceIndex, bool fromKeyboard = false);
     Q_INVOKABLE void selectWordPieceForSecondInputWord(int wordPieceIndex, bool fromKeyboard = false);
-    Q_INVOKABLE void removeWordPiecesFromFirstInputWord(int inputRangeStart);
-    Q_INVOKABLE void removeWordPiecesFromSecondInputWord(int inputRangeStart);
+    Q_INVOKABLE void removeWordPiecesFromFirstInputWord(int inputRangeStart, bool fromKeyboard = false);
+    Q_INVOKABLE void removeWordPiecesFromSecondInputWord(int inputRangeStart, bool fromKeyboard = false);
     Q_INVOKABLE void clearMainPaneInput();
     Q_INVOKABLE void clearMainPaneFirstInputWord();
     Q_INVOKABLE void clearMainPaneSecondInputWord();
@@ -138,6 +145,8 @@ public:
     bool getAreSecondWordInputPiecesHovered() const;
     int getSecondWordInputPiecesHoverIndex() const;
     int getPieceSelectionCursorPosition() const;
+    int getPiecesRemovalFirstWordCursorPosition() const;
+    int getPiecesRemovalSecondWordCursorPosition() const;
 
     int getLevelEasy() const;
     int getLevelMedium() const;
@@ -181,6 +190,7 @@ signals:
     Q_SIGNAL void errorMessageChanged();
     Q_SIGNAL void hoverChanged();
     Q_SIGNAL void pieceSelectionCursorPositionChanged();
+    Q_SIGNAL void piecesRemovalCursorPositionChanged();
 
 private slots:
     void _onInputChanged();

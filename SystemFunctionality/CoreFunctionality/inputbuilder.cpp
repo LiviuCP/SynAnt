@@ -51,6 +51,75 @@ bool InputBuilder::clearInput()
     return success;
 }
 
+void InputBuilder::setPersistentPiecesRemovalIndex(Game::InputWordNumber inputWordNumber)
+{
+    WordInput& mainInput{inputWordNumber == Game::InputWordNumber::ONE ? m_FirstWordInput : m_SecondWordInput};
+    WordInput& otherInput{inputWordNumber == Game::InputWordNumber::ONE ? m_SecondWordInput : m_FirstWordInput};
+
+    if (mainInput.persistentPiecesRemovalIndex == -1 && mainInput.indexes.size() != 0)
+    {
+        mainInput.persistentPiecesRemovalIndex = mainInput.indexes.size() - 1;
+        otherInput.persistentPiecesRemovalIndex = -1;
+
+        Q_EMIT persistentIndexesChanged();
+    }
+}
+
+void InputBuilder::clearPersistentPiecesRemovalIndexes()
+{
+    if (m_FirstWordInput.persistentPiecesRemovalIndex != -1 || m_SecondWordInput.persistentPiecesRemovalIndex != -1)
+    {
+        m_FirstWordInput.persistentPiecesRemovalIndex = -1;
+        m_SecondWordInput.persistentPiecesRemovalIndex = -1;
+
+        Q_EMIT persistentIndexesChanged();
+    }
+}
+
+void InputBuilder::increasePersistentPiecesRemovalIndex()
+{
+    Q_ASSERT(m_FirstWordInput.persistentPiecesRemovalIndex == -1 || m_SecondWordInput.persistentPiecesRemovalIndex == -1);
+
+    if (m_FirstWordInput.persistentPiecesRemovalIndex != -1)
+    {
+        if (m_FirstWordInput.persistentPiecesRemovalIndex < m_FirstWordInput.indexes.size()-1)
+        {
+            ++m_FirstWordInput.persistentPiecesRemovalIndex;
+            Q_EMIT persistentIndexesChanged();
+        }
+    }
+    else if (m_SecondWordInput.persistentPiecesRemovalIndex != -1)
+    {
+        if (m_SecondWordInput.persistentPiecesRemovalIndex < m_SecondWordInput.indexes.size() - 1)
+        {
+            ++m_SecondWordInput.persistentPiecesRemovalIndex;
+            Q_EMIT persistentIndexesChanged();
+        }
+    }
+}
+
+void InputBuilder::decreasePersistentPiecesRemovalIndex()
+{
+    Q_ASSERT(m_FirstWordInput.persistentPiecesRemovalIndex == -1 || m_SecondWordInput.persistentPiecesRemovalIndex == -1);
+
+    if (m_FirstWordInput.persistentPiecesRemovalIndex != -1)
+    {
+        if (m_FirstWordInput.persistentPiecesRemovalIndex > 0)
+        {
+            --m_FirstWordInput.persistentPiecesRemovalIndex;
+            Q_EMIT persistentIndexesChanged();
+        }
+    }
+    else if (m_SecondWordInput.persistentPiecesRemovalIndex != -1)
+    {
+        if (m_SecondWordInput.persistentPiecesRemovalIndex > 0)
+        {
+            --m_SecondWordInput.persistentPiecesRemovalIndex;
+            Q_EMIT persistentIndexesChanged();
+        }
+    }
+}
+
 void InputBuilder::setCloseInputAllowed()
 {
     m_IsCloseInputAllowed = true;
@@ -64,6 +133,16 @@ const QVector<int> InputBuilder::getFirstWordInputIndexes() const
 const QVector<int> InputBuilder::getSecondWordInputIndexes() const
 {
     return m_SecondWordInput.indexes;
+}
+
+int InputBuilder::getFirstWordPersistentPiecesRemovalIndex() const
+{
+    return m_FirstWordInput.persistentPiecesRemovalIndex;
+}
+
+int InputBuilder::getSecondWordPersistentPiecesRemovalIndex() const
+{
+    return m_SecondWordInput.persistentPiecesRemovalIndex;
 }
 
 bool InputBuilder::isInputComplete() const
@@ -190,5 +269,6 @@ bool InputBuilder::_removePiecesFromWordInput(InputBuilder::WordInput &currentWo
 InputBuilder::WordInput::WordInput()
     : indexes{}
     , state{WordInputState::EMPTY}
+    , persistentPiecesRemovalIndex{-1}
 {
 }

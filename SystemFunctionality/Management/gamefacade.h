@@ -45,6 +45,11 @@ public:
     void increasePersistentPieceSelectionIndex();
     void decreasePersistentPieceSelectionIndex();
 
+    void enablePersistentPiecesRemoval(Game::InputWordNumber inputWordNumber);
+    void disablePersistentPiecesRemoval();
+    void increasePersistentPiecesRemovalIndex();
+    void decreasePersistentPiecesRemovalIndex();
+
     void addWordPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex);
     void removeWordPiecesFromInputWord(Game::InputWordNumber inputWordNumber, int inputRangeStart);
     void clearInput();
@@ -65,6 +70,9 @@ public:
     const QVector<int> getSecondWordInputIndexes() const;
 
     int getPersistentPieceSelectionIndex() const;
+
+    int getFirstPersistentPiecesRemovalIndex() const;
+    int getSecondPersistentPiecesRemovalIndex() const;
 
     bool isInputComplete() const;
 
@@ -97,6 +105,7 @@ signals:
     Q_SIGNAL void completionChanged();
     Q_SIGNAL void piecesAddedToInputChanged();
     Q_SIGNAL void persistentPieceSelectionIndexChanged();
+    Q_SIGNAL void persistentPiecesRemovalIndexesChanged();
     Q_SIGNAL void statisticsChanged();
     Q_SIGNAL void statusChanged(Game::StatusCodes status);
 
