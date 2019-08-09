@@ -7,6 +7,7 @@
    It becomes the owner of the mixed words (pieces and reference words) and fulfills following tasks:
    1) Provides the owned data to the "consumer" classes (facade, presenter) on demand
    2) Keeps track of the selection status of the mixed words pieces (when a piece is added to input it is marked as selected and viceversa)
+   3) Holds the persistent index which is used for adding pieces to input by using the keyboard cursor
 */
 
 #ifndef WORDPAIROWNER_H

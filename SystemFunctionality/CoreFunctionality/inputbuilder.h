@@ -3,6 +3,7 @@
    1) uses the pieces provided by word pair owner and assembles them into input words
    2) enforces proper rules for input creation
    3) provides the built input to the facade for checking against the reference words obtained from the WordPairOwner class
+   4) holds the persistent indexes which are used for removing pieces from input by using the keyboard cursor
 */
 
 #ifndef INPUTBUILDER_H
