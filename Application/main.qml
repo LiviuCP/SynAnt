@@ -137,21 +137,17 @@ ApplicationWindow {
         Keys.onRightPressed: {
             if (gamePresenter.pieceSelectionCursorPosition !== -1) {
                 gamePresenter.movePieceSelectionCursorToRight();
-            } else if (gamePresenter.piecesRemovalFirstWordCursorPosition !== -1 ||gamePresenter.piecesRemovalSecondWordCursorPosition != -1) {
+            } else if (gamePresenter.piecesRemovalFirstWordCursorPosition !== -1 || gamePresenter.piecesRemovalSecondWordCursorPosition != -1) {
                 gamePresenter.movePiecesRemovalCursorToRight();
             }
         }
 
         Keys.onDownPressed: {
-            if (gamePresenter.pieceSelectionCursorPosition !== -1) {
-                gamePresenter.selectWordPieceForFirstInputWord(gamePresenter.pieceSelectionCursorPosition, true);
-            }
+            gamePresenter.selectPieceForFirstWordFromCursor();
         }
 
         Keys.onUpPressed: {
-            if (gamePresenter.pieceSelectionCursorPosition !== -1) {
-                gamePresenter.selectWordPieceForSecondInputWord(gamePresenter.pieceSelectionCursorPosition, true);
-            }
+            gamePresenter.selectPieceForSecondWordFromCursor();
         }
 
         Keys.onDigit1Pressed: {

@@ -175,17 +175,23 @@ void GameFacade::decreasePersistentPiecesRemovalIndex()
     m_pInputBuilder->decreasePersistentPiecesRemovalIndex();
 }
 
-void GameFacade::addWordPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex)
+void GameFacade::addPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex)
 {
+    disablePersistentPieceSelection();
+
     if (!m_pWordPairOwner->getIsWordPieceAddedToInput(wordPieceIndex))
     {
-        // adding piece should always occur before updating status
-        Game::PieceTypes pieceType{m_pWordPairOwner->getWordPieceType(wordPieceIndex)};
-        bool pieceAdded{m_pInputBuilder->addPieceToInputWord(inputWordNumber, wordPieceIndex, pieceType)};
+        _addPieceToInputWord(inputWordNumber, wordPieceIndex);
+    }
+}
 
-        Q_EMIT statusChanged(m_CurrentStatusCode = pieceAdded ? (m_pInputBuilder->isInputComplete() ? Game::StatusCodes::PIECE_ADDED_COMPLETE_INPUT
-                                                                                                    : Game::StatusCodes::PIECE_ADDED_INCOMPLETE_INPUT)
-                                                              : Game::StatusCodes::PIECE_NOT_ADDED);
+void GameFacade::addPieceToInputWordFromPersistentIndex(Game::InputWordNumber inputWordNumber)
+{
+    int persistentIndex{m_pWordPairOwner->getPersistentPieceSelectionIndex()};
+
+    if (persistentIndex != -1)
+    {
+        _addPieceToInputWord(inputWordNumber, persistentIndex);
     }
 }
 
@@ -523,6 +529,17 @@ void GameFacade::_onStatisticsUpdated(Game::StatisticsUpdate updateType)
     }
 
     Q_EMIT statisticsChanged();
+}
+
+void GameFacade::_addPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex)
+{
+    // adding piece should always occur before updating status
+    Game::PieceTypes pieceType{m_pWordPairOwner->getWordPieceType(wordPieceIndex)};
+    bool pieceAdded{m_pInputBuilder->addPieceToInputWord(inputWordNumber, wordPieceIndex, pieceType)};
+
+    Q_EMIT statusChanged(m_CurrentStatusCode = pieceAdded ? (m_pInputBuilder->isInputComplete() ? Game::StatusCodes::PIECE_ADDED_COMPLETE_INPUT
+                                                                                                : Game::StatusCodes::PIECE_ADDED_INCOMPLETE_INPUT)
+                                                          : Game::StatusCodes::PIECE_NOT_ADDED);
 }
 
 void GameFacade::_allowAddToCache()

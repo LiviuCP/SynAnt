@@ -50,7 +50,8 @@ public:
     void increasePersistentPiecesRemovalIndex();
     void decreasePersistentPiecesRemovalIndex();
 
-    void addWordPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex);
+    void addPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex);
+    void addPieceToInputWordFromPersistentIndex(Game::InputWordNumber inputWordNumber);
     void removeWordPiecesFromInputWord(Game::InputWordNumber inputWordNumber, int inputRangeStart);
     void clearInput();
 
@@ -122,6 +123,7 @@ private slots:
     void _onStatisticsUpdated(Game::StatisticsUpdate updateType);
 
 private:
+    void _addPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex);
     void _allowAddToCache();
     void _blockAddToCache();
     void _allowCacheReset();
