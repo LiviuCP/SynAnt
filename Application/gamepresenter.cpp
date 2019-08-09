@@ -256,24 +256,24 @@ void GamePresenter::selectPieceForSecondInputWord(int wordPieceIndex)
     m_pGameFacade->addPieceToInputWord(Game::InputWordNumber::TWO, wordPieceIndex);
 }
 
-void GamePresenter::removeWordPiecesFromFirstInputWord(int inputRangeStart, bool fromKeyboard)
+void GamePresenter::removePiecesFromFirstInputWordByCursor()
 {
-    if (!fromKeyboard && m_pGameFacade->getFirstPersistentPiecesRemovalIndex() != -1)
-    {
-        disablePiecesRemovalFromKeyboard();
-    }
-
-    m_pGameFacade->removeWordPiecesFromInputWord(Game::InputWordNumber::ONE, inputRangeStart);
+    m_pGameFacade->removePiecesFromInputWordByPersistentIndex(Game::InputWordNumber::ONE);
 }
 
-void GamePresenter::removeWordPiecesFromSecondInputWord(int inputRangeStart, bool fromKeyboard)
+void GamePresenter::removePiecesFromFirstInputWord(int inputRangeStart)
 {
-    if (!fromKeyboard && m_pGameFacade->getSecondPersistentPiecesRemovalIndex() != -1)
-    {
-        disablePiecesRemovalFromKeyboard();
-    }
+    m_pGameFacade->removePiecesFromInputWord(Game::InputWordNumber::ONE, inputRangeStart);
+}
 
-    m_pGameFacade->removeWordPiecesFromInputWord(Game::InputWordNumber::TWO, inputRangeStart);
+void GamePresenter::removePiecesFromSecondInputWordByCursor()
+{
+    m_pGameFacade->removePiecesFromInputWordByPersistentIndex(Game::InputWordNumber::TWO);
+}
+
+void GamePresenter::removePiecesFromSecondInputWord(int inputRangeStart)
+{
+    m_pGameFacade->removePiecesFromInputWord(Game::InputWordNumber::TWO, inputRangeStart);
 }
 
 void GamePresenter::clearMainPaneInput()
@@ -285,7 +285,7 @@ void GamePresenter::clearMainPaneFirstInputWord()
 {
     if (!m_pGameFacade->getFirstWordInputIndexes().empty())
     {
-        m_pGameFacade->removeWordPiecesFromInputWord(Game::InputWordNumber::ONE, 0);
+        m_pGameFacade->removePiecesFromInputWord(Game::InputWordNumber::ONE, 0);
     }
 }
 
@@ -293,7 +293,7 @@ void GamePresenter::clearMainPaneSecondInputWord()
 {
     if (!m_pGameFacade->getSecondWordInputIndexes().empty())
     {
-        m_pGameFacade->removeWordPiecesFromInputWord(Game::InputWordNumber::TWO, 0);
+        m_pGameFacade->removePiecesFromInputWord(Game::InputWordNumber::TWO, 0);
     }
 }
 

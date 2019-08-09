@@ -52,7 +52,8 @@ public:
 
     void addPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex);
     void addPieceToInputWordFromPersistentIndex(Game::InputWordNumber inputWordNumber);
-    void removeWordPiecesFromInputWord(Game::InputWordNumber inputWordNumber, int inputRangeStart);
+    void removePiecesFromInputWord(Game::InputWordNumber inputWordNumber, int inputRangeStart);
+    void removePiecesFromInputWordByPersistentIndex(Game::InputWordNumber inputWordNumber);
     void clearInput();
 
     void handleSubmitRequest();

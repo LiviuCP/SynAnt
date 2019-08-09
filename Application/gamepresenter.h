@@ -107,8 +107,10 @@ public:
     Q_INVOKABLE void selectPieceForFirstInputWord(int wordPieceIndex);
     Q_INVOKABLE void selectPieceForSecondWordFromCursor();
     Q_INVOKABLE void selectPieceForSecondInputWord(int wordPieceIndex);
-    Q_INVOKABLE void removeWordPiecesFromFirstInputWord(int inputRangeStart, bool fromKeyboard = false);
-    Q_INVOKABLE void removeWordPiecesFromSecondInputWord(int inputRangeStart, bool fromKeyboard = false);
+    Q_INVOKABLE void removePiecesFromFirstInputWordByCursor();
+    Q_INVOKABLE void removePiecesFromFirstInputWord(int inputRangeStart);
+    Q_INVOKABLE void removePiecesFromSecondInputWordByCursor();
+    Q_INVOKABLE void removePiecesFromSecondInputWord(int inputRangeStart);
     Q_INVOKABLE void clearMainPaneInput();
     Q_INVOKABLE void clearMainPaneFirstInputWord();
     Q_INVOKABLE void clearMainPaneSecondInputWord();

@@ -168,9 +168,9 @@ ApplicationWindow {
 
         function removeWordPieces() {
             if (gamePresenter.piecesRemovalFirstWordCursorPosition !== -1) {
-                gamePresenter.removeWordPiecesFromFirstInputWord(gamePresenter.piecesRemovalFirstWordCursorPosition);
+                gamePresenter.removePiecesFromFirstInputWordByCursor();
             } else if (gamePresenter.piecesRemovalSecondWordCursorPosition !== -1) {
-                gamePresenter.removeWordPiecesFromSecondInputWord(gamePresenter.piecesRemovalSecondWordCursorPosition);
+                gamePresenter.removePiecesFromSecondInputWordByCursor();
             }
         }
 

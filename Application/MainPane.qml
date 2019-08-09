@@ -507,7 +507,7 @@ Item {
 
                     onEntered: presenter.updateFirstWordInputHoverIndex(index)
                     onExited: presenter.clearWordInputHoverIndexes()
-                    onClicked: presenter.removeWordPiecesFromFirstInputWord(index)
+                    onClicked: presenter.removePiecesFromFirstInputWord(index)
                 }
 
                 ToolTip {
@@ -560,7 +560,7 @@ Item {
 
                     onEntered: presenter.updateSecondWordInputHoverIndex(index)
                     onExited: presenter.clearWordInputHoverIndexes()
-                    onClicked: presenter.removeWordPiecesFromSecondInputWord(index)
+                    onClicked: presenter.removePiecesFromSecondInputWord(index)
                 }
 
                 ToolTip {

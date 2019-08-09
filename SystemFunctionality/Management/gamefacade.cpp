@@ -195,11 +195,26 @@ void GameFacade::addPieceToInputWordFromPersistentIndex(Game::InputWordNumber in
     }
 }
 
-void GameFacade::removeWordPiecesFromInputWord(Game::InputWordNumber inputWordNumber, int inputRangeStart)
+void GameFacade::removePiecesFromInputWord(Game::InputWordNumber inputWordNumber, int inputRangeStart)
 {
+    disablePersistentPiecesRemoval();
+
     if (m_pInputBuilder->removePiecesFromInputWord(inputWordNumber, inputRangeStart))
     {
         Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::PIECES_REMOVED);
+    }
+}
+
+void GameFacade::removePiecesFromInputWordByPersistentIndex(Game::InputWordNumber inputWordNumber)
+{
+    int persistentIndex{inputWordNumber == Game::InputWordNumber::ONE ? m_pInputBuilder->getFirstWordPersistentPiecesRemovalIndex()
+                                                                      : m_pInputBuilder->getSecondWordPersistentPiecesRemovalIndex()};
+    if (persistentIndex != -1)
+    {
+        if (m_pInputBuilder->removePiecesFromInputWord(inputWordNumber, persistentIndex))
+        {
+            Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::PIECES_REMOVED);
+        }
     }
 }
 
