@@ -423,7 +423,7 @@ Item {
                 Timer {
                     id: clickTimer
                     interval: 200
-                    onTriggered: presenter.selectWordPieceForFirstInputWord(index)
+                    onTriggered: presenter.selectPieceForFirstInputWord(index)
                 }
 
                 Text {
@@ -442,7 +442,7 @@ Item {
                     // single click for assigning piece to first word, double click for assigning to second word
                     onClicked: {
                         if (clickTimer.running) {
-                            presenter.selectWordPieceForSecondInputWord(index);
+                            presenter.selectPieceForSecondInputWord(index);
                             clickTimer.stop();
                         }
                         else {
