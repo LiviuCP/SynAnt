@@ -122,6 +122,7 @@ private slots:
     void _connectDataSourceToWordMixer();
     void _onPiecesAddedToInputChanged();
     void _onStatisticsUpdated(Game::StatisticsUpdate updateType);
+    void _onInputChanged();
 
 private:
     void _addPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex);

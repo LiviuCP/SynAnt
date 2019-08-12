@@ -44,7 +44,7 @@ GameFacade::GameFacade(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pWordPairOwner, &WordPairOwner::persistentIndexChanged, this, &GameFacade::persistentPieceSelectionIndexChanged);
     Q_ASSERT(connected);
-    connected = connect(m_pInputBuilder, &InputBuilder::inputChanged, this, &GameFacade::inputChanged);
+    connected = connect(m_pInputBuilder, &InputBuilder::inputChanged, this, &GameFacade::_onInputChanged);
     Q_ASSERT(connected);
     connected = connect(m_pInputBuilder, &InputBuilder::inputCompletionChanged, this, &GameFacade::completionChanged);
     Q_ASSERT(connected);
@@ -547,6 +547,17 @@ void GameFacade::_onStatisticsUpdated(Game::StatisticsUpdate updateType)
     }
 
     Q_EMIT statisticsChanged();
+}
+
+void GameFacade::_onInputChanged()
+{
+    if (m_pInputBuilder->isHalfInput())
+    {
+        m_pWordPairOwner->clearPersistentPieceSelectionIndex();
+        m_pWordPairOwner->setPersistentPieceSelectionIndex(true);
+    }
+
+    Q_EMIT inputChanged();
 }
 
 void GameFacade::_addPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex)
