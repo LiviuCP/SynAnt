@@ -38,6 +38,8 @@ public:
     int getFirstWordPersistentPiecesRemovalIndex() const;
     int getSecondWordPersistentPiecesRemovalIndex() const;
 
+    bool isEmptyInput() const;
+    bool isHalfInput() const;
     bool isInputComplete() const;
 
 signals:

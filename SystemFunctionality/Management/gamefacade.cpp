@@ -137,7 +137,10 @@ void GameFacade::resumeWordEntry()
 
 void GameFacade::enablePersistentPieceSelection()
 {
-    m_pWordPairOwner->setPersistentPieceSelectionIndex();
+    if (!m_pInputBuilder->isInputComplete())
+    {
+        m_pWordPairOwner->setPersistentPieceSelectionIndex(m_pInputBuilder->isEmptyInput() || m_pInputBuilder->isHalfInput());
+    }
 }
 
 void GameFacade::disablePersistentPieceSelection()

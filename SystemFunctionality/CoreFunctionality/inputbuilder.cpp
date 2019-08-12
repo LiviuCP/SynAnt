@@ -149,6 +149,17 @@ int InputBuilder::getSecondWordPersistentPiecesRemovalIndex() const
     return m_SecondWordInput.persistentPiecesRemovalIndex;
 }
 
+bool InputBuilder::isEmptyInput() const
+{
+    return (m_FirstWordInput.state == WordInputState::EMPTY && m_SecondWordInput.state == WordInputState::EMPTY);
+}
+
+bool InputBuilder::isHalfInput() const
+{
+    return ((m_FirstWordInput.state == WordInputState::EMPTY && m_SecondWordInput.state == WordInputState::COMPLETED) ||
+            (m_FirstWordInput.state == WordInputState::COMPLETED && m_SecondWordInput.state == WordInputState::EMPTY));
+}
+
 bool InputBuilder::isInputComplete() const
 {
     return (m_FirstWordInput.state == WordInputState::COMPLETED && m_SecondWordInput.state == WordInputState::COMPLETED);

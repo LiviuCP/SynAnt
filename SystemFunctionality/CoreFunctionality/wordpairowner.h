@@ -28,7 +28,7 @@ public:
 
     void setWordMixerProxy(WordMixerProxy* pWordMixerProxy);
 
-    void setPersistentPieceSelectionIndex();
+    void setPersistentPieceSelectionIndex(bool isStartPieceRequired);
     void clearPersistentPieceSelectionIndex();
     void increasePersistentPieceSelectionIndex();
     void decreasePersistentPieceSelectionIndex();

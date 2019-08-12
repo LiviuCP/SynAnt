@@ -19,18 +19,41 @@ void WordPairOwner::setWordMixerProxy(WordMixerProxy* pWordMixerProxy)
     }
 }
 
-void WordPairOwner::setPersistentPieceSelectionIndex()
+void WordPairOwner::setPersistentPieceSelectionIndex(bool isStartPieceRequired)
 {
     if (m_PersistentPieceSelectionIndex == -1)
     {
+        int firstAvailableIndex{-1};
+
         for (int pieceIndex{0}; pieceIndex < m_MixedWordsPieces.size(); ++pieceIndex)
         {
             if (!m_MixedWordsPieces[pieceIndex].isAddedToInput)
             {
-                m_PersistentPieceSelectionIndex = pieceIndex;
-                Q_EMIT persistentIndexChanged();
+                firstAvailableIndex = pieceIndex;
                 break;
             }
+        }
+
+        if (firstAvailableIndex != -1)
+        {
+            if (!isStartPieceRequired)
+            {
+                m_PersistentPieceSelectionIndex = firstAvailableIndex;
+            }
+            else
+            {
+
+                for (int pieceIndex{firstAvailableIndex}; pieceIndex < m_MixedWordsPieces.size(); ++pieceIndex)
+                {
+                    if (!m_MixedWordsPieces[pieceIndex].isAddedToInput && m_MixedWordsPieces[pieceIndex].pieceType == Game::PieceTypes::BEGIN_PIECE)
+                    {
+                        m_PersistentPieceSelectionIndex = pieceIndex;
+                        break;
+                    }
+                }
+            }
+
+            Q_EMIT persistentIndexChanged();
         }
     }
 }
