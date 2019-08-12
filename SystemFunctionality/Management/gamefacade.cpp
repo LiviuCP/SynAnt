@@ -199,6 +199,7 @@ void GameFacade::removePiecesFromInputWord(Game::InputWordNumber inputWordNumber
 {
     if (m_pInputBuilder->removePiecesFromInputWord(inputWordNumber, inputRangeStart))
     {
+        m_pWordPairOwner->clearPersistentPieceSelectionIndex();
         Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::PIECES_REMOVED);
     }
 }
@@ -220,6 +221,7 @@ void GameFacade::clearInput()
 {
     if (m_pInputBuilder->clearInput())
     {
+        m_pWordPairOwner->clearPersistentPieceSelectionIndex();
         Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::USER_INPUT_CLEARED);
     }
 }
