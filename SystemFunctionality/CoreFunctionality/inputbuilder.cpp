@@ -46,6 +46,8 @@ bool InputBuilder::clearInput()
 
     if (success)
     {
+        clearPersistentPiecesRemovalIndexes();
+
         // approval will be required again when selecting an end piece while the other word is already closed
         m_IsCloseInputAllowed = false;
     }

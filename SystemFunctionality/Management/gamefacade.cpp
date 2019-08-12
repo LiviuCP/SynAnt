@@ -197,8 +197,6 @@ void GameFacade::addPieceToInputWordFromPersistentIndex(Game::InputWordNumber in
 
 void GameFacade::removePiecesFromInputWord(Game::InputWordNumber inputWordNumber, int inputRangeStart)
 {
-    disablePersistentPiecesRemoval();
-
     if (m_pInputBuilder->removePiecesFromInputWord(inputWordNumber, inputRangeStart))
     {
         Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::PIECES_REMOVED);
