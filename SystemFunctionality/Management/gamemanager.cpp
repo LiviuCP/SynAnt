@@ -21,8 +21,6 @@
 #include "../Utilities/gamestrings.h"
 #include "../Utilities/exceptions.h"
 
-const QString c_DatabaseDriver{"QSQLITE"};
-
 GameManager* GameManager::s_pGameManager = nullptr;
 
 GameManager *GameManager::getManager()
