@@ -551,7 +551,7 @@ void GameFacade::_onStatisticsUpdated(Game::StatisticsUpdate updateType)
 
 void GameFacade::_onInputChanged()
 {
-    if (m_pInputBuilder->isHalfInput())
+    if (m_pInputBuilder->isHalfInput() && (m_pWordPairOwner->getPersistentPieceSelectionIndex() != -1))
     {
         m_pWordPairOwner->clearPersistentPieceSelectionIndex();
         m_pWordPairOwner->setPersistentPieceSelectionIndex(true);
