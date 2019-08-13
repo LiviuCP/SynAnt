@@ -1,22 +1,44 @@
 #include "wordpairowner.h"
-#include "Proxies/wordmixerproxy.h"
 
 WordPairOwner::WordPairOwner(QObject *parent)
     : QObject{parent}
-    , m_pWordMixerProxy{nullptr}
     , m_AreSynonyms{false}
     , m_PersistentPieceSelectionIndex{-1}
 {
 }
 
-void WordPairOwner::setWordMixerProxy(WordMixerProxy* pWordMixerProxy)
+void WordPairOwner::setNewWordsPair(const QVector<QString>& content, const QString& firstWord, const QString& secondWord, bool areSynonyms,
+                                    int firstWordFirstPieceIndex, int firstWordLastPieceIndex, int secondWordFirstPieceIndex, int secondWordLastPieceIndex)
 {
-    Q_ASSERT(pWordMixerProxy);
-
-    if (!m_pWordMixerProxy)
+    if (m_PersistentPieceSelectionIndex != -1)
     {
-        m_pWordMixerProxy = pWordMixerProxy;
+        m_PersistentPieceSelectionIndex = -1;
+        Q_EMIT persistentIndexChanged();
     }
+
+    _buildMixedWordsPiecesArray(content, firstWordFirstPieceIndex, firstWordLastPieceIndex, secondWordFirstPieceIndex, secondWordLastPieceIndex);
+
+    m_FirstReferenceWord = firstWord;
+    m_SecondReferenceWord = secondWord;
+    m_AreSynonyms = areSynonyms;
+
+    Q_EMIT newWordsPairSetup();
+}
+
+void WordPairOwner::markPieceAsAddedToInput(int wordPieceIndex)
+{
+    if (m_PersistentPieceSelectionIndex != -1)
+    {
+        Q_ASSERT(m_PersistentPieceSelectionIndex == wordPieceIndex);
+    }
+
+    _updatePersistentPieceSelectionIndex();
+    _updateSingleWordPieceStatus(wordPieceIndex, true);
+}
+
+void WordPairOwner::markPiecesAsRemovedFromInput(QVector<int> wordPieceIndexes)
+{
+    _updateMultipleWordPiecesStatus(wordPieceIndexes, false);
 }
 
 void WordPairOwner::setPersistentPieceSelectionIndex(bool isStartPieceRequired)
@@ -236,58 +258,23 @@ bool WordPairOwner::areSynonyms() const
     return m_AreSynonyms;
 }
 
-void WordPairOwner::onPieceAddedToInput(int wordPieceIndex)
-{
-    if (m_PersistentPieceSelectionIndex != -1)
-    {
-        Q_ASSERT(m_PersistentPieceSelectionIndex == wordPieceIndex);
-    }
-
-    _updatePersistentPieceSelectionIndex();
-    _updateSingleWordPieceStatus(wordPieceIndex, true);
-}
-
-void WordPairOwner::onPiecesRemovedFromInput(QVector<int> wordPieceIndexes)
-{
-    _updateMultipleWordPiecesStatus(wordPieceIndexes, false);
-}
-
-void WordPairOwner::onNewMixedWordsAvailable()
-{
-    Q_ASSERT(m_pWordMixerProxy);
-
-    if (m_PersistentPieceSelectionIndex != -1)
-    {
-        m_PersistentPieceSelectionIndex = -1;
-        Q_EMIT persistentIndexChanged();
-    }
-
-    _buildMixedWordsPiecesArray();
-
-    m_FirstReferenceWord = m_pWordMixerProxy->getFirstWord();
-    m_SecondReferenceWord = m_pWordMixerProxy->getSecondWord();
-    m_AreSynonyms = m_pWordMixerProxy->areSynonyms();
-
-    Q_EMIT newWordPiecesAvailable();
-}
-
-void WordPairOwner::_buildMixedWordsPiecesArray()
+void WordPairOwner::_buildMixedWordsPiecesArray(const QVector<QString>& content, int firstBeginIndex, int firstEndIndex, int secondBeginIndex, int secondEndIndex)
 {
     m_MixedWordsPieces.clear();
-    m_MixedWordsPieces.resize(m_pWordMixerProxy->getMixedWordsPiecesContent().size());
+    m_MixedWordsPieces.resize(content.size());
 
     int index{0};
 
     for (auto& piece : m_MixedWordsPieces)
     {
-        piece.content = m_pWordMixerProxy->getMixedWordsPiecesContent().at(index);
+        piece.content = content.at(index);
         piece.isAddedToInput = false;
 
-        if (index == m_pWordMixerProxy->getFirstWordFirstPieceIndex() || index == m_pWordMixerProxy->getSecondWordFirstPieceIndex())
+        if (index == firstBeginIndex || index == secondBeginIndex)
         {
             piece.pieceType = Game::PieceTypes::BEGIN_PIECE;
         }
-        else if (index == m_pWordMixerProxy->getFirstWordLastPieceIndex() || index == m_pWordMixerProxy->getSecondWordLastPieceIndex())
+        else if (index == firstEndIndex || index == secondEndIndex)
         {
             piece.pieceType = Game::PieceTypes::END_PIECE;
         }

@@ -38,11 +38,17 @@ GameFacade::GameFacade(QObject *parent)
     Q_ASSERT(m_pInputBuilder->parent());
     Q_ASSERT(m_pScoreItem->parent());
 
-    bool connected{connect(m_pWordPairOwner, &WordPairOwner::newWordPiecesAvailable, this, &GameFacade::mixedWordsChanged)};
+    bool connected{connect(m_pWordMixer, &WordMixer::newWordsPairMixed, this, &GameFacade::_onNewWordsPairMixed)};
+    Q_ASSERT(connected);
+    connected = connect(m_pWordPairOwner, &WordPairOwner::newWordsPairSetup, this, &GameFacade::newMixedWordsAvailable);
     Q_ASSERT(connected);
     connected = connect(m_pWordPairOwner, &WordPairOwner::piecesAddedToInputChanged, this, &GameFacade::_onPiecesAddedToInputChanged);
     Q_ASSERT(connected);
     connected = connect(m_pWordPairOwner, &WordPairOwner::persistentIndexChanged, this, &GameFacade::persistentPieceSelectionIndexChanged);
+    Q_ASSERT(connected);
+    connected = connect(m_pInputBuilder, &InputBuilder::pieceAddedToInput, this, &GameFacade::_onPieceAddedToInput);
+    Q_ASSERT(connected);
+    connected = connect(m_pInputBuilder, &InputBuilder::piecesRemovedFromInput, this, &GameFacade::_onPiecesRemovedFromInput);
     Q_ASSERT(connected);
     connected = connect(m_pInputBuilder, &InputBuilder::inputChanged, this, &GameFacade::_onInputChanged);
     Q_ASSERT(connected);
@@ -66,6 +72,7 @@ GameFacade::GameFacade(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pDataSourceProxy, &DataSourceProxy::writeDataToDbFinished, this, &GameFacade::_onWriteDataToDbFinished);
     Q_ASSERT(connected);
+
 }
 
 void GameFacade::init()
@@ -535,6 +542,30 @@ void GameFacade::_onPiecesAddedToInputChanged()
     }
 
     Q_EMIT piecesAddedToInputChanged();
+}
+
+void GameFacade::_onNewWordsPairMixed()
+{
+    m_pWordPairOwner->setNewWordsPair(m_pWordMixer->getMixedWordsPiecesContent(),
+                                      m_pWordMixer->getFirstWord(),
+                                      m_pWordMixer->getSecondWord(),
+                                      m_pWordMixer->areSynonyms(),
+                                      m_pWordMixer->getFirstWordFirstPieceIndex(),
+                                      m_pWordMixer->getFirstWordLastPieceIndex(),
+                                      m_pWordMixer->getSecondWordFirstPieceIndex(),
+                                      m_pWordMixer->getSecondWordLastPieceIndex());
+
+    Q_UNUSED(m_pInputBuilder->clearInput());
+}
+
+void GameFacade::_onPieceAddedToInput(int index)
+{
+    m_pWordPairOwner->markPieceAsAddedToInput(index);
+}
+
+void GameFacade::_onPiecesRemovedFromInput(QVector<int> indexes)
+{
+    m_pWordPairOwner->markPiecesAsRemovedFromInput(indexes);
 }
 
 void GameFacade::_onStatisticsUpdated(Game::StatisticsUpdate updateType)

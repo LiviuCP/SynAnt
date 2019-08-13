@@ -16,7 +16,6 @@
 #include "../DataAccess/dataentrystatistics.h"
 #include "../DataAccess/datasourceaccesshelper.h"
 #include "../Proxies/datasourceproxy.h"
-#include "../Proxies/wordmixerproxy.h"
 #include "../Utilities/scoreitem.h"
 #include "../Utilities/gamestrings.h"
 #include "../Utilities/exceptions.h"
@@ -60,8 +59,6 @@ GameManager::GameManager(QObject *parent)
     , m_pDataEntryCacheThread{nullptr}
 {
     _registerMetaTypes();
-
-    m_pWordMixerProxy = new WordMixerProxy{m_pWordMixer, this};
 
     bool connected{connect(this, &GameManager::dataSourceSetupCompleted, this, &GameManager::_onDataSourceSetupCompleted)};
     Q_ASSERT(connected);
@@ -207,18 +204,7 @@ void GameManager::_onDataSourceSetupCompleted()
 {
     Q_ASSERT(m_pDataSourceLoaderThread->isRunning() && m_pDataEntryCacheThread->isRunning());
 
-    // do all external backend connections except the ones to the facade (facade will build them itself)
-    bool connected{connect(m_pWordPairOwner, &WordPairOwner::newWordPiecesAvailable, m_pInputBuilder, &InputBuilder::onNewWordPiecesAvailable)};
-    Q_ASSERT(connected);
-    connected = connect(m_pWordMixer, &WordMixer::mixedWordsChanged, m_pWordPairOwner, &WordPairOwner::onNewMixedWordsAvailable);
-    Q_ASSERT(connected);
-    connected = connect(m_pInputBuilder, &InputBuilder::pieceAddedToInput, m_pWordPairOwner, &WordPairOwner::onPieceAddedToInput);
-    Q_ASSERT(connected);
-    connected = connect(m_pInputBuilder, &InputBuilder::piecesRemovedFromInput, m_pWordPairOwner, &WordPairOwner::onPiecesRemovedFromInput);
-    Q_ASSERT(connected);
-
-    m_pWordPairOwner->setWordMixerProxy(m_pWordMixerProxy);
-
+    // the facade is created by manager and will built it's own connections to the other manager provided components: WordMixer, WordPairOwner, InputBuilder, ScoreItem, data proxy
     m_pGameFacade = new GameFacade{this};
 }
 

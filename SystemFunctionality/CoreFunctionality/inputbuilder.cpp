@@ -165,23 +165,6 @@ bool InputBuilder::isInputComplete() const
     return (m_FirstWordInput.state == WordInputState::COMPLETED && m_SecondWordInput.state == WordInputState::COMPLETED);
 }
 
-void InputBuilder::onNewWordPiecesAvailable()
-{
-    bool resetCompleteInput{m_FirstWordInput.state == WordInputState::COMPLETED && m_SecondWordInput.state == WordInputState::COMPLETED};
-
-    m_FirstWordInput.indexes.clear();
-    m_SecondWordInput.indexes.clear();
-    m_FirstWordInput.state = WordInputState::EMPTY;
-    m_SecondWordInput.state = WordInputState::EMPTY;
-
-    if (resetCompleteInput)
-    {
-        Q_EMIT inputCompletionChanged();
-    }
-
-    Q_EMIT inputChanged();
-}
-
 bool InputBuilder::_addPieceToInputWord(InputBuilder::WordInput &currentWordInput, const InputBuilder::WordInput &otherWordInput, int pieceIndex, Game::PieceTypes pieceType)
 {
     bool success{false};

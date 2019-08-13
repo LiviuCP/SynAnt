@@ -102,7 +102,7 @@ signals:
     Q_SIGNAL void addPairToCacheAllowedChanged();
     Q_SIGNAL void resetCacheAllowedChanged();
     Q_SIGNAL void saveNewPairsToDbAllowedChanged();
-    Q_SIGNAL void mixedWordsChanged();
+    Q_SIGNAL void newMixedWordsAvailable();
     Q_SIGNAL void inputChanged();
     Q_SIGNAL void completionChanged();
     Q_SIGNAL void piecesAddedToInputChanged();
@@ -121,6 +121,9 @@ private slots:
     void _onWriteDataToDbErrorOccured();
     void _connectDataSourceToWordMixer();
     void _onPiecesAddedToInputChanged();
+    void _onNewWordsPairMixed();
+    void _onPieceAddedToInput(int index);
+    void _onPiecesRemovedFromInput(QVector<int> indexes);
     void _onStatisticsUpdated(Game::StatisticsUpdate updateType);
     void _onInputChanged();
 

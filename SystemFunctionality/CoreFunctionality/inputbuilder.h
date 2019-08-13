@@ -49,9 +49,6 @@ signals:
     Q_SIGNAL void inputCompletionChanged();
     Q_SIGNAL void persistentIndexesChanged();
 
-public slots:
-    void onNewWordPiecesAvailable();
-
 private:
     enum class WordInputState
     {

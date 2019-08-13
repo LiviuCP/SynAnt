@@ -39,7 +39,6 @@ SOURCES += \
         Proxies/gamefunctionalityproxy.cpp \
         Proxies/gameproxy.cpp \
         Proxies/datasourceproxy.cpp \
-        Proxies/wordmixerproxy.cpp \
         Utilities/scoreitem.cpp \
         Utilities/exceptions.cpp \
         systemfunctionality.cpp
@@ -60,7 +59,6 @@ HEADERS += \
         Proxies/gamefunctionalityproxy.h \
         Proxies/gameproxy.h \
         Proxies/datasourceproxy.h \
-        Proxies/wordmixerproxy.h \
         Utilities/scoreitem.h \
         Utilities/exceptions.h \
         Utilities/game.h \

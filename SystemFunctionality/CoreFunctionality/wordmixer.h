@@ -47,7 +47,7 @@ public slots:
     void mixWords(QPair<QString, QString> newWordsPair, bool areSynonyms);
 
 signals:
-    Q_SIGNAL void mixedWordsChanged();
+    Q_SIGNAL void newWordsPairMixed();
 
 private:
     // used for retrieving the mixed words string vector indexes of the first and last piece of each of the 2 words

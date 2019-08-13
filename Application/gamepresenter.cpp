@@ -64,7 +64,7 @@ GamePresenter::GamePresenter(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::statusChanged, this, &GamePresenter::_onStatusChanged);
     Q_ASSERT(connected);
-    connected = connect(m_pGameFacade, &GameFacade::mixedWordsChanged, this, &GamePresenter::mixedWordsChanged);
+    connected = connect(m_pGameFacade, &GameFacade::newMixedWordsAvailable, this, &GamePresenter::mixedWordsChanged);
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::dataAvailableChanged, this, &GamePresenter::playEnabledChanged);
     Q_ASSERT(connected);

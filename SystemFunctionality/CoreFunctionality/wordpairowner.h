@@ -26,7 +26,11 @@ class WordPairOwner : public QObject
 public:
     explicit WordPairOwner(QObject *parent = nullptr);
 
-    void setWordMixerProxy(WordMixerProxy* pWordMixerProxy);
+    void setNewWordsPair(const QVector<QString>& content, const QString& firstWord, const QString& secondWord, bool areSynonyms,
+                         int firstWordFirstPieceIndex, int firstWordLastPieceIndex, int secondWordFirstPieceIndex, int secondWordLastPieceIndex);
+
+    void markPieceAsAddedToInput(int wordPieceIndex);
+    void markPiecesAsRemovedFromInput(QVector<int> wordPieceIndexes);
 
     void setPersistentPieceSelectionIndex(bool isStartPieceRequired);
     void clearPersistentPieceSelectionIndex();
@@ -48,17 +52,15 @@ public:
     bool areSynonyms() const;
 
 public slots:
-    void onPieceAddedToInput(int wordPieceIndex);
-    void onPiecesRemovedFromInput(QVector<int> wordPieceIndexes);
-    void onNewMixedWordsAvailable();
+
 
 signals:
-    Q_SIGNAL void newWordPiecesAvailable();
+    Q_SIGNAL void newWordsPairSetup();
     Q_SIGNAL void piecesAddedToInputChanged();
     Q_SIGNAL void persistentIndexChanged();
 
 private:
-    void _buildMixedWordsPiecesArray();
+    void _buildMixedWordsPiecesArray(const QVector<QString>& content, int firstBeginIndex, int firstEndIndex, int secondBeginIndex, int secondEndIndex);
     void _updateSingleWordPieceStatus(int wordPieceIndex, bool addedToInput);
     void _updateMultipleWordPiecesStatus(QVector<int> wordPieceIndexes, bool addedToInput);
     void _updatePersistentPieceSelectionIndex();
@@ -72,7 +74,6 @@ private:
         bool isAddedToInput;
     };
 
-    WordMixerProxy* m_pWordMixerProxy;
     QString m_FirstReferenceWord;
     QString m_SecondReferenceWord;
     QVector<WordPiece> m_MixedWordsPieces;

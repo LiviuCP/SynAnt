@@ -116,5 +116,5 @@ void WordMixer::mixWords(QPair<QString, QString> newWordsPair, bool areSynonyms)
     }
     m_WordsBeginEndPieceIndexes[WordsBeginEndPieces::SECOND_WORD_LAST_PIECE] = insertWordPiece(m_WordsPair.second, secondWordLastPiecePos, wordPieceIndexes);
 
-    Q_EMIT mixedWordsChanged();
+    Q_EMIT newWordsPairMixed();
 }

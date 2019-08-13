@@ -105,7 +105,6 @@ private:
     DataSourceProxy* m_pDataSourceProxy;
     DataSourceAccessHelper* m_pDataSourceAccessHelper;
     WordMixer* m_pWordMixer;
-    WordMixerProxy* m_pWordMixerProxy;
     WordPairOwner* m_pWordPairOwner;
     InputBuilder* m_pInputBuilder;
     ScoreItem* m_pScoreItem;
