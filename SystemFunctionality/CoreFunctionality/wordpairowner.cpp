@@ -294,7 +294,7 @@ void WordPairOwner::_updateSingleWordPieceStatus(int wordPieceIndex, bool select
     if (m_MixedWordsPieces[wordPieceIndex].isAddedToInput != selected)
     {
         m_MixedWordsPieces[wordPieceIndex].isAddedToInput = selected;
-        Q_EMIT piecesAddedToInputChanged();
+        Q_EMIT piecesAddedToInputStateChanged();
     }
 }
 
@@ -320,7 +320,7 @@ void WordPairOwner::_updateMultipleWordPiecesStatus(QVector<int> wordPieceIndex,
 
     if (isSelectionChanged)
     {
-        Q_EMIT piecesAddedToInputChanged();
+        Q_EMIT piecesAddedToInputStateChanged();
     }
 }
 

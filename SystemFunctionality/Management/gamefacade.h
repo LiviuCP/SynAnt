@@ -120,12 +120,11 @@ private slots:
     void _onCacheReset();
     void _onWriteDataToDbFinished(int nrOfEntries);
     void _onWriteDataToDbErrorOccured();
-    void _onPiecesAddedToInputChanged();
+    void _onPiecesAddedToInputStateChanged();
     void _onNewWordsPairMixed();
     void _onPieceAddedToInput(int index);
     void _onPiecesRemovedFromInput(QVector<int> indexes);
     void _onStatisticsUpdated(Game::StatisticsUpdate updateType);
-    void _onInputChanged();
 
 private:
     void _connectToDataSource();
@@ -136,6 +135,7 @@ private:
     void _blockCacheReset();
     void _allowSaveToDb();
     void _blockSaveToDb();
+    void _refreshPersistentPieceSelectionIndex();
 
     GameFunctionalityProxy* m_pGameFunctionalityProxy;
     DataSourceProxy* m_pDataSourceProxy;

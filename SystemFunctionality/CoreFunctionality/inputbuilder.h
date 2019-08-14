@@ -45,7 +45,6 @@ public:
 signals:
     Q_SIGNAL void pieceAddedToInput(int index);
     Q_SIGNAL void piecesRemovedFromInput(QVector<int> indexes);
-    Q_SIGNAL void inputChanged();
     Q_SIGNAL void inputCompletionChanged();
     Q_SIGNAL void persistentIndexesChanged();
 

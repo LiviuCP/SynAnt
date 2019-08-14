@@ -53,7 +53,7 @@ public:
 
 signals:
     Q_SIGNAL void newWordsPairSetup();
-    Q_SIGNAL void piecesAddedToInputChanged();
+    Q_SIGNAL void piecesAddedToInputStateChanged();
     Q_SIGNAL void persistentIndexChanged();
 
 private:

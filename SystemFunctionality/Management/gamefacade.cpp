@@ -42,15 +42,13 @@ GameFacade::GameFacade(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pWordPairOwner, &WordPairOwner::newWordsPairSetup, this, &GameFacade::newMixedWordsAvailable);
     Q_ASSERT(connected);
-    connected = connect(m_pWordPairOwner, &WordPairOwner::piecesAddedToInputChanged, this, &GameFacade::_onPiecesAddedToInputChanged);
+    connected = connect(m_pWordPairOwner, &WordPairOwner::piecesAddedToInputStateChanged, this, &GameFacade::_onPiecesAddedToInputStateChanged);
     Q_ASSERT(connected);
     connected = connect(m_pWordPairOwner, &WordPairOwner::persistentIndexChanged, this, &GameFacade::persistentPieceSelectionIndexChanged);
     Q_ASSERT(connected);
     connected = connect(m_pInputBuilder, &InputBuilder::pieceAddedToInput, this, &GameFacade::_onPieceAddedToInput);
     Q_ASSERT(connected);
     connected = connect(m_pInputBuilder, &InputBuilder::piecesRemovedFromInput, this, &GameFacade::_onPiecesRemovedFromInput);
-    Q_ASSERT(connected);
-    connected = connect(m_pInputBuilder, &InputBuilder::inputChanged, this, &GameFacade::_onInputChanged);
     Q_ASSERT(connected);
     connected = connect(m_pInputBuilder, &InputBuilder::inputCompletionChanged, this, &GameFacade::completionChanged);
     Q_ASSERT(connected);
@@ -530,7 +528,7 @@ void GameFacade::_onWriteDataToDbErrorOccured()
     Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_ENTRY_SAVING_ERROR);
 }
 
-void GameFacade::_onPiecesAddedToInputChanged()
+void GameFacade::_onPiecesAddedToInputStateChanged()
 {
     if (m_pWordPairOwner->isOnePieceLeftToAddToInput())
     {
@@ -557,11 +555,17 @@ void GameFacade::_onNewWordsPairMixed()
 void GameFacade::_onPieceAddedToInput(int index)
 {
     m_pWordPairOwner->markPieceAsAddedToInput(index);
+    _refreshPersistentPieceSelectionIndex();
+
+    Q_EMIT inputChanged();
 }
 
 void GameFacade::_onPiecesRemovedFromInput(QVector<int> indexes)
 {
     m_pWordPairOwner->markPiecesAsRemovedFromInput(indexes);
+    _refreshPersistentPieceSelectionIndex();
+
+    Q_EMIT inputChanged();
 }
 
 void GameFacade::_onStatisticsUpdated(Game::StatisticsUpdate updateType)
@@ -574,17 +578,6 @@ void GameFacade::_onStatisticsUpdated(Game::StatisticsUpdate updateType)
     }
 
     Q_EMIT statisticsChanged();
-}
-
-void GameFacade::_onInputChanged()
-{
-    if (m_pInputBuilder->isHalfInput() && (m_pWordPairOwner->getPersistentPieceSelectionIndex() != -1))
-    {
-        m_pWordPairOwner->clearPersistentPieceSelectionIndex();
-        m_pWordPairOwner->setPersistentPieceSelectionIndex(true);
-    }
-
-    Q_EMIT inputChanged();
 }
 
 void GameFacade::_connectToDataSource()
@@ -658,5 +651,14 @@ void GameFacade::_blockSaveToDb()
     {
         m_IsSavingToDbAllowed = false;
         Q_EMIT saveNewPairsToDbAllowedChanged();
+    }
+}
+
+void GameFacade::_refreshPersistentPieceSelectionIndex()
+{
+    if (m_pInputBuilder->isHalfInput() && (m_pWordPairOwner->getPersistentPieceSelectionIndex() != -1))
+    {
+        m_pWordPairOwner->clearPersistentPieceSelectionIndex();
+        m_pWordPairOwner->setPersistentPieceSelectionIndex(true);
     }
 }

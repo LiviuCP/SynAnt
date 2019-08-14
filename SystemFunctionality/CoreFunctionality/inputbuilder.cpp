@@ -175,8 +175,6 @@ bool InputBuilder::_addPieceToInputWord(InputBuilder::WordInput &currentWordInpu
         currentWordInput.indexes.append(pieceIndex);
         Q_EMIT pieceAddedToInput(pieceIndex);
         success = true;
-
-        Q_EMIT inputChanged();
     }
 
     return success;
@@ -241,7 +239,6 @@ bool InputBuilder::_removePiecesFromWordInput(InputBuilder::WordInput &currentWo
 
         currentWordInput.indexes.remove(rangeStart, currentWordInput.indexes.size()-rangeStart);
 
-        Q_EMIT inputChanged();
         Q_EMIT piecesRemovedFromInput(removedPieceIndexes);
 
         if (currentWordInput.state == WordInputState::BUILD_IN_PROGRESS)
