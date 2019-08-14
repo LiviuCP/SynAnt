@@ -51,9 +51,6 @@ public:
     bool isOnePieceLeftToAddToInput() const;
     bool areSynonyms() const;
 
-public slots:
-
-
 signals:
     Q_SIGNAL void newWordsPairSetup();
     Q_SIGNAL void piecesAddedToInputChanged();

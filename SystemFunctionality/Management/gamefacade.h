@@ -113,13 +113,13 @@ signals:
 
 private slots:
     void _onLoadDataFromDbFinished(bool success);
+    void _onEntryProvidedToConsumer(QPair<QString, QString> newWordsPair, bool areSynonyms);
     void _onAddInvalidWordsPairRequested();
     void _onNewWordsPairAddedToCache();
     void _onWordsPairAlreadyContainedInCache();
     void _onCacheReset();
     void _onWriteDataToDbFinished(int nrOfEntries);
     void _onWriteDataToDbErrorOccured();
-    void _connectDataSourceToWordMixer();
     void _onPiecesAddedToInputChanged();
     void _onNewWordsPairMixed();
     void _onPieceAddedToInput(int index);
@@ -128,6 +128,7 @@ private slots:
     void _onInputChanged();
 
 private:
+    void _connectToDataSource();
     void _addPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex);
     void _allowAddToCache();
     void _blockAddToCache();

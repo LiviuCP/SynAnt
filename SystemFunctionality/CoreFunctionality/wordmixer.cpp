@@ -20,52 +20,6 @@ WordMixer::WordMixer(QObject *parent)
     m_WordPieceIndexEngine.seed(rDev2());
 }
 
-void WordMixer::setWordPieceSize(Game::Level level)
-{
-    Q_ASSERT(static_cast<int>(level) >= 0 && static_cast<int>(level) < static_cast<int>(Game::Level::NrOfLevels));
-    m_WordPieceSize = Game::c_WordPieceSizes[level];
-}
-
-const QVector<QString>& WordMixer::getMixedWordsPiecesContent() const
-{
-    return m_MixedWordsPiecesContent;
-}
-
-QString WordMixer::getFirstWord() const
-{
-    return m_WordsPair.first;
-}
-
-QString WordMixer::getSecondWord() const
-{
-    return m_WordsPair.second;
-}
-
-int WordMixer::getFirstWordFirstPieceIndex() const
-{
-    return m_WordsBeginEndPieceIndexes[WordsBeginEndPieces::FIRST_WORD_FIRST_PIECE];
-}
-
-int WordMixer::getFirstWordLastPieceIndex() const
-{
-    return m_WordsBeginEndPieceIndexes[WordsBeginEndPieces::FIRST_WORD_LAST_PIECE];
-}
-
-int WordMixer::getSecondWordFirstPieceIndex() const
-{
-    return m_WordsBeginEndPieceIndexes[WordsBeginEndPieces::SECOND_WORD_FIRST_PIECE];
-}
-
-int WordMixer::getSecondWordLastPieceIndex() const
-{
-    return m_WordsBeginEndPieceIndexes[WordsBeginEndPieces::SECOND_WORD_LAST_PIECE];
-}
-
-bool WordMixer::areSynonyms() const
-{
-    return m_AreSynonyms;
-}
-
 void WordMixer::mixWords(QPair<QString, QString> newWordsPair, bool areSynonyms)
 {
     Q_ASSERT(newWordsPair.first.size() != 0 && newWordsPair.second.size() != 0);
@@ -117,4 +71,50 @@ void WordMixer::mixWords(QPair<QString, QString> newWordsPair, bool areSynonyms)
     m_WordsBeginEndPieceIndexes[WordsBeginEndPieces::SECOND_WORD_LAST_PIECE] = insertWordPiece(m_WordsPair.second, secondWordLastPiecePos, wordPieceIndexes);
 
     Q_EMIT newWordsPairMixed();
+}
+
+void WordMixer::setWordPieceSize(Game::Level level)
+{
+    Q_ASSERT(static_cast<int>(level) >= 0 && static_cast<int>(level) < static_cast<int>(Game::Level::NrOfLevels));
+    m_WordPieceSize = Game::c_WordPieceSizes[level];
+}
+
+const QVector<QString>& WordMixer::getMixedWordsPiecesContent() const
+{
+    return m_MixedWordsPiecesContent;
+}
+
+QString WordMixer::getFirstWord() const
+{
+    return m_WordsPair.first;
+}
+
+QString WordMixer::getSecondWord() const
+{
+    return m_WordsPair.second;
+}
+
+int WordMixer::getFirstWordFirstPieceIndex() const
+{
+    return m_WordsBeginEndPieceIndexes[WordsBeginEndPieces::FIRST_WORD_FIRST_PIECE];
+}
+
+int WordMixer::getFirstWordLastPieceIndex() const
+{
+    return m_WordsBeginEndPieceIndexes[WordsBeginEndPieces::FIRST_WORD_LAST_PIECE];
+}
+
+int WordMixer::getSecondWordFirstPieceIndex() const
+{
+    return m_WordsBeginEndPieceIndexes[WordsBeginEndPieces::SECOND_WORD_FIRST_PIECE];
+}
+
+int WordMixer::getSecondWordLastPieceIndex() const
+{
+    return m_WordsBeginEndPieceIndexes[WordsBeginEndPieces::SECOND_WORD_LAST_PIECE];
+}
+
+bool WordMixer::areSynonyms() const
+{
+    return m_AreSynonyms;
 }

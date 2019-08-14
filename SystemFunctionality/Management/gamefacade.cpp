@@ -452,7 +452,7 @@ void GameFacade::_onLoadDataFromDbFinished(bool success)
         if (nrOfEntries != 0)
         {
             m_pDataSourceAccessHelper->setEntriesTable(nrOfEntries);
-            _connectDataSourceToWordMixer();
+            _connectToDataSource();
 
             Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_LOADING_COMPLETE);
         }
@@ -468,6 +468,11 @@ void GameFacade::_onLoadDataFromDbFinished(bool success)
     {
         Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_LOADING_ERROR);
     }
+}
+
+void GameFacade::_onEntryProvidedToConsumer(QPair<QString, QString> newWordsPair, bool areSynonyms)
+{
+    m_pWordMixer->mixWords(newWordsPair, areSynonyms);
 }
 
 void GameFacade::_onAddInvalidWordsPairRequested()
@@ -511,7 +516,7 @@ void GameFacade::_onWriteDataToDbFinished(int nrOfEntries)
 
     if (initialNrOfEntries == 0)
     {
-        _connectDataSourceToWordMixer();
+        _connectToDataSource();
     }
 
     _allowAddToCache();
@@ -523,15 +528,6 @@ void GameFacade::_onWriteDataToDbFinished(int nrOfEntries)
 void GameFacade::_onWriteDataToDbErrorOccured()
 {
     Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_ENTRY_SAVING_ERROR);
-}
-
-void GameFacade::_connectDataSourceToWordMixer()
-{
-    bool connected{connect(m_pDataSourceProxy, &DataSourceProxy::entryProvidedToConsumer, m_pWordMixer, &WordMixer::mixWords)};
-    Q_ASSERT(connected);
-
-    m_IsDataAvailable = true;
-    Q_EMIT dataAvailableChanged();
 }
 
 void GameFacade::_onPiecesAddedToInputChanged()
@@ -589,6 +585,15 @@ void GameFacade::_onInputChanged()
     }
 
     Q_EMIT inputChanged();
+}
+
+void GameFacade::_connectToDataSource()
+{
+    bool connected{connect(m_pDataSourceProxy, &DataSourceProxy::entryProvidedToConsumer, this, &GameFacade::_onEntryProvidedToConsumer)};
+    Q_ASSERT(connected);
+
+    m_IsDataAvailable = true;
+    Q_EMIT dataAvailableChanged();
 }
 
 void GameFacade::_addPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex)

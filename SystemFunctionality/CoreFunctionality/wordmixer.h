@@ -27,6 +27,9 @@ class WordMixer : public QObject
 public:
     explicit WordMixer(QObject *parent = nullptr);
 
+    // splits the words into equal pieces and mixes them into an array (last piece might have less characters than the others)
+    void mixWords(QPair<QString, QString> newWordsPair, bool areSynonyms);
+
     // sets number of characters for each word piece
     void setWordPieceSize(Game::Level level);
 
@@ -41,10 +44,6 @@ public:
     int getSecondWordLastPieceIndex() const;
 
     bool areSynonyms() const;
-
-public slots:
-    // splits the words into equal pieces and mixes them into an array (last piece might have less characters than the others)
-    void mixWords(QPair<QString, QString> newWordsPair, bool areSynonyms);
 
 signals:
     Q_SIGNAL void newWordsPairMixed();
