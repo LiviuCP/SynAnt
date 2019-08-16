@@ -50,6 +50,8 @@ GameFacade::GameFacade(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pInputBuilder, &InputBuilder::piecesRemovedFromInput, this, &GameFacade::_onPiecesRemovedFromInput);
     Q_ASSERT(connected);
+    connected = connect(m_pInputBuilder, &InputBuilder::inputReset, this, &GameFacade::inputChanged);
+    Q_ASSERT(connected);
     connected = connect(m_pInputBuilder, &InputBuilder::inputCompletionChanged, this, &GameFacade::completionChanged);
     Q_ASSERT(connected);
     connected = connect(m_pInputBuilder, &InputBuilder::persistentIndexesChanged, this, &GameFacade::persistentPiecesRemovalIndexesChanged);
@@ -540,6 +542,8 @@ void GameFacade::_onPiecesAddedToInputStateChanged()
 
 void GameFacade::_onNewWordsPairMixed()
 {
+    m_pInputBuilder->resetInput();
+
     m_pWordPairOwner->setNewWordsPair(m_pWordMixer->getMixedWordsPiecesContent(),
                                       m_pWordMixer->getFirstWord(),
                                       m_pWordMixer->getSecondWord(),
@@ -549,7 +553,6 @@ void GameFacade::_onNewWordsPairMixed()
                                       m_pWordMixer->getSecondWordFirstPieceIndex(),
                                       m_pWordMixer->getSecondWordLastPieceIndex());
 
-    Q_UNUSED(m_pInputBuilder->clearInput());
 }
 
 void GameFacade::_onPieceAddedToInput(int index)

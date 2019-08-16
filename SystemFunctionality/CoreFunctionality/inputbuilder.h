@@ -22,7 +22,12 @@ public:
 
     bool addPieceToInputWord(Game::InputWordNumber inputWordNumber, int index, Game::PieceTypes pieceType);
     bool removePiecesFromInputWord(Game::InputWordNumber inputWordNumber, int rangeStart);
+
+    // used for erasing input when the user requests this (mixed words pair stays the same)
     bool clearInput();
+
+    // used for erasing the old input when a new word pair is mixed
+    void resetInput();
 
     void setPersistentPiecesRemovalIndex(Game::InputWordNumber inputWordNumber);
     void clearPersistentPiecesRemovalIndexes();
@@ -47,6 +52,7 @@ signals:
     Q_SIGNAL void piecesRemovedFromInput(QVector<int> indexes);
     Q_SIGNAL void inputCompletionChanged();
     Q_SIGNAL void persistentIndexesChanged();
+    Q_SIGNAL void inputReset();
 
 private:
     enum class WordInputState

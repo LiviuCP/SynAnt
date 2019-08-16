@@ -304,7 +304,6 @@ void WordPairOwner::_updateMultipleWordPiecesStatus(QVector<int> wordPieceIndex,
 
     for (auto index : wordPieceIndex)
     {
-        // investigate this!!!
         Q_ASSERT(index >= 0 && index < m_MixedWordsPieces.size());
 
         if (m_MixedWordsPieces[index].isAddedToInput != selected)

@@ -55,6 +55,23 @@ bool InputBuilder::clearInput()
     return success;
 }
 
+void InputBuilder::resetInput()
+{
+    bool isResettingCompleteInput{isInputComplete()};
+
+    m_FirstWordInput.indexes.clear();
+    m_SecondWordInput.indexes.clear();
+    m_FirstWordInput.state = WordInputState::EMPTY;
+    m_SecondWordInput.state = WordInputState::EMPTY;
+
+    if (isResettingCompleteInput)
+    {
+        Q_EMIT inputCompletionChanged();
+    }
+
+    Q_EMIT inputReset();
+}
+
 void InputBuilder::setPersistentPiecesRemovalIndex(Game::InputWordNumber inputWordNumber)
 {
     WordInput& mainInput{inputWordNumber == Game::InputWordNumber::ONE ? m_FirstWordInput : m_SecondWordInput};
