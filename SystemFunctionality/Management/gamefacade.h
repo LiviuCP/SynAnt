@@ -41,19 +41,19 @@ public:
     void resumeWordEntry();
 
     void enablePersistentPieceSelection();
-    void disablePersistentPieceSelection();
     void increasePersistentPieceSelectionIndex();
     void decreasePersistentPieceSelectionIndex();
 
     void enablePersistentPiecesRemoval(Game::InputWordNumber inputWordNumber);
-    void disablePersistentPiecesRemoval();
     void increasePersistentPiecesRemovalIndex();
     void decreasePersistentPiecesRemovalIndex();
 
+    void disablePersistentIndexes();
+
     void addPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex);
-    void addPieceToInputWordFromPersistentIndex(Game::InputWordNumber inputWordNumber);
+    void addPieceToInputWordInPersistentMode(Game::InputWordNumber inputWordNumber);
     void removePiecesFromInputWord(Game::InputWordNumber inputWordNumber, int inputRangeStart);
-    void removePiecesFromInputWordByPersistentIndex(Game::InputWordNumber inputWordNumber);
+    void removePiecesFromInputWordInPersistentMode(Game::InputWordNumber inputWordNumber);
     void clearInput();
 
     void handleSubmitRequest();
@@ -135,7 +135,6 @@ private:
     void _blockCacheReset();
     void _allowSaveToDb();
     void _blockSaveToDb();
-    void _refreshPersistentPieceSelectionIndex();
 
     GameFunctionalityProxy* m_pGameFunctionalityProxy;
     DataSourceProxy* m_pDataSourceProxy;
@@ -154,6 +153,7 @@ private:
     bool m_IsSavingInProgress;
     bool m_IsGameStarted;
     bool m_IsGamePaused;
+    bool m_IsPersistentIndexModeEnabled;
 };
 
 #endif // GAMEFACADE_H

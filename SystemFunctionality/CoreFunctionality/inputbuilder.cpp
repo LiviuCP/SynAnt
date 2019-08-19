@@ -256,8 +256,6 @@ bool InputBuilder::_removePiecesFromWordInput(InputBuilder::WordInput &currentWo
 
         currentWordInput.indexes.remove(rangeStart, currentWordInput.indexes.size()-rangeStart);
 
-        Q_EMIT piecesRemovedFromInput(removedPieceIndexes);
-
         if (currentWordInput.state == WordInputState::BUILD_IN_PROGRESS)
         {
             currentWordInput.state = rangeStart > 0 ? WordInputState::BUILD_IN_PROGRESS : WordInputState::EMPTY;
@@ -273,6 +271,8 @@ bool InputBuilder::_removePiecesFromWordInput(InputBuilder::WordInput &currentWo
         }
 
         success = true;
+
+        Q_EMIT piecesRemovedFromInput(removedPieceIndexes);
     }
 
     return success;

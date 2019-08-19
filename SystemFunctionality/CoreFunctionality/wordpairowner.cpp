@@ -4,18 +4,13 @@ WordPairOwner::WordPairOwner(QObject *parent)
     : QObject{parent}
     , m_AreSynonyms{false}
     , m_PersistentPieceSelectionIndex{-1}
+    , m_NewPairAutoIndexSetupEnabled{false}
 {
 }
 
 void WordPairOwner::setNewWordsPair(const QVector<QString>& content, const QString& firstWord, const QString& secondWord, bool areSynonyms,
                                     int firstWordFirstPieceIndex, int firstWordLastPieceIndex, int secondWordFirstPieceIndex, int secondWordLastPieceIndex)
 {
-    if (m_PersistentPieceSelectionIndex != -1)
-    {
-        m_PersistentPieceSelectionIndex = -1;
-        Q_EMIT persistentIndexChanged();
-    }
-
     _buildMixedWordsPiecesArray(content, firstWordFirstPieceIndex, firstWordLastPieceIndex, secondWordFirstPieceIndex, secondWordLastPieceIndex);
 
     m_FirstReferenceWord = firstWord;
@@ -23,6 +18,12 @@ void WordPairOwner::setNewWordsPair(const QVector<QString>& content, const QStri
     m_AreSynonyms = areSynonyms;
 
     Q_EMIT newWordsPairSetup();
+
+    if (m_NewPairAutoIndexSetupEnabled)
+    {
+        clearPersistentPieceSelectionIndex();
+        setPersistentPieceSelectionIndex(true);
+    }
 }
 
 void WordPairOwner::markPieceAsAddedToInput(int wordPieceIndex)
@@ -39,6 +40,14 @@ void WordPairOwner::markPieceAsAddedToInput(int wordPieceIndex)
 void WordPairOwner::markPiecesAsRemovedFromInput(QVector<int> wordPieceIndexes)
 {
     _updateMultipleWordPiecesStatus(wordPieceIndexes, false);
+}
+
+void WordPairOwner::enableNewPairAutoIndexSetup(bool enabled)
+{
+    if (m_NewPairAutoIndexSetupEnabled != enabled)
+    {
+        m_NewPairAutoIndexSetupEnabled = enabled;
+    }
 }
 
 void WordPairOwner::setPersistentPieceSelectionIndex(bool isStartPieceRequired)

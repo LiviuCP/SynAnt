@@ -32,6 +32,7 @@ public:
     void markPieceAsAddedToInput(int wordPieceIndex);
     void markPiecesAsRemovedFromInput(QVector<int> wordPieceIndexes);
 
+    void enableNewPairAutoIndexSetup(bool enabled);
     void setPersistentPieceSelectionIndex(bool isStartPieceRequired);
     void clearPersistentPieceSelectionIndex();
     void increasePersistentPieceSelectionIndex();
@@ -76,6 +77,7 @@ private:
     QVector<WordPiece> m_MixedWordsPieces;
     bool m_AreSynonyms;
     int m_PersistentPieceSelectionIndex;
+    bool m_NewPairAutoIndexSetupEnabled;
 };
 
 #endif // WORDPAIROWNER_H

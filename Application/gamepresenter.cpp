@@ -183,14 +183,13 @@ void GamePresenter::enablePieceSelectionFromKeyboard()
 {
     if (!getAreFirstWordInputPiecesHovered() && !getAreSecondWordInputPiecesHovered())
     {
-        m_pGameFacade->disablePersistentPiecesRemoval();
         m_pGameFacade->enablePersistentPieceSelection();
     }
 }
 
 void GamePresenter::disablePieceSelectionFromKeyboard()
 {
-    m_pGameFacade->disablePersistentPieceSelection();
+    m_pGameFacade->disablePersistentIndexes();
 }
 
 void GamePresenter::movePieceSelectionCursorToLeft()
@@ -207,7 +206,6 @@ void GamePresenter::enableFirstWordPiecesRemovalFromKeyboard()
 {
     if (!getAreFirstWordInputPiecesHovered() && !getAreSecondWordInputPiecesHovered())
     {
-        m_pGameFacade->disablePersistentPieceSelection();
         m_pGameFacade->enablePersistentPiecesRemoval(Game::InputWordNumber::ONE);
     }
 }
@@ -216,14 +214,13 @@ void GamePresenter::enableSecondWordPiecesRemovalFromKeyboard()
 {
     if (!getAreFirstWordInputPiecesHovered() && !getAreSecondWordInputPiecesHovered())
     {
-        m_pGameFacade->disablePersistentPieceSelection();
         m_pGameFacade->enablePersistentPiecesRemoval(Game::InputWordNumber::TWO);
     }
 }
 
 void GamePresenter::disablePiecesRemovalFromKeyboard()
 {
-    m_pGameFacade->disablePersistentPiecesRemoval();
+    m_pGameFacade->disablePersistentIndexes();
 }
 
 void GamePresenter::movePiecesRemovalCursorToLeft()
@@ -238,7 +235,7 @@ void GamePresenter::movePiecesRemovalCursorToRight()
 
 void GamePresenter::selectPieceForFirstWordFromCursor()
 {
-    m_pGameFacade->addPieceToInputWordFromPersistentIndex(Game::InputWordNumber::ONE);
+    m_pGameFacade->addPieceToInputWordInPersistentMode(Game::InputWordNumber::ONE);
 }
 
 void GamePresenter::selectPieceForFirstInputWord(int wordPieceIndex)
@@ -248,7 +245,7 @@ void GamePresenter::selectPieceForFirstInputWord(int wordPieceIndex)
 
 void GamePresenter::selectPieceForSecondWordFromCursor()
 {
-    m_pGameFacade->addPieceToInputWordFromPersistentIndex(Game::InputWordNumber::TWO);
+    m_pGameFacade->addPieceToInputWordInPersistentMode(Game::InputWordNumber::TWO);
 }
 
 void GamePresenter::selectPieceForSecondInputWord(int wordPieceIndex)
@@ -258,7 +255,7 @@ void GamePresenter::selectPieceForSecondInputWord(int wordPieceIndex)
 
 void GamePresenter::removePiecesFromFirstInputWordByCursor()
 {
-    m_pGameFacade->removePiecesFromInputWordByPersistentIndex(Game::InputWordNumber::ONE);
+    m_pGameFacade->removePiecesFromInputWordInPersistentMode(Game::InputWordNumber::ONE);
 }
 
 void GamePresenter::removePiecesFromFirstInputWord(int inputRangeStart)
@@ -268,7 +265,7 @@ void GamePresenter::removePiecesFromFirstInputWord(int inputRangeStart)
 
 void GamePresenter::removePiecesFromSecondInputWordByCursor()
 {
-    m_pGameFacade->removePiecesFromInputWordByPersistentIndex(Game::InputWordNumber::TWO);
+    m_pGameFacade->removePiecesFromInputWordInPersistentMode(Game::InputWordNumber::TWO);
 }
 
 void GamePresenter::removePiecesFromSecondInputWord(int inputRangeStart)
