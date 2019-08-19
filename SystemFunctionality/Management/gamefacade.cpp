@@ -253,8 +253,6 @@ void GameFacade::removePiecesFromInputWordInPersistentMode(Game::InputWordNumber
 
 void GameFacade::clearInput()
 {
-    disablePersistentIndexes();
-
     if (m_pInputBuilder->clearInput())
     {
         Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::USER_INPUT_CLEARED);
@@ -599,6 +597,7 @@ void GameFacade::_onPiecesRemovedFromInput(QVector<int> indexes)
 
     if (m_IsPersistentIndexModeEnabled)
     {
+        m_pWordPairOwner->clearPersistentPieceSelectionIndex();
         m_pWordPairOwner->setPersistentPieceSelectionIndex(m_pInputBuilder->isEmptyInput() || m_pInputBuilder->isHalfInput());
     }
 
