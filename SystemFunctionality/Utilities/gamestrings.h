@@ -162,21 +162,24 @@ namespace GameStrings {
     const QString c_WordPairsMessage                    {    "Word pairs: %1/%2"                                                                        };
 
     // status messages
-    const QString c_DataLoadingMessage                  {    "Loading data. Please wait"                                                                };
+    const QString c_DataLoadingMessage                  {
+                                                             "\n\n\n\nWelcome to SynAnt!"
+                                                             "\n\n\n\nApp is loading. Please wait..."
+                                                                                                                                                        };
 
     const QString c_DataAvailableMessage                {
-                                                             "\n\t\tWelcome to SynAnt!\n\n\n"
-                                                             "\nIt's simple!\n"
-                                                             "\nTwo words are divided into equal pieces and mixed with each other.\n"
+                                                             "\n\nLet's play!\n\n"
+                                                             "\nIt's simple: two words are divided into equal pieces and mixed with each other.\n"
                                                              "\nYou just need to guess them.\n"
                                                              "\nThe words can either be synonyms or antonyms.\n\n\n"
-                                                             "\nPress Play to enter the game or Help for more information."
+                                                             "\nPress Play to enter the game or Enter new pairs to add more data.\n"
+                                                             "\nFor more information click Help."
                                                         };
 
     const QString c_NoValidEntriesLoadedMessage         {
                                                              "No valid entries could be loaded from database.\n\n"
                                                              "Please use the data entry page to add pairs.\n\n"
-                                                             "Then return to intro page and press Play."
+                                                             "Then return to intro page and press Play to start the game."
                                                         };
 
     const QString c_SelectOrDeleteWordPiecesMessage     {    "Please select a new word piece or delete one/more if necessary"                           };
