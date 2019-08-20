@@ -32,6 +32,7 @@ class GamePresenter : public QObject
     Q_PROPERTY(bool submitMainPaneInputEnabled READ getSubmitMainPaneInputEnabled NOTIFY submitMainPaneInputEnabledChanged)
     Q_PROPERTY(bool clearMainPaneInputEnabled READ getClearMainPaneInputEnabled NOTIFY clearMainPaneInputEnabledChanged)
     Q_PROPERTY(bool mainPaneStatisticsResetEnabled READ getMainPaneStatisticsResetEnabled NOTIFY mainPaneStatisticsResetEnabledChanged)
+    Q_PROPERTY(bool persistentModeEnabled READ isPersistentModeEnabled NOTIFY persistentModeEnabledChanged)
 
     /* game and user input properties */
     Q_PROPERTY(QList<QVariant> mixedWordsPiecesContent READ getMixedWordsPiecesContent NOTIFY mixedWordsChanged)
@@ -130,6 +131,7 @@ public:
     bool isDiscardAddedWordPairsEnabled() const;
     bool isSaveAddedWordPairsEnabled() const;
     bool getMainPaneStatisticsResetEnabled() const;
+    bool isPersistentModeEnabled() const;
     bool getClearMainPaneInputEnabled() const;
     bool getSubmitMainPaneInputEnabled() const;
     bool getErrorOccured() const;
@@ -178,6 +180,7 @@ signals:
     Q_SIGNAL void discardAddedWordPairsEnabledChanged();
     Q_SIGNAL void saveAddedWordPairsEnabledChanged();
     Q_SIGNAL void mainPaneStatisticsResetEnabledChanged();
+    Q_SIGNAL void persistentModeEnabledChanged();
     Q_SIGNAL void clearMainPaneInputEnabledChanged();
     Q_SIGNAL void submitMainPaneInputEnabledChanged();
     Q_SIGNAL void errorOccuredChanged();

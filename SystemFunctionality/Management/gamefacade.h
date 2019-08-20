@@ -54,6 +54,7 @@ public:
     void addPieceToInputWordInPersistentMode(Game::InputWordNumber inputWordNumber);
     void removePiecesFromInputWord(Game::InputWordNumber inputWordNumber, int inputRangeStart);
     void removePiecesFromInputWordInPersistentMode(Game::InputWordNumber inputWordNumber);
+    void clearInputWord(Game::InputWordNumber inputWordNumber);
     void clearInput();
 
     void handleSubmitRequest();
@@ -75,6 +76,8 @@ public:
 
     int getFirstPersistentPiecesRemovalIndex() const;
     int getSecondPersistentPiecesRemovalIndex() const;
+
+    bool isPersistentModeEnabled() const;
 
     bool isInputComplete() const;
 
@@ -108,6 +111,7 @@ signals:
     Q_SIGNAL void piecesAddedToInputChanged();
     Q_SIGNAL void persistentPieceSelectionIndexChanged();
     Q_SIGNAL void persistentPiecesRemovalIndexesChanged();
+    Q_SIGNAL void persistentIndexModeEnabledChanged();
     Q_SIGNAL void statisticsChanged();
     Q_SIGNAL void statusChanged(Game::StatusCodes status);
 

@@ -82,6 +82,8 @@ GamePresenter::GamePresenter(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::completionChanged, this, &GamePresenter::submitMainPaneInputEnabledChanged);
     Q_ASSERT(connected);
+    connected = connect(m_pGameFacade, &GameFacade::persistentIndexModeEnabledChanged, this, &GamePresenter::persistentModeEnabledChanged);
+    Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::persistentPieceSelectionIndexChanged, this, &GamePresenter::pieceSelectionCursorPositionChanged);
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::persistentPiecesRemovalIndexesChanged, this, &GamePresenter::piecesRemovalCursorPositionChanged);
@@ -181,10 +183,7 @@ void GamePresenter::switchToLevel(int level)
 
 void GamePresenter::enablePieceSelectionFromKeyboard()
 {
-    if (!getAreFirstWordInputPiecesHovered() && !getAreSecondWordInputPiecesHovered())
-    {
-        m_pGameFacade->enablePersistentPieceSelection();
-    }
+    m_pGameFacade->enablePersistentPieceSelection();
 }
 
 void GamePresenter::disablePieceSelectionFromKeyboard()
@@ -204,18 +203,14 @@ void GamePresenter::movePieceSelectionCursorToRight()
 
 void GamePresenter::enableFirstWordPiecesRemovalFromKeyboard()
 {
-    if (!getAreFirstWordInputPiecesHovered() && !getAreSecondWordInputPiecesHovered())
-    {
-        m_pGameFacade->enablePersistentPiecesRemoval(Game::InputWordNumber::ONE);
-    }
+
+    m_pGameFacade->enablePersistentPiecesRemoval(Game::InputWordNumber::ONE);
+
 }
 
 void GamePresenter::enableSecondWordPiecesRemovalFromKeyboard()
 {
-    if (!getAreFirstWordInputPiecesHovered() && !getAreSecondWordInputPiecesHovered())
-    {
-        m_pGameFacade->enablePersistentPiecesRemoval(Game::InputWordNumber::TWO);
-    }
+    m_pGameFacade->enablePersistentPiecesRemoval(Game::InputWordNumber::TWO);
 }
 
 void GamePresenter::disablePiecesRemovalFromKeyboard()
@@ -282,7 +277,7 @@ void GamePresenter::clearMainPaneFirstInputWord()
 {
     if (!m_pGameFacade->getFirstWordInputIndexes().empty())
     {
-        m_pGameFacade->removePiecesFromInputWord(Game::InputWordNumber::ONE, 0);
+        m_pGameFacade->clearInputWord(Game::InputWordNumber::ONE);
     }
 }
 
@@ -290,7 +285,7 @@ void GamePresenter::clearMainPaneSecondInputWord()
 {
     if (!m_pGameFacade->getSecondWordInputIndexes().empty())
     {
-        m_pGameFacade->removePiecesFromInputWord(Game::InputWordNumber::TWO, 0);
+        m_pGameFacade->clearInputWord(Game::InputWordNumber::TWO);
     }
 }
 
@@ -380,6 +375,11 @@ bool GamePresenter::isSaveAddedWordPairsEnabled() const
 bool GamePresenter::getMainPaneStatisticsResetEnabled() const
 {
     return m_MainPaneStatisticsResetEnabled;
+}
+
+bool GamePresenter::isPersistentModeEnabled() const
+{
+    return m_pGameFacade->isPersistentModeEnabled();
 }
 
 bool GamePresenter::getClearMainPaneInputEnabled() const
@@ -792,6 +792,18 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
     case Game::StatusCodes::CACHE_RESET:
         _updateStatusMessage(GameStrings::c_DataEntryCacheResetMessage, Pane::DATA_ENTRY, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
+        break;
+    case Game::StatusCodes::PERSISTENT_MODE_ENTERED:
+        _updateStatusMessage(GameStrings::c_CursorModeEnabled, Pane::MAIN, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
+        break;
+    case Game::StatusCodes::PERSISTENT_MODE_EXITED:
+        _updateStatusMessage(GameStrings::c_CursorModeDisabled, Pane::MAIN, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
+        break;
+    case Game::StatusCodes::PERSISTENT_INDEX_REQUIRED:
+        _updateStatusMessage(GameStrings::c_MouseClickDisabled, Pane::MAIN, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::c_ShortStatusUpdateDelay);
         break;
     default:
         Q_ASSERT(false);

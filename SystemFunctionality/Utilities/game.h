@@ -59,6 +59,9 @@ namespace Game
         PIECE_ADDED_INCOMPLETE_INPUT,
         PIECES_REMOVED,
         USER_INPUT_CLEARED,
+        PERSISTENT_MODE_ENTERED,
+        PERSISTENT_MODE_EXITED,
+        PERSISTENT_INDEX_REQUIRED,
         StatusCodesCount
     };
 

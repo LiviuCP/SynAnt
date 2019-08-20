@@ -235,6 +235,10 @@ namespace GameStrings {
                                                              "\n\nA new pair of words is available below."
                                                         };
 
+    const QString c_CursorModeEnabled                   {    "Cursor enabled."                                                                          };
+    const QString c_CursorModeDisabled                  {    "Cursor disabled."                                                                         };
+    const QString c_MouseClickDisabled                  {    "Mouse click on word pieces disabled while cursor is active!"                              };
+
     const QString c_ScoresResetMessage                  {    "The statistics have been reset!\n"                                                        };
 
     const QString c_LevelChangedMessage                 {

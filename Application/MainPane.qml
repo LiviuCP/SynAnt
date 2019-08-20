@@ -453,7 +453,7 @@ Item {
 
                 ToolTip {
                     text: presenter.mixedWordsPiecesSelections[index] ? GameStrings.wordPieceAlreadySelectedToolTip : GameStrings.selectWordPieceToolTip
-                    visible: mixedWordsCurrentPieceMouseArea.containsMouse
+                    visible: !presenter.persistentModeEnabled && mixedWordsCurrentPieceMouseArea.containsMouse
                     delay: presenter.toolTipDelay
                     timeout: presenter.toolTipTimeout
                 }
@@ -479,8 +479,11 @@ Item {
             model: presenter.firstWordInputPiecesContent
 
             Rectangle {
-                property bool isHoverSelected: presenter.areFirstWordInputPiecesHovered && presenter.firstWordInputPiecesHoverIndex <= index
-                property bool isKeyboardSelected: presenter.piecesRemovalFirstWordCursorPosition !== -1 && presenter.piecesRemovalFirstWordCursorPosition <= index
+                property bool isHoverSelected: !presenter.persistentModeEnabled ? presenter.areFirstWordInputPiecesHovered && presenter.firstWordInputPiecesHoverIndex <= index
+                                                                               : false
+                property bool isKeyboardSelected: presenter.persistentModeEnabled ? presenter.piecesRemovalFirstWordCursorPosition !== -1 &&
+                                                                                    presenter.piecesRemovalFirstWordCursorPosition <= index
+                                                                                  : false
 
                 width: parent.width / mixedWordsRepeater.count
                 height: parent.height
@@ -508,11 +511,12 @@ Item {
                     onEntered: presenter.updateFirstWordInputHoverIndex(index)
                     onExited: presenter.clearWordInputHoverIndexes()
                     onClicked: presenter.removePiecesFromFirstInputWord(index)
+
                 }
 
                 ToolTip {
                     text: GameStrings.mainPaneFirstWordInputToolTip
-                    visible: firstWordInputCurrentPieceMouseArea.containsMouse
+                    visible: !presenter.persistentModeEnabled && firstWordInputCurrentPieceMouseArea.containsMouse
                     delay: presenter.toolTipDelay
                     timeout: presenter.toolTipTimeout
                 }
@@ -532,8 +536,11 @@ Item {
             model: presenter.secondWordInputPiecesContent
 
             Rectangle {
-                property bool isHoverSelected: presenter.areSecondWordInputPiecesHovered && presenter.secondWordInputPiecesHoverIndex <= index
-                property bool isKeyboardSelected: presenter.piecesRemovalSecondWordCursorPosition !== -1 && presenter.piecesRemovalSecondWordCursorPosition <= index
+                property bool isHoverSelected: !presenter.persistentModeEnabled ? presenter.areSecondWordInputPiecesHovered && presenter.secondWordInputPiecesHoverIndex <= index
+                                                                                : false
+                property bool isKeyboardSelected: presenter.persistentModeEnabled ? presenter.piecesRemovalSecondWordCursorPosition !== -1 &&
+                                                                                    presenter.piecesRemovalSecondWordCursorPosition <= index
+                                                                                  : false
 
                 width: parent.width / mixedWordsRepeater.count
                 height: parent.height
@@ -565,7 +572,7 @@ Item {
 
                 ToolTip {
                     text: GameStrings.mainPaneSecondWordInputToolTip
-                    visible: secondWordInputCurrentPieceMouseArea.containsMouse
+                    visible: !presenter.persistentModeEnabled && secondWordInputCurrentPieceMouseArea.containsMouse
                     delay: presenter.toolTipDelay
                     timeout: presenter.toolTipTimeout
                 }
@@ -793,18 +800,6 @@ Item {
             onPressed: opacity = Styles.pressedButtonOpacity
             onReleased: opacity = Styles.releasedButtonOpacity
             onCanceled: opacity = Styles.releasedButtonOpacity
-        }
-    }
-
-    Connections {
-        target: presenter
-
-        // always disable and piece selection or removal operation FROM KEYBOARD if the mouse hover is active (the idea is to use EITHER mouse OR keyboard for operations)
-        onHoverChanged: {
-            if (presenter.areFirstWordInputPiecesHovered || presenter.areSecondWordInputPiecesHovered) {
-                presenter.disablePieceSelectionFromKeyboard();
-                presenter.disablePiecesRemovalFromKeyboard();
-            }
         }
     }
 }
