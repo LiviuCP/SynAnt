@@ -581,8 +581,8 @@ void GameFacade::_onWriteDataToDbFinished(int nrOfEntries)
     }
 
     _allowAddToCache();
-
     m_IsSavingInProgress = false;
+
     Q_EMIT statusChanged(m_CurrentStatusCode = initialNrOfEntries == 0 ? Game::StatusCodes::DATA_GOT_AVAILABLE : Game::StatusCodes::DATA_SUCCESSFULLY_SAVED);
 }
 

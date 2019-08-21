@@ -676,7 +676,12 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
     case Game::StatusCodes::DATA_SUCCESSFULLY_SAVED:
         _updateStatusMessage(GameStrings::c_DataSuccessfullySavedMessage.arg(m_pGameFacade->getLastSavedNrOfWordPairs()), Pane::DATA_ENTRY, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
-        Q_EMIT dataEntrySaved();
+
+        if (m_CurrentPane == Pane::PROMPT_SAVE_EXIT)
+        {
+            Q_EMIT dataEntrySavedWhenPrompted();
+        }
+
         break;
     case Game::StatusCodes::GAME_STARTED:
         _updateStatusMessage(GameStrings::c_GameStartedMessage, Pane::MAIN, Game::c_NoDelay);
@@ -703,6 +708,7 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         {
             QGuiApplication::quit();
         }
+
         break;
     case Game::StatusCodes::CORRECT_USER_INPUT:
         {
@@ -779,7 +785,12 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         _updateStatusMessage(GameStrings::c_DataSuccessfullySavedMessage.arg(m_pGameFacade->getLastSavedNrOfWordPairs()), Pane::DATA_ENTRY, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DataAvailableMessage, Pane::INTRO, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
-        Q_EMIT dataEntrySaved();
+
+        if (m_CurrentPane == Pane::PROMPT_SAVE_EXIT)
+        {
+            Q_EMIT dataEntrySavedWhenPrompted();
+        }
+
         break;
     case Game::StatusCodes::DATA_ENTRY_ADD_INVALID:
         _updateStatusMessage(GameStrings::c_DataEntryInvalidPairMessage.arg(c_InvalidPairEntryReasonMessages[m_pGameFacade->getDataEntryValidationCode()]),
@@ -793,7 +804,12 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
     case Game::StatusCodes::CACHE_RESET:
         _updateStatusMessage(GameStrings::c_DataEntryCacheResetMessage, Pane::DATA_ENTRY, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
-        Q_EMIT dataEntryDiscarded();
+
+        if (m_CurrentPane == Pane::PROMPT_SAVE_EXIT)
+        {
+            Q_EMIT dataEntryDiscardedWhenPrompted();
+        }
+
         break;
     case Game::StatusCodes::PERSISTENT_MODE_ENTERED:
         _updateStatusMessage(GameStrings::c_CursorModeEnabled, Pane::MAIN, Game::c_NoDelay);

@@ -192,14 +192,16 @@ signals:
     Q_SIGNAL void mainPaneStatusMessageChanged();
     Q_SIGNAL void mainPaneStatisticsMessagesChanged();
     Q_SIGNAL void dataEntryPaneStatusMessageChanged();
-    Q_SIGNAL void dataEntryAddSucceeded();
-    Q_SIGNAL void dataEntryAddInvalid();
-    Q_SIGNAL void dataEntrySaved();
-    Q_SIGNAL void dataEntryDiscarded();
     Q_SIGNAL void errorMessageChanged();
     Q_SIGNAL void hoverChanged();
     Q_SIGNAL void pieceSelectionCursorPositionChanged();
     Q_SIGNAL void piecesRemovalCursorPositionChanged();
+    Q_SIGNAL void dataEntryAddSucceeded();
+    Q_SIGNAL void dataEntryAddInvalid();
+
+    // only to be used when current pane is PromptSaveExitPane.qml !!!
+    Q_SIGNAL void dataEntrySavedWhenPrompted();
+    Q_SIGNAL void dataEntryDiscardedWhenPrompted();
 
 private slots:
     void _onInputChanged();

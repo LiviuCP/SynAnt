@@ -211,7 +211,7 @@ Item {
     Connections {
         target: presenter
 
-        onDataEntrySaved: quitOrExitDataEntry()
-        onDataEntryDiscarded: quitOrExitDataEntry()
+        onDataEntrySavedWhenPrompted: quitOrExitDataEntry()
+        onDataEntryDiscardedWhenPrompted: quitOrExitDataEntry()
     }
 }
