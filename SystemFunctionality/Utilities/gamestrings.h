@@ -177,7 +177,7 @@ namespace GameStrings {
                                                         };
 
     const QString c_NoValidEntriesLoadedMessage         {
-                                                             "No valid entries could be loaded from database.\n\n"
+                                                             "\n\n\n\nNo valid entries could be loaded from database.\n\n"
                                                              "Please use the data entry page to add pairs.\n\n"
                                                              "Then return to intro page and press Play to start the game."
                                                         };
