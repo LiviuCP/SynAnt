@@ -541,7 +541,7 @@ void GameFacade::_onAddInvalidWordsPairRequested()
     // restore add to cache capability so the user can re-add the entry after modifying the words
     _allowAddToCache();
 
-    Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_ENTRY_INVALID);
+    Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_ENTRY_ADD_INVALID);
 }
 
 void GameFacade::_onNewWordsPairAddedToCache()
@@ -550,7 +550,7 @@ void GameFacade::_onNewWordsPairAddedToCache()
     _allowCacheReset();
     _allowSaveToDb();
 
-    Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_ENTRY_SUCCESS);
+    Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_ENTRY_ADD_SUCCESS);
 }
 
 void GameFacade::_onWordsPairAlreadyContainedInCache()
