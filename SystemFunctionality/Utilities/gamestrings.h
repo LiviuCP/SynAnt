@@ -182,16 +182,35 @@ namespace GameStrings {
                                                              "Then return to intro page and press Play to start the game."
                                                         };
 
-    const QString c_SelectOrDeleteWordPiecesMessage     {    "Please select a new word piece or delete one/more if necessary"                           };
-    const QString c_DataEntryStartMessage               {    "Word pairs entry started"                                                                 };
-    const QString c_DataEntryResumeMessage              {    "Data entry resumed. There are %1 entries pending to be saved!"                            };
-    const QString c_DataEntryRequestMessage             {    "Please enter a new pair of words.\n\nChoose if they are synonyms or antonyms"             };
-    const QString c_DataSaveInProgressMessage           {    "Data is currently being saved..."                                                         };
-    const QString c_DataSuccessfullySavedMessage        {    "%1 word pairs have been successfully saved to database"                                   };
     const QString c_GameStartedMessage                  {    "Game started"                                                                             };
     const QString c_GamePausedMessage                   {    "Game paused"                                                                              };
     const QString c_GameResumedMessage                  {    "Game resumed"                                                                             };
     const QString c_GameStoppedMessage                  {    "Exiting game"                                                                             };
+    const QString c_SelectOrDeleteWordPiecesMessage     {    "Please select a new word piece or delete one/more if necessary"                           };
+
+    const QString c_DataEntryStartMessage               {    "Word pairs entry started"                                                                 };
+    const QString c_DataEntryResumeMessage              {    "Data entry resumed. There are %1 entries pending to be saved!"                            };
+    const QString c_DataEntryRequestMessage             {    "Please enter a new pair of words.\n\nChoose if they are synonyms or antonyms"             };
+
+    const QString c_DataEntrySuccessMessage             {
+                                                             "The new pair has been successfully added to validated pairs.\n\n"
+                                                             "There are %1 entries pending to be saved.\n\n"
+                                                             "Press Save to add the already validated pairs to game database "
+                                                             "and make the available for playing."
+                                                        };
+
+    const QString c_DataEntryInvalidPairMessage         {
+                                                             "The new words pair has not been correctly entered.\n\n"
+                                                             "%1\n\n"
+                                                             "Please correct and try again!"
+                                                        };
+
+    const QString c_PairAlreadyAddedMessage             {    "The pair has already been added. Please save added pairs to database or discard them"     };
+
+    const QString c_DataEntryCacheResetRequestedMessage {    "Discarding unsaved entries"                                                               };
+    const QString c_DataEntryCacheResetMessage          {    "The unsaved entries been discarded"                                                       };
+    const QString c_DataSaveInProgressMessage           {    "Data is currently being saved..."                                                         };
+    const QString c_DataSuccessfullySavedMessage        {    "%1 word pairs have been successfully saved to database"                                   };
 
     const QString c_PieceNotAddedToInputMessage         {    "The selected wordpiece cannot be added to the input of the required word!"                };
     const QString c_PieceAddedToInputMessage            {    "The selected wordpiece has been successfully added to user input"                         };
@@ -211,24 +230,6 @@ namespace GameStrings {
 
     const QString c_IncorrectUserInputMessage           {    "You didn't enter the correct words.\n\nPlease correct input and try again!"               };
 
-    const QString c_DataEntrySuccessMessage             {
-                                                             "The new pair has been successfully added to validated pairs.\n\n"
-                                                             "There are %1 entries pending to be saved.\n\n"
-                                                             "Press Save to add the already validated pairs to game database "
-                                                             "and make the available for playing."
-                                                        };
-
-    const QString c_PairAlreadyAddedMessage             {    "The pair has already been added. Please save added pairs to database or discard them"     };
-
-    const QString c_DataEntryInvalidPairMessage         {
-                                                             "The new words pair has not been correctly entered.\n\n"
-                                                             "%1\n\n"
-                                                             "Please correct and try again!"
-                                                        };
-
-    const QString c_DataEntryCacheResetRequestedMessage {    "Discarding unsaved entries"                                                               };
-    const QString c_DataEntryCacheResetMessage          {    "The unsaved entries been discarded"                                                       };
-
     const QString c_ShowPairRequestedByUserMessage      {
                                                              "\nThe correct words are:\n\n"
                                                              "\t%1\n"
@@ -238,16 +239,16 @@ namespace GameStrings {
                                                              "\n\nA new pair of words is available below."
                                                         };
 
-    const QString c_CursorModeEnabled                   {    "Cursor enabled."                                                                          };
-    const QString c_CursorModeDisabled                  {    "Cursor disabled."                                                                         };
-    const QString c_MouseClickDisabled                  {    "Mouse click on word pieces disabled while cursor is active!"                              };
-
-    const QString c_ScoresResetMessage                  {    "The statistics have been reset!\n"                                                        };
+    const QString c_StatisticsResetMessage                  {    "The statistics have been reset!\n"                                                        };
 
     const QString c_LevelChangedMessage                 {
                                                              "Level changed\n\n"
                                                              "A new pair of words is available below"
                                                         };
+
+    const QString c_CursorModeEnabled                   {    "Cursor enabled."                                                                          };
+    const QString c_CursorModeDisabled                  {    "Cursor disabled."                                                                         };
+    const QString c_MouseClickDisabled                  {    "Mouse click on word pieces disabled while cursor is active!"                              };
 
     // invalid pair entry error messages
     const QString c_WordHasLessThanMinimumCharacters    {    "At least one word has less than minimum required number of characters."                   };
