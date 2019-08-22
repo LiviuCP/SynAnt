@@ -29,9 +29,6 @@ bool InputBuilder::removePiecesFromInputWord(Game::InputWordNumber inputWordNumb
     if (success)
     {
         clearPersistentPiecesRemovalIndexes();
-
-        // approval will be required again when selecting an end piece while the other word is already closed
-        m_IsCloseInputAllowed = false;
     }
 
     return success;
@@ -47,9 +44,6 @@ bool InputBuilder::clearInput()
     if (success)
     {
         clearPersistentPiecesRemovalIndexes();
-
-        // approval will be required again when selecting an end piece while the other word is already closed
-        m_IsCloseInputAllowed = false;
     }
 
     return success;
@@ -141,9 +135,12 @@ void InputBuilder::decreasePersistentPiecesRemovalIndex()
     }
 }
 
-void InputBuilder::setCloseInputAllowed()
+void InputBuilder::setCloseInputAllowed(bool allowed)
 {
-    m_IsCloseInputAllowed = true;
+    if (m_IsCloseInputAllowed != allowed)
+    {
+        m_IsCloseInputAllowed = allowed;
+    }
 }
 
 const QVector<int> InputBuilder::getFirstWordInputIndexes() const

@@ -35,7 +35,7 @@ public:
     void decreasePersistentPiecesRemovalIndex();
 
     // only to be called from "outside" (e.g. from facade) so an active close approval is provided
-    void setCloseInputAllowed();
+    void setCloseInputAllowed(bool allowed);
 
     const QVector<int> getFirstWordInputIndexes() const;
     const QVector<int> getSecondWordInputIndexes() const;

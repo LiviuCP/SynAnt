@@ -593,11 +593,7 @@ void GameFacade::_onWriteDataToDbErrorOccured()
 
 void GameFacade::_onPiecesAddedToInputStateChanged()
 {
-    if (m_pWordPairOwner->isOnePieceLeftToAddToInput())
-    {
-        m_pInputBuilder->setCloseInputAllowed();
-    }
-
+    m_pInputBuilder->setCloseInputAllowed(m_pWordPairOwner->isOnePieceLeftToAddToInput());
     Q_EMIT piecesAddedToInputChanged();
 }
 
