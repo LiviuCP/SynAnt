@@ -109,7 +109,7 @@ static const QString c_HelpWindowMessageString          {
                                                              "Press Add pair or hit ALT+A to validate each new pair. "
                                                              "Press Save or hit CTRL+S to save the validated entries to database. "
                                                              "Press Discard or hit CTRL+D to cancel saving the validated entries to database and clear them. "
-                                                             "Press Clear or hit CTRL+Q to erase the content of the text fields. "
+                                                             "Press Clear or hit ALT+X to erase the content of the text fields. "
                                                              "Press Back or hit ALT+K to return to previous page.\n"
                                                              "\n37) The data entry dialog is available only after initial loading of the database content at game start.\n"
                                                              "\n38) Following rules should be followed when adding new word pairs:\n"
@@ -123,9 +123,9 @@ static const QString c_HelpWindowMessageString          {
                                                              "During this time the Quit button will be disabled.\n"
                                                              "\n40) When quitting the application from the data entry dialog or pressing the Back button the user will be prompted "
                                                              "to save any validated (but unsaved) entries to database. Three options are available: \n"
-                                                             " - Yes (CTRL+Y): save added pairs and execute the requested operation (back/quit)\n"
-                                                             " - No (CTRL+N): discard added pairs and execute the requested operation\n"
-                                                             " - Cancel(CTRL+W): return to data entry dialog and resume operations\n"
+                                                             " - Yes (ALT+Y): save added pairs and execute the requested operation (back/quit)\n"
+                                                             " - No (ALT+N): discard added pairs and execute the requested operation\n"
+                                                             " - Cancel(ALT+W): return to data entry dialog and resume operations\n"
                                                              "\nPress Ok to return to previous page.\n"
                                                         };
 
