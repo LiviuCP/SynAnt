@@ -143,65 +143,28 @@ void GameFacade::resumeWordEntry()
     }
 }
 
-void GameFacade::enablePersistentPieceSelection()
+void GameFacade::enablePersistentMode()
 {
-    if (m_IsPersistentIndexModeEnabled)
+    if (!m_IsPersistentIndexModeEnabled)
     {
-        m_pInputBuilder->clearPersistentPiecesRemovalIndexes();
-    }
-    else
-    {
+        if (!m_pInputBuilder->isInputComplete())
+        {
+            m_pWordPairOwner->setPersistentPieceSelectionIndex(m_pInputBuilder->isEmptyInput() || m_pInputBuilder->isHalfInput());
+        }
+        else
+        {
+            m_pInputBuilder->setPersistentPiecesRemovalIndex(Game::InputWordNumber::ONE);
+        }
+
         m_pWordPairOwner->enableNewPairAutoIndexSetup(true);
         m_IsPersistentIndexModeEnabled = true;
 
         Q_EMIT persistentIndexModeEnabledChanged();
         Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::PERSISTENT_MODE_ENTERED);
     }
-
-    if (!m_pInputBuilder->isInputComplete())
-    {
-        m_pWordPairOwner->setPersistentPieceSelectionIndex(m_pInputBuilder->isEmptyInput() || m_pInputBuilder->isHalfInput());
-    }
 }
 
-void GameFacade::increasePersistentPieceSelectionIndex()
-{
-    m_pWordPairOwner->increasePersistentPieceSelectionIndex();
-}
-
-void GameFacade::decreasePersistentPieceSelectionIndex()
-{
-    m_pWordPairOwner->decreasePersistentPieceSelectionIndex();
-}
-
-void GameFacade::enablePersistentPiecesRemoval(Game::InputWordNumber inputWordNumber)
-{
-    if (m_IsPersistentIndexModeEnabled)
-    {
-        m_pWordPairOwner->clearPersistentPieceSelectionIndex();
-    }
-    else
-    {
-        m_IsPersistentIndexModeEnabled = true;
-
-        Q_EMIT persistentIndexModeEnabledChanged();
-        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::PERSISTENT_MODE_ENTERED);
-    }
-
-    m_pInputBuilder->setPersistentPiecesRemovalIndex(inputWordNumber);
-}
-
-void GameFacade::increasePersistentPiecesRemovalIndex()
-{
-    m_pInputBuilder->increasePersistentPiecesRemovalIndex();
-}
-
-void GameFacade::decreasePersistentPiecesRemovalIndex()
-{
-    m_pInputBuilder->decreasePersistentPiecesRemovalIndex();
-}
-
-void GameFacade::disablePersistentIndexes()
+void GameFacade::disablePersistentMode()
 {
     if (m_IsPersistentIndexModeEnabled)
     {
@@ -213,6 +176,131 @@ void GameFacade::disablePersistentIndexes()
 
         Q_EMIT persistentIndexModeEnabledChanged();
         Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::PERSISTENT_MODE_EXITED);
+    }
+}
+
+void GameFacade::goToNextPersistentModeContainer()
+{
+    if (m_IsPersistentIndexModeEnabled)
+    {
+        if (m_pWordPairOwner->getPersistentPieceSelectionIndex() != -1)
+        {
+            if (!m_pInputBuilder->isEmptyInput())
+            {
+                m_pWordPairOwner->clearPersistentPieceSelectionIndex();
+                m_pInputBuilder->setPersistentPiecesRemovalIndex(Game::InputWordNumber::ONE);
+
+                if(m_pInputBuilder->getFirstWordPersistentPiecesRemovalIndex() == -1)
+                {
+                    m_pInputBuilder->setPersistentPiecesRemovalIndex(Game::InputWordNumber::TWO);
+                }
+            }
+        }
+        else if (m_pInputBuilder->getFirstWordPersistentPiecesRemovalIndex() != -1)
+        {
+            m_pInputBuilder->clearPersistentPiecesRemovalIndexes();
+            m_pInputBuilder->setPersistentPiecesRemovalIndex(Game::InputWordNumber::TWO);
+
+            if (m_pInputBuilder->getSecondWordPersistentPiecesRemovalIndex() == -1)
+            {
+                m_pWordPairOwner->setPersistentPieceSelectionIndex(m_pInputBuilder->isHalfInput());
+            }
+        }
+        else if (m_pInputBuilder->getSecondWordPersistentPiecesRemovalIndex() != -1)
+        {
+            m_pInputBuilder->clearPersistentPiecesRemovalIndexes();
+            if (!m_pInputBuilder->isInputComplete())
+            {
+                m_pWordPairOwner->setPersistentPieceSelectionIndex(m_pInputBuilder->isHalfInput());
+            }
+            else
+            {
+                m_pInputBuilder->setPersistentPiecesRemovalIndex(Game::InputWordNumber::ONE);
+            }
+        }
+        else
+        {
+            // there should always be an active persistent index while in persistent mode
+            Q_ASSERT(false);
+        }
+    }
+}
+
+void GameFacade::increasePersistentIndex()
+{
+    if (m_IsPersistentIndexModeEnabled)
+    {
+        if (m_pWordPairOwner->getPersistentPieceSelectionIndex() != -1)
+        {
+            m_pWordPairOwner->increasePersistentPieceSelectionIndex();
+        }
+        else if (m_pInputBuilder->getFirstWordPersistentPiecesRemovalIndex() != -1 || m_pInputBuilder->getSecondWordPersistentPiecesRemovalIndex() != -1)
+        {
+            m_pInputBuilder->increasePersistentPiecesRemovalIndex();
+        }
+        else
+        {
+            // there should always be an active persistent index while in persistent mode
+            Q_ASSERT(false);
+        }
+    }
+}
+
+void GameFacade::decreasePersistentIndex()
+{
+    if (m_IsPersistentIndexModeEnabled)
+    {
+        if (m_pWordPairOwner->getPersistentPieceSelectionIndex() != -1)
+        {
+            m_pWordPairOwner->decreasePersistentPieceSelectionIndex();
+        }
+        else if (m_pInputBuilder->getFirstWordPersistentPiecesRemovalIndex() != -1 || m_pInputBuilder->getSecondWordPersistentPiecesRemovalIndex() != -1)
+        {
+            m_pInputBuilder->decreasePersistentPiecesRemovalIndex();
+        }
+        else
+        {
+            // there should always be an active persistent index while in persistent mode
+            Q_ASSERT(false);
+        }
+    }
+}
+
+void GameFacade::executeFirstPersistentModeAction()
+{
+    if (m_IsPersistentIndexModeEnabled)
+    {
+        // there should always be an active persistent index while in persistent mode
+        Q_ASSERT(m_pWordPairOwner->getPersistentPieceSelectionIndex() != -1 ||
+                 m_pInputBuilder->getFirstWordPersistentPiecesRemovalIndex() != -1 || m_pInputBuilder->getSecondWordPersistentPiecesRemovalIndex() != -1);
+
+        if (m_pWordPairOwner->getPersistentPieceSelectionIndex() != -1)
+        {
+            _addPieceToInputWord(Game::InputWordNumber::ONE, m_pWordPairOwner->getPersistentPieceSelectionIndex());
+        }
+        else
+        {
+            _removePiecesFromInputWordInPersistentMode();
+        }
+    }
+}
+
+void GameFacade::executeSecondPersistentModeAction()
+{
+    if (m_IsPersistentIndexModeEnabled)
+    {
+        // there should always be an active persistent index while in persistent mode
+        Q_ASSERT(m_pWordPairOwner->getPersistentPieceSelectionIndex() != -1 ||
+                 m_pInputBuilder->getFirstWordPersistentPiecesRemovalIndex() != -1 || m_pInputBuilder->getSecondWordPersistentPiecesRemovalIndex() != -1);
+
+        if (m_pWordPairOwner->getPersistentPieceSelectionIndex() != -1)
+        {
+            _addPieceToInputWord(Game::InputWordNumber::TWO, m_pWordPairOwner->getPersistentPieceSelectionIndex());
+        }
+        else
+        {
+            _removePiecesFromInputWordInPersistentMode();
+        }
     }
 }
 
@@ -231,19 +319,6 @@ void GameFacade::addPieceToInputWord(Game::InputWordNumber inputWordNumber, int 
     }
 }
 
-void GameFacade::addPieceToInputWordInPersistentMode(Game::InputWordNumber inputWordNumber)
-{
-    if (m_IsPersistentIndexModeEnabled)
-    {
-        int persistentIndex{m_pWordPairOwner->getPersistentPieceSelectionIndex()};
-
-        if (persistentIndex != -1)
-        {
-            _addPieceToInputWord(inputWordNumber, persistentIndex);
-        }
-    }
-}
-
 void GameFacade::removePiecesFromInputWord(Game::InputWordNumber inputWordNumber, int inputRangeStart)
 {
     if (!m_IsPersistentIndexModeEnabled)
@@ -258,23 +333,6 @@ void GameFacade::removePiecesFromInputWord(Game::InputWordNumber inputWordNumber
         Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::PERSISTENT_INDEX_REQUIRED);
     }
 }
-
-void GameFacade::removePiecesFromInputWordInPersistentMode(Game::InputWordNumber inputWordNumber)
-{
-    if (m_IsPersistentIndexModeEnabled)
-    {
-        int persistentIndex{inputWordNumber == Game::InputWordNumber::ONE ? m_pInputBuilder->getFirstWordPersistentPiecesRemovalIndex()
-                                                                          : m_pInputBuilder->getSecondWordPersistentPiecesRemovalIndex()};
-        if (persistentIndex != -1)
-        {
-            if (m_pInputBuilder->removePiecesFromInputWord(inputWordNumber, persistentIndex))
-            {
-                m_pWordPairOwner->setPersistentPieceSelectionIndex(m_pInputBuilder->isEmptyInput() || m_pInputBuilder->isHalfInput());
-                Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::PIECES_REMOVED);
-            }
-        }
-                           }
-    }
 
 void GameFacade::clearInputWord(Game::InputWordNumber inputWordNumber)
 {
@@ -616,10 +674,17 @@ void GameFacade::_onPieceAddedToInput(int index)
 {
     m_pWordPairOwner->markPieceAsAddedToInput(index);
 
-    if (m_pInputBuilder->isHalfInput() && (m_pWordPairOwner->getPersistentPieceSelectionIndex() != -1))
+    if (m_IsPersistentIndexModeEnabled)
     {
-        m_pWordPairOwner->clearPersistentPieceSelectionIndex();
-        m_pWordPairOwner->setPersistentPieceSelectionIndex(true);
+        if (m_pInputBuilder->isHalfInput() && (m_pWordPairOwner->getPersistentPieceSelectionIndex() != -1))
+        {
+            m_pWordPairOwner->clearPersistentPieceSelectionIndex();
+            m_pWordPairOwner->setPersistentPieceSelectionIndex(true);
+        }
+        else if (m_pInputBuilder->isInputComplete())
+        {
+            m_pInputBuilder->setPersistentPiecesRemovalIndex(Game::InputWordNumber::ONE);
+        }
     }
 
     Q_EMIT inputChanged();
@@ -668,6 +733,26 @@ void GameFacade::_addPieceToInputWord(Game::InputWordNumber inputWordNumber, int
     Q_EMIT statusChanged(m_CurrentStatusCode = pieceAdded ? (m_pInputBuilder->isInputComplete() ? Game::StatusCodes::PIECE_ADDED_COMPLETE_INPUT
                                                                                                 : Game::StatusCodes::PIECE_ADDED_INCOMPLETE_INPUT)
                                                           : Game::StatusCodes::PIECE_NOT_ADDED);
+}
+
+void GameFacade::_removePiecesFromInputWordInPersistentMode()
+{
+    if (m_pInputBuilder->getFirstWordPersistentPiecesRemovalIndex() != -1)
+    {
+        if (m_pInputBuilder->removePiecesFromInputWord(Game::InputWordNumber::ONE, m_pInputBuilder->getFirstWordPersistentPiecesRemovalIndex()))
+        {
+            m_pWordPairOwner->setPersistentPieceSelectionIndex(m_pInputBuilder->isEmptyInput() || m_pInputBuilder->isHalfInput());
+            Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::PIECES_REMOVED);
+        }
+    }
+    else if (m_pInputBuilder->getSecondWordPersistentPiecesRemovalIndex() != -1)
+    {
+        if (m_pInputBuilder->removePiecesFromInputWord(Game::InputWordNumber::TWO, m_pInputBuilder->getSecondWordPersistentPiecesRemovalIndex()))
+        {
+            m_pWordPairOwner->setPersistentPieceSelectionIndex(m_pInputBuilder->isEmptyInput() || m_pInputBuilder->isHalfInput());
+            Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::PIECES_REMOVED);
+        }
+    }
 }
 
 void GameFacade::_allowAddToCache()

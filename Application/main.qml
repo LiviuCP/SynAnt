@@ -115,71 +115,34 @@ ApplicationWindow {
         }
 
         Keys.onPressed: {
-            if (event.key === Qt.Key_S) {
-                if (gamePresenter.pieceSelectionCursorPosition === -1) {
-                    gamePresenter.enablePieceSelectionFromKeyboard();
-                } else {
-                    gamePresenter.disablePieceSelectionFromKeyboard();
-                }
-
+            if (event.key === Qt.Key_C) {
+                gamePresenter.enableCursor();
                 event.accepted = true;
             }
         }
 
+        Keys.onEscapePressed: {
+            gamePresenter.disableCursor();
+        }
+
+        Keys.onTabPressed: {
+            gamePresenter.moveCursorToNextContainer();
+        }
+
         Keys.onLeftPressed: {
-            if (gamePresenter.pieceSelectionCursorPosition !== -1) {
-                gamePresenter.movePieceSelectionCursorToLeft();
-            } else if (gamePresenter.piecesRemovalFirstWordCursorPosition !== -1 || gamePresenter.piecesRemovalSecondWordCursorPosition != -1) {
-                gamePresenter.movePiecesRemovalCursorToLeft();
-            }
+            gamePresenter.moveCursorLeft();
         }
 
         Keys.onRightPressed: {
-            if (gamePresenter.pieceSelectionCursorPosition !== -1) {
-                gamePresenter.movePieceSelectionCursorToRight();
-            } else if (gamePresenter.piecesRemovalFirstWordCursorPosition !== -1 || gamePresenter.piecesRemovalSecondWordCursorPosition != -1) {
-                gamePresenter.movePiecesRemovalCursorToRight();
-            }
+            gamePresenter.moveCursorRight();
         }
 
         Keys.onDownPressed: {
-            gamePresenter.selectPieceForFirstWordFromCursor();
+            gamePresenter.executeFirstCursorAction();
         }
 
         Keys.onUpPressed: {
-            gamePresenter.selectPieceForSecondWordFromCursor();
-        }
-
-        Keys.onDigit1Pressed: {
-            if (gamePresenter.piecesRemovalFirstWordCursorPosition === -1) {
-                gamePresenter.enableFirstWordPiecesRemovalFromKeyboard();
-            } else {
-                gamePresenter.disablePiecesRemovalFromKeyboard();
-            }
-        }
-
-        Keys.onDigit2Pressed: {
-            if (gamePresenter.piecesRemovalSecondWordCursorPosition === -1) {
-                gamePresenter.enableSecondWordPiecesRemovalFromKeyboard();
-            } else {
-                gamePresenter.disablePiecesRemovalFromKeyboard();
-            }
-        }
-
-        function removeWordPieces() {
-            if (gamePresenter.piecesRemovalFirstWordCursorPosition !== -1) {
-                gamePresenter.removePiecesFromFirstInputWordByCursor();
-            } else if (gamePresenter.piecesRemovalSecondWordCursorPosition !== -1) {
-                gamePresenter.removePiecesFromSecondInputWordByCursor();
-            }
-        }
-
-        Keys.onReturnPressed: {
-            removeWordPieces();
-        }
-
-        Keys.onEnterPressed: {
-            removeWordPieces();
+            gamePresenter.executeSecondCursorAction();
         }
     }
 

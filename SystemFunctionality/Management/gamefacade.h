@@ -40,20 +40,16 @@ public:
     void startWordEntry();
     void resumeWordEntry();
 
-    void enablePersistentPieceSelection();
-    void increasePersistentPieceSelectionIndex();
-    void decreasePersistentPieceSelectionIndex();
-
-    void enablePersistentPiecesRemoval(Game::InputWordNumber inputWordNumber);
-    void increasePersistentPiecesRemovalIndex();
-    void decreasePersistentPiecesRemovalIndex();
-
-    void disablePersistentIndexes();
+    void enablePersistentMode();
+    void disablePersistentMode();
+    void goToNextPersistentModeContainer();
+    void increasePersistentIndex();
+    void decreasePersistentIndex();
+    void executeFirstPersistentModeAction();
+    void executeSecondPersistentModeAction();
 
     void addPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex);
-    void addPieceToInputWordInPersistentMode(Game::InputWordNumber inputWordNumber);
     void removePiecesFromInputWord(Game::InputWordNumber inputWordNumber, int inputRangeStart);
-    void removePiecesFromInputWordInPersistentMode(Game::InputWordNumber inputWordNumber);
     void clearInputWord(Game::InputWordNumber inputWordNumber);
     void clearInput();
 
@@ -73,12 +69,10 @@ public:
     const QVector<int> getSecondWordInputIndexes() const;
 
     int getPersistentPieceSelectionIndex() const;
-
     int getFirstPersistentPiecesRemovalIndex() const;
     int getSecondPersistentPiecesRemovalIndex() const;
 
     bool isPersistentModeEnabled() const;
-
     bool isInputComplete() const;
 
     QString getFirstReferenceWord() const;
@@ -133,6 +127,7 @@ private slots:
 private:
     void _connectToDataSource();
     void _addPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex);
+    void _removePiecesFromInputWordInPersistentMode();
     void _allowAddToCache();
     void _blockAddToCache();
     void _allowCacheReset();
