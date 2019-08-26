@@ -176,6 +176,12 @@ namespace GameStrings {
                                                              "\n\n\n\nApp is loading. Please wait..."
                                                                                                                                                         };
 
+    const QString c_NoValidEntriesLoadedMessage         {
+                                                             "\n\n\n\nNo valid entries could be loaded from database.\n\n"
+                                                             "Please use the data entry page to add pairs.\n\n"
+                                                             "Then return to intro page and press Play to start the game."
+                                                        };
+
     const QString c_DataAvailableMessage                {
                                                              "\n\nLet's play!\n\n"
                                                              "\nIt's simple: two words are divided into equal pieces and mixed with each other.\n"
@@ -185,10 +191,11 @@ namespace GameStrings {
                                                              "\nFor more information click Help."
                                                         };
 
-    const QString c_NoValidEntriesLoadedMessage         {
-                                                             "\n\n\n\nNo valid entries could be loaded from database.\n\n"
-                                                             "Please use the data entry page to add pairs.\n\n"
-                                                             "Then return to intro page and press Play to start the game."
+    const QString c_AdditionalDataAvailableMessage      {    "\n\nAdditional data available"                                                            };
+
+    const QString c_PleasePlayOrEnterDataMessage        {
+                                                             "\n\nPress Play to enter the game or Enter new pairs to add more data."
+                                                             "\n\nFor more information click Help."
                                                         };
 
     const QString c_GameStartedMessage                  {    "Game started"                                                                             };
@@ -218,7 +225,23 @@ namespace GameStrings {
 
     const QString c_DataEntryCacheResetRequestedMessage {    "Discarding unsaved entries"                                                               };
     const QString c_DataEntryCacheResetMessage          {    "The unsaved entries been discarded"                                                       };
+
+    // data entry pane
     const QString c_DataSaveInProgressMessage           {    "Data is currently being saved..."                                                         };
+
+    // intro pane
+    const QString c_NewDataSaveInProgressMessage        {
+                                                             "\n\nData is currently being saved.\n\n"
+                                                             "Once ready playing will be enabled.\n\n"
+                                                             "Please wait..."
+                                                        };
+
+    // intro pane
+    const QString c_AdditionalDataSaveInProgressMessage {
+                                                             "\n\nAdditional data is currently being saved...\n\n"
+                                                             "Playing is enabled with already existing data."
+                                                        };
+
     const QString c_DataSuccessfullySavedMessage        {    "%1 word pairs have been successfully saved to database"                                   };
 
     const QString c_PieceNotAddedToInputMessage         {    "The selected wordpiece cannot be added to the input of the required word!"                };

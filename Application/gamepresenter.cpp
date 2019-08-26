@@ -639,12 +639,6 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         _updateStatusMessage(GameStrings::c_DataSuccessfullySavedMessage.arg(m_pGameFacade->getLastSavedNrOfWordPairs()), Pane::DATA_ENTRY, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DataAvailableMessage, Pane::INTRO, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
-
-        if (m_CurrentPane == Pane::PROMPT_SAVE_EXIT)
-        {
-            Q_EMIT dataEntrySavedWhenPrompted();
-        }
-
         break;
     case Game::StatusCodes::GAME_STARTED:
         _updateStatusMessage(GameStrings::c_GameStartedMessage, Pane::MAIN, Game::c_NoDelay);
@@ -702,25 +696,20 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
     case Game::StatusCodes::CACHE_RESET:
         _updateStatusMessage(GameStrings::c_DataEntryCacheResetMessage, Pane::DATA_ENTRY, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
-
-        if (m_CurrentPane == Pane::PROMPT_SAVE_EXIT)
-        {
-            Q_EMIT dataEntryDiscardedWhenPrompted();
-        }
-
         break;
-    case Game::StatusCodes::DATA_SAVE_IN_PROGRESS:
+    case Game::StatusCodes::NEW_DATA_SAVE_IN_PROGRESS:
         _updateStatusMessage(GameStrings::c_DataSaveInProgressMessage, Pane::DATA_ENTRY, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_NewDataSaveInProgressMessage, Pane::INTRO, Game::c_NoDelay);
+        break;
+    case Game::StatusCodes::ADDITIONAL_DATA_SAVE_IN_PROGRESS:
+        _updateStatusMessage(GameStrings::c_DataSaveInProgressMessage, Pane::DATA_ENTRY, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_AdditionalDataSaveInProgressMessage, Pane::INTRO, Game::c_NoDelay);
         break;
     case Game::StatusCodes::DATA_SUCCESSFULLY_SAVED:
         _updateStatusMessage(GameStrings::c_DataSuccessfullySavedMessage.arg(m_pGameFacade->getLastSavedNrOfWordPairs()), Pane::DATA_ENTRY, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
-
-        if (m_CurrentPane == Pane::PROMPT_SAVE_EXIT)
-        {
-            Q_EMIT dataEntrySavedWhenPrompted();
-        }
-
+        _updateStatusMessage(GameStrings::c_AdditionalDataAvailableMessage, Pane::INTRO, Game::c_NoDelay);
+        _updateStatusMessage(GameStrings::c_PleasePlayOrEnterDataMessage, Pane::INTRO, Game::c_VeryShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::DATA_ENTRY_SAVING_ERROR:
         _launchErrorPane(GameStrings::c_CannotSaveDataMessage);

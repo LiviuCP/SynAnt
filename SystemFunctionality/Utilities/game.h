@@ -45,7 +45,8 @@ namespace Game
         PAIR_ALREADY_ADDED,
         RESET_CACHE_REQUESTED,
         CACHE_RESET,
-        DATA_SAVE_IN_PROGRESS,
+        NEW_DATA_SAVE_IN_PROGRESS,
+        ADDITIONAL_DATA_SAVE_IN_PROGRESS,
         DATA_SUCCESSFULLY_SAVED,
         DATA_ENTRY_SAVING_ERROR,
         PIECE_NOT_ADDED,
@@ -107,6 +108,7 @@ namespace Game
     static constexpr int c_WriteDataThreadDelay{500};
     static constexpr int c_ResetCacheDelay{250};
     static constexpr int c_ToolTipTimeout{4000};
+    static constexpr int c_VeryShortStatusUpdateDelay{400};
     static constexpr int c_ShortStatusUpdateDelay{1000};
     static constexpr int c_LongStatusUpdateDelay{2000};
     static constexpr int c_GameQuitDelay{200};

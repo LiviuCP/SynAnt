@@ -106,11 +106,13 @@ Item {
 
                 onActivated: {
                     presenter.handleSaveAddedWordPairsRequest();
+                    promptSaveExitPane.quitOrExitDataEntry();
                 }
             }
 
             onClicked: {
                 presenter.handleSaveAddedWordPairsRequest();
+                promptSaveExitPane.quitOrExitDataEntry();
             }
 
             onPressed: opacity = Styles.pressedButtonOpacity
@@ -153,11 +155,13 @@ Item {
 
                 onActivated: {
                     presenter.handleClearAddedWordPairsRequest();
+                    promptSaveExitPane.quitOrExitDataEntry();
                 }
             }
 
             onClicked: {
                 presenter.handleClearAddedWordPairsRequest();
+                promptSaveExitPane.quitOrExitDataEntry();
             }
 
             onPressed: opacity = Styles.pressedButtonOpacity
@@ -206,12 +210,5 @@ Item {
             onReleased: opacity = Styles.releasedButtonOpacity
             onCanceled: opacity = Styles.releasedButtonOpacity
         }
-    }
-
-    Connections {
-        target: presenter
-
-        onDataEntrySavedWhenPrompted: quitOrExitDataEntry()
-        onDataEntryDiscardedWhenPrompted: quitOrExitDataEntry()
     }
 }

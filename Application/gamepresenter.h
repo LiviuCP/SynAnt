@@ -193,10 +193,6 @@ signals:
     Q_SIGNAL void dataEntryAddSucceeded();
     Q_SIGNAL void dataEntryAddInvalid();
 
-    // only to be used when current pane is PromptSaveExitPane.qml !!!
-    Q_SIGNAL void dataEntrySavedWhenPrompted();
-    Q_SIGNAL void dataEntryDiscardedWhenPrompted();
-
 private slots:
     void _onInputChanged();
     void _onStatisticsChanged();

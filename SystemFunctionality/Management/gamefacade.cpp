@@ -397,7 +397,7 @@ void GameFacade::requestSaveDataToDb()
         _blockCacheReset();
 
         m_IsSavingInProgress = true;
-        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_SAVE_IN_PROGRESS);
+        Q_EMIT statusChanged(m_CurrentStatusCode = m_IsDataAvailable ? Game::StatusCodes::ADDITIONAL_DATA_SAVE_IN_PROGRESS : Game::StatusCodes::NEW_DATA_SAVE_IN_PROGRESS);
 
         m_pDataSourceProxy->saveDataToDb();
     }
