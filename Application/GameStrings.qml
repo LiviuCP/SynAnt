@@ -16,6 +16,7 @@ QtObject {
                                                                                     \nPress Enter new pairs to add more data."
 
     readonly property string promptSaveBeforeExitMessage:                           "\n\n\n\n\tDo you want to save the added word pairs before exiting?\n"
+    readonly property string promptDiscardMessage:                                  "\n\n\n\n\tDo you really want to discard the added word pairs?\n"
 
     // labels
     readonly property string playButtonLabel:                                       "Play"
@@ -37,9 +38,11 @@ QtObject {
     readonly property string backButtonLabel:                                       "Back"
     readonly property string discardButtonLabel:                                    "Discard"
     readonly property string saveButtonLabel:                                       "Save"
-    readonly property string yesButtonLabel:                                        "Yes"
-    readonly property string noButtonLabel:                                         "No"
-    readonly property string cancelButtonLabel:                                     "Cancel"
+    readonly property string promptSaveYesButtonLabel:                              "Yes"
+    readonly property string promptSaveNoButtonLabel:                               "No"
+    readonly property string promptSaveCancelButtonLabel:                           "Cancel"
+    readonly property string promptDiscardYesButtonLabel:                           "Yes"
+    readonly property string promptDiscardCancelButtonLabel:                        "Cancel"
     readonly property string closeButtonLabel:                                      "Close"
 
     // shortcuts
@@ -62,9 +65,11 @@ QtObject {
     readonly property string backButtonShortcut:                                    "ALT+K"
     readonly property string saveButtonShortcut:                                    "CTRL+S"
     readonly property string discardButtonShortcut:                                 "CTRL+D"
-    readonly property string yesButtonShortcut:                                     "ALT+Y"
-    readonly property string noButtonShortcut:                                      "ALT+N"
-    readonly property string cancelButtonShortcut:                                  "ALT+W"
+    readonly property string promptSaveYesButtonShortcut:                           "ALT+Y"
+    readonly property string promptSaveNoButtonShortcut:                            "ALT+N"
+    readonly property string promptSaveCancelButtonShortcut:                        "ALT+W"
+    readonly property string promptDiscardYesButtonShortcut:                        "CTRL+Y"
+    readonly property string promptDiscardCancelButtonShortcut:                     "CTRL+W"
     readonly property string closeButtonShortcut:                                   "ALT+C"
 
     // tooltips
@@ -106,9 +111,11 @@ QtObject {
     readonly property string backButtonToolTip:                                     "Click or hit ALT+K to go to previous page"
     readonly property string saveButtonToolTip:                                     "Click or hit CTRL+S to save the added entries to database"
     readonly property string discardButtonToolTip:                                  "Click or hit CTRL+D to discard the added entries"
-    readonly property string yesButtonToolTip:                                      "Click or hit ALT+Y to save and exit the application"
-    readonly property string noButtonToolTip:                                       "Click or hit ALT+N to exit the application without saving"
-    readonly property string cancelButtonToolTip:                                   "Click or hit ALT+W to return to data entry dialog"
+    readonly property string promptSaveYesButtonToolTip:                            "Click or hit ALT+Y to save and exit the application"
+    readonly property string promptSaveNoButtonToolTip:                             "Click or hit ALT+N to exit the application without saving"
+    readonly property string promptSaveCancelButtonToolTip:                         "Click or hit ALT+W to return to data entry dialog"
+    readonly property string promptDiscardYesButtonToolTip:                         "Click or hit CTRL+Y to discard the added entries"
+    readonly property string promptDiscardCancelButtonToolTip:                      "Click or hit CTRL+W to cancel discarding the added entries"
     readonly property string closeButtonToolTip:                                    "A fatal error occurred. Click button or hit ALT+C to exit the game."
     readonly property string dataEntryFirstWordToolTip:                             "Enter the first word from the pair to be added to database."
     readonly property string dataEntrySecondWordToolTip:                            "Enter the second word from the pair to be added to database."

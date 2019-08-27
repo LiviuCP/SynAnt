@@ -362,13 +362,13 @@ Item {
                 enabled: discardBtn.enabled && presenter.dataEntryPaneVisible
 
                 onActivated: {
-                    presenter.handleClearAddedWordPairsRequest();
+                    presenter.promptForDiscardingAddedWordPairs();
                     firstWordTextField.forceActiveFocus();
                 }
             }
 
             onClicked: {
-                presenter.handleClearAddedWordPairsRequest();
+                presenter.promptForDiscardingAddedWordPairs();
                 firstWordTextField.forceActiveFocus();
             }
 

@@ -305,6 +305,7 @@ namespace GameStrings {
     const QString c_MainWindowTitle                     {    "SynAnt - Let's Play!"                                                                     };
     const QString c_DataEntryWindowTitle                {    "SynAnt - Enter New Word Pairs"                                                            };
     const QString c_PromptSaveExitWindowTitle           {    "SynAnt - Save Data?"                                                                      };
+    const QString c_PromptDiscardWindowTitle            {    "SynAnt - Discard Data?"                                                                   };
     const QString c_FatalErrorWindowTitle               {    "Fatal Error!"                                                                             };
 
     // colors

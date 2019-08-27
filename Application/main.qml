@@ -76,6 +76,18 @@ ApplicationWindow {
         }
     }
 
+    PromptDiscardPane {
+        id: promptDiscardPane
+
+        presenter: gamePresenter
+        visible: gamePresenter.promptDiscardPaneVisible
+
+        anchors {
+            fill: parent
+            margins: windowMargins
+        }
+    }
+
     HelpPane {
         id: helpPane
 

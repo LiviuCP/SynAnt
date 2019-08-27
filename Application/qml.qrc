@@ -10,5 +10,6 @@
         <file>Styles.qml</file>
         <file>DataEntryPane.qml</file>
         <file>PromptSaveExitPane.qml</file>
+        <file>PromptDiscardPane.qml</file>
     </qresource>
 </RCC>

@@ -5,24 +5,14 @@ import GameManagers 1.0
 import GameUtils 1.0
 
 Item {
-    id: promptSaveExitPane
+    id: promptDiscardPane
 
     property QtObject presenter
 
     readonly property double promptPaneRectHeight: height * 0.89
     readonly property double bottomBtnsLayoutHeight: height * 0.1
-    readonly property double bottomBtnsMinWidth: (promptStatusBox.width - 2 * bottomBtnsLayout.spacing) / 3
-    readonly property double buttonRadiusRatio: 0.025
-
-    function quitOrExitDataEntry() {
-        if (presenter.quitGameDeferred) {
-            presenter.quit();
-        } else {
-            // user should return to the page that was visited before arriving to the data entry page (from which the prompt was issued)
-            presenter.goBack();
-            presenter.goBack();
-        }
-    }
+    readonly property double bottomBtnsMinWidth: (promptMessageBox.width - bottomBtnsLayout.spacing) / 2
+    readonly property double buttonRadiusRatio: 0.02
 
     MouseArea {
         id: promptPaneMouseArea
@@ -39,7 +29,7 @@ Item {
     }
 
     Rectangle {
-        id: promptStatusBox
+        id: promptMessageBox
 
         width: parent.width
         height: promptPaneRectHeight
@@ -50,7 +40,7 @@ Item {
         border.color: Styles.borderColor
 
         Text {
-            text: GameStrings.promptSaveBeforeExitMessage;
+            text: GameStrings.promptDiscardMessage;
             wrapMode: Text.WordWrap
             anchors.fill: parent
         }
@@ -62,11 +52,11 @@ Item {
         height: bottomBtnsLayoutHeight
 
         anchors {
-            top: promptStatusBox.bottom
+            top: promptMessageBox.bottom
             topMargin: parent.height * 0.01
             bottom: parent.bottom
-            left: promptStatusBox.left
-            right: promptStatusBox.right
+            left: promptMessageBox.left
+            right: promptMessageBox.right
         }
 
         Button {
@@ -75,7 +65,7 @@ Item {
             Layout.minimumWidth: bottomBtnsMinWidth
 
             contentItem: Text {
-                text: GameStrings.promptSaveYesButtonLabel
+                text: GameStrings.promptDiscardYesButtonLabel
                 color: Styles.textColor
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
@@ -89,79 +79,30 @@ Item {
 
                 border {
                     color: Styles.borderColor
-                    width: width * 0.005
+                    width: width * 0.003
                 }
             }
 
             ToolTip {
-                text: GameStrings.promptSaveYesButtonToolTip
+                text: GameStrings.promptDiscardYesButtonToolTip
                 visible: yesBtn.hovered
                 delay: presenter.toolTipDelay
                 timeout: presenter.toolTipTimeout
             }
 
             Shortcut {
-                sequence: GameStrings.promptSaveYesButtonShortcut
-                enabled: presenter.promptSaveExitPaneVisible
-
-                onActivated: {
-                    presenter.handleSaveAddedWordPairsRequest();
-                    promptSaveExitPane.quitOrExitDataEntry();
-                }
-            }
-
-            onClicked: {
-                presenter.handleSaveAddedWordPairsRequest();
-                promptSaveExitPane.quitOrExitDataEntry();
-            }
-
-            onPressed: opacity = Styles.pressedButtonOpacity
-            onReleased: opacity = Styles.releasedButtonOpacity
-            onCanceled: opacity = Styles.releasedButtonOpacity
-        }
-
-        Button {
-            id: noBtn
-
-            Layout.minimumWidth: bottomBtnsMinWidth
-
-            contentItem: Text {
-                text: GameStrings.promptSaveNoButtonLabel
-                color: Styles.textColor
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-
-            background: Rectangle {
-                color: Styles.pushButtonColor
-                radius: width * buttonRadiusRatio
-
-                border {
-                    color: Styles.borderColor
-                    width: width * 0.005
-                }
-            }
-
-            ToolTip {
-                text: GameStrings.promptSaveNoButtonToolTip
-                visible: noBtn.hovered
-                delay: presenter.toolTipDelay
-                timeout: presenter.toolTipTimeout
-            }
-
-            Shortcut {
-                sequence: GameStrings.promptSaveNoButtonShortcut
-                enabled: presenter.promptSaveExitPaneVisible
+                sequence: GameStrings.promptDiscardYesButtonShortcut
+                enabled: presenter.promptDiscardPaneVisible
 
                 onActivated: {
                     presenter.handleClearAddedWordPairsRequest();
-                    promptSaveExitPane.quitOrExitDataEntry();
+                    presenter.goBack();
                 }
             }
 
             onClicked: {
                 presenter.handleClearAddedWordPairsRequest();
-                promptSaveExitPane.quitOrExitDataEntry();
+                presenter.goBack();
             }
 
             onPressed: opacity = Styles.pressedButtonOpacity
@@ -175,7 +116,7 @@ Item {
             Layout.minimumWidth: bottomBtnsMinWidth
 
             contentItem: Text {
-                text: GameStrings.promptSaveCancelButtonLabel
+                text: GameStrings.promptDiscardCancelButtonLabel
                 color: Styles.textColor
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
@@ -187,20 +128,20 @@ Item {
 
                 border {
                     color: Styles.borderColor
-                    width: width * 0.005
+                    width: width * 0.003
                 }
             }
 
             ToolTip {
-                text: GameStrings.promptSaveCancelButtonToolTip
+                text: GameStrings.promptDiscardCancelButtonToolTip
                 visible: cancelBtn.hovered
                 delay: presenter.toolTipDelay
                 timeout: presenter.toolTipTimeout
             }
 
             Shortcut {
-                sequence: GameStrings.promptSaveCancelButtonShortcut
-                enabled: presenter.promptSaveExitPaneVisible
+                sequence: GameStrings.promptDiscardCancelButtonShortcut
+                enabled: presenter.promptDiscardPaneVisible
 
                 onActivated: presenter.goBack()
             }

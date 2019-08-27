@@ -14,6 +14,7 @@ static const QMap<GamePresenter::Pane, QString> c_WindowTitles
     {GamePresenter::Pane::MAIN, GameStrings::c_MainWindowTitle},
     {GamePresenter::Pane::DATA_ENTRY, GameStrings::c_DataEntryWindowTitle},
     {GamePresenter::Pane::PROMPT_SAVE_EXIT, GameStrings::c_PromptSaveExitWindowTitle},
+    {GamePresenter::Pane::PROMPT_DISCARD, GameStrings::c_PromptDiscardWindowTitle},
     {GamePresenter::Pane::ERROR, GameStrings::c_FatalErrorWindowTitle}
 };
 
@@ -41,6 +42,7 @@ GamePresenter::GamePresenter(QObject *parent)
     , m_MainPaneVisible {false}
     , m_DataEntryPaneVisible{false}
     , m_PromptSaveExitPaneVisible{false}
+    , m_PromptDiscardPaneVisible{false}
     , m_MainPaneInitialized {false}
     , m_MainPaneStatisticsResetEnabled {false}
     , m_ClearMainPaneInputEnabled{false}
@@ -156,6 +158,19 @@ void GamePresenter::promptForSavingAddedWordPairs()
 
     m_DataEntryPaneVisible = false;
     m_PromptSaveExitPaneVisible = true;
+
+    Q_EMIT currentPaneChanged();
+}
+
+void GamePresenter::promptForDiscardingAddedWordPairs()
+{
+    Q_ASSERT(m_CurrentPane == Pane::DATA_ENTRY);
+
+    m_PreviousPanesStack.append(m_CurrentPane);
+    m_CurrentPane = Pane::PROMPT_DISCARD;
+
+    m_DataEntryPaneVisible = false;
+    m_PromptDiscardPaneVisible = true;
 
     Q_EMIT currentPaneChanged();
 }
@@ -313,6 +328,11 @@ bool GamePresenter::getDataEntryPaneVisible() const
 bool GamePresenter::getPromptSaveExitPaneVisible() const
 {
     return m_PromptSaveExitPaneVisible;
+}
+
+bool GamePresenter::getPromptDiscardPaneVisible() const
+{
+    return m_PromptDiscardPaneVisible;
 }
 
 bool GamePresenter::isPlayEnabled() const
@@ -815,6 +835,9 @@ void GamePresenter::_switchToPane(Pane pane)
         case Pane::DATA_ENTRY:
             m_DataEntryPaneVisible = false;
             break;
+        case Pane::PROMPT_DISCARD:
+            m_PromptDiscardPaneVisible = false;
+            break;
         default:
             Q_ASSERT(false);
         }
@@ -933,6 +956,9 @@ void GamePresenter::_launchErrorPane(const QString& errorMessage)
         break;
     case Pane::PROMPT_SAVE_EXIT:
         m_PromptSaveExitPaneVisible = false;
+        break;
+    case Pane::PROMPT_DISCARD:
+        m_PromptDiscardPaneVisible = false;
         break;
     default:
         Q_ASSERT(static_cast<int>(m_CurrentPane) >= 0 && static_cast<int>(m_CurrentPane) < static_cast<int>(Pane::Nr_Of_Panes));

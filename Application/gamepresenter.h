@@ -22,6 +22,7 @@ class GamePresenter : public QObject
     Q_PROPERTY(bool mainPaneVisible READ getMainPaneVisible NOTIFY currentPaneChanged)
     Q_PROPERTY(bool dataEntryPaneVisible READ getDataEntryPaneVisible NOTIFY currentPaneChanged)
     Q_PROPERTY(bool promptSaveExitPaneVisible READ getPromptSaveExitPaneVisible NOTIFY currentPaneChanged)
+    Q_PROPERTY(bool promptDiscardPaneVisible READ getPromptDiscardPaneVisible NOTIFY currentPaneChanged)
 
     /* functionality enabling properties */
     Q_PROPERTY(bool playEnabled READ isPlayEnabled NOTIFY playEnabledChanged)
@@ -78,6 +79,7 @@ public:
         MAIN,
         DATA_ENTRY,
         PROMPT_SAVE_EXIT,
+        PROMPT_DISCARD,
         ERROR,
         Nr_Of_Panes
     };
@@ -91,6 +93,7 @@ public:
     Q_INVOKABLE void handleClearAddedWordPairsRequest();
     Q_INVOKABLE void handleSaveAddedWordPairsRequest();
     Q_INVOKABLE void promptForSavingAddedWordPairs();
+    Q_INVOKABLE void promptForDiscardingAddedWordPairs();
     Q_INVOKABLE void handleDisplayCorrectWordsPairRequest();
     Q_INVOKABLE void handleSubmitMainPaneInputRequest();
     Q_INVOKABLE void handleMainPaneStatisticsResetRequest();
@@ -119,6 +122,7 @@ public:
     bool getMainPaneVisible() const;
     bool getDataEntryPaneVisible() const;
     bool getPromptSaveExitPaneVisible() const;
+    bool getPromptDiscardPaneVisible() const;
     bool isPlayEnabled() const;
     bool isDataEntryEnabled() const;
     bool isAddWordsPairEnabled() const;
@@ -209,6 +213,7 @@ private:
     bool m_MainPaneVisible;
     bool m_DataEntryPaneVisible;
     bool m_PromptSaveExitPaneVisible;
+    bool m_PromptDiscardPaneVisible;
     bool m_MainPaneInitialized;
 
     bool m_MainPaneStatisticsResetEnabled;
