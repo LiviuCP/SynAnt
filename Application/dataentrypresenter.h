@@ -48,7 +48,7 @@ signals:
     Q_SIGNAL void dataSaveInProgress();
 
 private slots:
-    void _onStatusChanged(Game::StatusCodes statusCode);
+    void _onStatusChanged(Game::DataEntryStatusCodes statusCode);
 
 private:
     void _updateStatusMessage(const QString& message, int delay);

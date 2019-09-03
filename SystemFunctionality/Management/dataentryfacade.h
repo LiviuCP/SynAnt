@@ -44,7 +44,7 @@ signals:
     Q_SIGNAL void addPairToCacheAllowedChanged();
     Q_SIGNAL void resetCacheAllowedChanged();
     Q_SIGNAL void saveNewPairsToDbAllowedChanged();
-    Q_SIGNAL void statusChanged(Game::StatusCodes status);
+    Q_SIGNAL void statusChanged(Game::DataEntryStatusCodes status);
 
 private slots:
     void _onDataEntryAllowed(bool success);
@@ -65,7 +65,7 @@ private:
     DataFunctionalityProxy* m_pDataFunctionalityProxy;
     DataEntryProxy* m_pDataEntryProxy;
 
-    Game::StatusCodes m_CurrentStatusCode;
+    Game::DataEntryStatusCodes m_CurrentStatusCode;
 
     bool m_IsDataEntryAllowed;
     bool m_IsAddingToCacheAllowed;

@@ -88,7 +88,7 @@ QString DataEntryPresenter::getDataEntryPaneStatusMessage() const
     return m_DataEntryPaneStatusMessage;
 }
 
-void DataEntryPresenter::_onStatusChanged(Game::StatusCodes statusCode)
+void DataEntryPresenter::_onStatusChanged(Game::DataEntryStatusCodes statusCode)
 {
     if (m_pStatusUpdateTimer->isActive())
     {
@@ -97,40 +97,40 @@ void DataEntryPresenter::_onStatusChanged(Game::StatusCodes statusCode)
 
     switch (statusCode)
     {
-    case Game::StatusCodes::DATA_ENTRY_STARTED:
+    case Game::DataEntryStatusCodes::DATA_ENTRY_STARTED:
         _updateStatusMessage(GameStrings::c_DataEntryStartMessage, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Game::c_ShortStatusUpdateDelay);
         break;
-    case Game::StatusCodes::DATA_ENTRY_RESUMED:
+    case Game::DataEntryStatusCodes::DATA_ENTRY_RESUMED:
         _updateStatusMessage(GameStrings::c_DataEntryResumeMessage.arg(m_pDataEntryFacade->getCurrentNrOfAddedWordPairs()), Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Game::c_ShortStatusUpdateDelay);
         break;
-    case Game::StatusCodes::DATA_ENTRY_ADD_SUCCESS:
+    case Game::DataEntryStatusCodes::DATA_ENTRY_ADD_SUCCESS:
         Q_EMIT dataEntryAddSucceeded();
         _updateStatusMessage(GameStrings::c_DataEntrySuccessMessage.arg(m_pDataEntryFacade->getCurrentNrOfAddedWordPairs()), Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Game::c_ShortStatusUpdateDelay);
         break;
-    case Game::StatusCodes::DATA_ENTRY_ADD_INVALID:
+    case Game::DataEntryStatusCodes::DATA_ENTRY_ADD_INVALID:
         _updateStatusMessage(GameStrings::c_DataEntryInvalidPairMessage.arg(c_InvalidPairEntryReasonMessages[m_pDataEntryFacade->getDataEntryValidationCode()]), Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Game::c_ShortStatusUpdateDelay);
         Q_EMIT dataEntryAddInvalid();
         break;
-    case Game::StatusCodes::PAIR_ALREADY_ADDED:
+    case Game::DataEntryStatusCodes::PAIR_ALREADY_ADDED:
         _updateStatusMessage(GameStrings::c_PairAlreadyAddedMessage, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Game::c_ShortStatusUpdateDelay);
         break;
-    case Game::StatusCodes::RESET_CACHE_REQUESTED:
+    case Game::DataEntryStatusCodes::RESET_CACHE_REQUESTED:
         _updateStatusMessage(GameStrings::c_DataEntryCacheResetRequestedMessage, Game::c_NoDelay);
         break;
-    case Game::StatusCodes::CACHE_RESET:
+    case Game::DataEntryStatusCodes::CACHE_RESET:
         _updateStatusMessage(GameStrings::c_DataEntryCacheResetMessage, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Game::c_ShortStatusUpdateDelay);
         break;
-    case Game::StatusCodes::DATA_SAVE_IN_PROGRESS:
+    case Game::DataEntryStatusCodes::DATA_SAVE_IN_PROGRESS:
         _updateStatusMessage(GameStrings::c_DataSaveInProgressMessage, Game::c_NoDelay);
         Q_EMIT dataSaveInProgress();
         break;
-    case Game::StatusCodes::DATA_SUCCESSFULLY_SAVED:
+    case Game::DataEntryStatusCodes::DATA_SUCCESSFULLY_SAVED:
         _updateStatusMessage(GameStrings::c_DataSuccessfullySavedMessage.arg(m_pDataEntryFacade->getLastSavedNrOfWordPairs()), Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Game::c_ShortStatusUpdateDelay);
         break;

@@ -28,7 +28,6 @@ namespace Game
     enum class StatusCodes
     {
         NO_DATA_LOADING_REQUESTED,
-        NO_DATA_ENTRY_REQUESTED,
         LOADING_DATA,
         DATA_LOADING_COMPLETE,
         NO_VALID_DATA_ENTRIES_LOADED,
@@ -39,14 +38,6 @@ namespace Game
         GAME_RESUMED_COMPLETE_INPUT,
         GAME_RESUMED_INCOMPLETE_INPUT,
         GAME_STOPPED,
-        DATA_ENTRY_STARTED,
-        DATA_ENTRY_RESUMED,
-        DATA_ENTRY_ADD_SUCCESS,
-        DATA_ENTRY_ADD_INVALID,
-        PAIR_ALREADY_ADDED,
-        RESET_CACHE_REQUESTED,
-        CACHE_RESET,
-        DATA_SAVE_IN_PROGRESS,
         NEW_DATA_SAVE_IN_PROGRESS,
         ADDITIONAL_DATA_SAVE_IN_PROGRESS,
         DATA_SUCCESSFULLY_SAVED,
@@ -66,6 +57,21 @@ namespace Game
         PERSISTENT_MODE_EXITED,
         PERSISTENT_INDEX_REQUIRED,
         StatusCodesCount
+    };
+
+    enum class DataEntryStatusCodes
+    {
+        NO_DATA_ENTRY_REQUESTED,
+        DATA_ENTRY_STARTED,
+        DATA_ENTRY_RESUMED,
+        DATA_ENTRY_ADD_SUCCESS,
+        DATA_ENTRY_ADD_INVALID,
+        PAIR_ALREADY_ADDED,
+        RESET_CACHE_REQUESTED,
+        CACHE_RESET,
+        DATA_SAVE_IN_PROGRESS,
+        DATA_SUCCESSFULLY_SAVED,
+        DataEntryStatusCodesCount
     };
 
     enum class ValidationCodes
