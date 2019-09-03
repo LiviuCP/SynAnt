@@ -30,12 +30,14 @@
 #include "../Utilities/game.h"
 
 class GameFacade;
+class DataEntryFacade;
 class DataSource;
 class DataSourceLoader;
 class DataEntryValidator;
 class DataEntryCache;
 class DataEntryStatistics;
 class DataSourceProxy;
+class DataEntryProxy;
 class DataSourceAccessHelper;
 class WordMixer;
 class WordMixerProxy;
@@ -60,11 +62,14 @@ public:
     int getNrOfValidDataSourceEntries() const;
     Game::ValidationCodes getPairEntryValidationCode() const;
 
-    GameFacade* getFacade() const;
+    GameFacade* getGameFacade() const;
+    DataEntryFacade* getDataEntryFacade() const;
+
     DataSource* getDataSource() const;
     DataEntryValidator* getDataEntryValidator() const;
     DataEntryCache* getDataEntryCache() const;
     DataSourceProxy* getDataSourceProxy() const;
+    DataEntryProxy* getDataEntryProxy() const;
     DataSourceAccessHelper* getDataSourceAccessHelper() const;
     WordMixer* getWordMixer() const;
     WordPairOwner* getWordPairOwner() const;
@@ -84,9 +89,12 @@ signals:
     Q_SIGNAL void readDataFromDb();
     Q_SIGNAL void writeDataToDb();
     Q_SIGNAL void resetCacheRequested();
+    Q_SIGNAL void loadDataFromDbFinished(bool success);
+    Q_SIGNAL void dataEntryAllowed(bool allowed);
 
 private slots:
     void _onDataSourceSetupCompleted();
+    void _onLoadDataFromDbFinished(bool success);
 
 private:
     explicit GameManager(QObject *parent = nullptr);
@@ -97,12 +105,14 @@ private:
     static GameManager* s_pGameManager;
 
     GameFacade* m_pGameFacade;
+    DataEntryFacade* m_pDataEntryFacade;
     DataSource* m_pDataSource;
     DataSourceLoader* m_pDataSourceLoader;
     DataEntryValidator* m_pDataEntryValidator;
     DataEntryCache* m_pDataEntryCache;
     DataEntryStatistics* m_pDataEntryStatistics;
     DataSourceProxy* m_pDataSourceProxy;
+    DataEntryProxy* m_pDataEntryProxy;
     DataSourceAccessHelper* m_pDataSourceAccessHelper;
     WordMixer* m_pWordMixer;
     WordPairOwner* m_pWordPairOwner;

@@ -2,6 +2,7 @@
 #include <QVector>
 
 #include "gamepresenter.h"
+#include "dataentrypresenter.h"
 #include "../SystemFunctionality/Management/gamefacade.h"
 #include "../SystemFunctionality/Utilities/gamestrings.h"
 #include "../SystemFunctionality/Utilities/exceptions.h"
@@ -37,6 +38,7 @@ static const QMap<Game::ValidationCodes, QString> c_InvalidPairEntryReasonMessag
 
 GamePresenter::GamePresenter(QObject *parent)
     : QObject(parent)
+    , m_pDataEntryPresenter{new DataEntryPresenter{this}}
     , m_IntroPaneVisible {true}
     , m_HelpPaneVisible {false}
     , m_MainPaneVisible {false}
@@ -47,6 +49,7 @@ GamePresenter::GamePresenter(QObject *parent)
     , m_MainPaneStatisticsResetEnabled {false}
     , m_ClearMainPaneInputEnabled{false}
     , m_ErrorOccured {false}
+    , m_QuitDeferred{false}
     , m_WindowTitle{GameStrings::c_IntroWindowTitle}
     , m_CurrentPane {Pane::INTRO}
     , m_StatusUpdatePane{Pane::INTRO}
@@ -57,7 +60,7 @@ GamePresenter::GamePresenter(QObject *parent)
     , m_pGameProxy {new GameProxy{this}}
     , m_pStatusUpdateTimer {new QTimer{this}}
 {
-    m_pGameFacade = m_pGameProxy->getFacade();
+    m_pGameFacade = m_pGameProxy->getGameFacade();
     Q_ASSERT(m_pGameFacade);
 
     m_pStatusUpdateTimer->setSingleShot(true);
@@ -69,14 +72,6 @@ GamePresenter::GamePresenter(QObject *parent)
     connected = connect(m_pGameFacade, &GameFacade::newMixedWordsAvailable, this, &GamePresenter::mixedWordsChanged);
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::dataAvailableChanged, this, &GamePresenter::playEnabledChanged);
-    Q_ASSERT(connected);
-    connected = connect(m_pGameFacade, &GameFacade::dataEntryAllowedChanged, this, &GamePresenter::dataEntryEnabledChanged);
-    Q_ASSERT(connected);
-    connected = connect(m_pGameFacade, &GameFacade::addPairToCacheAllowedChanged, this, &GamePresenter::addWordsPairEnabledChanged);
-    Q_ASSERT(connected);
-    connected = connect(m_pGameFacade, &GameFacade::saveNewPairsToDbAllowedChanged, this, &GamePresenter::saveAddedWordPairsEnabledChanged);
-    Q_ASSERT(connected);
-    connected = connect(m_pGameFacade, &GameFacade::resetCacheAllowedChanged, this, &GamePresenter::discardAddedWordPairsEnabledChanged);
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::inputChanged, this, &GamePresenter::_onInputChanged);
     Q_ASSERT(connected);
@@ -103,7 +98,7 @@ void GamePresenter::switchToPane(GamePresenter::Pane pane)
 
     if (pane == GamePresenter::Pane::DATA_ENTRY)
     {
-        m_pGameFacade->startWordEntry();
+        qobject_cast<DataEntryPresenter*>(m_pDataEntryPresenter)->startDataEntry();
     }
 }
 
@@ -124,7 +119,7 @@ void GamePresenter::goBack()
 
         Q_EMIT currentPaneChanged();
 
-        m_pGameFacade->resumeWordEntry();
+        qobject_cast<DataEntryPresenter*>(m_pDataEntryPresenter)->resumeDataEntry();
     }
     else
     {
@@ -132,21 +127,6 @@ void GamePresenter::goBack()
         m_PreviousPanesStack.pop_back();
         _switchToPane(previousPane);
     }
-}
-
-void GamePresenter::handleAddWordsPairRequest(const QString& firstWord, const QString& secondWord, bool areSynonyms)
-{
-    m_pGameFacade->requestAddPairToCache(firstWord, secondWord, areSynonyms);
-}
-
-void GamePresenter::handleClearAddedWordPairsRequest()
-{
-    m_pGameFacade->requestCacheReset();
-}
-
-void GamePresenter::handleSaveAddedWordPairsRequest()
-{
-    m_pGameFacade->requestSaveDataToDb();
 }
 
 void GamePresenter::promptForSavingAddedWordPairs()
@@ -173,6 +153,11 @@ void GamePresenter::promptForDiscardingAddedWordPairs()
     m_PromptDiscardPaneVisible = true;
 
     Q_EMIT currentPaneChanged();
+}
+
+void GamePresenter::handleDataSaveInProgress()
+{
+    m_pGameFacade->handleSavingInProgress();
 }
 
 void GamePresenter::handleDisplayCorrectWordsPairRequest()
@@ -305,6 +290,11 @@ void GamePresenter::quit()
     }
 }
 
+QObject *GamePresenter::getDataEntryPresenter() const
+{
+    return m_pDataEntryPresenter;
+}
+
 bool GamePresenter::getIntroPaneVisible() const
 {
     return m_IntroPaneVisible;
@@ -338,26 +328,6 @@ bool GamePresenter::getPromptDiscardPaneVisible() const
 bool GamePresenter::isPlayEnabled() const
 {
     return m_pGameFacade->isDataAvailable();
-}
-
-bool GamePresenter::isDataEntryEnabled() const
-{
-    return m_pGameFacade->isDataEntryAllowed();
-}
-
-bool GamePresenter::isAddWordsPairEnabled() const
-{
-    return m_pGameFacade->isAddingToCacheAllowed();
-}
-
-bool GamePresenter::isDiscardAddedWordPairsEnabled() const
-{
-    return m_pGameFacade->isCacheResetAllowed();
-}
-
-bool GamePresenter::isSaveAddedWordPairsEnabled() const
-{
-    return m_pGameFacade->isSavingToDbAllowed();
 }
 
 bool GamePresenter::getMainPaneStatisticsResetEnabled() const
@@ -573,11 +543,6 @@ QString GamePresenter::getMainPaneWordPairsMessage() const
     return m_MainPaneWordPairsMessage;
 }
 
-QString GamePresenter::getDataEntryPaneStatusMessage() const
-{
-    return m_DataEntryPaneStatusMessage;
-}
-
 QString GamePresenter::getErrorMessage() const
 {
     return m_ErrorMessage;
@@ -656,9 +621,7 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         _launchErrorPane(GameStrings::c_CannotOpenFileMessage);
         break;
     case Game::StatusCodes::DATA_GOT_AVAILABLE:
-        _updateStatusMessage(GameStrings::c_DataSuccessfullySavedMessage.arg(m_pGameFacade->getLastSavedNrOfWordPairs()), Pane::DATA_ENTRY, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_DataAvailableMessage, Pane::INTRO, Game::c_NoDelay);
-        _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::GAME_STARTED:
         _updateStatusMessage(GameStrings::c_GameStartedMessage, Pane::MAIN, Game::c_NoDelay);
@@ -685,49 +648,14 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         {
             QGuiApplication::quit();
         }
-
-        break;
-    case Game::StatusCodes::DATA_ENTRY_STARTED:
-        _updateStatusMessage(GameStrings::c_DataEntryStartMessage, Pane::DATA_ENTRY, Game::c_NoDelay);
-        _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
-        break;
-    case Game::StatusCodes::DATA_ENTRY_RESUMED:
-        _updateStatusMessage(GameStrings::c_DataEntryResumeMessage.arg(m_pGameFacade->getCurrentNrOfAddedWordPairs()), Pane::DATA_ENTRY, Game::c_NoDelay);
-        _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
-        break;
-    case Game::StatusCodes::DATA_ENTRY_ADD_SUCCESS:
-        Q_EMIT dataEntryAddSucceeded();
-        _updateStatusMessage(GameStrings::c_DataEntrySuccessMessage.arg(m_pGameFacade->getCurrentNrOfAddedWordPairs()), Pane::DATA_ENTRY, Game::c_NoDelay);
-        _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
-        break;
-    case Game::StatusCodes::DATA_ENTRY_ADD_INVALID:
-        _updateStatusMessage(GameStrings::c_DataEntryInvalidPairMessage.arg(c_InvalidPairEntryReasonMessages[m_pGameFacade->getDataEntryValidationCode()]),
-                            Pane::DATA_ENTRY, Game::c_NoDelay);
-        _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
-        Q_EMIT dataEntryAddInvalid();
-        break;
-    case Game::StatusCodes::PAIR_ALREADY_ADDED:
-        _updateStatusMessage(GameStrings::c_PairAlreadyAddedMessage, Pane::DATA_ENTRY, Game::c_NoDelay);
-        _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
-        break;
-    case Game::StatusCodes::RESET_CACHE_REQUESTED:
-        _updateStatusMessage(GameStrings::c_DataEntryCacheResetRequestedMessage, Pane::DATA_ENTRY, Game::c_NoDelay);
-        break;
-    case Game::StatusCodes::CACHE_RESET:
-        _updateStatusMessage(GameStrings::c_DataEntryCacheResetMessage, Pane::DATA_ENTRY, Game::c_NoDelay);
-        _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::NEW_DATA_SAVE_IN_PROGRESS:
-        _updateStatusMessage(GameStrings::c_DataSaveInProgressMessage, Pane::DATA_ENTRY, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_NewDataSaveInProgressMessage, Pane::INTRO, Game::c_NoDelay);
         break;
     case Game::StatusCodes::ADDITIONAL_DATA_SAVE_IN_PROGRESS:
-        _updateStatusMessage(GameStrings::c_DataSaveInProgressMessage, Pane::DATA_ENTRY, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_AdditionalDataSaveInProgressMessage, Pane::INTRO, Game::c_NoDelay);
         break;
     case Game::StatusCodes::DATA_SUCCESSFULLY_SAVED:
-        _updateStatusMessage(GameStrings::c_DataSuccessfullySavedMessage.arg(m_pGameFacade->getLastSavedNrOfWordPairs()), Pane::DATA_ENTRY, Game::c_NoDelay);
-        _updateStatusMessage(GameStrings::c_DataEntryRequestMessage, Pane::DATA_ENTRY, Game::c_ShortStatusUpdateDelay);
         _updateStatusMessage(GameStrings::c_AdditionalDataAvailableMessage, Pane::INTRO, Game::c_NoDelay);
         _updateStatusMessage(GameStrings::c_PleasePlayOrEnterDataMessage, Pane::INTRO, Game::c_VeryShortStatusUpdateDelay);
         break;
@@ -876,7 +804,7 @@ void GamePresenter::_switchToPane(Pane pane)
             }
             else if (m_CurrentPane == Pane::HELP)
             {
-                m_pGameFacade->resumeWordEntry();
+                qobject_cast<DataEntryPresenter*>(m_pDataEntryPresenter)->resumeDataEntry();
             }
 
             m_DataEntryPaneVisible = true;
@@ -928,9 +856,8 @@ void GamePresenter::_updateMessage()
         Q_EMIT mainPaneStatusMessageChanged();
         break;
     case Pane::DATA_ENTRY:
-        m_DataEntryPaneStatusMessage = m_CurrentStatusMessage;
-        Q_EMIT dataEntryPaneStatusMessageChanged();
-        break;
+        // data entry pane status to be updated by the data entry presenter only
+        Q_ASSERT(false);
     case Pane::ERROR:
         break;
     default:

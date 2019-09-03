@@ -162,7 +162,7 @@ ApplicationWindow {
 
     Shortcut {
         sequence: GameStrings.dataEntryButtonShortcut
-        enabled: gamePresenter.dataEntryEnabled && (gamePresenter.introPaneVisible || gamePresenter.mainPaneVisible)
+        enabled: gamePresenter.dataEntry.dataEntryEnabled && (gamePresenter.introPaneVisible || gamePresenter.mainPaneVisible)
 
         onActivated: gamePresenter.switchToPane(GamePresenter.DATA_ENTRY)
     }
@@ -179,7 +179,7 @@ ApplicationWindow {
         enabled: gamePresenter.introPaneVisible || gamePresenter.helpPaneVisible || gamePresenter.mainPaneVisible || gamePresenter.dataEntryPaneVisible
 
         onActivated: {
-            if (gamePresenter.dataEntryPaneVisible && gamePresenter.saveAddedWordPairsEnabled) {
+            if (gamePresenter.dataEntryPaneVisible && gamePresenter.dataEntry.saveAddedWordPairsEnabled) {
                 gamePresenter.quitGameDeferred = true;
                 gamePresenter.promptForSavingAddedWordPairs();
             } else {

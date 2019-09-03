@@ -12,9 +12,13 @@
 class GameFacade;
 class GameProxy;
 
+class DataEntryPresenter;
+
 class GamePresenter : public QObject
 {
     Q_OBJECT
+
+    Q_PROPERTY(QObject* dataEntry READ getDataEntryPresenter CONSTANT)
 
     /* pane visibility properties */
     Q_PROPERTY(bool introPaneVisible READ getIntroPaneVisible NOTIFY currentPaneChanged)
@@ -26,10 +30,6 @@ class GamePresenter : public QObject
 
     /* functionality enabling properties */
     Q_PROPERTY(bool playEnabled READ isPlayEnabled NOTIFY playEnabledChanged)
-    Q_PROPERTY(bool dataEntryEnabled READ isDataEntryEnabled NOTIFY dataEntryEnabledChanged)
-    Q_PROPERTY(bool addWordsPairEnabled READ isAddWordsPairEnabled NOTIFY addWordsPairEnabledChanged)
-    Q_PROPERTY(bool discardAddedWordPairsEnabled READ isDiscardAddedWordPairsEnabled NOTIFY discardAddedWordPairsEnabledChanged)
-    Q_PROPERTY(bool saveAddedWordPairsEnabled READ isSaveAddedWordPairsEnabled NOTIFY saveAddedWordPairsEnabledChanged)
     Q_PROPERTY(bool submitMainPaneInputEnabled READ getSubmitMainPaneInputEnabled NOTIFY submitMainPaneInputEnabledChanged)
     Q_PROPERTY(bool clearMainPaneInputEnabled READ getClearMainPaneInputEnabled NOTIFY clearMainPaneInputEnabledChanged)
     Q_PROPERTY(bool mainPaneStatisticsResetEnabled READ getMainPaneStatisticsResetEnabled NOTIFY mainPaneStatisticsResetEnabledChanged)
@@ -62,7 +62,6 @@ class GamePresenter : public QObject
     Q_PROPERTY(QString mainPaneStatusMessage READ getMainPaneStatusMessage NOTIFY mainPaneStatusMessageChanged)
     Q_PROPERTY(QString mainPaneScoreMessage READ getMainPaneScoreMessage NOTIFY mainPaneStatisticsMessagesChanged)
     Q_PROPERTY(QString mainPaneWordPairsMessage READ getMainPaneWordPairsMessage NOTIFY mainPaneStatisticsMessagesChanged)
-    Q_PROPERTY(QString dataEntryPaneStatusMessage READ getDataEntryPaneStatusMessage NOTIFY dataEntryPaneStatusMessageChanged)
     Q_PROPERTY(QString errorMessage READ getErrorMessage NOTIFY errorMessageChanged)
 
     /* miscellaneous */
@@ -89,11 +88,9 @@ public:
 
     Q_INVOKABLE void switchToPane(Pane pane);
     Q_INVOKABLE void goBack();
-    Q_INVOKABLE void handleAddWordsPairRequest(const QString& firstWord, const QString& secondWord, bool areSynonyms);
-    Q_INVOKABLE void handleClearAddedWordPairsRequest();
-    Q_INVOKABLE void handleSaveAddedWordPairsRequest();
     Q_INVOKABLE void promptForSavingAddedWordPairs();
     Q_INVOKABLE void promptForDiscardingAddedWordPairs();
+    Q_INVOKABLE void handleDataSaveInProgress();
     Q_INVOKABLE void handleDisplayCorrectWordsPairRequest();
     Q_INVOKABLE void handleSubmitMainPaneInputRequest();
     Q_INVOKABLE void handleMainPaneStatisticsResetRequest();
@@ -117,6 +114,8 @@ public:
     Q_INVOKABLE void clearWordInputHoverIndexes();
     Q_INVOKABLE void quit();
 
+    QObject* getDataEntryPresenter() const;
+
     bool getIntroPaneVisible() const;
     bool getHelpPaneVisible() const;
     bool getMainPaneVisible() const;
@@ -124,10 +123,6 @@ public:
     bool getPromptSaveExitPaneVisible() const;
     bool getPromptDiscardPaneVisible() const;
     bool isPlayEnabled() const;
-    bool isDataEntryEnabled() const;
-    bool isAddWordsPairEnabled() const;
-    bool isDiscardAddedWordPairsEnabled() const;
-    bool isSaveAddedWordPairsEnabled() const;
     bool getMainPaneStatisticsResetEnabled() const;
     bool isPersistentModeEnabled() const;
     bool getClearMainPaneInputEnabled() const;
@@ -165,7 +160,6 @@ public:
     QString getMainPaneStatusMessage() const;
     QString getMainPaneScoreMessage() const;
     QString getMainPaneWordPairsMessage() const;
-    QString getDataEntryPaneStatusMessage() const;
     QString getErrorMessage() const;
 
     virtual ~GamePresenter();
@@ -173,10 +167,6 @@ public:
 signals:
     Q_SIGNAL void currentPaneChanged();
     Q_SIGNAL void playEnabledChanged();
-    Q_SIGNAL void dataEntryEnabledChanged();
-    Q_SIGNAL void addWordsPairEnabledChanged();
-    Q_SIGNAL void discardAddedWordPairsEnabledChanged();
-    Q_SIGNAL void saveAddedWordPairsEnabledChanged();
     Q_SIGNAL void mainPaneStatisticsResetEnabledChanged();
     Q_SIGNAL void persistentModeEnabledChanged();
     Q_SIGNAL void clearMainPaneInputEnabledChanged();
@@ -189,13 +179,10 @@ signals:
     Q_SIGNAL void introPaneMessageChanged();
     Q_SIGNAL void mainPaneStatusMessageChanged();
     Q_SIGNAL void mainPaneStatisticsMessagesChanged();
-    Q_SIGNAL void dataEntryPaneStatusMessageChanged();
     Q_SIGNAL void errorMessageChanged();
     Q_SIGNAL void hoverChanged();
     Q_SIGNAL void pieceSelectionCursorPositionChanged();
     Q_SIGNAL void piecesRemovalCursorPositionChanged();
-    Q_SIGNAL void dataEntryAddSucceeded();
-    Q_SIGNAL void dataEntryAddInvalid();
 
 private slots:
     void _onInputChanged();
@@ -207,6 +194,8 @@ private:
     void _updateStatusMessage(const QString& message, Pane pane, int delay);
     void _updateMessage();
     void _launchErrorPane(const QString& errorMessage);
+
+    QObject* m_pDataEntryPresenter;
 
     bool m_IntroPaneVisible;
     bool m_HelpPaneVisible;
@@ -226,7 +215,6 @@ private:
     QString m_MainPaneStatusMessage;
     QString m_MainPaneScoreMessage;
     QString m_MainPaneWordPairsMessage;
-    QString m_DataEntryPaneStatusMessage;
     QString m_ErrorMessage;
     QString m_CurrentStatusMessage;
 

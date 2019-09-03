@@ -35,9 +35,13 @@ SOURCES += \
         DataAccess/datasourceaccesshelper.cpp \
         Management/gamemanager.cpp \
         Management/gamefacade.cpp \
+        Management/dataentryfacade.cpp \
         Proxies/gameinitproxy.cpp \
         Proxies/gamefunctionalityproxy.cpp \
         Proxies/gameproxy.cpp \
+        Proxies/datafunctionalityproxy.cpp \
+        Proxies/dataproxy.cpp \
+        Proxies/dataentryproxy.cpp \
         Proxies/datasourceproxy.cpp \
         Utilities/scoreitem.cpp \
         Utilities/exceptions.cpp \
@@ -55,9 +59,13 @@ HEADERS += \
         DataAccess/datasourceaccesshelper.h \
         Management/gamemanager.h \
         Management/gamefacade.h \
+        Management/dataentryfacade.h \
         Proxies/gameinitproxy.h \
         Proxies/gamefunctionalityproxy.h \
         Proxies/gameproxy.h \
+        Proxies/datafunctionalityproxy.h \
+        Proxies/dataproxy.h \
+        Proxies/dataentryproxy.h \
         Proxies/datasourceproxy.h \
         Utilities/scoreitem.h \
         Utilities/exceptions.h \

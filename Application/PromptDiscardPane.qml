@@ -95,13 +95,13 @@ Item {
                 enabled: presenter.promptDiscardPaneVisible
 
                 onActivated: {
-                    presenter.handleClearAddedWordPairsRequest();
+                    presenter.dataEntry.handleClearAddedWordPairsRequest();
                     presenter.goBack();
                 }
             }
 
             onClicked: {
-                presenter.handleClearAddedWordPairsRequest();
+                presenter.dataEntry.handleClearAddedWordPairsRequest();
                 presenter.goBack();
             }
 

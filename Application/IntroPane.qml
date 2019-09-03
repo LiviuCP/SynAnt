@@ -116,7 +116,7 @@ Item {
         Button {
             id: dataEntryBtn
 
-            enabled: presenter.dataEntryEnabled
+            enabled: presenter.dataEntry.dataEntryEnabled
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -221,5 +221,11 @@ Item {
             onReleased: opacity = Styles.releasedButtonOpacity
             onCanceled: opacity = Styles.releasedButtonOpacity
         }
+    }
+
+    Connections {
+        target: presenter.dataEntry
+
+        onDataSaveInProgress: presenter.handleDataSaveInProgress()
     }
 }

@@ -163,7 +163,7 @@ Item {
         Button {
             id: dataEntryBtn
 
-            enabled: presenter.dataEntryEnabled
+            enabled: presenter.dataEntry.dataEntryEnabled
 
             Layout.minimumWidth: quitBtn.width
 

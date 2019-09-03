@@ -24,7 +24,7 @@ Item {
     }
 
     function handleBackButtonAction() {
-        if (presenter.saveAddedWordPairsEnabled) {
+        if (presenter.dataEntry.saveAddedWordPairsEnabled) {
             presenter.promptForSavingAddedWordPairs();
         } else {
             presenter.goBack();
@@ -57,7 +57,7 @@ Item {
         border.color: Styles.borderColor
 
         Text {
-            text: presenter.dataEntryPaneStatusMessage;
+            text: presenter.dataEntry.dataEntryPaneStatusMessage;
             wrapMode: Text.WordWrap
             anchors.fill: parent
         }
@@ -204,7 +204,7 @@ Item {
         Button {
             id: addPairBtn
 
-            enabled: presenter.addWordsPairEnabled
+            enabled: presenter.dataEntry.addWordsPairEnabled
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -238,10 +238,10 @@ Item {
                 sequence: GameStrings.addPairButtonShortcut
                 enabled: addPairBtn.enabled && presenter.dataEntryPaneVisible
 
-                onActivated: presenter.handleAddWordsPairRequest(firstWordTextField.text, secondWordTextField.text, synonymsSelectionButton.checked)
+                onActivated: presenter.dataEntry.handleAddWordsPairRequest(firstWordTextField.text, secondWordTextField.text, synonymsSelectionButton.checked)
             }
 
-            onClicked: presenter.handleAddWordsPairRequest(firstWordTextField.text, secondWordTextField.text, synonymsSelectionButton.checked)
+            onClicked: presenter.dataEntry.handleAddWordsPairRequest(firstWordTextField.text, secondWordTextField.text, synonymsSelectionButton.checked)
             onPressed: opacity = Styles.pressedButtonOpacity
             onReleased: opacity = Styles.releasedButtonOpacity
             onCanceled: opacity = Styles.releasedButtonOpacity
@@ -327,7 +327,7 @@ Item {
         Button {
             id: discardBtn
 
-            enabled: presenter.discardAddedWordPairsEnabled
+            enabled: presenter.dataEntry.discardAddedWordPairsEnabled
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -380,7 +380,7 @@ Item {
         Button {
             id: saveBtn
 
-            enabled: presenter.saveAddedWordPairsEnabled
+            enabled: presenter.dataEntry.saveAddedWordPairsEnabled
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -415,13 +415,13 @@ Item {
                 enabled: saveBtn.enabled && presenter.dataEntryPaneVisible
 
                 onActivated: {
-                    presenter.handleSaveAddedWordPairsRequest();
+                    presenter.dataEntry.handleSaveAddedWordPairsRequest();
                     firstWordTextField.forceActiveFocus();
                 }
             }
 
             onClicked: {
-                presenter.handleSaveAddedWordPairsRequest();
+                presenter.dataEntry.handleSaveAddedWordPairsRequest();
                 firstWordTextField.forceActiveFocus();
             }
 
@@ -460,7 +460,7 @@ Item {
             }
 
             onClicked: {
-                if (presenter.saveAddedWordPairsEnabled) {
+                if (presenter.dataEntry.saveAddedWordPairsEnabled) {
                     presenter.quitGameDeferred = true;
                     presenter.promptForSavingAddedWordPairs();
                 } else {
@@ -475,9 +475,9 @@ Item {
     }
 
     Connections {
-        target: presenter
+        target: presenter.dataEntry
 
-        onDataEntryAddSucceeded: clearTextFields()
+        onDataEntryAddSucceeded: dataEntryPane.clearTextFields()
         onDataEntryAddInvalid: firstWordTextField.forceActiveFocus()
     }
 }

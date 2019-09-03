@@ -5,7 +5,7 @@
    3) The facade checks the user input created by InputBuilder against the reference words contained in WordPairOwner.
    4) The facade intermediates the communication between data access classes and consumer (WordMixer) by using the DataSourceProxy.
    5) The facade provides decoupling by hiding the backend functionality (WordMixer, ScoreItem, WordPairOwner, InputBuilder and data access classes) entirely from presenter.
-   6) Last but not least the facade is the only responsible class for updating the status of the game (which is displayed in the status box of the main pane).
+   6) Last but not least the facade is responsible for updating the status of the game (except data entry).
 */
 
 #ifndef GAMEFACADE_H
@@ -37,9 +37,6 @@ public:
     void pauseGame();
     void quitGame();
 
-    void startWordEntry();
-    void resumeWordEntry();
-
     void enablePersistentMode();
     void disablePersistentMode();
     void goToNextPersistentModeContainer();
@@ -54,9 +51,7 @@ public:
     void clearInput();
 
     void handleSubmitRequest();
-    void requestAddPairToCache(const QString& firstWord, const QString& secondWord, bool areSynonyms);
-    void requestSaveDataToDb();
-    void requestCacheReset();
+    void handleSavingInProgress();
     void provideCorrectWordsPairToUser();
     void setLevel(Game::Level level);
     void resetGameStatistics();
@@ -82,23 +77,12 @@ public:
     int getTotalAvailableScore() const;
     int getGuessedWordPairs() const;
     int getTotalWordPairs() const;
-    int getCurrentNrOfAddedWordPairs() const;
-    int getLastSavedNrOfWordPairs() const;
-    Game::ValidationCodes getDataEntryValidationCode() const;
 
     bool isDataAvailable() const;
-    bool isDataEntryAllowed() const;
-    bool isAddingToCacheAllowed() const;
-    bool isCacheResetAllowed() const;
-    bool isSavingToDbAllowed() const;
     bool areSynonyms() const;
 
 signals:
     Q_SIGNAL void dataAvailableChanged();
-    Q_SIGNAL void dataEntryAllowedChanged();
-    Q_SIGNAL void addPairToCacheAllowedChanged();
-    Q_SIGNAL void resetCacheAllowedChanged();
-    Q_SIGNAL void saveNewPairsToDbAllowedChanged();
     Q_SIGNAL void newMixedWordsAvailable();
     Q_SIGNAL void inputChanged();
     Q_SIGNAL void completionChanged();
@@ -112,10 +96,6 @@ signals:
 private slots:
     void _onLoadDataFromDbFinished(bool success);
     void _onEntryProvidedToConsumer(QPair<QString, QString> newWordsPair, bool areSynonyms);
-    void _onAddInvalidWordsPairRequested();
-    void _onNewWordsPairAddedToCache();
-    void _onWordsPairAlreadyContainedInCache();
-    void _onCacheReset();
     void _onWriteDataToDbFinished(int nrOfEntries);
     void _onWriteDataToDbErrorOccured();
     void _onPiecesAddedToInputStateChanged();
@@ -128,12 +108,6 @@ private:
     void _connectToDataSource();
     void _addPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex);
     void _removePiecesFromInputWordInPersistentMode();
-    void _allowAddToCache();
-    void _blockAddToCache();
-    void _allowCacheReset();
-    void _blockCacheReset();
-    void _allowSaveToDb();
-    void _blockSaveToDb();
 
     GameFunctionalityProxy* m_pGameFunctionalityProxy;
     DataSourceProxy* m_pDataSourceProxy;
@@ -144,12 +118,8 @@ private:
     ScoreItem* m_pScoreItem;
     Game::StatusCodes m_CurrentStatusCode;
     bool m_IsDataAvailable;
-    bool m_IsDataEntryAllowed;
-    bool m_IsAddingToCacheAllowed;
-    bool m_IsResettingCacheAllowed;
-    int m_CachedWordPairs;
-    bool m_IsSavingToDbAllowed;
-    bool m_IsSavingInProgress;
+    int m_CachedWordPairs; // data entry
+    bool m_IsSavingToDbAllowed; // data entry
     bool m_IsGameStarted;
     bool m_IsGamePaused;
     bool m_IsPersistentIndexModeEnabled;

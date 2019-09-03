@@ -28,6 +28,7 @@ namespace Game
     enum class StatusCodes
     {
         NO_DATA_LOADING_REQUESTED,
+        NO_DATA_ENTRY_REQUESTED,
         LOADING_DATA,
         DATA_LOADING_COMPLETE,
         NO_VALID_DATA_ENTRIES_LOADED,
@@ -45,6 +46,7 @@ namespace Game
         PAIR_ALREADY_ADDED,
         RESET_CACHE_REQUESTED,
         CACHE_RESET,
+        DATA_SAVE_IN_PROGRESS,
         NEW_DATA_SAVE_IN_PROGRESS,
         ADDITIONAL_DATA_SAVE_IN_PROGRESS,
         DATA_SUCCESSFULLY_SAVED,

@@ -13,7 +13,8 @@ class GameProxy : public QObject
     Q_OBJECT
 public:
     explicit GameProxy(QObject *parent = nullptr);
-    GameFacade* getFacade() const;
+
+    GameFacade* getGameFacade() const;
     void releaseResources();
 };
 

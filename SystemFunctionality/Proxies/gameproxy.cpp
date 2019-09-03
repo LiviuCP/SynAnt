@@ -6,9 +6,9 @@ GameProxy::GameProxy(QObject *parent)
 {
 }
 
-GameFacade *GameProxy::getFacade() const
+GameFacade *GameProxy::getGameFacade() const
 {
-    return GameManager::getManager()->getFacade();
+    return GameManager::getManager()->getGameFacade();
 }
 
 void GameProxy::releaseResources()

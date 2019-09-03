@@ -105,13 +105,13 @@ Item {
                 enabled: presenter.promptSaveExitPaneVisible
 
                 onActivated: {
-                    presenter.handleSaveAddedWordPairsRequest();
+                    presenter.dataEntry.handleSaveAddedWordPairsRequest();
                     promptSaveExitPane.quitOrExitDataEntry();
                 }
             }
 
             onClicked: {
-                presenter.handleSaveAddedWordPairsRequest();
+                presenter.dataEntry.handleSaveAddedWordPairsRequest();
                 promptSaveExitPane.quitOrExitDataEntry();
             }
 
@@ -154,13 +154,13 @@ Item {
                 enabled: presenter.promptSaveExitPaneVisible
 
                 onActivated: {
-                    presenter.handleClearAddedWordPairsRequest();
+                    presenter.dataEntry.handleClearAddedWordPairsRequest();
                     promptSaveExitPane.quitOrExitDataEntry();
                 }
             }
 
             onClicked: {
-                presenter.handleClearAddedWordPairsRequest();
+                presenter.dataEntry.handleClearAddedWordPairsRequest();
                 promptSaveExitPane.quitOrExitDataEntry();
             }
 
