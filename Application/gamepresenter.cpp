@@ -657,7 +657,7 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         break;
     case Game::StatusCodes::DATA_SUCCESSFULLY_SAVED:
         _updateStatusMessage(GameStrings::c_AdditionalDataAvailableMessage, Pane::INTRO, Game::c_NoDelay);
-        _updateStatusMessage(GameStrings::c_PleasePlayOrEnterDataMessage, Pane::INTRO, Game::c_VeryShortStatusUpdateDelay);
+        _updateStatusMessage(GameStrings::c_PleasePlayOrEnterDataMessage, Pane::INTRO, Game::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::DATA_ENTRY_SAVING_ERROR:
         _launchErrorPane(GameStrings::c_CannotSaveDataMessage);
