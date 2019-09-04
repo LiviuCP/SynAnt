@@ -1,5 +1,5 @@
 #include "exceptions.h"
-#include "gamestrings.h"
+#include "../Utilities/gameutils.h"
 
 GameException::GameException(QString description)
     : exception{}
@@ -20,6 +20,6 @@ FileException::FileException(QString description, QString fileName)
 
 const QString FileException::getDescription() const noexcept
 {
-    return {GameException::getDescription() + GameStrings::c_FileNameMessage.arg(m_FileName)};
+    return {GameException::getDescription() + Game::c_FileNameMessage.arg(m_FileName)};
 }
 

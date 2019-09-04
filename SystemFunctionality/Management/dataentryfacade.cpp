@@ -5,7 +5,7 @@
 DataEntryFacade::DataEntryFacade(QObject *parent)
     : QObject(parent)
     , m_pDataFunctionalityProxy{new DataFunctionalityProxy{this}}
-    , m_CurrentStatusCode{Game::DataEntryStatusCodes::NO_DATA_ENTRY_REQUESTED}
+    , m_CurrentStatusCode{DataEntry::StatusCodes::NO_DATA_ENTRY_REQUESTED}
     , m_IsDataEntryAllowed{false}
     , m_IsAddingToCacheAllowed{true}
     , m_IsResettingCacheAllowed{false}
@@ -36,7 +36,7 @@ void DataEntryFacade::startDataEntry()
 {
     if (!m_IsSavingInProgress)
     {
-        Q_EMIT statusChanged(m_CurrentStatusCode = Game::DataEntryStatusCodes::DATA_ENTRY_STARTED);
+        Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::DATA_ENTRY_STARTED);
     }
 }
 
@@ -44,7 +44,7 @@ void DataEntryFacade::resumeDataEntry()
 {
     if (!m_IsSavingInProgress)
     {
-        Q_EMIT statusChanged(m_CurrentStatusCode = Game::DataEntryStatusCodes::DATA_ENTRY_RESUMED);
+        Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::DATA_ENTRY_RESUMED);
     }
 }
 
@@ -66,7 +66,7 @@ void DataEntryFacade::requestSaveDataToDb()
         _blockCacheReset();
 
         m_IsSavingInProgress = true;
-        Q_EMIT statusChanged(m_CurrentStatusCode = Game::DataEntryStatusCodes::DATA_SAVE_IN_PROGRESS);
+        Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::DATA_SAVE_IN_PROGRESS);
 
         m_pDataEntryProxy->saveDataToDb();
     }
@@ -76,7 +76,7 @@ void DataEntryFacade::requestCacheReset()
 {
     if (m_IsDataEntryAllowed && m_IsResettingCacheAllowed)
     {
-        Q_EMIT statusChanged(m_CurrentStatusCode = Game::DataEntryStatusCodes::RESET_CACHE_REQUESTED);
+        Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::RESET_CACHE_REQUESTED);
 
         _blockSaveToDb();
         _blockCacheReset();
@@ -94,7 +94,7 @@ int DataEntryFacade::getLastSavedNrOfWordPairs() const
     return m_pDataEntryProxy->getLastSavedNrOfCacheEntries();
 }
 
-Game::ValidationCodes DataEntryFacade::getDataEntryValidationCode() const
+DataEntry::ValidationCodes DataEntryFacade::getDataEntryValidationCode() const
 {
     return m_pDataEntryProxy->getPairEntryValidationCode();
 }
@@ -134,7 +134,7 @@ void DataEntryFacade::_onNewWordsPairAddedToCache()
     _allowCacheReset();
     _allowSaveToDb();
 
-    Q_EMIT statusChanged(m_CurrentStatusCode = Game::DataEntryStatusCodes::DATA_ENTRY_ADD_SUCCESS);
+    Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::DATA_ENTRY_ADD_SUCCESS);
 }
 
 void DataEntryFacade::_onAddInvalidWordsPairRequested()
@@ -142,7 +142,7 @@ void DataEntryFacade::_onAddInvalidWordsPairRequested()
     // restore add to cache capability so the user can re-add the entry after modifying the words
     _allowAddToCache();
 
-    Q_EMIT statusChanged(m_CurrentStatusCode = Game::DataEntryStatusCodes::DATA_ENTRY_ADD_INVALID);
+    Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::DATA_ENTRY_ADD_INVALID);
 }
 
 void DataEntryFacade::_onWordsPairAlreadyContainedInCache()
@@ -151,13 +151,13 @@ void DataEntryFacade::_onWordsPairAlreadyContainedInCache()
     _allowCacheReset();
     _allowSaveToDb();
 
-    Q_EMIT statusChanged(m_CurrentStatusCode = Game::DataEntryStatusCodes::PAIR_ALREADY_ADDED);
+    Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::PAIR_ALREADY_ADDED);
 }
 
 void DataEntryFacade::_onCacheReset()
 {
     _allowAddToCache();
-    Q_EMIT statusChanged(m_CurrentStatusCode = Game::DataEntryStatusCodes::CACHE_RESET);
+    Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::CACHE_RESET);
 }
 
 void DataEntryFacade::_onWriteDataToDbFinished(int nrOfEntries)
@@ -168,7 +168,7 @@ void DataEntryFacade::_onWriteDataToDbFinished(int nrOfEntries)
     _allowAddToCache();
     m_IsSavingInProgress = false;
 
-    Q_EMIT statusChanged(m_CurrentStatusCode = Game::DataEntryStatusCodes::DATA_SUCCESSFULLY_SAVED);
+    Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::DATA_SUCCESSFULLY_SAVED);
 }
 
 void DataEntryFacade::_allowAddToCache()

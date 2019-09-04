@@ -7,7 +7,7 @@
 #include <QColor>
 #include <QTimer>
 
-#include "../SystemFunctionality/Utilities/game.h"
+#include "../SystemFunctionality/Utilities/gameutils.h"
 
 class GameFacade;
 class GameProxy;

@@ -69,8 +69,8 @@ HEADERS += \
         Proxies/datasourceproxy.h \
         Utilities/scoreitem.h \
         Utilities/exceptions.h \
-        Utilities/game.h \
-        Utilities/gamestrings.h \
+        Utilities/gameutils.h \
+        Utilities/dataentryutils.h \
         systemfunctionality.h \
         systemfunctionality_global.h
 

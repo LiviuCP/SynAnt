@@ -12,7 +12,7 @@
 #include <QObject>
 #include <QVector>
 
-#include "../Utilities/game.h"
+#include "../Utilities/gameutils.h"
 
 class InputBuilder : public QObject
 {

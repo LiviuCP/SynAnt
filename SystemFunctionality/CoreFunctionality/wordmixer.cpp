@@ -1,6 +1,5 @@
 #include "wordmixer.h"
-#include "../Utilities/game.h"
-#include "../Utilities/gamestrings.h"
+#include "../Utilities/gameutils.h"
 #include "../Utilities/exceptions.h"
 
 WordMixer::WordMixer(QObject *parent)

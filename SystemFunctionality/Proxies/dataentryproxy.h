@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#include "../Utilities/game.h"
+#include "../Utilities/dataentryutils.h"
 
 class GameManager;
 
@@ -17,7 +17,7 @@ public:
     void requestWriteToCache(QPair<QString, QString> newWordsPair, bool areSynonyms);
     void requestCacheReset();
 
-    Game::ValidationCodes getPairEntryValidationCode() const;
+    DataEntry::ValidationCodes getPairEntryValidationCode() const;
     int getLastSavedNrOfCacheEntries() const;
     int getCurrentNrOfCacheEntries() const;
 

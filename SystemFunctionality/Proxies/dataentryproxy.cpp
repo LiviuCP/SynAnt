@@ -20,7 +20,7 @@ void DataEntryProxy::requestCacheReset()
     GameManager::getManager()->requestCacheReset();
 }
 
-Game::ValidationCodes DataEntryProxy::getPairEntryValidationCode() const
+DataEntry::ValidationCodes DataEntryProxy::getPairEntryValidationCode() const
 {
     return GameManager::getManager()->getPairEntryValidationCode();
 }

@@ -27,7 +27,7 @@
 #include <QObject>
 #include <QSqlDatabase>
 
-#include "../Utilities/game.h"
+#include "../Utilities/dataentryutils.h"
 
 class GameFacade;
 class DataEntryFacade;
@@ -60,7 +60,7 @@ public:
     void provideDataEntryToConsumer(int entryNumber);
 
     int getNrOfValidDataSourceEntries() const;
-    Game::ValidationCodes getPairEntryValidationCode() const;
+    DataEntry::ValidationCodes getPairEntryValidationCode() const;
 
     GameFacade* getGameFacade() const;
     DataEntryFacade* getDataEntryFacade() const;

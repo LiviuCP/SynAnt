@@ -7,7 +7,6 @@
 #include "../Proxies/gamefunctionalityproxy.h"
 #include "../Proxies/datasourceproxy.h"
 #include "../Utilities/scoreitem.h"
-#include "../Utilities/gamestrings.h"
 
 GameFacade::GameFacade(QObject *parent)
     : QObject(parent)

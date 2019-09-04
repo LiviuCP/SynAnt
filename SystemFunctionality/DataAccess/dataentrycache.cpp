@@ -4,8 +4,7 @@
 #include <QSqlQuery>
 
 #include "dataentrycache.h"
-#include "../Utilities/game.h"
-#include "../Utilities/gamestrings.h"
+#include "../Utilities/gameutils.h"
 
 DataEntryCache::DataEntryCache(DataSource* pDataSource, QObject *parent)
     : QObject(parent)
@@ -34,14 +33,14 @@ void DataEntryCache::onResetCacheRequested()
     m_CacheEntries.clear();
 
     // for sync purposes only
-    QThread::msleep(Game::c_ResetCacheDelay);
+    QThread::msleep(Game::Timing::c_ResetCacheDelay);
 
     Q_EMIT cacheReset();
 }
 
 void DataEntryCache::onWriteDataToDbRequested()
 {
-    Q_UNUSED(QSqlDatabase::addDatabase(GameStrings::c_DbDriverName));
+    Q_UNUSED(QSqlDatabase::addDatabase(Game::Database::c_DbDriverName));
 
     // ensure all database related objects are destroyed before the connection is removed
     {
@@ -55,11 +54,11 @@ void DataEntryCache::onWriteDataToDbRequested()
 
             for (auto entry : m_CacheEntries)
             {
-                query.prepare(GameStrings::c_InsertEntryIntoDbQuery);
+                query.prepare(Game::Database::c_InsertEntryIntoDbQuery);
 
-                query.bindValue(GameStrings::c_FirstWordFieldPlaceholder, entry.firstWord);
-                query.bindValue(GameStrings::c_SecondWordFieldPlaceholder, entry.secondWord);
-                query.bindValue(GameStrings::c_AreSynonymsFieldPlaceholder, static_cast<int>(entry.areSynonyms));
+                query.bindValue(Game::Database::c_FirstWordFieldPlaceholder, entry.firstWord);
+                query.bindValue(Game::Database::c_SecondWordFieldPlaceholder, entry.secondWord);
+                query.bindValue(Game::Database::c_AreSynonymsFieldPlaceholder, static_cast<int>(entry.areSynonyms));
 
                 if (!query.exec())
                 {
@@ -74,7 +73,7 @@ void DataEntryCache::onWriteDataToDbRequested()
             m_CacheEntries.clear();
 
             // for sync purposes only
-            QThread::msleep(Game::c_WriteDataThreadDelay);
+            QThread::msleep(Game::Timing::c_WriteDataThreadDelay);
 
             Q_EMIT writeDataToDbFinished(nrOfSavedEntries);
         }

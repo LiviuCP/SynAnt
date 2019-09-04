@@ -13,7 +13,7 @@
 #include <QObject>
 #include <QVector>
 
-#include "game.h"
+#include "gameutils.h"
 
 class ScoreItem : public QObject
 {

@@ -19,7 +19,6 @@
 #include "../Proxies/datasourceproxy.h"
 #include "../Proxies/dataentryproxy.h"
 #include "../Utilities/scoreitem.h"
-#include "../Utilities/gamestrings.h"
 #include "../Utilities/exceptions.h"
 
 GameManager* GameManager::s_pGameManager = nullptr;
@@ -74,7 +73,7 @@ void GameManager::setDataSource(const QString &dataDirPath)
 
     if (!m_pDataSource)
     {
-        QString databasePath{dataDirPath + "/" + GameStrings::c_DatabaseName};
+        QString databasePath{dataDirPath + "/" + Game::Database::c_DatabaseName};
 
         _setDatabase(databasePath);
 
@@ -132,7 +131,7 @@ int GameManager::getNrOfValidDataSourceEntries() const
     return m_pDataSource->getNrOfValidEntries();
 }
 
-Game::ValidationCodes GameManager::getPairEntryValidationCode() const
+DataEntry::ValidationCodes GameManager::getPairEntryValidationCode() const
 {
     return m_pDataEntryValidator->getValidationCode();
 }
@@ -233,64 +232,64 @@ void GameManager::_onLoadDataFromDbFinished(bool success)
 
 void GameManager::_setDatabase(const QString& databasePath)
 {
-    if (QSqlDatabase::isDriverAvailable(GameStrings::c_DbDriverName))
+    if (QSqlDatabase::isDriverAvailable(Game::Database::c_DbDriverName))
     {
-        QSqlDatabase db{QSqlDatabase::addDatabase(GameStrings::c_DbDriverName)};
+        QSqlDatabase db{QSqlDatabase::addDatabase(Game::Database::c_DbDriverName)};
         db.setDatabaseName(databasePath);
 
         if (db.open())
         {
-            if (!db.tables().contains(GameStrings::c_TableName))
+            if (!db.tables().contains(Game::Database::c_TableName))
             {
                 QSqlQuery createTableQuery;
 
-                createTableQuery.prepare(GameStrings::c_CreateTableQuery);
+                createTableQuery.prepare(Game::Database::c_CreateTableQuery);
 
                 if (!createTableQuery.exec())
                 {
-                    throw GameException{GameStrings::c_CannotCreateTable};
+                    throw GameException{Game::Error::c_CannotCreateTable};
                 }
             }
             else
             {
                 bool isValidTable{true};
 
-                if (db.record(GameStrings::c_TableName).count() != Game::c_RequiredNrOfDbTableFields)
+                if (db.record(Game::Database::c_TableName).count() != Game::c_RequiredNrOfDbTableFields)
                 {
                     isValidTable = false;
                 }
-                else if (db.record(GameStrings::c_TableName).field(0).name() != GameStrings::c_IdFieldName ||
-                         db.record(GameStrings::c_TableName).field(1).name() != GameStrings::c_FirstWordFieldName ||
-                         db.record(GameStrings::c_TableName).field(2).name() != GameStrings::c_SecondWordFieldName ||
-                         db.record(GameStrings::c_TableName).field(3).name() != GameStrings::c_AreSynonymsFieldName ||
-                         db.record(GameStrings::c_TableName).field(4).name() != GameStrings::c_LanguageFieldName)
+                else if (db.record(Game::Database::c_TableName).field(0).name() != Game::Database::c_IdFieldName ||
+                         db.record(Game::Database::c_TableName).field(1).name() != Game::Database::c_FirstWordFieldName ||
+                         db.record(Game::Database::c_TableName).field(2).name() != Game::Database::c_SecondWordFieldName ||
+                         db.record(Game::Database::c_TableName).field(3).name() != Game::Database::c_AreSynonymsFieldName ||
+                         db.record(Game::Database::c_TableName).field(4).name() != Game::Database::c_LanguageFieldName)
                 {
                     isValidTable = false;
                 }
-                else if (db.record(GameStrings::c_TableName).field(0).type() != QVariant::Int ||
-                         db.record(GameStrings::c_TableName).field(1).type() != QVariant::String ||
-                         db.record(GameStrings::c_TableName).field(2).type() != QVariant::String ||
-                         db.record(GameStrings::c_TableName).field(3).type() != QVariant::Int ||
-                         db.record(GameStrings::c_TableName).field(4).type() != QVariant::String)
+                else if (db.record(Game::Database::c_TableName).field(0).type() != QVariant::Int ||
+                         db.record(Game::Database::c_TableName).field(1).type() != QVariant::String ||
+                         db.record(Game::Database::c_TableName).field(2).type() != QVariant::String ||
+                         db.record(Game::Database::c_TableName).field(3).type() != QVariant::Int ||
+                         db.record(Game::Database::c_TableName).field(4).type() != QVariant::String)
                 {
                     isValidTable = false;
                 }
 
                 if (!isValidTable)
                 {
-                    throw GameException{GameStrings::c_TableIsInvalid};
+                    throw GameException{Game::Error::c_TableIsInvalid};
                 }
             }
             db.close();
         }
         else
         {
-            throw FileException{GameStrings::c_CannotOpenDatabase, databasePath};
+            throw FileException{Game::Error::c_CannotOpenDatabase, databasePath};
         }
     }
     else
     {
-        throw GameException{GameStrings::c_DatabaseDriverNotAvailable};
+        throw GameException{Game::Error::c_DatabaseDriverNotAvailable};
     }
 
     QSqlDatabase::removeDatabase(QSqlDatabase::defaultConnection);

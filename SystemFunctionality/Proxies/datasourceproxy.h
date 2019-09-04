@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#include "../Utilities/game.h"
+#include "../Utilities/gameutils.h"
 
 class GameManager;
 

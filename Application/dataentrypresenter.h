@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QTimer>
 
-#include "../SystemFunctionality/Utilities/game.h"
+#include "../SystemFunctionality/Utilities/dataentryutils.h"
 
 class DataEntryFacade;
 class DataProxy;
@@ -48,7 +48,7 @@ signals:
     Q_SIGNAL void dataSaveInProgress();
 
 private slots:
-    void _onStatusChanged(Game::DataEntryStatusCodes statusCode);
+    void _onStatusChanged(DataEntry::StatusCodes statusCode);
 
 private:
     void _updateStatusMessage(const QString& message, int delay);
