@@ -7,8 +7,7 @@
 
 #include <QMap>
 
-
-static const QString c_HelpWindowMessageString          {
+static const QString c_RawHelpMessage                   {
                                                              "\n\n 1) The words can be in any language depending on the data file content.\n"
                                                              "\n 2) Minimum word size is %1 characters. Minimum total pair size is %2 characters. "
                                                              "The total pair size should not exceed %3 characters.\n"
@@ -128,23 +127,10 @@ static const QString c_HelpWindowMessageString          {
                                                              "\nPress Ok to return to previous page.\n"
                                                         };
 
+/* only add the enum classes here that are shared by multiple classes */
+
 namespace Game
 {
-    enum class InputWordNumber
-    {
-        ONE,
-        TWO,
-        NrOfWords
-    };
-
-    enum class Level
-    {
-        EASY,
-        MEDIUM,
-        HARD,
-        NrOfLevels
-    };
-
     enum class StatusCodes
     {
         NO_DATA_LOADING_REQUESTED,
@@ -179,13 +165,10 @@ namespace Game
         StatusCodesCount
     };
 
-    enum class StatisticsUpdate
+    enum class InputWordNumber
     {
-        INIT,
-        FULL_UPDATE,
-        PARTIAL_UPDATE,
-        RESET,
-        UpdateTypesCount
+        ONE,
+        TWO
     };
 
     enum class PieceTypes
@@ -196,25 +179,36 @@ namespace Game
         PieceTypesCount
     };
 
-    const QMap<Game::Level, int> c_ScoreIncrements
+    enum class Levels
     {
-        {Game::Level::EASY,   1},
-        {Game::Level::MEDIUM, 2},
-        {Game::Level::HARD,   4}
+        LEVEL_EASY,
+        LEVEL_MEDIUM,
+        LEVEL_HARD,
+        NrOfLevels
     };
 
-    const QMap<Game::Level, int> c_WordPieceSizes
+    enum class StatisticsUpdateTypes
     {
-        {Game::Level::EASY,   3},
-        {Game::Level::MEDIUM, 2},
-        {Game::Level::HARD,   1}
+        INIT,
+        FULL_UPDATE,
+        PARTIAL_UPDATE,
+        RESET,
+        UpdateTypesCount
     };
 
-    static constexpr int c_RequiredNrOfDbTableFields{5};
+    const QMap<Game::Levels, int> c_ScoreIncrements
+    {
+        {Game::Levels::LEVEL_EASY,   1},
+        {Game::Levels::LEVEL_MEDIUM, 2},
+        {Game::Levels::LEVEL_HARD,   4}
+    };
 
-    const QString c_FileNameMessage{"\nFile: %1\n"};
-    const QString c_Synonyms{"synonyms"};
-    const QString c_Antonyms{"antonyms"};
+    const QMap<Game::Levels, int> c_WordPieceSizes
+    {
+        {Game::Levels::LEVEL_EASY,   3},
+        {Game::Levels::LEVEL_MEDIUM, 2},
+        {Game::Levels::LEVEL_HARD,   1}
+    };
 
     namespace Timing
     {
@@ -232,9 +226,9 @@ namespace Game
 
     namespace Colors
     {
-        const QString c_WordFirstPieceTextColor             {    "blue"                                                                                     };
-        const QString c_WordMiddlePieceTextColor            {    "black"                                                                                    };
-        const QString c_WordLastPieceTextColor              {    "red"                                                                                      };
+        const QString c_BeginPieceTextColor             {    "blue"                                                                                     };
+        const QString c_MiddlePieceTextColor            {    "black"                                                                                    };
+        const QString c_EndPieceTextColor              {    "red"                                                                                      };
     }
 
     namespace Database
@@ -263,10 +257,10 @@ namespace Game
                                                             };
     }
 
-    namespace Statistics
+    namespace StatisticsTexts
     {
-        const QString c_HighscoresMessage                   {    "High-score: %1/%2"                                                                        };
-        const QString c_WordPairsMessage                    {    "Word pairs: %1/%2"                                                                        };
+        const QString c_HighscoresText                   {    "High-score: %1/%2"                                                                        };
+        const QString c_WordPairsText                    {    "Word pairs: %1/%2"                                                                        };
     }
 
     namespace Constraints
@@ -289,15 +283,15 @@ namespace Game
 
     namespace Messages
     {
-        // general window messages
-        const QString c_HelpWindowMessage                   {
-                                                                 c_HelpWindowMessageString
+        // general pane messages
+        const QString c_HelpMessage                         {
+                                                                 c_RawHelpMessage
                                                                      .arg(Game::Constraints::c_MinWordSize)
                                                                      .arg(Game::Constraints::c_MinPairSize)
                                                                      .arg(Game::Constraints::c_MaxPairSize)
-                                                                     .arg(Game::c_ScoreIncrements[Game::Level::EASY])
-                                                                     .arg(Game::c_ScoreIncrements[Game::Level::MEDIUM])
-                                                                     .arg(Game::c_ScoreIncrements[Game::Level::HARD])
+                                                                     .arg(Game::c_ScoreIncrements[Game::Levels::LEVEL_EASY])
+                                                                     .arg(Game::c_ScoreIncrements[Game::Levels::LEVEL_MEDIUM])
+                                                                     .arg(Game::c_ScoreIncrements[Game::Levels::LEVEL_HARD])
                                                             };
 
         // status messages
@@ -379,20 +373,29 @@ namespace Game
                                                                  "A new pair of words is available below"
                                                             };
 
-        const QString c_CursorModeEnabled                   {    "Cursor enabled."                                                                          };
-        const QString c_CursorModeDisabled                  {    "Cursor disabled."                                                                         };
-        const QString c_MouseClickDisabled                  {    "Mouse click on word pieces disabled while cursor is active!"                              };
+        const QString c_CursorModeEnabledMessage            {    "Cursor enabled."                                                                          };
+        const QString c_CursorModeDisabledMessage           {    "Cursor disabled."                                                                         };
+        const QString c_MouseClickDisabledMessage           {    "Mouse click on word pieces disabled while cursor is active!"                              };
     }
 
     namespace Error
     {
         // fatal error messages
+        const QString c_FileExceptionRawMessage             {    "\n%1\n\nFile: %2\n"                                                                       };
         const QString c_DatabaseDriverNotAvailable          {    "The SQLite driver is not available!"                                                      };
         const QString c_CannotOpenDatabase                  {    "The database cannot be opened!"                                                           };
         const QString c_CannotCreateTable                   {    "Cannot create database table!"                                                            };
         const QString c_TableIsInvalid                      {    "The database table is invalid!"                                                           };
-        const QString c_CannotOpenFileMessage               {    "File cannot be opened for reading!\n"                                                     };
-        const QString c_CannotSaveDataMessage               {    "An error occured when saving the word pair(s)!"                                           };
+        const QString c_CannotLoadDataMessage               {    "An error occured when loading the word pair(s)!\n"                                        };
+        const QString c_CannotSaveDataMessage               {    "An error occured when saving the word pair(s)!\n"                                         };
+    }
+
+    namespace Misc
+    {
+        static constexpr int c_RequiredNrOfDbTableFields{5};
+
+        const QString c_SynonymsDescriptor{"synonyms"};
+        const QString c_AntonymsDescriptor{"antonyms"};
     }
 }
 

@@ -6,10 +6,10 @@
 
 static const QMap<DataEntry::ValidationCodes, QString> c_InvalidPairEntryReasonMessages
 {
-    {DataEntry::ValidationCodes::LESS_MIN_CHARS_PER_WORD, DataEntry::Messages::c_WordHasLessThanMinimumCharacters},
-    {DataEntry::ValidationCodes::LESS_MIN_TOTAL_PAIR_CHARS, DataEntry::Messages::c_PairHasLessThanMinimumCharacters},
-    {DataEntry::ValidationCodes::MORE_MAX_TOTAL_PAIR_CHARS, DataEntry::Messages::c_PairHasMoreThanMaximumCharacters},
-    {DataEntry::ValidationCodes::INVALID_CHARACTERS, DataEntry::Messages::c_InvalidCharacters},
+    {DataEntry::ValidationCodes::LESS_MIN_CHARS_PER_WORD, DataEntry::Messages::c_WordHasLessThanMinCharacters},
+    {DataEntry::ValidationCodes::LESS_MIN_TOTAL_PAIR_CHARS, DataEntry::Messages::c_PairHasLessThanMinCharacters},
+    {DataEntry::ValidationCodes::MORE_MAX_TOTAL_PAIR_CHARS, DataEntry::Messages::c_PairHasMoreThanMaxCharacters},
+    {DataEntry::ValidationCodes::INVALID_CHARACTERS, DataEntry::Messages::c_InvalidCharactersEntered},
     {DataEntry::ValidationCodes::IDENTICAL_WORDS, DataEntry::Messages::c_PairHasIdenticalWords},
     {DataEntry::ValidationCodes::PAIR_ALREADY_EXISTS, DataEntry::Messages::c_PairAlreadyExists}
 };
@@ -118,14 +118,14 @@ void DataEntryPresenter::_onStatusChanged(DataEntry::StatusCodes statusCode)
         Q_EMIT dataEntryAddInvalid();
         break;
     case DataEntry::StatusCodes::PAIR_ALREADY_ADDED:
-        _updateStatusMessage(DataEntry::Messages::c_PairAlreadyAddedMessage, Game::Timing::c_NoDelay);
+        _updateStatusMessage(DataEntry::Messages::c_DataEntryPairAlreadyAddedMessage, Game::Timing::c_NoDelay);
         _updateStatusMessage(DataEntry::Messages::c_DataEntryRequestMessage, Game::Timing::c_ShortStatusUpdateDelay);
         break;
     case DataEntry::StatusCodes::RESET_CACHE_REQUESTED:
-        _updateStatusMessage(DataEntry::Messages::c_DataEntryCacheResetRequestedMessage, Game::Timing::c_NoDelay);
+        _updateStatusMessage(DataEntry::Messages::c_DataCacheResetInProgressMessage, Game::Timing::c_NoDelay);
         break;
     case DataEntry::StatusCodes::CACHE_RESET:
-        _updateStatusMessage(DataEntry::Messages::c_DataEntryCacheResetMessage, Game::Timing::c_NoDelay);
+        _updateStatusMessage(DataEntry::Messages::c_DataCacheResetMessage, Game::Timing::c_NoDelay);
         _updateStatusMessage(DataEntry::Messages::c_DataEntryRequestMessage, Game::Timing::c_ShortStatusUpdateDelay);
         break;
     case DataEntry::StatusCodes::DATA_SAVE_IN_PROGRESS:

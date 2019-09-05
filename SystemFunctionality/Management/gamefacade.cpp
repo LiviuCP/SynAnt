@@ -343,7 +343,7 @@ void GameFacade::handleSubmitRequest()
 
     if (success)
     {
-        m_pScoreItem->updateStatistics(Game::StatisticsUpdate::FULL_UPDATE);
+        m_pScoreItem->updateStatistics(Game::StatisticsUpdateTypes::FULL_UPDATE);
         m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
     }
 }
@@ -355,12 +355,12 @@ void GameFacade::handleSavingInProgress()
 
 void GameFacade::provideCorrectWordsPairToUser()
 {
-    m_pScoreItem->updateStatistics(Game::StatisticsUpdate::PARTIAL_UPDATE);
+    m_pScoreItem->updateStatistics(Game::StatisticsUpdateTypes::PARTIAL_UPDATE);
     Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::SOLUTION_REQUESTED_BY_USER);
     m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
 }
 
-void GameFacade::setLevel(Game::Level level)
+void GameFacade::setLevel(Game::Levels level)
 {
     m_pWordMixer->setWordPieceSize(level);
     m_pScoreItem->setScoreIncrement(level);
@@ -372,7 +372,7 @@ void GameFacade::setLevel(Game::Level level)
 
 void GameFacade::resetGameStatistics()
 {
-    m_pScoreItem->updateStatistics(Game::StatisticsUpdate::RESET);
+    m_pScoreItem->updateStatistics(Game::StatisticsUpdateTypes::RESET);
 }
 
 QVector<QString> GameFacade::getMixedWordsPiecesContent() const
@@ -567,10 +567,10 @@ void GameFacade::_onPiecesRemovedFromInput(QVector<int> indexes)
     Q_EMIT inputChanged();
 }
 
-void GameFacade::_onStatisticsUpdated(Game::StatisticsUpdate updateType)
+void GameFacade::_onStatisticsUpdated(Game::StatisticsUpdateTypes updateType)
 {
     // for full and partial update no status message required (there are already status messages in the operations that trigger the full/partial update of statistics)
-    if (updateType == Game::StatisticsUpdate::RESET)
+    if (updateType == Game::StatisticsUpdateTypes::RESET)
     {
         Q_EMIT statusChanged(m_CurrentStatusCode = m_pInputBuilder->isInputComplete() ? Game::StatusCodes::STATISTICS_RESET_COMPLETE_INPUT
                                                                                       : Game::StatusCodes::STATISTICS_RESET_INCOMPLETE_INPUT);

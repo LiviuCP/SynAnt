@@ -43,15 +43,15 @@ void CoreFunctionalityTests::testWordsAreCorrectlyMixed()
 
     std::unique_ptr<WordMixer> pWordMixer{new WordMixer{}};
 
-    pWordMixer->setWordPieceSize(Game::Level::EASY);
+    pWordMixer->setWordPieceSize(Game::Levels::LEVEL_EASY);
     pWordMixer->mixWords(QPair<QString, QString>{firstWord, secondWord}, true);
     _checkCorrectMixing(pWordMixer->getMixedWordsPiecesContent(), QVector<QString>{"fir", "stw", "ord", "sec", "ond", "wor", "d"}, "easy");
 
-    pWordMixer->setWordPieceSize(Game::Level::MEDIUM);
+    pWordMixer->setWordPieceSize(Game::Levels::LEVEL_MEDIUM);
     pWordMixer->mixWords(QPair<QString, QString>{firstWord, secondWord}, true);
     _checkCorrectMixing(pWordMixer->getMixedWordsPiecesContent(), QVector<QString>{"fi", "rs", "tw", "or", "d", "se", "co", "nd", "wo", "rd"}, "medium");
 
-    pWordMixer->setWordPieceSize(Game::Level::HARD);
+    pWordMixer->setWordPieceSize(Game::Levels::LEVEL_HARD);
     pWordMixer->mixWords(QPair<QString, QString>{firstWord, secondWord}, true);
     _checkCorrectMixing(pWordMixer->getMixedWordsPiecesContent(), QVector<QString>{"f", "i", "r", "s", "t", "w", "o", "r", "d", "s", "e", "c", "o", "n", "d", "w", "o", "r", "d"},
                         "hard");
@@ -69,7 +69,7 @@ void CoreFunctionalityTests::testFirstLastPieceIndexesAreCorrect()
 
     std::unique_ptr<WordMixer> pWordMixer{new WordMixer{}};
 
-    pWordMixer->setWordPieceSize(Game::Level::EASY);
+    pWordMixer->setWordPieceSize(Game::Levels::LEVEL_EASY);
     // for testing purposes we always assume the words are synonyms
     pWordMixer->mixWords(QPair<QString, QString>{firstWord, secondWord}, true);
 
@@ -78,7 +78,7 @@ void CoreFunctionalityTests::testFirstLastPieceIndexesAreCorrect()
     QVERIFY2(pWordMixer->getMixedWordsPiecesContent()[pWordMixer->getSecondWordFirstPieceIndex()] == "sec", secondWordFirstPieceIndexNotCorrect);
     QVERIFY2(pWordMixer->getMixedWordsPiecesContent()[pWordMixer->getSecondWordLastPieceIndex()] == "d", secondWordLastPieceIndexNotCorrect);
 
-    pWordMixer->setWordPieceSize(Game::Level::MEDIUM);
+    pWordMixer->setWordPieceSize(Game::Levels::LEVEL_MEDIUM);
     pWordMixer->mixWords(QPair<QString, QString>{firstWord, secondWord}, true);
 
     QVERIFY2(pWordMixer->getMixedWordsPiecesContent()[pWordMixer->getFirstWordFirstPieceIndex()] == "wo", firstWordFirstPieceIndexNotCorrect);
@@ -86,7 +86,7 @@ void CoreFunctionalityTests::testFirstLastPieceIndexesAreCorrect()
     QVERIFY2(pWordMixer->getMixedWordsPiecesContent()[pWordMixer->getSecondWordFirstPieceIndex()] == "se", secondWordFirstPieceIndexNotCorrect);
     QVERIFY2(pWordMixer->getMixedWordsPiecesContent()[pWordMixer->getSecondWordLastPieceIndex()] == "rd", secondWordLastPieceIndexNotCorrect);
 
-    pWordMixer->setWordPieceSize(Game::Level::HARD);
+    pWordMixer->setWordPieceSize(Game::Levels::LEVEL_HARD);
     pWordMixer->mixWords(QPair<QString, QString>{firstWord, secondWord}, true);
 
     QVERIFY2(pWordMixer->getMixedWordsPiecesContent()[pWordMixer->getFirstWordFirstPieceIndex()] == "w", firstWordFirstPieceIndexNotCorrect);

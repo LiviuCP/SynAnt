@@ -53,7 +53,7 @@ public:
     void handleSubmitRequest();
     void handleSavingInProgress();
     void provideCorrectWordsPairToUser();
-    void setLevel(Game::Level level);
+    void setLevel(Game::Levels level);
     void resetGameStatistics();
 
     QVector<QString> getMixedWordsPiecesContent() const;
@@ -102,7 +102,7 @@ private slots:
     void _onNewWordsPairMixed();
     void _onPieceAddedToInput(int index);
     void _onPiecesRemovedFromInput(QVector<int> indexes);
-    void _onStatisticsUpdated(Game::StatisticsUpdate updateType);
+    void _onStatisticsUpdated(Game::StatisticsUpdateTypes updateType);
 
 private:
     void _connectToDataSource();

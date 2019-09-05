@@ -7,6 +7,8 @@
 
 #include <QString>
 
+/* only add the enum classes here that are shared by multiple classes */
+
 namespace DataEntry
 {
     enum class StatusCodes
@@ -21,7 +23,7 @@ namespace DataEntry
         CACHE_RESET,
         DATA_SAVE_IN_PROGRESS,
         DATA_SUCCESSFULLY_SAVED,
-        DataEntryStatusCodesCount
+        StatusCodesCount
     };
 
     enum class ValidationCodes
@@ -34,7 +36,7 @@ namespace DataEntry
         INVALID_CHARACTERS,
         PAIR_ALREADY_EXISTS,
         IDENTICAL_WORDS,
-        ReasonCodesCount
+        ValidationCodesCount
     };
 
     namespace Messages
@@ -56,18 +58,18 @@ namespace DataEntry
                                                                  "Please correct and try again!"
                                                             };
 
-        const QString c_PairAlreadyAddedMessage             {    "The pair has already been added. Please save added pairs to database or discard them"     };
+        const QString c_DataEntryPairAlreadyAddedMessage    {    "The pair has already been added. Please save added pairs to database or discard them"     };
 
-        const QString c_DataEntryCacheResetRequestedMessage {    "Discarding unsaved entries"                                                               };
-        const QString c_DataEntryCacheResetMessage          {    "The unsaved entries been discarded"                                                       };
+        const QString c_DataCacheResetInProgressMessage     {    "Discarding unsaved entries"                                                               };
+        const QString c_DataCacheResetMessage               {    "The unsaved entries been discarded"                                                       };
         const QString c_DataSaveInProgressMessage           {    "Data is currently being saved..."                                                         };
         const QString c_DataSuccessfullySavedMessage        {    "%1 word pairs have been successfully saved to database"                                   };
 
         // invalid pair entry reason messages
-        const QString c_WordHasLessThanMinimumCharacters    {    "At least one word has less than minimum required number of characters."                   };
-        const QString c_PairHasLessThanMinimumCharacters    {    "The entered word pair has less than the minimum required number of characters."           };
-        const QString c_PairHasMoreThanMaximumCharacters    {    "The entered word pair has more than the allowed maximum number of characters."            };
-        const QString c_InvalidCharacters                   {    "At least one of the words contains invalid characters."                                   };
+        const QString c_WordHasLessThanMinCharacters        {    "At least one word has less than minimum required number of characters."                   };
+        const QString c_PairHasLessThanMinCharacters        {    "The entered word pair has less than the minimum required number of characters."           };
+        const QString c_PairHasMoreThanMaxCharacters        {    "The entered word pair has more than the allowed maximum number of characters."            };
+        const QString c_InvalidCharactersEntered            {    "At least one of the words contains invalid characters."                                   };
         const QString c_PairHasIdenticalWords               {    "The entered word pair has identical words."                                               };
         const QString c_PairAlreadyExists                   {    "The entered word pair already exists."                                                    };
     }

@@ -254,7 +254,7 @@ void GameManager::_setDatabase(const QString& databasePath)
             {
                 bool isValidTable{true};
 
-                if (db.record(Game::Database::c_TableName).count() != Game::c_RequiredNrOfDbTableFields)
+                if (db.record(Game::Database::c_TableName).count() != Game::Misc::c_RequiredNrOfDbTableFields)
                 {
                     isValidTable = false;
                 }

@@ -58,7 +58,7 @@ class GamePresenter : public QObject
     /* text properties */
     Q_PROPERTY(QString windowTitle READ getWindowTitle NOTIFY currentPaneChanged)
     Q_PROPERTY(QString introPaneMessage READ getIntroPaneMessage NOTIFY introPaneMessageChanged)
-    Q_PROPERTY(QString helpPaneMessage READ getHelpPaneMessage CONSTANT) // if feasible: to be moved later to GameStrings.qml
+    Q_PROPERTY(QString helpPaneMessage READ getHelpPaneMessage CONSTANT) // don't move to GameStrings.qml as some additional constant properties might be required for passing args
     Q_PROPERTY(QString mainPaneStatusMessage READ getMainPaneStatusMessage NOTIFY mainPaneStatusMessageChanged)
     Q_PROPERTY(QString mainPaneScoreMessage READ getMainPaneScoreMessage NOTIFY mainPaneStatisticsMessagesChanged)
     Q_PROPERTY(QString mainPaneWordPairsMessage READ getMainPaneWordPairsMessage NOTIFY mainPaneStatisticsMessagesChanged)

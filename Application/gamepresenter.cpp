@@ -20,9 +20,9 @@ static const QMap<GamePresenter::Pane, QString> c_WindowTitles
 
 static const QMap<Game::PieceTypes, QColor> c_WordPieceTextColors
 {
-    {Game::PieceTypes::BEGIN_PIECE, Game::Colors::c_WordFirstPieceTextColor},
-    {Game::PieceTypes::MIDDLE_PIECE, Game::Colors::c_WordMiddlePieceTextColor},
-    {Game::PieceTypes::END_PIECE, Game::Colors::c_WordLastPieceTextColor}
+    {Game::PieceTypes::BEGIN_PIECE, Game::Colors::c_BeginPieceTextColor},
+    {Game::PieceTypes::MIDDLE_PIECE, Game::Colors::c_MiddlePieceTextColor},
+    {Game::PieceTypes::END_PIECE, Game::Colors::c_EndPieceTextColor}
 };
 
 GamePresenter::GamePresenter(QObject *parent)
@@ -166,8 +166,8 @@ void GamePresenter::handleMainPaneStatisticsResetRequest()
 
 void GamePresenter::switchToLevel(int level)
 {
-    Q_ASSERT(level >= 0 && level < static_cast<int>(Game::Level::NrOfLevels));
-    m_pGameFacade->setLevel(static_cast<Game::Level>(level));
+    Q_ASSERT(level >= 0 && level < static_cast<int>(Game::Levels::NrOfLevels));
+    m_pGameFacade->setLevel(static_cast<Game::Levels>(level));
 }
 
 void GamePresenter::enableCursor()
@@ -479,17 +479,17 @@ int GamePresenter::getPiecesRemovalSecondWordCursorPosition() const
 
 int GamePresenter::getLevelEasy() const
 {
-    return static_cast<int>(Game::Level::EASY);
+    return static_cast<int>(Game::Levels::LEVEL_EASY);
 }
 
 int GamePresenter::getLevelMedium() const
 {
-    return static_cast<int>(Game::Level::MEDIUM);
+    return static_cast<int>(Game::Levels::LEVEL_MEDIUM);
 }
 
 int GamePresenter::getLevelHard() const
 {
-    return static_cast<int>(Game::Level::HARD);
+    return static_cast<int>(Game::Levels::LEVEL_HARD);
 }
 
 int GamePresenter::getToolTipDelay() const
@@ -514,7 +514,7 @@ QString GamePresenter::getIntroPaneMessage() const
 
 QString GamePresenter::getHelpPaneMessage() const
 {
-    return Game::Messages::c_HelpWindowMessage;
+    return Game::Messages::c_HelpMessage;
 }
 
 QString GamePresenter::getMainPaneStatusMessage() const
@@ -580,9 +580,9 @@ void GamePresenter::_onStatisticsChanged()
         Q_EMIT mainPaneStatisticsResetEnabledChanged();
     }
 
-    m_MainPaneScoreMessage = Game::Statistics::c_HighscoresMessage.arg(obtainedScore)
+    m_MainPaneScoreMessage = Game::StatisticsTexts::c_HighscoresText.arg(obtainedScore)
                                                              .arg(totalAvailableScore);
-    m_MainPaneWordPairsMessage = Game::Statistics::c_WordPairsMessage.arg(guessedWordPairs)
+    m_MainPaneWordPairsMessage = Game::StatisticsTexts::c_WordPairsText.arg(guessedWordPairs)
                                                                 .arg(totalWordPairs);
 
     Q_EMIT mainPaneStatisticsMessagesChanged();
@@ -607,7 +607,7 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         _updateStatusMessage(Game::Messages::c_NoValidEntriesLoadedMessage, Pane::INTRO, Game::Timing::c_NoDelay);
         break;
     case Game::StatusCodes::DATA_LOADING_ERROR:
-        _launchErrorPane(Game::Error::c_CannotOpenFileMessage);
+        _launchErrorPane(Game::Error::c_CannotLoadDataMessage);
         break;
     case Game::StatusCodes::DATA_GOT_AVAILABLE:
         _updateStatusMessage(Game::Messages::c_DataAvailableMessage, Pane::INTRO, Game::Timing::c_NoDelay);
@@ -675,7 +675,7 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         {
             QString message{Game::Messages::c_CorrectUserInputMessage.arg(m_pGameFacade->getFirstReferenceWord())
                                                          .arg(m_pGameFacade->getSecondReferenceWord())
-                                                         .arg(m_pGameFacade->areSynonyms() ? Game::c_Synonyms : Game::c_Antonyms)};
+                                                         .arg(m_pGameFacade->areSynonyms() ? Game::Misc::c_SynonymsDescriptor : Game::Misc::c_AntonymsDescriptor)};
             _updateStatusMessage(message, Pane::MAIN, Game::Timing::c_NoDelay);
         }
         _updateStatusMessage(Game::Messages::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::Timing::c_LongStatusUpdateDelay);
@@ -688,7 +688,7 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         {
             QString message = Game::Messages::c_ShowPairRequestedByUserMessage.arg(m_pGameFacade->getFirstReferenceWord())
                                                                    .arg(m_pGameFacade->getSecondReferenceWord())
-                                                                   .arg(m_pGameFacade->areSynonyms() ? Game::c_Synonyms : Game::c_Antonyms);
+                                                                   .arg(m_pGameFacade->areSynonyms() ? Game::Misc::c_SynonymsDescriptor : Game::Misc::c_AntonymsDescriptor);
             _updateStatusMessage(message, Pane::MAIN, Game::Timing::c_NoDelay);
         }
         _updateStatusMessage(Game::Messages::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::Timing::c_LongStatusUpdateDelay);
@@ -706,15 +706,15 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         _updateStatusMessage(Game::Messages::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::Timing::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::PERSISTENT_MODE_ENTERED:
-        _updateStatusMessage(Game::Messages::c_CursorModeEnabled, Pane::MAIN, Game::Timing::c_NoDelay);
+        _updateStatusMessage(Game::Messages::c_CursorModeEnabledMessage, Pane::MAIN, Game::Timing::c_NoDelay);
         _updateStatusMessage(Game::Messages::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::Timing::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::PERSISTENT_MODE_EXITED:
-        _updateStatusMessage(Game::Messages::c_CursorModeDisabled, Pane::MAIN, Game::Timing::c_NoDelay);
+        _updateStatusMessage(Game::Messages::c_CursorModeDisabledMessage, Pane::MAIN, Game::Timing::c_NoDelay);
         _updateStatusMessage(Game::Messages::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::Timing::c_ShortStatusUpdateDelay);
         break;
     case Game::StatusCodes::PERSISTENT_INDEX_REQUIRED:
-        _updateStatusMessage(Game::Messages::c_MouseClickDisabled, Pane::MAIN, Game::Timing::c_NoDelay);
+        _updateStatusMessage(Game::Messages::c_MouseClickDisabledMessage, Pane::MAIN, Game::Timing::c_NoDelay);
         _updateStatusMessage(Game::Messages::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::Timing::c_ShortStatusUpdateDelay);
         break;
     default:

@@ -4,7 +4,7 @@
 
 WordMixer::WordMixer(QObject *parent)
     : QObject(parent)
-    , m_WordPieceSize{Game::c_WordPieceSizes[Game::Level::MEDIUM]}
+    , m_WordPieceSize{Game::c_WordPieceSizes[Game::Levels::LEVEL_MEDIUM]}
     , m_WordsPair{}
     , m_MixedWordsPiecesContent{}
     , m_WordsBeginEndPieceIndexes{
@@ -72,9 +72,9 @@ void WordMixer::mixWords(QPair<QString, QString> newWordsPair, bool areSynonyms)
     Q_EMIT newWordsPairMixed();
 }
 
-void WordMixer::setWordPieceSize(Game::Level level)
+void WordMixer::setWordPieceSize(Game::Levels level)
 {
-    Q_ASSERT(static_cast<int>(level) >= 0 && static_cast<int>(level) < static_cast<int>(Game::Level::NrOfLevels));
+    Q_ASSERT(static_cast<int>(level) >= 0 && static_cast<int>(level) < static_cast<int>(Game::Levels::NrOfLevels));
     m_WordPieceSize = Game::c_WordPieceSizes[level];
 }
 

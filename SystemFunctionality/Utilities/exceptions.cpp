@@ -20,6 +20,11 @@ FileException::FileException(QString description, QString fileName)
 
 const QString FileException::getDescription() const noexcept
 {
-    return {GameException::getDescription() + Game::c_FileNameMessage.arg(m_FileName)};
+    return
+    {
+        Game::Error::c_FileExceptionRawMessage
+                .arg(GameException::getDescription())
+                .arg(m_FileName)
+    };
 }
 
