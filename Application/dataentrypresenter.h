@@ -29,6 +29,7 @@ public:
     // call directly from game presenter to avoid unnecessary signal routing to QML
     void startDataEntry();
     void resumeDataEntry();
+    void stopDataEntry();
 
     bool isDataEntryEnabled() const;
     bool isAddWordsPairEnabled() const;
@@ -46,6 +47,7 @@ signals:
     Q_SIGNAL void dataEntryAddSucceeded();
     Q_SIGNAL void dataEntryAddInvalid();
     Q_SIGNAL void dataSaveInProgress();
+    Q_SIGNAL void dataEntryStopped();
 
 private slots:
     void _onStatusChanged(DataEntry::StatusCodes statusCode);

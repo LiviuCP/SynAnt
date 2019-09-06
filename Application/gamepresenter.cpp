@@ -767,6 +767,11 @@ void GamePresenter::_switchToPane(Pane pane)
         switch(pane)
         {
         case Pane::INTRO:
+            if (m_CurrentPane == Pane::DATA_ENTRY)
+            {
+                qobject_cast<DataEntryPresenter*>(m_pDataEntryPresenter)->stopDataEntry();
+                delayedSwitchingRequested = true;
+            }
             m_IntroPaneVisible = true;
             break;
         case Pane::HELP:
@@ -785,9 +790,13 @@ void GamePresenter::_switchToPane(Pane pane)
             }
             else
             {
+                if (m_CurrentPane == Pane::DATA_ENTRY)
+                {
+                    qobject_cast<DataEntryPresenter*>(m_pDataEntryPresenter)->stopDataEntry();
+                    delayedSwitchingRequested = true;
+                }
                 m_pGameFacade -> resumeGame();
             }
-
             m_MainPaneVisible = true;
             break;
         case Pane::DATA_ENTRY:
@@ -800,7 +809,6 @@ void GamePresenter::_switchToPane(Pane pane)
             {
                 qobject_cast<DataEntryPresenter*>(m_pDataEntryPresenter)->resumeDataEntry();
             }
-
             m_DataEntryPaneVisible = true;
             break;
         default:

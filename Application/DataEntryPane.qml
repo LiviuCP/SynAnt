@@ -479,5 +479,6 @@ Item {
 
         onDataEntryAddSucceeded: dataEntryPane.clearTextFields()
         onDataEntryAddInvalid: firstWordTextField.forceActiveFocus()
+        onDataEntryStopped: dataEntryPane.clearTextFields()
     }
 }

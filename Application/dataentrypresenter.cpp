@@ -64,6 +64,11 @@ void DataEntryPresenter::resumeDataEntry()
     m_pDataEntryFacade->resumeDataEntry();
 }
 
+void DataEntryPresenter::stopDataEntry()
+{
+    m_pDataEntryFacade->stopDataEntry();
+}
+
 bool DataEntryPresenter::isDataEntryEnabled() const
 {
     return m_pDataEntryFacade->isDataEntryAllowed();
@@ -102,9 +107,20 @@ void DataEntryPresenter::_onStatusChanged(DataEntry::StatusCodes statusCode)
         _updateStatusMessage(DataEntry::Messages::c_DataEntryStartMessage, Game::Timing::c_NoDelay);
         _updateStatusMessage(DataEntry::Messages::c_DataEntryRequestMessage, Game::Timing::c_ShortStatusUpdateDelay);
         break;
+    case DataEntry::StatusCodes::DATA_ENTRY_STARTED_SAVE_IN_PROGRESS:
+        _updateStatusMessage(DataEntry::Messages::c_DataEntrySaveInProgressStartMessage, Game::Timing::c_NoDelay);
+        break;
     case DataEntry::StatusCodes::DATA_ENTRY_RESUMED:
         _updateStatusMessage(DataEntry::Messages::c_DataEntryResumeMessage.arg(m_pDataEntryFacade->getCurrentNrOfAddedWordPairs()), Game::Timing::c_NoDelay);
         _updateStatusMessage(DataEntry::Messages::c_DataEntryRequestMessage, Game::Timing::c_ShortStatusUpdateDelay);
+        break;
+    case DataEntry::StatusCodes::DATA_ENTRY_STOPPED:
+        _updateStatusMessage(DataEntry::Messages::c_DataEntryStopMessage, Game::Timing::c_NoDelay);
+        Q_EMIT dataEntryStopped();
+        break;
+    case DataEntry::StatusCodes::DATA_ENTRY_STOPPED_SAVE_IN_PROGRESS:
+        _updateStatusMessage(DataEntry::Messages::c_DataEntrySaveInProgressStopMessage, Game::Timing::c_NoDelay);
+        Q_EMIT dataEntryStopped();
         break;
     case DataEntry::StatusCodes::DATA_ENTRY_ADD_SUCCESS:
         Q_EMIT dataEntryAddSucceeded();

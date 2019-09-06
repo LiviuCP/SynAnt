@@ -15,7 +15,10 @@ namespace DataEntry
     {
         NO_DATA_ENTRY_REQUESTED,
         DATA_ENTRY_STARTED,
+        DATA_ENTRY_STARTED_SAVE_IN_PROGRESS,
         DATA_ENTRY_RESUMED,
+        DATA_ENTRY_STOPPED,
+        DATA_ENTRY_STOPPED_SAVE_IN_PROGRESS,
         DATA_ENTRY_ADD_SUCCESS,
         DATA_ENTRY_ADD_INVALID,
         PAIR_ALREADY_ADDED,
@@ -41,8 +44,11 @@ namespace DataEntry
 
     namespace Messages
     {
-        const QString c_DataEntryStartMessage               {    "Word pairs entry started"                                                                 };
-        const QString c_DataEntryResumeMessage              {    "Data entry resumed. There are %1 entries pending to be saved!"                            };
+        const QString c_DataEntryStartMessage               {    "Welcome to data entry"                                                                    };
+        const QString c_DataEntrySaveInProgressStartMessage {    "Welcome back to data entry. Please wait, data is currently being saved..."                };
+        const QString c_DataEntryResumeMessage              {    "Word pairs entry resumed. There are %1 entries pending to be saved!"                      };
+        const QString c_DataEntryStopMessage                {    "Word pairs entry stopped"                                                                 };
+        const QString c_DataEntrySaveInProgressStopMessage  {    "Word pairs entry stopped. Data will be saved in the background"                           };
         const QString c_DataEntryRequestMessage             {    "Please enter a new pair of words.\n\nChoose if they are synonyms or antonyms"             };
 
         const QString c_DataEntrySuccessMessage             {

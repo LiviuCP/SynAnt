@@ -25,6 +25,7 @@ public:
 
     void startDataEntry();
     void resumeDataEntry();
+    void stopDataEntry();
 
     void requestAddPairToCache(const QString& firstWord, const QString& secondWord, bool areSynonyms);
     void requestSaveDataToDb();

@@ -34,10 +34,7 @@ DataEntryFacade::DataEntryFacade(QObject *parent)
 
 void DataEntryFacade::startDataEntry()
 {
-    if (!m_IsSavingInProgress)
-    {
-        Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::DATA_ENTRY_STARTED);
-    }
+    Q_EMIT statusChanged(m_CurrentStatusCode = m_IsSavingInProgress ? DataEntry::StatusCodes::DATA_ENTRY_STARTED_SAVE_IN_PROGRESS : DataEntry::StatusCodes::DATA_ENTRY_STARTED);
 }
 
 void DataEntryFacade::resumeDataEntry()
@@ -46,6 +43,11 @@ void DataEntryFacade::resumeDataEntry()
     {
         Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::DATA_ENTRY_RESUMED);
     }
+}
+
+void DataEntryFacade::stopDataEntry()
+{
+    Q_EMIT statusChanged(m_CurrentStatusCode = m_IsSavingInProgress ? DataEntry::StatusCodes::DATA_ENTRY_STOPPED_SAVE_IN_PROGRESS : DataEntry::StatusCodes::DATA_ENTRY_STOPPED);
 }
 
 void DataEntryFacade::requestAddPairToCache(const QString &firstWord, const QString &secondWord, bool areSynonyms)
