@@ -40,49 +40,52 @@ void DataEntryCache::onResetCacheRequested()
 
 void DataEntryCache::onWriteDataToDbRequested()
 {
-    Q_UNUSED(QSqlDatabase::addDatabase(Game::Database::c_DbDriverName));
-
-    // ensure all database related objects are destroyed before the connection is removed
+    if (m_CacheEntries.size() > 0)
     {
-        QSqlDatabase db{QSqlDatabase::database(QSqlDatabase::defaultConnection)};
+        Q_UNUSED(QSqlDatabase::addDatabase(Game::Database::c_DbDriverName));
 
-        db.setDatabaseName(m_pDataSource->getDataFilePath());
-
-        if (db.open())
+        // ensure all database related objects are destroyed before the connection is removed
         {
-            QSqlQuery query;
+            QSqlDatabase db{QSqlDatabase::database(QSqlDatabase::defaultConnection)};
 
-            for (auto entry : m_CacheEntries)
+            db.setDatabaseName(m_pDataSource->getDataFilePath());
+
+            if (db.open())
             {
-                query.prepare(Game::Database::c_InsertEntryIntoDbQuery);
+                QSqlQuery query;
 
-                query.bindValue(Game::Database::c_FirstWordFieldPlaceholder, entry.firstWord);
-                query.bindValue(Game::Database::c_SecondWordFieldPlaceholder, entry.secondWord);
-                query.bindValue(Game::Database::c_AreSynonymsFieldPlaceholder, static_cast<int>(entry.areSynonyms));
-
-                if (!query.exec())
+                for (auto entry : m_CacheEntries)
                 {
-                    Q_EMIT writeDataToDbErrorOccured();
+                    query.prepare(Game::Database::c_InsertEntryIntoDbQuery);
+
+                    query.bindValue(Game::Database::c_FirstWordFieldPlaceholder, entry.firstWord);
+                    query.bindValue(Game::Database::c_SecondWordFieldPlaceholder, entry.secondWord);
+                    query.bindValue(Game::Database::c_AreSynonymsFieldPlaceholder, static_cast<int>(entry.areSynonyms));
+
+                    if (!query.exec())
+                    {
+                        Q_EMIT writeDataToDbErrorOccured();
+                    }
                 }
+
+                db.close();
+
+                int nrOfSavedEntries{m_CacheEntries.size()};
+                m_pDataSource->updateDataEntries(m_CacheEntries, true);
+                m_CacheEntries.clear();
+
+                // for sync purposes only
+                QThread::msleep(Game::Timing::c_WriteDataThreadDelay);
+
+                Q_EMIT writeDataToDbFinished(nrOfSavedEntries);
             }
-
-            db.close();
-
-            int nrOfSavedEntries{m_CacheEntries.size()};
-            m_pDataSource->updateDataEntries(m_CacheEntries, true);
-            m_CacheEntries.clear();
-
-            // for sync purposes only
-            QThread::msleep(Game::Timing::c_WriteDataThreadDelay);
-
-            Q_EMIT writeDataToDbFinished(nrOfSavedEntries);
+            else
+            {
+                // user entered data valid but error when writing to DB
+                Q_EMIT writeDataToDbErrorOccured();
+            }
         }
-        else
-        {
-            // user entered data valid but error when writing to DB
-            Q_EMIT writeDataToDbErrorOccured();
-        }
+
+        QSqlDatabase::removeDatabase(QSqlDatabase::defaultConnection);
     }
-
-    QSqlDatabase::removeDatabase(QSqlDatabase::defaultConnection);
 }

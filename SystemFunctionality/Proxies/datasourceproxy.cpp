@@ -16,7 +16,7 @@ void DataSourceProxy::provideDataEntryToConsumer(int entryNumber)
     GameManager::getManager()->provideDataEntryToConsumer(entryNumber);
 }
 
-int DataSourceProxy::getNrOfValidDataSourceEntries()
+int DataSourceProxy::getNrOfDataSourceEntries()
 {
-    return GameManager::getManager()->getNrOfValidDataSourceEntries();
+    return GameManager::getManager()->getNrOfDataSourceEntries();
 }

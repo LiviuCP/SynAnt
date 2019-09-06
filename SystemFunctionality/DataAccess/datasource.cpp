@@ -34,7 +34,7 @@ void DataSource::provideDataEntryToConsumer(int entryNumber)
     Q_EMIT entryProvidedToConsumer(QPair<QString, QString>(fetchedDataEntry.firstWord, fetchedDataEntry.secondWord), fetchedDataEntry.areSynonyms);
 }
 
-int DataSource::getNrOfValidEntries() const
+int DataSource::getNrOfEntries() const
 {
     QMutexLocker mutexLocker{&m_DataSourceMutex};
     return m_DataEntries.size();

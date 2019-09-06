@@ -9,8 +9,10 @@ DataSourceAccessHelper::DataSourceAccessHelper(QObject *parent)
 
 void DataSourceAccessHelper::setEntriesTable(int nrOfEntries)
 {
-    Q_ASSERT(nrOfEntries > 0);
-    m_EntryUsedStatuses.fill(false, nrOfEntries);
+    if (nrOfEntries > 0)
+    {
+        m_EntryUsedStatuses.fill(false, nrOfEntries);
+    }
 }
 
 void DataSourceAccessHelper::resetUsedEntries()
@@ -20,10 +22,12 @@ void DataSourceAccessHelper::resetUsedEntries()
 
 void DataSourceAccessHelper::addEntriesToTable(int nrOfEntries)
 {
-    Q_ASSERT(nrOfEntries > 0);
-    QVector<bool> newEntriesUsedStatuses;
-    newEntriesUsedStatuses.fill(false, nrOfEntries);
-    m_EntryUsedStatuses.append(newEntriesUsedStatuses);
+    if (nrOfEntries > 0)
+    {
+        QVector<bool> newEntriesUsedStatuses;
+        newEntriesUsedStatuses.fill(false, nrOfEntries);
+        m_EntryUsedStatuses.append(newEntriesUsedStatuses);
+    }
 }
 
 int DataSourceAccessHelper::generateEntryNumber()

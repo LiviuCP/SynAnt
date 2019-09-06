@@ -469,18 +469,20 @@ void GameFacade::_onLoadDataFromDbFinished(bool success)
 {
     if (success)
     {
-        int nrOfEntries{m_pDataSourceProxy->getNrOfValidDataSourceEntries()};
+        int nrOfEntries{m_pDataSourceProxy->getNrOfDataSourceEntries()};
 
-        if (nrOfEntries != 0)
+        if (nrOfEntries > 0)
         {
+            m_IsDataAvailable = true;
             m_pDataSourceAccessHelper->setEntriesTable(nrOfEntries);
             _connectToDataSource();
 
+            Q_EMIT dataAvailableChanged();
             Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_LOADING_COMPLETE);
         }
         else
         {
-            Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::NO_VALID_DATA_ENTRIES_LOADED);
+            Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::NO_DATA_ENTRIES_LOADED);
         }
     }
     else
@@ -496,16 +498,22 @@ void GameFacade::_onEntryProvidedToConsumer(QPair<QString, QString> newWordsPair
 
 void GameFacade::_onWriteDataToDbFinished(int nrOfEntries)
 {
-    int initialNrOfEntries{m_pDataSourceAccessHelper->getTotalNrOfEntries()};
-
-    m_pDataSourceAccessHelper->addEntriesToTable(nrOfEntries);
-
-    if (initialNrOfEntries == 0)
+    if (nrOfEntries > 0)
     {
-        _connectToDataSource();
-    }
+        int initialNrOfEntries{m_pDataSourceAccessHelper->getTotalNrOfEntries()};
 
-    Q_EMIT statusChanged(m_CurrentStatusCode = initialNrOfEntries == 0 ? Game::StatusCodes::DATA_GOT_AVAILABLE : Game::StatusCodes::DATA_SUCCESSFULLY_SAVED);
+        m_pDataSourceAccessHelper->addEntriesToTable(nrOfEntries);
+
+        if (initialNrOfEntries == 0)
+        {
+            m_IsDataAvailable = true;
+            _connectToDataSource();
+
+            Q_EMIT dataAvailableChanged();
+        }
+
+        Q_EMIT statusChanged(m_CurrentStatusCode = initialNrOfEntries == 0 ? Game::StatusCodes::DATA_GOT_AVAILABLE : Game::StatusCodes::DATA_SUCCESSFULLY_SAVED);
+    }
 }
 
 void GameFacade::_onWriteDataToDbErrorOccured()
@@ -583,9 +591,6 @@ void GameFacade::_connectToDataSource()
 {
     bool connected{connect(m_pDataSourceProxy, &DataSourceProxy::entryProvidedToConsumer, this, &GameFacade::_onEntryProvidedToConsumer)};
     Q_ASSERT(connected);
-
-    m_IsDataAvailable = true;
-    Q_EMIT dataAvailableChanged();
 }
 
 void GameFacade::_addPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex)

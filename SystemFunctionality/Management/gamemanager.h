@@ -59,7 +59,7 @@ public:
     void requestCacheReset();
     void provideDataEntryToConsumer(int entryNumber);
 
-    int getNrOfValidDataSourceEntries() const;
+    int getNrOfDataSourceEntries() const;
     DataEntry::ValidationCodes getPairEntryValidationCode() const;
 
     GameFacade* getGameFacade() const;

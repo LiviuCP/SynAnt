@@ -603,7 +603,7 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
     case Game::StatusCodes::DATA_LOADING_COMPLETE:
         _updateStatusMessage(Game::Messages::c_DataAvailableMessage, Pane::INTRO, Game::Timing::c_NoDelay);
         break;
-    case Game::StatusCodes::NO_VALID_DATA_ENTRIES_LOADED:
+    case Game::StatusCodes::NO_DATA_ENTRIES_LOADED:
         _updateStatusMessage(Game::Messages::c_NoValidEntriesLoadedMessage, Pane::INTRO, Game::Timing::c_NoDelay);
         break;
     case Game::StatusCodes::DATA_LOADING_ERROR:

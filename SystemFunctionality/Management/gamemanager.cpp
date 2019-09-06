@@ -126,9 +126,9 @@ void GameManager::provideDataEntryToConsumer(int entryNumber)
     m_pDataSource->provideDataEntryToConsumer(entryNumber);
 }
 
-int GameManager::getNrOfValidDataSourceEntries() const
+int GameManager::getNrOfDataSourceEntries() const
 {
-    return m_pDataSource->getNrOfValidEntries();
+    return m_pDataSource->getNrOfEntries();
 }
 
 DataEntry::ValidationCodes GameManager::getPairEntryValidationCode() const

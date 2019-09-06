@@ -15,7 +15,7 @@ public:
 
     void loadDataFromDb();
     void provideDataEntryToConsumer(int entryNumber);
-    int getNrOfValidDataSourceEntries();
+    int getNrOfDataSourceEntries();
 
 signals:
     Q_SIGNAL void loadDataFromDbFinished(bool success);

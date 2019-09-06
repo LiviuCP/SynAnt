@@ -136,7 +136,7 @@ namespace Game
         NO_DATA_LOADING_REQUESTED,
         LOADING_DATA,
         DATA_LOADING_COMPLETE,
-        NO_VALID_DATA_ENTRIES_LOADED,
+        NO_DATA_ENTRIES_LOADED,
         DATA_LOADING_ERROR,
         DATA_GOT_AVAILABLE,
         GAME_STARTED,
@@ -215,7 +215,7 @@ namespace Game
         static constexpr int c_ToolTipDelay{1000};
         static constexpr int c_PaneSwitchingDelay{250};
         static constexpr int c_LoadDataThreadDelay{2000};
-        static constexpr int c_WriteDataThreadDelay{5000};
+        static constexpr int c_WriteDataThreadDelay{500};
         static constexpr int c_ResetCacheDelay{250};
         static constexpr int c_ToolTipTimeout{4000};
         static constexpr int c_ShortStatusUpdateDelay{1000};
