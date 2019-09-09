@@ -430,7 +430,7 @@ Item {
 
                 Timer {
                     id: clickTimer
-                    interval: 200
+                    interval: 250
                     onTriggered: presenter.selectPieceForFirstInputWord(index)
                 }
 
