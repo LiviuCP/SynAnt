@@ -9,6 +9,10 @@ Item {
 
     property QtObject presenter
 
+    property bool dataEntryButtonShortcutActivated: false
+    property bool helpButtonShortcutActivated: false
+    property bool quitButtonShortcutActivated: false
+
     readonly property double introPaneRectHeight: height * 0.9
     readonly property double bottomBtnsLayoutHeight: height * 0.1
     readonly property double bottomBtnsMinWidth: (introPaneRect.width - 3 * bottomBtnsLayout.spacing) / 4
@@ -118,19 +122,21 @@ Item {
 
             enabled: presenter.dataEntry.dataEntryEnabled
 
+            property double buttonOpacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
+
             Layout.minimumWidth: bottomBtnsMinWidth
 
             contentItem: Text {
                 text: GameStrings.dataEntryButtonLabel
                 color: Styles.textColor
+                opacity: dataEntryBtn.buttonOpacity
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                opacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
             }
 
             background: Rectangle {
                 color: Styles.pushButtonColor
-                opacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
+                opacity: dataEntryBtn.buttonOpacity
                 radius: width * buttonRadiusRatio
 
                 border {
@@ -155,17 +161,21 @@ Item {
         Button {
             id: helpBtn
 
+            property double buttonOpacity: Styles.releasedButtonOpacity
+
             Layout.minimumWidth: bottomBtnsMinWidth
 
             contentItem: Text {
                 text: GameStrings.helpButtonLabel
                 color: Styles.textColor
+                opacity: helpBtn.buttonOpacity
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
 
             background: Rectangle {
                 color: Styles.pushButtonColor
+                opacity: helpBtn.buttonOpacity
                 radius: width * buttonRadiusRatio
 
                 border {
@@ -190,17 +200,21 @@ Item {
         Button {
             id: quitBtn
 
+            property double buttonOpacity: Styles.releasedButtonOpacity
+
             Layout.minimumWidth: bottomBtnsMinWidth - parent.spacing * 0.5
 
             contentItem: Text {
                 text: GameStrings.quitButtonLabel
                 color: Styles.textColor
+                opacity: quitBtn.buttonOpacity
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
 
             background: Rectangle {
                 color: Styles.pushButtonColor
+                opacity: quitBtn.buttonOpacity
                 radius: width * buttonRadiusRatio
 
                 border {
@@ -227,5 +241,29 @@ Item {
         target: presenter.dataEntry
 
         onDataSaveInProgress: presenter.handleDataSaveInProgress()
+    }
+
+    onDataEntryButtonShortcutActivatedChanged: {
+        if (dataEntryButtonShortcutActivated)
+        {
+            Styles.updateButtonOpacityAtShortcutActivation(dataEntryBtn);
+            dataEntryButtonShortcutActivated = false;
+        }
+    }
+
+    onHelpButtonShortcutActivatedChanged: {
+        if (helpButtonShortcutActivated)
+        {
+            Styles.updateButtonOpacityAtShortcutActivation(helpBtn);
+            helpButtonShortcutActivated = false;
+        }
+    }
+
+    onQuitButtonShortcutActivatedChanged: {
+        if (quitButtonShortcutActivated)
+        {
+            Styles.updateButtonOpacityAtShortcutActivation(quitBtn);
+            quitButtonShortcutActivated = false;
+        }
     }
 }

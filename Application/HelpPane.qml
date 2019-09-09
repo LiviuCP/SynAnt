@@ -9,6 +9,8 @@ Item {
 
     property QtObject presenter
 
+    property bool quitButtonShortcutActivated: false
+
     readonly property double helpPaneRectHeight: height * 0.9
     readonly property double bottomBtnsLayoutHeight: height * 0.1
     readonly property double bottomBtnsMinWidth: (helpPaneRect.width - bottomBtnsLayout.spacing) * 0.5
@@ -103,11 +105,23 @@ Item {
                 timeout: presenter.toolTipTimeout
             }
 
+            // we will not use the Styles functions here as we need the prompt page to be activated when the timer triggers
+            property Timer shortcutActivationTimer: Timer {
+                interval: 50
+                onTriggered: {
+                    okBtn.opacity = Styles.releasedButtonOpacity;
+                    presenter.goBack();
+                }
+            }
+
             Shortcut {
                 sequence: GameStrings.okButtonShortcut
                 enabled: presenter.helpPaneVisible
 
-                onActivated: presenter.goBack()
+                onActivated: {
+                    okBtn.opacity = Styles.pressedButtonOpacity;
+                    okBtn.shortcutActivationTimer.start();
+                }
             }
 
             onClicked: presenter.goBack()
@@ -119,17 +133,21 @@ Item {
         Button {
             id: quitBtn
 
+            property double buttonOpacity: Styles.releasedButtonOpacity
+
             Layout.minimumWidth: bottomBtnsMinWidth
 
             contentItem: Text {
                 text: GameStrings.quitButtonLabel
                 color: Styles.textColor
+                opacity: quitBtn.buttonOpacity
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
 
             background: Rectangle {
                 color: Styles.pushButtonColor
+                opacity: quitBtn.buttonOpacity
                 radius: width * buttonRadiusRatio
 
                 border {
@@ -150,5 +168,10 @@ Item {
             onReleased: opacity = Styles.releasedButtonOpacity
             onCanceled: opacity = Styles.releasedButtonOpacity
         }
+    }
+
+    onQuitButtonShortcutActivatedChanged: {
+        Styles.updateButtonOpacityAtShortcutActivation(quitBtn);
+        quitButtonShortcutActivated = false;
     }
 }

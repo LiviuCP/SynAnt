@@ -62,19 +62,21 @@ Item {
         Button {
             id: yesBtn
 
+            property double buttonOpacity: Styles.releasedButtonOpacity
+
             Layout.minimumWidth: bottomBtnsMinWidth
 
             contentItem: Text {
                 text: GameStrings.promptDiscardYesButtonLabel
                 color: Styles.textColor
+                opacity: yesBtn.buttonOpacity
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                opacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
             }
 
             background: Rectangle {
                 color: Styles.pushButtonColor
-                opacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
+                opacity: yesBtn.buttonOpacity
                 radius: width * buttonRadiusRatio
 
                 border {
@@ -90,13 +92,23 @@ Item {
                 timeout: presenter.toolTipTimeout
             }
 
+            // we will not use the Styles functions here as we need the prompt page to be activated when the timer triggers
+            property Timer shortcutActivationTimer: Timer {
+                interval: 50
+                onTriggered: {
+                    yesBtn.opacity = Styles.releasedButtonOpacity;
+                    presenter.dataEntry.handleClearAddedWordPairsRequest();
+                    presenter.goBack();
+                }
+            }
+
             Shortcut {
                 sequence: GameStrings.promptDiscardYesButtonShortcut
                 enabled: presenter.promptDiscardPaneVisible
 
                 onActivated: {
-                    presenter.dataEntry.handleClearAddedWordPairsRequest();
-                    presenter.goBack();
+                    yesBtn.opacity = Styles.pressedButtonOpacity;
+                    yesBtn.shortcutActivationTimer.start();
                 }
             }
 
@@ -113,17 +125,21 @@ Item {
         Button {
             id: cancelBtn
 
+            property double buttonOpacity: Styles.releasedButtonOpacity
+
             Layout.minimumWidth: bottomBtnsMinWidth
 
             contentItem: Text {
                 text: GameStrings.promptDiscardCancelButtonLabel
                 color: Styles.textColor
+                opacity: cancelBtn.buttonOpacity
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
             }
 
             background: Rectangle {
                 color: Styles.pushButtonColor
+                opacity: cancelBtn.buttonOpacity
                 radius: width * buttonRadiusRatio
 
                 border {
@@ -139,11 +155,23 @@ Item {
                 timeout: presenter.toolTipTimeout
             }
 
+            // we will not use the Styles functions here as we need the prompt page to be activated when the timer triggers
+            property Timer shortcutActivationTimer: Timer {
+                interval: 50
+                onTriggered: {
+                    cancelBtn.opacity = Styles.releasedButtonOpacity;
+                    presenter.goBack();
+                }
+            }
+
             Shortcut {
                 sequence: GameStrings.promptDiscardCancelButtonShortcut
                 enabled: presenter.promptDiscardPaneVisible
 
-                onActivated: presenter.goBack()
+                onActivated: {
+                    cancelBtn.opacity = Styles.pressedButtonOpacity;
+                    cancelBtn.shortcutActivationTimer.start();
+                }
             }
 
             onClicked: presenter.goBack()

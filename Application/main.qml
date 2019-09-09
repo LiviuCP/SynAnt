@@ -164,27 +164,85 @@ ApplicationWindow {
         sequence: GameStrings.dataEntryButtonShortcut
         enabled: gamePresenter.dataEntry.dataEntryEnabled && (gamePresenter.introPaneVisible || gamePresenter.mainPaneVisible)
 
-        onActivated: gamePresenter.switchToPane(GamePresenter.DATA_ENTRY)
+        property Timer dataEntryTimer: Timer {
+            interval: 100
+            onTriggered: {
+                gamePresenter.switchToPane(GamePresenter.DATA_ENTRY);
+            }
+        }
+
+        onActivated: {
+            if (gamePresenter.introPaneVisible) {
+                introPane.dataEntryButtonShortcutActivated = true;
+            } else if (gamePresenter.mainPaneVisible) {
+                mainPane.dataEntryButtonShortcutActivated = true;
+            }
+            else {
+                console.log("Error, Data entry button shortcut should not be enabled for current pane");
+            }
+
+            dataEntryTimer.start();
+        }
     }
 
     Shortcut {
         sequence: GameStrings.helpButtonShortcut
         enabled: gamePresenter.introPaneVisible || gamePresenter.mainPaneVisible || gamePresenter.dataEntryPaneVisible
 
-        onActivated: gamePresenter.switchToPane(GamePresenter.HELP)
+        property Timer helpTimer: Timer {
+            interval: 100
+            onTriggered: {
+                gamePresenter.switchToPane(GamePresenter.HELP);
+            }
+        }
+
+        onActivated: {
+            if (gamePresenter.introPaneVisible) {
+                introPane.helpButtonShortcutActivated = true;
+            } else if (gamePresenter.mainPaneVisible) {
+                mainPane.helpButtonShortcutActivated = true;
+            } else if (gamePresenter.dataEntryPaneVisible) {
+                dataEntryPane.helpButtonShortcutActivated = true;
+            }
+            else {
+                console.log("Error, Help button shortcut should not be enabled for current pane");
+            }
+
+            helpTimer.start();
+        }
     }
 
     Shortcut {
         sequence: GameStrings.quitButtonShortcut
         enabled: gamePresenter.introPaneVisible || gamePresenter.helpPaneVisible || gamePresenter.mainPaneVisible || gamePresenter.dataEntryPaneVisible
 
-        onActivated: {
-            if (gamePresenter.dataEntryPaneVisible && gamePresenter.dataEntry.saveAddedWordPairsEnabled) {
-                gamePresenter.quitGameDeferred = true;
-                gamePresenter.promptForSavingAddedWordPairs();
-            } else {
-                gamePresenter.quit();
+        property Timer quitTimer: Timer {
+            interval: 100
+            onTriggered: {
+                if (gamePresenter.dataEntryPaneVisible && gamePresenter.dataEntry.saveAddedWordPairsEnabled) {
+                    gamePresenter.quitGameDeferred = true;
+                    gamePresenter.promptForSavingAddedWordPairs();
+                } else {
+                    gamePresenter.quit();
+                }
             }
+        }
+
+        onActivated: {
+            if (gamePresenter.introPaneVisible) {
+                introPane.quitButtonShortcutActivated = true;
+            } else if (gamePresenter.mainPaneVisible) {
+                mainPane.quitButtonShortcutActivated = true;
+            } else if (gamePresenter.helpPaneVisible) {
+                helpPane.quitButtonShortcutActivated = true;
+            } else if (gamePresenter.dataEntryPaneVisible) {
+                dataEntryPane.quitButtonShortcutActivated = true;
+            }
+            else {
+                console.log("Error, Quit button shortcut should not be enabled for current pane");
+            }
+
+            quitTimer.start();
         }
     }
 }
