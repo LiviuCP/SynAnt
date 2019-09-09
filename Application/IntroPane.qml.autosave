@@ -99,7 +99,7 @@ Item {
                 }
             }
 
-            // we will not use the Styles functions here as we need the prompt page to be activated when the timer triggers
+            // we will not use the Styles functions here as we need the presenter invokable to be called after timer expires
             property Timer shortcutActivationTimer: Timer {
                 interval: 50
                 onTriggered: {

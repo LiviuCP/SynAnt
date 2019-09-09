@@ -92,7 +92,7 @@ Item {
                 timeout: presenter.toolTipTimeout
             }
 
-            // we will not use the Styles functions here as we need the prompt page to be activated when the timer triggers
+            // we will not use the Styles functions here as we need the presenter invokables to be called when the timer triggers
             property Timer shortcutActivationTimer: Timer {
                 interval: 50
                 onTriggered: {
