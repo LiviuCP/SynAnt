@@ -10,6 +10,8 @@
 #include <QObject>
 #include <QVector>
 
+#include <random>
+
 class DataSourceAccessHelper : public QObject
 {
     Q_OBJECT
