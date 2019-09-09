@@ -9,8 +9,7 @@ QtObject {
     readonly property string fatalErrorWindowTitle:                                 "Fatal Error!"
     readonly property string fatalErrorWindowObjectName:                            "errorDialog"
 
-    readonly property string mainPaneInstructionsMessage:                           "\nPlease enter the 2 words.
-                                                                                    \nHit Submit when ready.
+    readonly property string mainPaneInstructionsMessage:                           "\nPlease enter the 2 words. Hit Submit when ready.
                                                                                     \nUse radio buttons to change difficulty level.
                                                                                     \nPress Reset to reset the scores and number of pairs.
                                                                                     \nPress Enter new pairs to add more data."
