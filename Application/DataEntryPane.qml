@@ -82,16 +82,28 @@ Item {
 
         RadioButton {
             id: synonymsSelectionButton
+
+            activeFocusOnTab: true
             checked: true
             text: GameStrings.synonymsSelectionButtonLabel
-            onToggled: checked = true
+
+            onToggled: {
+                checked = true;
+                firstWordTextField.forceActiveFocus();
+            }
         }
 
         RadioButton {
             id: antonymsSelectionButton
+
+            activeFocusOnTab: true
             checked: false
             text: GameStrings.antonymsSelectionButtonLabel
-            onToggled: checked = true
+
+            onToggled: {
+                checked = true;
+                firstWordTextField.forceActiveFocus();
+            }
         }
     }
 
@@ -109,6 +121,8 @@ Item {
 
         TextField {
             id: firstWordTextField
+
+            activeFocusOnTab: true
 
             Layout.minimumWidth: parent.width * 0.414
             Layout.minimumHeight: parent.height
@@ -132,6 +146,8 @@ Item {
         TextField {
             id: secondWordTextField
 
+            activeFocusOnTab: true
+
             Layout.minimumWidth: parent.width * 0.414
             Layout.minimumHeight: parent.height
             Layout.alignment: Qt.AlignRight
@@ -148,6 +164,8 @@ Item {
 
         Button {
             id: clearBtn
+
+            activeFocusOnTab: false
 
             enabled: false
 
@@ -211,6 +229,8 @@ Item {
         Button {
             id: addPairBtn
 
+            activeFocusOnTab: false
+
             enabled: presenter.dataEntry.addWordsPairEnabled
 
             property double buttonOpacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
@@ -261,6 +281,8 @@ Item {
 
         Button {
             id: backBtn
+
+            activeFocusOnTab: false
 
             property double buttonOpacity: Styles.releasedButtonOpacity
 
@@ -320,6 +342,8 @@ Item {
         Button {
             id: helpBtn
 
+            activeFocusOnTab: false
+
             property double buttonOpacity: Styles.releasedButtonOpacity
 
             Layout.minimumWidth: bottomBtnsMinWidth
@@ -358,6 +382,8 @@ Item {
 
         Button {
             id: discardBtn
+
+            activeFocusOnTab: false
 
             enabled: presenter.dataEntry.discardAddedWordPairsEnabled
 
@@ -424,6 +450,8 @@ Item {
         Button {
             id: saveBtn
 
+            activeFocusOnTab: false
+
             enabled: presenter.dataEntry.saveAddedWordPairsEnabled
 
             property double buttonOpacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
@@ -478,6 +506,8 @@ Item {
 
         Button {
             id: quitBtn
+
+            activeFocusOnTab: false
 
             property double buttonOpacity: Styles.releasedButtonOpacity
 
