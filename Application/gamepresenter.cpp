@@ -25,6 +25,9 @@ static const QMap<Game::PieceTypes, QColor> c_WordPieceTextColors
     {Game::PieceTypes::END_PIECE, Game::Colors::c_EndPieceTextColor}
 };
 
+static const QString c_GameHelpTitleDescriptor{"Game"};
+static const QString c_DataEntryHelpTitleDescriptor{"Data Entry"};
+
 GamePresenter::GamePresenter(QObject *parent)
     : QObject(parent)
     , m_pDataEntryPresenter{new DataEntryPresenter{this}}
@@ -35,6 +38,7 @@ GamePresenter::GamePresenter(QObject *parent)
     , m_PromptSaveExitPaneVisible{false}
     , m_PromptDiscardPaneVisible{false}
     , m_MainPaneInitialized {false}
+    , m_IsDataEntryHelpMenuActive{false}
     , m_MainPaneStatisticsResetEnabled {false}
     , m_ClearMainPaneInputEnabled{false}
     , m_ErrorOccured {false}
@@ -504,7 +508,9 @@ int GamePresenter::getToolTipTimeout() const
 
 QString GamePresenter::getWindowTitle() const
 {
-    return c_WindowTitles[m_CurrentPane];
+    return (m_CurrentPane == Pane::HELP ? (c_WindowTitles[m_CurrentPane].arg(m_IsDataEntryHelpMenuActive ? c_DataEntryHelpTitleDescriptor
+                                                                                                         : c_GameHelpTitleDescriptor))
+                                        : c_WindowTitles[m_CurrentPane]);
 }
 
 QString GamePresenter::getIntroPaneMessage() const
@@ -514,7 +520,7 @@ QString GamePresenter::getIntroPaneMessage() const
 
 QString GamePresenter::getHelpPaneMessage() const
 {
-    return Game::Messages::c_HelpMessage;
+    return (m_IsDataEntryHelpMenuActive ? DataEntry::Messages::c_DataEntryHelpMessage : Game::Messages::c_GameHelpMessage);
 }
 
 QString GamePresenter::getMainPaneStatusMessage() const
@@ -780,6 +786,7 @@ void GamePresenter::_switchToPane(Pane pane)
                 m_pGameFacade->pauseGame();
                 delayedSwitchingRequested = true;
             }
+            _setDataEntryHelpMenuActive(m_CurrentPane == Pane::DATA_ENTRY);
             m_HelpPaneVisible = true;
             break;
         case Pane::MAIN:
@@ -825,6 +832,15 @@ void GamePresenter::_switchToPane(Pane pane)
         {
             triggerPaneSwitching();
         }
+    }
+}
+
+void GamePresenter::_setDataEntryHelpMenuActive(bool active)
+{
+    if (m_IsDataEntryHelpMenuActive != active)
+    {
+        m_IsDataEntryHelpMenuActive = active;
+        Q_EMIT helpPaneMessageChanged();
     }
 }
 

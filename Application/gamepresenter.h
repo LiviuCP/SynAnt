@@ -58,7 +58,7 @@ class GamePresenter : public QObject
     /* text properties */
     Q_PROPERTY(QString windowTitle READ getWindowTitle NOTIFY currentPaneChanged)
     Q_PROPERTY(QString introPaneMessage READ getIntroPaneMessage NOTIFY introPaneMessageChanged)
-    Q_PROPERTY(QString helpPaneMessage READ getHelpPaneMessage CONSTANT) // don't move to GameStrings.qml as some additional constant properties might be required for passing args
+    Q_PROPERTY(QString helpPaneMessage READ getHelpPaneMessage NOTIFY helpPaneMessageChanged)
     Q_PROPERTY(QString mainPaneStatusMessage READ getMainPaneStatusMessage NOTIFY mainPaneStatusMessageChanged)
     Q_PROPERTY(QString mainPaneScoreMessage READ getMainPaneScoreMessage NOTIFY mainPaneStatisticsMessagesChanged)
     Q_PROPERTY(QString mainPaneWordPairsMessage READ getMainPaneWordPairsMessage NOTIFY mainPaneStatisticsMessagesChanged)
@@ -177,6 +177,7 @@ signals:
     Q_SIGNAL void inputChanged();
     Q_SIGNAL void selectionChanged();
     Q_SIGNAL void introPaneMessageChanged();
+    Q_SIGNAL void helpPaneMessageChanged();
     Q_SIGNAL void mainPaneStatusMessageChanged();
     Q_SIGNAL void mainPaneStatisticsMessagesChanged();
     Q_SIGNAL void errorMessageChanged();
@@ -191,6 +192,7 @@ private slots:
 
 private:
     void _switchToPane(Pane pane);
+    void _setDataEntryHelpMenuActive(bool isDataEntryHelpMenuRequired);
     void _updateStatusMessage(const QString& message, Pane pane, int delay);
     void _updateMessage();
     void _launchErrorPane(const QString& errorMessage);
@@ -204,6 +206,7 @@ private:
     bool m_PromptSaveExitPaneVisible;
     bool m_PromptDiscardPaneVisible;
     bool m_MainPaneInitialized;
+    bool m_IsDataEntryHelpMenuActive;
 
     bool m_MainPaneStatisticsResetEnabled;
     bool m_ClearMainPaneInputEnabled;

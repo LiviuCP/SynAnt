@@ -7,7 +7,40 @@
 
 #include <QString>
 
+#include "gameutils.h"
+
 /* only add the enum classes here that are shared by multiple classes */
+
+static const QString c_RawDataEntryHelpMessage          {
+                                                             "\nPlease read following data entry instructions: \n\n"
+                                                             "\n 1) Enter each required words pair within the provided text fields."
+                                                             "Choose if the words are synonyms or antonyms. Press click Add pair or hit ALT+A to validate the pair.\n"
+                                                             "\n 2) In order to choose if the words are synonyms of antonyms by keyboard please navigate between radio buttons "
+                                                             "and text fields by using TAB/SHIFT+TAB. When the required radio button is selected hit SPACE to have it toggled on.\n"
+                                                             "\n 3) Press Save or hit CTRL+S to save the validated entries (pairs) to database. \n"
+                                                             "\n 4) Press Discard or hit CTRL+D to cancel saving the validated entries "
+                                                             "to database and clear them from buffer.\n"
+                                                             "\n 5) Press Clear or hit ALT+X to erase the content of the text fields.\n"
+                                                             "\n 6) Press Back or hit ALT+K to return to previous page.\n"
+                                                             "\n 7) Following rules apply when adding new word pairs:\n"
+                                                             " - minimum word size is %1 characters\n"
+                                                             " - minimum total pair size is %2 characters\n"
+                                                             " - the total pair size should not exceed %3 characters\n"
+                                                             " - the words should not contain other characters than small letters\n"
+                                                             " - the words from each pair should not be identical\n"
+                                                             " - no duplicate pairs are allowed even if the order of the two words is different\n"
+                                                             " - both words should be entered\n"
+                                                             "\n 8) When quitting the application from the data entry dialog or pressing the Back button you will be prompted "
+                                                             "to save any validated (but unsaved) entries to database. Three options are available:\n"
+                                                             " - Yes (ALT+Y): save added pairs and then execute the requested operation (back/quit)\n"
+                                                             " - No (ALT+N): discard added pairs and execute the requested operation\n"
+                                                             " - Cancel(ALT+W): return to data entry dialog and resume operations\n"
+                                                             "\n 9) When discarding unsaved entries (by using Discard button) you will be asked for confirmation. "
+                                                             "Two options are available: \n"
+                                                             " - Yes (CTRL+Y): discard pairs from data entry buffer\n"
+                                                             " - Cancel (CTRL+W): cancel discarding, keep entries in the buffer\n"
+                                                             "In both cases you will return to the data entry dialog after choosing the option.\n"
+                                                        };
 
 namespace DataEntry
 {
@@ -44,6 +77,15 @@ namespace DataEntry
 
     namespace Messages
     {
+        // help pane content when accessed from data entry dialog
+        const QString c_DataEntryHelpMessage                {
+                                                                 c_RawDataEntryHelpMessage
+                                                                     .arg(Game::Constraints::c_MinWordSize)
+                                                                     .arg(Game::Constraints::c_MinPairSize)
+                                                                     .arg(Game::Constraints::c_MaxPairSize)
+                                                            };
+
+        // status messages
         const QString c_DataEntryStartMessage               {    "Welcome to data entry"                                                                    };
         const QString c_DataEntrySaveInProgressStartMessage {    "Welcome back to data entry. Please wait, data is currently being saved..."                };
         const QString c_DataEntryResumeMessage              {    "Word pairs entry resumed. There are %1 entries pending to be saved!"                      };
