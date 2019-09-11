@@ -26,7 +26,7 @@ Item {
     ToolTip {
         delay: presenter.toolTipDelay
         timeout: presenter.toolTipTimeout
-        text: GameStrings.helpPaneToolTip
+        text: presenter.helpPaneToolTip
         visible: helpPaneMouseArea.containsMouse
     }
 

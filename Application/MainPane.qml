@@ -742,7 +742,7 @@ Item {
             }
 
             ToolTip {
-                text: GameStrings.helpButtonToolTip
+                text: presenter.helpButtonToolTip
                 visible: helpBtn.hovered
                 delay: presenter.toolTipDelay
                 timeout: presenter.toolTipTimeout

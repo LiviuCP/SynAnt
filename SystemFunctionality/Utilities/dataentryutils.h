@@ -121,6 +121,11 @@ namespace DataEntry
         const QString c_PairHasIdenticalWords               {    "The entered word pair has identical words."                                               };
         const QString c_PairAlreadyExists                   {    "The entered word pair already exists."                                                    };
     }
+
+    namespace Misc
+    {
+        const QString c_DataEntryDescriptor{"Data Entry"};  // keep default capitalized, use toLower() where required
+    }
 }
 
 #endif // DATAENTRYUTILS_H

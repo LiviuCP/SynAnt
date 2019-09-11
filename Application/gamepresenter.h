@@ -58,7 +58,9 @@ class GamePresenter : public QObject
     /* text properties */
     Q_PROPERTY(QString windowTitle READ getWindowTitle NOTIFY currentPaneChanged)
     Q_PROPERTY(QString introPaneMessage READ getIntroPaneMessage NOTIFY introPaneMessageChanged)
-    Q_PROPERTY(QString helpPaneMessage READ getHelpPaneMessage NOTIFY helpPaneMessageChanged)
+    Q_PROPERTY(QString helpPaneMessage READ getHelpPaneMessage NOTIFY helpPaneContentChanged)
+    Q_PROPERTY(QString helpPaneToolTip READ getHelpPaneToolTip NOTIFY helpPaneContentChanged)
+    Q_PROPERTY(QString helpButtonToolTip READ getHelpButtonToolTip NOTIFY currentPaneChanged)
     Q_PROPERTY(QString mainPaneStatusMessage READ getMainPaneStatusMessage NOTIFY mainPaneStatusMessageChanged)
     Q_PROPERTY(QString mainPaneScoreMessage READ getMainPaneScoreMessage NOTIFY mainPaneStatisticsMessagesChanged)
     Q_PROPERTY(QString mainPaneWordPairsMessage READ getMainPaneWordPairsMessage NOTIFY mainPaneStatisticsMessagesChanged)
@@ -157,6 +159,8 @@ public:
 
     QString getIntroPaneMessage() const;
     QString getHelpPaneMessage() const;
+    QString getHelpPaneToolTip() const;
+    QString getHelpButtonToolTip() const;
     QString getMainPaneStatusMessage() const;
     QString getMainPaneScoreMessage() const;
     QString getMainPaneWordPairsMessage() const;
@@ -177,7 +181,7 @@ signals:
     Q_SIGNAL void inputChanged();
     Q_SIGNAL void selectionChanged();
     Q_SIGNAL void introPaneMessageChanged();
-    Q_SIGNAL void helpPaneMessageChanged();
+    Q_SIGNAL void helpPaneContentChanged();
     Q_SIGNAL void mainPaneStatusMessageChanged();
     Q_SIGNAL void mainPaneStatisticsMessagesChanged();
     Q_SIGNAL void errorMessageChanged();

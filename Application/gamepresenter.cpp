@@ -25,9 +25,6 @@ static const QMap<Game::PieceTypes, QColor> c_WordPieceTextColors
     {Game::PieceTypes::END_PIECE, Game::Colors::c_EndPieceTextColor}
 };
 
-static const QString c_GameHelpTitleDescriptor{"Game"};
-static const QString c_DataEntryHelpTitleDescriptor{"Data Entry"};
-
 GamePresenter::GamePresenter(QObject *parent)
     : QObject(parent)
     , m_pDataEntryPresenter{new DataEntryPresenter{this}}
@@ -508,8 +505,8 @@ int GamePresenter::getToolTipTimeout() const
 
 QString GamePresenter::getWindowTitle() const
 {
-    return (m_CurrentPane == Pane::HELP ? (c_WindowTitles[m_CurrentPane].arg(m_IsDataEntryHelpMenuActive ? c_DataEntryHelpTitleDescriptor
-                                                                                                         : c_GameHelpTitleDescriptor))
+    return (m_CurrentPane == Pane::HELP ? (c_WindowTitles[m_CurrentPane].arg(m_IsDataEntryHelpMenuActive ? DataEntry::Misc::c_DataEntryDescriptor
+                                                                                                         : Game::Misc::c_GameDescriptor))
                                         : c_WindowTitles[m_CurrentPane]);
 }
 
@@ -521,6 +518,18 @@ QString GamePresenter::getIntroPaneMessage() const
 QString GamePresenter::getHelpPaneMessage() const
 {
     return (m_IsDataEntryHelpMenuActive ? DataEntry::Messages::c_DataEntryHelpMessage : Game::Messages::c_GameHelpMessage);
+}
+
+QString GamePresenter::getHelpPaneToolTip() const
+{
+    return (Game::Messages::c_GameHelpPaneToolTip.arg((m_IsDataEntryHelpMenuActive ? DataEntry::Misc::c_DataEntryDescriptor
+                                                                                   : Game::Misc::c_GameDescriptor).toLower()));
+}
+
+QString GamePresenter::getHelpButtonToolTip() const
+{
+    return (Game::Messages::c_GameHelpButtonToolTip.arg((m_CurrentPane == Pane::DATA_ENTRY ? DataEntry::Misc::c_DataEntryDescriptor
+                                                                                           : Game::Misc::c_GameDescriptor).toLower()));
 }
 
 QString GamePresenter::getMainPaneStatusMessage() const
@@ -840,7 +849,7 @@ void GamePresenter::_setDataEntryHelpMenuActive(bool active)
     if (m_IsDataEntryHelpMenuActive != active)
     {
         m_IsDataEntryHelpMenuActive = active;
-        Q_EMIT helpPaneMessageChanged();
+        Q_EMIT helpPaneContentChanged();
     }
 }
 

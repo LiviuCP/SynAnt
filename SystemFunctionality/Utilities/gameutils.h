@@ -281,6 +281,9 @@ namespace Game
                                                                      .arg(Game::c_ScoreIncrements[Game::Levels::LEVEL_HARD])
                                                             };
 
+        const QString c_GameHelpPaneToolTip                 {    "Please read the detailed %1 instructions."                                                };
+        const QString c_GameHelpButtonToolTip               {    "Click or hit ALT+H for accessing the detailed %1 instructions."                           };
+
 
 
         // status messages
@@ -383,6 +386,7 @@ namespace Game
     {
         static constexpr int c_RequiredNrOfDbTableFields{5};
 
+        const QString c_GameDescriptor{"Game"};             // keep default capitalized, use toLower() where required
         const QString c_SynonymsDescriptor{"synonyms"};
         const QString c_AntonymsDescriptor{"antonyms"};
     }

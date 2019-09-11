@@ -73,7 +73,6 @@ QtObject {
 
     // tooltips
     readonly property string introPaneToolTip:                                      "Welcome to SynAnt"
-    readonly property string helpPaneToolTip:                                       "Please read the detailed game instructions."
     readonly property string mainPaneToolTip:                                       "This is where the action happens!"
     readonly property string dataEntryPaneToolTip:                                  "Please feel free to add new pairs to the game."
     readonly property string promptPaneToolTip:                                     "Please choose one of the below options."
@@ -94,7 +93,6 @@ QtObject {
     readonly property string mainPaneFirstWordInputToolTip:                         "Click to remove the selected chunk of pieces from the first word input."
     readonly property string mainPaneSecondWordInputToolTip:                        "Click to remove the selected chunk of pieces from the second word input."
     readonly property string playButtonToolTip:                                     "Click or hit ALT+P to play."
-    readonly property string helpButtonToolTip:                                     "Click or hit ALT+H for accessing the detailed game instructions."
     readonly property string quitButtonToolTip:                                     "Click or hit ALT+Q to exit application.
                                                                                     \nThe application will exit only after completing all load/save operations."
     readonly property string okButtonToolTip:                                       "Click or hit ALT+O to return to previous page."
