@@ -28,12 +28,6 @@ static const QMap<Game::PieceTypes, QColor> c_WordPieceTextColors
 GamePresenter::GamePresenter(QObject *parent)
     : QObject(parent)
     , m_pDataEntryPresenter{new DataEntryPresenter{this}}
-    , m_IntroPaneVisible {true}
-    , m_HelpPaneVisible {false}
-    , m_MainPaneVisible {false}
-    , m_DataEntryPaneVisible{false}
-    , m_PromptSaveExitPaneVisible{false}
-    , m_PromptDiscardPaneVisible{false}
     , m_MainPaneInitialized {false}
     , m_IsDataEntryHelpMenuActive{false}
     , m_MainPaneStatisticsResetEnabled {false}
@@ -97,8 +91,6 @@ void GamePresenter::goBack()
     if (m_CurrentPane == Pane::PROMPT_SAVE_EXIT)
     {
         m_CurrentPane = Pane::DATA_ENTRY;
-        m_PromptSaveExitPaneVisible = false;
-        m_DataEntryPaneVisible = true;
         m_PreviousPanesStack.pop_back();
 
         if (m_QuitDeferred)
@@ -126,9 +118,6 @@ void GamePresenter::promptForSavingAddedWordPairs()
     m_PreviousPanesStack.append(m_CurrentPane);
     m_CurrentPane = Pane::PROMPT_SAVE_EXIT;
 
-    m_DataEntryPaneVisible = false;
-    m_PromptSaveExitPaneVisible = true;
-
     Q_EMIT currentPaneChanged();
 }
 
@@ -138,9 +127,6 @@ void GamePresenter::promptForDiscardingAddedWordPairs()
 
     m_PreviousPanesStack.append(m_CurrentPane);
     m_CurrentPane = Pane::PROMPT_DISCARD;
-
-    m_DataEntryPaneVisible = false;
-    m_PromptDiscardPaneVisible = true;
 
     Q_EMIT currentPaneChanged();
 }
@@ -287,32 +273,32 @@ QObject *GamePresenter::getDataEntryPresenter() const
 
 bool GamePresenter::getIntroPaneVisible() const
 {
-    return m_IntroPaneVisible;
+    return (m_CurrentPane == Pane::INTRO);
 }
 
 bool GamePresenter::getHelpPaneVisible() const
 {
-    return m_HelpPaneVisible;
+    return (m_CurrentPane == Pane::HELP);
 }
 
 bool GamePresenter::getMainPaneVisible() const
 {
-    return m_MainPaneVisible;
+    return (m_CurrentPane == Pane::MAIN);
 }
 
 bool GamePresenter::getDataEntryPaneVisible() const
 {
-    return m_DataEntryPaneVisible;
+    return (m_CurrentPane == Pane::DATA_ENTRY);
 }
 
 bool GamePresenter::getPromptSaveExitPaneVisible() const
 {
-    return m_PromptSaveExitPaneVisible;
+    return (m_CurrentPane == Pane::PROMPT_SAVE_EXIT);
 }
 
 bool GamePresenter::getPromptDiscardPaneVisible() const
 {
-    return m_PromptDiscardPaneVisible;
+    return (m_CurrentPane == Pane::PROMPT_DISCARD);
 }
 
 bool GamePresenter::isPlayEnabled() const
@@ -647,7 +633,7 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
             _updateStatusMessage(Game::Messages::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::Timing::c_ShortStatusUpdateDelay);
             break;
         case Game::StatusCodes::GAME_STOPPED:
-            if (m_MainPaneVisible)
+            if (m_CurrentPane == Pane::MAIN)
             {
                 _updateStatusMessage(Game::Messages::c_GameStoppedMessage, Pane::MAIN, Game::Timing::c_NoDelay);
                 QTimer::singleShot(Game::Timing::c_GameQuitDelay, this, [](){QGuiApplication::quit();});
@@ -757,23 +743,19 @@ void GamePresenter::_switchToPane(Pane pane)
 
     if (m_CurrentPane != pane)
     {
+        // execute certain actions related to the current pane (that don't depend on future pane) here; also exclude certain panes (like error)
         switch(m_CurrentPane)
         {
         case Pane::INTRO:
-            m_IntroPaneVisible = false;
             break;
         case Pane::HELP:
-            m_HelpPaneVisible = false;
             break;
         case Pane::MAIN:
-            m_MainPaneVisible = false;
             isGamePausingRequired = true;
             break;
         case Pane::DATA_ENTRY:
-            m_DataEntryPaneVisible = false;
             break;
         case Pane::PROMPT_DISCARD:
-            m_PromptDiscardPaneVisible = false;
             break;
         default:
             Q_ASSERT(false);
@@ -787,7 +769,6 @@ void GamePresenter::_switchToPane(Pane pane)
                 qobject_cast<DataEntryPresenter*>(m_pDataEntryPresenter)->stopDataEntry();
                 delayedSwitchingRequested = true;
             }
-            m_IntroPaneVisible = true;
             break;
         case Pane::HELP:
             if (isGamePausingRequired)
@@ -796,7 +777,6 @@ void GamePresenter::_switchToPane(Pane pane)
                 delayedSwitchingRequested = true;
             }
             _setDataEntryHelpMenuActive(m_CurrentPane == Pane::DATA_ENTRY);
-            m_HelpPaneVisible = true;
             break;
         case Pane::MAIN:
             if (!m_MainPaneInitialized)
@@ -813,7 +793,6 @@ void GamePresenter::_switchToPane(Pane pane)
                 }
                 m_pGameFacade -> resumeGame();
             }
-            m_MainPaneVisible = true;
             break;
         case Pane::DATA_ENTRY:
             if (isGamePausingRequired)
@@ -825,7 +804,6 @@ void GamePresenter::_switchToPane(Pane pane)
             {
                 qobject_cast<DataEntryPresenter*>(m_pDataEntryPresenter)->resumeDataEntry();
             }
-            m_DataEntryPaneVisible = true;
             break;
         default:
             Q_ASSERT(false);
@@ -894,30 +872,6 @@ void GamePresenter::_updateMessage()
 
 void GamePresenter::_launchErrorPane(const QString& errorMessage)
 {
-    switch (m_CurrentPane)
-    {
-    case Pane::INTRO:
-        m_IntroPaneVisible = false;
-        break;
-    case Pane::HELP:
-        m_HelpPaneVisible = false;
-        break;
-    case Pane::MAIN:
-        m_MainPaneVisible = false;
-        break;
-    case Pane::DATA_ENTRY:
-        m_DataEntryPaneVisible = false;
-        break;
-    case Pane::PROMPT_SAVE_EXIT:
-        m_PromptSaveExitPaneVisible = false;
-        break;
-    case Pane::PROMPT_DISCARD:
-        m_PromptDiscardPaneVisible = false;
-        break;
-    default:
-        Q_ASSERT(static_cast<int>(m_CurrentPane) >= 0 && static_cast<int>(m_CurrentPane) < static_cast<int>(Pane::Nr_Of_Panes));
-    }
-
     m_CurrentPane = Pane::ERROR;
     m_ErrorMessage = errorMessage;
     m_ErrorOccured = true;

@@ -203,12 +203,6 @@ private:
 
     QObject* m_pDataEntryPresenter;
 
-    bool m_IntroPaneVisible;
-    bool m_HelpPaneVisible;
-    bool m_MainPaneVisible;
-    bool m_DataEntryPaneVisible;
-    bool m_PromptSaveExitPaneVisible;
-    bool m_PromptDiscardPaneVisible;
     bool m_MainPaneInitialized;
     bool m_IsDataEntryHelpMenuActive;
 
