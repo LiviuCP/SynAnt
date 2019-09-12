@@ -10,6 +10,8 @@ Item {
     property bool dataEntryButtonShortcutActivated: false
     property bool helpButtonShortcutActivated: false
     property bool quitButtonShortcutActivated: false
+    property bool upArrowPressed: false
+    property bool downArrowPressed: false
 
     property QtObject presenter
 
@@ -428,10 +430,32 @@ Item {
                 border.color: index === presenter.pieceSelectionCursorPosition ? Styles.selectedBorderColor : Styles.borderColor
                 border.width: index === presenter.pieceSelectionCursorPosition ? Styles.selectedBorderWidth : Styles.borderWidth
 
+                opacity: (firstWordClickSelectedPieceOpacityTimer.running ||
+                          secondWordClickSelectedPieceOpacityTimer.running ||
+                          (mixedWordsRepeater.cursorSelectedPieceOpacityTimer.running &&
+                           index === presenter.pieceSelectionCursorPosition)) ? Styles.pressedOpacity
+                                                                              : Styles.defaultOpacity
+
                 Timer {
                     id: clickTimer
                     interval: 250
+                    onTriggered: {
+                        firstWordClickSelectedPieceOpacityTimer.start();
+                    }
+                }
+
+                Timer {
+                    id: firstWordClickSelectedPieceOpacityTimer
+                    interval: 100
+
                     onTriggered: presenter.selectPieceForFirstInputWord(index)
+                }
+
+                Timer {
+                    id: secondWordClickSelectedPieceOpacityTimer
+                    interval: 100
+
+                    onTriggered: presenter.selectPieceForSecondInputWord(index)
                 }
 
                 Text {
@@ -450,7 +474,7 @@ Item {
                     // single click for assigning piece to first word, double click for assigning to second word
                     onClicked: {
                         if (clickTimer.running) {
-                            presenter.selectPieceForSecondInputWord(index);
+                            secondWordClickSelectedPieceOpacityTimer.start();
                             clickTimer.stop();
                         }
                         else {
@@ -465,6 +489,14 @@ Item {
                     delay: presenter.toolTipDelay
                     timeout: presenter.toolTipTimeout
                 }
+            }
+
+            property Timer cursorSelectedPieceOpacityTimer : Timer {
+                interval: 100
+            }
+
+            function decreaseOpacityAtCursor() {
+                cursorSelectedPieceOpacityTimer.start();
             }
         }
     }
@@ -496,7 +528,13 @@ Item {
                 width: parent.width / mixedWordsRepeater.count
                 height: parent.height
 
-                opacity: isHoverSelected ? Styles.hoverOpacity : (isKeyboardSelected ? Styles.hoverOpacity : Styles.defaultOpacity)
+                opacity: ((firstWordInputRepeater.firstWordClickRemovedPiecesOpacityTimer.running &&
+                           index >= presenter.firstWordInputPiecesHoverIndex) ||
+                          (firstWordInputRepeater.firstWordCursorRemovedPiecesOpacityTimer.running &&
+                           index >= presenter.piecesRemovalFirstWordCursorPosition)) ? Styles.pressedOpacity
+                                                                                     : (isHoverSelected ? Styles.hoverOpacity
+                                                                                                        : (isKeyboardSelected ? Styles.hoverOpacity
+                                                                                                                              : Styles.defaultOpacity))
 
                 color: isHoverSelected ? Styles.markedForDeletionColor : (isKeyboardSelected ? Styles.markedForDeletionColor : Styles.backgroundColor)
 
@@ -518,7 +556,7 @@ Item {
 
                     onEntered: presenter.updateFirstWordInputHoverIndex(index)
                     onExited: presenter.clearWordInputHoverIndexes()
-                    onClicked: presenter.removePiecesFromFirstInputWord(index)
+                    onClicked: firstWordInputRepeater.firstWordClickRemovedPiecesOpacityTimer.start()
 
                 }
 
@@ -528,6 +566,19 @@ Item {
                     delay: presenter.toolTipDelay
                     timeout: presenter.toolTipTimeout
                 }
+            }
+
+            property Timer firstWordClickRemovedPiecesOpacityTimer : Timer {
+                interval: 100
+                onTriggered: presenter.removePiecesFromFirstInputWord(presenter.firstWordInputPiecesHoverIndex)
+            }
+
+            property Timer firstWordCursorRemovedPiecesOpacityTimer : Timer {
+                interval: 100
+            }
+
+            function decreaseOpacityAtCursor() {
+                firstWordCursorRemovedPiecesOpacityTimer.start();
             }
         }
 
@@ -553,7 +604,13 @@ Item {
                 width: parent.width / mixedWordsRepeater.count
                 height: parent.height
 
-                opacity: isHoverSelected ? Styles.hoverOpacity : (isKeyboardSelected ? Styles.hoverOpacity : Styles.defaultOpacity)
+                opacity: ((secondWordInputRepeater.secondWordClickRemovedPiecesOpacityTimer.running &&
+                           index >= presenter.secondWordInputPiecesHoverIndex) ||
+                          (secondWordInputRepeater.secondWordCursorRemovedPiecesOpacityTimer.running &&
+                           index >= presenter.piecesRemovalSecondWordCursorPosition)) ? Styles.pressedOpacity
+                                                                                      : (isHoverSelected ? Styles.hoverOpacity
+                                                                                                         : (isKeyboardSelected ? Styles.hoverOpacity
+                                                                                                                               : Styles.defaultOpacity))
 
                 color: isHoverSelected ? Styles.markedForDeletionColor : (isKeyboardSelected ? Styles.markedForDeletionColor : Styles.backgroundColor)
 
@@ -575,7 +632,7 @@ Item {
 
                     onEntered: presenter.updateSecondWordInputHoverIndex(index)
                     onExited: presenter.clearWordInputHoverIndexes()
-                    onClicked: presenter.removePiecesFromSecondInputWord(index)
+                    onClicked: secondWordInputRepeater.secondWordClickRemovedPiecesOpacityTimer.start()
                 }
 
                 ToolTip {
@@ -584,6 +641,19 @@ Item {
                     delay: presenter.toolTipDelay
                     timeout: presenter.toolTipTimeout
                 }
+            }
+
+            property Timer secondWordClickRemovedPiecesOpacityTimer : Timer {
+                interval: 100
+                onTriggered: presenter.removePiecesFromSecondInputWord(presenter.secondWordInputPiecesHoverIndex)
+            }
+
+            property Timer secondWordCursorRemovedPiecesOpacityTimer : Timer {
+                interval: 100
+            }
+
+            function decreaseOpacityAtCursor() {
+                secondWordCursorRemovedPiecesOpacityTimer.start();
             }
         }
 
@@ -864,6 +934,32 @@ Item {
         {
             Styles.updateButtonOpacityAtShortcutActivation(quitBtn);
             quitButtonShortcutActivated = false;
+        }
+    }
+
+    onUpArrowPressedChanged: {
+        if (upArrowPressed) {
+            decreaseElementOpacityAtCursor();
+            upArrowPressed = false;
+        }
+    }
+
+    onDownArrowPressedChanged: {
+        if (downArrowPressed) {
+            decreaseElementOpacityAtCursor();
+            downArrowPressed = false;
+        }
+    }
+
+    function decreaseElementOpacityAtCursor() {
+        if (presenter.pieceSelectionCursorPosition !== -1) {
+            mixedWordsRepeater.decreaseOpacityAtCursor();
+        }
+        else if (presenter.piecesRemovalFirstWordCursorPosition !== -1) {
+            firstWordInputRepeater.decreaseOpacityAtCursor();
+        }
+        else if (presenter.piecesRemovalSecondWordCursorPosition !== -1) {
+            secondWordInputRepeater.decreaseOpacityAtCursor();
         }
     }
 }

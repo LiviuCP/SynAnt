@@ -22,6 +22,7 @@ QtObject {
     readonly property double releasedButtonOpacity: 1.0
     readonly property double disabledButtonOpacity: 0.3
     readonly property double hoverOpacity: 0.8
+    readonly property double pressedOpacity: 0.5
     readonly property double defaultOpacity: 1.0
 
     // widths

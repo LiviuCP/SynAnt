@@ -150,11 +150,25 @@ ApplicationWindow {
         }
 
         Keys.onDownPressed: {
-            gamePresenter.executeFirstCursorAction();
+            mainPane.downArrowPressed = true;
+            downPressedTimer.start();
         }
 
         Keys.onUpPressed: {
-            gamePresenter.executeSecondCursorAction();
+            mainPane.upArrowPressed = true;
+            upPressedTimer.start();
+        }
+
+        Timer {
+            id: downPressedTimer
+            interval: 125
+            onTriggered: gamePresenter.executeFirstCursorAction();
+        }
+
+        Timer {
+            id: upPressedTimer
+            interval: 125
+            onTriggered: gamePresenter.executeSecondCursorAction();
         }
     }
 
