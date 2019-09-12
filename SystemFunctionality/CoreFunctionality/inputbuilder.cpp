@@ -174,6 +174,12 @@ bool InputBuilder::isHalfInput() const
             (m_FirstWordInput.state == WordInputState::COMPLETED && m_SecondWordInput.state == WordInputState::EMPTY));
 }
 
+bool InputBuilder::isOneWordLeftInProgress() const
+{
+    return ((m_FirstWordInput.state == WordInputState::COMPLETED && m_SecondWordInput.state == WordInputState::BUILD_IN_PROGRESS) ||
+            (m_FirstWordInput.state == WordInputState::BUILD_IN_PROGRESS && m_SecondWordInput.state == WordInputState::COMPLETED));
+}
+
 bool InputBuilder::isInputComplete() const
 {
     return (m_FirstWordInput.state == WordInputState::COMPLETED && m_SecondWordInput.state == WordInputState::COMPLETED);

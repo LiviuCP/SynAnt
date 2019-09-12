@@ -45,6 +45,7 @@ public:
 
     bool isEmptyInput() const;
     bool isHalfInput() const;
+    bool isOneWordLeftInProgress() const;
     bool isInputComplete() const;
 
 signals:

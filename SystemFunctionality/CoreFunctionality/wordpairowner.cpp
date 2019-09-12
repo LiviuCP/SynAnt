@@ -26,14 +26,14 @@ void WordPairOwner::setNewWordsPair(const QVector<QString>& content, const QStri
     }
 }
 
-void WordPairOwner::markPieceAsAddedToInput(int wordPieceIndex)
+void WordPairOwner::markPieceAsAddedToInput(int wordPieceIndex, bool excludeEndPiecesFromPersistentIndex)
 {
     if (m_PersistentPieceSelectionIndex != -1)
     {
         Q_ASSERT(m_PersistentPieceSelectionIndex == wordPieceIndex);
     }
 
-    _updatePersistentPieceSelectionIndex();
+    _updatePersistentPieceSelectionIndex(excludeEndPiecesFromPersistentIndex);
     _updateSingleWordPieceStatus(wordPieceIndex, true);
 }
 
@@ -50,7 +50,7 @@ void WordPairOwner::enableNewPairAutoIndexSetup(bool enabled)
     }
 }
 
-void WordPairOwner::setPersistentPieceSelectionIndex(bool isStartPieceRequired)
+void WordPairOwner::setPersistentPieceSelectionIndex(bool isStartPieceRequired, bool excludeEndPiecesFromPersistentIndex)
 {
     if (m_PersistentPieceSelectionIndex == -1)
     {
@@ -58,6 +58,11 @@ void WordPairOwner::setPersistentPieceSelectionIndex(bool isStartPieceRequired)
 
         for (int pieceIndex{0}; pieceIndex < m_MixedWordsPieces.size(); ++pieceIndex)
         {
+            if (excludeEndPiecesFromPersistentIndex && m_MixedWordsPieces[pieceIndex].pieceType == Game::PieceTypes::END_PIECE)
+            {
+                continue;
+            }
+
             if (!m_MixedWordsPieces[pieceIndex].isAddedToInput)
             {
                 firstAvailableIndex = pieceIndex;
@@ -332,7 +337,7 @@ void WordPairOwner::_updateMultipleWordPiecesStatus(QVector<int> wordPieceIndex,
     }
 }
 
-void WordPairOwner::_updatePersistentPieceSelectionIndex()
+void WordPairOwner::_updatePersistentPieceSelectionIndex(bool excludeEndPiecesFromPersistentIndex)
 {
     if (m_PersistentPieceSelectionIndex != -1)
     {
@@ -340,6 +345,11 @@ void WordPairOwner::_updatePersistentPieceSelectionIndex()
 
         for (int index{m_PersistentPieceSelectionIndex+1}; index < m_MixedWordsPieces.size(); ++index)
         {
+            if (excludeEndPiecesFromPersistentIndex && m_MixedWordsPieces[index].pieceType == Game::PieceTypes::END_PIECE)
+            {
+                continue;
+            }
+
             if (!m_MixedWordsPieces[index].isAddedToInput)
             {
                 m_PersistentPieceSelectionIndex = index;
@@ -352,6 +362,11 @@ void WordPairOwner::_updatePersistentPieceSelectionIndex()
         {
             for (int index{m_PersistentPieceSelectionIndex-1}; index >= 0; --index)
             {
+                if (excludeEndPiecesFromPersistentIndex && m_MixedWordsPieces[index].pieceType == Game::PieceTypes::END_PIECE)
+                {
+                    continue;
+                }
+
                 if (!m_MixedWordsPieces[index].isAddedToInput)
                 {
                     m_PersistentPieceSelectionIndex = index;

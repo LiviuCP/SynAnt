@@ -29,11 +29,11 @@ public:
     void setNewWordsPair(const QVector<QString>& content, const QString& firstWord, const QString& secondWord, bool areSynonyms,
                          int firstWordFirstPieceIndex, int firstWordLastPieceIndex, int secondWordFirstPieceIndex, int secondWordLastPieceIndex);
 
-    void markPieceAsAddedToInput(int wordPieceIndex);
+    void markPieceAsAddedToInput(int wordPieceIndex, bool excludeEndPiecesFromPersistentIndex = false);
     void markPiecesAsRemovedFromInput(QVector<int> wordPieceIndexes);
 
     void enableNewPairAutoIndexSetup(bool enabled);
-    void setPersistentPieceSelectionIndex(bool isStartPieceRequired);
+    void setPersistentPieceSelectionIndex(bool isStartPieceRequired, bool excludeEndPiecesFromPersistentIndex = false);
     void clearPersistentPieceSelectionIndex();
     void increasePersistentPieceSelectionIndex();
     void decreasePersistentPieceSelectionIndex();
@@ -61,7 +61,7 @@ private:
     void _buildMixedWordsPiecesArray(const QVector<QString>& content, int firstBeginIndex, int firstEndIndex, int secondBeginIndex, int secondEndIndex);
     void _updateSingleWordPieceStatus(int wordPieceIndex, bool addedToInput);
     void _updateMultipleWordPiecesStatus(QVector<int> wordPieceIndexes, bool addedToInput);
-    void _updatePersistentPieceSelectionIndex();
+    void _updatePersistentPieceSelectionIndex(bool excludeEndPiecesFromPersistentIndex);
 
     struct WordPiece
     {

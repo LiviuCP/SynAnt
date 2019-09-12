@@ -118,7 +118,8 @@ void GameFacade::enablePersistentMode()
     {
         if (!m_pInputBuilder->isInputComplete())
         {
-            m_pWordPairOwner->setPersistentPieceSelectionIndex(m_pInputBuilder->isEmptyInput() || m_pInputBuilder->isHalfInput());
+            m_pWordPairOwner->setPersistentPieceSelectionIndex(m_pInputBuilder->isEmptyInput() || m_pInputBuilder->isHalfInput(),
+                                                               m_pInputBuilder->isOneWordLeftInProgress() && !m_pWordPairOwner->isOnePieceLeftToAddToInput());
         }
         else
         {
@@ -172,7 +173,8 @@ void GameFacade::goToNextPersistentModeContainer()
 
             if (m_pInputBuilder->getSecondWordPersistentPiecesRemovalIndex() == -1)
             {
-                m_pWordPairOwner->setPersistentPieceSelectionIndex(m_pInputBuilder->isHalfInput());
+                m_pWordPairOwner->setPersistentPieceSelectionIndex(m_pInputBuilder->isHalfInput(),
+                                                                   m_pInputBuilder->isOneWordLeftInProgress() && !m_pWordPairOwner->isOnePieceLeftToAddToInput());
             }
         }
         else if (m_pInputBuilder->getSecondWordPersistentPiecesRemovalIndex() != -1)
@@ -180,7 +182,8 @@ void GameFacade::goToNextPersistentModeContainer()
             m_pInputBuilder->clearPersistentPiecesRemovalIndexes();
             if (!m_pInputBuilder->isInputComplete())
             {
-                m_pWordPairOwner->setPersistentPieceSelectionIndex(m_pInputBuilder->isHalfInput());
+                m_pWordPairOwner->setPersistentPieceSelectionIndex(m_pInputBuilder->isHalfInput(),
+                                                                   m_pInputBuilder->isOneWordLeftInProgress() && !m_pWordPairOwner->isOnePieceLeftToAddToInput());
             }
             else
             {
@@ -544,19 +547,29 @@ void GameFacade::_onNewWordsPairMixed()
 
 void GameFacade::_onPieceAddedToInput(int index)
 {
-    m_pWordPairOwner->markPieceAsAddedToInput(index);
-
     if (m_IsPersistentIndexModeEnabled)
     {
+        // a small hack: we exclude the end pieces from being marked by persistent selection index if only part of a word is left to add to input ...
+        m_pWordPairOwner->markPieceAsAddedToInput(index, m_pInputBuilder->isOneWordLeftInProgress());
+
         if (m_pInputBuilder->isHalfInput() && (m_pWordPairOwner->getPersistentPieceSelectionIndex() != -1))
         {
             m_pWordPairOwner->clearPersistentPieceSelectionIndex();
             m_pWordPairOwner->setPersistentPieceSelectionIndex(true);
         }
+        else if (m_pWordPairOwner->isOnePieceLeftToAddToInput())
+        {
+            // ... but if only the end piece is left to add we re-activate the persistent selection index which marks this piece
+            m_pWordPairOwner->setPersistentPieceSelectionIndex(false);
+        }
         else if (m_pInputBuilder->isInputComplete())
         {
             m_pInputBuilder->setPersistentPiecesRemovalIndex(Game::InputWordNumber::ONE);
         }
+    }
+    else
+    {
+        m_pWordPairOwner->markPieceAsAddedToInput(index);
     }
 
     Q_EMIT inputChanged();
@@ -569,7 +582,8 @@ void GameFacade::_onPiecesRemovedFromInput(QVector<int> indexes)
     if (m_IsPersistentIndexModeEnabled)
     {
         m_pWordPairOwner->clearPersistentPieceSelectionIndex();
-        m_pWordPairOwner->setPersistentPieceSelectionIndex(m_pInputBuilder->isEmptyInput() || m_pInputBuilder->isHalfInput());
+        m_pWordPairOwner->setPersistentPieceSelectionIndex(m_pInputBuilder->isEmptyInput() || m_pInputBuilder->isHalfInput(),
+                                                           m_pInputBuilder->isOneWordLeftInProgress() && !m_pWordPairOwner->isOnePieceLeftToAddToInput());
     }
 
     Q_EMIT inputChanged();
