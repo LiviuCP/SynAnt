@@ -10,7 +10,7 @@ QtObject {
     readonly property color mixedPiecesBackgroundColor: "#a0a0a0"
     readonly property color firstWordInputBackgroundColor: "#cccccc"
     readonly property color secondWordInputBackgroundColor: "#dedede"
-    readonly property color markedForDeletionColor: "#a52a2a"
+    readonly property color markedForDeletionColor: "#9f4513"
     readonly property color pushButtonColor: "#d3d3d3"
     readonly property color borderColor: "#000000"
     readonly property color mixedPiecesBorderColor: "#444444"
