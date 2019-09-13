@@ -237,10 +237,10 @@ namespace Game
                                                                  "firstWord TEXT, secondWord TEXT, areSynonyms INTEGER, language TEXT)"
                                                             };
 
-        const QString c_RetrieveAllEntriesQuery             {    "SELECT * FROM GameDataTable WHERE language = 'EN'"                                        };
+        const QString c_RetrieveAllEntriesQuery             {    "SELECT * FROM GameDataTable WHERE language = 'ANY'"                                       };
         const QString c_InsertEntryIntoDbQuery              {
                                                                  "INSERT INTO GameDataTable(firstWord, secondWord, areSynonyms, language) "
-                                                                 "VALUES(:firstWord, :secondWord, :areSynonyms, 'EN')"
+                                                                 "VALUES(:firstWord, :secondWord, :areSynonyms, 'ANY')"
                                                             };
     }
 
