@@ -425,10 +425,10 @@ Item {
 
                 visible: !presenter.mixedWordsPiecesSelections[index]
 
-                color: Styles.backgroundColor
+                color: Styles.mixedPiecesBackgroundColor
 
                 border.color: index === presenter.pieceSelectionCursorPosition && !mixedWordsRepeater.cursorSelectedPieceOpacityTimer.running ? Styles.selectedBorderColor
-                                                                                                                                              : Styles.borderColor
+                                                                                                                                              : Styles.mixedPiecesBorderColor
                 border.width: index === presenter.pieceSelectionCursorPosition && !mixedWordsRepeater.cursorSelectedPieceOpacityTimer.running ? Styles.selectedBorderWidth
                                                                                                                                               : Styles.borderWidth
 
@@ -538,7 +538,7 @@ Item {
                                                                                                         : (isKeyboardSelected ? Styles.hoverOpacity
                                                                                                                               : Styles.defaultOpacity))
 
-                color: isHoverSelected ? Styles.markedForDeletionColor : (isKeyboardSelected ? Styles.markedForDeletionColor : Styles.backgroundColor)
+                color: isHoverSelected ? Styles.markedForDeletionColor : (isKeyboardSelected ? Styles.markedForDeletionColor : Styles.firstWordInputBackgroundColor)
 
                 border.color: index === presenter.piecesRemovalFirstWordCursorPosition &&
                               !firstWordInputRepeater.firstWordCursorRemovedPiecesOpacityTimer.running ? Styles.selectedBorderColor
@@ -619,7 +619,7 @@ Item {
                                                                                                          : (isKeyboardSelected ? Styles.hoverOpacity
                                                                                                                                : Styles.defaultOpacity))
 
-                color: isHoverSelected ? Styles.markedForDeletionColor : (isKeyboardSelected ? Styles.markedForDeletionColor : Styles.backgroundColor)
+                color: isHoverSelected ? Styles.markedForDeletionColor : (isKeyboardSelected ? Styles.markedForDeletionColor : Styles.secondWordInputBackgroundColor)
 
                 border.color: index === presenter.piecesRemovalSecondWordCursorPosition &&
                               !secondWordInputRepeater.secondWordCursorRemovedPiecesOpacityTimer.running ? Styles.selectedBorderColor
