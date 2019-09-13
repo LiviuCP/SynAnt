@@ -719,7 +719,7 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
             _updateStatusMessage(Game::Messages::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::Timing::c_ShortStatusUpdateDelay);
             break;
         case Game::StatusCodes::PERSISTENT_INDEX_REQUIRED:
-            _updateStatusMessage(Game::Messages::c_MouseClickDisabledMessage, Pane::MAIN, Game::Timing::c_NoDelay);
+            _updateStatusMessage(Game::Messages::c_ClickSelectOrRemoveDisabledMessage, Pane::MAIN, Game::Timing::c_NoDelay);
             _updateStatusMessage(Game::Messages::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::Timing::c_ShortStatusUpdateDelay);
             break;
         default:

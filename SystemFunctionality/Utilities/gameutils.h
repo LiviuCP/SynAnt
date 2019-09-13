@@ -367,7 +367,7 @@ namespace Game
 
         const QString c_CursorModeEnabledMessage            {    "Cursor enabled."                                                                          };
         const QString c_CursorModeDisabledMessage           {    "Cursor disabled."                                                                         };
-        const QString c_MouseClickDisabledMessage           {    "Mouse click on word pieces disabled while cursor is active!"                              };
+        const QString c_ClickSelectOrRemoveDisabledMessage  {    "Mouse click selection or removal of word pieces disabled while cursor mode is active!"    };
     }
 
     namespace Error
