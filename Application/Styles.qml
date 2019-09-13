@@ -10,7 +10,7 @@ QtObject {
     readonly property string markedForDeletionColor: "brown"
     readonly property string pushButtonColor: "lightgrey"
     readonly property string borderColor: "black"
-    readonly property string selectedBorderColor: "orange"
+    readonly property string selectedBorderColor: "white"
     readonly property string firstWordInputBorderColor: "green"
     readonly property string secondWordInputBorderColor: "darkorange"
     readonly property string textColor: "black"

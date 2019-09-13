@@ -427,8 +427,10 @@ Item {
 
                 color: Styles.backgroundColor
 
-                border.color: index === presenter.pieceSelectionCursorPosition ? Styles.selectedBorderColor : Styles.borderColor
-                border.width: index === presenter.pieceSelectionCursorPosition ? Styles.selectedBorderWidth : Styles.borderWidth
+                border.color: index === presenter.pieceSelectionCursorPosition && !mixedWordsRepeater.cursorSelectedPieceOpacityTimer.running ? Styles.selectedBorderColor
+                                                                                                                                              : Styles.borderColor
+                border.width: index === presenter.pieceSelectionCursorPosition && !mixedWordsRepeater.cursorSelectedPieceOpacityTimer.running ? Styles.selectedBorderWidth
+                                                                                                                                              : Styles.borderWidth
 
                 opacity: (firstWordClickSelectedPieceOpacityTimer.running ||
                           secondWordClickSelectedPieceOpacityTimer.running ||
@@ -538,8 +540,13 @@ Item {
 
                 color: isHoverSelected ? Styles.markedForDeletionColor : (isKeyboardSelected ? Styles.markedForDeletionColor : Styles.backgroundColor)
 
-                border.color: Styles.firstWordInputBorderColor
-                border.width: index === presenter.piecesRemovalFirstWordCursorPosition ? Styles.selectedBorderWidth : Styles.borderWidth
+                border.color: index === presenter.piecesRemovalFirstWordCursorPosition &&
+                              !firstWordInputRepeater.firstWordCursorRemovedPiecesOpacityTimer.running ? Styles.selectedBorderColor
+                                                                                                       : Styles.firstWordInputBorderColor
+
+                border.width: index === presenter.piecesRemovalFirstWordCursorPosition &&
+                              !firstWordInputRepeater.firstWordCursorRemovedPiecesOpacityTimer.running ? Styles.selectedBorderWidth
+                                                                                                       : Styles.borderWidth
 
                 Text {
                     font.pointSize: wordPieces.height * 0.4
@@ -614,8 +621,13 @@ Item {
 
                 color: isHoverSelected ? Styles.markedForDeletionColor : (isKeyboardSelected ? Styles.markedForDeletionColor : Styles.backgroundColor)
 
-                border.color: Styles.secondWordInputBorderColor
-                border.width: index === presenter.piecesRemovalSecondWordCursorPosition ? Styles.selectedBorderWidth : Styles.borderWidth
+                border.color: index === presenter.piecesRemovalSecondWordCursorPosition &&
+                              !secondWordInputRepeater.secondWordCursorRemovedPiecesOpacityTimer.running ? Styles.selectedBorderColor
+                                                                                                         : Styles.secondWordInputBorderColor
+
+                border.width: index === presenter.piecesRemovalSecondWordCursorPosition &&
+                              !secondWordInputRepeater.secondWordCursorRemovedPiecesOpacityTimer.running ? Styles.selectedBorderWidth
+                                                                                                         : Styles.borderWidth
 
                 Text {
                     font.pointSize: wordPieces.height * 0.4
