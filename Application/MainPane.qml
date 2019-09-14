@@ -1,3 +1,4 @@
+
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
@@ -419,6 +420,10 @@ Item {
 
             model: presenter.mixedWordsPiecesContent
 
+            property Timer cursorSelectedPieceTimer : Timer {
+                interval: 100
+            }
+
             Rectangle {
                 width: parent.width / mixedWordsRepeater.count
                 height: parent.height
@@ -427,14 +432,14 @@ Item {
 
                 color: Styles.mixedPiecesBackgroundColor
 
-                border.color: index === presenter.pieceSelectionCursorPosition && !mixedWordsRepeater.cursorSelectedPieceOpacityTimer.running ? Styles.selectedBorderColor
+                border.color: index === presenter.pieceSelectionCursorPosition && !mixedWordsRepeater.cursorSelectedPieceTimer.running ? Styles.selectedBorderColor
                                                                                                                                               : Styles.mixedPiecesBorderColor
-                border.width: index === presenter.pieceSelectionCursorPosition && !mixedWordsRepeater.cursorSelectedPieceOpacityTimer.running ? Styles.selectedBorderWidth
+                border.width: index === presenter.pieceSelectionCursorPosition && !mixedWordsRepeater.cursorSelectedPieceTimer.running ? Styles.selectedBorderWidth
                                                                                                                                               : Styles.borderWidth
 
-                opacity: (firstWordClickSelectedPieceOpacityTimer.running ||
-                          secondWordClickSelectedPieceOpacityTimer.running ||
-                          (mixedWordsRepeater.cursorSelectedPieceOpacityTimer.running &&
+                opacity: (firstWordClickSelectedPieceTimer.running ||
+                          secondWordClickSelectedPieceTimer.running ||
+                          (mixedWordsRepeater.cursorSelectedPieceTimer.running &&
                            index === presenter.pieceSelectionCursorPosition)) ? Styles.pressedOpacity
                                                                               : Styles.defaultOpacity
 
@@ -442,19 +447,19 @@ Item {
                     id: clickTimer
                     interval: 250
                     onTriggered: {
-                        firstWordClickSelectedPieceOpacityTimer.start();
+                        firstWordClickSelectedPieceTimer.start();
                     }
                 }
 
                 Timer {
-                    id: firstWordClickSelectedPieceOpacityTimer
+                    id: firstWordClickSelectedPieceTimer
                     interval: 100
 
                     onTriggered: presenter.selectPieceForFirstInputWord(index)
                 }
 
                 Timer {
-                    id: secondWordClickSelectedPieceOpacityTimer
+                    id: secondWordClickSelectedPieceTimer
                     interval: 100
 
                     onTriggered: presenter.selectPieceForSecondInputWord(index)
@@ -476,7 +481,7 @@ Item {
                     // single click for assigning piece to first word, double click for assigning to second word
                     onClicked: {
                         if (clickTimer.running) {
-                            secondWordClickSelectedPieceOpacityTimer.start();
+                            secondWordClickSelectedPieceTimer.start();
                             clickTimer.stop();
                         }
                         else {
@@ -493,12 +498,8 @@ Item {
                 }
             }
 
-            property Timer cursorSelectedPieceOpacityTimer : Timer {
-                interval: 100
-            }
-
             function decreaseOpacityAtCursor() {
-                cursorSelectedPieceOpacityTimer.start();
+                cursorSelectedPieceTimer.start();
             }
         }
     }
@@ -520,6 +521,15 @@ Item {
 
             model: presenter.firstWordInputPiecesContent
 
+            property Timer firstWordClickRemovedPiecesTimer : Timer {
+                interval: 100
+                onTriggered: presenter.removePiecesFromFirstInputWord(presenter.firstWordInputPiecesHoverIndex)
+            }
+
+            property Timer firstWordCursorRemovedPiecesTimer : Timer {
+                interval: 100
+            }
+
             Rectangle {
                 property bool isHoverSelected: !presenter.persistentModeEnabled ? presenter.areFirstWordInputPiecesHovered && presenter.firstWordInputPiecesHoverIndex <= index
                                                                                : false
@@ -530,9 +540,9 @@ Item {
                 width: parent.width / mixedWordsRepeater.count
                 height: parent.height
 
-                opacity: ((firstWordInputRepeater.firstWordClickRemovedPiecesOpacityTimer.running &&
+                opacity: ((firstWordInputRepeater.firstWordClickRemovedPiecesTimer.running &&
                            index >= presenter.firstWordInputPiecesHoverIndex) ||
-                          (firstWordInputRepeater.firstWordCursorRemovedPiecesOpacityTimer.running &&
+                          (firstWordInputRepeater.firstWordCursorRemovedPiecesTimer.running &&
                            index >= presenter.piecesRemovalFirstWordCursorPosition)) ? Styles.pressedOpacity
                                                                                      : (isHoverSelected ? Styles.hoverOpacity
                                                                                                         : (isKeyboardSelected ? Styles.hoverOpacity
@@ -541,11 +551,11 @@ Item {
                 color: isHoverSelected ? Styles.markedForDeletionColor : (isKeyboardSelected ? Styles.markedForDeletionColor : Styles.firstWordInputBackgroundColor)
 
                 border.color: index === presenter.piecesRemovalFirstWordCursorPosition &&
-                              !firstWordInputRepeater.firstWordCursorRemovedPiecesOpacityTimer.running ? Styles.selectedBorderColor
+                              !firstWordInputRepeater.firstWordCursorRemovedPiecesTimer.running ? Styles.selectedBorderColor
                                                                                                        : Styles.firstWordInputBorderColor
 
                 border.width: index === presenter.piecesRemovalFirstWordCursorPosition &&
-                              !firstWordInputRepeater.firstWordCursorRemovedPiecesOpacityTimer.running ? Styles.selectedBorderWidth
+                              !firstWordInputRepeater.firstWordCursorRemovedPiecesTimer.running ? Styles.selectedBorderWidth
                                                                                                        : Styles.borderWidth
 
                 Text {
@@ -563,7 +573,7 @@ Item {
 
                     onEntered: presenter.updateFirstWordInputHoverIndex(index)
                     onExited: presenter.clearWordInputHoverIndexes()
-                    onClicked: firstWordInputRepeater.firstWordClickRemovedPiecesOpacityTimer.start()
+                    onClicked: firstWordInputRepeater.firstWordClickRemovedPiecesTimer.start()
 
                 }
 
@@ -575,17 +585,8 @@ Item {
                 }
             }
 
-            property Timer firstWordClickRemovedPiecesOpacityTimer : Timer {
-                interval: 100
-                onTriggered: presenter.removePiecesFromFirstInputWord(presenter.firstWordInputPiecesHoverIndex)
-            }
-
-            property Timer firstWordCursorRemovedPiecesOpacityTimer : Timer {
-                interval: 100
-            }
-
             function decreaseOpacityAtCursor() {
-                firstWordCursorRemovedPiecesOpacityTimer.start();
+                firstWordCursorRemovedPiecesTimer.start();
             }
         }
 
@@ -601,6 +602,15 @@ Item {
 
             model: presenter.secondWordInputPiecesContent
 
+            property Timer secondWordClickRemovedPiecesTimer : Timer {
+                interval: 100
+                onTriggered: presenter.removePiecesFromSecondInputWord(presenter.secondWordInputPiecesHoverIndex)
+            }
+
+            property Timer secondWordCursorRemovedPiecesTimer : Timer {
+                interval: 100
+            }
+
             Rectangle {
                 property bool isHoverSelected: !presenter.persistentModeEnabled ? presenter.areSecondWordInputPiecesHovered && presenter.secondWordInputPiecesHoverIndex <= index
                                                                                 : false
@@ -611,9 +621,9 @@ Item {
                 width: parent.width / mixedWordsRepeater.count
                 height: parent.height
 
-                opacity: ((secondWordInputRepeater.secondWordClickRemovedPiecesOpacityTimer.running &&
+                opacity: ((secondWordInputRepeater.secondWordClickRemovedPiecesTimer.running &&
                            index >= presenter.secondWordInputPiecesHoverIndex) ||
-                          (secondWordInputRepeater.secondWordCursorRemovedPiecesOpacityTimer.running &&
+                          (secondWordInputRepeater.secondWordCursorRemovedPiecesTimer.running &&
                            index >= presenter.piecesRemovalSecondWordCursorPosition)) ? Styles.pressedOpacity
                                                                                       : (isHoverSelected ? Styles.hoverOpacity
                                                                                                          : (isKeyboardSelected ? Styles.hoverOpacity
@@ -622,11 +632,11 @@ Item {
                 color: isHoverSelected ? Styles.markedForDeletionColor : (isKeyboardSelected ? Styles.markedForDeletionColor : Styles.secondWordInputBackgroundColor)
 
                 border.color: index === presenter.piecesRemovalSecondWordCursorPosition &&
-                              !secondWordInputRepeater.secondWordCursorRemovedPiecesOpacityTimer.running ? Styles.selectedBorderColor
+                              !secondWordInputRepeater.secondWordCursorRemovedPiecesTimer.running ? Styles.selectedBorderColor
                                                                                                          : Styles.secondWordInputBorderColor
 
                 border.width: index === presenter.piecesRemovalSecondWordCursorPosition &&
-                              !secondWordInputRepeater.secondWordCursorRemovedPiecesOpacityTimer.running ? Styles.selectedBorderWidth
+                              !secondWordInputRepeater.secondWordCursorRemovedPiecesTimer.running ? Styles.selectedBorderWidth
                                                                                                          : Styles.borderWidth
 
                 Text {
@@ -644,7 +654,7 @@ Item {
 
                     onEntered: presenter.updateSecondWordInputHoverIndex(index)
                     onExited: presenter.clearWordInputHoverIndexes()
-                    onClicked: secondWordInputRepeater.secondWordClickRemovedPiecesOpacityTimer.start()
+                    onClicked: secondWordInputRepeater.secondWordClickRemovedPiecesTimer.start()
                 }
 
                 ToolTip {
@@ -655,17 +665,8 @@ Item {
                 }
             }
 
-            property Timer secondWordClickRemovedPiecesOpacityTimer : Timer {
-                interval: 100
-                onTriggered: presenter.removePiecesFromSecondInputWord(presenter.secondWordInputPiecesHoverIndex)
-            }
-
-            property Timer secondWordCursorRemovedPiecesOpacityTimer : Timer {
-                interval: 100
-            }
-
             function decreaseOpacityAtCursor() {
-                secondWordCursorRemovedPiecesOpacityTimer.start();
+                secondWordCursorRemovedPiecesTimer.start();
             }
         }
 
