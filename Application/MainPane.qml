@@ -498,7 +498,7 @@ Item {
                 }
             }
 
-            function decreaseOpacityAtCursor() {
+            function animatePieceSelectedByCursor() {
                 cursorSelectedPieceTimer.start();
             }
         }
@@ -585,7 +585,7 @@ Item {
                 }
             }
 
-            function decreaseOpacityAtCursor() {
+            function animatePiecesRemovedByCursor() {
                 firstWordCursorRemovedPiecesTimer.start();
             }
         }
@@ -665,7 +665,7 @@ Item {
                 }
             }
 
-            function decreaseOpacityAtCursor() {
+            function animatePiecesRemovedByCursor() {
                 secondWordCursorRemovedPiecesTimer.start();
             }
         }
@@ -952,27 +952,27 @@ Item {
 
     onUpArrowPressedChanged: {
         if (upArrowPressed) {
-            decreaseElementOpacityAtCursor();
+            animatePiecesControlledByCursor();
             upArrowPressed = false;
         }
     }
 
     onDownArrowPressedChanged: {
         if (downArrowPressed) {
-            decreaseElementOpacityAtCursor();
+            animatePiecesControlledByCursor();
             downArrowPressed = false;
         }
     }
 
-    function decreaseElementOpacityAtCursor() {
+    function animatePiecesControlledByCursor() {
         if (presenter.pieceSelectionCursorPosition !== -1) {
-            mixedWordsRepeater.decreaseOpacityAtCursor();
+            mixedWordsRepeater.animatePieceSelectedByCursor();
         }
         else if (presenter.piecesRemovalFirstWordCursorPosition !== -1) {
-            firstWordInputRepeater.decreaseOpacityAtCursor();
+            firstWordInputRepeater.animatePiecesRemovedByCursor();
         }
         else if (presenter.piecesRemovalSecondWordCursorPosition !== -1) {
-            secondWordInputRepeater.decreaseOpacityAtCursor();
+            secondWordInputRepeater.animatePiecesRemovedByCursor();
         }
     }
 }
