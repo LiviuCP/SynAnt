@@ -40,6 +40,7 @@ static const QString c_RawDataEntryHelpMessage          {
                                                              " - Yes (CTRL+Y): discard pairs from data entry buffer\n"
                                                              " - Cancel (CTRL+W): cancel discarding, keep entries in the buffer\n"
                                                              "In both cases you will return to the data entry dialog after choosing the option.\n"
+                                                             "\nPress Ok to return to previous page.\n"
                                                         };
 
 namespace DataEntry
