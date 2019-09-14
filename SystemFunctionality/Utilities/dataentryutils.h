@@ -90,8 +90,8 @@ namespace DataEntry
         const QString c_DataEntrySaveInProgressStartMessage {    "Welcome back to data entry. Please wait, data is currently being saved..."                };
         const QString c_DataEntryResumeMessage              {    "Word pairs entry resumed. There are %1 entries pending to be saved!"                      };
         const QString c_DataEntryStopMessage                {    "Word pairs entry stopped"                                                                 };
-        const QString c_DataEntrySaveInProgressStopMessage  {    "Word pairs entry stopped. Data will be saved in the background"                           };
-        const QString c_DataEntryRequestMessage             {    "Please enter a new pair of words.\n\nChoose if they are synonyms or antonyms"             };
+        const QString c_DataEntrySaveInProgressStopMessage  {    "Word pairs entry stopped, data will be continue to be saved"                              };
+        const QString c_DataEntryRequestMessage             {    "Please enter a new pair of words.\n\nChoose if they are synonyms or antonyms."            };
 
         const QString c_DataEntrySuccessMessage             {
                                                                  "The new pair has been successfully added to validated pairs.\n\n"
