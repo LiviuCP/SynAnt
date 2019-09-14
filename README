@@ -1,16 +1,12 @@
 0. Introduction
 
-This program retrieves a words pair that can either be synonyms or antonyms, divides them in (almost) equal pieces and mixes them. The user should guess the correct words.
+This program retrieves a words pair that can either be synonyms or antonyms, divides them into (almost) equal pieces and mixes them. The user should guess the correct words.
 
 1. Available Versions and Supported Operating Systems
 
-Currently there are two versions on this repo: v1.2 and v2.0.
+Currently there are two versions on this repo: v1.2 and v2.0. Both are in finished (released) state and ready to use. They have been compiled on Fedora 28 using Qt 5.9.2 and a 64bit GCC-C++ compiler.
 
-In version 1.2 the program has been compiled on Linux (Fedora 28) using Qt 5.9.2 and a 64bit GCC-C++ compiler. It has been deployed on Fedora 28 and OpenSUSE 42.3 so far.
-
-Version 2.0 is currently under construction (see the branches containing v2.0 in the description for more information about the code).
-
-The app is currently not supported on any non-Linux operating system.
+For both the deployment has been made on Fedora 28 and OpenSUSE 42.3 so far. The app is currently not supported on any non-Linux operating system.
 
 2. Build 
 
@@ -20,13 +16,13 @@ For version 1.2 there are 2 branches, each of them containing an implementation 
 
 Choose the branch you would like to use and then compile it.
 
-For v1.2 after compiling the code copy the file "data" in the Application sub-directory. Feel free to modify it by adding new word pairs. The file should keep its name ("data"), otherwise it won't be recognized by the app and an error will be triggered. For v2.0 this step is no longer needed as if the file does not exist or is empty it will automatically be created and the user will be redirected to a data entry section where new word pairs can be added.
+For v1.2 after compiling the code copy the file "data" into the Application sub-directory. Feel free to modify it by adding new word pairs. The file should keep its name ("data"), otherwise it won't be recognized by the app and an error will be triggered. For v2.0 this step is no longer needed as if no data exists, after opening the app the user will be redirected to a data entry section where new word pairs can be added. These pairs can then be played within the game.
 
-As the v2.0 is currently work in progress the README file will continue to get updated to reflect the changes. One thing to be mentioned is that the QWidgets support will be removed in version 2.0 and only the QML implementation will continue to be used.
+For v2.0 there is no more QWidgets support. The whole UI has been written in QML. Use branch SynAnt_v2.0 to pull the code for this version.
 
 3. Deploying the app
 
-For version 1.2 I used linuxdeployqt for having all necessary libs added to the application so it can run on Linux machines where Qt is not installed. In order to successfully create the deployable package please follow these steps:
+For both v1.2 and v2.0 I used linuxdeployqt for having all necessary libs added to the application so it can run on Linux machines where Qt is not installed. In order to successfully create the deployable package please follow these steps:
 - download linuxdeployqt from this GitHub page: https://github.com/probonopd/linuxdeployqt (check instructions from the page for more details)
 - Make the downloaded file executable: chmod a+x linuxdeployqt-continuous-x86_64.AppImage
 - locate the folder where the qmake executable resides. The directory should have a path similar to this: /path/to/Qt/5.9.2/gcc_64/bin
@@ -36,18 +32,20 @@ For version 1.2 I used linuxdeployqt for having all necessary libs added to the 
   QMake version 3.1
   Using Qt version 5.9.2 in /path/to/Qt/5.9.2/gcc_64/lib
 
+- for v2.0 (which uses a SQLite database instead of a text file for storing data) please use this "hack" to prevent an error regarding a missing MySQL library (caused by not finding libmysqlclient.so.18):
+  - go to the sqldrivers directory which has a path similar to this: cd /path/to/Qt/5.9.2/gcc_64/plugins/sqldrivers
+  - move all files EXCEPT libqsqlite.so to a different location, preferably outside Qt. I only had two files to move: libqsqlmysql.so, libqsqlpsql.so
+  - after deployment is done put these two files back to their original location
 - build the application as RELEASE
 - run the linuxdeployqt as follows:
-  - for the SynAnt_v1.2_QWidgets branch you only need to provide the path of the executable as argument:
+  - for the SynAnt_v1.2_QWidgets branch you only need to provide the path of the executable contained within the BUILD DIRECTORY as argument:
     /path/to/linuxdeployqt-continuous-x86_64.AppImage /path/to/builddir/Application/SynAnt
-  - for the SynAnt_v1.2_QML branch the directory containing the qml files should be provided too. This is located in the Application subdir of the source code directory:
-    /path/to/linuxdeployqt-continuous-x86_64.AppImage /path/to/builddir/Application/SynAnt -qmldir='/path/to/SynAnt/Application'
-- check that the build directory now contains following folders within the Application subdir: lib, plugins, qml (last one only for the SynAnt_v1.2_QML branch)
+  - for the SynAnt_v1.2_QML and SynAnt_v2.0 branches the directory containing the qml files should be provided too. This is located in the Application subdir of the SOURCE CODE DIRECTORY:
+    /path/to/linuxdeployqt-continuous-x86_64.AppImage /path/to/builddir/Application/SynAnt -qmldir='/path/to/sourcedir/Application'
+- check that the build directory now contains following folders within the Application subdir: lib, plugins, qml (last one only for the SynAnt_v1.2_QML and SynAnt_v2.0 branches)
 - copy the build directory onto a Linux machine where Qt is not installed and check that it runs successfully (should run exactly the same as on the Qt machine)
 
 Note: an error might trigger when running linuxdeployqt mentioning that libjasper.so.1 cannot be found. I solved this error by creating a symbolic link to libjasper.so.4. The symbolic link was placed into the same directory as the libjasper.so.4 file. You can use the locate command (don't forget to execute updatedb as sudo before running it) for finding the libjasper.so files.
-
-For version 2.0 the same deploy steps might be used at the moment as for the QML branch of v1.2, however this is subject to change as the version is under construction.
 
 4. Updating the "data" file
 
@@ -55,10 +53,12 @@ The data file can only be updated manually for version 1.2. See above sections f
 
 Each row should contain one word pair. The 2 words from each pair are separated by a special character which is '=' for synonyms and '!' for antonyms. No rows should be left empty or with incorrect format (e.g. no separator/multiple separators) otherwise an exception will be triggered when reading the incorrect row and the program will stop. The minimum word size is 5 characters.
 
-Starting with version 2.0 the data is being updated by using a data entry dialog page. This is a significant improvement comparing to previous versions as it is even possible to start the game without having a data file (the user will need to enter at least one word pair so the game can be played). So no more manual updating is required anymore. For more information check the Help dialog.
+Starting with version 2.0 the data is being updated by using a data entry dialog page. This is a significant improvement comparing to previous versions as it is even possible to start the game without having a data file (the user will need to enter at least one word pair so the game can be played), so no more manual updating is required. Also the data is not stored into a text file but a SQLite database, which increases reliability and maintainability. For more information check the Help dialog.
 
 5. Further info
 
-Click the Help button within the app for more information.
+Click the Help button within the app for more information. Please note that in version 2.0 the help menu is contextual. If accessed from data entry dialog page it provides data entry help topics while when accessing it from the introduction or main page it contains general game help topics.
 
 For questions please feel free to comment on my GitHub page: https://github.com/LiviuCP
+
+Last note: the words "pane" and "page" can be used interchangeably into application/README as for these two versions of the game a page contains exactly one pane. This might change in the future versions.
