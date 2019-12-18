@@ -58,6 +58,8 @@ void InputBuilder::resetInput()
     m_FirstWordInput.state = WordInputState::EMPTY;
     m_SecondWordInput.state = WordInputState::EMPTY;
 
+    clearPersistentPiecesRemovalIndexes();
+
     if (isResettingCompleteInput)
     {
         Q_EMIT inputCompletionChanged();
