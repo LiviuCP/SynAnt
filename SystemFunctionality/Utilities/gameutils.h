@@ -56,6 +56,8 @@ static const QString c_RawGameHelpMessage                   {
                                                                  "input containers.\n"
                                                                  " - the cursor position within the mixed pieces container is updated to the first available start piece if this is "
                                                                  "the only possible piece type to be added to input in the current state.\n"
+                                                                 " - if one word is complete the cursor moves to an available middle-piece each time a new part is added to input unless the "
+                                                                 "only remaining part to be added is the end piece.\n"
                                                                  "\n14) You need to build both words correctly to win the round.\n"
                                                                  "\n15) Following rules are enforced by app when building the user input:\n"
                                                                  " - each word should start with a start piece (blue text)\n"
