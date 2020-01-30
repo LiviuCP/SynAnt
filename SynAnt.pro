@@ -2,9 +2,11 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     Application \
-    SystemFunctionality \
-    Tests
-
+    SystemFunctionality
 
 Application.depends = SystemFunctionality
-Tests.depends = SystemFunctionality
+
+CONFIG(debug, debug|release) {
+    SUBDIRS += Tests
+    Tests.depends = SystemFunctionality
+}
