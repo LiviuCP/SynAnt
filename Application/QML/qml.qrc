@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/Application">
+        <file>main.qml</file>
+        <file>AppMain/IntroPane.qml</file>
+        <file>AppMain/HelpPane.qml</file>
+        <file>AppMain/MainPane.qml</file>
+        <file>AppMain/DataEntryPane.qml</file>
+        <file>Dialogs/PromptSaveExitPane.qml</file>
+        <file>Dialogs/PromptDiscardPane.qml</file>
+        <file>Dialogs/ErrorPane.qml</file>
+        <file>Dialogs/ErrorDialog.qml</file>
+        <file>Utilities/GameStrings.qml</file>
+        <file>Utilities/Styles.qml</file>
+    </qresource>
+</RCC>

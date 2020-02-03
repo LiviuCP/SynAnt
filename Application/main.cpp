@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
     try
     {
         gameInitProxy.setDataSource(app.applicationDirPath());
-        engine.load(QUrl(QLatin1String("qrc:/main.qml")));
+        engine.load(QUrl(QLatin1String("qrc:/Application/main.qml")));
 
         if (engine.rootObjects().isEmpty())
         {
@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
     }
     catch (const GameException& exception)
     {
-        QQmlComponent errorComponent(&engine, QUrl(QLatin1String("qrc:/ErrorDialog.qml")));
+        QQmlComponent errorComponent(&engine, QUrl(QLatin1String("qrc:/Application/Dialogs/ErrorDialog.qml")));
         QObject *errorComponentObject = errorComponent.create();
 
         QObject *errorDialogObject = errorComponentObject->findChild<QObject*>("errorDialog");
@@ -51,6 +51,16 @@ void registerDataTypesForQML()
 {
     qmlRegisterType<GamePresenter>("GameManagers", 1, 0, "GamePresenter");
 
-    qmlRegisterSingletonType(QUrl("qrc:///GameStrings.qml"), "GameUtils", 1, 0, "GameStrings");
-    qmlRegisterSingletonType(QUrl("qrc:///Styles.qml"), "GameUtils", 1, 0, "Styles");
+    qmlRegisterType(QUrl("qrc:///Application/AppMain/IntroPane.qml"), "AppCore", 1, 0, "IntroPane");
+    qmlRegisterType(QUrl("qrc:///Application/AppMain/HelpPane.qml"), "AppCore", 1, 0, "HelpPane");
+    qmlRegisterType(QUrl("qrc:///Application/AppMain/MainPane.qml"), "AppCore", 1, 0, "MainPane");
+    qmlRegisterType(QUrl("qrc:///Application/AppMain/DataEntryPane.qml"), "AppCore", 1, 0, "DataEntryPane");
+
+    qmlRegisterType(QUrl("qrc:///Application/Dialogs/ErrorPane.qml"), "AppDialogs", 1, 0, "ErrorPane");
+//    qmlRegisterType(QUrl("qrc:///Application/Dialogs/ErrorDialog.qml"), "AppDialogs", 1, 0, "ErrorDialog"); // not required in QML but only in main.cpp
+    qmlRegisterType(QUrl("qrc:///Application/Dialogs/PromptDiscardPane.qml"), "AppDialogs", 1, 0, "PromptDiscardPane");
+    qmlRegisterType(QUrl("qrc:///Application/Dialogs/PromptSaveExitPane.qml"), "AppDialogs", 1, 0, "PromptSaveExitPane");
+
+    qmlRegisterSingletonType(QUrl("qrc:///Application/Utilities/GameStrings.qml"), "GameUtils", 1, 0, "GameStrings");
+    qmlRegisterSingletonType(QUrl("qrc:///Application/Utilities/Styles.qml"), "GameUtils", 1, 0, "Styles");
 }

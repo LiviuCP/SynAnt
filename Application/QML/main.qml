@@ -2,8 +2,10 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Window 2.3
-import GameManagers 1.0
+import AppCore 1.0
+import AppDialogs 1.0
 import GameUtils 1.0
+import GameManagers 1.0
 
 ApplicationWindow {
     id: game
