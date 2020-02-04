@@ -344,7 +344,7 @@ Item {
     }
 
     Row {
-        id: wordPieces
+        id: wordPiecesContainer
 
         height: wordPiecesHeight
 
@@ -355,92 +355,12 @@ Item {
             right: infoLevelsAndStatusLayout.right
         }
 
-        Repeater {
-            id: mixedWordsRepeater
+        MixedWordPieces {
+            id: mixedWordPieces
 
-            model: presenter.mixedWordsPiecesContent
-
-            property Timer cursorSelectedPieceTimer : Timer {
-                interval: 100
-            }
-
-            Rectangle {
-                width: parent.width / mixedWordsRepeater.count
-                height: parent.height
-
-                visible: !presenter.mixedWordsPiecesSelections[index]
-
-                color: Styles.mixedPiecesBackgroundColor
-
-                border.color: index === presenter.pieceSelectionCursorPosition && !mixedWordsRepeater.cursorSelectedPieceTimer.running ? Styles.selectedBorderColor
-                                                                                                                                              : Styles.mixedPiecesBorderColor
-                border.width: index === presenter.pieceSelectionCursorPosition && !mixedWordsRepeater.cursorSelectedPieceTimer.running ? Styles.selectedBorderWidth
-                                                                                                                                              : Styles.borderWidth
-
-                opacity: (firstWordClickSelectedPieceTimer.running ||
-                          secondWordClickSelectedPieceTimer.running ||
-                          (mixedWordsRepeater.cursorSelectedPieceTimer.running &&
-                           index === presenter.pieceSelectionCursorPosition)) ? Styles.pressedOpacity
-                                                                              : Styles.defaultOpacity
-
-                Timer {
-                    id: clickTimer
-                    interval: 250
-                    onTriggered: {
-                        firstWordClickSelectedPieceTimer.start();
-                    }
-                }
-
-                Timer {
-                    id: firstWordClickSelectedPieceTimer
-                    interval: 100
-
-                    onTriggered: presenter.selectPieceForFirstInputWord(index)
-                }
-
-                Timer {
-                    id: secondWordClickSelectedPieceTimer
-                    interval: 100
-
-                    onTriggered: presenter.selectPieceForSecondInputWord(index)
-                }
-
-                Text {
-                    text: modelData
-                    font.pointSize: wordPieces.height * 0.4
-                    anchors.centerIn: parent
-                    color: presenter.mixedWordsPiecesTextColors[index]
-                }
-
-                MouseArea {
-                    id: mixedWordsCurrentPieceMouseArea
-
-                    hoverEnabled: true
-                    anchors.fill: parent
-
-                    // single click for assigning piece to first word, double click for assigning to second word
-                    onClicked: {
-                        if (clickTimer.running) {
-                            secondWordClickSelectedPieceTimer.start();
-                            clickTimer.stop();
-                        }
-                        else {
-                            clickTimer.restart();
-                        }
-                    }
-                }
-
-                ToolTip {
-                    text: presenter.mixedWordsPiecesSelections[index] ? GameStrings.wordPieceAlreadySelectedToolTip : GameStrings.selectWordPieceToolTip
-                    visible: !presenter.persistentModeEnabled && mixedWordsCurrentPieceMouseArea.containsMouse
-                    delay: presenter.toolTipDelay
-                    timeout: presenter.toolTipTimeout
-                }
-            }
-
-            function animatePieceSelectedByCursor() {
-                cursorSelectedPieceTimer.start();
-            }
+            gamePresenter: presenter
+            pieceWidth: parent.width / mixedWordPieces.count
+            pieceHeight: parent.height
         }
     }
 
@@ -450,16 +370,16 @@ Item {
         height: wordsEntryLayoutHeight
 
         anchors {
-            top: wordPieces.bottom
+            top: wordPiecesContainer.bottom
             topMargin: parent.width * 0.01
-            left: wordPieces.left
-            right: wordPieces.right
+            left: wordPiecesContainer.left
+            right: wordPiecesContainer.right
         }
 
         WordPiecesInput {
             id: firstWordInput
             gamePresenter: presenter
-            pieceWidth: parent.width / mixedWordsRepeater.count
+            pieceWidth: parent.width / mixedWordPieces.count
             pieceHeight: parent.height
         }
 
@@ -473,7 +393,7 @@ Item {
         WordPiecesInput {
             id: secondWordInput
             gamePresenter: presenter
-            pieceWidth: parent.width / mixedWordsRepeater.count
+            pieceWidth: parent.width / mixedWordPieces.count
             pieceHeight: parent.height
             isFirstWord: false
         }
@@ -608,7 +528,7 @@ Item {
 
     function animatePiecesControlledByCursor() {
         if (presenter.pieceSelectionCursorPosition !== -1) {
-            mixedWordsRepeater.animatePieceSelectedByCursor();
+            mixedWordPieces.animatePieceSelectedByCursor();
         }
         else if (presenter.piecesRemovalFirstWordCursorPosition !== -1) {
             firstWordInput.animatePiecesRemovedByCursor();

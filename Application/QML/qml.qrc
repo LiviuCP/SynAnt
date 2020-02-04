@@ -13,5 +13,6 @@
         <file>Utilities/Styles.qml</file>
         <file>Controls/AppButton.qml</file>
         <file>Controls/WordPiecesInput.qml</file>
+        <file>Controls/MixedWordPieces.qml</file>
     </qresource>
 </RCC>
