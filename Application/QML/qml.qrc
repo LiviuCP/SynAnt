@@ -12,5 +12,6 @@
         <file>Utilities/GameStrings.qml</file>
         <file>Utilities/Styles.qml</file>
         <file>Controls/AppButton.qml</file>
+        <file>Controls/WordPiecesInput.qml</file>
     </qresource>
 </RCC>

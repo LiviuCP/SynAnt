@@ -1,4 +1,3 @@
-
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
@@ -457,78 +456,11 @@ Item {
             right: wordPieces.right
         }
 
-        Repeater {
-            id: firstWordInputRepeater
-
-            model: presenter.firstWordInputPiecesContent
-
-            property Timer firstWordClickRemovedPiecesTimer : Timer {
-                interval: 100
-                onTriggered: presenter.removePiecesFromFirstInputWord(presenter.firstWordInputPiecesHoverIndex)
-            }
-
-            property Timer firstWordCursorRemovedPiecesTimer : Timer {
-                interval: 100
-            }
-
-            Rectangle {
-                property bool isHoverSelected: !presenter.persistentModeEnabled ? presenter.areFirstWordInputPiecesHovered && presenter.firstWordInputPiecesHoverIndex <= index
-                                                                               : false
-                property bool isKeyboardSelected: presenter.persistentModeEnabled ? presenter.piecesRemovalFirstWordCursorPosition !== -1 &&
-                                                                                    presenter.piecesRemovalFirstWordCursorPosition <= index
-                                                                                  : false
-
-                width: parent.width / mixedWordsRepeater.count
-                height: parent.height
-
-                opacity: ((firstWordInputRepeater.firstWordClickRemovedPiecesTimer.running &&
-                           index >= presenter.firstWordInputPiecesHoverIndex) ||
-                          (firstWordInputRepeater.firstWordCursorRemovedPiecesTimer.running &&
-                           index >= presenter.piecesRemovalFirstWordCursorPosition)) ? Styles.pressedOpacity
-                                                                                     : (isHoverSelected ? Styles.hoverOpacity
-                                                                                                        : (isKeyboardSelected ? Styles.hoverOpacity
-                                                                                                                              : Styles.defaultOpacity))
-
-                color: isHoverSelected ? Styles.markedForDeletionColor : (isKeyboardSelected ? Styles.markedForDeletionColor : Styles.firstWordInputBackgroundColor)
-
-                border.color: index === presenter.piecesRemovalFirstWordCursorPosition &&
-                              !firstWordInputRepeater.firstWordCursorRemovedPiecesTimer.running ? Styles.selectedBorderColor
-                                                                                                       : Styles.firstWordInputBorderColor
-
-                border.width: index === presenter.piecesRemovalFirstWordCursorPosition &&
-                              !firstWordInputRepeater.firstWordCursorRemovedPiecesTimer.running ? Styles.selectedBorderWidth
-                                                                                                       : Styles.borderWidth
-
-                Text {
-                    font.pointSize: wordPieces.height * 0.4
-                    anchors.centerIn: parent
-                    text: modelData
-                    color: presenter.firstWordInputPiecesTextColors[index]
-                }
-
-                MouseArea {
-                    id: firstWordInputCurrentPieceMouseArea
-
-                    hoverEnabled: true
-                    anchors.fill: parent
-
-                    onEntered: presenter.updateFirstWordInputHoverIndex(index)
-                    onExited: presenter.clearWordInputHoverIndexes()
-                    onClicked: firstWordInputRepeater.firstWordClickRemovedPiecesTimer.start()
-
-                }
-
-                ToolTip {
-                    text: GameStrings.mainPaneFirstWordInputToolTip
-                    visible: !presenter.persistentModeEnabled && firstWordInputCurrentPieceMouseArea.containsMouse
-                    delay: presenter.toolTipDelay
-                    timeout: presenter.toolTipTimeout
-                }
-            }
-
-            function animatePiecesRemovedByCursor() {
-                firstWordCursorRemovedPiecesTimer.start();
-            }
+        WordPiecesInput {
+            id: firstWordInput
+            gamePresenter: presenter
+            pieceWidth: parent.width / mixedWordsRepeater.count
+            pieceHeight: parent.height
         }
 
         Shortcut {
@@ -538,77 +470,12 @@ Item {
             onActivated: presenter.clearMainPaneFirstInputWord()
         }
 
-        Repeater {
-            id: secondWordInputRepeater
-
-            model: presenter.secondWordInputPiecesContent
-
-            property Timer secondWordClickRemovedPiecesTimer : Timer {
-                interval: 100
-                onTriggered: presenter.removePiecesFromSecondInputWord(presenter.secondWordInputPiecesHoverIndex)
-            }
-
-            property Timer secondWordCursorRemovedPiecesTimer : Timer {
-                interval: 100
-            }
-
-            Rectangle {
-                property bool isHoverSelected: !presenter.persistentModeEnabled ? presenter.areSecondWordInputPiecesHovered && presenter.secondWordInputPiecesHoverIndex <= index
-                                                                                : false
-                property bool isKeyboardSelected: presenter.persistentModeEnabled ? presenter.piecesRemovalSecondWordCursorPosition !== -1 &&
-                                                                                    presenter.piecesRemovalSecondWordCursorPosition <= index
-                                                                                  : false
-
-                width: parent.width / mixedWordsRepeater.count
-                height: parent.height
-
-                opacity: ((secondWordInputRepeater.secondWordClickRemovedPiecesTimer.running &&
-                           index >= presenter.secondWordInputPiecesHoverIndex) ||
-                          (secondWordInputRepeater.secondWordCursorRemovedPiecesTimer.running &&
-                           index >= presenter.piecesRemovalSecondWordCursorPosition)) ? Styles.pressedOpacity
-                                                                                      : (isHoverSelected ? Styles.hoverOpacity
-                                                                                                         : (isKeyboardSelected ? Styles.hoverOpacity
-                                                                                                                               : Styles.defaultOpacity))
-
-                color: isHoverSelected ? Styles.markedForDeletionColor : (isKeyboardSelected ? Styles.markedForDeletionColor : Styles.secondWordInputBackgroundColor)
-
-                border.color: index === presenter.piecesRemovalSecondWordCursorPosition &&
-                              !secondWordInputRepeater.secondWordCursorRemovedPiecesTimer.running ? Styles.selectedBorderColor
-                                                                                                         : Styles.secondWordInputBorderColor
-
-                border.width: index === presenter.piecesRemovalSecondWordCursorPosition &&
-                              !secondWordInputRepeater.secondWordCursorRemovedPiecesTimer.running ? Styles.selectedBorderWidth
-                                                                                                         : Styles.borderWidth
-
-                Text {
-                    font.pointSize: wordPieces.height * 0.4
-                    anchors.centerIn: parent
-                    text: modelData
-                    color: presenter.secondWordInputPiecesTextColors[index]
-                }
-
-                MouseArea {
-                    id: secondWordInputCurrentPieceMouseArea
-
-                    hoverEnabled: true
-                    anchors.fill: parent
-
-                    onEntered: presenter.updateSecondWordInputHoverIndex(index)
-                    onExited: presenter.clearWordInputHoverIndexes()
-                    onClicked: secondWordInputRepeater.secondWordClickRemovedPiecesTimer.start()
-                }
-
-                ToolTip {
-                    text: GameStrings.mainPaneSecondWordInputToolTip
-                    visible: !presenter.persistentModeEnabled && secondWordInputCurrentPieceMouseArea.containsMouse
-                    delay: presenter.toolTipDelay
-                    timeout: presenter.toolTipTimeout
-                }
-            }
-
-            function animatePiecesRemovedByCursor() {
-                secondWordCursorRemovedPiecesTimer.start();
-            }
+        WordPiecesInput {
+            id: secondWordInput
+            gamePresenter: presenter
+            pieceWidth: parent.width / mixedWordsRepeater.count
+            pieceHeight: parent.height
+            isFirstWord: false
         }
 
         Shortcut {
@@ -744,10 +611,10 @@ Item {
             mixedWordsRepeater.animatePieceSelectedByCursor();
         }
         else if (presenter.piecesRemovalFirstWordCursorPosition !== -1) {
-            firstWordInputRepeater.animatePiecesRemovedByCursor();
+            firstWordInput.animatePiecesRemovedByCursor();
         }
         else if (presenter.piecesRemovalSecondWordCursorPosition !== -1) {
-            secondWordInputRepeater.animatePiecesRemovedByCursor();
+            secondWordInput.animatePiecesRemovedByCursor();
         }
     }
 }
