@@ -63,7 +63,7 @@ Repeater {
                                                                                                : Styles.borderWidth
 
         Text {
-            font.pointSize: wordPieces.height * 0.4
+            font.pointSize: pieceHeight * 0.4
             anchors.centerIn: parent
             text: modelData
             color: isFirstWord ? gamePresenter.firstWordInputPiecesTextColors[index] : gamePresenter.secondWordInputPiecesTextColors[index]
