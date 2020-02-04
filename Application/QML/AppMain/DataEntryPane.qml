@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import GameManagers 1.0
 import GameUtils 1.0
+import Controls 1.0
 
 Item {
     id: dataEntryPane
@@ -162,54 +163,20 @@ Item {
             Keys.onReleased: clearBtn.enabled = (firstWordTextField.text.length != 0 || secondWordTextField.text.length != 0) ? true : false
         }
 
-        Button {
+        AppButton {
             id: clearBtn
 
-            activeFocusOnTab: false
-
-            enabled: false
-
-            property double buttonOpacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
+            isActiveFocusOnTabEnabled: false
+            buttonEnabled: false
+            dedicatedShortcutEnabled: enabled && presenter.dataEntryPaneVisible
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
-            contentItem: Text {
-                text: GameStrings.dataEntryClearButtonLabel
-                color: Styles.textColor
-                opacity: clearBtn.buttonOpacity
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
+            buttonLabel: GameStrings.dataEntryClearButtonLabel
+            buttonToolTip: GameStrings.dataEntryClearButtonToolTip
+            shortcutSequence: GameStrings.dataEntryClearButtonShortcut
 
-            background: Rectangle {
-                color: Styles.pushButtonColor
-                opacity: clearBtn.buttonOpacity
-                radius: width * buttonRadiusRatio
-
-                border {
-                    color: Styles.borderColor
-                    width: width * 0.005
-                }
-            }
-
-            ToolTip {
-                text: GameStrings.dataEntryClearButtonToolTip
-                visible: clearBtn.hovered
-                delay: presenter.toolTipDelay
-                timeout: presenter.toolTipTimeout
-            }
-
-            Shortcut {
-                sequence: GameStrings.dataEntryClearButtonShortcut
-                enabled: clearBtn.enabled && presenter.dataEntryPaneVisible
-
-                onActivated: dataEntryPane.clearTextFields()
-            }
-
-            onClicked: dataEntryPane.clearTextFields()
-            onPressed: opacity = Styles.pressedButtonOpacity
-            onReleased: opacity = Styles.releasedButtonOpacity
-            onCanceled: opacity = Styles.releasedButtonOpacity
+            onButtonClicked: dataEntryPane.clearTextFields()
         }
     }
 
@@ -226,320 +193,100 @@ Item {
             right: wordsEntryLayout.right
         }
 
-        Button {
+        AppButton {
             id: addPairBtn
 
-            activeFocusOnTab: false
-
-            enabled: presenter.dataEntry.addWordsPairEnabled
-
-            property double buttonOpacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
+            isActiveFocusOnTabEnabled: false
+            buttonEnabled: presenter.dataEntry.addWordsPairEnabled
+            dedicatedShortcutEnabled: presenter.dataEntryPaneVisible && presenter.dataEntry.addWordsPairEnabled
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
-            contentItem: Text {
-                text: GameStrings.addPairButtonLabel
-                color: Styles.textColor
-                opacity: addPairBtn.buttonOpacity
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
+            buttonLabel: GameStrings.addPairButtonLabel
+            buttonToolTip: GameStrings.addPairButtonToolTip
+            shortcutSequence: GameStrings.addPairButtonShortcut
 
-            background: Rectangle {
-                color: Styles.pushButtonColor
-                opacity: addPairBtn.buttonOpacity
-                radius: width * buttonRadiusRatio
-
-                border {
-                    color: Styles.borderColor
-                    width: width * 0.005
-                }
-            }
-
-            ToolTip {
-                text: GameStrings.addPairButtonToolTip
-                visible: addPairBtn.hovered
-                delay: presenter.toolTipDelay
-                timeout: presenter.toolTipTimeout
-            }
-
-            Shortcut {
-                sequence: GameStrings.addPairButtonShortcut
-                enabled: addPairBtn.enabled && presenter.dataEntryPaneVisible
-
-                onActivated: {
-                    Styles.updateButtonOpacityAtShortcutActivation(addPairBtn);
-                    presenter.dataEntry.handleAddWordsPairRequest(firstWordTextField.text, secondWordTextField.text, synonymsSelectionButton.checked);
-                }
-            }
-
-            onClicked: presenter.dataEntry.handleAddWordsPairRequest(firstWordTextField.text, secondWordTextField.text, synonymsSelectionButton.checked)
-            onPressed: opacity = Styles.pressedButtonOpacity
-            onReleased: opacity = Styles.releasedButtonOpacity
-            onCanceled: opacity = Styles.releasedButtonOpacity
+            onButtonClicked: presenter.dataEntry.handleAddWordsPairRequest(firstWordTextField.text, secondWordTextField.text, synonymsSelectionButton.checked)
         }
 
-        Button {
+        AppButton {
             id: backBtn
 
-            activeFocusOnTab: false
-
-            property double buttonOpacity: Styles.releasedButtonOpacity
+            isActiveFocusOnTabEnabled: false
+            dedicatedShortcutEnabled: presenter.dataEntryPaneVisible
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
-            contentItem: Text {
-                text: GameStrings.backButtonLabel
-                color: Styles.textColor
-                opacity: backBtn.buttonOpacity
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
+            buttonLabel: GameStrings.backButtonLabel
+            buttonToolTip: GameStrings.backButtonToolTip
+            shortcutSequence: GameStrings.backButtonShortcut
 
-            background: Rectangle {
-                color: Styles.pushButtonColor
-                opacity: backBtn.buttonOpacity
-                radius: width * buttonRadiusRatio
-
-                border {
-                    color: Styles.borderColor
-                    width: width * 0.005
-                }
-            }
-
-            ToolTip {
-                text: GameStrings.backButtonToolTip
-                visible: backBtn.hovered
-                delay: presenter.toolTipDelay
-                timeout: presenter.toolTipTimeout
-            }
-
-            // we will not use the Styles functions here as we need the prompt page to be activated when the timer triggers
-            property Timer shortcutActivationTimer: Timer {
-                interval: 50
-                onTriggered: {
-                    backBtn.opacity = Styles.releasedButtonOpacity;
-                    dataEntryPane.handleBackButtonAction();
-                }
-            }
-
-            Shortcut {
-                sequence: GameStrings.backButtonShortcut
-                enabled: presenter.dataEntryPaneVisible
-
-                onActivated: {
-                    backBtn.opacity = Styles.pressedButtonOpacity;
-                    backBtn.shortcutActivationTimer.start();
-                }
-            }
-
-            onClicked: dataEntryPane.handleBackButtonAction()
-            onPressed: opacity = Styles.pressedButtonOpacity
-            onReleased: opacity = Styles.releasedButtonOpacity
-            onCanceled: opacity = Styles.releasedButtonOpacity
+            onButtonClicked: dataEntryPane.handleBackButtonAction()
         }
 
-        Button {
+        AppButton {
             id: helpBtn
 
-            activeFocusOnTab: false
-
-            property double buttonOpacity: Styles.releasedButtonOpacity
+            isActiveFocusOnTabEnabled: false
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
-            contentItem: Text {
-                text: GameStrings.helpButtonLabel
-                color: Styles.textColor
-                opacity: helpBtn.buttonOpacity
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
+            buttonLabel: GameStrings.helpButtonLabel
+            buttonToolTip: presenter.helpButtonToolTip
 
-            background: Rectangle {
-                color: Styles.pushButtonColor
-                opacity: helpBtn.buttonOpacity
-                radius: width * buttonRadiusRatio
-
-                border {
-                    color: Styles.borderColor
-                    width: width * 0.005
-                }
-            }
-
-            ToolTip {
-                text: presenter.helpButtonToolTip
-                visible: helpBtn.hovered
-                delay: presenter.toolTipDelay
-                timeout: presenter.toolTipTimeout
-            }
-
-            onClicked: presenter.switchToPane(GamePresenter.HELP)
-            onPressed: opacity = Styles.pressedButtonOpacity
-            onReleased: opacity = Styles.releasedButtonOpacity
-            onCanceled: opacity = Styles.releasedButtonOpacity
+            onButtonClicked: presenter.switchToPane(GamePresenter.HELP)
         }
 
-        Button {
+        AppButton {
             id: discardBtn
 
-            activeFocusOnTab: false
-
-            enabled: presenter.dataEntry.discardAddedWordPairsEnabled
-
-            property double buttonOpacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
+            isActiveFocusOnTabEnabled: false
+            buttonEnabled: presenter.dataEntry.discardAddedWordPairsEnabled
+            dedicatedShortcutEnabled: presenter.dataEntryPaneVisible && presenter.dataEntry.discardAddedWordPairsEnabled
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
-            contentItem: Text {
-                text: GameStrings.discardButtonLabel
-                color: Styles.textColor
-                opacity: discardBtn.buttonOpacity
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
+            buttonLabel: GameStrings.discardButtonLabel
+            buttonToolTip: GameStrings.discardButtonToolTip
+            shortcutSequence: GameStrings.discardButtonShortcut
 
-            background: Rectangle {
-                color: Styles.pushButtonColor
-                opacity: discardBtn.buttonOpacity
-                radius: width * buttonRadiusRatio
-
-                border {
-                    color: Styles.borderColor
-                    width: width * 0.005
-                }
-            }
-
-            ToolTip {
-                text: GameStrings.discardButtonToolTip
-                visible: discardBtn.hovered
-                delay: presenter.toolTipDelay
-                timeout: presenter.toolTipTimeout
-            }
-
-            // we will not use the Styles functions here as we need the prompt page to be activated when the timer triggers
-            property Timer shortcutActivationTimer: Timer {
-                interval: 50
-                onTriggered: {
-                    discardBtn.opacity = Styles.releasedButtonOpacity;
-                    presenter.promptForDiscardingAddedWordPairs();
-                    firstWordTextField.forceActiveFocus();
-                }
-            }
-
-            Shortcut {
-                sequence: GameStrings.discardButtonShortcut
-                enabled: discardBtn.enabled && presenter.dataEntryPaneVisible
-
-                onActivated: {
-                    discardBtn.opacity = Styles.pressedButtonOpacity;
-                    discardBtn.shortcutActivationTimer.start();
-                }
-            }
-
-            onClicked: {
+            onButtonClicked: {
                 presenter.promptForDiscardingAddedWordPairs();
                 firstWordTextField.forceActiveFocus();
             }
-
-            onPressed: opacity = Styles.pressedButtonOpacity
-            onReleased: opacity = Styles.releasedButtonOpacity
-            onCanceled: opacity = Styles.releasedButtonOpacity
         }
 
-        Button {
+        AppButton {
             id: saveBtn
 
-            activeFocusOnTab: false
-
-            enabled: presenter.dataEntry.saveAddedWordPairsEnabled
-
-            property double buttonOpacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
+            isActiveFocusOnTabEnabled: false
+            buttonEnabled: presenter.dataEntry.saveAddedWordPairsEnabled
+            dedicatedShortcutEnabled: presenter.dataEntryPaneVisible && presenter.dataEntry.saveAddedWordPairsEnabled
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
-            contentItem: Text {
-                text: GameStrings.saveButtonLabel
-                color: Styles.textColor
-                opacity: saveBtn.buttonOpacity
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
+            buttonLabel: GameStrings.saveButtonLabel
+            buttonToolTip: GameStrings.saveButtonToolTip
+            shortcutSequence: GameStrings.saveButtonShortcut
 
-            background: Rectangle {
-                color: Styles.pushButtonColor
-                opacity: saveBtn.buttonOpacity
-                radius: width * buttonRadiusRatio
-
-                border {
-                    color: Styles.borderColor
-                    width: width * 0.005
-                }
-            }
-
-            ToolTip {
-                text: GameStrings.saveButtonToolTip
-                visible: saveBtn.hovered
-                delay: presenter.toolTipDelay
-                timeout: presenter.toolTipTimeout
-            }
-
-            Shortcut {
-                sequence: GameStrings.saveButtonShortcut
-                enabled: saveBtn.enabled && presenter.dataEntryPaneVisible
-
-                onActivated: {
-                    presenter.dataEntry.handleSaveAddedWordPairsRequest();
-                    firstWordTextField.forceActiveFocus();
-                }
-            }
-
-            onClicked: {
+            onButtonClicked: {
                 presenter.dataEntry.handleSaveAddedWordPairsRequest();
                 firstWordTextField.forceActiveFocus();
             }
-
-            onPressed: opacity = Styles.pressedButtonOpacity
-            onReleased: opacity = Styles.releasedButtonOpacity
-            onCanceled: opacity = Styles.releasedButtonOpacity
         }
 
-        Button {
+        AppButton {
             id: quitBtn
 
-            activeFocusOnTab: false
-
-            property double buttonOpacity: Styles.releasedButtonOpacity
+            isActiveFocusOnTabEnabled: false
+            dedicatedShortcutEnabled: false
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
-            contentItem: Text {
-                text: GameStrings.quitButtonLabel
-                color: Styles.textColor
-                opacity: quitBtn.buttonOpacity
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
+            buttonLabel: GameStrings.quitButtonLabel
+            buttonToolTip: GameStrings.quitButtonToolTip
 
-            background: Rectangle {
-                color: Styles.pushButtonColor
-                opacity: quitBtn.buttonOpacity
-                radius: width * buttonRadiusRatio
-
-                border {
-                    color: Styles.borderColor
-                    width: width * 0.005
-                }
-            }
-
-            ToolTip {
-                text: GameStrings.quitButtonToolTip
-                visible: quitBtn.hovered
-                delay: presenter.toolTipDelay
-                timeout: presenter.toolTipTimeout
-            }
-
-            onClicked: {
+            onButtonClicked: {
                 if (presenter.dataEntry.saveAddedWordPairsEnabled) {
                     presenter.quitGameDeferred = true;
                     presenter.promptForSavingAddedWordPairs();
@@ -547,10 +294,6 @@ Item {
                     presenter.quit();
                 }
             }
-
-            onPressed: opacity = Styles.pressedButtonOpacity
-            onReleased: opacity = Styles.releasedButtonOpacity
-            onCanceled: opacity = Styles.releasedButtonOpacity
         }
     }
 

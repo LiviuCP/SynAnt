@@ -2,6 +2,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import GameUtils 1.0
+import Controls 1.0
 
 Item {
     id: errorPane
@@ -70,47 +71,19 @@ Item {
             right: errorPaneRect.right
         }
 
-        Button {
+        AppButton {
             id: closeBtn
+
+            dedicatedShortcutEnabled: presenter.errorOccured
 
             Layout.minimumWidth: bottomBtnsMinWidth
             Layout.alignment: Layout.Center
 
-            contentItem: Text {
-                text: GameStrings.closeButtonLabel
-                color: Styles.textColor
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
+            buttonLabel: GameStrings.closeButtonLabel
+            buttonToolTip: GameStrings.closeButtonToolTip
+            shortcutSequence: GameStrings.closeButtonShortcut
 
-            background: Rectangle {
-                color: Styles.pushButtonColor
-                radius: width * buttonRadiusRatio
-
-                border {
-                    color: Styles.borderColor
-                    width: width * 0.005
-                }
-            }
-
-            ToolTip {
-                text: GameStrings.closeButtonToolTip
-                visible: closeBtn.hovered
-                delay: presenter.toolTipDelay
-                timeout: presenter.toolTipTimeout
-            }
-
-            Shortcut {
-                sequence: GameStrings.closeButtonShortcut
-                enabled: presenter.errorOccured
-
-                onActivated: presenter.quit()
-            }
-
-            onClicked: presenter.quit();
-            onPressed: opacity = Styles.pressedButtonOpacity
-            onReleased: opacity = Styles.releasedButtonOpacity
-            onCanceled: opacity = Styles.releasedButtonOpacity
+            onButtonClicked: presenter.quit()
         }
     }
 }

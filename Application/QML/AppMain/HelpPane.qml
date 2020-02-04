@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import GameManagers 1.0
 import GameUtils 1.0
+import Controls 1.0
 
 Item {
     id: helpPane
@@ -76,97 +77,31 @@ Item {
 
         height: bottomBtnsLayoutHeight
 
-        Button {
+        AppButton {
             id: okBtn
 
-            contentItem: Text {
-                text: GameStrings.okButtonLabel
-                color: Styles.textColor
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
-
-            background: Rectangle {
-                color: Styles.pushButtonColor
-                radius: width * buttonRadiusRatio
-
-                border {
-                    color: Styles.borderColor
-                    width: width * 0.002
-                }
-            }
+            dedicatedShortcutEnabled: presenter.helpPaneVisible
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
-            ToolTip {
-                text: GameStrings.okButtonToolTip
-                visible: okBtn.hovered
-                delay: presenter.toolTipDelay
-                timeout: presenter.toolTipTimeout
-            }
+            buttonLabel: GameStrings.okButtonLabel
+            buttonToolTip: GameStrings.okButtonToolTip
+            shortcutSequence: GameStrings.okButtonShortcut
 
-            // we will not use the Styles functions here as we need the presenter invokable to be called after timer expires
-            property Timer shortcutActivationTimer: Timer {
-                interval: 50
-                onTriggered: {
-                    okBtn.opacity = Styles.releasedButtonOpacity;
-                    presenter.goBack();
-                }
-            }
-
-            Shortcut {
-                sequence: GameStrings.okButtonShortcut
-                enabled: presenter.helpPaneVisible
-
-                onActivated: {
-                    okBtn.opacity = Styles.pressedButtonOpacity;
-                    okBtn.shortcutActivationTimer.start();
-                }
-            }
-
-            onClicked: presenter.goBack()
-            onPressed: opacity = Styles.pressedButtonOpacity
-            onReleased: opacity = Styles.releasedButtonOpacity
-            onCanceled: opacity = Styles.releasedButtonOpacity
+            onButtonClicked: presenter.goBack()
         }
 
-        Button {
+        AppButton {
             id: quitBtn
 
-            property double buttonOpacity: Styles.releasedButtonOpacity
+            dedicatedShortcutEnabled: false
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
-            contentItem: Text {
-                text: GameStrings.quitButtonLabel
-                color: Styles.textColor
-                opacity: quitBtn.buttonOpacity
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
+            buttonLabel: GameStrings.quitButtonLabel
+            buttonToolTip: GameStrings.quitButtonToolTip
 
-            background: Rectangle {
-                color: Styles.pushButtonColor
-                opacity: quitBtn.buttonOpacity
-                radius: width * buttonRadiusRatio
-
-                border {
-                    color: Styles.borderColor
-                    width: width * 0.002
-                }
-            }
-
-            ToolTip {
-                text: GameStrings.quitButtonToolTip
-                visible: quitBtn.hovered
-                delay: presenter.toolTipDelay
-                timeout: presenter.toolTipTimeout
-            }
-
-            onClicked: presenter.quit()
-            onPressed: opacity = Styles.pressedButtonOpacity
-            onReleased: opacity = Styles.releasedButtonOpacity
-            onCanceled: opacity = Styles.releasedButtonOpacity
+            onButtonClicked: presenter.quit()
         }
     }
 

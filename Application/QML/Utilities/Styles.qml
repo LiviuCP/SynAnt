@@ -28,9 +28,10 @@ QtObject {
     readonly property double pressedOpacity: 0.5
     readonly property double defaultOpacity: 1.0
 
-    // widths
+    // dimensions
     readonly property int borderWidth: 1
     readonly property int selectedBorderWidth: 2
+    readonly property int pushButtonRadius: 5
 
     // button behavior when using shortcuts
     property QtObject button

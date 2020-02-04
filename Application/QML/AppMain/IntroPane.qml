@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import GameManagers 1.0
 import GameUtils 1.0
+import Controls 1.0
 
 Item {
     id: introPane
@@ -71,183 +72,59 @@ Item {
             right: introPaneRect.right
         }
 
-        Button {
+        AppButton {
             id: playBtn
 
-            enabled: presenter.playEnabled
-
-            property double buttonOpacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
+            buttonEnabled: presenter.playEnabled
+            dedicatedShortcutEnabled: presenter.introPaneVisible && presenter.playEnabled
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
-            contentItem: Text {
-                text: GameStrings.playButtonLabel
-                color: Styles.textColor
-                opacity: playBtn.buttonOpacity
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
+            buttonLabel: GameStrings.playButtonLabel
+            buttonToolTip: GameStrings.playButtonToolTip
+            shortcutSequence: GameStrings.playButtonShortcut
 
-            background: Rectangle {
-                color: Styles.pushButtonColor
-                opacity: playBtn.buttonOpacity
-                radius: width * buttonRadiusRatio
-
-                border {
-                    color: Styles.borderColor
-                    width: width * 0.005
-                }
-            }
-
-            // we will not use the Styles functions here as we need the prompt page to be activated when the timer triggers
-            property Timer shortcutActivationTimer: Timer {
-                interval: 50
-                onTriggered: {
-                    playBtn.opacity = Styles.releasedButtonOpacity;
-                    presenter.switchToPane(GamePresenter.MAIN);
-                }
-            }
-
-            ToolTip {
-                text: GameStrings.playButtonToolTip
-                visible: playBtn.hovered
-                delay: presenter.toolTipDelay
-                timeout: presenter.toolTipTimeout
-            }
-
-            Shortcut {
-                sequence: GameStrings.playButtonShortcut
-                enabled: presenter.playEnabled && presenter.introPaneVisible
-
-                onActivated: {
-                    playBtn.opacity = Styles.pressedButtonOpacity;
-                    playBtn.shortcutActivationTimer.start();
-                }
-            }
-
-            onClicked: presenter.switchToPane(GamePresenter.MAIN)
-            onPressed: opacity = Styles.pressedButtonOpacity
-            onReleased: opacity = Styles.releasedButtonOpacity
-            onCanceled: opacity = Styles.releasedButtonOpacity
+            onButtonClicked: presenter.switchToPane(GamePresenter.MAIN)
         }
 
-        Button {
+        AppButton {
             id: dataEntryBtn
 
-            enabled: presenter.dataEntry.dataEntryEnabled
-
-            property double buttonOpacity: enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
+            buttonEnabled: presenter.dataEntry.dataEntryEnabled
+            dedicatedShortcutEnabled: false
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
-            contentItem: Text {
-                text: GameStrings.dataEntryButtonLabel
-                color: Styles.textColor
-                opacity: dataEntryBtn.buttonOpacity
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
+            buttonLabel: GameStrings.dataEntryButtonLabel
+            buttonToolTip: GameStrings.dataEntryButtonToolTip
 
-            background: Rectangle {
-                color: Styles.pushButtonColor
-                opacity: dataEntryBtn.buttonOpacity
-                radius: width * buttonRadiusRatio
-
-                border {
-                    color: Styles.borderColor
-                    width: width * 0.005
-                }
-            }
-
-            ToolTip {
-                text: GameStrings.dataEntryButtonToolTip
-                visible: dataEntryBtn.hovered
-                delay: presenter.toolTipDelay
-                timeout: presenter.toolTipTimeout
-            }
-
-            onClicked: presenter.switchToPane(GamePresenter.DATA_ENTRY)
-            onPressed: opacity = Styles.pressedButtonOpacity
-            onReleased: opacity = Styles.releasedButtonOpacity
-            onCanceled: opacity = Styles.releasedButtonOpacity
+            onButtonClicked: presenter.switchToPane(GamePresenter.DATA_ENTRY)
         }
 
-        Button {
+        AppButton {
             id: helpBtn
 
-            property double buttonOpacity: Styles.releasedButtonOpacity
+            dedicatedShortcutEnabled: false
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
-            contentItem: Text {
-                text: GameStrings.helpButtonLabel
-                color: Styles.textColor
-                opacity: helpBtn.buttonOpacity
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
+            buttonLabel: GameStrings.helpButtonLabel
+            buttonToolTip: presenter.helpButtonToolTip
 
-            background: Rectangle {
-                color: Styles.pushButtonColor
-                opacity: helpBtn.buttonOpacity
-                radius: width * buttonRadiusRatio
-
-                border {
-                    color: Styles.borderColor
-                    width: width * 0.005
-                }
-            }
-
-            ToolTip {
-                text: presenter.helpButtonToolTip
-                visible: helpBtn.hovered
-                delay: presenter.toolTipDelay
-                timeout: presenter.toolTipTimeout
-            }
-
-            onClicked: presenter.switchToPane(GamePresenter.HELP)
-            onPressed: opacity = Styles.pressedButtonOpacity
-            onReleased: opacity = Styles.releasedButtonOpacity
-            onCanceled: opacity = Styles.releasedButtonOpacity
+            onButtonClicked: presenter.switchToPane(GamePresenter.HELP)
         }
 
-        Button {
+        AppButton {
             id: quitBtn
 
-            property double buttonOpacity: Styles.releasedButtonOpacity
+            dedicatedShortcutEnabled: false
 
             Layout.minimumWidth: bottomBtnsMinWidth - parent.spacing * 0.5
 
-            contentItem: Text {
-                text: GameStrings.quitButtonLabel
-                color: Styles.textColor
-                opacity: quitBtn.buttonOpacity
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
+            buttonLabel: GameStrings.quitButtonLabel
+            buttonToolTip: GameStrings.quitButtonToolTip
 
-            background: Rectangle {
-                color: Styles.pushButtonColor
-                opacity: quitBtn.buttonOpacity
-                radius: width * buttonRadiusRatio
-
-                border {
-                    color: Styles.borderColor
-                    width: width * 0.005
-                }
-            }
-
-            ToolTip {
-                text: GameStrings.quitButtonToolTip
-                visible: quitBtn.hovered
-                delay: presenter.toolTipDelay
-                timeout: presenter.toolTipTimeout
-            }
-
-            onClicked: presenter.quit()
-            onPressed: opacity = Styles.pressedButtonOpacity
-            onReleased: opacity = Styles.releasedButtonOpacity
-            onCanceled: opacity = Styles.releasedButtonOpacity
+            onButtonClicked: presenter.quit()
         }
     }
 

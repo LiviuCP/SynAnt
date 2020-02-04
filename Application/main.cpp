@@ -56,6 +56,8 @@ void registerDataTypesForQML()
     qmlRegisterType(QUrl("qrc:///Application/AppMain/MainPane.qml"), "AppCore", 1, 0, "MainPane");
     qmlRegisterType(QUrl("qrc:///Application/AppMain/DataEntryPane.qml"), "AppCore", 1, 0, "DataEntryPane");
 
+    qmlRegisterType(QUrl("qrc:///Application/Controls/AppButton.qml"), "Controls", 1, 0, "AppButton");
+
     qmlRegisterType(QUrl("qrc:///Application/Dialogs/ErrorPane.qml"), "AppDialogs", 1, 0, "ErrorPane");
 //    qmlRegisterType(QUrl("qrc:///Application/Dialogs/ErrorDialog.qml"), "AppDialogs", 1, 0, "ErrorDialog"); // not required in QML but only in main.cpp
     qmlRegisterType(QUrl("qrc:///Application/Dialogs/PromptDiscardPane.qml"), "AppDialogs", 1, 0, "PromptDiscardPane");

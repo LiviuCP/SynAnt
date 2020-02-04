@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import GameManagers 1.0
 import GameUtils 1.0
+import Controls 1.0
 
 Item {
     id: promptSaveExitPane
@@ -69,188 +70,52 @@ Item {
             right: promptStatusBox.right
         }
 
-        Button {
+        AppButton {
             id: yesBtn
 
-            property double buttonOpacity: Styles.releasedButtonOpacity
+            dedicatedShortcutEnabled: presenter.promptSaveExitPaneVisible
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
-            contentItem: Text {
-                text: GameStrings.promptSaveYesButtonLabel
-                color: Styles.textColor
-                opacity: yesBtn.buttonOpacity
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
+            buttonLabel: GameStrings.promptSaveYesButtonLabel
+            buttonToolTip: GameStrings.promptSaveYesButtonToolTip
+            shortcutSequence: GameStrings.promptSaveYesButtonShortcut
 
-            background: Rectangle {
-                color: Styles.pushButtonColor
-                opacity: yesBtn.buttonOpacity
-                radius: width * buttonRadiusRatio
-
-                border {
-                    color: Styles.borderColor
-                    width: width * 0.005
-                }
-            }
-
-            ToolTip {
-                text: GameStrings.promptSaveYesButtonToolTip
-                visible: yesBtn.hovered
-                delay: presenter.toolTipDelay
-                timeout: presenter.toolTipTimeout
-            }
-
-            // we will not use the Styles functions here as we need the methods to be called when the timer triggers
-            property Timer shortcutActivationTimer: Timer {
-                interval: 50
-                onTriggered: {
-                    yesBtn.opacity = Styles.releasedButtonOpacity;
-                    presenter.dataEntry.handleSaveAddedWordPairsRequest();
-                    promptSaveExitPane.quitOrExitDataEntry();
-                }
-            }
-
-            Shortcut {
-                sequence: GameStrings.promptSaveYesButtonShortcut
-                enabled: presenter.promptSaveExitPaneVisible
-
-                onActivated: {
-                    yesBtn.opacity = Styles.pressedButtonOpacity;
-                    yesBtn.shortcutActivationTimer.start();
-                }
-            }
-
-            onClicked: {
+            onButtonClicked: {
                 presenter.dataEntry.handleSaveAddedWordPairsRequest();
                 promptSaveExitPane.quitOrExitDataEntry();
             }
-
-            onPressed: opacity = Styles.pressedButtonOpacity
-            onReleased: opacity = Styles.releasedButtonOpacity
-            onCanceled: opacity = Styles.releasedButtonOpacity
         }
 
-        Button {
+        AppButton {
             id: noBtn
 
-            property double buttonOpacity: Styles.releasedButtonOpacity
+            dedicatedShortcutEnabled: presenter.promptSaveExitPaneVisible
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
-            contentItem: Text {
-                text: GameStrings.promptSaveNoButtonLabel
-                color: Styles.textColor
-                opacity: noBtn.buttonOpacity
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
+            buttonLabel: GameStrings.promptSaveNoButtonLabel
+            buttonToolTip: GameStrings.promptSaveNoButtonToolTip
+            shortcutSequence: GameStrings.promptSaveNoButtonShortcut
 
-            background: Rectangle {
-                color: Styles.pushButtonColor
-                opacity: noBtn.buttonOpacity
-                radius: width * buttonRadiusRatio
-
-                border {
-                    color: Styles.borderColor
-                    width: width * 0.005
-                }
-            }
-
-            ToolTip {
-                text: GameStrings.promptSaveNoButtonToolTip
-                visible: noBtn.hovered
-                delay: presenter.toolTipDelay
-                timeout: presenter.toolTipTimeout
-            }
-
-            // we will not use the Styles functions here as we need the methods to be called when the timer triggers
-            property Timer shortcutActivationTimer: Timer {
-                interval: 50
-                onTriggered: {
-                    noBtn.opacity = Styles.releasedButtonOpacity;
-                    presenter.dataEntry.handleClearAddedWordPairsRequest();
-                    promptSaveExitPane.quitOrExitDataEntry();
-                }
-            }
-
-            Shortcut {
-                sequence: GameStrings.promptSaveNoButtonShortcut
-                enabled: presenter.promptSaveExitPaneVisible
-
-                onActivated: {
-                    noBtn.opacity = Styles.pressedButtonOpacity;
-                    noBtn.shortcutActivationTimer.start();
-                }
-            }
-
-            onClicked: {
+            onButtonClicked: {
                 presenter.dataEntry.handleClearAddedWordPairsRequest();
                 promptSaveExitPane.quitOrExitDataEntry();
             }
-
-            onPressed: opacity = Styles.pressedButtonOpacity
-            onReleased: opacity = Styles.releasedButtonOpacity
-            onCanceled: opacity = Styles.releasedButtonOpacity
         }
 
-        Button {
+        AppButton {
             id: cancelBtn
 
-            property double buttonOpacity: Styles.releasedButtonOpacity
+            dedicatedShortcutEnabled: presenter.promptSaveExitPaneVisible
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
-            contentItem: Text {
-                text: GameStrings.promptSaveCancelButtonLabel
-                color: Styles.textColor
-                opacity: cancelBtn.buttonOpacity
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
-            }
+            buttonLabel: GameStrings.promptSaveCancelButtonLabel
+            buttonToolTip: GameStrings.promptSaveCancelButtonToolTip
+            shortcutSequence: GameStrings.promptSaveCancelButtonShortcut
 
-            background: Rectangle {
-                color: Styles.pushButtonColor
-                opacity: cancelBtn.buttonOpacity
-                radius: width * buttonRadiusRatio
-
-                border {
-                    color: Styles.borderColor
-                    width: width * 0.005
-                }
-            }
-
-            ToolTip {
-                text: GameStrings.promptSaveCancelButtonToolTip
-                visible: cancelBtn.hovered
-                delay: presenter.toolTipDelay
-                timeout: presenter.toolTipTimeout
-            }
-
-            // we will not use the Styles functions here as we need the presenter invokable to be called when the timer triggers
-            property Timer shortcutActivationTimer: Timer {
-                interval: 50
-                onTriggered: {
-                    cancelBtn.opacity = Styles.releasedButtonOpacity;
-                    presenter.goBack();
-                }
-            }
-
-            Shortcut {
-                sequence: GameStrings.promptSaveCancelButtonShortcut
-                enabled: presenter.promptSaveExitPaneVisible
-
-                onActivated: {
-                    cancelBtn.opacity = Styles.pressedButtonOpacity;
-                    cancelBtn.shortcutActivationTimer.start();
-                }
-            }
-
-            onClicked: presenter.goBack()
-            onPressed: opacity = Styles.pressedButtonOpacity
-            onReleased: opacity = Styles.releasedButtonOpacity
-            onCanceled: opacity = Styles.releasedButtonOpacity
+            onButtonClicked: presenter.goBack()
         }
     }
 }

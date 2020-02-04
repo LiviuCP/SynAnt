@@ -11,5 +11,6 @@
         <file>Dialogs/ErrorDialog.qml</file>
         <file>Utilities/GameStrings.qml</file>
         <file>Utilities/Styles.qml</file>
+        <file>Controls/AppButton.qml</file>
     </qresource>
 </RCC>
