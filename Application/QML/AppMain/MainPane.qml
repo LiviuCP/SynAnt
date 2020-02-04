@@ -19,7 +19,7 @@ Item {
     readonly property double scoresLayoutHeight: height * 0.1
     readonly property double infoLevelsAndStatusLayoutHeight: height * 0.55
     readonly property double wordPiecesHeight: height * 0.06
-    readonly property double wordsEntryLayoutHeight: height * 0.05
+    readonly property double wordsInputContainerHeight: height * 0.05
     readonly property double bottomBtnsLayoutHeight: height * 0.1
     readonly property double bottomBtnsMinWidth: (infoLevelsAndStatusLayout.width - 4 * bottomBtnsLayout.spacing) * 0.2
     readonly property double buttonRadiusRatio: 0.035
@@ -344,7 +344,7 @@ Item {
     }
 
     Row {
-        id: wordPiecesContainer
+        id: mixedWordPiecesContainer
 
         height: wordPiecesHeight
 
@@ -365,15 +365,15 @@ Item {
     }
 
     Row {
-        id: wordsEntryLayout
+        id: wordsInputContainer
 
-        height: wordsEntryLayoutHeight
+        height: wordsInputContainerHeight
 
         anchors {
-            top: wordPiecesContainer.bottom
+            top: mixedWordPiecesContainer.bottom
             topMargin: parent.width * 0.01
-            left: wordPiecesContainer.left
-            right: wordPiecesContainer.right
+            left: mixedWordPiecesContainer.left
+            right: mixedWordPiecesContainer.right
         }
 
         WordPiecesInput {
@@ -413,8 +413,8 @@ Item {
 
         anchors {
             bottom: parent.bottom
-            left: wordsEntryLayout.left
-            right: wordsEntryLayout.right
+            left: wordsInputContainer.left
+            right: wordsInputContainer.right
         }
 
         AppButton {
