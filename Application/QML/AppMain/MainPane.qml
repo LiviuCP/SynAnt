@@ -225,76 +225,40 @@ Item {
             ColumnLayout {
                 anchors.fill: parent
 
-                RadioButton {
+                AppRadioButton {
                     id: easyLvlBtn
 
-                    checked: false
-                    text: GameStrings.levelEasyButtonLabel
+                    buttonChecked: false
+                    dedicatedShortcutEnabled: presenter.mainPaneVisible
 
-                    Shortcut {
-                        sequence: GameStrings.levelEasyButtonShortcut
-                        enabled: presenter.mainPaneVisible
+                    buttonLabel: GameStrings.levelEasyButtonLabel
+                    shortcutSequence: GameStrings.levelEasyButtonShortcut
 
-                        onActivated: {
-                            if (!easyLvlBtn.checked) {
-                                easyLvlBtn.checked = true;
-                                presenter.switchToLevel(presenter.levelEasy);
-                            }
-                        }
-                    }
-
-                    onToggled: {
-                        checked = true;
-                        presenter.switchToLevel(presenter.levelEasy);
-                    }
+                    onButtonToggled: presenter.switchToLevel(presenter.levelEasy)
                 }
 
-                RadioButton {
+                AppRadioButton {
                     id: mediumLvlBtn
 
-                    checked: true
-                    text: GameStrings.levelMediumButtonLabel
+                    buttonChecked: true
+                    dedicatedShortcutEnabled: presenter.mainPaneVisible
 
-                    Shortcut {
-                        sequence: GameStrings.levelMediumButtonShortcut
-                        enabled: presenter.mainPaneVisible
+                    buttonLabel: GameStrings.levelMediumButtonLabel
+                    shortcutSequence: GameStrings.levelMediumButtonShortcut
 
-                        onActivated: {
-                            if (!mediumLvlBtn.checked) {
-                                mediumLvlBtn.checked = true;
-                                presenter.switchToLevel(presenter.levelMedium);
-                            }
-                        }
-                    }
-
-                    onToggled: {
-                        checked = true;
-                        presenter.switchToLevel(presenter.levelMedium);
-                    }
+                    onButtonToggled: presenter.switchToLevel(presenter.levelMedium)
                 }
 
-                RadioButton {
+                AppRadioButton {
                     id: hardLvlBtn
 
-                    checked: false
-                    text: GameStrings.levelHardButtonLabel
+                    buttonChecked: false
+                    dedicatedShortcutEnabled: presenter.mainPaneVisible
 
-                    Shortcut {
-                        sequence: GameStrings.levelHardButtonShortcut
-                        enabled: presenter.mainPaneVisible
+                    buttonLabel: GameStrings.levelHardButtonLabel
+                    shortcutSequence: GameStrings.levelHardButtonShortcut
 
-                        onActivated: {
-                            if (!hardLvlBtn.checked) {
-                                hardLvlBtn.checked = true;
-                                presenter.switchToLevel(presenter.levelHard);
-                            }
-                        }
-                    }
-
-                    onToggled: {
-                        checked = true;
-                        presenter.switchToLevel(presenter.levelHard);
-                    }
+                    onButtonToggled: presenter.switchToLevel(presenter.levelHard)
                 }
             }
         }

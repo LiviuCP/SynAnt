@@ -81,30 +81,28 @@ Item {
             right: dataEntryStatusBox.right
         }
 
-        RadioButton {
+        AppRadioButton {
             id: synonymsSelectionButton
 
-            activeFocusOnTab: true
-            checked: true
-            text: GameStrings.synonymsSelectionButtonLabel
+            buttonChecked: true
+            isActiveFocusOnTabEnabled: true
+            dedicatedShortcutEnabled: false
 
-            onToggled: {
-                checked = true;
-                firstWordTextField.forceActiveFocus();
-            }
+            buttonLabel: GameStrings.synonymsSelectionButtonLabel
+
+            onButtonToggled: firstWordTextField.forceActiveFocus()
         }
 
-        RadioButton {
+        AppRadioButton {
             id: antonymsSelectionButton
 
-            activeFocusOnTab: true
-            checked: false
-            text: GameStrings.antonymsSelectionButtonLabel
+            buttonChecked: false
+            isActiveFocusOnTabEnabled: true
+            dedicatedShortcutEnabled: false
 
-            onToggled: {
-                checked = true;
-                firstWordTextField.forceActiveFocus();
-            }
+            buttonLabel: GameStrings.antonymsSelectionButtonLabel
+
+            onButtonToggled: firstWordTextField.forceActiveFocus()
         }
     }
 

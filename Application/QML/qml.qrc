@@ -14,5 +14,6 @@
         <file>Controls/AppButton.qml</file>
         <file>Controls/WordPiecesInput.qml</file>
         <file>Controls/MixedWordPieces.qml</file>
+        <file>Controls/AppRadioButton.qml</file>
     </qresource>
 </RCC>
