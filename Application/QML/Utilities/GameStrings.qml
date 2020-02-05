@@ -9,11 +9,6 @@ QtObject {
     readonly property string fatalErrorWindowTitle:                                 "Fatal Error!"
     readonly property string fatalErrorWindowObjectName:                            "errorDialog"
 
-    readonly property string mainPaneInstructionsMessage:                           "\nPlease enter the 2 words. Hit Submit when ready.
-                                                                                    \nUse radio buttons to change difficulty level.
-                                                                                    \nPress Reset to reset the scores and number of pairs.
-                                                                                    \nPress Enter new pairs to add more data."
-
     readonly property string promptSaveBeforeExitMessage:                           "\n\n\n\n\tDo you want to save the added word pairs before exiting?\n"
     readonly property string promptDiscardMessage:                                  "\n\n\n\n\tDo you really want to discard the added word pairs?\n"
 
@@ -85,7 +80,6 @@ QtObject {
     readonly property string wordPairsToolTip:                                      "Displays the number of word pairs:
                                                                                     \n1) Current number of pairs the user has guessed so far
                                                                                     \n2) Total number of pairs presented to user so far."
-    readonly property string mainPaneInstructionsBoxToolTip:                        "Displays the game instructions."
     readonly property string mainPaneStatusBoxToolTip:                              "Displays the game status (e.g. if 2 correct words were entered)."
     readonly property string selectWordPieceToolTip:                                "Single click to add the word piece to the first word input.
                                                                                     \nDouble click to add the word piece to the second word input."

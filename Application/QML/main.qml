@@ -162,13 +162,13 @@ ApplicationWindow {
         }
 
         Timer {
-            id: downPressedTimer
+            id: upPressedTimer
             interval: 125
             onTriggered: gamePresenter.executeFirstCursorAction();
         }
 
         Timer {
-            id: upPressedTimer
+            id: downPressedTimer
             interval: 125
             onTriggered: gamePresenter.executeSecondCursorAction();
         }

@@ -16,13 +16,11 @@ Item {
 
     property QtObject presenter
 
-    readonly property double scoresLayoutHeight: height * 0.1
-    readonly property double infoLevelsAndStatusLayoutHeight: height * 0.55
+    readonly property double statisticsLayoutHeight: height * 0.1
+    readonly property double mainLayoutHeight: height * 0.55
     readonly property double wordPiecesHeight: height * 0.06
-    readonly property double wordsInputContainerHeight: height * 0.05
     readonly property double bottomBtnsLayoutHeight: height * 0.1
-    readonly property double bottomBtnsMinWidth: (infoLevelsAndStatusLayout.width - 4 * bottomBtnsLayout.spacing) * 0.2
-    readonly property double buttonRadiusRatio: 0.035
+    readonly property double bottomBtnsMinWidth: (mainLayout.width - 4 * bottomBtnsLayout.spacing) * 0.2
 
     MouseArea {
         id: mainPaneMouseArea
@@ -39,9 +37,10 @@ Item {
     }
 
     RowLayout {
-        id: scoresLayout
+        id: statisticsLayout
 
-        height: scoresLayoutHeight
+        height: statisticsLayoutHeight
+        width: parent.width
 
         anchors {
             top: parent.top
@@ -52,7 +51,7 @@ Item {
         Rectangle {
             id: highscoresRect
 
-            Layout.minimumWidth: (infoRect.width - scoresLayout.spacing) / 2
+            Layout.minimumWidth: (statisticsLayout.width - 2 * statisticsLayout.spacing) / 3
             Layout.minimumHeight: parent.height / 2
 
             color: Styles.backgroundColor
@@ -87,7 +86,7 @@ Item {
         Rectangle {
             id: wordPairsRect
 
-            Layout.minimumWidth: (infoRect.width - scoresLayout.spacing) / 2
+            Layout.minimumWidth: 2 * (statisticsLayout.width - 0.5 * statisticsLayout.spacing) / 3
             Layout.minimumHeight: parent.height / 2
 
             color: Styles.backgroundColor
@@ -119,154 +118,133 @@ Item {
             }
         }
 
-        AppButton {
-            id: resetBtn
-
-            buttonEnabled: presenter.mainPaneStatisticsResetEnabled
-            dedicatedShortcutEnabled: presenter.mainPaneVisible && presenter.mainPaneStatisticsResetEnabled
-
-            Layout.minimumWidth: showPairBtn.width
-            Layout.alignment: Qt.AlignRight
-            Layout.leftMargin: 0.05 * mainPane.width
-
-            buttonLabel: GameStrings.mainPaneStatisticsResetButtonLabel
-            buttonToolTip: GameStrings.mainPaneResetButtonToolTip
-            shortcutSequence: GameStrings.mainPaneResetButtonShortcut
-
-            onButtonClicked: presenter.handleMainPaneStatisticsResetRequest()
-        }
-
-        AppButton {
-            id: dataEntryBtn
-
-            buttonEnabled: presenter.dataEntry.dataEntryEnabled
-            dedicatedShortcutEnabled: false
-
-            Layout.minimumWidth: quitBtn.width
-
-            buttonLabel: GameStrings.dataEntryButtonLabel
-            buttonToolTip: GameStrings.dataEntryButtonToolTip
-
-            onButtonClicked: presenter.switchToPane(GamePresenter.DATA_ENTRY)
+        Item {
+            id: placeholder
+            Layout.fillWidth: true
         }
     }
 
     RowLayout {
-        id: infoLevelsAndStatusLayout
+        id: mainLayout
 
         width: parent.width
-        height: infoLevelsAndStatusLayoutHeight
+        height: mainLayoutHeight
 
         anchors {
-            top: scoresLayout.bottom
-            topMargin: parent.height * 0.05
+            top: statisticsLayout.bottom
+            topMargin: parent.height * 0.01
         }
 
-        Rectangle {
-            id: infoRect
-
-            Layout.minimumWidth: parent.width * 0.55
+        ColumnLayout {
+            Layout.minimumWidth: highscoresRect.width
             Layout.minimumHeight: parent.height
 
-            color: Styles.backgroundColor
-            border.color: Styles.borderColor
+            AppButton {
+                id: resetBtn
 
-            MouseArea {
-                id: infoMouseArea
+                buttonEnabled: presenter.mainPaneStatisticsResetEnabled
+                dedicatedShortcutEnabled: presenter.mainPaneVisible && presenter.mainPaneStatisticsResetEnabled
 
-                anchors.fill: parent
-                hoverEnabled: true
+                Layout.minimumWidth: highscoresRect.width
+
+                buttonLabel: GameStrings.mainPaneStatisticsResetButtonLabel
+                buttonToolTip: GameStrings.mainPaneResetButtonToolTip
+                shortcutSequence: GameStrings.mainPaneResetButtonShortcut
+
+                onButtonClicked: presenter.handleMainPaneStatisticsResetRequest()
             }
 
-            ToolTip {
-                text: GameStrings.mainPaneInstructionsBoxToolTip
-                visible: infoMouseArea.containsMouse
-                delay: presenter.toolTipDelay
-                timeout: presenter.toolTipTimeout
+            AppButton {
+                id: dataEntryBtn
+
+                buttonEnabled: presenter.dataEntry.dataEntryEnabled
+                dedicatedShortcutEnabled: false
+
+                Layout.minimumWidth: highscoresRect.width
+
+                buttonLabel: GameStrings.dataEntryButtonLabel
+                buttonToolTip: GameStrings.dataEntryButtonToolTip
+
+                onButtonClicked: presenter.switchToPane(GamePresenter.DATA_ENTRY)
             }
 
-            Text {
-                text: GameStrings.mainPaneInstructionsMessage
-                color: Styles.textColor
-                width: parent.width
-                wrapMode: Text.WordWrap
+            ComboBox {
+                id: languageSelectionDropdown
+                Layout.minimumWidth: highscoresRect.width
+                editable: true
+                model: ["Language"]
+                onAccepted: console.log("Under construction")
+            }
 
-                anchors {
-                    fill: parent
-                    leftMargin: parent.width * 0.01
-                    rightMargin: parent.width * 0.01
+            Rectangle {
+                id: levelBtnsRect
+
+                Layout.minimumWidth: highscoresRect.width
+                Layout.fillHeight: true
+
+                color: Styles.backgroundColor
+                border.color: Styles.borderColor
+
+                MouseArea {
+                    id: levelBtnsMouseArea
+
+                    anchors.fill: parent
+                    hoverEnabled: true
+                }
+
+                ToolTip {
+                    text: GameStrings.levelButtonsToolTip
+                    visible: levelBtnsMouseArea.containsMouse
+                    delay: presenter.toolTipDelay
+                    timeout: presenter.toolTipTimeout
+                }
+
+                ColumnLayout {
+                    anchors.fill: parent
+
+                    AppRadioButton {
+                        id: easyLvlBtn
+
+                        buttonChecked: false
+                        dedicatedShortcutEnabled: presenter.mainPaneVisible
+
+                        buttonLabel: GameStrings.levelEasyButtonLabel
+                        shortcutSequence: GameStrings.levelEasyButtonShortcut
+
+                        onButtonToggled: presenter.switchToLevel(presenter.levelEasy)
+                    }
+
+                    AppRadioButton {
+                        id: mediumLvlBtn
+
+                        buttonChecked: true
+                        dedicatedShortcutEnabled: presenter.mainPaneVisible
+
+                        buttonLabel: GameStrings.levelMediumButtonLabel
+                        shortcutSequence: GameStrings.levelMediumButtonShortcut
+
+                        onButtonToggled: presenter.switchToLevel(presenter.levelMedium)
+                    }
+
+                    AppRadioButton {
+                        id: hardLvlBtn
+
+                        buttonChecked: false
+                        dedicatedShortcutEnabled: presenter.mainPaneVisible
+
+                        buttonLabel: GameStrings.levelHardButtonLabel
+                        shortcutSequence: GameStrings.levelHardButtonShortcut
+
+                        onButtonToggled: presenter.switchToLevel(presenter.levelHard)
+                    }
                 }
             }
         }
 
         Rectangle {
-            id: levelBtnsRect
+            id: statusBox
 
-            Layout.minimumWidth: parent.width * 0.15
-            Layout.minimumHeight: parent.height * 0.6
-
-            color: Styles.backgroundColor
-            border.color: Styles.borderColor
-
-            MouseArea {
-                id: levelBtnsMouseArea
-
-                anchors.fill: parent
-                hoverEnabled: true
-            }
-
-            ToolTip {
-                text: GameStrings.levelButtonsToolTip
-                visible: levelBtnsMouseArea.containsMouse
-                delay: presenter.toolTipDelay
-                timeout: presenter.toolTipTimeout
-            }
-
-            ColumnLayout {
-                anchors.fill: parent
-
-                AppRadioButton {
-                    id: easyLvlBtn
-
-                    buttonChecked: false
-                    dedicatedShortcutEnabled: presenter.mainPaneVisible
-
-                    buttonLabel: GameStrings.levelEasyButtonLabel
-                    shortcutSequence: GameStrings.levelEasyButtonShortcut
-
-                    onButtonToggled: presenter.switchToLevel(presenter.levelEasy)
-                }
-
-                AppRadioButton {
-                    id: mediumLvlBtn
-
-                    buttonChecked: true
-                    dedicatedShortcutEnabled: presenter.mainPaneVisible
-
-                    buttonLabel: GameStrings.levelMediumButtonLabel
-                    shortcutSequence: GameStrings.levelMediumButtonShortcut
-
-                    onButtonToggled: presenter.switchToLevel(presenter.levelMedium)
-                }
-
-                AppRadioButton {
-                    id: hardLvlBtn
-
-                    buttonChecked: false
-                    dedicatedShortcutEnabled: presenter.mainPaneVisible
-
-                    buttonLabel: GameStrings.levelHardButtonLabel
-                    shortcutSequence: GameStrings.levelHardButtonShortcut
-
-                    onButtonToggled: presenter.switchToLevel(presenter.levelHard)
-                }
-            }
-        }
-
-        Rectangle {
-            id: statusRect
-
-            Layout.minimumWidth: parent.width * 0.242
+            Layout.minimumWidth: wordPairsRect.width
             Layout.minimumHeight: parent.height
             Layout.alignment: Qt.AlignRight
 
@@ -274,7 +252,7 @@ Item {
             border.color: Styles.borderColor
 
             MouseArea {
-                id: statusMouseArea
+                id: statusBoxMouseArea
 
                 anchors.fill: parent
                 hoverEnabled: true
@@ -282,7 +260,7 @@ Item {
 
             ToolTip {
                 text: GameStrings.mainPaneStatusBoxToolTip
-                visible: statusMouseArea.containsMouse
+                visible: statusBoxMouseArea.containsMouse
                 delay: presenter.toolTipDelay
                 timeout: presenter.toolTipTimeout
             }
@@ -308,36 +286,15 @@ Item {
     }
 
     Row {
-        id: mixedWordPiecesContainer
+        id: firstWordsInputContainer
 
         height: wordPiecesHeight
 
         anchors {
-            top: infoLevelsAndStatusLayout.bottom
-            topMargin: parent.height * 0.025
-            left: infoLevelsAndStatusLayout.left
-            right: infoLevelsAndStatusLayout.right
-        }
-
-        MixedWordPieces {
-            id: mixedWordPieces
-
-            gamePresenter: presenter
-            pieceWidth: parent.width / mixedWordPieces.count
-            pieceHeight: parent.height
-        }
-    }
-
-    Row {
-        id: wordsInputContainer
-
-        height: wordsInputContainerHeight
-
-        anchors {
-            top: mixedWordPiecesContainer.bottom
-            topMargin: parent.width * 0.01
-            left: mixedWordPiecesContainer.left
-            right: mixedWordPiecesContainer.right
+            top: mainLayout.bottom
+            topMargin: parent.width * 0.02
+            left: mainLayout.left
+            right: mainLayout.right
         }
 
         WordPiecesInput {
@@ -352,6 +309,40 @@ Item {
             enabled: presenter.mainPaneVisible
 
             onActivated: presenter.clearMainPaneFirstInputWord()
+        }
+    }
+
+    Row {
+        id: mixedWordPiecesContainer
+
+        height: wordPiecesHeight
+
+        anchors {
+            top: firstWordsInputContainer.bottom
+            topMargin: parent.height * 0.01
+            left: mainLayout.left
+            right: mainLayout.right
+        }
+
+        MixedWordPieces {
+            id: mixedWordPieces
+
+            gamePresenter: presenter
+            pieceWidth: parent.width / mixedWordPieces.count
+            pieceHeight: parent.height
+        }
+    }
+
+    Row {
+        id: secondWordsInputContainer
+
+        height: wordPiecesHeight
+
+        anchors {
+            top: mixedWordPiecesContainer.bottom
+            topMargin: parent.width * 0.01
+            left: mainLayout.left
+            right: mainLayout.right
         }
 
         WordPiecesInput {
@@ -377,8 +368,8 @@ Item {
 
         anchors {
             bottom: parent.bottom
-            left: wordsInputContainer.left
-            right: wordsInputContainer.right
+            left: mixedWordPiecesContainer.left
+            right: mixedWordPiecesContainer.right
         }
 
         AppButton {
