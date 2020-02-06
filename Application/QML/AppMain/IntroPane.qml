@@ -14,49 +14,21 @@ Item {
     property bool helpButtonShortcutActivated: false
     property bool quitButtonShortcutActivated: false
 
-    readonly property double introPaneRectHeight: height * 0.9
+    readonly property double introPaneStatusBoxHeight: height * 0.9
     readonly property double bottomBtnsLayoutHeight: height * 0.1
-    readonly property double bottomBtnsMinWidth: (introPaneRect.width - 3 * bottomBtnsLayout.spacing) / 4
+    readonly property double bottomBtnsMinWidth: (introPaneStatusBox.width - 3 * bottomBtnsLayout.spacing) / 4
     readonly property double buttonRadiusRatio: 0.025
 
-    MouseArea {
-        id: introPaneMouseArea
-
-        anchors.fill: parent
-        hoverEnabled: true
-    }
-
-    ToolTip {
-        text: GameStrings.introPaneToolTip
-        visible: introPaneMouseArea.containsMouse
-        delay: presenter.toolTipDelay
-        timeout: presenter.toolTipTimeout
-    }
-
-    Rectangle {
-        id: introPaneRect
+    StatusBox {
+        id: introPaneStatusBox
 
         width: parent.width
-        height: introPaneRectHeight
+        height: introPaneStatusBoxHeight
 
         anchors.top: parent.top
 
-        color: Styles.backgroundColor
-        border.color: Styles.borderColor
-
-        Text {
-            id: introPaneText
-
-            text: presenter.introPaneMessage
-            color: Styles.textColor
-
-            anchors {
-                fill: parent
-                leftMargin: parent.width * 0.005
-            }
-
-
-        }
+        statusMessage: presenter.introPaneMessage
+        boxToolTip: GameStrings.introPaneToolTip
     }
 
     RowLayout {
@@ -65,11 +37,11 @@ Item {
         height: bottomBtnsLayoutHeight
 
         anchors {
-            top: introPaneRect.bottom
+            top: introPaneStatusBox.bottom
             bottom: parent.bottom
             topMargin: parent.height * 0.01
-            left: introPaneRect.left
-            right: introPaneRect.right
+            left: introPaneStatusBox.left
+            right: introPaneStatusBox.right
         }
 
         AppButton {

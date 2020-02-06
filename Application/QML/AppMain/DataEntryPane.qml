@@ -37,6 +37,7 @@ Item {
         }
     }
 
+    // keep mouse area and tooltip as the status box doesn't cover most part of the window (like in other panes)
     MouseArea {
         id: entryPaneMouseArea
 
@@ -51,7 +52,7 @@ Item {
         timeout: presenter.toolTipTimeout
     }
 
-    Rectangle {
+    StatusBox {
         id: dataEntryStatusBox
 
         width: parent.width
@@ -59,14 +60,8 @@ Item {
 
         anchors.top: parent.top
 
-        color: Styles.backgroundColor
-        border.color: Styles.borderColor
-
-        Text {
-            text: presenter.dataEntry.dataEntryPaneStatusMessage;
-            wrapMode: Text.WordWrap
-            anchors.fill: parent
-        }
+        statusMessage: presenter.dataEntry.dataEntryPaneStatusMessage
+        boxToolTip: GameStrings.dataEntryPaneToolTip
     }
 
     RowLayout {

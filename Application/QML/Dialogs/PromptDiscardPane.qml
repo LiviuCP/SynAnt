@@ -12,39 +12,19 @@ Item {
 
     readonly property double promptPaneRectHeight: height * 0.89
     readonly property double bottomBtnsLayoutHeight: height * 0.1
-    readonly property double bottomBtnsMinWidth: (promptMessageBox.width - bottomBtnsLayout.spacing) / 2
+    readonly property double bottomBtnsMinWidth: (promptDiscardPaneStatusBox.width - bottomBtnsLayout.spacing) / 2
     readonly property double buttonRadiusRatio: 0.02
 
-    MouseArea {
-        id: promptPaneMouseArea
-
-        anchors.fill: parent
-        hoverEnabled: true
-    }
-
-    ToolTip {
-        text: GameStrings.promptPaneToolTip
-        visible: promptPaneMouseArea.containsMouse
-        delay: presenter.toolTipDelay
-        timeout: presenter.toolTipTimeout
-    }
-
-    Rectangle {
-        id: promptMessageBox
+    StatusBox {
+        id: promptDiscardPaneStatusBox
 
         width: parent.width
         height: promptPaneRectHeight
 
         anchors.top: parent.top
 
-        color: Styles.backgroundColor
-        border.color: Styles.borderColor
-
-        Text {
-            text: GameStrings.promptDiscardMessage;
-            wrapMode: Text.WordWrap
-            anchors.fill: parent
-        }
+        statusMessage: GameStrings.promptDiscardMessage
+        boxToolTip: GameStrings.promptPaneToolTip
     }
 
     RowLayout {
@@ -53,11 +33,11 @@ Item {
         height: bottomBtnsLayoutHeight
 
         anchors {
-            top: promptMessageBox.bottom
+            top: promptDiscardPaneStatusBox.bottom
             topMargin: parent.height * 0.01
             bottom: parent.bottom
-            left: promptMessageBox.left
-            right: promptMessageBox.right
+            left: promptDiscardPaneStatusBox.left
+            right: promptDiscardPaneStatusBox.right
         }
 
         AppButton {

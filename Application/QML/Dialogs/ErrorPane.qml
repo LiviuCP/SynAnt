@@ -9,54 +9,23 @@ Item {
 
     property QtObject presenter
 
-    readonly property double errorPaneRectHeight: height * 0.9
+    readonly property double errorPaneStatusBoxHeight: height * 0.9
     readonly property double bottomBtnsLayoutHeight: height * 0.1
-    readonly property double bottomBtnsMinWidth: errorPaneRect.width / 3
+    readonly property double bottomBtnsMinWidth: errorPaneStatusBox.width / 3
     readonly property double buttonRadiusRatio: 0.025
 
-    MouseArea {
-        id: errorPaneMouseArea
+    StatusBox {
+        id: errorPaneStatusBox
 
-        anchors.fill: parent
-        hoverEnabled: true
-    }
-
-    ToolTip {
-        text: GameStrings.errorPaneToolTip
-        visible: errorPaneMouseArea.containsMouse
-        delay: presenter.toolTipDelay
-        timeout: presenter.toolTipTimeout
-    }
-
-    Rectangle {
-        id: errorPaneRect
+        isErrorStatus: true
 
         width: parent.width
-        height: errorPaneRectHeight
+        height: errorPaneStatusBoxHeight
 
         anchors.top: parent.top
 
-        color: Styles.backgroundColor
-        border.color: Styles.borderColor
-
-        Text {
-            id: errorPaneText
-
-            text: presenter.errorMessage
-            color: Styles.fatalErrorTextColor
-            width: parent.width
-            wrapMode: Text.WordWrap
-
-            font.pointSize: 12
-            minimumPointSize: 8
-            fontSizeMode: Text.Fit
-
-            anchors {
-                fill: parent
-                leftMargin: parent.width * 0.02
-                rightMargin: parent.width * 0.02
-            }
-        }
+        statusMessage: presenter.errorMessage
+        boxToolTip: GameStrings.errorPaneToolTip
     }
 
     RowLayout {
@@ -67,8 +36,8 @@ Item {
         anchors {
             bottom: parent.bottom
             topMargin: parent.height * 0.01
-            left: errorPaneRect.left
-            right: errorPaneRect.right
+            left: errorPaneStatusBox.left
+            right: errorPaneStatusBox.right
         }
 
         AppButton {

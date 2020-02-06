@@ -12,7 +12,7 @@ Item {
 
     readonly property double promptPaneRectHeight: height * 0.89
     readonly property double bottomBtnsLayoutHeight: height * 0.1
-    readonly property double bottomBtnsMinWidth: (promptStatusBox.width - 2 * bottomBtnsLayout.spacing) / 3
+    readonly property double bottomBtnsMinWidth: (promptSaveExitPaneStatusBox.width - 2 * bottomBtnsLayout.spacing) / 3
     readonly property double buttonRadiusRatio: 0.025
 
     function quitOrExitDataEntry() {
@@ -25,36 +25,16 @@ Item {
         }
     }
 
-    MouseArea {
-        id: promptPaneMouseArea
-
-        anchors.fill: parent
-        hoverEnabled: true
-    }
-
-    ToolTip {
-        text: GameStrings.promptPaneToolTip
-        visible: promptPaneMouseArea.containsMouse
-        delay: presenter.toolTipDelay
-        timeout: presenter.toolTipTimeout
-    }
-
-    Rectangle {
-        id: promptStatusBox
+    StatusBox {
+        id: promptSaveExitPaneStatusBox
 
         width: parent.width
         height: promptPaneRectHeight
 
         anchors.top: parent.top
 
-        color: Styles.backgroundColor
-        border.color: Styles.borderColor
-
-        Text {
-            text: GameStrings.promptSaveBeforeExitMessage;
-            wrapMode: Text.WordWrap
-            anchors.fill: parent
-        }
+        statusMessage: GameStrings.promptSaveBeforeExitMessage
+        boxToolTip: GameStrings.promptPaneToolTip
     }
 
     RowLayout {
@@ -63,11 +43,11 @@ Item {
         height: bottomBtnsLayoutHeight
 
         anchors {
-            top: promptStatusBox.bottom
+            top: promptSaveExitPaneStatusBox.bottom
             topMargin: parent.height * 0.01
             bottom: parent.bottom
-            left: promptStatusBox.left
-            right: promptStatusBox.right
+            left: promptSaveExitPaneStatusBox.left
+            right: promptSaveExitPaneStatusBox.right
         }
 
         AppButton {

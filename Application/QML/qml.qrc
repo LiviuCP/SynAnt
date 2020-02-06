@@ -15,5 +15,6 @@
         <file>Controls/WordPiecesInput.qml</file>
         <file>Controls/MixedWordPieces.qml</file>
         <file>Controls/AppRadioButton.qml</file>
+        <file>OtherWidgets/StatusBox.qml</file>
     </qresource>
 </RCC>

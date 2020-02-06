@@ -241,47 +241,15 @@ Item {
             }
         }
 
-        Rectangle {
-            id: statusBox
+        StatusBox {
+            id: mainPaneStatusBox
 
             Layout.minimumWidth: wordPairsRect.width
             Layout.minimumHeight: parent.height
             Layout.alignment: Qt.AlignRight
 
-            color: Styles.backgroundColor
-            border.color: Styles.borderColor
-
-            MouseArea {
-                id: statusBoxMouseArea
-
-                anchors.fill: parent
-                hoverEnabled: true
-            }
-
-            ToolTip {
-                text: GameStrings.mainPaneStatusBoxToolTip
-                visible: statusBoxMouseArea.containsMouse
-                delay: presenter.toolTipDelay
-                timeout: presenter.toolTipTimeout
-            }
-
-            Text {
-                text: presenter.mainPaneStatusMessage
-                color: Styles.textColor
-
-                width: parent.width
-                wrapMode: Text.WordWrap
-
-                font.pointSize: 12
-                minimumPointSize: 8
-                fontSizeMode: Text.Fit
-
-                anchors {
-                    fill: parent
-                    leftMargin: parent.width * 0.02
-                    rightMargin: parent.width * 0.02
-                }
-            }
+            statusMessage: presenter.mainPaneStatusMessage
+            boxToolTip: GameStrings.mainPaneStatusBoxToolTip
         }
     }
 
