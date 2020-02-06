@@ -11,7 +11,7 @@ Item {
     property bool hasFlickable: false
 
     Rectangle {
-        color: Styles.backgroundColor
+        color: Styles.statusBoxBackgroundColor
         border.color: Styles.borderColor
 
         anchors.fill: parent

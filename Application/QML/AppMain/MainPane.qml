@@ -54,7 +54,7 @@ Item {
             Layout.minimumWidth: (statisticsLayout.width - 2 * statisticsLayout.spacing) / 3
             Layout.minimumHeight: parent.height / 2
 
-            color: Styles.backgroundColor
+            color: Styles.statusBoxBackgroundColor
             border.color: Styles.borderColor
 
             MouseArea {
@@ -89,7 +89,7 @@ Item {
             Layout.minimumWidth: 2 * (statisticsLayout.width - 0.5 * statisticsLayout.spacing) / 3
             Layout.minimumHeight: parent.height / 2
 
-            color: Styles.backgroundColor
+            color: Styles.statusBoxBackgroundColor
             border.color: Styles.borderColor
 
             MouseArea {
@@ -182,7 +182,7 @@ Item {
                 Layout.minimumWidth: highscoresRect.width
                 Layout.fillHeight: true
 
-                color: Styles.backgroundColor
+                color: Styles.statusBoxBackgroundColor
                 border.color: Styles.borderColor
 
                 MouseArea {

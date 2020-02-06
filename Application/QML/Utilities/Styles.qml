@@ -7,6 +7,7 @@ QtObject {
 
     // colors
     readonly property color backgroundColor: "#add8e6"
+    readonly property color statusBoxBackgroundColor: "#dddddd"
     readonly property color mixedPiecesBackgroundColor: "#a0a0a0"
     readonly property color firstWordInputBackgroundColor: "#cccccc"
     readonly property color secondWordInputBackgroundColor: "#dedede"
