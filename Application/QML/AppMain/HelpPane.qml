@@ -12,67 +12,32 @@ Item {
 
     property bool quitButtonShortcutActivated: false
 
-    readonly property double helpPaneRectHeight: height * 0.9
+    readonly property double helpPaneStatusBoxHeight: height * 0.9
     readonly property double bottomBtnsLayoutHeight: height * 0.1
-    readonly property double bottomBtnsMinWidth: (helpPaneRect.width - bottomBtnsLayout.spacing) * 0.5
-    readonly property double buttonRadiusRatio: 0.01
+    readonly property double bottomBtnsMinWidth: (helpPaneStatusBox.width - bottomBtnsLayout.spacing) * 0.5
 
-    MouseArea {
-        id: helpPaneMouseArea
-
-        anchors.fill: parent
-        hoverEnabled: true
-    }
-
-    ToolTip {
-        delay: presenter.toolTipDelay
-        timeout: presenter.toolTipTimeout
-        text: presenter.helpPaneToolTip
-        visible: helpPaneMouseArea.containsMouse
-    }
-
-    Rectangle {
-        id: helpPaneRect
+    StatusBox {
+        id: helpPaneStatusBox
 
         width: parent.width
-        height: helpPaneRectHeight
+        height: helpPaneStatusBoxHeight
 
         anchors.top: parent.top
 
-        color: Styles.backgroundColor
-        border.color: Styles.borderColor
-
-        Flickable {
-            id: helpPaneFlickable
-
-            clip: true
-            contentHeight: helpPaneText.height
-
-            anchors {
-                fill: parent
-                leftMargin: parent.width * 0.005
-                rightMargin: parent.width * 0.005
-            }
-
-            Text {
-                id: helpPaneText
-                text: presenter.helpPaneMessage
-                color: Styles.textColor
-                width: parent.width
-                wrapMode: Text.WordWrap
-            }
-        }
+        statusMessage: presenter.helpPaneMessage
+        boxToolTip: presenter.helpPaneToolTip
+        hasFlickable: true
     }
 
     RowLayout {
         id: bottomBtnsLayout
 
         anchors {
-            top: helpPaneRect.bottom
+            top: helpPaneStatusBox.bottom
             topMargin: parent.height * 0.01
             bottom: parent.bottom
-            left: helpPaneRect.left
-            right: helpPaneRect.right
+            left: helpPaneStatusBox.left
+            right: helpPaneStatusBox.right
         }
 
         height: bottomBtnsLayoutHeight

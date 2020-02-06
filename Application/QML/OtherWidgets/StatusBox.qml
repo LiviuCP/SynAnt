@@ -8,6 +8,7 @@ Item {
     property string statusMessage
     property string boxToolTip
     property bool isErrorStatus: false
+    property bool hasFlickable: false
 
     Rectangle {
         color: Styles.backgroundColor
@@ -30,6 +31,7 @@ Item {
         }
 
         Text {
+            visible: !hasFlickable
             text: statusMessage
             color: isErrorStatus ? Styles.fatalErrorTextColor : Styles.textColor
 
@@ -44,6 +46,28 @@ Item {
                 fill: parent
                 leftMargin: parent.width * 0.02
                 rightMargin: parent.width * 0.02
+            }
+        }
+
+        Flickable {
+            id: helpPaneFlickable
+            visible: hasFlickable
+
+            clip: true
+            contentHeight: flickableText.height
+
+            anchors {
+                fill: parent
+                leftMargin: parent.width * 0.005
+                rightMargin: parent.width * 0.005
+            }
+
+            Text {
+                id: flickableText
+                text: statusMessage
+                color: Styles.textColor
+                width: parent.width
+                wrapMode: Text.WordWrap
             }
         }
     }
