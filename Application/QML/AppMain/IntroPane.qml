@@ -52,6 +52,20 @@ Item {
             editable: true
             model: ["Language"]
             onAccepted: console.log("Under construction")
+
+            MouseArea {
+                id: languageSelectionDropdownMouseArea
+
+                anchors.fill: parent
+                hoverEnabled: true
+            }
+
+            ToolTip {
+                text: GameStrings.languageSelectionToolTip
+                visible: languageSelectionDropdownMouseArea.containsMouse
+                delay: 1000
+                timeout: 4000
+            }
         }
     }
 

@@ -112,4 +112,6 @@ QtObject {
     readonly property string closeButtonToolTip:                                    "A fatal error occurred. Click button or hit ALT+C to exit the game."
     readonly property string dataEntryFirstWordToolTip:                             "Enter the first word from the pair to be added to database."
     readonly property string dataEntrySecondWordToolTip:                            "Enter the second word from the pair to be added to database."
+    readonly property string languageSelectionToolTip:                              "Choose the language you wish the retrieved word pairs to have."
+    readonly property string dataEntryLanguageSelectionToolTip:                     "Choose the language in which you wish to enter new word pairs."
 }
