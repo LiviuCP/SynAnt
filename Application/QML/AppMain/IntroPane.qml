@@ -14,8 +14,9 @@ Item {
     property bool helpButtonShortcutActivated: false
     property bool quitButtonShortcutActivated: false
 
-    readonly property double introPaneStatusBoxHeight: height * 0.9
+    readonly property double introPaneStatusBoxHeight: height * 0.8
     readonly property double bottomBtnsLayoutHeight: height * 0.1
+    readonly property double languageDropdownLayoutHeight: height * 0.1
     readonly property double bottomBtnsMinWidth: (introPaneStatusBox.width - 3 * bottomBtnsLayout.spacing) / 4
     readonly property double buttonRadiusRatio: 0.025
 
@@ -32,12 +33,35 @@ Item {
     }
 
     RowLayout {
+        id: languageDropdownLayout
+
+        height: languageDropdownLayoutHeight
+
+        anchors {
+            top: introPaneStatusBox.bottom
+            topMargin: parent.height * 0.01
+            left: introPaneStatusBox.left
+            right: introPaneStatusBox.right
+        }
+
+        ComboBox {
+            id: languageSelectionDropdown
+
+            Layout.fillWidth: true
+
+            editable: true
+            model: ["Language"]
+            onAccepted: console.log("Under construction")
+        }
+    }
+
+    RowLayout {
         id: bottomBtnsLayout
 
         height: bottomBtnsLayoutHeight
 
         anchors {
-            top: introPaneStatusBox.bottom
+            top: languageDropdownLayout.bottom
             bottom: parent.bottom
             topMargin: parent.height * 0.01
             left: introPaneStatusBox.left
