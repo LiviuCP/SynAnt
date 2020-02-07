@@ -48,79 +48,30 @@ Item {
             right: parent.right
         }
 
-        Rectangle {
-            id: highscoresRect
+        StatisticsBox {
+            id: highscoresBox
+
+            boxLabel: GameStrings.scoreLabel
+            leftValue: presenter.obtainedScore
+            rightValue: presenter.totalAvailableScore
 
             Layout.minimumWidth: (statisticsLayout.width - 2 * statisticsLayout.spacing) / 3
             Layout.minimumHeight: parent.height / 2
 
-            color: Styles.statusBoxBackgroundColor
-            border.color: Styles.borderColor
-
-            MouseArea {
-                id: highscoresMouseArea
-
-                anchors.fill: parent
-                hoverEnabled: true
-            }
-
-            ToolTip {
-                text: GameStrings.highscoresToolTip
-                visible: highscoresMouseArea.containsMouse
-                delay: presenter.toolTipDelay
-                timeout: presenter.toolTipTimeout
-            }
-
-            Text {
-                color: Styles.textColor
-                text: GameStrings.scoreMessage.arg(presenter.obtainedScore).arg(presenter.totalAvailableScore)
-
-                anchors {
-                    left: parent.left
-                    leftMargin: parent.width * 0.01
-                    verticalCenter: parent.verticalCenter
-                }
-            }
+            boxToolTip: GameStrings.highscoresToolTip
         }
 
-        Rectangle {
-            id: wordPairsRect
+        StatisticsBox {
+            id: wordPairsBox
+
+            boxLabel: GameStrings.pairsLabel
+            leftValue: presenter.guessedWordPairs
+            rightValue: presenter.totalWordPairs
 
             Layout.minimumWidth: 2 * (statisticsLayout.width - 0.5 * statisticsLayout.spacing) / 3
             Layout.minimumHeight: parent.height / 2
 
-            color: Styles.statusBoxBackgroundColor
-            border.color: Styles.borderColor
-
-            MouseArea {
-                id: wordPairsMouseArea
-
-                anchors.fill: parent
-                hoverEnabled: true
-            }
-
-            ToolTip {
-                text: GameStrings.wordPairsToolTip
-                visible: wordPairsMouseArea.containsMouse
-                delay: presenter.toolTipDelay
-                timeout: presenter.toolTipTimeout
-            }
-
-            Text {
-                text: GameStrings.wordPairsMessage.arg(presenter.guessedWordPairs).arg(presenter.totalWordPairs)
-                color: Styles.textColor
-
-                anchors {
-                    left: parent.left
-                    leftMargin: parent.width * 0.01
-                    verticalCenter: parent.verticalCenter
-                }
-            }
-        }
-
-        Item {
-            id: placeholder
-            Layout.fillWidth: true
+            boxToolTip: GameStrings.wordPairsToolTip
         }
     }
 
@@ -136,7 +87,7 @@ Item {
         }
 
         ColumnLayout {
-            Layout.minimumWidth: highscoresRect.width
+            Layout.minimumWidth: highscoresBox.width
             Layout.minimumHeight: parent.height
 
             AppButton {
@@ -145,7 +96,7 @@ Item {
                 buttonEnabled: presenter.mainPaneStatisticsResetEnabled
                 dedicatedShortcutEnabled: presenter.mainPaneVisible && presenter.mainPaneStatisticsResetEnabled
 
-                Layout.minimumWidth: highscoresRect.width
+                Layout.minimumWidth: highscoresBox.width
 
                 buttonLabel: GameStrings.mainPaneStatisticsResetButtonLabel
                 buttonToolTip: GameStrings.mainPaneResetButtonToolTip
@@ -160,7 +111,7 @@ Item {
                 buttonEnabled: presenter.dataEntry.dataEntryEnabled
                 dedicatedShortcutEnabled: false
 
-                Layout.minimumWidth: highscoresRect.width
+                Layout.minimumWidth: highscoresBox.width
 
                 buttonLabel: GameStrings.dataEntryButtonLabel
                 buttonToolTip: GameStrings.dataEntryButtonToolTip
@@ -170,7 +121,7 @@ Item {
 
             ComboBox {
                 id: languageSelectionDropdown
-                Layout.minimumWidth: highscoresRect.width
+                Layout.minimumWidth: highscoresBox.width
                 editable: true
                 model: ["Language"]
                 onAccepted: console.log("Under construction")
@@ -179,7 +130,7 @@ Item {
             Rectangle {
                 id: levelBtnsRect
 
-                Layout.minimumWidth: highscoresRect.width
+                Layout.minimumWidth: highscoresBox.width
                 Layout.fillHeight: true
 
                 color: Styles.statusBoxBackgroundColor
@@ -244,7 +195,7 @@ Item {
         StatusBox {
             id: mainPaneStatusBox
 
-            Layout.minimumWidth: wordPairsRect.width
+            Layout.minimumWidth: wordPairsBox.width
             Layout.minimumHeight: parent.height
             Layout.alignment: Qt.AlignRight
 

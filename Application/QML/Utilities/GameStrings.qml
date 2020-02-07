@@ -12,9 +12,6 @@ QtObject {
     readonly property string promptSaveBeforeExitMessage:                           "\n\n\n\n\tDo you want to save the added word pairs before exiting?\n"
     readonly property string promptDiscardMessage:                                  "\n\n\n\n\tDo you really want to discard the added word pairs?\n"
 
-    readonly property string scoreMessage: "High-score: %1/%2"
-    readonly property string wordPairsMessage: "Word pairs: %1/%2"
-
     // labels
     readonly property string playButtonLabel:                                       "Play"
     readonly property string helpButtonLabel:                                       "Help"
@@ -41,6 +38,8 @@ QtObject {
     readonly property string promptDiscardYesButtonLabel:                           "Yes"
     readonly property string promptDiscardCancelButtonLabel:                        "Cancel"
     readonly property string closeButtonLabel:                                      "Close"
+    readonly property string scoreLabel:                                            "Score:"
+    readonly property string pairsLabel:                                            "Pairs:"
 
     // shortcuts
     readonly property string playButtonShortcut:                                    "ALT+P"

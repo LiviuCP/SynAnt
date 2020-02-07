@@ -6,7 +6,7 @@ Item {
     id: statusBox
 
     property string statusMessage
-    property string boxToolTip
+    property string boxToolTip: ""
     property bool isErrorStatus: false
     property bool hasFlickable: false
 
