@@ -7,20 +7,20 @@
   5) Score increment depends on level (the higher the level the higher the increment)
 */
 
-#ifndef SCOREITEM_H
-#define SCOREITEM_H
+#ifndef STATISTICSITEM_H
+#define STATISTICSITEM_H
 
 #include <QObject>
 #include <QVector>
 
 #include "gameutils.h"
 
-class ScoreItem : public QObject
+class StatisticsItem : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit ScoreItem(QObject *parent = nullptr);
+    explicit StatisticsItem(QObject *parent = nullptr);
 
     void initStatistics();
     void updateStatistics(Game::StatisticsUpdateTypes updateType);
@@ -46,4 +46,4 @@ private:
     int m_ScoreIncrement;
 };
 
-#endif // SCOREITEM_H
+#endif // STATISTICSITEM_H

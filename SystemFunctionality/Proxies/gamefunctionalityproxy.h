@@ -12,7 +12,7 @@ class DataSourceAccessHelper;
 class WordMixer;
 class WordPairOwner;
 class InputBuilder;
-class ScoreItem;
+class StatisticsItem;
 
 class GameFunctionalityProxy : public QObject
 {
@@ -25,7 +25,7 @@ public:
     WordMixer* getWordMixer() const;
     WordPairOwner* getWordPairOwner() const;
     InputBuilder* getInputBuilder() const;
-    ScoreItem* getScoreItem() const;
+    StatisticsItem* getStatisticsItem() const;
 };
 
 #endif // GAMEFUNCTIONALITYPROXY_H

@@ -32,7 +32,7 @@ InputBuilder* GameFunctionalityProxy::getInputBuilder() const
     return GameManager::getManager()->getInputBuilder();
 }
 
-ScoreItem* GameFunctionalityProxy::getScoreItem() const
+StatisticsItem* GameFunctionalityProxy::getStatisticsItem() const
 {
-    return GameManager::getManager()->getScoreItem();
+    return GameManager::getManager()->getStatisticsItem();
 }

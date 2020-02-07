@@ -18,7 +18,7 @@
 #include "../DataAccess/datasourceaccesshelper.h"
 #include "../Proxies/datasourceproxy.h"
 #include "../Proxies/dataentryproxy.h"
-#include "../Utilities/scoreitem.h"
+#include "../Utilities/statisticsitem.h"
 #include "../Utilities/exceptions.h"
 
 GameManager* GameManager::s_pGameManager = nullptr;
@@ -57,7 +57,7 @@ GameManager::GameManager(QObject *parent)
     , m_pWordMixer{new WordMixer{this}}
     , m_pWordPairOwner{new WordPairOwner{this}}
     , m_pInputBuilder{new InputBuilder{this}}
-    , m_pScoreItem {new ScoreItem{this}}
+    , m_pStatisticsItem {new StatisticsItem{this}}
     , m_pDataSourceLoaderThread{nullptr}
     , m_pDataEntryCacheThread{nullptr}
 {
@@ -191,9 +191,9 @@ InputBuilder* GameManager::getInputBuilder() const
     return m_pInputBuilder;
 }
 
-ScoreItem* GameManager::getScoreItem() const
+StatisticsItem* GameManager::getStatisticsItem() const
 {
-    return m_pScoreItem;
+    return m_pStatisticsItem;
 }
 
 int GameManager::getLastSavedNrOfCacheEntries() const
@@ -219,7 +219,7 @@ void GameManager::_onDataSourceSetupCompleted()
     Q_ASSERT(m_pDataSourceLoaderThread->isRunning() && m_pDataEntryCacheThread->isRunning());
 
     /* the facades are created by manager and will build the connections to the other manager provided components
-                                                (WordMixer, WordPairOwner, InputBuilder, ScoreItem, etc) on their own */
+                                                (WordMixer, WordPairOwner, InputBuilder, StatisticsItem, etc) on their own */
     m_pGameFacade = new GameFacade{this};
     m_pDataEntryFacade = new DataEntryFacade{this};
 }

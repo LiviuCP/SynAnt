@@ -4,7 +4,7 @@
    2) In return backend classes send signals to presenter through facade.
    3) The facade checks the user input created by InputBuilder against the reference words contained in WordPairOwner.
    4) The facade intermediates the communication between data access classes and consumer (WordMixer) by using the DataSourceProxy.
-   5) The facade provides decoupling by hiding the backend functionality (WordMixer, ScoreItem, WordPairOwner, InputBuilder and data access classes) entirely from presenter.
+   5) The facade provides decoupling by hiding the backend functionality (WordMixer, StatisticsItem, WordPairOwner, InputBuilder and data access classes) entirely from presenter.
    6) Last but not least the facade is responsible for updating the status of the game (except data entry).
 */
 
@@ -22,7 +22,7 @@ class DataSourceAccessHelper;
 class WordMixer;
 class WordPairOwner;
 class InputBuilder;
-class ScoreItem;
+class StatisticsItem;
 
 class GameFacade : public QObject
 {
@@ -115,7 +115,7 @@ private:
     WordMixer* m_pWordMixer;
     WordPairOwner* m_pWordPairOwner;
     InputBuilder* m_pInputBuilder;
-    ScoreItem* m_pScoreItem;
+    StatisticsItem* m_pStatisticsItem;
     Game::StatusCodes m_CurrentStatusCode;
     bool m_IsDataAvailable;
     int m_CachedWordPairs; // data entry

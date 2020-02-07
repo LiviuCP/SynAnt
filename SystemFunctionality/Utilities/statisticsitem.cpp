@@ -1,6 +1,6 @@
-#include "scoreitem.h"
+#include "statisticsitem.h"
 
-ScoreItem::ScoreItem(QObject *parent)
+StatisticsItem::StatisticsItem(QObject *parent)
     : QObject(parent)
     , m_IsInitialized{false}
     , m_ObtainedScore{0}
@@ -11,7 +11,7 @@ ScoreItem::ScoreItem(QObject *parent)
 {
 }
 
-void ScoreItem::initStatistics()
+void StatisticsItem::initStatistics()
 {
     if (!m_IsInitialized)
     {
@@ -20,7 +20,7 @@ void ScoreItem::initStatistics()
     }
 }
 
-void ScoreItem::updateStatistics(Game::StatisticsUpdateTypes updateType)
+void StatisticsItem::updateStatistics(Game::StatisticsUpdateTypes updateType)
 {
     Q_ASSERT(m_IsInitialized);
 
@@ -55,28 +55,28 @@ void ScoreItem::updateStatistics(Game::StatisticsUpdateTypes updateType)
     }
 }
 
-void ScoreItem::setScoreIncrement(Game::Levels level)
+void StatisticsItem::setScoreIncrement(Game::Levels level)
 {
     Q_ASSERT(static_cast<int>(level) >= 0 && static_cast<int>(level) < static_cast<int>(Game::Levels::NrOfLevels));
     m_ScoreIncrement = Game::c_ScoreIncrements[level];
 }
 
-int ScoreItem::getObtainedScore() const
+int StatisticsItem::getObtainedScore() const
 {
     return m_ObtainedScore;
 }
 
-int ScoreItem::getTotalAvailableScore() const
+int StatisticsItem::getTotalAvailableScore() const
 {
     return m_TotalAvailableScore;
 }
 
-int ScoreItem::getGuessedWordPairs() const
+int StatisticsItem::getGuessedWordPairs() const
 {
     return m_GuessedWordPairs;
 }
 
-int ScoreItem::getTotalWordPairs() const
+int StatisticsItem::getTotalWordPairs() const
 {
     return m_TotalWordPairs;
 }

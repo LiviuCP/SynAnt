@@ -6,7 +6,7 @@
 #include "../DataAccess/datasourceaccesshelper.h"
 #include "../Proxies/gamefunctionalityproxy.h"
 #include "../Proxies/datasourceproxy.h"
-#include "../Utilities/scoreitem.h"
+#include "../Utilities/statisticsitem.h"
 
 GameFacade::GameFacade(QObject *parent)
     : QObject(parent)
@@ -23,7 +23,7 @@ GameFacade::GameFacade(QObject *parent)
     m_pWordMixer = m_pGameFunctionalityProxy->getWordMixer();
     m_pWordPairOwner = m_pGameFunctionalityProxy->getWordPairOwner();
     m_pInputBuilder = m_pGameFunctionalityProxy->getInputBuilder();
-    m_pScoreItem = m_pGameFunctionalityProxy->getScoreItem();
+    m_pStatisticsItem = m_pGameFunctionalityProxy->getStatisticsItem();
 
     // all QObjects used by application (except the QML registered ones) should be parented (the non-parented ones would only be used in tests)
     Q_ASSERT(this->parent());
@@ -32,7 +32,7 @@ GameFacade::GameFacade(QObject *parent)
     Q_ASSERT(m_pWordMixer->parent());
     Q_ASSERT(m_pWordPairOwner->parent());
     Q_ASSERT(m_pInputBuilder->parent());
-    Q_ASSERT(m_pScoreItem->parent());
+    Q_ASSERT(m_pStatisticsItem->parent());
 
     bool connected{connect(m_pWordMixer, &WordMixer::newWordsPairMixed, this, &GameFacade::_onNewWordsPairMixed)};
     Q_ASSERT(connected);
@@ -52,7 +52,7 @@ GameFacade::GameFacade(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pInputBuilder, &InputBuilder::persistentIndexesChanged, this, &GameFacade::persistentPiecesRemovalIndexesChanged);
     Q_ASSERT(connected);
-    connected = connect(m_pScoreItem, &ScoreItem::statisticsUpdated, this, &GameFacade::_onStatisticsUpdated);
+    connected = connect(m_pStatisticsItem, &StatisticsItem::statisticsUpdated, this, &GameFacade::_onStatisticsUpdated);
     Q_ASSERT(connected);
     connected = connect(m_pDataSourceProxy, &DataSourceProxy::loadDataFromDbFinished, this, &GameFacade::_onLoadDataFromDbFinished);
     Q_ASSERT(connected);
@@ -82,7 +82,7 @@ void GameFacade::startGame()
         Q_ASSERT(m_IsDataAvailable);
 
         m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
-        m_pScoreItem->initStatistics();
+        m_pStatisticsItem->initStatistics();
 
         Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::GAME_STARTED);
 
@@ -347,7 +347,7 @@ void GameFacade::handleSubmitRequest()
 
     if (success)
     {
-        m_pScoreItem->updateStatistics(Game::StatisticsUpdateTypes::FULL_UPDATE);
+        m_pStatisticsItem->updateStatistics(Game::StatisticsUpdateTypes::FULL_UPDATE);
         m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
     }
 }
@@ -359,7 +359,7 @@ void GameFacade::handleSavingInProgress()
 
 void GameFacade::provideCorrectWordsPairToUser()
 {
-    m_pScoreItem->updateStatistics(Game::StatisticsUpdateTypes::PARTIAL_UPDATE);
+    m_pStatisticsItem->updateStatistics(Game::StatisticsUpdateTypes::PARTIAL_UPDATE);
     Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::SOLUTION_REQUESTED_BY_USER);
     m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
 }
@@ -367,7 +367,7 @@ void GameFacade::provideCorrectWordsPairToUser()
 void GameFacade::setLevel(Game::Levels level)
 {
     m_pWordMixer->setWordPieceSize(level);
-    m_pScoreItem->setScoreIncrement(level);
+    m_pStatisticsItem->setScoreIncrement(level);
 
     Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::LEVEL_CHANGED);
 
@@ -376,7 +376,7 @@ void GameFacade::setLevel(Game::Levels level)
 
 void GameFacade::resetGameStatistics()
 {
-    m_pScoreItem->updateStatistics(Game::StatisticsUpdateTypes::RESET);
+    m_pStatisticsItem->updateStatistics(Game::StatisticsUpdateTypes::RESET);
 }
 
 QVector<QString> GameFacade::getMixedWordsPiecesContent() const
@@ -441,22 +441,22 @@ QString GameFacade::getSecondReferenceWord() const
 
 int GameFacade::getObtainedScore() const
 {
-    return m_pScoreItem->getObtainedScore();
+    return m_pStatisticsItem->getObtainedScore();
 }
 
 int GameFacade::getTotalAvailableScore() const
 {
-    return m_pScoreItem->getTotalAvailableScore();
+    return m_pStatisticsItem->getTotalAvailableScore();
 }
 
 int GameFacade::getGuessedWordPairs() const
 {
-    return m_pScoreItem->getGuessedWordPairs();
+    return m_pStatisticsItem->getGuessedWordPairs();
 }
 
 int GameFacade::getTotalWordPairs() const
 {
-    return m_pScoreItem->getTotalWordPairs();
+    return m_pStatisticsItem->getTotalWordPairs();
 }
 
 bool GameFacade::isDataAvailable() const
