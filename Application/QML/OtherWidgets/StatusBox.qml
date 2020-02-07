@@ -6,29 +6,31 @@ Item {
     id: statusBox
 
     property string statusMessage
+
     property string boxToolTip: ""
+
     property bool isErrorStatus: false
     property bool hasFlickable: false
+
+    MouseArea {
+        id: statusBoxMouseArea
+
+        anchors.fill: parent
+        hoverEnabled: true
+    }
+
+    ToolTip {
+        text: boxToolTip
+        visible: statusBoxMouseArea.containsMouse && boxToolTip !== ""
+        delay: 1000
+        timeout: 4000
+    }
 
     Rectangle {
         color: Styles.statusBoxBackgroundColor
         border.color: Styles.borderColor
 
         anchors.fill: parent
-
-        MouseArea {
-            id: statusBoxMouseArea
-
-            anchors.fill: parent
-            hoverEnabled: true
-        }
-
-        ToolTip {
-            text: boxToolTip
-            visible: statusBoxMouseArea.containsMouse && boxToolTip !== ""
-            delay: 1000
-            timeout: 4000
-        }
 
         Text {
             visible: !hasFlickable

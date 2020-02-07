@@ -11,6 +11,20 @@ Item {
 
     property string boxToolTip: ""
 
+    MouseArea {
+        id: statisticsMouseArea
+
+        anchors.fill: parent
+        hoverEnabled: true
+    }
+
+    ToolTip {
+        text: boxToolTip
+        visible: statisticsMouseArea.containsMouse && boxToolTip !== ""
+        delay: 1000
+        timeout: 4000
+    }
+
     Rectangle {
         id: label
 
@@ -70,19 +84,5 @@ Item {
             anchors.centerIn: parent
             text: rightValue
         }
-    }
-
-    MouseArea {
-        id: statisticsMouseArea
-
-        anchors.fill: parent
-        hoverEnabled: true
-    }
-
-    ToolTip {
-        text: boxToolTip
-        visible: statisticsMouseArea.containsMouse && boxToolTip !== ""
-        delay: 1000
-        timeout: 4000
     }
 }
