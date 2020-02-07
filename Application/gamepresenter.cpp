@@ -523,14 +523,24 @@ QString GamePresenter::getMainPaneStatusMessage() const
     return m_MainPaneStatusMessage;
 }
 
-QString GamePresenter::getMainPaneScoreMessage() const
+QString GamePresenter::getObtainedScore() const
 {
-    return m_MainPaneScoreMessage;
+    return m_pGameFacade->getObtainedScore();
 }
 
-QString GamePresenter::getMainPaneWordPairsMessage() const
+QString GamePresenter::getTotalAvailableScore() const
 {
-    return m_MainPaneWordPairsMessage;
+    return m_pGameFacade->getTotalAvailableScore();
+}
+
+QString GamePresenter::getGuessedWordPairs() const
+{
+    return m_pGameFacade->getGuessedWordPairs();
+}
+
+QString GamePresenter::getTotalWordPairs() const
+{
+    return m_pGameFacade->getTotalWordPairs();
 }
 
 QString GamePresenter::getErrorMessage() const
@@ -563,30 +573,20 @@ void GamePresenter::_onInputChanged()
 
 void GamePresenter::_onStatisticsChanged()
 {
-    int obtainedScore{m_pGameFacade->getObtainedScore()};
-    int totalAvailableScore{m_pGameFacade->getTotalAvailableScore()};
-    int guessedWordPairs{m_pGameFacade->getGuessedWordPairs()};
-    int totalWordPairs{m_pGameFacade->getTotalWordPairs()};
+    bool canReset{m_pGameFacade->canResetGameStatistics()};
 
-    bool emptyStatistics{obtainedScore == 0 && totalAvailableScore == 0 && guessedWordPairs == 0 && totalWordPairs == 0};
-
-    if (!m_MainPaneStatisticsResetEnabled && !emptyStatistics)
+    if (!m_MainPaneStatisticsResetEnabled && canReset)
     {
         m_MainPaneStatisticsResetEnabled = true;
         Q_EMIT mainPaneStatisticsResetEnabledChanged();
     }
-    else if (m_MainPaneStatisticsResetEnabled && emptyStatistics)
+    else if (m_MainPaneStatisticsResetEnabled && !canReset)
     {
         m_MainPaneStatisticsResetEnabled = false;
         Q_EMIT mainPaneStatisticsResetEnabledChanged();
     }
 
-    m_MainPaneScoreMessage = Game::StatisticsTexts::c_HighscoresText.arg(obtainedScore)
-                                                             .arg(totalAvailableScore);
-    m_MainPaneWordPairsMessage = Game::StatisticsTexts::c_WordPairsText.arg(guessedWordPairs)
-                                                                .arg(totalWordPairs);
-
-    Q_EMIT mainPaneStatisticsMessagesChanged();
+    Q_EMIT mainPaneStatisticsChanged();
 }
 
 void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
@@ -820,6 +820,11 @@ void GamePresenter::_switchToPane(Pane pane)
             triggerPaneSwitching();
         }
     }
+}
+
+bool GamePresenter::_canResetGameStatistics() const
+{
+    return m_pGameFacade->canResetGameStatistics();
 }
 
 void GamePresenter::_setDataEntryHelpMenuActive(bool active)

@@ -246,12 +246,6 @@ namespace Game
                                                             };
     }
 
-    namespace StatisticsTexts
-    {
-        const QString c_HighscoresText                      {    "High-score: %1/%2"                                                                        };
-        const QString c_WordPairsText                       {    "Word pairs: %1/%2"                                                                        };
-    }
-
     namespace Constraints
     {
         static constexpr int c_MinWordSize{5};

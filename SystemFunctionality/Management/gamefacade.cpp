@@ -374,6 +374,11 @@ void GameFacade::setLevel(Game::Levels level)
     m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
 }
 
+bool GameFacade::canResetGameStatistics() const
+{
+    return m_pStatisticsItem->canResetStatistics();
+}
+
 void GameFacade::resetGameStatistics()
 {
     m_pStatisticsItem->updateStatistics(Game::StatisticsUpdateTypes::RESET);
@@ -439,22 +444,22 @@ QString GameFacade::getSecondReferenceWord() const
     return m_pWordPairOwner->getSecondReferenceWord();
 }
 
-int GameFacade::getObtainedScore() const
+QString GameFacade::getObtainedScore() const
 {
     return m_pStatisticsItem->getObtainedScore();
 }
 
-int GameFacade::getTotalAvailableScore() const
+QString GameFacade::getTotalAvailableScore() const
 {
     return m_pStatisticsItem->getTotalAvailableScore();
 }
 
-int GameFacade::getGuessedWordPairs() const
+QString GameFacade::getGuessedWordPairs() const
 {
     return m_pStatisticsItem->getGuessedWordPairs();
 }
 
-int GameFacade::getTotalWordPairs() const
+QString GameFacade::getTotalWordPairs() const
 {
     return m_pStatisticsItem->getTotalWordPairs();
 }

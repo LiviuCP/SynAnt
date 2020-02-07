@@ -61,22 +61,27 @@ void StatisticsItem::setScoreIncrement(Game::Levels level)
     m_ScoreIncrement = Game::c_ScoreIncrements[level];
 }
 
-int StatisticsItem::getObtainedScore() const
+bool StatisticsItem::canResetStatistics() const
 {
-    return m_ObtainedScore;
+    return (m_ObtainedScore != 0 || m_TotalAvailableScore != 0 || m_GuessedWordPairs != 0 || m_TotalWordPairs != 0);
 }
 
-int StatisticsItem::getTotalAvailableScore() const
+QString StatisticsItem::getObtainedScore() const
 {
-    return m_TotalAvailableScore;
+    return QString::number(m_ObtainedScore);
 }
 
-int StatisticsItem::getGuessedWordPairs() const
+QString StatisticsItem::getTotalAvailableScore() const
 {
-    return m_GuessedWordPairs;
+    return QString::number(m_TotalAvailableScore);
 }
 
-int StatisticsItem::getTotalWordPairs() const
+QString StatisticsItem::getGuessedWordPairs() const
 {
-    return m_TotalWordPairs;
+    return QString::number(m_GuessedWordPairs);
+}
+
+QString StatisticsItem::getTotalWordPairs() const
+{
+    return QString::number(m_TotalWordPairs);
 }

@@ -54,6 +54,7 @@ public:
     void handleSavingInProgress();
     void provideCorrectWordsPairToUser();
     void setLevel(Game::Levels level);
+    bool canResetGameStatistics() const;
     void resetGameStatistics();
 
     QVector<QString> getMixedWordsPiecesContent() const;
@@ -73,10 +74,10 @@ public:
     QString getFirstReferenceWord() const;
     QString getSecondReferenceWord() const;
 
-    int getObtainedScore() const;
-    int getTotalAvailableScore() const;
-    int getGuessedWordPairs() const;
-    int getTotalWordPairs() const;
+    QString getObtainedScore() const;
+    QString getTotalAvailableScore() const;
+    QString getGuessedWordPairs() const;
+    QString getTotalWordPairs() const;
 
     bool isDataAvailable() const;
     bool areSynonyms() const;

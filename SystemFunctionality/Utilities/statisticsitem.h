@@ -25,11 +25,12 @@ public:
     void initStatistics();
     void updateStatistics(Game::StatisticsUpdateTypes updateType);
     void setScoreIncrement(Game::Levels level);
+    bool canResetStatistics() const;
 
-    int getObtainedScore() const;
-    int getTotalAvailableScore() const;
-    int getGuessedWordPairs() const;
-    int getTotalWordPairs() const;
+    QString getObtainedScore() const;
+    QString getTotalAvailableScore() const;
+    QString getGuessedWordPairs() const;
+    QString getTotalWordPairs() const;
 
 signals:
     Q_SIGNAL void statisticsUpdated(Game::StatisticsUpdateTypes updateType);

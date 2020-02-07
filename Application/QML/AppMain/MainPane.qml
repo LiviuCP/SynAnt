@@ -73,7 +73,7 @@ Item {
 
             Text {
                 color: Styles.textColor
-                text: presenter.mainPaneScoreMessage
+                text: GameStrings.scoreMessage.arg(presenter.obtainedScore).arg(presenter.totalAvailableScore)
 
                 anchors {
                     left: parent.left
@@ -107,7 +107,7 @@ Item {
             }
 
             Text {
-                text: presenter.mainPaneWordPairsMessage
+                text: GameStrings.wordPairsMessage.arg(presenter.guessedWordPairs).arg(presenter.totalWordPairs)
                 color: Styles.textColor
 
                 anchors {

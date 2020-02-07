@@ -62,8 +62,10 @@ class GamePresenter : public QObject
     Q_PROPERTY(QString helpPaneToolTip READ getHelpPaneToolTip NOTIFY helpPaneContentChanged)
     Q_PROPERTY(QString helpButtonToolTip READ getHelpButtonToolTip NOTIFY currentPaneChanged)
     Q_PROPERTY(QString mainPaneStatusMessage READ getMainPaneStatusMessage NOTIFY mainPaneStatusMessageChanged)
-    Q_PROPERTY(QString mainPaneScoreMessage READ getMainPaneScoreMessage NOTIFY mainPaneStatisticsMessagesChanged)
-    Q_PROPERTY(QString mainPaneWordPairsMessage READ getMainPaneWordPairsMessage NOTIFY mainPaneStatisticsMessagesChanged)
+    Q_PROPERTY(QString obtainedScore READ getObtainedScore NOTIFY mainPaneStatisticsChanged)
+    Q_PROPERTY(QString totalAvailableScore READ getTotalAvailableScore NOTIFY mainPaneStatisticsChanged)
+    Q_PROPERTY(QString guessedWordPairs READ getGuessedWordPairs NOTIFY mainPaneStatisticsChanged)
+    Q_PROPERTY(QString totalWordPairs READ getTotalWordPairs NOTIFY mainPaneStatisticsChanged)
     Q_PROPERTY(QString errorMessage READ getErrorMessage NOTIFY errorMessageChanged)
 
     /* miscellaneous */
@@ -162,8 +164,10 @@ public:
     QString getHelpPaneToolTip() const;
     QString getHelpButtonToolTip() const;
     QString getMainPaneStatusMessage() const;
-    QString getMainPaneScoreMessage() const;
-    QString getMainPaneWordPairsMessage() const;
+    QString getObtainedScore() const;
+    QString getTotalAvailableScore() const;
+    QString getGuessedWordPairs() const;
+    QString getTotalWordPairs() const;
     QString getErrorMessage() const;
 
     virtual ~GamePresenter();
@@ -183,7 +187,7 @@ signals:
     Q_SIGNAL void introPaneMessageChanged();
     Q_SIGNAL void helpPaneContentChanged();
     Q_SIGNAL void mainPaneStatusMessageChanged();
-    Q_SIGNAL void mainPaneStatisticsMessagesChanged();
+    Q_SIGNAL void mainPaneStatisticsChanged();
     Q_SIGNAL void errorMessageChanged();
     Q_SIGNAL void hoverChanged();
     Q_SIGNAL void pieceSelectionCursorPositionChanged();
@@ -195,6 +199,7 @@ private slots:
     void _onStatusChanged(Game::StatusCodes statusCode);
 
 private:
+    bool _canResetGameStatistics() const;
     void _switchToPane(Pane pane);
     void _setDataEntryHelpMenuActive(bool isDataEntryHelpMenuRequired);
     void _updateStatusMessage(const QString& message, Pane pane, int delay);
@@ -214,8 +219,6 @@ private:
     QString m_WindowTitle;
     QString m_IntroPaneMessage;
     QString m_MainPaneStatusMessage;
-    QString m_MainPaneScoreMessage;
-    QString m_MainPaneWordPairsMessage;
     QString m_ErrorMessage;
     QString m_CurrentStatusMessage;
 
