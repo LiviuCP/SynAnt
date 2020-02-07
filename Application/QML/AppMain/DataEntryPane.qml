@@ -79,6 +79,8 @@ Item {
         AppRadioButton {
             id: synonymsSelectionButton
 
+            Layout.minimumWidth: 1.2655 * quitBtn.width
+
             buttonChecked: true
             isActiveFocusOnTabEnabled: true
             dedicatedShortcutEnabled: false
@@ -91,6 +93,8 @@ Item {
         AppRadioButton {
             id: antonymsSelectionButton
 
+            Layout.minimumWidth: 1.2655 * quitBtn.width
+
             buttonChecked: false
             isActiveFocusOnTabEnabled: true
             dedicatedShortcutEnabled: false
@@ -98,6 +102,14 @@ Item {
             buttonLabel: GameStrings.antonymsSelectionButtonLabel
 
             onButtonToggled: firstWordTextField.forceActiveFocus()
+        }
+
+        ComboBox {
+            id: languageSelectionDropdown
+            Layout.fillWidth: true
+            editable: true
+            model: ["Language"]
+            onAccepted: console.log("Under construction")
         }
     }
 
