@@ -49,23 +49,15 @@ Item {
 
             Layout.fillWidth: true
 
+            ToolTip.visible: hovered
+            ToolTip.text: GameStrings.languageSelectionToolTip
+            ToolTip.delay: 1000
+            ToolTip.timeout: 4000
+
             editable: true
             model: ["Language"]
+
             onAccepted: console.log("Under construction")
-
-            MouseArea {
-                id: languageSelectionDropdownMouseArea
-
-                anchors.fill: parent
-                hoverEnabled: true
-            }
-
-            ToolTip {
-                text: GameStrings.languageSelectionToolTip
-                visible: languageSelectionDropdownMouseArea.containsMouse
-                delay: 1000
-                timeout: 4000
-            }
         }
     }
 
