@@ -83,10 +83,10 @@ void UtilitiesTests::testStatisticsCorrectlyUpdated()
 void UtilitiesTests::_checkCorrectStatistics(const StatisticsItem& statisticsItem, int guessedWordPairs, int totalWordPairs, int obtainedScore, int totalAvailableScore, const QString &status)
 {
     qInfo()<<status;
-    QVERIFY2(statisticsItem.getGuessedWordPairs() == guessedWordPairs, "Number of guessed word pairs is incorrect");
-    QVERIFY2(statisticsItem.getTotalWordPairs() == totalWordPairs, "Number of total word pairs is incorrect");
-    QVERIFY2(statisticsItem.getObtainedScore() == obtainedScore, "Obtained score is incorrect");
-    QVERIFY2(statisticsItem.getTotalAvailableScore() == totalAvailableScore, "Total available score is incorrect");
+    QVERIFY2(statisticsItem.getGuessedWordPairs() == QString::number(guessedWordPairs), "Number of guessed word pairs is incorrect");
+    QVERIFY2(statisticsItem.getTotalWordPairs() == QString::number(totalWordPairs), "Number of total word pairs is incorrect");
+    QVERIFY2(statisticsItem.getObtainedScore() == QString::number(obtainedScore), "Obtained score is incorrect");
+    QVERIFY2(statisticsItem.getTotalAvailableScore() == QString::number(totalAvailableScore), "Total available score is incorrect");
 }
 
 QTEST_APPLESS_MAIN(UtilitiesTests)
