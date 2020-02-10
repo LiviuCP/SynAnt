@@ -9,13 +9,14 @@
         <file>Dialogs/PromptDiscardPane.qml</file>
         <file>Dialogs/ErrorPane.qml</file>
         <file>Dialogs/ErrorDialog.qml</file>
-        <file>Utilities/GameStrings.qml</file>
-        <file>Utilities/Styles.qml</file>
         <file>Controls/AppButton.qml</file>
+        <file>Controls/AppRadioButton.qml</file>
+        <file>Controls/Dropdown.qml</file>
         <file>Controls/WordPiecesInput.qml</file>
         <file>Controls/MixedWordPieces.qml</file>
-        <file>Controls/AppRadioButton.qml</file>
         <file>OtherWidgets/StatusBox.qml</file>
         <file>OtherWidgets/StatisticsBox.qml</file>
+        <file>Utilities/GameStrings.qml</file>
+        <file>Utilities/Styles.qml</file>
     </qresource>
 </RCC>

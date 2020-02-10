@@ -119,20 +119,14 @@ Item {
                 onButtonClicked: presenter.switchToPane(GamePresenter.DATA_ENTRY)
             }
 
-            ComboBox {
+            Dropdown {
                 id: languageSelectionDropdown
 
                 Layout.minimumWidth: highscoresBox.width
+                dataModel: ["Language", "English"]
+                dropdownToolTip: GameStrings.languageSelectionToolTip
 
-                ToolTip.visible: hovered
-                ToolTip.text: GameStrings.languageSelectionToolTip
-                ToolTip.delay: 1000
-                ToolTip.timeout: 4000
-
-                editable: true
-                model: ["Language"]
-
-                onAccepted: console.log("Under construction")
+                onOptionAccepted: console.log("Under construction")
             }
 
             Rectangle {

@@ -44,20 +44,15 @@ Item {
             right: introPaneStatusBox.right
         }
 
-        ComboBox {
+        Dropdown {
             id: languageSelectionDropdown
 
             Layout.fillWidth: true
 
-            ToolTip.visible: hovered
-            ToolTip.text: GameStrings.languageSelectionToolTip
-            ToolTip.delay: 1000
-            ToolTip.timeout: 4000
+            dataModel: ["Language", "English"]
+            dropdownToolTip: GameStrings.languageSelectionToolTip
 
-            editable: true
-            model: ["Language"]
-
-            onAccepted: console.log("Under construction")
+            onOptionAccepted: console.log("Under construction")
         }
     }
 

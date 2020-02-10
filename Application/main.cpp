@@ -58,6 +58,7 @@ void registerDataTypesForQML()
 
     qmlRegisterType(QUrl("qrc:///Application/Controls/AppButton.qml"), "Controls", 1, 0, "AppButton");
     qmlRegisterType(QUrl("qrc:///Application/Controls/AppRadioButton.qml"), "Controls", 1, 0, "AppRadioButton");
+    qmlRegisterType(QUrl("qrc:///Application/Controls/Dropdown.qml"), "Controls", 1, 0, "Dropdown");
     qmlRegisterType(QUrl("qrc:///Application/Controls/MixedWordPieces.qml"), "Controls", 1, 0, "MixedWordPieces");
     qmlRegisterType(QUrl("qrc:///Application/Controls/WordPiecesInput.qml"), "Controls", 1, 0, "WordPiecesInput");
 
