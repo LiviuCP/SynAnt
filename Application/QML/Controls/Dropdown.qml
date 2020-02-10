@@ -4,7 +4,7 @@ import QtQuick.Controls 2.2
 ComboBox {
     id: dropdown
 
-    signal optionAccepted
+    property int dataModelIndex: -1
 
     property var dataModel: null
     property string dropdownToolTip: ""
@@ -19,5 +19,7 @@ ComboBox {
     editable: false
     model: dataModel
 
-    onAccepted: optionAccepted()
+    onCurrentIndexChanged: {
+        dataModelIndex = currentIndex;
+    }
 }

@@ -52,7 +52,7 @@ Item {
             dataModel: ["Language", "English"]
             dropdownToolTip: GameStrings.languageSelectionToolTip
 
-            onOptionAccepted: console.log("Under construction")
+            onDataModelIndexChanged: console.log("Under construction. Current model index is now: " + dataModelIndex)
         }
     }
 
