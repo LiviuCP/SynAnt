@@ -15,10 +15,13 @@ ComboBox {
     enabled: dropdownEnabled && dataModel !== null && count > 0
 
     delegate: ItemDelegate {
-        text: dataModel[index]
         enabled: (index !== 0 || currentIndex == 0 || !disableFirstElementAtIndexChange) && dropdownEnabled
-        height: enabled ? implicitHeight : 0
         visible: enabled
+
+        width: parent.width
+        height: enabled ? implicitHeight : 0
+
+        text: dataModel[index]
         font.bold: index === currentIndex
 
         onClicked: {
