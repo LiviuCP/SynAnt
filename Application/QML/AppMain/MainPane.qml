@@ -123,7 +123,7 @@ Item {
                 id: languageSelectionDropdown
 
                 Layout.minimumWidth: highscoresBox.width
-                dataModel: ["English", "German"]
+                dataModel: presenter.availableLanguages
                 dropdownToolTip: GameStrings.languageSelectionToolTip
 
                 dropdownEnabled: presenter.languageSelectionEnabled

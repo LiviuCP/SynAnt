@@ -553,6 +553,12 @@ QString GamePresenter::getErrorMessage() const
     return m_ErrorMessage;
 }
 
+QStringList GamePresenter::getAvailableLanguages() const
+{
+    return m_CurrentPane == Pane::INTRO ? QStringList{Game::LanguageSelection::c_SelectLanguageHeader} + Game::LanguageSelection::c_AvailableLanguages
+                                        : Game::LanguageSelection::c_AvailableLanguages;
+}
+
 GamePresenter::~GamePresenter()
 {
     m_pGameProxy->releaseResources();
@@ -740,6 +746,7 @@ void GamePresenter::_switchToPane(Pane pane)
 
     bool delayedSwitchingRequested{false};
     bool isGamePausingRequired{false};
+    bool canRemoveLanguageSelectionHeader{false};
 
     auto triggerPaneSwitching = [this]()
     {
@@ -752,6 +759,10 @@ void GamePresenter::_switchToPane(Pane pane)
         switch(m_CurrentPane)
         {
         case Pane::INTRO:
+            if (pane != Pane::HELP)
+            {
+                canRemoveLanguageSelectionHeader = true;
+            }
             break;
         case Pane::HELP:
             break;
@@ -815,6 +826,11 @@ void GamePresenter::_switchToPane(Pane pane)
         }
 
         m_CurrentPane = pane;
+
+        if (canRemoveLanguageSelectionHeader)
+        {
+            Q_EMIT languageSelectionHeaderChanged();
+        }
 
         if (delayedSwitchingRequested)
         {

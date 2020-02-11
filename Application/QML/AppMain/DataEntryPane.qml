@@ -109,7 +109,7 @@ Item {
 
             Layout.fillWidth: true
 
-            dataModel: ["English", "German"]
+            dataModel: presenter.availableLanguages
             dropdownToolTip: GameStrings.dataEntryLanguageSelectionToolTip
 
             dropdownEnabled: presenter.languageSelectionEnabled

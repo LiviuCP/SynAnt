@@ -199,6 +199,17 @@ namespace Game
         {Game::Levels::LEVEL_HARD,   1}
     };
 
+    namespace LanguageSelection
+    {
+        const QString c_SelectLanguageHeader{"Select language"};
+        const QStringList c_AvailableLanguages
+        {
+            "English",
+            "Deutsch",
+            "Romana"
+        };
+    }
+
     namespace Timing
     {
         static constexpr int c_ToolTipDelay{1000};

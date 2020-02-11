@@ -49,7 +49,7 @@ Item {
 
             Layout.fillWidth: true
 
-            dataModel: ["Select language", "English", "German"]
+            dataModel: presenter.availableLanguages
             dropdownToolTip: GameStrings.languageSelectionToolTip
 
             disableFirstElementAtIndexChange: true

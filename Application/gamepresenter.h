@@ -68,6 +68,7 @@ class GamePresenter : public QObject
     Q_PROPERTY(QString guessedWordPairs READ getGuessedWordPairs NOTIFY mainPaneStatisticsChanged)
     Q_PROPERTY(QString totalWordPairs READ getTotalWordPairs NOTIFY mainPaneStatisticsChanged)
     Q_PROPERTY(QString errorMessage READ getErrorMessage NOTIFY errorMessageChanged)
+    Q_PROPERTY(QStringList availableLanguages READ getAvailableLanguages NOTIFY languageSelectionHeaderChanged)
 
     /* miscellaneous */
     Q_PROPERTY(bool errorOccured READ getErrorOccured NOTIFY errorOccuredChanged)
@@ -171,12 +172,14 @@ public:
     QString getGuessedWordPairs() const;
     QString getTotalWordPairs() const;
     QString getErrorMessage() const;
+    QStringList getAvailableLanguages() const;
 
     virtual ~GamePresenter();
 
 signals:
     Q_SIGNAL void currentPaneChanged();
     Q_SIGNAL void languageSelectionEnabledChanged();
+    Q_SIGNAL void languageSelectionHeaderChanged();
     Q_SIGNAL void playEnabledChanged();
     Q_SIGNAL void mainPaneStatisticsResetEnabledChanged();
     Q_SIGNAL void persistentModeEnabledChanged();
