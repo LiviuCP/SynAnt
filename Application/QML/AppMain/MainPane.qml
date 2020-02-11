@@ -126,6 +126,8 @@ Item {
                 dataModel: ["English", "German"]
                 dropdownToolTip: GameStrings.languageSelectionToolTip
 
+                dropdownEnabled: presenter.languageSelectionEnabled
+
                 onItemChanged: console.log("Item changed, current index is now: " + currentIndex)
             }
 

@@ -54,6 +54,8 @@ Item {
 
             disableFirstElementAtIndexChange: true
 
+            dropdownEnabled: presenter.languageSelectionEnabled
+
             onItemChanged: console.log("Item changed, current index is now: " + currentIndex)
         }
     }

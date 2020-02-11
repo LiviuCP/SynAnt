@@ -30,6 +30,7 @@ class GamePresenter : public QObject
 
     /* functionality enabling properties */
     Q_PROPERTY(bool playEnabled READ isPlayEnabled NOTIFY playEnabledChanged)
+    Q_PROPERTY(bool languageSelectionEnabled READ isLanguageSelectionEnabled NOTIFY languageSelectionEnabledChanged)
     Q_PROPERTY(bool submitMainPaneInputEnabled READ getSubmitMainPaneInputEnabled NOTIFY submitMainPaneInputEnabledChanged)
     Q_PROPERTY(bool clearMainPaneInputEnabled READ getClearMainPaneInputEnabled NOTIFY clearMainPaneInputEnabledChanged)
     Q_PROPERTY(bool mainPaneStatisticsResetEnabled READ getMainPaneStatisticsResetEnabled NOTIFY mainPaneStatisticsResetEnabledChanged)
@@ -126,6 +127,7 @@ public:
     bool getDataEntryPaneVisible() const;
     bool getPromptSaveExitPaneVisible() const;
     bool getPromptDiscardPaneVisible() const;
+    bool isLanguageSelectionEnabled() const;
     bool isPlayEnabled() const;
     bool getMainPaneStatisticsResetEnabled() const;
     bool isPersistentModeEnabled() const;
@@ -174,6 +176,7 @@ public:
 
 signals:
     Q_SIGNAL void currentPaneChanged();
+    Q_SIGNAL void languageSelectionEnabledChanged();
     Q_SIGNAL void playEnabledChanged();
     Q_SIGNAL void mainPaneStatisticsResetEnabledChanged();
     Q_SIGNAL void persistentModeEnabledChanged();

@@ -301,6 +301,11 @@ bool GamePresenter::getPromptDiscardPaneVisible() const
     return (m_CurrentPane == Pane::PROMPT_DISCARD);
 }
 
+bool GamePresenter::isLanguageSelectionEnabled() const
+{
+    return true; // to be updated
+}
+
 bool GamePresenter::isPlayEnabled() const
 {
     return m_pGameFacade->isDataAvailable();
