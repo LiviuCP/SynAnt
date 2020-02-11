@@ -5,17 +5,18 @@ ComboBox {
     id: dropdown
 
     property bool disableFirstElementAtIndexChange: false
+    property bool dropdownEnabled: false    // use this property and not enabled to ensure the dropdown can be altered
 
     signal itemChanged
 
     property var dataModel: null
     property string dropdownToolTip: ""
 
-    enabled: dataModel !== null && count > 0
+    enabled: dropdownEnabled && dataModel !== null && count > 0
 
     delegate: ItemDelegate {
         text: dataModel[index]
-        enabled: index !== 0 || currentIndex == 0 || !disableFirstElementAtIndexChange
+        enabled: (index !== 0 || currentIndex == 0 || !disableFirstElementAtIndexChange) && dropdownEnabled
         height: enabled ? implicitHeight : 0
         visible: enabled
         font.bold: index === currentIndex
