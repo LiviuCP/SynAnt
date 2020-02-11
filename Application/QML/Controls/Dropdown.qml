@@ -4,12 +4,29 @@ import QtQuick.Controls 2.2
 ComboBox {
     id: dropdown
 
-    property int dataModelIndex: -1
+    property bool disableFirstElementAtIndexChange: false
+
+    signal itemChanged
 
     property var dataModel: null
     property string dropdownToolTip: ""
 
-    enabled: dataModel !== null
+    enabled: dataModel !== null && count > 0
+
+    delegate: ItemDelegate {
+        text: dataModel[index]
+        enabled: index !== 0 || currentIndex == 0 || !disableFirstElementAtIndexChange
+        height: enabled ? implicitHeight : 0
+        visible: enabled
+        font.bold: index === currentIndex
+
+        onClicked: {
+            if (index !== currentIndex) {
+                currentIndex = index;
+                itemChanged();
+            }
+        }
+    }
 
     ToolTip.visible: hovered && dropdownToolTip !== ""
     ToolTip.text: dropdownToolTip
@@ -18,8 +35,4 @@ ComboBox {
 
     editable: false
     model: dataModel
-
-    onCurrentIndexChanged: {
-        dataModelIndex = currentIndex;
-    }
 }

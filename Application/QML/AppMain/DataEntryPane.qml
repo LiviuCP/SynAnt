@@ -109,10 +109,10 @@ Item {
 
             Layout.fillWidth: true
 
-            dataModel: ["Language", "English"]
+            dataModel: ["English", "German"]
             dropdownToolTip: GameStrings.dataEntryLanguageSelectionToolTip
 
-            onDataModelIndexChanged: console.log("Under construction. Current model index is now: " + dataModelIndex)
+            onItemChanged: console.log("Item changed, current index is now: " + currentIndex)
         }
     }
 

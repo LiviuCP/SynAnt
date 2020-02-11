@@ -123,10 +123,10 @@ Item {
                 id: languageSelectionDropdown
 
                 Layout.minimumWidth: highscoresBox.width
-                dataModel: ["Language", "English"]
+                dataModel: ["English", "German"]
                 dropdownToolTip: GameStrings.languageSelectionToolTip
 
-                onDataModelIndexChanged: console.log("Under construction. Current model index is now: " + dataModelIndex)
+                onItemChanged: console.log("Item changed, current index is now: " + currentIndex)
             }
 
             Rectangle {
