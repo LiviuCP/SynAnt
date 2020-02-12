@@ -33,6 +33,7 @@ public:
 
     int getCurrentNrOfAddedWordPairs() const;
     int getLastSavedNrOfWordPairs() const;
+    int getCurrentLanguageIndex() const;
     DataEntry::ValidationCodes getDataEntryValidationCode() const;
 
     bool isDataEntryAllowed() const;
@@ -40,11 +41,14 @@ public:
     bool isCacheResetAllowed() const;
     bool isSavingToDbAllowed() const;
 
+    void setLanguage(int languageIndex);
+
 signals:
     Q_SIGNAL void dataEntryAllowedChanged();
     Q_SIGNAL void addPairToCacheAllowedChanged();
     Q_SIGNAL void resetCacheAllowedChanged();
     Q_SIGNAL void saveNewPairsToDbAllowedChanged();
+    Q_SIGNAL void languageChanged();
     Q_SIGNAL void statusChanged(DataEntry::StatusCodes status);
 
 private slots:
@@ -73,6 +77,7 @@ private:
     bool m_IsResettingCacheAllowed;
     bool m_IsSavingToDbAllowed;
     bool m_IsSavingInProgress;
+    int m_CurrentLanguageIndex;
 };
 
 #endif // DATAENTRYFACADE_H

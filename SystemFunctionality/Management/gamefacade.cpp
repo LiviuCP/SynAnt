@@ -17,6 +17,7 @@ GameFacade::GameFacade(QObject *parent)
     , m_IsGameStarted{false}
     , m_IsGamePaused{false}
     , m_IsPersistentIndexModeEnabled{false}
+    , m_CurrentLanguageIndex{-1}
 {
     m_pDataSourceProxy = m_pGameFunctionalityProxy->getDataSourceProxy();
     m_pDataSourceAccessHelper = m_pGameFunctionalityProxy->getDataSourceAccessHelper();
@@ -374,6 +375,16 @@ void GameFacade::setLevel(Game::Levels level)
     m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
 }
 
+void GameFacade::setLanguage(int languageIndex)
+{
+    if (m_CurrentLanguageIndex != languageIndex)
+    {
+        m_CurrentLanguageIndex = languageIndex;
+        Q_EMIT languageChanged();
+        Q_EMIT statusChanged(Game::StatusCodes::LANGUAGE_CHANGED);
+    }
+}
+
 bool GameFacade::canResetGameStatistics() const
 {
     return m_pStatisticsItem->canResetStatistics();
@@ -462,6 +473,11 @@ QString GameFacade::getGuessedWordPairs() const
 QString GameFacade::getTotalWordPairs() const
 {
     return m_pStatisticsItem->getTotalWordPairs();
+}
+
+int GameFacade::getCurrentLanguageIndex() const
+{
+    return m_CurrentLanguageIndex;
 }
 
 bool GameFacade::isDataAvailable() const

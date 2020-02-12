@@ -4,19 +4,31 @@ import QtQuick.Controls 2.2
 ComboBox {
     id: dropdown
 
-    property bool disableFirstElementAtIndexChange: false
+    property var dataModel: null
+
+    property string dropdownToolTip: ""
+    property string noItemSelectedText: ""
+
+    property int selectedIndex: -1 // don't modify this property manually, it is only meant to be used by the onItemChanged() slot
+
     property bool dropdownEnabled: false    // use this property and not enabled to ensure the dropdown can be altered
 
     signal itemChanged
 
-    property var dataModel: null
-    property string dropdownToolTip: ""
-
     enabled: dropdownEnabled && dataModel !== null && count > 0
 
+    Text {
+        z:1
+        text: noItemSelectedText
+
+        anchors.left: parent.left
+        anchors.leftMargin: 12
+        anchors.verticalCenter: parent.verticalCenter
+        visible: currentIndex === -1
+    }
+
     delegate: ItemDelegate {
-        enabled: (index !== 0 || currentIndex == 0 || !disableFirstElementAtIndexChange) && dropdownEnabled
-        visible: enabled
+        id: dropdownDelegate
 
         width: parent.width
         height: enabled ? implicitHeight : 0
@@ -26,7 +38,7 @@ ComboBox {
 
         onClicked: {
             if (index !== currentIndex) {
-                currentIndex = index;
+                selectedIndex = index;
                 itemChanged();
             }
         }

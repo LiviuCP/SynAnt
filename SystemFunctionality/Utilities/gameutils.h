@@ -148,6 +148,7 @@ namespace Game
         STATISTICS_RESET_COMPLETE_INPUT,
         STATISTICS_RESET_INCOMPLETE_INPUT,
         LEVEL_CHANGED,
+        LANGUAGE_CHANGED,
         PERSISTENT_MODE_ENTERED,
         PERSISTENT_MODE_EXITED,
         PERSISTENT_INDEX_REQUIRED,
@@ -198,17 +199,6 @@ namespace Game
         {Game::Levels::LEVEL_MEDIUM, 2},
         {Game::Levels::LEVEL_HARD,   1}
     };
-
-    namespace LanguageSelection
-    {
-        const QString c_SelectLanguageHeader{"Select language"};
-        const QStringList c_AvailableLanguages
-        {
-            "English",
-            "Deutsch",
-            "Romana"
-        };
-    }
 
     namespace Timing
     {
@@ -370,6 +360,11 @@ namespace Game
         const QString c_LevelChangedMessage                 {
                                                                  "Level changed\n\n"
                                                                  "A new pair of words is available below"
+                                                            };
+
+        const QString c_LanguageChangedMessage              {
+                                                                 "Language changed\n\n"
+                                                                 "This feature is under construction. Thanks for understanding!"
                                                             };
 
         const QString c_CursorModeEnabledMessage            {    "Cursor enabled."                                                                          };

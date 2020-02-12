@@ -11,6 +11,7 @@ DataEntryFacade::DataEntryFacade(QObject *parent)
     , m_IsResettingCacheAllowed{false}
     , m_IsSavingToDbAllowed{false}
     , m_IsSavingInProgress{false}
+    , m_CurrentLanguageIndex{-1}
 {
     m_pDataEntryProxy = m_pDataFunctionalityProxy->getDataEntryProxy();
 
@@ -96,6 +97,11 @@ int DataEntryFacade::getLastSavedNrOfWordPairs() const
     return m_pDataEntryProxy->getLastSavedNrOfCacheEntries();
 }
 
+int DataEntryFacade::getCurrentLanguageIndex() const
+{
+    return m_CurrentLanguageIndex;
+}
+
 DataEntry::ValidationCodes DataEntryFacade::getDataEntryValidationCode() const
 {
     return m_pDataEntryProxy->getPairEntryValidationCode();
@@ -119,6 +125,16 @@ bool DataEntryFacade::isCacheResetAllowed() const
 bool DataEntryFacade::isSavingToDbAllowed() const
 {
     return m_IsSavingToDbAllowed;
+}
+
+void DataEntryFacade::setLanguage(int languageIndex)
+{
+    // for the moment no status code will be issued for language change in the data entry dialog
+    if (m_CurrentLanguageIndex != languageIndex)
+    {
+        m_CurrentLanguageIndex = languageIndex;
+        Q_EMIT languageChanged();
+    }
 }
 
 void DataEntryFacade::_onDataEntryAllowed(bool allowed)

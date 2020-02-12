@@ -109,12 +109,16 @@ Item {
 
             Layout.fillWidth: true
 
-            dataModel: presenter.availableLanguages
-            dropdownToolTip: GameStrings.dataEntryLanguageSelectionToolTip
-
             dropdownEnabled: presenter.languageSelectionEnabled
 
-            onItemChanged: console.log("Item changed, current index is now: " + currentIndex)
+            dataModel: GameStrings.languagesList
+            currentIndex: presenter.dataEntry.languageIndex
+
+            dropdownToolTip: GameStrings.dataEntryLanguageSelectionToolTip
+
+            onItemChanged: {
+                presenter.dataEntry.handleLanguageChangeRequest(selectedIndex);
+            }
         }
     }
 
@@ -328,6 +332,13 @@ Item {
         {
             Styles.updateButtonOpacityAtShortcutActivation(quitBtn);
             quitButtonShortcutActivated = false;
+        }
+    }
+
+    // the data entry language should be changed to default (intro/main pane) language once data entry dialog is exited
+    onVisibleChanged: {
+        if (!visible && presenter.languageIndex !== presenter.dataEntry.languageIndex) {
+            presenter.dataEntry.handleLanguageChangeRequest(presenter.languageIndex);
         }
     }
 }

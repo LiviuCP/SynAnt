@@ -123,12 +123,18 @@ Item {
                 id: languageSelectionDropdown
 
                 Layout.minimumWidth: highscoresBox.width
-                dataModel: presenter.availableLanguages
-                dropdownToolTip: GameStrings.languageSelectionToolTip
 
                 dropdownEnabled: presenter.languageSelectionEnabled
 
-                onItemChanged: console.log("Item changed, current index is now: " + currentIndex)
+                dataModel: GameStrings.languagesList
+                currentIndex: presenter.languageIndex
+
+                dropdownToolTip: GameStrings.languageSelectionToolTip
+
+                onItemChanged: {
+                    presenter.handleLanguageChangeRequest(selectedIndex);
+                    presenter.dataEntry.handleLanguageChangeRequest(selectedIndex);
+                }
             }
 
             Rectangle {

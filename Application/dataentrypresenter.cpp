@@ -33,6 +33,8 @@ DataEntryPresenter::DataEntryPresenter(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pDataEntryFacade, &DataEntryFacade::saveNewPairsToDbAllowedChanged, this, &DataEntryPresenter::saveAddedWordPairsEnabledChanged);
     Q_ASSERT(connected);
+    connected = connect(m_pDataEntryFacade, &DataEntryFacade::languageChanged, this, &DataEntryPresenter::languageChanged);
+    Q_ASSERT(connected);
     connected = connect(m_pDataEntryFacade, &DataEntryFacade::statusChanged, this, &DataEntryPresenter::_onStatusChanged);
     Q_ASSERT(connected);
     connected = connect(m_pStatusUpdateTimer, &QTimer::timeout, this, &DataEntryPresenter::_updateMessage);
@@ -52,6 +54,12 @@ void DataEntryPresenter::handleClearAddedWordPairsRequest()
 void DataEntryPresenter::handleSaveAddedWordPairsRequest()
 {
     m_pDataEntryFacade->requestSaveDataToDb();
+}
+
+void DataEntryPresenter::handleLanguageChangeRequest(int newLanguageIndex)
+{
+    Q_ASSERT(newLanguageIndex >= 0); // update it once the languages are better setup in backend (beyond facade)
+    m_pDataEntryFacade->setLanguage(newLanguageIndex);
 }
 
 void DataEntryPresenter::startDataEntry()
@@ -92,6 +100,11 @@ bool DataEntryPresenter::isSaveAddedWordPairsEnabled() const
 QString DataEntryPresenter::getDataEntryPaneStatusMessage() const
 {
     return m_DataEntryPaneStatusMessage;
+}
+
+int DataEntryPresenter::getLanguageIndex() const
+{
+    return m_pDataEntryFacade->getCurrentLanguageIndex();
 }
 
 void DataEntryPresenter::_onStatusChanged(DataEntry::StatusCodes statusCode)

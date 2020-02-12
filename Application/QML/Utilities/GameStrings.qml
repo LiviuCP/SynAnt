@@ -12,6 +12,12 @@ QtObject {
     readonly property string promptSaveBeforeExitMessage:                           "\n\n\n\n\tDo you want to save the added word pairs before exiting?\n"
     readonly property string promptDiscardMessage:                                  "\n\n\n\n\tDo you really want to discard the added word pairs?\n"
 
+    readonly property var languagesList: [
+                                                                                    "English",
+                                                                                    "Deutsch",
+                                                                                    "Romana"
+    ]
+
     // labels
     readonly property string playButtonLabel:                                       "Play"
     readonly property string helpButtonLabel:                                       "Help"
@@ -40,6 +46,7 @@ QtObject {
     readonly property string closeButtonLabel:                                      "Close"
     readonly property string scoreLabel:                                            "Score:"
     readonly property string pairsLabel:                                            "Pairs:"
+    readonly property string selectLanguageLabel:                                   "Select language"
 
     // shortcuts
     readonly property string playButtonShortcut:                                    "ALT+P"

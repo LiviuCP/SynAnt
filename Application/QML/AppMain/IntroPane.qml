@@ -49,14 +49,18 @@ Item {
 
             Layout.fillWidth: true
 
-            dataModel: presenter.availableLanguages
-            dropdownToolTip: GameStrings.languageSelectionToolTip
-
-            disableFirstElementAtIndexChange: true
-
             dropdownEnabled: presenter.languageSelectionEnabled
 
-            onItemChanged: console.log("Item changed, current index is now: " + currentIndex)
+            dataModel: GameStrings.languagesList
+            currentIndex: presenter.languageIndex
+
+            dropdownToolTip: GameStrings.languageSelectionToolTip
+            noItemSelectedText: GameStrings.selectLanguageLabel
+
+            onItemChanged: {
+                presenter.handleLanguageChangeRequest(selectedIndex);
+                presenter.dataEntry.handleLanguageChangeRequest(selectedIndex);
+            }
         }
     }
 

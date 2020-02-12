@@ -63,6 +63,8 @@ GamePresenter::GamePresenter(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::completionChanged, this, &GamePresenter::submitMainPaneInputEnabledChanged);
     Q_ASSERT(connected);
+    connected = connect(m_pGameFacade, &GameFacade::languageChanged, this, &GamePresenter::languageChanged);
+    Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::persistentIndexModeEnabledChanged, this, &GamePresenter::persistentModeEnabledChanged);
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::persistentPieceSelectionIndexChanged, this, &GamePresenter::pieceSelectionCursorPositionChanged);
@@ -155,6 +157,12 @@ void GamePresenter::switchToLevel(int level)
 {
     Q_ASSERT(level >= 0 && level < static_cast<int>(Game::Levels::NrOfLevels));
     m_pGameFacade->setLevel(static_cast<Game::Levels>(level));
+}
+
+void GamePresenter::handleLanguageChangeRequest(int newLanguageIndex)
+{
+    Q_ASSERT(newLanguageIndex >= 0); // update it once the languages are better setup in backend (beyond facade)
+    m_pGameFacade->setLanguage(newLanguageIndex);
 }
 
 void GamePresenter::enableCursor()
@@ -469,6 +477,11 @@ int GamePresenter::getPiecesRemovalSecondWordCursorPosition() const
     return m_pGameFacade->getSecondPersistentPiecesRemovalIndex();
 }
 
+int GamePresenter::getLanguageIndex() const
+{
+    return m_pGameFacade->getCurrentLanguageIndex();
+}
+
 int GamePresenter::getLevelEasy() const
 {
     return static_cast<int>(Game::Levels::LEVEL_EASY);
@@ -551,12 +564,6 @@ QString GamePresenter::getTotalWordPairs() const
 QString GamePresenter::getErrorMessage() const
 {
     return m_ErrorMessage;
-}
-
-QStringList GamePresenter::getAvailableLanguages() const
-{
-    return m_CurrentPane == Pane::INTRO ? QStringList{Game::LanguageSelection::c_SelectLanguageHeader} + Game::LanguageSelection::c_AvailableLanguages
-                                        : Game::LanguageSelection::c_AvailableLanguages;
 }
 
 GamePresenter::~GamePresenter()
@@ -721,6 +728,18 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
             _updateStatusMessage(Game::Messages::c_LevelChangedMessage, Pane::MAIN, Game::Timing::c_NoDelay);
             _updateStatusMessage(Game::Messages::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::Timing::c_ShortStatusUpdateDelay);
             break;
+        case Game::StatusCodes::LANGUAGE_CHANGED:
+            if (m_CurrentPane == Pane::INTRO)
+            {
+                 _updateStatusMessage(Game::Messages::c_LanguageChangedMessage, Pane::INTRO, Game::Timing::c_NoDelay);
+                 _updateStatusMessage(Game::Messages::c_PleasePlayOrEnterDataMessage, Pane::INTRO, Game::Timing::c_ShortStatusUpdateDelay);
+            }
+            else if (m_CurrentPane == Pane::MAIN)
+            {
+                 _updateStatusMessage(Game::Messages::c_LanguageChangedMessage, Pane::MAIN, Game::Timing::c_NoDelay);
+                 _updateStatusMessage(Game::Messages::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::Timing::c_ShortStatusUpdateDelay);
+            }
+            break;
         case Game::StatusCodes::PERSISTENT_MODE_ENTERED:
             _updateStatusMessage(Game::Messages::c_CursorModeEnabledMessage, Pane::MAIN, Game::Timing::c_NoDelay);
             _updateStatusMessage(Game::Messages::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::Timing::c_ShortStatusUpdateDelay);
@@ -746,7 +765,6 @@ void GamePresenter::_switchToPane(Pane pane)
 
     bool delayedSwitchingRequested{false};
     bool isGamePausingRequired{false};
-    bool canRemoveLanguageSelectionHeader{false};
 
     auto triggerPaneSwitching = [this]()
     {
@@ -759,10 +777,6 @@ void GamePresenter::_switchToPane(Pane pane)
         switch(m_CurrentPane)
         {
         case Pane::INTRO:
-            if (pane != Pane::HELP)
-            {
-                canRemoveLanguageSelectionHeader = true;
-            }
             break;
         case Pane::HELP:
             break;
@@ -826,11 +840,6 @@ void GamePresenter::_switchToPane(Pane pane)
         }
 
         m_CurrentPane = pane;
-
-        if (canRemoveLanguageSelectionHeader)
-        {
-            Q_EMIT languageSelectionHeaderChanged();
-        }
 
         if (delayedSwitchingRequested)
         {

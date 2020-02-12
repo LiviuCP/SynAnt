@@ -42,6 +42,7 @@ class GamePresenter : public QObject
     Q_PROPERTY(QList<QVariant> mixedWordsPiecesSelections READ getMixedWordsPiecesSelections NOTIFY selectionChanged)
     Q_PROPERTY(QList<QVariant> firstWordInputPiecesContent READ getFirstWordInputPiecesContent NOTIFY inputChanged)
     Q_PROPERTY(QList<QVariant> firstWordInputPiecesTextColors READ getFirstWordInputPiecesTextColors NOTIFY inputChanged)
+    Q_PROPERTY(int languageIndex READ getLanguageIndex NOTIFY languageChanged)
     Q_PROPERTY(bool areFirstWordInputPiecesHovered READ getAreFirstWordInputPiecesHovered NOTIFY hoverChanged)
     Q_PROPERTY(int firstWordInputPiecesHoverIndex READ getFirstWordInputPiecesHoverIndex NOTIFY hoverChanged)
     Q_PROPERTY(QList<QVariant> secondWordInputPiecesContent READ getSecondWordInputPiecesContent NOTIFY inputChanged)
@@ -68,7 +69,6 @@ class GamePresenter : public QObject
     Q_PROPERTY(QString guessedWordPairs READ getGuessedWordPairs NOTIFY mainPaneStatisticsChanged)
     Q_PROPERTY(QString totalWordPairs READ getTotalWordPairs NOTIFY mainPaneStatisticsChanged)
     Q_PROPERTY(QString errorMessage READ getErrorMessage NOTIFY errorMessageChanged)
-    Q_PROPERTY(QStringList availableLanguages READ getAvailableLanguages NOTIFY languageSelectionHeaderChanged)
 
     /* miscellaneous */
     Q_PROPERTY(bool errorOccured READ getErrorOccured NOTIFY errorOccuredChanged)
@@ -101,6 +101,7 @@ public:
     Q_INVOKABLE void handleSubmitMainPaneInputRequest();
     Q_INVOKABLE void handleMainPaneStatisticsResetRequest();
     Q_INVOKABLE void switchToLevel(int level);
+    Q_INVOKABLE void handleLanguageChangeRequest(int newLanguageIndex);
     Q_INVOKABLE void enableCursor();
     Q_INVOKABLE void disableCursor();
     Q_INVOKABLE void moveCursorToNextContainer();
@@ -154,6 +155,8 @@ public:
     int getPiecesRemovalFirstWordCursorPosition() const;
     int getPiecesRemovalSecondWordCursorPosition() const;
 
+    int getLanguageIndex() const;
+
     int getLevelEasy() const;
     int getLevelMedium() const;
     int getLevelHard() const;
@@ -172,14 +175,13 @@ public:
     QString getGuessedWordPairs() const;
     QString getTotalWordPairs() const;
     QString getErrorMessage() const;
-    QStringList getAvailableLanguages() const;
 
     virtual ~GamePresenter();
 
 signals:
     Q_SIGNAL void currentPaneChanged();
     Q_SIGNAL void languageSelectionEnabledChanged();
-    Q_SIGNAL void languageSelectionHeaderChanged();
+    Q_SIGNAL void languageChanged();
     Q_SIGNAL void playEnabledChanged();
     Q_SIGNAL void mainPaneStatisticsResetEnabledChanged();
     Q_SIGNAL void persistentModeEnabledChanged();

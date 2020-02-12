@@ -18,6 +18,7 @@ class DataEntryPresenter : public QObject
     Q_PROPERTY(bool discardAddedWordPairsEnabled READ isDiscardAddedWordPairsEnabled NOTIFY discardAddedWordPairsEnabledChanged)
     Q_PROPERTY(bool saveAddedWordPairsEnabled READ isSaveAddedWordPairsEnabled NOTIFY saveAddedWordPairsEnabledChanged)
     Q_PROPERTY(QString dataEntryPaneStatusMessage READ getDataEntryPaneStatusMessage NOTIFY dataEntryPaneStatusMessageChanged)
+    Q_PROPERTY(int languageIndex READ getLanguageIndex NOTIFY languageChanged)
 
 public:
     explicit DataEntryPresenter(QObject *parent = nullptr);
@@ -25,6 +26,7 @@ public:
     Q_INVOKABLE void handleAddWordsPairRequest(const QString& firstWord, const QString& secondWord, bool areSynonyms);
     Q_INVOKABLE void handleClearAddedWordPairsRequest();
     Q_INVOKABLE void handleSaveAddedWordPairsRequest();
+    Q_INVOKABLE void handleLanguageChangeRequest(int newLanguageIndex);
 
     // call directly from game presenter to avoid unnecessary signal routing to QML
     void startDataEntry();
@@ -38,6 +40,8 @@ public:
 
     QString getDataEntryPaneStatusMessage() const;
 
+    int getLanguageIndex() const;
+
 signals:
     Q_SIGNAL void dataEntryEnabledChanged();
     Q_SIGNAL void addWordsPairEnabledChanged();
@@ -48,6 +52,7 @@ signals:
     Q_SIGNAL void dataEntryAddInvalid();
     Q_SIGNAL void dataSaveInProgress();
     Q_SIGNAL void dataEntryStopped();
+    Q_SIGNAL void languageChanged();
 
 private slots:
     void _onStatusChanged(DataEntry::StatusCodes statusCode);

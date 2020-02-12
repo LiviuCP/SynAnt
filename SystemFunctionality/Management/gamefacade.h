@@ -54,6 +54,7 @@ public:
     void handleSavingInProgress();
     void provideCorrectWordsPairToUser();
     void setLevel(Game::Levels level);
+    void setLanguage(int languageIndex);
     bool canResetGameStatistics() const;
     void resetGameStatistics();
 
@@ -79,6 +80,8 @@ public:
     QString getGuessedWordPairs() const;
     QString getTotalWordPairs() const;
 
+    int getCurrentLanguageIndex() const;
+
     bool isDataAvailable() const;
     bool areSynonyms() const;
 
@@ -88,6 +91,7 @@ signals:
     Q_SIGNAL void inputChanged();
     Q_SIGNAL void completionChanged();
     Q_SIGNAL void piecesAddedToInputChanged();
+    Q_SIGNAL void languageChanged();
     Q_SIGNAL void persistentPieceSelectionIndexChanged();
     Q_SIGNAL void persistentPiecesRemovalIndexesChanged();
     Q_SIGNAL void persistentIndexModeEnabledChanged();
@@ -124,6 +128,7 @@ private:
     bool m_IsGameStarted;
     bool m_IsGamePaused;
     bool m_IsPersistentIndexModeEnabled;
+    int m_CurrentLanguageIndex;
 };
 
 #endif // GAMEFACADE_H
