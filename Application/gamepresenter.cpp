@@ -731,8 +731,9 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         case Game::StatusCodes::LANGUAGE_CHANGED:
             if (m_CurrentPane == Pane::INTRO)
             {
+                const QString secondMessage{isPlayEnabled() ? Game::Messages::c_PleasePlayOrEnterDataMessage : Game::Messages::c_PleaseEnterDataMessage};
                  _updateStatusMessage(Game::Messages::c_LanguageChangedMessage, Pane::INTRO, Game::Timing::c_NoDelay);
-                 _updateStatusMessage(Game::Messages::c_PleasePlayOrEnterDataMessage, Pane::INTRO, Game::Timing::c_ShortStatusUpdateDelay);
+                 _updateStatusMessage(secondMessage, Pane::INTRO, Game::Timing::c_ShortStatusUpdateDelay);
             }
             else if (m_CurrentPane == Pane::MAIN)
             {

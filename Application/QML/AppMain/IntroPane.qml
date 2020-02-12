@@ -80,7 +80,7 @@ Item {
         AppButton {
             id: playBtn
 
-            buttonEnabled: presenter.playEnabled
+            buttonEnabled: presenter.playEnabled && presenter.languageIndex !== -1
             dedicatedShortcutEnabled: presenter.introPaneVisible && presenter.playEnabled
 
             Layout.minimumWidth: bottomBtnsMinWidth
@@ -95,7 +95,7 @@ Item {
         AppButton {
             id: dataEntryBtn
 
-            buttonEnabled: presenter.dataEntry.dataEntryEnabled
+            buttonEnabled: presenter.dataEntry.dataEntryEnabled && presenter.dataEntry.languageIndex !== -1
             dedicatedShortcutEnabled: false
 
             Layout.minimumWidth: bottomBtnsMinWidth

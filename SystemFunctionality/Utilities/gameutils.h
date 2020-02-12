@@ -291,7 +291,7 @@ namespace Game
 
         const QString c_NoValidEntriesLoadedMessage         {
                                                                  "\n\n\n\nNo valid entries could be loaded from database.\n\n"
-                                                                 "Please use the data entry page to add pairs.\n\n"
+                                                                 "Please select a language and use the data entry page to add pairs.\n\n"
                                                                  "Then return to intro page and press Play to start the game."
                                                             };
 
@@ -299,15 +299,23 @@ namespace Game
                                                                  "\n\nLet's play!\n\n"
                                                                  "\nIt's simple: two words are divided into equal pieces and mixed with each other.\n"
                                                                  "\nYou just need to guess them.\n"
-                                                                 "\nThe words can either be synonyms or antonyms.\n\n\n"
-                                                                 "\nPress Play to enter the game or Enter new pairs to add more data.\n"
+                                                                 "\nThe words can either be synonyms or antonyms.\n\n"
+                                                                 "\nPlease select a language or change the existing one if required. "
+                                                                 "Then press Play to enter the game or Enter new pairs to add more data.\n"
                                                                  "\nFor more information click Help."
                                                             };
 
         const QString c_AdditionalDataAvailableMessage      {    "\n\nAdditional data available"                                                            };
 
         const QString c_PleasePlayOrEnterDataMessage        {
-                                                                 "\n\nPress Play to enter the game or Enter new pairs to add more data."
+                                                                 "\n\nPress Play to enter the game or Enter new pairs to add more data.\n"
+                                                                 "\nUse the dropdown to change the language if required"
+                                                                 "\n\nFor more information click Help."
+                                                            };
+
+        const QString c_PleaseEnterDataMessage              {
+                                                                 "\n\nPress Enter new pairs to add data to the selected language"
+                                                                 " or change it by using the dropdown."
                                                                  "\n\nFor more information click Help."
                                                             };
 
