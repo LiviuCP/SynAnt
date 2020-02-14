@@ -232,15 +232,10 @@ Item {
         WordPiecesInput {
             id: firstWordInput
             gamePresenter: presenter
+            clearShortcutEnabled: presenter.mainPaneVisible
+            clearShortcutSequence: GameStrings.clearMainPaneFirstInputWordShortcut
             pieceWidth: parent.width / mixedWordPieces.count
             pieceHeight: parent.height
-        }
-
-        Shortcut {
-            sequence: GameStrings.clearMainPaneFirstInputWordShortcut
-            enabled: presenter.mainPaneVisible
-
-            onActivated: presenter.clearMainPaneFirstInputWord()
         }
     }
 
@@ -280,16 +275,11 @@ Item {
         WordPiecesInput {
             id: secondWordInput
             gamePresenter: presenter
+            clearShortcutEnabled: presenter.mainPaneVisible
+            clearShortcutSequence: GameStrings.clearMainPaneSecondInputWordShortcut
             pieceWidth: parent.width / mixedWordPieces.count
             pieceHeight: parent.height
             isFirstWord: false
-        }
-
-        Shortcut {
-            sequence: GameStrings.clearMainPaneSecondInputWordShortcut
-            enabled: presenter.mainPaneVisible
-
-            onActivated: presenter.clearMainPaneSecondInputWord()
         }
     }
 

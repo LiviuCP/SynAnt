@@ -6,6 +6,8 @@ Repeater {
     id: wordPiecesInput
 
     property QtObject gamePresenter
+    property string clearShortcutSequence: ""
+    property bool clearShortcutEnabled: false
     property double pieceWidth
     property double pieceHeight
     property bool isFirstWord : true
@@ -16,6 +18,19 @@ Repeater {
     property color wordInputBorderColor : isFirstWord ? Styles.firstWordInputBorderColor : Styles.secondWordInputBorderColor
     property color wordInputBackgroundColor : isFirstWord ? Styles.firstWordInputBackgroundColor : Styles.secondWordInputBackgroundColor
     property string pieceToolTip: isFirstWord ? GameStrings.mainPaneFirstWordInputToolTip : GameStrings.mainPaneSecondWordInputToolTip
+
+    readonly property QtObject shortcut: Shortcut {
+        sequence: clearShortcutSequence
+        enabled: clearShortcutSequence !== "" && clearShortcutEnabled
+
+        onActivated: {
+            if (isFirstWord) {
+                gamePresenter.clearMainPaneFirstInputWord();
+            } else {
+                gamePresenter.clearMainPaneSecondInputWord();
+            }
+        }
+    }
 
     model: isFirstWord ? gamePresenter.firstWordInputPiecesContent : gamePresenter.secondWordInputPiecesContent
 
@@ -87,7 +102,6 @@ Repeater {
 
             onExited: gamePresenter.clearWordInputHoverIndexes()
             onClicked: clickRemovedPiecesTimer.start()
-
         }
 
         ToolTip {
