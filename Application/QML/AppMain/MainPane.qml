@@ -132,7 +132,7 @@ Item {
                 dropdownToolTip: GameStrings.languageSelectionToolTip
 
                 onItemChanged: {
-                    presenter.handleLanguageChangeRequest(selectedIndex);
+                    presenter.handleLanguageChangeRequest(selectedIndex, true);
                     presenter.dataEntry.handleLanguageChangeRequest(selectedIndex);
                 }
             }
@@ -167,6 +167,7 @@ Item {
                         id: easyLvlBtn
 
                         buttonChecked: false
+                        buttonEnabled: !presenter.dataLoadingInProgress
                         dedicatedShortcutEnabled: presenter.mainPaneVisible
 
                         buttonLabel: GameStrings.levelEasyButtonLabel
@@ -179,6 +180,7 @@ Item {
                         id: mediumLvlBtn
 
                         buttonChecked: true
+                        buttonEnabled: !presenter.dataLoadingInProgress
                         dedicatedShortcutEnabled: presenter.mainPaneVisible
 
                         buttonLabel: GameStrings.levelMediumButtonLabel
@@ -191,6 +193,7 @@ Item {
                         id: hardLvlBtn
 
                         buttonChecked: false
+                        buttonEnabled: !presenter.dataLoadingInProgress
                         dedicatedShortcutEnabled: presenter.mainPaneVisible
 
                         buttonLabel: GameStrings.levelHardButtonLabel
@@ -304,7 +307,7 @@ Item {
         AppButton {
             id: submitBtn
 
-            buttonEnabled: presenter.submitMainPaneInputEnabled
+            buttonEnabled: presenter.submitMainPaneInputEnabled && !presenter.dataLoadingInProgress
             dedicatedShortcutEnabled: presenter.mainPaneVisible && presenter.submitMainPaneInputEnabled
 
             Layout.minimumWidth: bottomBtnsMinWidth
@@ -319,7 +322,7 @@ Item {
         AppButton {
             id: clearInputBtn
 
-            buttonEnabled: presenter.clearMainPaneInputEnabled
+            buttonEnabled: presenter.clearMainPaneInputEnabled && !presenter.dataLoadingInProgress
             dedicatedShortcutEnabled: presenter.mainPaneVisible && presenter.clearMainPaneInputEnabled
 
             Layout.minimumWidth: bottomBtnsMinWidth
@@ -347,6 +350,7 @@ Item {
         AppButton {
             id: showPairBtn
 
+            buttonEnabled: !presenter.dataLoadingInProgress
             dedicatedShortcutEnabled: presenter.mainPaneVisible
 
             Layout.minimumWidth: bottomBtnsMinWidth

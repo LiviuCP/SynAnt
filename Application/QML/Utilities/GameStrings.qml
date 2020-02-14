@@ -15,7 +15,8 @@ QtObject {
     readonly property var languagesList: [
                                                                                     "English",
                                                                                     "Deutsch",
-                                                                                    "Romana"
+                                                                                    "Romana",
+                                                                                    "Italiano"
     ]
 
     // labels

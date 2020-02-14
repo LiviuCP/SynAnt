@@ -44,6 +44,8 @@ Repeater {
         width: pieceWidth
         height: pieceHeight
 
+        visible: !presenter.dataLoadingInProgress
+
         opacity: ((clickRemovedPiecesTimer.running &&
                    index >= hoverIndex) ||
                   (cursorRemovedPiecesTimer.running &&

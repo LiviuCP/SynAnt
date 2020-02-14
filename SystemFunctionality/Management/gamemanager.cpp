@@ -101,9 +101,9 @@ void GameManager::setDataSource(const QString &dataDirPath)
     }
 }
 
-void GameManager::loadDataFromDb()
+void GameManager::loadDataFromDb(int languageIndex, bool allowEmptyResult)
 {
-    Q_EMIT readDataFromDb();
+    Q_EMIT readDataFromDb(languageIndex, allowEmptyResult);
 }
 
 void GameManager::saveDataToDb()
@@ -224,9 +224,9 @@ void GameManager::_onDataSourceSetupCompleted()
     m_pDataEntryFacade = new DataEntryFacade{this};
 }
 
-void GameManager::_onLoadDataFromDbFinished(bool success)
+void GameManager::_onLoadDataFromDbFinished(bool success, bool validEntriesLoaded)
 {
-    Q_EMIT loadDataFromDbFinished(success);
+    Q_EMIT loadDataFromDbFinished(success, validEntriesLoaded);
     Q_EMIT dataEntryAllowed(success);
 }
 

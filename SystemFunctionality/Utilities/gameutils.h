@@ -122,7 +122,7 @@ namespace Game
 {
     enum class StatusCodes
     {
-        NO_DATA_LOADING_REQUESTED,
+        NO_LANGUAGE_SET,
         LOADING_DATA,
         DATA_LOADING_COMPLETE,
         NO_DATA_ENTRIES_LOADED,
@@ -148,7 +148,6 @@ namespace Game
         STATISTICS_RESET_COMPLETE_INPUT,
         STATISTICS_RESET_INCOMPLETE_INPUT,
         LEVEL_CHANGED,
-        LANGUAGE_CHANGED,
         PERSISTENT_MODE_ENTERED,
         PERSISTENT_MODE_EXITED,
         PERSISTENT_INDEX_REQUIRED,
@@ -204,7 +203,7 @@ namespace Game
     {
         static constexpr int c_ToolTipDelay{1000};
         static constexpr int c_PaneSwitchingDelay{150};
-        static constexpr int c_LoadDataThreadDelay{2000};
+        static constexpr int c_LoadDataThreadDelay{1000};
         static constexpr int c_WriteDataThreadDelay{500};
         static constexpr int c_ResetCacheDelay{250};
         static constexpr int c_ToolTipTimeout{4000};
@@ -240,7 +239,7 @@ namespace Game
                                                                  "firstWord TEXT, secondWord TEXT, areSynonyms INTEGER, language TEXT)"
                                                             };
 
-        const QString c_RetrieveAllEntriesQuery             {    "SELECT * FROM GameDataTable WHERE language = 'ANY'"                                       };
+        const QString c_RetrieveEntriesFromLanguageQuery    {    "SELECT * FROM GameDataTable WHERE language = '%1'"                                        };
         const QString c_InsertEntryIntoDbQuery              {
                                                                  "INSERT INTO GameDataTable(firstWord, secondWord, areSynonyms, language) "
                                                                  "VALUES(:firstWord, :secondWord, :areSynonyms, 'ANY')"
@@ -284,25 +283,23 @@ namespace Game
 
 
         // status messages
-        const QString c_DataLoadingMessage                  {
-                                                                 "\n\n\n\nWelcome to SynAnt!"
-                                                                 "\n\n\n\nApp is loading. Please wait..."
-                                                                                                                                                            };
+        const QString c_DataLoadingMessage                  {    "\n\n\n\nLoading data. Please wait..."                                                     };
 
         const QString c_NoValidEntriesLoadedMessage         {
-                                                                 "\n\n\n\nNo valid entries could be loaded from database.\n\n"
-                                                                 "Please select a language and use the data entry page to add pairs.\n\n"
+                                                                 "\n\n\n\nNo valid entries could be loaded from database for the selected language.\n\n"
+                                                                 "Please select another language or use the data entry page to add pairs.\n\n"
                                                                  "Then return to intro page and press Play to start the game."
                                                             };
 
-        const QString c_DataAvailableMessage                {
-                                                                 "\n\nLet's play!\n\n"
+        const QString c_CannotChangeLanguageMessage         {    "Cannot change language. No word pairs are available."                                     };
+
+        const QString c_WelcomeMessage                      {
+                                                                 "\n\nWelcome to SynAnt!\n\n"
                                                                  "\nIt's simple: two words are divided into equal pieces and mixed with each other.\n"
                                                                  "\nYou just need to guess them.\n"
                                                                  "\nThe words can either be synonyms or antonyms.\n\n"
-                                                                 "\nPlease select a language or change the existing one if required. "
-                                                                 "Then press Play to enter the game or Enter new pairs to add more data.\n"
-                                                                 "\nFor more information click Help."
+                                                                 "For more details click Help.\n"
+                                                                 "\n\nPlease select a language."
                                                             };
 
         const QString c_AdditionalDataAvailableMessage      {    "\n\nAdditional data available"                                                            };
@@ -310,12 +307,6 @@ namespace Game
         const QString c_PleasePlayOrEnterDataMessage        {
                                                                  "\n\nPress Play to enter the game or Enter new pairs to add more data.\n"
                                                                  "\nUse the dropdown to change the language if required"
-                                                                 "\n\nFor more information click Help."
-                                                            };
-
-        const QString c_PleaseEnterDataMessage              {
-                                                                 "\n\nPress Enter new pairs to add data to the selected language"
-                                                                 " or change it by using the dropdown."
                                                                  "\n\nFor more information click Help."
                                                             };
 
@@ -370,10 +361,7 @@ namespace Game
                                                                  "A new pair of words is available below"
                                                             };
 
-        const QString c_LanguageChangedMessage              {
-                                                                 "Language changed\n\n"
-                                                                 "This feature is under construction. Thanks for understanding!"
-                                                            };
+        const QString c_LanguageChangedMessage              {    "Language changed\n\n"                                                                     };
 
         const QString c_CursorModeEnabledMessage            {    "Cursor enabled."                                                                          };
         const QString c_CursorModeDisabledMessage           {    "Cursor disabled."                                                                         };

@@ -159,10 +159,10 @@ void GamePresenter::switchToLevel(int level)
     m_pGameFacade->setLevel(static_cast<Game::Levels>(level));
 }
 
-void GamePresenter::handleLanguageChangeRequest(int newLanguageIndex)
+void GamePresenter::handleLanguageChangeRequest(int newLanguageIndex, bool revertLanguageWhenDataUnavailable)
 {
     Q_ASSERT(newLanguageIndex >= 0); // update it once the languages are better setup in backend (beyond facade)
-    m_pGameFacade->setLanguage(newLanguageIndex);
+    m_pGameFacade->setLanguage(newLanguageIndex, revertLanguageWhenDataUnavailable);
 }
 
 void GamePresenter::enableCursor()
@@ -337,6 +337,11 @@ bool GamePresenter::getClearMainPaneInputEnabled() const
 bool GamePresenter::getSubmitMainPaneInputEnabled() const
 {
     return m_pGameFacade->isInputComplete();
+}
+
+bool GamePresenter::getDataLoadingInProgress() const
+{
+    return m_pGameFacade->isDataLoadingInProgress();
 }
 
 bool GamePresenter::getErrorOccured() const
@@ -620,20 +625,45 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
 
         switch (statusCode)
         {
+        case Game::StatusCodes::NO_LANGUAGE_SET:
+            _updateStatusMessage(Game::Messages::c_WelcomeMessage, Pane::INTRO, Game::Timing::c_NoDelay);
+            break;
         case Game::StatusCodes::LOADING_DATA:
-            _updateStatusMessage(Game::Messages::c_DataLoadingMessage, Pane::INTRO, Game::Timing::c_NoDelay);
+            Q_EMIT dataLoadingInProgressChanged();
+            if (m_CurrentPane == Pane::INTRO || m_CurrentPane == Pane::MAIN)
+            {
+                _updateStatusMessage(Game::Messages::c_DataLoadingMessage, m_CurrentPane, Game::Timing::c_NoDelay);
+            }
             break;
         case Game::StatusCodes::DATA_LOADING_COMPLETE:
-            _updateStatusMessage(Game::Messages::c_DataAvailableMessage, Pane::INTRO, Game::Timing::c_NoDelay);
+            if (m_CurrentPane == Pane::INTRO)
+            {
+                _updateStatusMessage(Game::Messages::c_PleasePlayOrEnterDataMessage, Pane::INTRO, Game::Timing::c_NoDelay);
+            }
+            else if (m_CurrentPane == Pane::MAIN)
+            {
+                _updateStatusMessage(Game::Messages::c_LanguageChangedMessage, Pane::MAIN, Game::Timing::c_NoDelay);
+                _updateStatusMessage(Game::Messages::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::Timing::c_ShortStatusUpdateDelay);
+            }
+            Q_EMIT dataLoadingInProgressChanged();
             break;
         case Game::StatusCodes::NO_DATA_ENTRIES_LOADED:
-            _updateStatusMessage(Game::Messages::c_NoValidEntriesLoadedMessage, Pane::INTRO, Game::Timing::c_NoDelay);
+            if (m_CurrentPane == Pane::INTRO)
+            {
+                _updateStatusMessage(Game::Messages::c_NoValidEntriesLoadedMessage, Pane::INTRO, Game::Timing::c_NoDelay);
+            }
+            else if (m_CurrentPane == Pane::MAIN)
+            {
+                _updateStatusMessage(Game::Messages::c_CannotChangeLanguageMessage, Pane::MAIN, Game::Timing::c_NoDelay);
+                _updateStatusMessage(Game::Messages::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::Timing::c_ShortStatusUpdateDelay);
+            }
+            Q_EMIT dataLoadingInProgressChanged();
             break;
         case Game::StatusCodes::DATA_LOADING_ERROR:
             _launchErrorPane(Game::Error::c_CannotLoadDataMessage);
             break;
         case Game::StatusCodes::DATA_GOT_AVAILABLE:
-            _updateStatusMessage(Game::Messages::c_DataAvailableMessage, Pane::INTRO, Game::Timing::c_NoDelay);
+            _updateStatusMessage(Game::Messages::c_PleasePlayOrEnterDataMessage, Pane::INTRO, Game::Timing::c_NoDelay);
             break;
         case Game::StatusCodes::GAME_STARTED:
             _updateStatusMessage(Game::Messages::c_GameStartedMessage, Pane::MAIN, Game::Timing::c_NoDelay);
@@ -727,19 +757,6 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         case Game::StatusCodes::LEVEL_CHANGED:
             _updateStatusMessage(Game::Messages::c_LevelChangedMessage, Pane::MAIN, Game::Timing::c_NoDelay);
             _updateStatusMessage(Game::Messages::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::Timing::c_ShortStatusUpdateDelay);
-            break;
-        case Game::StatusCodes::LANGUAGE_CHANGED:
-            if (m_CurrentPane == Pane::INTRO)
-            {
-                const QString secondMessage{isPlayEnabled() ? Game::Messages::c_PleasePlayOrEnterDataMessage : Game::Messages::c_PleaseEnterDataMessage};
-                 _updateStatusMessage(Game::Messages::c_LanguageChangedMessage, Pane::INTRO, Game::Timing::c_NoDelay);
-                 _updateStatusMessage(secondMessage, Pane::INTRO, Game::Timing::c_ShortStatusUpdateDelay);
-            }
-            else if (m_CurrentPane == Pane::MAIN)
-            {
-                 _updateStatusMessage(Game::Messages::c_LanguageChangedMessage, Pane::MAIN, Game::Timing::c_NoDelay);
-                 _updateStatusMessage(Game::Messages::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::Timing::c_ShortStatusUpdateDelay);
-            }
             break;
         case Game::StatusCodes::PERSISTENT_MODE_ENTERED:
             _updateStatusMessage(Game::Messages::c_CursorModeEnabledMessage, Pane::MAIN, Game::Timing::c_NoDelay);

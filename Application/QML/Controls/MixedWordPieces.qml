@@ -19,7 +19,7 @@ Repeater {
         width: pieceWidth
         height: pieceHeight
 
-        visible: !gamePresenter.mixedWordsPiecesSelections[index]
+        visible: !gamePresenter.mixedWordsPiecesSelections[index] && !presenter.dataLoadingInProgress
 
         color: Styles.mixedPiecesBackgroundColor
 

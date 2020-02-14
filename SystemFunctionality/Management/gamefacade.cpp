@@ -11,13 +11,16 @@
 GameFacade::GameFacade(QObject *parent)
     : QObject(parent)
     , m_pGameFunctionalityProxy{new GameFunctionalityProxy{this}}
-    , m_CurrentStatusCode{Game::StatusCodes::NO_DATA_LOADING_REQUESTED}
+    , m_CurrentStatusCode{Game::StatusCodes::NO_LANGUAGE_SET}
+    , m_IsConnectedToDataSource{false}
     , m_IsDataAvailable{false}
     , m_IsSavingToDbAllowed{false}
     , m_IsGameStarted{false}
     , m_IsGamePaused{false}
     , m_IsPersistentIndexModeEnabled{false}
     , m_CurrentLanguageIndex{-1}
+    , m_PreviousLanguageIndex{-1}
+    , m_RevertLanguageWhenDataUnavailable{false}
 {
     m_pDataSourceProxy = m_pGameFunctionalityProxy->getDataSourceProxy();
     m_pDataSourceAccessHelper = m_pGameFunctionalityProxy->getDataSourceAccessHelper();
@@ -65,10 +68,9 @@ GameFacade::GameFacade(QObject *parent)
 
 void GameFacade::init()
 {
-    if (m_CurrentStatusCode == Game::StatusCodes::NO_DATA_LOADING_REQUESTED)
+    if (m_CurrentStatusCode == Game::StatusCodes::NO_LANGUAGE_SET)
     {
-        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::LOADING_DATA);
-        m_pDataSourceProxy->loadDataFromDb();
+        Q_EMIT statusChanged(m_CurrentStatusCode);
     }
     else
     {
@@ -82,7 +84,6 @@ void GameFacade::startGame()
     {
         Q_ASSERT(m_IsDataAvailable);
 
-        m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
         m_pStatisticsItem->initStatistics();
 
         Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::GAME_STARTED);
@@ -375,13 +376,16 @@ void GameFacade::setLevel(Game::Levels level)
     m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
 }
 
-void GameFacade::setLanguage(int languageIndex)
+void GameFacade::setLanguage(int languageIndex, bool revertLanguageWhenDataUnavailable)
 {
     if (m_CurrentLanguageIndex != languageIndex)
     {
+        m_PreviousLanguageIndex = m_CurrentLanguageIndex;
         m_CurrentLanguageIndex = languageIndex;
+        m_RevertLanguageWhenDataUnavailable = revertLanguageWhenDataUnavailable;
         Q_EMIT languageChanged();
-        Q_EMIT statusChanged(Game::StatusCodes::LANGUAGE_CHANGED);
+        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::LOADING_DATA);
+        m_pDataSourceProxy->loadDataFromDb(languageIndex, !revertLanguageWhenDataUnavailable);
     }
 }
 
@@ -480,6 +484,11 @@ int GameFacade::getCurrentLanguageIndex() const
     return m_CurrentLanguageIndex;
 }
 
+bool GameFacade::isDataLoadingInProgress() const
+{
+    return m_CurrentStatusCode == Game::StatusCodes::LOADING_DATA;
+}
+
 bool GameFacade::isDataAvailable() const
 {
     return m_IsDataAvailable;
@@ -490,23 +499,38 @@ bool GameFacade::areSynonyms() const
     return m_pWordPairOwner->areSynonyms();
 }
 
-void GameFacade::_onLoadDataFromDbFinished(bool success)
+void GameFacade::_onLoadDataFromDbFinished(bool success, bool validEntriesLoaded)
 {
     if (success)
     {
-        int nrOfEntries{m_pDataSourceProxy->getNrOfDataSourceEntries()};
-
-        if (nrOfEntries > 0)
+        if (validEntriesLoaded)
         {
-            m_IsDataAvailable = true;
-            m_pDataSourceAccessHelper->setEntriesTable(nrOfEntries);
+            m_pDataSourceAccessHelper->setEntriesTable(m_pDataSourceProxy->getNrOfDataSourceEntries());
             _connectToDataSource();
+            m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
 
-            Q_EMIT dataAvailableChanged();
+            if (!m_IsDataAvailable)
+            {
+                m_IsDataAvailable = true;
+                Q_EMIT dataAvailableChanged();
+            }
+
             Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_LOADING_COMPLETE);
         }
         else
         {
+            if (m_RevertLanguageWhenDataUnavailable)
+            {
+                m_CurrentLanguageIndex = m_PreviousLanguageIndex;
+                Q_EMIT languageChanged();
+            }
+
+            if (m_IsDataAvailable)
+            {
+                m_IsDataAvailable = false;
+                Q_EMIT dataAvailableChanged();
+            }
+
             Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::NO_DATA_ENTRIES_LOADED);
         }
     }
@@ -623,10 +647,14 @@ void GameFacade::_onStatisticsUpdated(Game::StatisticsUpdateTypes updateType)
     Q_EMIT statisticsChanged();
 }
 
+// should only be called once when switching to a language that either has word pairs in the database or pairs have just been added for it to the database
 void GameFacade::_connectToDataSource()
 {
-    bool connected{connect(m_pDataSourceProxy, &DataSourceProxy::entryProvidedToConsumer, this, &GameFacade::_onEntryProvidedToConsumer)};
-    Q_ASSERT(connected);
+    if (!m_IsConnectedToDataSource)
+    {
+        m_IsConnectedToDataSource =  connect(m_pDataSourceProxy, &DataSourceProxy::entryProvidedToConsumer, this, &GameFacade::_onEntryProvidedToConsumer);
+        Q_ASSERT(m_IsConnectedToDataSource);
+    }
 }
 
 void GameFacade::_addPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex)

@@ -53,7 +53,7 @@ public:
     static void releaseResources();
 
     void setDataSource(const QString& dataDirPath);
-    void loadDataFromDb();
+    void loadDataFromDb(int languageIndex, bool allowEmptyResult);
     void saveDataToDb();
     void requestWriteToCache(QPair<QString, QString> newWordsPair, bool areSynonyms);
     void requestCacheReset();
@@ -86,15 +86,15 @@ signals:
     Q_SIGNAL void writeDataToDbFinished(int nrOfEntries);
     Q_SIGNAL void cacheReset();
     Q_SIGNAL void dataSourceSetupCompleted();
-    Q_SIGNAL void readDataFromDb();
+    Q_SIGNAL void readDataFromDb(int languageIndex, bool allowEmptyResult);
     Q_SIGNAL void writeDataToDb();
     Q_SIGNAL void resetCacheRequested();
-    Q_SIGNAL void loadDataFromDbFinished(bool success);
+    Q_SIGNAL void loadDataFromDbFinished(bool success, bool validEntriesLoaded);
     Q_SIGNAL void dataEntryAllowed(bool allowed);
 
 private slots:
     void _onDataSourceSetupCompleted();
-    void _onLoadDataFromDbFinished(bool success);
+    void _onLoadDataFromDbFinished(bool success, bool validEntriesLoaded);
 
 private:
     explicit GameManager(QObject *parent = nullptr);

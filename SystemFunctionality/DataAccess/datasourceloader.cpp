@@ -7,6 +7,8 @@
 #include "datasourceloader.h"
 #include "../Utilities/gameutils.h"
 
+const QVector<QString> c_LanguageCodes{"EN", "DE", "RO", "IT"};
+
 DataSourceLoader::DataSourceLoader(DataSource* pDataSource, QObject *parent)
     : QObject(parent)
     , m_pDataSource{pDataSource}
@@ -14,17 +16,27 @@ DataSourceLoader::DataSourceLoader(DataSource* pDataSource, QObject *parent)
     Q_ASSERT(m_pDataSource);
 }
 
-void DataSourceLoader::onLoadDataFromDbRequested()
+void DataSourceLoader::onLoadDataFromDbRequested(int languageIndex, bool allowEmptyResult)
 {
     bool success{true};
+    bool validEntriesLoaded{false};
 
     QVector<DataSource::DataEntry> loadedDataEntries;
 
-    if (_loadEntriesFromDb(loadedDataEntries))
+    if (_loadEntriesFromDb(loadedDataEntries, languageIndex))
     {
-        _validateLoadedDataEntries(loadedDataEntries);
+        validEntriesLoaded = (loadedDataEntries.size() != 0);
+        if (validEntriesLoaded)
+        {
+            _validateLoadedDataEntries(loadedDataEntries);
+        }
 
-        m_pDataSource->updateDataEntries(m_ValidDataEntries, false);
+        if (m_ValidDataEntries.size() != 0 || allowEmptyResult)
+        {
+            m_pDataSource->updateDataEntries(m_ValidDataEntries, false);
+            m_ValidDataEntries.resize(0);
+            m_ValidDataEntries.squeeze();
+        }
 
         // for sync purposes only
         QThread::msleep(Game::Timing::c_LoadDataThreadDelay);
@@ -34,10 +46,10 @@ void DataSourceLoader::onLoadDataFromDbRequested()
         success = false;
     }
 
-    Q_EMIT loadDataFromDbFinished(success);
+    Q_EMIT loadDataFromDbFinished(success, validEntriesLoaded);
 }
 
-bool DataSourceLoader::_loadEntriesFromDb(QVector<DataSource::DataEntry>& dbEntries)
+bool DataSourceLoader::_loadEntriesFromDb(QVector<DataSource::DataEntry>& dbEntries, int languageIndex)
 {
     bool success{true};
 
@@ -51,7 +63,7 @@ bool DataSourceLoader::_loadEntriesFromDb(QVector<DataSource::DataEntry>& dbEntr
 
         if (db.open())
         {
-            QSqlQuery retrieveDataQuery{Game::Database::c_RetrieveAllEntriesQuery};
+            QSqlQuery retrieveDataQuery{Game::Database::c_RetrieveEntriesFromLanguageQuery.arg(c_LanguageCodes[languageIndex])};
             if (retrieveDataQuery.isActive())
             {
                 while (retrieveDataQuery.next())
@@ -81,6 +93,8 @@ bool DataSourceLoader::_loadEntriesFromDb(QVector<DataSource::DataEntry>& dbEntr
 
 void DataSourceLoader::_validateLoadedDataEntries(const QVector<DataSource::DataEntry> dbEntries)
 {
+    m_ValidDataEntries.reserve(dbEntries.size());
+
     for (int row{0}; row < dbEntries.size(); ++row)
     {
         if (_isValidDataEntry(dbEntries[row]))

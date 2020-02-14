@@ -6,9 +6,9 @@ DataSourceProxy::DataSourceProxy(QObject *parent)
 {
 }
 
-void DataSourceProxy::loadDataFromDb()
+void DataSourceProxy::loadDataFromDb(int languageIndex, bool allowEmptyResult)
 {
-    GameManager::getManager()->loadDataFromDb();
+    GameManager::getManager()->loadDataFromDb(languageIndex, allowEmptyResult);
 }
 
 void DataSourceProxy::provideDataEntryToConsumer(int entryNumber)

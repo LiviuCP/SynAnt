@@ -18,13 +18,13 @@ public:
     explicit DataSourceLoader(DataSource* pDataSource, QObject *parent = nullptr);
 
 public slots:
-    void onLoadDataFromDbRequested();
+    void onLoadDataFromDbRequested(int languageIndex, bool allowEmptyResult);
 
 signals:
-    Q_SIGNAL void loadDataFromDbFinished(bool success);
+    Q_SIGNAL void loadDataFromDbFinished(bool success, bool validEntriesLoaded);
 
 private:
-    bool _loadEntriesFromDb(QVector<DataSource::DataEntry>& dbEntries);
+    bool _loadEntriesFromDb(QVector<DataSource::DataEntry>& dbEntries, int languageIndex);
     void _validateLoadedDataEntries(const QVector<DataSource::DataEntry> dbEntries);
     bool _isValidDataEntry(const DataSource::DataEntry& dataEntry);
 

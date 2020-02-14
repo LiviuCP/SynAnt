@@ -54,7 +54,7 @@ public:
     void handleSavingInProgress();
     void provideCorrectWordsPairToUser();
     void setLevel(Game::Levels level);
-    void setLanguage(int languageIndex);
+    void setLanguage(int languageIndex, bool revertLanguageWhenDataUnavailable);
     bool canResetGameStatistics() const;
     void resetGameStatistics();
 
@@ -82,6 +82,7 @@ public:
 
     int getCurrentLanguageIndex() const;
 
+    bool isDataLoadingInProgress() const;
     bool isDataAvailable() const;
     bool areSynonyms() const;
 
@@ -99,7 +100,7 @@ signals:
     Q_SIGNAL void statusChanged(Game::StatusCodes status);
 
 private slots:
-    void _onLoadDataFromDbFinished(bool success);
+    void _onLoadDataFromDbFinished(bool success, bool validEntriesLoaded);
     void _onEntryProvidedToConsumer(QPair<QString, QString> newWordsPair, bool areSynonyms);
     void _onWriteDataToDbFinished(int nrOfEntries);
     void _onWriteDataToDbErrorOccured();
@@ -122,6 +123,7 @@ private:
     InputBuilder* m_pInputBuilder;
     StatisticsItem* m_pStatisticsItem;
     Game::StatusCodes m_CurrentStatusCode;
+    bool m_IsConnectedToDataSource;
     bool m_IsDataAvailable;
     int m_CachedWordPairs; // data entry
     bool m_IsSavingToDbAllowed; // data entry
@@ -129,6 +131,8 @@ private:
     bool m_IsGamePaused;
     bool m_IsPersistentIndexModeEnabled;
     int m_CurrentLanguageIndex;
+    int m_PreviousLanguageIndex; // used for restoring the previous language in main pane in case no word can be loaded from currently setup one
+    bool m_RevertLanguageWhenDataUnavailable;
 };
 
 #endif // GAMEFACADE_H
