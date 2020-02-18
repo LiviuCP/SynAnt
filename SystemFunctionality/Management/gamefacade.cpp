@@ -58,7 +58,7 @@ GameFacade::GameFacade(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pStatisticsItem, &StatisticsItem::statisticsUpdated, this, &GameFacade::_onStatisticsUpdated);
     Q_ASSERT(connected);
-    connected = connect(m_pDataSourceProxy, &DataSourceProxy::loadDataFromDbFinished, this, &GameFacade::_onLoadDataFromDbFinished);
+    connected = connect(m_pDataSourceProxy, &DataSourceProxy::fetchDataForSelectedLanguageFinished, this, &GameFacade::_onFetchDataForSelectedLanguageFinished);
     Q_ASSERT(connected);
     connected = connect(m_pDataSourceProxy, &DataSourceProxy::writeDataToDbFinished, this, &GameFacade::_onWriteDataToDbFinished);
     Q_ASSERT(connected);
@@ -384,8 +384,8 @@ void GameFacade::setLanguage(int languageIndex, bool revertLanguageWhenDataUnava
         m_CurrentLanguageIndex = languageIndex;
         m_RevertLanguageWhenDataUnavailable = revertLanguageWhenDataUnavailable;
         Q_EMIT languageChanged();
-        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::LOADING_DATA);
-        m_pDataSourceProxy->loadDataFromDb(languageIndex, !revertLanguageWhenDataUnavailable);
+        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::FETCHING_DATA);
+        m_pDataSourceProxy->fetchDataForSelectedLanguage(languageIndex, !revertLanguageWhenDataUnavailable);
     }
 }
 
@@ -484,9 +484,9 @@ int GameFacade::getCurrentLanguageIndex() const
     return m_CurrentLanguageIndex;
 }
 
-bool GameFacade::isDataLoadingInProgress() const
+bool GameFacade::isdataFetchingInProgress() const
 {
-    return m_CurrentStatusCode == Game::StatusCodes::LOADING_DATA;
+    return m_CurrentStatusCode == Game::StatusCodes::FETCHING_DATA;
 }
 
 bool GameFacade::isDataAvailable() const
@@ -499,11 +499,11 @@ bool GameFacade::areSynonyms() const
     return m_pWordPairOwner->areSynonyms();
 }
 
-void GameFacade::_onLoadDataFromDbFinished(bool success, bool validEntriesLoaded)
+void GameFacade::_onFetchDataForSelectedLanguageFinished(bool success, bool validEntriesFetched)
 {
     if (success)
     {
-        if (validEntriesLoaded)
+        if (validEntriesFetched)
         {
             m_pDataSourceAccessHelper->setEntriesTable(m_pDataSourceProxy->getNrOfDataSourceEntries());
             _connectToDataSource();
@@ -515,7 +515,7 @@ void GameFacade::_onLoadDataFromDbFinished(bool success, bool validEntriesLoaded
                 Q_EMIT dataAvailableChanged();
             }
 
-            Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_LOADING_COMPLETE);
+            Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_FETCHING_COMPLETE);
         }
         else
         {
@@ -531,12 +531,12 @@ void GameFacade::_onLoadDataFromDbFinished(bool success, bool validEntriesLoaded
                 Q_EMIT dataAvailableChanged();
             }
 
-            Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::NO_DATA_ENTRIES_LOADED);
+            Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::NO_DATA_ENTRIES_FETCHED);
         }
     }
     else
     {
-        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_LOADING_ERROR);
+        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_FETCHING_ERROR);
     }
 }
 

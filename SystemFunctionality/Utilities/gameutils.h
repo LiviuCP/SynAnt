@@ -123,10 +123,10 @@ namespace Game
     enum class StatusCodes
     {
         NO_LANGUAGE_SET,
-        LOADING_DATA,
-        DATA_LOADING_COMPLETE,
-        NO_DATA_ENTRIES_LOADED,
-        DATA_LOADING_ERROR,
+        FETCHING_DATA,
+        DATA_FETCHING_COMPLETE,
+        NO_DATA_ENTRIES_FETCHED,
+        DATA_FETCHING_ERROR,
         DATA_GOT_AVAILABLE,
         GAME_STARTED,
         GAME_PAUSED,
@@ -283,10 +283,10 @@ namespace Game
 
 
         // status messages
-        const QString c_DataLoadingMessage                  {    "\n\n\n\nLoading data. Please wait..."                                                     };
+        const QString c_FetchingDataMessage                 {    "\n\n\n\nFetching data. Please wait..."                                                    };
 
-        const QString c_NoValidEntriesLoadedMessage         {
-                                                                 "\n\n\n\nNo valid entries could be loaded from database for the selected language.\n\n"
+        const QString c_NoValidEntriesFetchedMessage        {
+                                                                 "\n\n\n\nThe selected language has no valid pairs.\n\n"
                                                                  "Please select another language or use the data entry page to add pairs.\n\n"
                                                                  "Then return to intro page and press Play to start the game."
                                                             };
@@ -376,7 +376,7 @@ namespace Game
         const QString c_CannotOpenDatabase                  {    "The database cannot be opened!"                                                           };
         const QString c_CannotCreateTable                   {    "Cannot create database table!"                                                            };
         const QString c_TableIsInvalid                      {    "The database table is invalid!"                                                           };
-        const QString c_CannotLoadDataMessage               {    "An error occured when loading the word pair(s)!\n"                                        };
+        const QString c_CannotFetchDataMessage              {    "An error occured when fetching the word pair(s)!\n"                                       };
         const QString c_CannotSaveDataMessage               {    "An error occured when saving the word pair(s)!\n"                                         };
     }
 

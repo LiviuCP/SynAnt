@@ -16,37 +16,54 @@ DataSourceLoader::DataSourceLoader(DataSource* pDataSource, QObject *parent)
     Q_ASSERT(m_pDataSource);
 }
 
-void DataSourceLoader::onLoadDataFromDbRequested(int languageIndex, bool allowEmptyResult)
+void DataSourceLoader::onLoadDataFromDbForSelectedLanguageRequested(int languageIndex, bool allowEmptyResult)
 {
-    bool success{true};
-    bool validEntriesLoaded{false};
-
-    QVector<DataSource::DataEntry> loadedDataEntries;
-
-    if (_loadEntriesFromDb(loadedDataEntries, languageIndex))
+    if (languageIndex >= 0 && m_pDataSource->getPrimarySourceLanguageIndex() != languageIndex)
     {
-        validEntriesLoaded = (loadedDataEntries.size() != 0);
-        if (validEntriesLoaded)
+        if (m_pDataSource->getSecondarySourceLanguageIndex() == languageIndex)
         {
-            _validateLoadedDataEntries(loadedDataEntries);
-        }
+            bool areEntriesAvailable{m_pDataSource->getSecondarySourceNrOfEntries() != 0};
 
-        if (m_ValidDataEntries.size() != 0 || allowEmptyResult)
+            if (areEntriesAvailable || allowEmptyResult)
+            {
+                m_pDataSource->updateDataEntries(QVector<DataSource::DataEntry>{}, languageIndex, DataSource::UpdateOperation::SWAP);
+            }
+
+            Q_EMIT languageAlreadyContainedInDataSource(areEntriesAvailable);
+        }
+        else
         {
-            m_pDataSource->updateDataEntries(m_ValidDataEntries, false);
-            m_ValidDataEntries.resize(0);
-            m_ValidDataEntries.squeeze();
+            bool success{true};
+            bool validEntriesLoaded{false};
+
+            QVector<DataSource::DataEntry> loadedDataEntries;
+
+            if (_loadEntriesFromDb(loadedDataEntries, languageIndex))
+            {
+                validEntriesLoaded = (loadedDataEntries.size() != 0);
+                if (validEntriesLoaded)
+                {
+                    _validateLoadedDataEntries(loadedDataEntries);
+                }
+
+                if (m_ValidDataEntries.size() != 0 || allowEmptyResult)
+                {
+                    m_pDataSource->updateDataEntries(m_ValidDataEntries, languageIndex, DataSource::UpdateOperation::LOAD_TO_PRIMARY);
+                    m_ValidDataEntries.resize(0);
+                    m_ValidDataEntries.squeeze();
+                }
+
+                // for sync purposes only
+                QThread::msleep(Game::Timing::c_LoadDataThreadDelay);
+            }
+            else
+            {
+                success = false;
+            }
+
+            Q_EMIT loadDataFromDbForSelectedLanguageFinished(success, validEntriesLoaded);
         }
-
-        // for sync purposes only
-        QThread::msleep(Game::Timing::c_LoadDataThreadDelay);
     }
-    else
-    {
-        success = false;
-    }
-
-    Q_EMIT loadDataFromDbFinished(success, validEntriesLoaded);
 }
 
 bool DataSourceLoader::_loadEntriesFromDb(QVector<DataSource::DataEntry>& dbEntries, int languageIndex)

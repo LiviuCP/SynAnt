@@ -53,7 +53,7 @@ public:
     static void releaseResources();
 
     void setDataSource(const QString& dataDirPath);
-    void loadDataFromDb(int languageIndex, bool allowEmptyResult);
+    void fetchDataForSelectedLanguage(int languageIndex, bool allowEmptyResult);
     void saveDataToDb();
     void requestWriteToCache(QPair<QString, QString> newWordsPair, bool areSynonyms);
     void requestCacheReset();
@@ -86,15 +86,16 @@ signals:
     Q_SIGNAL void writeDataToDbFinished(int nrOfEntries);
     Q_SIGNAL void cacheReset();
     Q_SIGNAL void dataSourceSetupCompleted();
-    Q_SIGNAL void readDataFromDb(int languageIndex, bool allowEmptyResult);
+    Q_SIGNAL void readDataForSelectedLanguage(int languageIndex, bool allowEmptyResult);
     Q_SIGNAL void writeDataToDb();
     Q_SIGNAL void resetCacheRequested();
-    Q_SIGNAL void loadDataFromDbFinished(bool success, bool validEntriesLoaded);
+    Q_SIGNAL void fetchDataForSelectedLanguageFinished(bool success, bool validEntriesLoaded);
     Q_SIGNAL void dataEntryAllowed(bool allowed);
 
 private slots:
     void _onDataSourceSetupCompleted();
-    void _onLoadDataFromDbFinished(bool success, bool validEntriesLoaded);
+    void _onLoadDataFromDbForSelectedLanguageFinished(bool success, bool validEntriesLoaded);
+    void _onLanguageAlreadyContainedInDataSource(bool validEntriesLoaded);
 
 private:
     explicit GameManager(QObject *parent = nullptr);

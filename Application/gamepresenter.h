@@ -71,7 +71,7 @@ class GamePresenter : public QObject
     Q_PROPERTY(QString errorMessage READ getErrorMessage NOTIFY errorMessageChanged)
 
     /* miscellaneous */
-    Q_PROPERTY(bool dataLoadingInProgress READ getDataLoadingInProgress NOTIFY dataLoadingInProgressChanged)
+    Q_PROPERTY(bool dataFetchingInProgress READ getDataFetchingInProgress NOTIFY dataFetchingInProgressChanged)
     Q_PROPERTY(bool errorOccured READ getErrorOccured NOTIFY errorOccuredChanged)
     Q_PROPERTY(bool quitGameDeferred READ getQuitGameDeferred WRITE setQuitGameDeferred NOTIFY quitGameDeferredChanged)
     Q_PROPERTY(int toolTipDelay READ getToolTipDelay CONSTANT)
@@ -136,7 +136,7 @@ public:
     bool isPersistentModeEnabled() const;
     bool getClearMainPaneInputEnabled() const;
     bool getSubmitMainPaneInputEnabled() const;
-    bool getDataLoadingInProgress() const;
+    bool getDataFetchingInProgress() const;
     bool getErrorOccured() const;
     bool getQuitGameDeferred() const;
 
@@ -202,7 +202,7 @@ signals:
     Q_SIGNAL void hoverChanged();
     Q_SIGNAL void pieceSelectionCursorPositionChanged();
     Q_SIGNAL void piecesRemovalCursorPositionChanged();
-    Q_SIGNAL void dataLoadingInProgressChanged();
+    Q_SIGNAL void dataFetchingInProgressChanged();
 
 private slots:
     void _onInputChanged();

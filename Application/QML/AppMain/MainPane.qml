@@ -167,7 +167,7 @@ Item {
                         id: easyLvlBtn
 
                         buttonChecked: false
-                        buttonEnabled: !presenter.dataLoadingInProgress
+                        buttonEnabled: !presenter.dataFetchingInProgress
                         dedicatedShortcutEnabled: presenter.mainPaneVisible
 
                         buttonLabel: GameStrings.levelEasyButtonLabel
@@ -180,7 +180,7 @@ Item {
                         id: mediumLvlBtn
 
                         buttonChecked: true
-                        buttonEnabled: !presenter.dataLoadingInProgress
+                        buttonEnabled: !presenter.dataFetchingInProgress
                         dedicatedShortcutEnabled: presenter.mainPaneVisible
 
                         buttonLabel: GameStrings.levelMediumButtonLabel
@@ -193,7 +193,7 @@ Item {
                         id: hardLvlBtn
 
                         buttonChecked: false
-                        buttonEnabled: !presenter.dataLoadingInProgress
+                        buttonEnabled: !presenter.dataFetchingInProgress
                         dedicatedShortcutEnabled: presenter.mainPaneVisible
 
                         buttonLabel: GameStrings.levelHardButtonLabel
@@ -297,7 +297,7 @@ Item {
         AppButton {
             id: submitBtn
 
-            buttonEnabled: presenter.submitMainPaneInputEnabled && !presenter.dataLoadingInProgress
+            buttonEnabled: presenter.submitMainPaneInputEnabled && !presenter.dataFetchingInProgress
             dedicatedShortcutEnabled: presenter.mainPaneVisible && presenter.submitMainPaneInputEnabled
 
             Layout.minimumWidth: bottomBtnsMinWidth
@@ -312,7 +312,7 @@ Item {
         AppButton {
             id: clearInputBtn
 
-            buttonEnabled: presenter.clearMainPaneInputEnabled && !presenter.dataLoadingInProgress
+            buttonEnabled: presenter.clearMainPaneInputEnabled && !presenter.dataFetchingInProgress
             dedicatedShortcutEnabled: presenter.mainPaneVisible && presenter.clearMainPaneInputEnabled
 
             Layout.minimumWidth: bottomBtnsMinWidth
@@ -340,7 +340,7 @@ Item {
         AppButton {
             id: showPairBtn
 
-            buttonEnabled: !presenter.dataLoadingInProgress
+            buttonEnabled: !presenter.dataFetchingInProgress
             dedicatedShortcutEnabled: presenter.mainPaneVisible
 
             Layout.minimumWidth: bottomBtnsMinWidth

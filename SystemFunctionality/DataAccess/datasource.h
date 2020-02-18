@@ -27,21 +27,45 @@ public:
         bool operator==(const DataEntry& dataEntry) const;
     };
 
+    enum class UpdateOperation
+    {
+        LOAD_TO_PRIMARY,
+        LOAD_TO_SECONDARY,
+        SWAP,
+        APPEND,
+    };
+
     explicit DataSource(const QString& dataBasePath, QObject *parent = nullptr);
 
-    void updateDataEntries(QVector<DataEntry> dataEntries, bool append);
+    void updateDataEntries(QVector<DataEntry> dataEntries, bool append); // remove this method after implementing multiple languages in data entry
+    void updateDataEntries(const QVector<DataEntry>& dataEntries, int languageIndex, DataSource::UpdateOperation updateOperation = DataSource::UpdateOperation::LOAD_TO_PRIMARY);
     void provideDataEntryToConsumer(int entryNumber);
 
-    int getNrOfEntries() const;
+    int getPrimarySourceLanguageIndex() const;
+    int getSecondarySourceLanguageIndex() const;
+    int getPrimarySourceNrOfEntries() const;
+    int getSecondarySourceNrOfEntries() const;
+
     QString getDataFilePath() const;
-    bool entryAlreadyExists(const DataEntry& dataEntry);
+    bool entryAlreadyExists(const DataEntry& dataEntry); // remove this method after implementing multiple languages in data entry
+    bool entryAlreadyExists(const DataEntry& dataEntry, int languageIndex);
 
 signals:
     Q_SIGNAL void entryProvidedToConsumer(QPair<QString, QString> newWordsPair, bool areSynonyms);
 
 private:
+    struct Source
+    {
+        Source();
+
+        int languageIndex;
+        QVector<DataEntry> entries;
+    };
+
     QString m_DataBasePath;
     QVector<DataEntry> m_DataEntries;
+    Source m_PrimarySource;
+    Source m_SecondarySource;
     mutable QMutex m_DataSourceMutex;
 };
 
