@@ -58,7 +58,9 @@ GameFacade::GameFacade(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pStatisticsItem, &StatisticsItem::statisticsUpdated, this, &GameFacade::_onStatisticsUpdated);
     Q_ASSERT(connected);
-    connected = connect(m_pDataSourceProxy, &DataSourceProxy::fetchDataForSelectedLanguageFinished, this, &GameFacade::_onFetchDataForSelectedLanguageFinished);
+    connected = connect(m_pDataSourceProxy, &DataSourceProxy::fetchDataForPrimaryLanguageFinished, this, &GameFacade::_onFetchDataForPrimaryLanguageFinished);
+    Q_ASSERT(connected);
+    connected = connect(m_pDataSourceProxy, &DataSourceProxy::fetchDataForSecondaryLanguageFinished, this, &GameFacade::_onFetchDataForSecondaryLanguageFinished);
     Q_ASSERT(connected);
     connected = connect(m_pDataSourceProxy, &DataSourceProxy::writeDataToDbFinished, this, &GameFacade::_onWriteDataToDbFinished);
     Q_ASSERT(connected);
@@ -385,7 +387,7 @@ void GameFacade::setLanguage(int languageIndex, bool revertLanguageWhenDataUnava
         m_RevertLanguageWhenDataUnavailable = revertLanguageWhenDataUnavailable;
         Q_EMIT languageChanged();
         Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::FETCHING_DATA);
-        m_pDataSourceProxy->fetchDataForSelectedLanguage(languageIndex, !revertLanguageWhenDataUnavailable);
+        m_pDataSourceProxy->fetchDataForPrimaryLanguage(languageIndex, !revertLanguageWhenDataUnavailable);
     }
 }
 
@@ -484,7 +486,7 @@ int GameFacade::getCurrentLanguageIndex() const
     return m_CurrentLanguageIndex;
 }
 
-bool GameFacade::isdataFetchingInProgress() const
+bool GameFacade::isDataFetchingInProgress() const
 {
     return m_CurrentStatusCode == Game::StatusCodes::FETCHING_DATA;
 }
@@ -499,7 +501,7 @@ bool GameFacade::areSynonyms() const
     return m_pWordPairOwner->areSynonyms();
 }
 
-void GameFacade::_onFetchDataForSelectedLanguageFinished(bool success, bool validEntriesFetched)
+void GameFacade::_onFetchDataForPrimaryLanguageFinished(bool success, bool validEntriesFetched)
 {
     if (success)
     {
@@ -540,23 +542,32 @@ void GameFacade::_onFetchDataForSelectedLanguageFinished(bool success, bool vali
     }
 }
 
+void GameFacade::_onFetchDataForSecondaryLanguageFinished(bool success)
+{
+    if (!success)
+    {
+        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_FETCHING_ERROR);
+    }
+}
+
 void GameFacade::_onEntryProvidedToConsumer(QPair<QString, QString> newWordsPair, bool areSynonyms)
 {
     m_pWordMixer->mixWords(newWordsPair, areSynonyms);
 }
 
-void GameFacade::_onWriteDataToDbFinished(int nrOfEntries)
+void GameFacade::_onWriteDataToDbFinished(int nrOfPrimaryLanguageSavedEntries)
 {
-    if (nrOfEntries > 0)
+    if (nrOfPrimaryLanguageSavedEntries > 0)
     {
         int initialNrOfEntries{m_pDataSourceAccessHelper->getTotalNrOfEntries()};
 
-        m_pDataSourceAccessHelper->addEntriesToTable(nrOfEntries);
+        m_pDataSourceAccessHelper->addEntriesToTable(nrOfPrimaryLanguageSavedEntries);
 
         if (initialNrOfEntries == 0)
         {
             m_IsDataAvailable = true;
             _connectToDataSource();
+            m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
 
             Q_EMIT dataAvailableChanged();
         }

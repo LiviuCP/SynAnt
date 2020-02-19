@@ -97,6 +97,16 @@ bool DataEntryPresenter::isSaveAddedWordPairsEnabled() const
     return m_pDataEntryFacade->isSavingToDbAllowed();
 }
 
+bool DataEntryPresenter::getDataFetchingInProgress() const
+{
+    return m_pDataEntryFacade->isDataFetchingInProgress();
+}
+
+bool DataEntryPresenter::getDataSavingInProgress() const
+{
+    return m_pDataEntryFacade->isDataSavingInProgress();
+}
+
 QString DataEntryPresenter::getDataEntryPaneStatusMessage() const
 {
     return m_DataEntryPaneStatusMessage;
@@ -160,12 +170,22 @@ void DataEntryPresenter::_onStatusChanged(DataEntry::StatusCodes statusCode)
     case DataEntry::StatusCodes::DATA_SAVE_IN_PROGRESS:
         _updateStatusMessage(DataEntry::Messages::c_DataSaveInProgressMessage, Game::Timing::c_NoDelay);
         Q_EMIT dataSaveInProgress();
+        Q_EMIT dataSavingInProgressChanged();
         break;
     case DataEntry::StatusCodes::DATA_SUCCESSFULLY_SAVED:
-        _updateStatusMessage(DataEntry::Messages::c_DataSuccessfullySavedMessage.arg(m_pDataEntryFacade->getLastSavedNrOfWordPairs()), Game::Timing::c_NoDelay);
+        _updateStatusMessage(DataEntry::Messages::c_DataSuccessfullySavedMessage.arg(m_pDataEntryFacade->getLastSavedTotalNrOfEntries()).arg(m_pDataEntryFacade->getLastNrOfEntriesSavedToPrimaryLanguage()), Game::Timing::c_NoDelay);
         _updateStatusMessage(DataEntry::Messages::c_DataEntryRequestMessage, Game::Timing::c_ShortStatusUpdateDelay);
+        Q_EMIT dataSavingInProgressChanged();
         break;
-
+    case DataEntry::StatusCodes::FETCHING_DATA:
+        _updateStatusMessage(Game::Messages::c_FetchingDataMessage, Game::Timing::c_NoDelay);
+        Q_EMIT dataFetchingInProgressChanged();
+        break;
+    case DataEntry::StatusCodes::DATA_FETCHING_FINISHED:
+        _updateStatusMessage(Game::Messages::c_LanguageChangedMessage, Game::Timing::c_NoDelay);
+        _updateStatusMessage(DataEntry::Messages::c_DataEntryRequestMessage, Game::Timing::c_ShortStatusUpdateDelay);
+        Q_EMIT dataFetchingInProgressChanged();
+        break;
     default:
         Q_ASSERT(false);
     }

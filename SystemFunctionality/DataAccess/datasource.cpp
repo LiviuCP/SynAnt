@@ -5,25 +5,10 @@
 DataSource::DataSource(const QString &dataBasePath, QObject *parent)
     : QObject (parent)
     , m_DataBasePath{dataBasePath}
-    , m_DataEntries{}
     , m_PrimarySource{}
     , m_SecondarySource{}
     , m_DataSourceMutex{}
 {
-}
-
-void DataSource::updateDataEntries(QVector<DataSource::DataEntry> dataEntries, bool append)
-{
-    QMutexLocker mutexLocker{&m_DataSourceMutex};
-
-    if (append)
-    {
-        m_DataEntries.append(dataEntries);
-    }
-    else
-    {
-        m_DataEntries = dataEntries;
-    }
 }
 
 void DataSource::updateDataEntries(const QVector<DataSource::DataEntry>& dataEntries, int languageIndex, DataSource::UpdateOperation updateOperation)
@@ -53,7 +38,19 @@ void DataSource::updateDataEntries(const QVector<DataSource::DataEntry>& dataEnt
             std::swap(m_PrimarySource.languageIndex, m_SecondarySource.languageIndex);
             break;
         case DataSource::UpdateOperation::APPEND:
-            // to be updated
+            Q_ASSERT(m_PrimarySource.languageIndex != m_SecondarySource.languageIndex);
+            if (languageIndex == m_PrimarySource.languageIndex)
+            {
+                m_PrimarySource.entries.append(dataEntries);
+            }
+            else if (languageIndex == m_SecondarySource.languageIndex)
+            {
+                m_SecondarySource.entries.append(dataEntries);
+            }
+            else
+            {
+                qWarning("Cannot append entries for language index %d as it is not set for any of the sources", languageIndex);
+            }
             break;
         }
     }
@@ -96,12 +93,6 @@ int DataSource::getSecondarySourceNrOfEntries() const
 QString DataSource::getDataFilePath() const
 {
     return m_DataBasePath;
-}
-
-bool DataSource::entryAlreadyExists(const DataSource::DataEntry &dataEntry)
-{
-    QMutexLocker mutexLocker{&m_DataSourceMutex};
-    return m_DataEntries.contains(dataEntry);
 }
 
 bool DataSource::entryAlreadyExists(const DataSource::DataEntry &dataEntry, int languageIndex)

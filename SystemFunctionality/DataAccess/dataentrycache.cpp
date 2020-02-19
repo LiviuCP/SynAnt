@@ -6,26 +6,29 @@
 #include "dataentrycache.h"
 #include "../Utilities/gameutils.h"
 
+const QVector<QString> c_LanguageCodes{"EN", "DE", "RO", "IT"};
+
 DataEntryCache::DataEntryCache(DataSource* pDataSource, QObject *parent)
     : QObject(parent)
     , m_CacheEntries{}
+    , m_LanguageIndexes{}
     , m_pDataSource{pDataSource}
 {
     Q_ASSERT(pDataSource);
 }
 
-void DataEntryCache::onValidEntryReceived(DataSource::DataEntry dataEntry)
+void DataEntryCache::onValidEntryReceived(DataSource::DataEntry dataEntry, int languageIndex)
 {
     if (!m_CacheEntries.contains(dataEntry))
     {
         m_CacheEntries.append(dataEntry);
+        m_LanguageIndexes.append(languageIndex);
         Q_EMIT newWordsPairAddedToCache();
     }
     else
     {
         Q_EMIT wordsPairAlreadyContainedInCache();
     }
-
 }
 
 void DataEntryCache::onResetCacheRequested()
@@ -54,13 +57,14 @@ void DataEntryCache::onWriteDataToDbRequested()
             {
                 QSqlQuery query;
 
-                for (auto entry : m_CacheEntries)
+                for (int entry{0}; entry < m_CacheEntries.size(); ++entry)
                 {
-                    query.prepare(Game::Database::c_InsertEntryIntoDbQuery);
+                    query.prepare(Game::Database::c_InsertEntryForLanguageIntoDbQuery);
 
-                    query.bindValue(Game::Database::c_FirstWordFieldPlaceholder, entry.firstWord);
-                    query.bindValue(Game::Database::c_SecondWordFieldPlaceholder, entry.secondWord);
-                    query.bindValue(Game::Database::c_AreSynonymsFieldPlaceholder, static_cast<int>(entry.areSynonyms));
+                    query.bindValue(Game::Database::c_FirstWordFieldPlaceholder, m_CacheEntries[entry].firstWord);
+                    query.bindValue(Game::Database::c_SecondWordFieldPlaceholder, m_CacheEntries[entry].secondWord);
+                    query.bindValue(Game::Database::c_AreSynonymsFieldPlaceholder, static_cast<int>(m_CacheEntries[entry].areSynonyms));
+                    query.bindValue(Game::Database::c_LanguageFieldPlaceholder, c_LanguageCodes[m_LanguageIndexes[entry]]);
 
                     if (!query.exec())
                     {
@@ -70,14 +74,16 @@ void DataEntryCache::onWriteDataToDbRequested()
 
                 db.close();
 
-                int nrOfSavedEntries{m_CacheEntries.size()};
-                m_pDataSource->updateDataEntries(m_CacheEntries, true);
+                int totalNrOfSavedEntries{m_CacheEntries.size()};
+                int nrOfPrimaryLanguageSavedEntries{0};
+
+                _updateDataSource(nrOfPrimaryLanguageSavedEntries);
                 m_CacheEntries.clear();
 
                 // for sync purposes only
                 QThread::msleep(Game::Timing::c_WriteDataThreadDelay);
 
-                Q_EMIT writeDataToDbFinished(nrOfSavedEntries);
+                Q_EMIT writeDataToDbFinished(nrOfPrimaryLanguageSavedEntries, totalNrOfSavedEntries);
             }
             else
             {
@@ -88,4 +94,34 @@ void DataEntryCache::onWriteDataToDbRequested()
 
         QSqlDatabase::removeDatabase(QSqlDatabase::defaultConnection);
     }
+}
+
+void DataEntryCache::_updateDataSource(int& entriesAddedToPrimaryLanguage)
+{
+    QVector<DataSource::DataEntry> primaryLanguageEntriesBuffer;
+    QVector<DataSource::DataEntry> secondaryLanguageEntriesBuffer;
+
+    for (int entry{0}; entry < m_LanguageIndexes.size(); ++entry)
+    {
+        if (m_LanguageIndexes[entry] == m_pDataSource->getPrimarySourceLanguageIndex())
+        {
+            primaryLanguageEntriesBuffer.append(m_CacheEntries[entry]);
+        }
+        else if (m_LanguageIndexes[entry] == m_pDataSource->getSecondarySourceLanguageIndex())
+        {
+            secondaryLanguageEntriesBuffer.append(m_CacheEntries[entry]);
+        }
+    }
+
+    if (primaryLanguageEntriesBuffer.size() != 0)
+    {
+        m_pDataSource->updateDataEntries(primaryLanguageEntriesBuffer, m_pDataSource->getPrimarySourceLanguageIndex(), DataSource::UpdateOperation::APPEND);
+    }
+
+    if (secondaryLanguageEntriesBuffer.size() != 0)
+    {
+        m_pDataSource->updateDataEntries(secondaryLanguageEntriesBuffer, m_pDataSource->getSecondarySourceLanguageIndex(), DataSource::UpdateOperation::APPEND);
+    }
+
+    entriesAddedToPrimaryLanguage = primaryLanguageEntriesBuffer.size();
 }

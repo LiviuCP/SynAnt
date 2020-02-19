@@ -109,7 +109,7 @@ Item {
 
             Layout.fillWidth: true
 
-            dropdownEnabled: presenter.languageSelectionEnabled
+            dropdownEnabled: presenter.languageSelectionEnabled && !presenter.dataEntry.dataFetchingInProgress && !presenter.dataEntry.dataSavingInProgress
 
             dataModel: GameStrings.languagesList
             currentIndex: presenter.dataEntry.languageIndex
@@ -211,8 +211,8 @@ Item {
             id: addPairBtn
 
             isActiveFocusOnTabEnabled: false
-            buttonEnabled: presenter.dataEntry.addWordsPairEnabled
-            dedicatedShortcutEnabled: presenter.dataEntryPaneVisible && presenter.dataEntry.addWordsPairEnabled
+            buttonEnabled: presenter.dataEntry.addWordsPairEnabled && !presenter.dataEntry.dataFetchingInProgress
+            dedicatedShortcutEnabled: presenter.dataEntryPaneVisible && presenter.dataEntry.addWordsPairEnabled  && !presenter.dataEntry.dataFetchingInProgress
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -227,7 +227,8 @@ Item {
             id: backBtn
 
             isActiveFocusOnTabEnabled: false
-            dedicatedShortcutEnabled: presenter.dataEntryPaneVisible
+            buttonEnabled: !presenter.dataEntry.dataFetchingInProgress
+            dedicatedShortcutEnabled: presenter.dataEntryPaneVisible && !presenter.dataEntry.dataFetchingInProgress
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -255,8 +256,8 @@ Item {
             id: discardBtn
 
             isActiveFocusOnTabEnabled: false
-            buttonEnabled: presenter.dataEntry.discardAddedWordPairsEnabled
-            dedicatedShortcutEnabled: presenter.dataEntryPaneVisible && presenter.dataEntry.discardAddedWordPairsEnabled
+            buttonEnabled: presenter.dataEntry.discardAddedWordPairsEnabled && !presenter.dataEntry.dataFetchingInProgress
+            dedicatedShortcutEnabled: presenter.dataEntryPaneVisible && presenter.dataEntry.discardAddedWordPairsEnabled && !presenter.dataEntry.dataFetchingInProgress
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -274,8 +275,8 @@ Item {
             id: saveBtn
 
             isActiveFocusOnTabEnabled: false
-            buttonEnabled: presenter.dataEntry.saveAddedWordPairsEnabled
-            dedicatedShortcutEnabled: presenter.dataEntryPaneVisible && presenter.dataEntry.saveAddedWordPairsEnabled
+            buttonEnabled: presenter.dataEntry.saveAddedWordPairsEnabled && !presenter.dataEntry.dataFetchingInProgress
+            dedicatedShortcutEnabled: presenter.dataEntryPaneVisible && presenter.dataEntry.saveAddedWordPairsEnabled && !presenter.dataEntry.dataFetchingInProgress
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -292,6 +293,7 @@ Item {
         AppButton {
             id: quitBtn
 
+            buttonEnabled: !presenter.dataEntry.dataFetchingInProgress
             isActiveFocusOnTabEnabled: false
             dedicatedShortcutEnabled: false
 
@@ -317,6 +319,7 @@ Item {
         onDataEntryAddSucceeded: dataEntryPane.clearTextFields()
         onDataEntryAddInvalid: firstWordTextField.forceActiveFocus()
         onDataEntryStopped: dataEntryPane.clearTextFields()
+        onLanguageChanged: firstWordTextField.forceActiveFocus()
     }
 
     onHelpButtonShortcutActivatedChanged: {

@@ -18,11 +18,14 @@ public:
     explicit DataSourceLoader(DataSource* pDataSource, QObject *parent = nullptr);
 
 public slots:
-    void onLoadDataFromDbForSelectedLanguageRequested(int languageIndex, bool allowEmptyResult);
+    void onLoadDataFromDbForPrimaryLanguageRequested(int languageIndex, bool allowEmptyResult);
+    void onLoadDataFromDbForSecondaryLanguageRequested(int languageIndex);
 
 signals:
-    Q_SIGNAL void loadDataFromDbForSelectedLanguageFinished(bool success, bool validEntriesLoaded);
-    Q_SIGNAL void languageAlreadyContainedInDataSource(bool entriesAvailable);
+    Q_SIGNAL void loadDataFromDbForPrimaryLanguageFinished(bool success, bool validEntriesLoaded);
+    Q_SIGNAL void requestedPrimaryLanguageAlreadyContainedInDataSource(bool entriesAvailable);
+    Q_SIGNAL void loadDataFromDbForSecondaryLanguageFinished(bool success);
+    Q_SIGNAL void requestedSecondaryLanguageAlreadySetAsPrimary();
 
 private:
     bool _loadEntriesFromDb(QVector<DataSource::DataEntry>& dbEntries, int languageIndex);

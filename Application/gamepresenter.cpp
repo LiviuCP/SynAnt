@@ -341,7 +341,7 @@ bool GamePresenter::getSubmitMainPaneInputEnabled() const
 
 bool GamePresenter::getDataFetchingInProgress() const
 {
-    return m_pGameFacade->isdataFetchingInProgress();
+    return m_pGameFacade->isDataFetchingInProgress();
 }
 
 bool GamePresenter::getErrorOccured() const

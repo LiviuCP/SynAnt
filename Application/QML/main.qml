@@ -203,7 +203,7 @@ ApplicationWindow {
 
     Shortcut {
         sequence: GameStrings.helpButtonShortcut
-        enabled: gamePresenter.introPaneVisible || gamePresenter.mainPaneVisible || gamePresenter.dataEntryPaneVisible
+        enabled: gamePresenter.introPaneVisible || gamePresenter.mainPaneVisible || (gamePresenter.dataEntryPaneVisible && !gamePresenter.dataEntry.dataFetchingInProgress)
 
         property Timer helpTimer: Timer {
             interval: 100

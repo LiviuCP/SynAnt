@@ -101,9 +101,14 @@ void GameManager::setDataSource(const QString &dataDirPath)
     }
 }
 
-void GameManager::fetchDataForSelectedLanguage(int languageIndex, bool allowEmptyResult)
+void GameManager::fetchDataForPrimaryLanguage(int languageIndex, bool allowEmptyResult)
 {
-    Q_EMIT readDataForSelectedLanguage(languageIndex, allowEmptyResult);
+    Q_EMIT readDataForPrimaryLanguage(languageIndex, allowEmptyResult);
+}
+
+void GameManager::fetchDataForSecondaryLanguage(int languageIndex)
+{
+    Q_EMIT readDataForSecondaryLanguage(languageIndex);
 }
 
 void GameManager::saveDataToDb()
@@ -111,9 +116,9 @@ void GameManager::saveDataToDb()
     Q_EMIT writeDataToDb();
 }
 
-void GameManager::requestWriteToCache(QPair<QString, QString> newWordsPair, bool areSynonyms)
+void GameManager::requestWriteToCache(QPair<QString, QString> newWordsPair, bool areSynonyms, int languageIndex)
 {
-    m_pDataEntryValidator->validateWordsPair(newWordsPair, areSynonyms);
+    m_pDataEntryValidator->validateWordsPair(newWordsPair, areSynonyms, languageIndex);
 }
 
 void GameManager::requestCacheReset()
@@ -196,9 +201,14 @@ StatisticsItem* GameManager::getStatisticsItem() const
     return m_pStatisticsItem;
 }
 
-int GameManager::getLastSavedNrOfCacheEntries() const
+int GameManager::getLastSavedTotalNrOfEntries() const
 {
-    return m_pDataEntryStatistics->getLastSavedNrOfCacheEntries();
+    return m_pDataEntryStatistics->getLastSavedTotalNrOfEntries();
+}
+
+int GameManager::getLastNrOfEntriesSavedToPrimaryLanguage() const
+{
+    return m_pDataEntryStatistics->getLastNrOfEntriesSavedToPrimaryLanguage();
 }
 
 int GameManager::getCurrentNrOfCacheEntries() const
@@ -224,16 +234,26 @@ void GameManager::_onDataSourceSetupCompleted()
     m_pDataEntryFacade = new DataEntryFacade{this};
 }
 
-void GameManager::_onLoadDataFromDbForSelectedLanguageFinished(bool success, bool validEntriesLoaded)
+void GameManager::_onLoadDataFromDbForPrimaryLanguageFinished(bool success, bool validEntriesLoaded)
 {
-    Q_EMIT fetchDataForSelectedLanguageFinished(success, validEntriesLoaded);
+    Q_EMIT fetchDataForPrimaryLanguageFinished(success, validEntriesLoaded);
     Q_EMIT dataEntryAllowed(success);
 }
 
-void GameManager::_onLanguageAlreadyContainedInDataSource(bool entriesAvailable)
+void GameManager::_onRequestedPrimaryLanguageAlreadyContainedInDataSource(bool entriesAvailable)
 {
-    Q_EMIT fetchDataForSelectedLanguageFinished(true, entriesAvailable);
+    Q_EMIT fetchDataForPrimaryLanguageFinished(true, entriesAvailable);
     Q_EMIT dataEntryAllowed(true);
+}
+
+void GameManager::_onLoadDataFromDbForSecondaryLanguageFinished(bool success)
+{
+    Q_EMIT fetchDataForSecondaryLanguageFinished(success);
+}
+
+void GameManager::_onRequestedSecondaryLanguageAlreadySetAsPrimary()
+{
+    Q_EMIT fetchDataForSecondaryLanguageFinished(true);
 }
 
 void GameManager::_setDatabase(const QString& databasePath)
@@ -316,15 +336,25 @@ void GameManager::_makeDataConnections()
     // loader
     bool connected{connect(m_pDataSourceLoaderThread, &QThread::finished, m_pDataSourceLoader, &DataSourceLoader::deleteLater)};
     Q_ASSERT(connected);
-    connected = connect(m_pDataSourceLoader, &DataSourceLoader::loadDataFromDbForSelectedLanguageFinished, this, &GameManager::_onLoadDataFromDbForSelectedLanguageFinished, Qt::QueuedConnection);
+    connected = connect(this, &GameManager::readDataForPrimaryLanguage, m_pDataSourceLoader, &DataSourceLoader::onLoadDataFromDbForPrimaryLanguageRequested, Qt::QueuedConnection);
     Q_ASSERT(connected);
-    connected = connect(m_pDataSourceLoader, &DataSourceLoader::languageAlreadyContainedInDataSource, this, &GameManager::_onLanguageAlreadyContainedInDataSource, Qt::QueuedConnection);
+    connected = connect(this, &GameManager::readDataForSecondaryLanguage, m_pDataSourceLoader, &DataSourceLoader::onLoadDataFromDbForSecondaryLanguageRequested, Qt::QueuedConnection);
     Q_ASSERT(connected);
-    connected = connect(this, &GameManager::fetchDataForSelectedLanguageFinished, m_pDataSourceProxy, &DataSourceProxy::fetchDataForSelectedLanguageFinished, Qt::DirectConnection);
+    connected = connect(m_pDataSourceLoader, &DataSourceLoader::loadDataFromDbForPrimaryLanguageFinished, this, &GameManager::_onLoadDataFromDbForPrimaryLanguageFinished, Qt::QueuedConnection);
+    Q_ASSERT(connected);
+    connected = connect(m_pDataSourceLoader, &DataSourceLoader::requestedPrimaryLanguageAlreadyContainedInDataSource, this, &GameManager::_onRequestedPrimaryLanguageAlreadyContainedInDataSource, Qt::QueuedConnection);
+    Q_ASSERT(connected);
+    connected = connect(m_pDataSourceLoader, &DataSourceLoader::loadDataFromDbForSecondaryLanguageFinished, this, &GameManager::_onLoadDataFromDbForSecondaryLanguageFinished, Qt::QueuedConnection);
+    Q_ASSERT(connected);
+    connected = connect(m_pDataSourceLoader, &DataSourceLoader::requestedSecondaryLanguageAlreadySetAsPrimary, this, &GameManager::_onRequestedSecondaryLanguageAlreadySetAsPrimary, Qt::QueuedConnection);
+    Q_ASSERT(connected);
+    connected = connect(this, &GameManager::fetchDataForPrimaryLanguageFinished, m_pDataSourceProxy, &DataSourceProxy::fetchDataForPrimaryLanguageFinished, Qt::DirectConnection);
+    Q_ASSERT(connected);
+    connected = connect(this, &GameManager::fetchDataForSecondaryLanguageFinished, m_pDataSourceProxy, &DataSourceProxy::fetchDataForSecondaryLanguageFinished, Qt::DirectConnection);
+    Q_ASSERT(connected);
+    connected = connect(this, &GameManager::fetchDataForSecondaryLanguageFinished, m_pDataEntryProxy, &DataEntryProxy::fetchDataForSecondaryLanguageFinished, Qt::DirectConnection);
     Q_ASSERT(connected);
     connected = connect(this, &GameManager::dataEntryAllowed, m_pDataEntryProxy, &DataEntryProxy::dataEntryAllowed, Qt::DirectConnection);
-    Q_ASSERT(connected);
-    connected = connect(this, &GameManager::readDataForSelectedLanguage, m_pDataSourceLoader, &DataSourceLoader::onLoadDataFromDbForSelectedLanguageRequested, Qt::QueuedConnection);
     Q_ASSERT(connected);
 
     // cache

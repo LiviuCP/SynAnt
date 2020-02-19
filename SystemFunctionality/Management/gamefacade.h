@@ -82,7 +82,7 @@ public:
 
     int getCurrentLanguageIndex() const;
 
-    bool isdataFetchingInProgress() const;
+    bool isDataFetchingInProgress() const;
     bool isDataAvailable() const;
     bool areSynonyms() const;
 
@@ -100,9 +100,10 @@ signals:
     Q_SIGNAL void statusChanged(Game::StatusCodes status);
 
 private slots:
-    void _onFetchDataForSelectedLanguageFinished(bool success, bool validEntriesFetched);
+    void _onFetchDataForPrimaryLanguageFinished(bool success, bool validEntriesFetched);
+    void _onFetchDataForSecondaryLanguageFinished(bool success);
     void _onEntryProvidedToConsumer(QPair<QString, QString> newWordsPair, bool areSynonyms);
-    void _onWriteDataToDbFinished(int nrOfEntries);
+    void _onWriteDataToDbFinished(int nrOfPrimaryLanguageSavedEntries);
     void _onWriteDataToDbErrorOccured();
     void _onPiecesAddedToInputStateChanged();
     void _onNewWordsPairMixed();

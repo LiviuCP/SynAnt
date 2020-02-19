@@ -233,6 +233,7 @@ namespace Game
         const QString c_FirstWordFieldPlaceholder           {    ":firstWord"                                                                               };
         const QString c_SecondWordFieldPlaceholder          {    ":secondWord"                                                                              };
         const QString c_AreSynonymsFieldPlaceholder         {    ":areSynonyms"                                                                             };
+        const QString c_LanguageFieldPlaceholder            {    ":language"                                                                                };
 
         const QString c_CreateTableQuery                    {
                                                                  "CREATE TABLE GameDataTable (rowId INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, "
@@ -243,6 +244,10 @@ namespace Game
         const QString c_InsertEntryIntoDbQuery              {
                                                                  "INSERT INTO GameDataTable(firstWord, secondWord, areSynonyms, language) "
                                                                  "VALUES(:firstWord, :secondWord, :areSynonyms, 'ANY')"
+                                                            };
+        const QString c_InsertEntryForLanguageIntoDbQuery   {
+                                                                 "INSERT INTO GameDataTable(firstWord, secondWord, areSynonyms, language) "
+                                                                 "VALUES(:firstWord, :secondWord, :areSynonyms, :language)"
                                                             };
     }
 

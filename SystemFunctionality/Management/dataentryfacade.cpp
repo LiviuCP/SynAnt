@@ -31,6 +31,8 @@ DataEntryFacade::DataEntryFacade(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pDataEntryProxy, &DataEntryProxy::writeDataToDbFinished, this, &DataEntryFacade::_onWriteDataToDbFinished);
     Q_ASSERT(connected);
+    connected = connect(m_pDataEntryProxy, &DataEntryProxy::fetchDataForSecondaryLanguageFinished, this, &DataEntryFacade::_onFetchDataForSecondaryLanguageFinished);
+    Q_ASSERT(connected);
 }
 
 void DataEntryFacade::startDataEntry()
@@ -56,7 +58,7 @@ void DataEntryFacade::requestAddPairToCache(const QString &firstWord, const QStr
     if (m_IsDataEntryAllowed && m_IsAddingToCacheAllowed)
     {
         _blockAddToCache();
-        m_pDataEntryProxy->requestWriteToCache(QPair<QString, QString>{firstWord, secondWord}, areSynonyms);
+        m_pDataEntryProxy->requestWriteToCache(QPair<QString, QString>{firstWord, secondWord}, areSynonyms, m_CurrentLanguageIndex);
     }
 }
 
@@ -92,9 +94,14 @@ int DataEntryFacade::getCurrentNrOfAddedWordPairs() const
     return m_pDataEntryProxy->getCurrentNrOfCacheEntries();
 }
 
-int DataEntryFacade::getLastSavedNrOfWordPairs() const
+int DataEntryFacade::getLastSavedTotalNrOfEntries() const
 {
-    return m_pDataEntryProxy->getLastSavedNrOfCacheEntries();
+    return m_pDataEntryProxy->getLastSavedTotalNrOfEntries();
+}
+
+int DataEntryFacade::getLastNrOfEntriesSavedToPrimaryLanguage() const
+{
+    return m_pDataEntryProxy->getLastNrOfEntriesSavedToPrimaryLanguage();
 }
 
 int DataEntryFacade::getCurrentLanguageIndex() const
@@ -127,6 +134,16 @@ bool DataEntryFacade::isSavingToDbAllowed() const
     return m_IsSavingToDbAllowed;
 }
 
+bool DataEntryFacade::isDataFetchingInProgress() const
+{
+    return (m_CurrentStatusCode == DataEntry::StatusCodes::FETCHING_DATA);
+}
+
+bool DataEntryFacade::isDataSavingInProgress() const
+{
+    return m_IsSavingInProgress;
+}
+
 void DataEntryFacade::setLanguage(int languageIndex)
 {
     // for the moment no status code will be issued for language change in the data entry dialog
@@ -134,6 +151,8 @@ void DataEntryFacade::setLanguage(int languageIndex)
     {
         m_CurrentLanguageIndex = languageIndex;
         Q_EMIT languageChanged();
+        Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::FETCHING_DATA);
+        m_pDataEntryProxy->fetchDataForSecondaryLanguage(languageIndex);
     }
 }
 
@@ -178,15 +197,20 @@ void DataEntryFacade::_onCacheReset()
     Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::CACHE_RESET);
 }
 
-void DataEntryFacade::_onWriteDataToDbFinished(int nrOfEntries)
+void DataEntryFacade::_onWriteDataToDbFinished()
 {
-    // only used in GameFacade
-    Q_UNUSED(nrOfEntries);
-
     _allowAddToCache();
     m_IsSavingInProgress = false;
 
     Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::DATA_SUCCESSFULLY_SAVED);
+}
+
+void DataEntryFacade::_onFetchDataForSecondaryLanguageFinished(bool success)
+{
+    if (success)
+    {
+        Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::DATA_FETCHING_FINISHED);
+    }
 }
 
 void DataEntryFacade::_allowAddToCache()

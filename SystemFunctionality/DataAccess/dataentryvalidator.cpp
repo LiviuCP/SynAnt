@@ -9,15 +9,15 @@ DataEntryValidator::DataEntryValidator(DataSource* pDataSource, QObject *parent)
     Q_ASSERT(pDataSource);
 }
 
-void DataEntryValidator::validateWordsPair(QPair<QString, QString> newWordsPair, bool areSynonyms)
+void DataEntryValidator::validateWordsPair(QPair<QString, QString> newWordsPair, bool areSynonyms, int languageIndex)
 {
     DataSource::DataEntry dataEntry;
 
-    bool isEntryValid{_isValidDataEntry(dataEntry, newWordsPair.first, newWordsPair.second, areSynonyms)};
+    bool isEntryValid{_isValidDataEntry(dataEntry, newWordsPair.first, newWordsPair.second, areSynonyms, languageIndex)};
 
     if (isEntryValid)
     {
-        Q_EMIT entryValidated(dataEntry);
+        Q_EMIT entryValidated(dataEntry, languageIndex);
     }
     else
     {
@@ -30,7 +30,7 @@ DataEntry::ValidationCodes DataEntryValidator::getValidationCode() const
     return m_ValidationCode;
 }
 
-bool DataEntryValidator::_isValidDataEntry(DataSource::DataEntry& dataEntry, const QString &firstWord, const QString &secondWord, bool areSynonyms)
+bool DataEntryValidator::_isValidDataEntry(DataSource::DataEntry& dataEntry, const QString &firstWord, const QString &secondWord, bool areSynonyms, int languageIndex)
 {
     auto hasInvalidCharacters = [](const QString &word)
     {
@@ -70,7 +70,7 @@ bool DataEntryValidator::_isValidDataEntry(DataSource::DataEntry& dataEntry, con
     {
         m_ValidationCode = DataEntry::ValidationCodes::IDENTICAL_WORDS;
     }
-    else if (m_pDataSource->entryAlreadyExists(DataSource::DataEntry{firstWord, secondWord, areSynonyms}))
+    else if (m_pDataSource->entryAlreadyExists(DataSource::DataEntry{firstWord, secondWord, areSynonyms}, languageIndex))
     {
         m_ValidationCode = DataEntry::ValidationCodes::PAIR_ALREADY_EXISTS;
     }

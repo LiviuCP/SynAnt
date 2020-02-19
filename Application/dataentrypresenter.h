@@ -19,6 +19,8 @@ class DataEntryPresenter : public QObject
     Q_PROPERTY(bool saveAddedWordPairsEnabled READ isSaveAddedWordPairsEnabled NOTIFY saveAddedWordPairsEnabledChanged)
     Q_PROPERTY(QString dataEntryPaneStatusMessage READ getDataEntryPaneStatusMessage NOTIFY dataEntryPaneStatusMessageChanged)
     Q_PROPERTY(int languageIndex READ getLanguageIndex NOTIFY languageChanged)
+    Q_PROPERTY(bool dataFetchingInProgress READ getDataFetchingInProgress NOTIFY dataFetchingInProgressChanged)
+    Q_PROPERTY(bool dataSavingInProgress READ getDataSavingInProgress NOTIFY dataSavingInProgressChanged)
 
 public:
     explicit DataEntryPresenter(QObject *parent = nullptr);
@@ -37,6 +39,8 @@ public:
     bool isAddWordsPairEnabled() const;
     bool isDiscardAddedWordPairsEnabled() const;
     bool isSaveAddedWordPairsEnabled() const;
+    bool getDataFetchingInProgress() const;
+    bool getDataSavingInProgress() const;
 
     QString getDataEntryPaneStatusMessage() const;
 
@@ -50,7 +54,9 @@ signals:
     Q_SIGNAL void dataEntryPaneStatusMessageChanged();
     Q_SIGNAL void dataEntryAddSucceeded();
     Q_SIGNAL void dataEntryAddInvalid();
-    Q_SIGNAL void dataSaveInProgress();
+    Q_SIGNAL void dataFetchingInProgressChanged();
+    Q_SIGNAL void dataSavingInProgressChanged();
+    Q_SIGNAL void dataSaveInProgress(); // used for connecting to panes outside of data entry
     Q_SIGNAL void dataEntryStopped();
     Q_SIGNAL void languageChanged();
 

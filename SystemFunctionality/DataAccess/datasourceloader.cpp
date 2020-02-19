@@ -16,7 +16,7 @@ DataSourceLoader::DataSourceLoader(DataSource* pDataSource, QObject *parent)
     Q_ASSERT(m_pDataSource);
 }
 
-void DataSourceLoader::onLoadDataFromDbForSelectedLanguageRequested(int languageIndex, bool allowEmptyResult)
+void DataSourceLoader::onLoadDataFromDbForPrimaryLanguageRequested(int languageIndex, bool allowEmptyResult)
 {
     if (languageIndex >= 0 && m_pDataSource->getPrimarySourceLanguageIndex() != languageIndex)
     {
@@ -29,7 +29,7 @@ void DataSourceLoader::onLoadDataFromDbForSelectedLanguageRequested(int language
                 m_pDataSource->updateDataEntries(QVector<DataSource::DataEntry>{}, languageIndex, DataSource::UpdateOperation::SWAP);
             }
 
-            Q_EMIT languageAlreadyContainedInDataSource(areEntriesAvailable);
+            Q_EMIT requestedPrimaryLanguageAlreadyContainedInDataSource(areEntriesAvailable);
         }
         else
         {
@@ -61,8 +61,47 @@ void DataSourceLoader::onLoadDataFromDbForSelectedLanguageRequested(int language
                 success = false;
             }
 
-            Q_EMIT loadDataFromDbForSelectedLanguageFinished(success, validEntriesLoaded);
+            Q_EMIT loadDataFromDbForPrimaryLanguageFinished(success, validEntriesLoaded);
         }
+    }
+}
+
+void DataSourceLoader::onLoadDataFromDbForSecondaryLanguageRequested(int languageIndex)
+{
+    Q_ASSERT(m_pDataSource->getPrimarySourceLanguageIndex() != -1);
+
+    if (languageIndex != m_pDataSource->getPrimarySourceLanguageIndex() && languageIndex != m_pDataSource->getSecondarySourceLanguageIndex())
+    {
+        bool success{true};
+        QVector<DataSource::DataEntry> loadedDataEntries;
+
+        if (_loadEntriesFromDb(loadedDataEntries, languageIndex))
+        {
+            if (loadedDataEntries.size() != 0)
+            {
+                _validateLoadedDataEntries(loadedDataEntries);
+            }
+
+            if (m_ValidDataEntries.size() != 0)
+            {
+                m_pDataSource->updateDataEntries(m_ValidDataEntries, languageIndex, DataSource::UpdateOperation::LOAD_TO_SECONDARY);
+                m_ValidDataEntries.resize(0);
+                m_ValidDataEntries.squeeze();
+            }
+
+            // for sync purposes only
+            QThread::msleep(Game::Timing::c_LoadDataThreadDelay);
+        }
+        else
+        {
+            success = false;
+        }
+
+        Q_EMIT loadDataFromDbForSecondaryLanguageFinished(success);
+    }
+    else if (languageIndex == m_pDataSource->getPrimarySourceLanguageIndex() || languageIndex == m_pDataSource->getSecondarySourceLanguageIndex())
+    {
+        Q_EMIT requestedSecondaryLanguageAlreadySetAsPrimary();
     }
 }
 

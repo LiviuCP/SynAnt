@@ -49,7 +49,7 @@ Item {
 
             Layout.fillWidth: true
 
-            dropdownEnabled: presenter.languageSelectionEnabled
+            dropdownEnabled: presenter.languageSelectionEnabled && !presenter.dataEntry.dataSavingInProgress
 
             dataModel: GameStrings.languagesList
             currentIndex: presenter.languageIndex

@@ -53,9 +53,10 @@ public:
     static void releaseResources();
 
     void setDataSource(const QString& dataDirPath);
-    void fetchDataForSelectedLanguage(int languageIndex, bool allowEmptyResult);
+    void fetchDataForPrimaryLanguage(int languageIndex, bool allowEmptyResult);
+    void fetchDataForSecondaryLanguage(int languageIndex);
     void saveDataToDb();
-    void requestWriteToCache(QPair<QString, QString> newWordsPair, bool areSynonyms);
+    void requestWriteToCache(QPair<QString, QString> newWordsPair, bool areSynonyms, int languageIndex);
     void requestCacheReset();
     void provideDataEntryToConsumer(int entryNumber);
 
@@ -76,26 +77,31 @@ public:
     InputBuilder* getInputBuilder() const;
     StatisticsItem* getStatisticsItem() const;
 
-    int getLastSavedNrOfCacheEntries() const;
+    int getLastSavedTotalNrOfEntries() const;
+    int getLastNrOfEntriesSavedToPrimaryLanguage() const;
     int getCurrentNrOfCacheEntries() const;
 
     virtual ~GameManager();
 
 signals:
     Q_SIGNAL void newWordsPairAddedToCache();
-    Q_SIGNAL void writeDataToDbFinished(int nrOfEntries);
+    Q_SIGNAL void writeDataToDbFinished(int nrOfPrimaryLanguageSavedEntries, int totalNrOfSavedEntries);
     Q_SIGNAL void cacheReset();
     Q_SIGNAL void dataSourceSetupCompleted();
-    Q_SIGNAL void readDataForSelectedLanguage(int languageIndex, bool allowEmptyResult);
+    Q_SIGNAL void readDataForPrimaryLanguage(int languageIndex, bool allowEmptyResult);
+    Q_SIGNAL void readDataForSecondaryLanguage(int languageIndex);
     Q_SIGNAL void writeDataToDb();
     Q_SIGNAL void resetCacheRequested();
-    Q_SIGNAL void fetchDataForSelectedLanguageFinished(bool success, bool validEntriesLoaded);
+    Q_SIGNAL void fetchDataForPrimaryLanguageFinished(bool success, bool validEntriesLoaded);
+    Q_SIGNAL void fetchDataForSecondaryLanguageFinished(bool success);
     Q_SIGNAL void dataEntryAllowed(bool allowed);
 
 private slots:
     void _onDataSourceSetupCompleted();
-    void _onLoadDataFromDbForSelectedLanguageFinished(bool success, bool validEntriesLoaded);
-    void _onLanguageAlreadyContainedInDataSource(bool validEntriesLoaded);
+    void _onLoadDataFromDbForPrimaryLanguageFinished(bool success, bool validEntriesLoaded);
+    void _onRequestedPrimaryLanguageAlreadyContainedInDataSource(bool validEntriesLoaded);
+    void _onLoadDataFromDbForSecondaryLanguageFinished(bool success);
+    void _onRequestedSecondaryLanguageAlreadySetAsPrimary();
 
 private:
     explicit GameManager(QObject *parent = nullptr);

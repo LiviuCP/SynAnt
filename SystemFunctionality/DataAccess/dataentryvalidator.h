@@ -18,15 +18,15 @@ class DataEntryValidator : public QObject
 public:
     explicit DataEntryValidator(DataSource* pDataSource, QObject *parent = nullptr);
 
-    void validateWordsPair(QPair<QString, QString> newWordsPair, bool areSynonyms);
+    void validateWordsPair(QPair<QString, QString> newWordsPair, bool areSynonyms, int languageIndex);
     DataEntry::ValidationCodes getValidationCode() const;
 
 signals:
     Q_SIGNAL void addInvalidWordsPairRequested();
-    Q_SIGNAL void entryValidated(DataSource::DataEntry rawDataEntry);
+    Q_SIGNAL void entryValidated(DataSource::DataEntry rawDataEntry, int languageIndex);
 
 private:
-    bool _isValidDataEntry(DataSource::DataEntry& rawDataEntry, const QString& firstWord, const QString& secondWord, bool areSynonyms);
+    bool _isValidDataEntry(DataSource::DataEntry& rawDataEntry, const QString& firstWord, const QString& secondWord, bool areSynonyms, int languageIndex);
 
     DataEntry::ValidationCodes m_ValidationCode;
     DataSource* m_pDataSource;

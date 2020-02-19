@@ -13,13 +13,14 @@ class DataSourceProxy : public QObject
 public:
     explicit DataSourceProxy(QObject *parent = nullptr);
 
-    void fetchDataForSelectedLanguage(int languageIndex, bool allowEmptyResult);
+    void fetchDataForPrimaryLanguage(int languageIndex, bool allowEmptyResult);
     void provideDataEntryToConsumer(int entryNumber);
     int getNrOfDataSourceEntries();
 
 signals:
-    Q_SIGNAL void fetchDataForSelectedLanguageFinished(bool success, bool validEntriesFetched);
-    Q_SIGNAL void writeDataToDbFinished(int nrOfEntries);
+    Q_SIGNAL void fetchDataForPrimaryLanguageFinished(bool success, bool validEntriesFetched);
+    Q_SIGNAL void fetchDataForSecondaryLanguageFinished(bool success);
+    Q_SIGNAL void writeDataToDbFinished(int nrOfPrimaryLanguageSavedEntries);
     Q_SIGNAL void writeDataToDbErrorOccured();
     Q_SIGNAL void entryProvidedToConsumer(QPair<QString, QString> newWordsPair, bool areSynonyms);
 };

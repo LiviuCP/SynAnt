@@ -19,7 +19,7 @@ public:
     explicit DataEntryCache(DataSource* pDataSource, QObject *parent = nullptr);
 
 public slots:
-    void onValidEntryReceived(DataSource::DataEntry dataEntry);
+    void onValidEntryReceived(DataSource::DataEntry dataEntry, int languageIndex);
     void onResetCacheRequested();
     void onWriteDataToDbRequested();
 
@@ -27,11 +27,14 @@ signals:
     Q_SIGNAL void newWordsPairAddedToCache();
     Q_SIGNAL void wordsPairAlreadyContainedInCache();
     Q_SIGNAL void cacheReset();
-    Q_SIGNAL void writeDataToDbFinished(int nrOfEntries);
+    Q_SIGNAL void writeDataToDbFinished(int nrOfPrimaryLanguageSavedEntries, int totalNrOfSavedEntries);
     Q_SIGNAL void writeDataToDbErrorOccured();
 
 private:
+    void _updateDataSource(int& entriesAddedToPrimaryLanguage);
+
     QVector<DataSource::DataEntry> m_CacheEntries;
+    QVector<int> m_LanguageIndexes;
     DataSource* m_pDataSource;
 };
 

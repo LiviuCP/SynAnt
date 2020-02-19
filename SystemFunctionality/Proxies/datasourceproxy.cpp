@@ -6,9 +6,9 @@ DataSourceProxy::DataSourceProxy(QObject *parent)
 {
 }
 
-void DataSourceProxy::fetchDataForSelectedLanguage(int languageIndex, bool allowEmptyResult)
+void DataSourceProxy::fetchDataForPrimaryLanguage(int languageIndex, bool allowEmptyResult)
 {
-    GameManager::getManager()->fetchDataForSelectedLanguage(languageIndex, allowEmptyResult);
+    GameManager::getManager()->fetchDataForPrimaryLanguage(languageIndex, allowEmptyResult);
 }
 
 void DataSourceProxy::provideDataEntryToConsumer(int entryNumber)

@@ -58,6 +58,8 @@ namespace DataEntry
         PAIR_ALREADY_ADDED,
         RESET_CACHE_REQUESTED,
         CACHE_RESET,
+        FETCHING_DATA,
+        DATA_FETCHING_FINISHED,
         DATA_SAVE_IN_PROGRESS,
         DATA_SUCCESSFULLY_SAVED,
         StatusCodesCount
@@ -112,7 +114,7 @@ namespace DataEntry
         const QString c_DataCacheResetInProgressMessage     {    "Discarding unsaved entries"                                                               };
         const QString c_DataCacheResetMessage               {    "The unsaved entries been discarded"                                                       };
         const QString c_DataSaveInProgressMessage           {    "Data is currently being saved..."                                                         };
-        const QString c_DataSuccessfullySavedMessage        {    "%1 word pairs have been successfully saved to database"                                   };
+        const QString c_DataSuccessfullySavedMessage        {    "%1 word pairs successfully saved to database, %2 pairs added to current game language"    };
 
         // invalid pair entry reason messages
         const QString c_WordHasLessThanMinCharacters        {    "At least one word has less than minimum required number of characters."                   };

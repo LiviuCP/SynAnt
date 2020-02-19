@@ -32,7 +32,8 @@ public:
     void requestCacheReset();
 
     int getCurrentNrOfAddedWordPairs() const;
-    int getLastSavedNrOfWordPairs() const;
+    int getLastSavedTotalNrOfEntries() const;
+    int getLastNrOfEntriesSavedToPrimaryLanguage() const;
     int getCurrentLanguageIndex() const;
     DataEntry::ValidationCodes getDataEntryValidationCode() const;
 
@@ -40,6 +41,8 @@ public:
     bool isAddingToCacheAllowed() const;
     bool isCacheResetAllowed() const;
     bool isSavingToDbAllowed() const;
+    bool isDataFetchingInProgress() const;
+    bool isDataSavingInProgress() const;
 
     void setLanguage(int languageIndex);
 
@@ -57,7 +60,8 @@ private slots:
     void _onAddInvalidWordsPairRequested();
     void _onWordsPairAlreadyContainedInCache();
     void _onCacheReset();
-    void _onWriteDataToDbFinished(int nrOfEntries);
+    void _onWriteDataToDbFinished();
+    void _onFetchDataForSecondaryLanguageFinished(bool success);
 
 private:
     void _allowAddToCache();

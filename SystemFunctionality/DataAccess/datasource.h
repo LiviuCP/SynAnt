@@ -37,7 +37,6 @@ public:
 
     explicit DataSource(const QString& dataBasePath, QObject *parent = nullptr);
 
-    void updateDataEntries(QVector<DataEntry> dataEntries, bool append); // remove this method after implementing multiple languages in data entry
     void updateDataEntries(const QVector<DataEntry>& dataEntries, int languageIndex, DataSource::UpdateOperation updateOperation = DataSource::UpdateOperation::LOAD_TO_PRIMARY);
     void provideDataEntryToConsumer(int entryNumber);
 
@@ -47,7 +46,6 @@ public:
     int getSecondarySourceNrOfEntries() const;
 
     QString getDataFilePath() const;
-    bool entryAlreadyExists(const DataEntry& dataEntry); // remove this method after implementing multiple languages in data entry
     bool entryAlreadyExists(const DataEntry& dataEntry, int languageIndex);
 
 signals:
@@ -63,7 +61,6 @@ private:
     };
 
     QString m_DataBasePath;
-    QVector<DataEntry> m_DataEntries;
     Source m_PrimarySource;
     Source m_SecondarySource;
     mutable QMutex m_DataSourceMutex;
