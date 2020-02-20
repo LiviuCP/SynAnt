@@ -79,6 +79,7 @@ void DataEntryCache::onWriteDataToDbRequested()
 
                 _updateDataSource(nrOfPrimaryLanguageSavedEntries);
                 m_CacheEntries.clear();
+                m_LanguageIndexes.clear();
 
                 // for sync purposes only
                 QThread::msleep(Game::Timing::c_WriteDataThreadDelay);
