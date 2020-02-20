@@ -574,6 +574,10 @@ void GameFacade::_onWriteDataToDbFinished(int nrOfPrimaryLanguageSavedEntries)
 
         Q_EMIT statusChanged(m_CurrentStatusCode = initialNrOfEntries == 0 ? Game::StatusCodes::DATA_GOT_AVAILABLE : Game::StatusCodes::DATA_SUCCESSFULLY_SAVED);
     }
+    else
+    {
+        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_SUCCESSFULLY_SAVED);
+    }
 }
 
 void GameFacade::_onWriteDataToDbErrorOccured()
