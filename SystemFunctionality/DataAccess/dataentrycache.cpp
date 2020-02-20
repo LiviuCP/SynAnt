@@ -19,6 +19,8 @@ DataEntryCache::DataEntryCache(DataSource* pDataSource, QObject *parent)
 
 void DataEntryCache::onValidEntryReceived(DataSource::DataEntry dataEntry, int languageIndex)
 {
+    Q_ASSERT(m_CacheEntries.size() == m_LanguageIndexes.size());
+
     if (!m_CacheEntries.contains(dataEntry))
     {
         m_CacheEntries.append(dataEntry);
