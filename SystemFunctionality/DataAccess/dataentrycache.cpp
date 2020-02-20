@@ -34,6 +34,7 @@ void DataEntryCache::onValidEntryReceived(DataSource::DataEntry dataEntry, int l
 void DataEntryCache::onResetCacheRequested()
 {
     m_CacheEntries.clear();
+    m_LanguageIndexes.clear();
 
     // for sync purposes only
     QThread::msleep(Game::Timing::c_ResetCacheDelay);
