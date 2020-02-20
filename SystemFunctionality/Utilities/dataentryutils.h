@@ -60,6 +60,7 @@ namespace DataEntry
         CACHE_RESET,
         FETCHING_DATA,
         DATA_FETCHING_FINISHED,
+        DATA_FETCHING_FINISHED_SAVE_IN_PROGRESS,
         DATA_SAVE_IN_PROGRESS,
         DATA_SUCCESSFULLY_SAVED,
         StatusCodesCount

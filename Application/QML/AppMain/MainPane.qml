@@ -124,7 +124,7 @@ Item {
 
                 Layout.minimumWidth: highscoresBox.width
 
-                dropdownEnabled: presenter.languageSelectionEnabled && !presenter.dataEntry.dataSavingInProgress
+                dropdownEnabled: presenter.languageSelectionEnabled && !presenter.dataEntry.dataSavingInProgress && !presenter.dataEntry.dataFetchingInProgress
 
                 dataModel: GameStrings.languagesList
                 currentIndex: presenter.languageIndex

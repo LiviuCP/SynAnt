@@ -82,6 +82,7 @@ private:
     bool m_IsSavingToDbAllowed;
     bool m_IsSavingInProgress;
     int m_CurrentLanguageIndex;
+    bool m_IsSavingDeferred;
 };
 
 #endif // DATAENTRYFACADE_H

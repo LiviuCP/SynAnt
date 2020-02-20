@@ -12,6 +12,7 @@ DataEntryFacade::DataEntryFacade(QObject *parent)
     , m_IsSavingToDbAllowed{false}
     , m_IsSavingInProgress{false}
     , m_CurrentLanguageIndex{-1}
+    , m_IsSavingDeferred{false}
 {
     m_pDataEntryProxy = m_pDataFunctionalityProxy->getDataEntryProxy();
 
@@ -70,10 +71,17 @@ void DataEntryFacade::requestSaveDataToDb()
         _blockSaveToDb();
         _blockCacheReset();
 
-        m_IsSavingInProgress = true;
-        Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::DATA_SAVE_IN_PROGRESS);
+        if (!isDataFetchingInProgress())
+        {
+            m_IsSavingInProgress = true;
+            Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::DATA_SAVE_IN_PROGRESS);
 
-        m_pDataEntryProxy->saveDataToDb();
+            m_pDataEntryProxy->saveDataToDb();
+        }
+        else
+        {
+            m_IsSavingDeferred = true;
+        }
     }
 }
 
@@ -209,7 +217,17 @@ void DataEntryFacade::_onFetchDataForSecondaryLanguageFinished(bool success)
 {
     if (success)
     {
-        Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::DATA_FETCHING_FINISHED);
+        if (m_IsSavingDeferred)
+        {
+            m_IsSavingDeferred = false;
+            m_IsSavingInProgress = true;
+            Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::DATA_FETCHING_FINISHED_SAVE_IN_PROGRESS);
+            m_pDataEntryProxy->saveDataToDb();
+        }
+        else
+        {
+            Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::DATA_FETCHING_FINISHED);
+        }
     }
 }
 

@@ -227,8 +227,7 @@ Item {
             id: backBtn
 
             isActiveFocusOnTabEnabled: false
-            buttonEnabled: !presenter.dataEntry.dataFetchingInProgress
-            dedicatedShortcutEnabled: presenter.dataEntryPaneVisible && !presenter.dataEntry.dataFetchingInProgress
+            dedicatedShortcutEnabled: presenter.dataEntryPaneVisible
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -256,8 +255,8 @@ Item {
             id: discardBtn
 
             isActiveFocusOnTabEnabled: false
-            buttonEnabled: presenter.dataEntry.discardAddedWordPairsEnabled && !presenter.dataEntry.dataFetchingInProgress
-            dedicatedShortcutEnabled: presenter.dataEntryPaneVisible && presenter.dataEntry.discardAddedWordPairsEnabled && !presenter.dataEntry.dataFetchingInProgress
+            buttonEnabled: presenter.dataEntry.discardAddedWordPairsEnabled
+            dedicatedShortcutEnabled: presenter.dataEntryPaneVisible && presenter.dataEntry.discardAddedWordPairsEnabled
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -275,8 +274,8 @@ Item {
             id: saveBtn
 
             isActiveFocusOnTabEnabled: false
-            buttonEnabled: presenter.dataEntry.saveAddedWordPairsEnabled && !presenter.dataEntry.dataFetchingInProgress
-            dedicatedShortcutEnabled: presenter.dataEntryPaneVisible && presenter.dataEntry.saveAddedWordPairsEnabled && !presenter.dataEntry.dataFetchingInProgress
+            buttonEnabled: presenter.dataEntry.saveAddedWordPairsEnabled
+            dedicatedShortcutEnabled: presenter.dataEntryPaneVisible && presenter.dataEntry.saveAddedWordPairsEnabled
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -335,13 +334,6 @@ Item {
         {
             Styles.updateButtonOpacityAtShortcutActivation(quitBtn);
             quitButtonShortcutActivated = false;
-        }
-    }
-
-    // the data entry language should be changed to default (intro/main pane) language once data entry dialog is exited
-    onVisibleChanged: {
-        if (!visible && presenter.languageIndex !== presenter.dataEntry.languageIndex) {
-            presenter.dataEntry.handleLanguageChangeRequest(presenter.languageIndex);
         }
     }
 }

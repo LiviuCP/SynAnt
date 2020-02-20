@@ -204,7 +204,7 @@ namespace Game
         static constexpr int c_ToolTipDelay{1000};
         static constexpr int c_PaneSwitchingDelay{150};
         static constexpr int c_LoadDataThreadDelay{1000};
-        static constexpr int c_WriteDataThreadDelay{500};
+        static constexpr int c_WriteDataThreadDelay{1000};
         static constexpr int c_ResetCacheDelay{250};
         static constexpr int c_ToolTipTimeout{4000};
         static constexpr int c_ShortStatusUpdateDelay{1000};
