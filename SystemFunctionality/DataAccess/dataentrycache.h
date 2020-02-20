@@ -31,7 +31,7 @@ signals:
     Q_SIGNAL void writeDataToDbErrorOccured();
 
 private:
-    void _updateDataSource(int& entriesAddedToPrimaryLanguage);
+    void _moveCachedEntriesToDataSource(int& nrOfEntriesSavedToPrimaryLanguage);
 
     QVector<DataSource::DataEntry> m_CacheEntries;
     QVector<int> m_LanguageIndexes;
