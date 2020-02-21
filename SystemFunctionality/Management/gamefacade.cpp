@@ -387,6 +387,10 @@ void GameFacade::setLanguage(int languageIndex, bool revertLanguageWhenDataUnava
         m_RevertLanguageWhenDataUnavailable = revertLanguageWhenDataUnavailable;
         Q_EMIT languageChanged();
         Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::FETCHING_DATA);
+        m_IsDataAvailable = false;
+
+        Q_EMIT dataAvailableChanged();
+
         m_pDataSourceProxy->fetchDataForPrimaryLanguage(languageIndex, !revertLanguageWhenDataUnavailable);
     }
 }
@@ -510,13 +514,9 @@ void GameFacade::_onFetchDataForPrimaryLanguageFinished(bool success, bool valid
             m_pDataSourceAccessHelper->setEntriesTable(m_pDataSourceProxy->getNrOfDataSourceEntries());
             _connectToDataSource();
             m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
+            m_IsDataAvailable = true;
 
-            if (!m_IsDataAvailable)
-            {
-                m_IsDataAvailable = true;
-                Q_EMIT dataAvailableChanged();
-            }
-
+            Q_EMIT dataAvailableChanged();
             Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_FETCHING_COMPLETE);
         }
         else
@@ -525,12 +525,6 @@ void GameFacade::_onFetchDataForPrimaryLanguageFinished(bool success, bool valid
             {
                 m_CurrentLanguageIndex = m_PreviousLanguageIndex;
                 Q_EMIT languageChanged();
-            }
-
-            if (m_IsDataAvailable)
-            {
-                m_IsDataAvailable = false;
-                Q_EMIT dataAvailableChanged();
             }
 
             Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::NO_DATA_ENTRIES_FETCHED);
