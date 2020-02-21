@@ -128,6 +128,7 @@ namespace Game
         NO_DATA_ENTRIES_FETCHED,
         DATA_FETCHING_ERROR,
         DATA_GOT_AVAILABLE,
+        DATA_STILL_UNAVAILABLE,
         GAME_STARTED,
         GAME_PAUSED,
         GAME_RESUMED_COMPLETE_INPUT,
@@ -292,6 +293,12 @@ namespace Game
 
         const QString c_NoValidEntriesFetchedMessage        {
                                                                  "\n\n\n\nThe selected language has no valid pairs.\n\n"
+                                                                 "Please select another language or use the data entry page to add pairs.\n\n"
+                                                                 "Then return to intro page and press Play to start the game."
+                                                            };
+
+        const QString c_NoValidEntriesSavedForGameLanguage  {
+                                                                 "\n\n\n\nNo valid entries saved for current game language.\n\n"
                                                                  "Please select another language or use the data entry page to add pairs.\n\n"
                                                                  "Then return to intro page and press Play to start the game."
                                                             };

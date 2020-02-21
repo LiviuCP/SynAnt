@@ -667,6 +667,9 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         case Game::StatusCodes::DATA_GOT_AVAILABLE:
             _updateStatusMessage(Game::Messages::c_PleasePlayOrEnterDataMessage, Pane::INTRO, Game::Timing::c_NoDelay);
             break;
+        case Game::StatusCodes::DATA_STILL_UNAVAILABLE:
+            _updateStatusMessage(Game::Messages::c_NoValidEntriesSavedForGameLanguage, Pane::INTRO, Game::Timing::c_NoDelay);
+            break;
         case Game::StatusCodes::GAME_STARTED:
             _updateStatusMessage(Game::Messages::c_GameStartedMessage, Pane::MAIN, Game::Timing::c_NoDelay);
             _updateStatusMessage(Game::Messages::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::Timing::c_ShortStatusUpdateDelay);

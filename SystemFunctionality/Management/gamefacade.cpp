@@ -557,26 +557,25 @@ void GameFacade::_onEntryProvidedToConsumer(QPair<QString, QString> newWordsPair
 
 void GameFacade::_onWriteDataToDbFinished(int nrOfPrimaryLanguageSavedEntries)
 {
-    if (nrOfPrimaryLanguageSavedEntries > 0)
+    const int initialNrOfPrimarySourceEntries{m_pDataSourceAccessHelper->getTotalNrOfEntries()};
+
+    if (initialNrOfPrimarySourceEntries > 0)
     {
-        int initialNrOfEntries{m_pDataSourceAccessHelper->getTotalNrOfEntries()};
-
+        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_SUCCESSFULLY_SAVED);
+    }
+    else if (nrOfPrimaryLanguageSavedEntries > 0)
+    {
         m_pDataSourceAccessHelper->addEntriesToTable(nrOfPrimaryLanguageSavedEntries);
+        m_IsDataAvailable = true;
+        _connectToDataSource();
+        m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
 
-        if (initialNrOfEntries == 0)
-        {
-            m_IsDataAvailable = true;
-            _connectToDataSource();
-            m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
-
-            Q_EMIT dataAvailableChanged();
-        }
-
-        Q_EMIT statusChanged(m_CurrentStatusCode = initialNrOfEntries == 0 ? Game::StatusCodes::DATA_GOT_AVAILABLE : Game::StatusCodes::DATA_SUCCESSFULLY_SAVED);
+        Q_EMIT dataAvailableChanged();
+        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_GOT_AVAILABLE);
     }
     else
     {
-        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_SUCCESSFULLY_SAVED);
+        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_STILL_UNAVAILABLE);
     }
 }
 
