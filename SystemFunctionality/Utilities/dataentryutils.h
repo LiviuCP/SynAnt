@@ -53,6 +53,7 @@ namespace DataEntry
         DATA_ENTRY_RESUMED,
         DATA_ENTRY_STOPPED,
         DATA_ENTRY_STOPPED_SAVE_IN_PROGRESS,
+        DATA_ENTRY_DISABLED,
         DATA_ENTRY_ADD_SUCCESS,
         DATA_ENTRY_ADD_INVALID,
         PAIR_ALREADY_ADDED,
@@ -95,6 +96,9 @@ namespace DataEntry
         const QString c_DataEntryResumeMessage              {    "Word pairs entry resumed. There are %1 entries pending to be saved!"                      };
         const QString c_DataEntryStopMessage                {    "Word pairs entry stopped"                                                                 };
         const QString c_DataEntrySaveInProgressStopMessage  {    "Word pairs entry stopped, data will be continue to be saved"                              };
+
+        const QString c_DataEntryDisabledMessage            {    "Entry disabled until fetch completes."                                                    };
+
         const QString c_DataEntryRequestMessage             {    "Please enter a new pair of words.\n\nChoose if they are synonyms or antonyms."            };
 
         const QString c_DataEntrySuccessMessage             {

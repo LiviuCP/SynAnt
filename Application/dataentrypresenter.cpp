@@ -145,6 +145,10 @@ void DataEntryPresenter::_onStatusChanged(DataEntry::StatusCodes statusCode)
         _updateStatusMessage(DataEntry::Messages::c_DataEntrySaveInProgressStopMessage, Game::Timing::c_NoDelay);
         Q_EMIT dataEntryStopped();
         break;
+    case DataEntry::StatusCodes::DATA_ENTRY_DISABLED:
+        _updateStatusMessage(DataEntry::Messages::c_DataEntryDisabledMessage, Game::Timing::c_NoDelay);
+        Q_EMIT dataEntryStopped();
+        break;
     case DataEntry::StatusCodes::DATA_ENTRY_ADD_SUCCESS:
         Q_EMIT dataEntryAddSucceeded();
         _updateStatusMessage(DataEntry::Messages::c_DataEntrySuccessMessage.arg(m_pDataEntryFacade->getCurrentNrOfAddedWordPairs()), Game::Timing::c_NoDelay);

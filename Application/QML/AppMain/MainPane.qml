@@ -108,7 +108,7 @@ Item {
             AppButton {
                 id: dataEntryBtn
 
-                buttonEnabled: presenter.dataEntry.dataEntryEnabled
+                buttonEnabled: presenter.dataEntry.dataEntryEnabled && !presenter.dataEntry.dataFetchingInProgress
                 dedicatedShortcutEnabled: false
 
                 Layout.minimumWidth: highscoresBox.width

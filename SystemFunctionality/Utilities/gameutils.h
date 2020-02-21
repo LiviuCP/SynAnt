@@ -203,7 +203,7 @@ namespace Game
     namespace Timing
     {
         static constexpr int c_ToolTipDelay{1000};
-        static constexpr int c_PaneSwitchingDelay{150};
+        static constexpr int c_PaneSwitchingDelay{350};
         static constexpr int c_LoadDataThreadDelay{1000};
         static constexpr int c_WriteDataThreadDelay{1000};
         static constexpr int c_ResetCacheDelay{250};
@@ -289,7 +289,7 @@ namespace Game
 
 
         // status messages
-        const QString c_FetchingDataMessage                 {    "\n\n\n\nFetching data. Please wait..."                                                    };
+        const QString c_FetchingDataMessage                 {    "\n\n\n\nFetching data.\n\nLanguage change disabled.\n\nPlease wait..."                    };
 
         const QString c_NoValidEntriesFetchedMessage        {
                                                                  "\n\n\n\nThe selected language has no valid pairs.\n\n"

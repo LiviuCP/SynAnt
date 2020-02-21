@@ -51,7 +51,9 @@ void DataEntryFacade::resumeDataEntry()
 
 void DataEntryFacade::stopDataEntry()
 {
-    Q_EMIT statusChanged(m_CurrentStatusCode = m_IsSavingInProgress ? DataEntry::StatusCodes::DATA_ENTRY_STOPPED_SAVE_IN_PROGRESS : DataEntry::StatusCodes::DATA_ENTRY_STOPPED);
+    Q_EMIT statusChanged(m_CurrentStatusCode = m_IsSavingInProgress ? DataEntry::StatusCodes::DATA_ENTRY_STOPPED_SAVE_IN_PROGRESS
+                                                                    : isDataFetchingInProgress() ? DataEntry::StatusCodes::DATA_ENTRY_DISABLED :
+                                                                                                   DataEntry::StatusCodes::DATA_ENTRY_STOPPED);
 }
 
 void DataEntryFacade::requestAddPairToCache(const QString &firstWord, const QString &secondWord, bool areSynonyms)

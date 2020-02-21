@@ -178,7 +178,7 @@ ApplicationWindow {
 
     Shortcut {
         sequence: GameStrings.dataEntryButtonShortcut
-        enabled: gamePresenter.dataEntry.dataEntryEnabled && (gamePresenter.introPaneVisible || gamePresenter.mainPaneVisible)
+        enabled: gamePresenter.dataEntry.dataEntryEnabled && (gamePresenter.introPaneVisible || gamePresenter.mainPaneVisible) && !gamePresenter.dataEntry.dataFetchingInProgress
 
         property Timer dataEntryTimer: Timer {
             interval: 100

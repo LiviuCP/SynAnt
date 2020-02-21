@@ -95,7 +95,7 @@ Item {
         AppButton {
             id: dataEntryBtn
 
-            buttonEnabled: presenter.dataEntry.dataEntryEnabled && presenter.dataEntry.languageIndex !== -1
+            buttonEnabled: presenter.dataEntry.dataEntryEnabled && presenter.dataEntry.languageIndex !== -1 && !presenter.dataEntry.dataFetchingInProgress
             dedicatedShortcutEnabled: false
 
             Layout.minimumWidth: bottomBtnsMinWidth
