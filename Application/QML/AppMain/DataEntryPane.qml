@@ -319,6 +319,10 @@ Item {
         onDataEntryAddInvalid: firstWordTextField.forceActiveFocus()
         onDataEntryStopped: dataEntryPane.clearTextFields()
         onLanguageChanged: firstWordTextField.forceActiveFocus()
+
+        onDataFetchingInProgressChanged: {
+            restoreToPrimaryLanguage();
+        }
     }
 
     onHelpButtonShortcutActivatedChanged: {
@@ -334,6 +338,17 @@ Item {
         {
             Styles.updateButtonOpacityAtShortcutActivation(quitBtn);
             quitButtonShortcutActivated = false;
+        }
+    }
+
+    onVisibleChanged: {
+        restoreToPrimaryLanguage();
+    }
+
+    // restores the language to primary game language when exiting data entry and returning to intro/main pane
+    function restoreToPrimaryLanguage() {
+        if (!visible && !presenter.dataEntry.dataFetchingInProgress && presenter.languageIndex !== presenter.dataEntry.languageIndex) {
+            presenter.dataEntry.handleLanguageChangeRequest(presenter.languageIndex);
         }
     }
 }
