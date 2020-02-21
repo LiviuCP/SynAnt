@@ -14,7 +14,6 @@ GameFacade::GameFacade(QObject *parent)
     , m_CurrentStatusCode{Game::StatusCodes::NO_LANGUAGE_SET}
     , m_IsConnectedToDataSource{false}
     , m_IsDataAvailable{false}
-    , m_IsSavingToDbAllowed{false}
     , m_IsGameStarted{false}
     , m_IsGamePaused{false}
     , m_IsPersistentIndexModeEnabled{false}

@@ -126,8 +126,6 @@ private:
     Game::StatusCodes m_CurrentStatusCode;
     bool m_IsConnectedToDataSource;
     bool m_IsDataAvailable;
-    int m_CachedWordPairs; // data entry
-    bool m_IsSavingToDbAllowed; // data entry
     bool m_IsGameStarted;
     bool m_IsGamePaused;
     bool m_IsPersistentIndexModeEnabled;
