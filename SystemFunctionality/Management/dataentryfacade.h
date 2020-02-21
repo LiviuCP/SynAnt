@@ -53,6 +53,7 @@ signals:
     Q_SIGNAL void saveNewPairsToDbAllowedChanged();
     Q_SIGNAL void languageChanged();
     Q_SIGNAL void statusChanged(DataEntry::StatusCodes status);
+    Q_SIGNAL void fetchingInProgressChanged();
 
 private slots:
     void _onDataEntryAllowed(bool success);
@@ -80,6 +81,7 @@ private:
     bool m_IsAddingToCacheAllowed;
     bool m_IsResettingCacheAllowed;
     bool m_IsSavingToDbAllowed;
+    bool m_IsFetchingInProgress;
     bool m_IsSavingInProgress;
     int m_CurrentLanguageIndex;
     bool m_IsSavingDeferred;

@@ -19,6 +19,7 @@ GameFacade::GameFacade(QObject *parent)
     , m_IsPersistentIndexModeEnabled{false}
     , m_CurrentLanguageIndex{-1}
     , m_PreviousLanguageIndex{-1}
+    , m_IsFetchingInProgress{false}
     , m_RevertLanguageWhenDataUnavailable{false}
 {
     m_pDataSourceProxy = m_pGameFunctionalityProxy->getDataSourceProxy();
@@ -384,8 +385,12 @@ void GameFacade::setLanguage(int languageIndex, bool revertLanguageWhenDataUnava
         m_PreviousLanguageIndex = m_CurrentLanguageIndex;
         m_CurrentLanguageIndex = languageIndex;
         m_RevertLanguageWhenDataUnavailable = revertLanguageWhenDataUnavailable;
+        m_IsFetchingInProgress = true;
+
         Q_EMIT languageChanged();
+        Q_EMIT fetchingInProgressChanged();
         Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::FETCHING_DATA);
+
         m_IsDataAvailable = false;
 
         Q_EMIT dataAvailableChanged();
@@ -491,7 +496,7 @@ int GameFacade::getCurrentLanguageIndex() const
 
 bool GameFacade::isDataFetchingInProgress() const
 {
-    return m_CurrentStatusCode == Game::StatusCodes::FETCHING_DATA;
+    return m_IsFetchingInProgress;
 }
 
 bool GameFacade::isDataAvailable() const
@@ -508,6 +513,9 @@ void GameFacade::_onFetchDataForPrimaryLanguageFinished(bool success, bool valid
 {
     if (success)
     {
+        m_IsFetchingInProgress = false;
+        Q_EMIT fetchingInProgressChanged();
+
         if (validEntriesFetched)
         {
             m_pDataSourceAccessHelper->setEntriesTable(m_pDataSourceProxy->getNrOfDataSourceEntries());

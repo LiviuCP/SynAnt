@@ -87,6 +87,7 @@ public:
     bool areSynonyms() const;
 
 signals:
+    Q_SIGNAL void fetchingInProgressChanged();
     Q_SIGNAL void dataAvailableChanged();
     Q_SIGNAL void newMixedWordsAvailable();
     Q_SIGNAL void inputChanged();
@@ -131,6 +132,7 @@ private:
     bool m_IsPersistentIndexModeEnabled;
     int m_CurrentLanguageIndex;
     int m_PreviousLanguageIndex; // used for restoring the previous language in main pane in case no word can be fetched from currently setup one
+    bool m_IsFetchingInProgress;
     bool m_RevertLanguageWhenDataUnavailable;
 };
 

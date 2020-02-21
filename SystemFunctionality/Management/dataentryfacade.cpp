@@ -10,6 +10,7 @@ DataEntryFacade::DataEntryFacade(QObject *parent)
     , m_IsAddingToCacheAllowed{true}
     , m_IsResettingCacheAllowed{false}
     , m_IsSavingToDbAllowed{false}
+    , m_IsFetchingInProgress{false}
     , m_IsSavingInProgress{false}
     , m_CurrentLanguageIndex{-1}
     , m_IsSavingDeferred{false}
@@ -146,7 +147,7 @@ bool DataEntryFacade::isSavingToDbAllowed() const
 
 bool DataEntryFacade::isDataFetchingInProgress() const
 {
-    return (m_CurrentStatusCode == DataEntry::StatusCodes::FETCHING_DATA);
+    return m_IsFetchingInProgress;
 }
 
 bool DataEntryFacade::isDataSavingInProgress() const
@@ -160,8 +161,12 @@ void DataEntryFacade::setLanguage(int languageIndex)
     if (m_CurrentLanguageIndex != languageIndex)
     {
         m_CurrentLanguageIndex = languageIndex;
+        m_IsFetchingInProgress = true;
+
         Q_EMIT languageChanged();
+        Q_EMIT fetchingInProgressChanged();
         Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::FETCHING_DATA);
+
         m_pDataEntryProxy->fetchDataForSecondaryLanguage(languageIndex);
     }
 }
@@ -219,6 +224,9 @@ void DataEntryFacade::_onFetchDataForSecondaryLanguageFinished(bool success)
 {
     if (success)
     {
+        m_IsFetchingInProgress = false;
+        Q_EMIT fetchingInProgressChanged();
+
         if (m_IsSavingDeferred)
         {
             m_IsSavingDeferred = false;

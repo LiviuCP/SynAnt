@@ -71,6 +71,8 @@ GamePresenter::GamePresenter(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::persistentPiecesRemovalIndexesChanged, this, &GamePresenter::piecesRemovalCursorPositionChanged);
     Q_ASSERT(connected);
+    connected = connect(m_pGameFacade, &GameFacade::fetchingInProgressChanged, this, &GamePresenter::dataFetchingInProgressChanged);
+    Q_ASSERT(connected);
     connected = connect(m_pStatusUpdateTimer, &QTimer::timeout, this, &GamePresenter::_updateMessage);
     Q_ASSERT(connected);
 
@@ -629,7 +631,6 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
             _updateStatusMessage(Game::Messages::c_WelcomeMessage, Pane::INTRO, Game::Timing::c_NoDelay);
             break;
         case Game::StatusCodes::FETCHING_DATA:
-            Q_EMIT dataFetchingInProgressChanged();
             if (m_CurrentPane == Pane::INTRO || m_CurrentPane == Pane::MAIN)
             {
                 _updateStatusMessage(Game::Messages::c_FetchingDataMessage, m_CurrentPane, Game::Timing::c_NoDelay);
@@ -646,7 +647,6 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
                 _updateStatusMessage(Game::Messages::c_LanguageChangedMessage, Pane::MAIN, Game::Timing::c_NoDelay);
                 _updateStatusMessage(Game::Messages::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::Timing::c_ShortStatusUpdateDelay);
             }
-            Q_EMIT dataFetchingInProgressChanged();
             break;
         case Game::StatusCodes::NO_DATA_ENTRIES_FETCHED:
             if (m_CurrentPane == Pane::INTRO)
@@ -659,7 +659,6 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
                 _updateStatusMessage(Game::Messages::c_CannotChangeLanguageMessage, Pane::MAIN, Game::Timing::c_NoDelay);
                 _updateStatusMessage(Game::Messages::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::Timing::c_ShortStatusUpdateDelay);
             }
-            Q_EMIT dataFetchingInProgressChanged();
             break;
         case Game::StatusCodes::DATA_FETCHING_ERROR:
             _launchErrorPane(Game::Error::c_CannotFetchDataMessage);
