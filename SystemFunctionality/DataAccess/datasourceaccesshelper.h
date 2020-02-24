@@ -21,6 +21,7 @@ public:
     void setEntriesTable(int nrOfEntries);
     void resetUsedEntries();
     void addEntriesToTable(int nrOfEntries);
+    void clearEntriesTable();
     int generateEntryNumber();
 
     int getNrOfUsedEntries() const;

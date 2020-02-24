@@ -30,6 +30,15 @@ void DataSourceAccessHelper::addEntriesToTable(int nrOfEntries)
     }
 }
 
+void DataSourceAccessHelper::clearEntriesTable()
+{
+    if (m_EntryUsedStatuses.size() != 0)
+    {
+        m_EntryUsedStatuses.clear();
+        m_EntryUsedStatuses.squeeze();
+    }
+}
+
 int DataSourceAccessHelper::generateEntryNumber()
 {
     Q_ASSERT(m_EntryUsedStatuses.size() > 0);

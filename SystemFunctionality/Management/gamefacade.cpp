@@ -533,6 +533,11 @@ void GameFacade::_onFetchDataForPrimaryLanguageFinished(bool success, bool valid
                 m_CurrentLanguageIndex = m_PreviousLanguageIndex;
                 Q_EMIT languageChanged();
             }
+            else
+            {
+                // ensure no residual entries from a previously selected language exist in intro pane
+                m_pDataSourceAccessHelper->clearEntriesTable();
+            }
 
             Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::NO_DATA_ENTRIES_FETCHED);
         }

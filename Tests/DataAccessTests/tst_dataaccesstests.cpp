@@ -14,7 +14,9 @@ public:
     DataAccessTests();
 
 private slots:
+    void testDataSourceAccessHelperInit();
     void testDataSourceAccessHelperSetTable();
+    void testDataSourceAccessHelperClearTable();
     void testDataSourceAccessHelperUsedEntries();
     void testDataSourceAccessHelperUseAllEntries();
     void testDataSourceAccessHelperSelfReset();
@@ -23,6 +25,16 @@ private slots:
 
 DataAccessTests::DataAccessTests()
 {
+}
+
+void DataAccessTests::testDataSourceAccessHelperInit()
+{
+    {
+        std::unique_ptr<DataSourceAccessHelper> pDataSourceAccessHelper{new DataSourceAccessHelper{}};
+
+        QVERIFY2(pDataSourceAccessHelper->getNrOfUsedEntries() == 0, "The number of used entries after second setup is not correct!");
+        QVERIFY2(pDataSourceAccessHelper->getTotalNrOfEntries() == 0, "The total number of entries after second setup is not correct!");
+    }
 }
 
 void DataAccessTests::testDataSourceAccessHelperSetTable()
@@ -64,6 +76,28 @@ void DataAccessTests::testDataSourceAccessHelperSetTable()
 
         QVERIFY2(pDataSourceAccessHelper->getNrOfUsedEntries() == 0, "The number of used entries after second setup is not correct!");
         QVERIFY2(pDataSourceAccessHelper->getTotalNrOfEntries() == 6, "The total number of entries after second setup is not correct!");
+    }
+}
+
+void DataAccessTests::testDataSourceAccessHelperClearTable()
+{
+    {
+        std::unique_ptr<DataSourceAccessHelper> pDataSourceAccessHelper{new DataSourceAccessHelper{}};
+
+        pDataSourceAccessHelper->clearEntriesTable();
+
+        QVERIFY2(pDataSourceAccessHelper->getNrOfUsedEntries() == 0, "The number of used entries after second setup is not correct!");
+        QVERIFY2(pDataSourceAccessHelper->getTotalNrOfEntries() == 0, "The total number of entries after second setup is not correct!");
+    }
+
+    {
+        std::unique_ptr<DataSourceAccessHelper> pDataSourceAccessHelper{new DataSourceAccessHelper{}};
+
+        pDataSourceAccessHelper->setEntriesTable(4);
+        pDataSourceAccessHelper->clearEntriesTable();
+
+        QVERIFY2(pDataSourceAccessHelper->getNrOfUsedEntries() == 0, "The number of used entries after second setup is not correct!");
+        QVERIFY2(pDataSourceAccessHelper->getTotalNrOfEntries() == 0, "The total number of entries after second setup is not correct!");
     }
 }
 
