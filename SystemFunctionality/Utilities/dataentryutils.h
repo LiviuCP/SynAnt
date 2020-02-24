@@ -104,7 +104,10 @@ namespace DataEntry
 
         const QString c_DataEntryDisabledMessage            {    "Entry disabled until fetch completes."                                                    };
 
-        const QString c_DataEntryRequestMessage             {    "Please enter a new pair of words.\n\nChoose if they are synonyms or antonyms."            };
+        const QString c_DataEntryRequestMessage             {
+                                                                 "Please enter a new pair of words in the required language.\n\n"
+                                                                 "Choose if they are synonyms or antonyms."
+                                                            };
 
         const QString c_DataEntrySuccessMessage             {
                                                                  "The new pair has been successfully added to validated pairs.\n\n"
