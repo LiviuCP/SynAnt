@@ -9,7 +9,10 @@
 
 static const QString c_RawGameHelpMessage                   {
                                                                  "\nPlease read following game instructions: \n\n"
-                                                                 "\n 1) The words can be in any language depending on the content of the database.\n"
+                                                                 "\n 1) At game startup the language should be chosen via dropdown from the intro window. "
+                                                                 "The language can then be changed from the main page. If the language contains no word pairs "
+                                                                 "use the the data entry dialog to add data to it. In main game window it is not possible to "
+                                                                 "switch to a language that doesn't contain any valid pairs.\n"
                                                                  "\n 2) Minimum word size is %1 characters. Minimum total pair size is %2 characters. "
                                                                  "The total pair size should not exceed %3 characters.\n"
                                                                  "\n 3) Each word is divided in equal parts, "
@@ -96,7 +99,8 @@ static const QString c_RawGameHelpMessage                   {
                                                                  "\n30) When changing the difficulty level, the score and number of word "
                                                                  "pairs remain unchanged.\n"
                                                                  "\n31) However, when the level is changed, a new pair of words "
-                                                                 "(divided according to the new level) will be presented to the user.\n"
+                                                                 "(divided according to the new level) will be presented to the user. Same thing happens when "
+                                                                 "changing the language.\n"
                                                                  "\n32) Each button has an appropriate key combination (shortcut).\n"
                                                                  "\n33) Unless mentioned otherwise for most push buttons the key combination is "
                                                                  "ALT+[first character of the button name]. "

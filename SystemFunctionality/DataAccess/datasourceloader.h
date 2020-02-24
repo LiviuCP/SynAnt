@@ -1,6 +1,6 @@
 /*
    This class fulfills following tasks:
-   1) Loads the valid word pairs from database
+   1) Loads the valid word pairs from database for the chosen language
    2) Hands the loaded data to the datasource
 */
 

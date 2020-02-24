@@ -13,8 +13,9 @@
 
 static const QString c_RawDataEntryHelpMessage          {
                                                              "\nPlease read following data entry instructions: \n\n"
-                                                             "\n 1) Enter each required words pair within the provided text fields."
-                                                             "Choose if the words are synonyms or antonyms. Press click Add pair or hit ALT+A to validate the pair.\n"
+                                                             "\n 1) Enter each required words pair within the provided text fields. "
+                                                             "Choose the language from dropdown and select if the words are synonyms or antonyms. "
+                                                             "Press click Add pair or hit ALT+A to validate the pair.\n"
                                                              "\n 2) In order to choose if the words are synonyms of antonyms by keyboard please navigate between radio buttons "
                                                              "and text fields by using TAB/SHIFT+TAB. When the required radio button is selected hit SPACE to have it toggled on.\n"
                                                              "\n 3) Press Save or hit CTRL+S to save the validated entries (pairs) to database. \n"
@@ -40,6 +41,10 @@ static const QString c_RawDataEntryHelpMessage          {
                                                              " - Yes (CTRL+Y): discard pairs from data entry buffer\n"
                                                              " - Cancel (CTRL+W): cancel discarding, keep entries in the buffer\n"
                                                              "In both cases you will return to the data entry dialog after choosing the option.\n"
+                                                             "\n 10) When exiting data entry the language is restored to default, namely then one setup in the "
+                                                             "intro/main dialogs.\n"
+                                                             "\n 11) While the data for a specific language is being loaded certain controls are disabled. "
+                                                             "This includes: language change dropdown, data entry button, add pair, etc.\n"
                                                              "\nPress Ok to return to previous page.\n"
                                                         };
 
