@@ -18,7 +18,7 @@ Choose the branch you would like to use and then compile it.
 
 For v1.2 after compiling the code copy the file "data" into the Application sub-directory. Feel free to modify it by adding new word pairs. The file should keep its name ("data"), otherwise it won't be recognized by the app and an error will be triggered. For v2.0 this step is no longer needed as if no data exists, after opening the app the user will be redirected to a data entry section where new word pairs can be added. These pairs can then be played within the game.
 
-For v2.0 there is no more QWidgets support. The whole UI has been written in QML. Use branch SynAnt_v2.0 to pull the code for this version.
+Starting with v2.0 there is no more QWidgets support. The whole UI has been written in QML. Use branch SynAnt_v2.0 to pull the code for this version. There is also a branch for v2.1 however this is under construction. This version is supposed to add new features like: multiple languages support for entering and guessing word pairs, an updated UI and an optional time limit for guessing each word pair.
 
 3. Deploying the app
 
@@ -47,6 +47,8 @@ For both v1.2 and v2.0 I used linuxdeployqt for having all necessary libs added 
 
 Note: an error might trigger when running linuxdeployqt mentioning that libjasper.so.1 cannot be found. I solved this error by creating a symbolic link to libjasper.so.4. The symbolic link was placed into the same directory as the libjasper.so.4 file. You can use the locate command (don't forget to execute updatedb as sudo before running it) for finding the libjasper.so files.
 
+For v2.1 same deployment instructions apply as for v2.0.
+
 4. Updating the "data" file
 
 The data file can only be updated manually for version 1.2. See above sections for more information.
@@ -57,8 +59,8 @@ Starting with version 2.0 the data is being updated by using a data entry dialog
 
 5. Further info
 
-Click the Help button within the app for more information. Please note that in version 2.0 the help menu is contextual. If accessed from data entry dialog page it provides data entry help topics while when accessing it from the introduction or main page it contains general game help topics.
+Click the Help button within the app for more information. Please note that starting with version 2.0 the help menu is contextual. If accessed from data entry dialog page it provides data entry help topics while when accessing it from the introduction or main page it contains general game help topics.
 
 For questions please feel free to comment on my GitHub page: https://github.com/LiviuCP
 
-Last note: the words "pane" and "page" can be used interchangeably into application/README as for these two versions of the game a page contains exactly one pane. This might change in the future versions.
+Last note: the words "pane", "page" and "dialog" can be used interchangeably into application/README as for these two versions of the game a page contains exactly one pane. This might change in the future versions.
