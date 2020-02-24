@@ -567,6 +567,7 @@ void GameFacade::_onWriteDataToDbFinished(int nrOfPrimaryLanguageSavedEntries)
 
     if (initialNrOfPrimarySourceEntries > 0)
     {
+        m_pDataSourceAccessHelper->addEntriesToTable(nrOfPrimaryLanguageSavedEntries);
         Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_SUCCESSFULLY_SAVED);
     }
     else if (nrOfPrimaryLanguageSavedEntries > 0)
