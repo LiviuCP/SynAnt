@@ -47,7 +47,7 @@ Item {
         Dropdown {
             id: languageSelectionDropdown
 
-            Layout.fillWidth: true
+            Layout.minimumWidth: 0.75 * parent.width
 
             dropdownEnabled: presenter.languageSelectionEnabled && !presenter.dataEntry.dataSavingInProgress && !presenter.dataEntry.dataFetchingInProgress
 
@@ -61,6 +61,19 @@ Item {
                 presenter.handleLanguageChangeRequest(selectedIndex);
                 presenter.dataEntry.handleLanguageChangeRequest(selectedIndex);
             }
+        }
+
+        ActivationSwitch {
+            id: timeLimitSwitch
+
+            Layout.minimumWidth: bottomBtnsMinWidth * 0.98
+
+            itemHeight: languageSelectionDropdown.height
+            leftSwitchLabel: GameStrings.timeLimitSwitchLabel
+
+            onSwitchToggled: console.log("Switch toggled. Under construction.")
+            onLeftToggled: console.log("Switch set to OFF. Under construction.")
+            onRightToggled: console.log("Switch set to ON. Under construction.")
         }
     }
 
