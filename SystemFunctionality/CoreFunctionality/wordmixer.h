@@ -31,7 +31,7 @@ public:
     void mixWords(QPair<QString, QString> newWordsPair, bool areSynonyms);
 
     // sets number of characters for each word piece
-    void setWordPieceSize(Game::Levels level);
+    void setGameLevel(Game::Levels level);
 
     const QVector<QString>& getMixedWordsPiecesContent() const;
     QString getFirstWord() const;
@@ -59,7 +59,7 @@ private:
         PiecesCount
     };
 
-    int m_WordPieceSize;
+    Game::Levels m_GameLevel;
     QPair<QString,QString> m_WordsPair;
     QVector<QString> m_MixedWordsPiecesContent;
 

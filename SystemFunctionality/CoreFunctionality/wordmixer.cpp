@@ -4,7 +4,7 @@
 
 WordMixer::WordMixer(QObject *parent)
     : QObject(parent)
-    , m_WordPieceSize{Game::c_WordPieceSizes[Game::Levels::LEVEL_MEDIUM]}
+    , m_GameLevel{Game::Levels::LEVEL_NONE}
     , m_WordsPair{}
     , m_MixedWordsPiecesContent{}
     , m_WordsBeginEndPieceIndexes{
@@ -21,6 +21,7 @@ WordMixer::WordMixer(QObject *parent)
 
 void WordMixer::mixWords(QPair<QString, QString> newWordsPair, bool areSynonyms)
 {
+    Q_ASSERT(m_GameLevel != Game::Levels::LEVEL_NONE);
     Q_ASSERT(newWordsPair.first.size() != 0 && newWordsPair.second.size() != 0);
 
     auto insertWordPiece = [this](const QString &word, int firstCharPos, QVector<int> &wordPieceIndexes)
@@ -29,7 +30,7 @@ void WordMixer::mixWords(QPair<QString, QString> newWordsPair, bool areSynonyms)
         int insertOnPositionIndex{indexDist(m_WordPieceIndexEngine)};
 
         int insertOnPosition{wordPieceIndexes[insertOnPositionIndex]};
-        m_MixedWordsPiecesContent[insertOnPosition] = word.mid(firstCharPos,m_WordPieceSize);
+        m_MixedWordsPiecesContent[insertOnPosition] = word.mid(firstCharPos, Game::c_WordPieceSizes[m_GameLevel]);
 
         wordPieceIndexes.remove(insertOnPositionIndex);
         return insertOnPosition;
@@ -40,8 +41,8 @@ void WordMixer::mixWords(QPair<QString, QString> newWordsPair, bool areSynonyms)
 
     int firstWordSize{m_WordsPair.first.size()};
     int secondWordSize{m_WordsPair.second.size()};
-    int firstWordNrOfPieces{firstWordSize / m_WordPieceSize + ((firstWordSize % m_WordPieceSize) == 0 ? 0 : 1)};
-    int secondWordNrOfPieces{secondWordSize / m_WordPieceSize + ((secondWordSize % m_WordPieceSize) == 0 ? 0 : 1)};
+    int firstWordNrOfPieces{firstWordSize / Game::c_WordPieceSizes[m_GameLevel] + ((firstWordSize % Game::c_WordPieceSizes[m_GameLevel]) == 0 ? 0 : 1)};
+    int secondWordNrOfPieces{secondWordSize / Game::c_WordPieceSizes[m_GameLevel] + ((secondWordSize % Game::c_WordPieceSizes[m_GameLevel]) == 0 ? 0 : 1)};
     int totalNrOfPieces{firstWordNrOfPieces + secondWordNrOfPieces};
 
     m_MixedWordsPiecesContent.resize(totalNrOfPieces);
@@ -52,18 +53,18 @@ void WordMixer::mixWords(QPair<QString, QString> newWordsPair, bool areSynonyms)
         wordPieceIndexes.append(pieceIndex);
     }
 
-    int firstWordLastPiecePos{m_WordPieceSize*(firstWordNrOfPieces-1)};
-    int secondWordLastPiecePos{m_WordPieceSize*(secondWordNrOfPieces-1)};
+    int firstWordLastPiecePos{Game::c_WordPieceSizes[m_GameLevel]*(firstWordNrOfPieces-1)};
+    int secondWordLastPiecePos{Game::c_WordPieceSizes[m_GameLevel]*(secondWordNrOfPieces-1)};
 
     m_WordsBeginEndPieceIndexes[WordsBeginEndPieces::FIRST_WORD_FIRST_PIECE] = insertWordPiece(m_WordsPair.first, 0, wordPieceIndexes);
-    for (int wordPieceStartPos{m_WordPieceSize}; wordPieceStartPos<firstWordLastPiecePos; wordPieceStartPos+=m_WordPieceSize)
+    for (int wordPieceStartPos{Game::c_WordPieceSizes[m_GameLevel]}; wordPieceStartPos<firstWordLastPiecePos; wordPieceStartPos+=Game::c_WordPieceSizes[m_GameLevel])
     {
         insertWordPiece(m_WordsPair.first, wordPieceStartPos, wordPieceIndexes);
     }
     m_WordsBeginEndPieceIndexes[WordsBeginEndPieces::FIRST_WORD_LAST_PIECE] = insertWordPiece(m_WordsPair.first, firstWordLastPiecePos, wordPieceIndexes);
 
     m_WordsBeginEndPieceIndexes[WordsBeginEndPieces::SECOND_WORD_FIRST_PIECE] = insertWordPiece(m_WordsPair.second, 0, wordPieceIndexes);
-    for (int wordPieceStartPos{m_WordPieceSize}; wordPieceStartPos<secondWordLastPiecePos; wordPieceStartPos+=m_WordPieceSize)
+    for (int wordPieceStartPos{Game::c_WordPieceSizes[m_GameLevel]}; wordPieceStartPos<secondWordLastPiecePos; wordPieceStartPos+=Game::c_WordPieceSizes[m_GameLevel])
     {
         insertWordPiece(m_WordsPair.second, wordPieceStartPos, wordPieceIndexes);
     }
@@ -72,10 +73,12 @@ void WordMixer::mixWords(QPair<QString, QString> newWordsPair, bool areSynonyms)
     Q_EMIT newWordsPairMixed();
 }
 
-void WordMixer::setWordPieceSize(Game::Levels level)
+void WordMixer::setGameLevel(Game::Levels level)
 {
-    Q_ASSERT(static_cast<int>(level) >= 0 && static_cast<int>(level) < static_cast<int>(Game::Levels::NrOfLevels));
-    m_WordPieceSize = Game::c_WordPieceSizes[level];
+    if (level != Game::Levels::LEVEL_NONE)
+    {
+        m_GameLevel = level;
+    }
 }
 
 const QVector<QString>& WordMixer::getMixedWordsPiecesContent() const

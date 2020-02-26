@@ -7,12 +7,14 @@ StatisticsItem::StatisticsItem(QObject *parent)
     , m_TotalAvailableScore{0}
     , m_GuessedWordPairs{0}
     , m_TotalWordPairs{0}
-    , m_ScoreIncrement{Game::c_ScoreIncrements[Game::Levels::LEVEL_MEDIUM]}
+    , m_GameLevel{Game::Levels::LEVEL_NONE}
 {
 }
 
 void StatisticsItem::initStatistics()
 {
+    Q_ASSERT(m_GameLevel != Game::Levels::LEVEL_NONE);
+
     if (!m_IsInitialized)
     {
         m_IsInitialized = true;
@@ -22,7 +24,7 @@ void StatisticsItem::initStatistics()
 
 void StatisticsItem::updateStatistics(Game::StatisticsUpdateTypes updateType)
 {
-    Q_ASSERT(m_IsInitialized);
+    Q_ASSERT(m_IsInitialized && m_GameLevel != Game::Levels::LEVEL_NONE);
 
     if (updateType == Game::StatisticsUpdateTypes::RESET)
     {
@@ -44,21 +46,23 @@ void StatisticsItem::updateStatistics(Game::StatisticsUpdateTypes updateType)
     {
         if (updateType == Game::StatisticsUpdateTypes::FULL_UPDATE)
         {
-            m_ObtainedScore += m_ScoreIncrement;
+            m_ObtainedScore += Game::c_ScoreIncrements[m_GameLevel];
             m_GuessedWordPairs++;
         }
 
-        m_TotalAvailableScore += m_ScoreIncrement;
+        m_TotalAvailableScore += Game::c_ScoreIncrements[m_GameLevel];
         m_TotalWordPairs++;
 
         Q_EMIT statisticsUpdated(updateType);
     }
 }
 
-void StatisticsItem::setScoreIncrement(Game::Levels level)
+void StatisticsItem::setGameLevel(Game::Levels level)
 {
-    Q_ASSERT(static_cast<int>(level) >= 0 && static_cast<int>(level) < static_cast<int>(Game::Levels::NrOfLevels));
-    m_ScoreIncrement = Game::c_ScoreIncrements[level];
+    if (level != Game::Levels::LEVEL_NONE)
+    {
+        m_GameLevel = level;
+    }
 }
 
 bool StatisticsItem::canResetStatistics() const

@@ -157,8 +157,8 @@ void GamePresenter::handleMainPaneStatisticsResetRequest()
 
 void GamePresenter::switchToLevel(int level)
 {
-    Q_ASSERT(level >= 0 && level < static_cast<int>(Game::Levels::NrOfLevels));
-    m_pGameFacade->setLevel(static_cast<Game::Levels>(level));
+    Q_ASSERT(level >= 0 && level < static_cast<int>(Game::Levels::LEVEL_NONE));
+    m_pGameFacade->setGameLevel(static_cast<Game::Levels>(level));
 }
 
 void GamePresenter::handleLanguageChangeRequest(int newLanguageIndex, bool revertLanguageWhenDataUnavailable)

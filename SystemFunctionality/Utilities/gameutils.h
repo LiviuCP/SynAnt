@@ -178,7 +178,7 @@ namespace Game
         LEVEL_EASY,
         LEVEL_MEDIUM,
         LEVEL_HARD,
-        NrOfLevels
+        LEVEL_NONE
     };
 
     enum class StatisticsUpdateTypes

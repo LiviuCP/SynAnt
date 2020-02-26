@@ -24,7 +24,7 @@ public:
 
     void initStatistics();
     void updateStatistics(Game::StatisticsUpdateTypes updateType);
-    void setScoreIncrement(Game::Levels level);
+    void setGameLevel(Game::Levels level);
     bool canResetStatistics() const;
 
     QString getObtainedScore() const;
@@ -44,7 +44,7 @@ private:
     int m_GuessedWordPairs;
     int m_TotalWordPairs;
 
-    int m_ScoreIncrement;
+    Game::Levels m_GameLevel;
 };
 
 #endif // STATISTICSITEM_H

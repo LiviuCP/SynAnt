@@ -53,7 +53,7 @@ public:
     void handleSubmitRequest();
     void handleSavingInProgress();
     void provideCorrectWordsPairToUser();
-    void setLevel(Game::Levels level);
+    void setGameLevel(Game::Levels level);
     void setLanguage(int languageIndex, bool revertLanguageWhenDataUnavailable);
     bool canResetGameStatistics() const;
     void resetGameStatistics();
@@ -116,6 +116,7 @@ private:
     void _connectToDataSource();
     void _addPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex);
     void _removePiecesFromInputWordInPersistentMode();
+    void _pushCurrentGameLevel();
 
     GameFunctionalityProxy* m_pGameFunctionalityProxy;
     DataSourceProxy* m_pDataSourceProxy;
@@ -130,6 +131,7 @@ private:
     bool m_IsGameStarted;
     bool m_IsGamePaused;
     bool m_IsPersistentIndexModeEnabled;
+    Game::Levels m_GameLevel;
     int m_CurrentLanguageIndex;
     int m_PreviousLanguageIndex; // used for restoring the previous language in main pane in case no word can be fetched from currently setup one
     bool m_IsFetchingInProgress;

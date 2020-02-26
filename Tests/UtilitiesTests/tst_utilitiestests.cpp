@@ -35,15 +35,15 @@ void UtilitiesTests::testStatisticsCorrectlyUpdated()
     pStatisticsItem->initStatistics();
     _checkCorrectStatistics(*pStatisticsItem, 0, 0, 0, 0, "Checking initial statistics");
 
-    pStatisticsItem->setScoreIncrement(Game::Levels::LEVEL_EASY);
+    pStatisticsItem->setGameLevel(Game::Levels::LEVEL_EASY);
     pStatisticsItem->updateStatistics(Game::StatisticsUpdateTypes::PARTIAL_UPDATE);
     pStatisticsItem->updateStatistics(Game::StatisticsUpdateTypes::FULL_UPDATE);
 
-    pStatisticsItem->setScoreIncrement(Game::Levels::LEVEL_MEDIUM);
+    pStatisticsItem->setGameLevel(Game::Levels::LEVEL_MEDIUM);
     pStatisticsItem->updateStatistics(Game::StatisticsUpdateTypes::PARTIAL_UPDATE);
     pStatisticsItem->updateStatistics(Game::StatisticsUpdateTypes::FULL_UPDATE);
 
-    pStatisticsItem->setScoreIncrement(Game::Levels::LEVEL_HARD);
+    pStatisticsItem->setGameLevel(Game::Levels::LEVEL_HARD);
     pStatisticsItem->updateStatistics(Game::StatisticsUpdateTypes::PARTIAL_UPDATE);
     pStatisticsItem->updateStatistics(Game::StatisticsUpdateTypes::FULL_UPDATE);
 
@@ -54,7 +54,7 @@ void UtilitiesTests::testStatisticsCorrectlyUpdated()
 
     _checkCorrectStatistics(*pStatisticsItem, 0, 0, 0, 0, "Checking statistics after reset");
 
-    pStatisticsItem->setScoreIncrement(Game::Levels::LEVEL_EASY);
+    pStatisticsItem->setGameLevel(Game::Levels::LEVEL_EASY);
     pStatisticsItem->updateStatistics(Game::StatisticsUpdateTypes::PARTIAL_UPDATE);
     pStatisticsItem->updateStatistics(Game::StatisticsUpdateTypes::FULL_UPDATE);
 
@@ -63,7 +63,7 @@ void UtilitiesTests::testStatisticsCorrectlyUpdated()
 
     pStatisticsItem->updateStatistics(Game::StatisticsUpdateTypes::RESET);
 
-    pStatisticsItem->setScoreIncrement(Game::Levels::LEVEL_MEDIUM);
+    pStatisticsItem->setGameLevel(Game::Levels::LEVEL_MEDIUM);
     pStatisticsItem->updateStatistics(Game::StatisticsUpdateTypes::PARTIAL_UPDATE);
     pStatisticsItem->updateStatistics(Game::StatisticsUpdateTypes::FULL_UPDATE);
 
@@ -72,7 +72,7 @@ void UtilitiesTests::testStatisticsCorrectlyUpdated()
 
     pStatisticsItem->updateStatistics(Game::StatisticsUpdateTypes::RESET);
 
-    pStatisticsItem->setScoreIncrement(Game::Levels::LEVEL_HARD);
+    pStatisticsItem->setGameLevel(Game::Levels::LEVEL_HARD);
     pStatisticsItem->updateStatistics(Game::StatisticsUpdateTypes::PARTIAL_UPDATE);
     pStatisticsItem->updateStatistics(Game::StatisticsUpdateTypes::FULL_UPDATE);
 

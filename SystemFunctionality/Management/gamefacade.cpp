@@ -17,6 +17,7 @@ GameFacade::GameFacade(QObject *parent)
     , m_IsGameStarted{false}
     , m_IsGamePaused{false}
     , m_IsPersistentIndexModeEnabled{false}
+    , m_GameLevel{Game::Levels::LEVEL_MEDIUM}
     , m_CurrentLanguageIndex{-1}
     , m_PreviousLanguageIndex{-1}
     , m_IsFetchingInProgress{false}
@@ -70,6 +71,10 @@ GameFacade::GameFacade(QObject *parent)
 
 void GameFacade::init()
 {
+    Q_ASSERT(m_GameLevel != Game::Levels::LEVEL_NONE);
+
+    _pushCurrentGameLevel();
+
     if (m_CurrentStatusCode == Game::StatusCodes::NO_LANGUAGE_SET)
     {
         Q_EMIT statusChanged(m_CurrentStatusCode);
@@ -368,14 +373,19 @@ void GameFacade::provideCorrectWordsPairToUser()
     m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
 }
 
-void GameFacade::setLevel(Game::Levels level)
+void GameFacade::setGameLevel(Game::Levels level)
 {
-    m_pWordMixer->setWordPieceSize(level);
-    m_pStatisticsItem->setScoreIncrement(level);
+    Q_ASSERT(level != Game::Levels::LEVEL_NONE);
 
-    Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::LEVEL_CHANGED);
+    if (m_GameLevel != level)
+    {
+        m_GameLevel = level;
+        _pushCurrentGameLevel();
 
-    m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
+        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::LEVEL_CHANGED);
+
+        m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
+    }
 }
 
 void GameFacade::setLanguage(int languageIndex, bool revertLanguageWhenDataUnavailable)
@@ -707,4 +717,10 @@ void GameFacade::_removePiecesFromInputWordInPersistentMode()
             Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::PIECES_REMOVED);
         }
     }
+}
+
+void GameFacade::_pushCurrentGameLevel()
+{
+    m_pWordMixer->setGameLevel(m_GameLevel);
+    m_pStatisticsItem->setGameLevel(m_GameLevel);
 }
