@@ -47,10 +47,11 @@ QtObject {
     readonly property string closeButtonLabel:                                      "Close"
     readonly property string scoreLabel:                                            "Score:"
     readonly property string pairsLabel:                                            "Pairs:"
-    readonly property string selectLanguageLabel:                                   "Select language"
+    readonly property string remainingTimeLabel:                                    "Time:"
     readonly property string timeLimitSwitchLabel:                                  "Time limit:"
     readonly property string timeLimitOffLabel:                                     "Time limit OFF"
     readonly property string timeLimitOnLabel:                                      "Time limit ON"
+    readonly property string selectLanguageLabel:                                   "Select language"
 
     // shortcuts
     readonly property string playButtonShortcut:                                    "ALT+P"
@@ -93,6 +94,8 @@ QtObject {
     readonly property string wordPairsToolTip:                                      "Displays the number of word pairs:
                                                                                     \n1) Current number of pairs the user has guessed so far
                                                                                     \n2) Total number of pairs presented to user so far."
+
+    readonly property string remainingTimeToolTip:                                  "Displays the time left for guessing the current word pair."
     readonly property string mainPaneStatusBoxToolTip:                              "Displays the game status (e.g. if 2 correct words were entered)."
     readonly property string selectWordPieceToolTip:                                "Single click to add the word piece to the first word input.
                                                                                     \nDouble click to add the word piece to the second word input."

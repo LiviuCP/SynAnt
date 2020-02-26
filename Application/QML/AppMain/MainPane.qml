@@ -68,10 +68,23 @@ Item {
             leftValue: presenter.guessedWordPairs
             rightValue: presenter.totalWordPairs
 
-            Layout.minimumWidth: 2 * (statisticsLayout.width - 0.5 * statisticsLayout.spacing) / 3
+            Layout.minimumWidth: (statisticsLayout.width - 2 * statisticsLayout.spacing) / 3
             Layout.minimumHeight: parent.height / 2
 
             boxToolTip: GameStrings.wordPairsToolTip
+        }
+
+        StatisticsBox {
+            id: timeLimitBox
+
+            boxLabel: GameStrings.remainingTimeLabel
+            leftValue: "05"     // to be updated
+            rightValue: "00"    // to be updated
+
+            Layout.minimumWidth: (statisticsLayout.width - 2 * statisticsLayout.spacing) / 3
+            Layout.minimumHeight: parent.height / 2
+
+            boxToolTip: GameStrings.remainingTimeToolTip
         }
     }
 
@@ -206,7 +219,7 @@ Item {
         }
 
         ColumnLayout {
-            Layout.minimumWidth: wordPairsBox.width
+            Layout.minimumWidth: 2 * wordPairsBox.width + statisticsLayout.spacing
             Layout.minimumHeight: parent.height
 
             ActivationSwitch {
