@@ -68,7 +68,7 @@ Item {
 
             Layout.minimumWidth: bottomBtnsMinWidth * 0.98
 
-            itemHeight: languageSelectionDropdown.height
+            customHeight: languageSelectionDropdown.height
             leftSwitchLabel: GameStrings.timeLimitSwitchLabel
 
             onSwitchToggled: console.log("Switch toggled. Under construction.")

@@ -49,6 +49,8 @@ QtObject {
     readonly property string pairsLabel:                                            "Pairs:"
     readonly property string selectLanguageLabel:                                   "Select language"
     readonly property string timeLimitSwitchLabel:                                  "Time limit:"
+    readonly property string timeLimitOffLabel:                                     "Time limit OFF"
+    readonly property string timeLimitOnLabel:                                      "Time limit ON"
 
     // shortcuts
     readonly property string playButtonShortcut:                                    "ALT+P"

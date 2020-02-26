@@ -205,15 +205,35 @@ Item {
             }
         }
 
-        StatusBox {
-            id: mainPaneStatusBox
-
+        ColumnLayout {
             Layout.minimumWidth: wordPairsBox.width
             Layout.minimumHeight: parent.height
-            Layout.alignment: Qt.AlignRight
 
-            statusMessage: presenter.mainPaneStatusMessage
-            boxToolTip: GameStrings.mainPaneStatusBoxToolTip
+            ActivationSwitch {
+                id: timeLimitSwitch
+
+                Layout.alignment: Layout.Bottom
+                Layout.preferredWidth: 0.998 * parent.width
+                Layout.leftMargin: 0.001 * width
+
+                customHeight: resetBtn.height
+                Layout.preferredHeight: resetBtn.height
+
+                leftSwitchLabel: GameStrings.timeLimitOffLabel
+                rightSwitchLabel: GameStrings.timeLimitOnLabel
+
+                onSwitchToggled: console.log("Switch toggled. Under construction.")
+                onLeftToggled: console.log("Switch set to OFF. Under construction.")
+                onRightToggled: console.log("Switch set to ON. Under construction.")
+            }
+
+            StatusBox {
+                id: mainPaneStatusBox
+                Layout.preferredWidth: parent.width
+                Layout.preferredHeight: parent.height - resetBtn.height - parent.spacing
+                statusMessage: presenter.mainPaneStatusMessage
+                boxToolTip: GameStrings.mainPaneStatusBoxToolTip
+            }
         }
     }
 

@@ -6,8 +6,8 @@ Item {
     property string leftSwitchLabel: ""
     property string rightSwitchLabel: ""
 
-    property double itemHeight: 28
-    readonly property double margin: 0.05 * width
+    property double customHeight: 28    // use this to determine the actual height of the widget (also add same preferredHeight in Column/Grid layouts)
+    readonly property double margin: 7
 
     property alias switchChecked: activationSwitch.checked
 
@@ -45,7 +45,7 @@ Item {
     Switch {
         id: activationSwitch
 
-        readonly property double switchHeight: itemHeight * 0.7
+        readonly property double switchHeight: customHeight * 0.7
 
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
