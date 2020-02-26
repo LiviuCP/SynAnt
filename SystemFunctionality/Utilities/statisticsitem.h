@@ -22,7 +22,7 @@ class StatisticsItem : public QObject
 public:
     explicit StatisticsItem(QObject *parent = nullptr);
 
-    void initStatistics();
+    void doInitialUpdate();
     void updateStatistics(Game::StatisticsUpdateTypes updateType);
     void setGameLevel(Game::Levels level);
     bool canResetStatistics() const;
@@ -37,7 +37,7 @@ signals:
 
 private:
     // total number is the maximum number that can be correctly guessed by user
-    bool m_IsInitialized;
+    bool m_IsInitialUpdateDone;
 
     int m_ObtainedScore;
     int m_TotalAvailableScore;

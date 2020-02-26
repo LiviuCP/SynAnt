@@ -91,7 +91,7 @@ void GameFacade::startGame()
     {
         Q_ASSERT(m_IsDataAvailable);
 
-        m_pStatisticsItem->initStatistics();
+        m_pStatisticsItem->doInitialUpdate();
 
         Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::GAME_STARTED);
 

@@ -183,7 +183,7 @@ namespace Game
 
     enum class StatisticsUpdateTypes
     {
-        INIT,
+        INITIAL_UPDATE,
         FULL_UPDATE,
         PARTIAL_UPDATE,
         RESET,

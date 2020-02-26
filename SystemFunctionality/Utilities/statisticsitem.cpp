@@ -2,7 +2,7 @@
 
 StatisticsItem::StatisticsItem(QObject *parent)
     : QObject(parent)
-    , m_IsInitialized{false}
+    , m_IsInitialUpdateDone{false}
     , m_ObtainedScore{0}
     , m_TotalAvailableScore{0}
     , m_GuessedWordPairs{0}
@@ -11,20 +11,20 @@ StatisticsItem::StatisticsItem(QObject *parent)
 {
 }
 
-void StatisticsItem::initStatistics()
+void StatisticsItem::doInitialUpdate()
 {
     Q_ASSERT(m_GameLevel != Game::Levels::LEVEL_NONE);
 
-    if (!m_IsInitialized)
+    if (!m_IsInitialUpdateDone)
     {
-        m_IsInitialized = true;
-        Q_EMIT statisticsUpdated(Game::StatisticsUpdateTypes::INIT);
+        m_IsInitialUpdateDone = true;
+        Q_EMIT statisticsUpdated(Game::StatisticsUpdateTypes::INITIAL_UPDATE);
     }
 }
 
 void StatisticsItem::updateStatistics(Game::StatisticsUpdateTypes updateType)
 {
-    Q_ASSERT(m_IsInitialized && m_GameLevel != Game::Levels::LEVEL_NONE);
+    Q_ASSERT(m_IsInitialUpdateDone && m_GameLevel != Game::Levels::LEVEL_NONE);
 
     if (updateType == Game::StatisticsUpdateTypes::RESET)
     {
