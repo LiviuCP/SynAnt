@@ -36,3 +36,8 @@ StatisticsItem* GameFunctionalityProxy::getStatisticsItem() const
 {
     return GameManager::getManager()->getStatisticsItem();
 }
+
+Chronometer *GameFunctionalityProxy::getChronometer() const
+{
+    return GameManager::getManager()->getChronometer();
+}

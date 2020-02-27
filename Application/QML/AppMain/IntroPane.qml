@@ -71,9 +71,9 @@ Item {
             customHeight: languageSelectionDropdown.height
             leftSwitchLabel: GameStrings.timeLimitSwitchLabel
 
-            onSwitchToggled: console.log("Switch toggled. Under construction.")
-            onLeftToggled: console.log("Switch set to OFF. Under construction.")
-            onRightToggled: console.log("Switch set to ON. Under construction.")
+            switchChecked: presenter.timeLimitEnabled
+
+            onSwitchToggled: presenter.setTimeLimitEnabled(switchChecked)
         }
     }
 

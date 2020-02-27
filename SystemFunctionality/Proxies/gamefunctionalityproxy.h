@@ -13,6 +13,7 @@ class WordMixer;
 class WordPairOwner;
 class InputBuilder;
 class StatisticsItem;
+class Chronometer;
 
 class GameFunctionalityProxy : public QObject
 {
@@ -26,6 +27,7 @@ public:
     WordPairOwner* getWordPairOwner() const;
     InputBuilder* getInputBuilder() const;
     StatisticsItem* getStatisticsItem() const;
+    Chronometer* getChronometer() const;
 };
 
 #endif // GAMEFUNCTIONALITYPROXY_H

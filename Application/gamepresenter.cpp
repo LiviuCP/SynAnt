@@ -65,6 +65,10 @@ GamePresenter::GamePresenter(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::languageChanged, this, &GamePresenter::languageChanged);
     Q_ASSERT(connected);
+    connected = connect(m_pGameFacade, &GameFacade::timeLimitEnabledChanged, this, &GamePresenter::timeLimitEnabledChanged);
+    Q_ASSERT(connected);
+    connected = connect(m_pGameFacade, &GameFacade::remainingTimeRefreshed, this, &GamePresenter::remainingTimeChanged);
+    Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::persistentIndexModeEnabledChanged, this, &GamePresenter::persistentModeEnabledChanged);
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::persistentPieceSelectionIndexChanged, this, &GamePresenter::pieceSelectionCursorPositionChanged);
@@ -202,6 +206,18 @@ void GamePresenter::executeSecondCursorAction()
     m_pGameFacade->executeSecondPersistentModeAction();
 }
 
+void GamePresenter::setTimeLimitEnabled(bool enabled)
+{
+    if (enabled)
+    {
+        m_pGameFacade->enableTimeLimit();
+    }
+    else
+    {
+        m_pGameFacade->disableTimeLimit();
+    }
+}
+
 void GamePresenter::selectPieceForFirstInputWord(int wordPieceIndex)
 {
     m_pGameFacade->addPieceToInputWord(Game::InputWordNumber::ONE, wordPieceIndex);
@@ -329,6 +345,11 @@ bool GamePresenter::getMainPaneStatisticsResetEnabled() const
 bool GamePresenter::isPersistentModeEnabled() const
 {
     return m_pGameFacade->isPersistentModeEnabled();
+}
+
+bool GamePresenter::isTimeLimitEnabled() const
+{
+    return m_pGameFacade->isTimeLimitEnabled();
 }
 
 bool GamePresenter::getClearMainPaneInputEnabled() const
@@ -487,6 +508,12 @@ int GamePresenter::getPiecesRemovalSecondWordCursorPosition() const
 int GamePresenter::getLanguageIndex() const
 {
     return m_pGameFacade->getCurrentLanguageIndex();
+}
+
+QStringList GamePresenter::getRemainingTime() const
+{
+    QPair<QString, QString> currentTimeMinSec{m_pGameFacade->getRemainingTime()};
+    return QStringList{} << currentTimeMinSec.first << currentTimeMinSec.second;
 }
 
 int GamePresenter::getLevelEasy() const
@@ -772,6 +799,18 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
             break;
         case Game::StatusCodes::PERSISTENT_INDEX_REQUIRED:
             _updateStatusMessage(Game::Messages::c_ClickSelectOrRemoveDisabledMessage, Pane::MAIN, Game::Timing::c_NoDelay);
+            _updateStatusMessage(Game::Messages::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::Timing::c_ShortStatusUpdateDelay);
+            break;
+        case Game::StatusCodes::TIME_LIMIT_ENABLED:
+            _updateStatusMessage(Game::Messages::c_TimeLimitEnabledMessage, Pane::MAIN, Game::Timing::c_NoDelay);
+            _updateStatusMessage(Game::Messages::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::Timing::c_ShortStatusUpdateDelay);
+            break;
+        case Game::StatusCodes::TIME_LIMIT_DISABLED:
+            _updateStatusMessage(Game::Messages::c_TimeLimitDisabledMessage, Pane::MAIN, Game::Timing::c_NoDelay);
+            _updateStatusMessage(Game::Messages::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::Timing::c_ShortStatusUpdateDelay);
+            break;
+        case Game::StatusCodes::TIME_LIMIT_REACHED:
+            _updateStatusMessage(Game::Messages::c_TimeLimitReachedMessage, Pane::MAIN, Game::Timing::c_NoDelay);
             _updateStatusMessage(Game::Messages::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::Timing::c_ShortStatusUpdateDelay);
             break;
         default:

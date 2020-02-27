@@ -35,6 +35,7 @@ class GamePresenter : public QObject
     Q_PROPERTY(bool clearMainPaneInputEnabled READ getClearMainPaneInputEnabled NOTIFY clearMainPaneInputEnabledChanged)
     Q_PROPERTY(bool mainPaneStatisticsResetEnabled READ getMainPaneStatisticsResetEnabled NOTIFY mainPaneStatisticsResetEnabledChanged)
     Q_PROPERTY(bool persistentModeEnabled READ isPersistentModeEnabled NOTIFY persistentModeEnabledChanged)
+    Q_PROPERTY(bool timeLimitEnabled READ isTimeLimitEnabled NOTIFY timeLimitEnabledChanged)
 
     /* game and user input properties */
     Q_PROPERTY(QList<QVariant> mixedWordsPiecesContent READ getMixedWordsPiecesContent NOTIFY mixedWordsChanged)
@@ -43,6 +44,7 @@ class GamePresenter : public QObject
     Q_PROPERTY(QList<QVariant> firstWordInputPiecesContent READ getFirstWordInputPiecesContent NOTIFY inputChanged)
     Q_PROPERTY(QList<QVariant> firstWordInputPiecesTextColors READ getFirstWordInputPiecesTextColors NOTIFY inputChanged)
     Q_PROPERTY(int languageIndex READ getLanguageIndex NOTIFY languageChanged)
+    Q_PROPERTY(QStringList remainingTimeMinSec READ getRemainingTime NOTIFY remainingTimeChanged)
     Q_PROPERTY(bool areFirstWordInputPiecesHovered READ getAreFirstWordInputPiecesHovered NOTIFY hoverChanged)
     Q_PROPERTY(int firstWordInputPiecesHoverIndex READ getFirstWordInputPiecesHoverIndex NOTIFY hoverChanged)
     Q_PROPERTY(QList<QVariant> secondWordInputPiecesContent READ getSecondWordInputPiecesContent NOTIFY inputChanged)
@@ -110,6 +112,7 @@ public:
     Q_INVOKABLE void moveCursorRight();
     Q_INVOKABLE void executeFirstCursorAction();
     Q_INVOKABLE void executeSecondCursorAction();
+    Q_INVOKABLE void setTimeLimitEnabled(bool enabled);
     Q_INVOKABLE void selectPieceForFirstInputWord(int wordPieceIndex);
     Q_INVOKABLE void selectPieceForSecondInputWord(int wordPieceIndex);
     Q_INVOKABLE void removePiecesFromFirstInputWord(int inputRangeStart);
@@ -134,6 +137,7 @@ public:
     bool isPlayEnabled() const;
     bool getMainPaneStatisticsResetEnabled() const;
     bool isPersistentModeEnabled() const;
+    bool isTimeLimitEnabled() const;
     bool getClearMainPaneInputEnabled() const;
     bool getSubmitMainPaneInputEnabled() const;
     bool getDataFetchingInProgress() const;
@@ -158,6 +162,8 @@ public:
     int getPiecesRemovalSecondWordCursorPosition() const;
 
     int getLanguageIndex() const;
+
+    QStringList getRemainingTime() const;
 
     int getLevelEasy() const;
     int getLevelMedium() const;
@@ -184,9 +190,11 @@ signals:
     Q_SIGNAL void currentPaneChanged();
     Q_SIGNAL void languageSelectionEnabledChanged();
     Q_SIGNAL void languageChanged();
+    Q_SIGNAL void remainingTimeChanged();
     Q_SIGNAL void playEnabledChanged();
     Q_SIGNAL void mainPaneStatisticsResetEnabledChanged();
     Q_SIGNAL void persistentModeEnabledChanged();
+    Q_SIGNAL void timeLimitEnabledChanged();
     Q_SIGNAL void clearMainPaneInputEnabledChanged();
     Q_SIGNAL void submitMainPaneInputEnabledChanged();
     Q_SIGNAL void errorOccuredChanged();

@@ -19,6 +19,7 @@
 #include "../Proxies/datasourceproxy.h"
 #include "../Proxies/dataentryproxy.h"
 #include "../Utilities/statisticsitem.h"
+#include "../Utilities/chronometer.h"
 #include "../Utilities/exceptions.h"
 
 GameManager* GameManager::s_pGameManager = nullptr;
@@ -57,7 +58,8 @@ GameManager::GameManager(QObject *parent)
     , m_pWordMixer{new WordMixer{this}}
     , m_pWordPairOwner{new WordPairOwner{this}}
     , m_pInputBuilder{new InputBuilder{this}}
-    , m_pStatisticsItem {new StatisticsItem{this}}
+    , m_pStatisticsItem{new StatisticsItem{this}}
+    , m_pChronometer{new Chronometer{this}}
     , m_pDataSourceLoaderThread{nullptr}
     , m_pDataEntryCacheThread{nullptr}
 {
@@ -199,6 +201,11 @@ InputBuilder* GameManager::getInputBuilder() const
 StatisticsItem* GameManager::getStatisticsItem() const
 {
     return m_pStatisticsItem;
+}
+
+Chronometer *GameManager::getChronometer() const
+{
+    return m_pChronometer;
 }
 
 int GameManager::getLastSavedTotalNrOfEntries() const

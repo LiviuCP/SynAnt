@@ -78,8 +78,8 @@ Item {
             id: timeLimitBox
 
             boxLabel: GameStrings.remainingTimeLabel
-            leftValue: "05"     // to be updated
-            rightValue: "00"    // to be updated
+            leftValue: presenter.remainingTimeMinSec[0]
+            rightValue: presenter.remainingTimeMinSec[1]
 
             Layout.minimumWidth: (statisticsLayout.width - 2 * statisticsLayout.spacing) / 3
             Layout.minimumHeight: parent.height / 2
@@ -237,9 +237,9 @@ Item {
                 leftSwitchLabel: GameStrings.timeLimitOffLabel
                 rightSwitchLabel: GameStrings.timeLimitOnLabel
 
-                onSwitchToggled: console.log("Switch toggled. Under construction.")
-                onLeftToggled: console.log("Switch set to OFF. Under construction.")
-                onRightToggled: console.log("Switch set to ON. Under construction.")
+                switchChecked: presenter.timeLimitEnabled
+
+                onSwitchToggled: presenter.setTimeLimitEnabled(switchChecked)
             }
 
             StatusBox {

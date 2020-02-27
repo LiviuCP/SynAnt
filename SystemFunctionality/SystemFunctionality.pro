@@ -44,6 +44,7 @@ SOURCES += \
         Proxies/dataentryproxy.cpp \
         Proxies/datasourceproxy.cpp \
         Utilities/statisticsitem.cpp \
+        Utilities/chronometer.cpp \
         Utilities/exceptions.cpp \
         systemfunctionality.cpp
 
@@ -68,6 +69,7 @@ HEADERS += \
         Proxies/dataentryproxy.h \
         Proxies/datasourceproxy.h \
         Utilities/statisticsitem.h \
+        Utilities/chronometer.h \
         Utilities/exceptions.h \
         Utilities/gameutils.h \
         Utilities/dataentryutils.h \

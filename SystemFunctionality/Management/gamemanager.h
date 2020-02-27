@@ -12,6 +12,7 @@
        - WordPairOwner
        - InputBuilder
        - StatisticsItem
+       - Chronometer
     2) Sets up database and manages the data connections (data source, loader, validator and cache); controls the data related functionality (loading, entry, validation, save to DB)
     3) Makes the non-facade game components connections (InputBuilder, WordPairOwner, WordMixer)
     4) Is responsible for creating/managing threads
@@ -44,6 +45,7 @@ class WordMixerProxy;
 class WordPairOwner;
 class InputBuilder;
 class StatisticsItem;
+class Chronometer;
 
 class GameManager : public QObject
 {
@@ -76,6 +78,7 @@ public:
     WordPairOwner* getWordPairOwner() const;
     InputBuilder* getInputBuilder() const;
     StatisticsItem* getStatisticsItem() const;
+    Chronometer* getChronometer() const;
 
     int getLastSavedTotalNrOfEntries() const;
     int getLastNrOfEntriesSavedToPrimaryLanguage() const;
@@ -125,6 +128,7 @@ private:
     WordPairOwner* m_pWordPairOwner;
     InputBuilder* m_pInputBuilder;
     StatisticsItem* m_pStatisticsItem;
+    Chronometer* m_pChronometer;
     QThread* m_pDataSourceLoaderThread;
     QThread* m_pDataEntryCacheThread;
 };

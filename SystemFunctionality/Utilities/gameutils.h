@@ -156,6 +156,9 @@ namespace Game
         PERSISTENT_MODE_ENTERED,
         PERSISTENT_MODE_EXITED,
         PERSISTENT_INDEX_REQUIRED,
+        TIME_LIMIT_ENABLED,
+        TIME_LIMIT_DISABLED,
+        TIME_LIMIT_REACHED,
         StatusCodesCount
     };
 
@@ -378,6 +381,10 @@ namespace Game
                                                             };
 
         const QString c_LanguageChangedMessage              {    "Language changed\n\n"                                                                     };
+
+        const QString c_TimeLimitEnabledMessage             {    "The time limit has been enabled. Countdown has started!"                                  };
+        const QString c_TimeLimitDisabledMessage            {    "The time limit has been disabled!"                                                        };
+        const QString c_TimeLimitReachedMessage             {    "The time limit has been reached. A new pair of words has been provided."                   };
 
         const QString c_CursorModeEnabledMessage            {    "Cursor enabled."                                                                          };
         const QString c_CursorModeDisabledMessage           {    "Cursor disabled."                                                                         };

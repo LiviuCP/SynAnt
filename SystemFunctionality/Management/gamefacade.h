@@ -23,6 +23,7 @@ class WordMixer;
 class WordPairOwner;
 class InputBuilder;
 class StatisticsItem;
+class Chronometer;
 
 class GameFacade : public QObject
 {
@@ -44,6 +45,9 @@ public:
     void decreasePersistentIndex();
     void executeFirstPersistentModeAction();
     void executeSecondPersistentModeAction();
+
+    void enableTimeLimit();
+    void disableTimeLimit();
 
     void addPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex);
     void removePiecesFromInputWord(Game::InputWordNumber inputWordNumber, int inputRangeStart);
@@ -71,6 +75,7 @@ public:
 
     bool isPersistentModeEnabled() const;
     bool isInputComplete() const;
+    bool isTimeLimitEnabled() const;
 
     QString getFirstReferenceWord() const;
     QString getSecondReferenceWord() const;
@@ -81,6 +86,7 @@ public:
     QString getTotalWordPairs() const;
 
     int getCurrentLanguageIndex() const;
+    QPair<QString, QString> getRemainingTime() const;
 
     bool isDataFetchingInProgress() const;
     bool isDataAvailable() const;
@@ -97,6 +103,8 @@ signals:
     Q_SIGNAL void persistentPieceSelectionIndexChanged();
     Q_SIGNAL void persistentPiecesRemovalIndexesChanged();
     Q_SIGNAL void persistentIndexModeEnabledChanged();
+    Q_SIGNAL void timeLimitEnabledChanged();
+    Q_SIGNAL void remainingTimeRefreshed();
     Q_SIGNAL void statisticsChanged();
     Q_SIGNAL void statusChanged(Game::StatusCodes status);
 
@@ -111,6 +119,8 @@ private slots:
     void _onPieceAddedToInput(int index);
     void _onPiecesRemovedFromInput(QVector<int> indexes);
     void _onStatisticsUpdated(Game::StatisticsUpdateTypes updateType);
+    void _onChronometerTimeoutTriggered();
+    void _onChronometerEnabledChanged();
 
 private:
     void _connectToDataSource();
@@ -125,6 +135,7 @@ private:
     WordPairOwner* m_pWordPairOwner;
     InputBuilder* m_pInputBuilder;
     StatisticsItem* m_pStatisticsItem;
+    Chronometer* m_pChronometer;
     Game::StatusCodes m_CurrentStatusCode;
     bool m_IsConnectedToDataSource;
     bool m_IsDataAvailable;
