@@ -16,6 +16,8 @@ Item {
     signal rightToggled
     signal leftToggled
 
+    opacity: activationSwitch.enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
+
     Rectangle {
         id: switchBackground
 
