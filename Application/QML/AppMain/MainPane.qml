@@ -225,6 +225,8 @@ Item {
             ActivationSwitch {
                 id: timeLimitSwitch
 
+                switchEnabled: !presenter.dataFetchingInProgress
+
                 Layout.alignment: Layout.Bottom
                 Layout.preferredWidth: 0.998 * parent.width
                 Layout.leftMargin: 0.001 * width

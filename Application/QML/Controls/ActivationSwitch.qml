@@ -10,6 +10,7 @@ Item {
     readonly property double margin: 7
 
     property alias switchChecked: activationSwitch.checked
+    property alias switchEnabled: activationSwitch.enabled
 
     signal switchToggled
     signal rightToggled
