@@ -109,11 +109,24 @@ static const QString c_RawGameHelpMessage                   {
                                                                  "For Clear input the shortcut ALT+Z could be used.\n"
                                                                  "\n35) Hit ALT+1/2/3 for setting the difficulty levels to "
                                                                  "easy/medium/hard.\n"
-                                                                 "\n36) Use the data entry page to enter additional word pairs. "
+                                                                 "\n36) It is possible to setup a time limit for guessing each word pair. This means the user should enter the "
+                                                                 "correct words in the given time. Use the switch from the intro or main pane to enable/disable this feature.\n"
+                                                                 "\n37) Following should be taken into consideration when setting up a time limit: \n"
+                                                                 " - after enabling the time limit from intro pane the counter will start once entering the main pane\n"
+                                                                 " - at timeout a new pair is provided to user but no points are earned. The countdown is restarted.\n"
+                                                                 " - the counter starts/stops immediately after time limit has been enabled/disabled from main pane\n"
+                                                                 " - the counter pauses when temporarily leaving the main pane (to help or data entry) and resumes once "
+                                                                 "returning to main\n"
+                                                                 " - the time limit depends on level (a higher level means a higher limit)\n"
+                                                                 " - the counter gets reset each time a new words pair is provided to user\n"
+                                                                 " - the time limit switch is disabled while a new language is being setup in the main pane\n"
+                                                                 " - for the same level the user gets more points when correctly guessing the pair while the time limit is enabled. "
+                                                                 "The obtained score per pair is: %7 points (easy), %8 points (medium), %9 points (hard).\n"
+                                                                 "\n38) Use the data entry page to enter additional word pairs. "
                                                                  "Press the Enter new pairs button or hit ALT+E to access the page. "
                                                                  "For more details please access the Help section from the data entry page. \n"
-                                                                 "\n37) The data entry dialog is available only after initial loading of the database content at game start.\n"
-                                                                 "\n38) Press Quit or hit ALT+Q for exiting the application. Please note that if data saving or loading "
+                                                                 "\n39) The data entry dialog is available only after initial loading of the database content at game start.\n"
+                                                                 "\n40) Press Quit or hit ALT+Q for exiting the application. Please note that if data saving or loading "
                                                                  "is in progress the exit process will take place only after the load or save operation is complete. "
                                                                  "Please refer to the data entry help menu for more details "
                                                                  "regarding closing the application from data entry dialog.\n"
@@ -303,6 +316,9 @@ namespace Game
                                                                      .arg(Game::c_ScoreIncrements[Game::Levels::LEVEL_EASY])
                                                                      .arg(Game::c_ScoreIncrements[Game::Levels::LEVEL_MEDIUM])
                                                                      .arg(Game::c_ScoreIncrements[Game::Levels::LEVEL_HARD])
+                                                                     .arg(Game::c_EnhancedScoreIncrements[Game::Levels::LEVEL_EASY])
+                                                                     .arg(Game::c_EnhancedScoreIncrements[Game::Levels::LEVEL_MEDIUM])
+                                                                     .arg(Game::c_EnhancedScoreIncrements[Game::Levels::LEVEL_HARD])
                                                             };
 
         const QString c_GameHelpPaneToolTip                 {    "Please read the detailed %1 instructions."                                                };
