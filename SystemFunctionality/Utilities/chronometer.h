@@ -48,7 +48,7 @@ private:
     int m_InitialRemainingTimeInSeconds;
     int m_CurrentRemainingTimeInSeconds;
     bool m_Enabled;
-    bool m_IsRefreshIntervalTimerPaused;
+    bool m_IsRemainingTimeUpdateTimerPaused;
     bool m_IsTimeExpirationTimerPaused;
     int m_RemainingTimerDurationWhenPaused;
 };

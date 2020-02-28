@@ -11,7 +11,7 @@ Chronometer::Chronometer(QObject *parent)
     , m_InitialRemainingTimeInSeconds{c_DefaultTimeIntervalSeconds}
     , m_CurrentRemainingTimeInSeconds{c_DefaultTimeIntervalSeconds}
     , m_Enabled{false}
-    , m_IsRefreshIntervalTimerPaused{false}
+    , m_IsRemainingTimeUpdateTimerPaused{false}
     , m_IsTimeExpirationTimerPaused{false}
     , m_RemainingTimerDurationWhenPaused{0}
 {
@@ -60,9 +60,9 @@ void Chronometer::stop()
     {
         m_pRemainingTimeUpdateTimer->stop();
     }
-    else if (m_IsRefreshIntervalTimerPaused)
+    else if (m_IsRemainingTimeUpdateTimerPaused)
     {
-        m_IsRefreshIntervalTimerPaused = false;
+        m_IsRemainingTimeUpdateTimerPaused = false;
         m_RemainingTimerDurationWhenPaused = 0;
     }
     else if (m_pTimeExpiredSignallingTimer->isActive())
@@ -102,7 +102,7 @@ void Chronometer::restart()
 
 void Chronometer::pause()
 {
-    if (!m_IsRefreshIntervalTimerPaused && !m_IsTimeExpirationTimerPaused)
+    if (!m_IsRemainingTimeUpdateTimerPaused && !m_IsTimeExpirationTimerPaused)
     {
         Q_ASSERT(m_RemainingTimerDurationWhenPaused == 0); // avoid the situation when no timer is paised but a remaining duration at pause is recorded
 
@@ -110,7 +110,7 @@ void Chronometer::pause()
         {
             m_RemainingTimerDurationWhenPaused = m_pRemainingTimeUpdateTimer->remainingTime();
             m_pRemainingTimeUpdateTimer->stop();
-            m_IsRefreshIntervalTimerPaused = true;
+            m_IsRemainingTimeUpdateTimerPaused = true;
         }
         else if (m_pTimeExpiredSignallingTimer->isActive())
         {
@@ -125,9 +125,9 @@ void Chronometer::resume()
 {
     if (m_RemainingTimerDurationWhenPaused != 0)
     {
-        if (m_IsRefreshIntervalTimerPaused)
+        if (m_IsRemainingTimeUpdateTimerPaused)
         {
-            m_IsRefreshIntervalTimerPaused = false;
+            m_IsRemainingTimeUpdateTimerPaused = false;
             m_pRemainingTimeUpdateTimer->start(m_RemainingTimerDurationWhenPaused);
         }
         else if (m_IsTimeExpirationTimerPaused)
@@ -148,7 +148,7 @@ bool Chronometer::setTotalCountdownTime(int time)
 {
     bool success{false};
 
-    if (!m_pRemainingTimeUpdateTimer->isActive() && !m_pTimeExpiredSignallingTimer->isActive() && !m_IsRefreshIntervalTimerPaused && !m_IsTimeExpirationTimerPaused && time > 0)
+    if (!m_pRemainingTimeUpdateTimer->isActive() && !m_pTimeExpiredSignallingTimer->isActive() && !m_IsRemainingTimeUpdateTimerPaused && !m_IsTimeExpirationTimerPaused && time > 0)
     {
         m_InitialRemainingTimeInSeconds = time;
         m_CurrentRemainingTimeInSeconds = m_InitialRemainingTimeInSeconds;
