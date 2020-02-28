@@ -771,7 +771,7 @@ void GameFacade::_onChronometerTimeoutTriggered()
     m_pStatisticsItem->updateStatistics(Game::StatisticsUpdateTypes::PARTIAL_UPDATE);
     m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
     Q_EMIT statusChanged(Game::StatusCodes::TIME_LIMIT_REACHED);
-    m_pChronometer->start();
+    m_pChronometer->restart();
 }
 
 void GameFacade::_onChronometerEnabledChanged()

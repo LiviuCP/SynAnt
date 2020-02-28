@@ -51,6 +51,7 @@ private:
     bool m_IsRemainingTimeUpdateTimerPaused;
     bool m_IsTimeExpirationTimerPaused;
     int m_RemainingTimerDurationWhenPaused;
+    bool m_IsStarted;
 };
 
 #endif // CHRONOMETER_H
