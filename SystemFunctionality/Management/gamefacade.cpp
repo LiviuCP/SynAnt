@@ -118,6 +118,11 @@ void GameFacade::resumeGame()
     Q_ASSERT(m_IsGamePaused);
     m_IsGamePaused = false;
 
+    if (m_pChronometer->isEnabled())
+    {
+        m_pChronometer->resume();
+    }
+
     Q_EMIT statusChanged(m_CurrentStatusCode = m_pInputBuilder->isInputComplete() ? Game::StatusCodes::GAME_RESUMED_COMPLETE_INPUT
                                                                                   : Game::StatusCodes::GAME_RESUMED_INCOMPLETE_INPUT);
 }
@@ -126,6 +131,11 @@ void GameFacade::pauseGame()
 {
     Q_ASSERT(m_IsGameStarted);
     m_IsGamePaused = true;
+
+    if (m_pChronometer->isEnabled())
+    {
+        m_pChronometer->pause();
+    }
 
     Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::GAME_PAUSED);
 }
