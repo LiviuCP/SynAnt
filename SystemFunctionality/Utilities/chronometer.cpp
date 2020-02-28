@@ -37,28 +37,9 @@ void Chronometer::disable()
 {
     if (m_Enabled)
     {
-        if (m_pRemainingTimeUpdateTimer->isActive())
-        {
-            m_pRemainingTimeUpdateTimer->stop();
-        }
-        else if (m_IsRefreshIntervalTimerPaused)
-        {
-            m_IsRefreshIntervalTimerPaused = false;
-            m_RemainingTimerDurationWhenPaused = 0;
-        }
-        else if (m_pTimeExpiredSignallingTimer->isActive())
-        {
-            m_pTimeExpiredSignallingTimer->stop();
-        }
-        else if (m_IsTimeExpirationTimerPaused)
-        {
-            m_IsTimeExpirationTimerPaused = false;
-            m_RemainingTimerDurationWhenPaused = 0;
-        }
-
-        _resetRemainingTime();
-
+        stop();
         m_Enabled = false;
+
         Q_EMIT enabledChanged();
     }
 }
@@ -70,6 +51,30 @@ void Chronometer::start()
         _resetRemainingTime();
         m_pRemainingTimeUpdateTimer->start(c_RefreshIntervalMilliseconds);
     }
+}
+
+void Chronometer::stop()
+{
+    if (m_pRemainingTimeUpdateTimer->isActive())
+    {
+        m_pRemainingTimeUpdateTimer->stop();
+    }
+    else if (m_IsRefreshIntervalTimerPaused)
+    {
+        m_IsRefreshIntervalTimerPaused = false;
+        m_RemainingTimerDurationWhenPaused = 0;
+    }
+    else if (m_pTimeExpiredSignallingTimer->isActive())
+    {
+        m_pTimeExpiredSignallingTimer->stop();
+    }
+    else if (m_IsTimeExpirationTimerPaused)
+    {
+        m_IsTimeExpirationTimerPaused = false;
+        m_RemainingTimerDurationWhenPaused = 0;
+    }
+
+    _resetRemainingTime();
 }
 
 void Chronometer::restart()
