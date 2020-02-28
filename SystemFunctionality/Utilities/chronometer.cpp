@@ -56,26 +56,29 @@ void Chronometer::start()
 
 void Chronometer::stop()
 {
-    if (m_pRemainingTimeUpdateTimer->isActive())
+    if (m_Enabled)
     {
-        m_pRemainingTimeUpdateTimer->stop();
-    }
-    else if (m_IsRemainingTimeUpdateTimerPaused)
-    {
-        m_IsRemainingTimeUpdateTimerPaused = false;
-        m_RemainingTimerDurationWhenPaused = 0;
-    }
-    else if (m_pTimeExpiredSignallingTimer->isActive())
-    {
-        m_pTimeExpiredSignallingTimer->stop();
-    }
-    else if (m_IsTimeExpirationTimerPaused)
-    {
-        m_IsTimeExpirationTimerPaused = false;
-        m_RemainingTimerDurationWhenPaused = 0;
-    }
+        if (m_pRemainingTimeUpdateTimer->isActive())
+        {
+            m_pRemainingTimeUpdateTimer->stop();
+        }
+        else if (m_IsRemainingTimeUpdateTimerPaused)
+        {
+            m_IsRemainingTimeUpdateTimerPaused = false;
+            m_RemainingTimerDurationWhenPaused = 0;
+        }
+        else if (m_pTimeExpiredSignallingTimer->isActive())
+        {
+            m_pTimeExpiredSignallingTimer->stop();
+        }
+        else if (m_IsTimeExpirationTimerPaused)
+        {
+            m_IsTimeExpirationTimerPaused = false;
+            m_RemainingTimerDurationWhenPaused = 0;
+        }
 
-    _resetRemainingTime();
+        _resetRemainingTime();
+    }
 }
 
 void Chronometer::restart()
@@ -102,7 +105,7 @@ void Chronometer::restart()
 
 void Chronometer::pause()
 {
-    if (!m_IsRemainingTimeUpdateTimerPaused && !m_IsTimeExpirationTimerPaused)
+    if (m_Enabled && !m_IsRemainingTimeUpdateTimerPaused && !m_IsTimeExpirationTimerPaused)
     {
         Q_ASSERT(m_RemainingTimerDurationWhenPaused == 0); // avoid the situation when no timer is paised but a remaining duration at pause is recorded
 
@@ -123,7 +126,7 @@ void Chronometer::pause()
 
 void Chronometer::resume()
 {
-    if (m_RemainingTimerDurationWhenPaused != 0)
+    if (m_Enabled && m_RemainingTimerDurationWhenPaused != 0)
     {
         if (m_IsRemainingTimeUpdateTimerPaused)
         {
