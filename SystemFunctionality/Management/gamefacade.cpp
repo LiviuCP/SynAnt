@@ -759,7 +759,11 @@ void GameFacade::_onChronometerEnabledChanged()
 {
     if (m_pChronometer->isEnabled())
     {
-        m_pChronometer->start();
+        if (m_IsGameStarted)
+        {
+            m_pChronometer->start();
+        }
+
         Q_EMIT statusChanged(Game::StatusCodes::TIME_LIMIT_ENABLED);
     }
     else
