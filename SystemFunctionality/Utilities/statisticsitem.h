@@ -25,6 +25,7 @@ public:
     void doInitialUpdate();
     void updateStatistics(Game::StatisticsUpdateTypes updateType);
     void setGameLevel(Game::Levels level);
+    void setEnhancedIncrement(bool enhanced);
     bool canResetStatistics() const;
 
     QString getObtainedScore() const;
@@ -38,6 +39,7 @@ signals:
 private:
     // total number is the maximum number that can be correctly guessed by user
     bool m_IsInitialUpdateDone;
+    bool m_IsEnhancedIncrementingUsed; // use a special incrementing scheme for certain conditions (e.g. a time limit enabled)
 
     int m_ObtainedScore;
     int m_TotalAvailableScore;

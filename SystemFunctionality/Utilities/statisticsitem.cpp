@@ -3,6 +3,7 @@
 StatisticsItem::StatisticsItem(QObject *parent)
     : QObject(parent)
     , m_IsInitialUpdateDone{false}
+    , m_IsEnhancedIncrementingUsed{false}
     , m_ObtainedScore{0}
     , m_TotalAvailableScore{0}
     , m_GuessedWordPairs{0}
@@ -44,13 +45,15 @@ void StatisticsItem::updateStatistics(Game::StatisticsUpdateTypes updateType)
     }
     else
     {
+        const int c_ScoreIncrement{m_IsEnhancedIncrementingUsed ? Game::c_EnhancedScoreIncrements[m_GameLevel] : Game::c_ScoreIncrements[m_GameLevel]};
+
         if (updateType == Game::StatisticsUpdateTypes::FULL_UPDATE)
         {
-            m_ObtainedScore += Game::c_ScoreIncrements[m_GameLevel];
+            m_ObtainedScore += c_ScoreIncrement;
             m_GuessedWordPairs++;
         }
 
-        m_TotalAvailableScore += Game::c_ScoreIncrements[m_GameLevel];
+        m_TotalAvailableScore += c_ScoreIncrement;
         m_TotalWordPairs++;
 
         Q_EMIT statisticsUpdated(updateType);
@@ -63,6 +66,11 @@ void StatisticsItem::setGameLevel(Game::Levels level)
     {
         m_GameLevel = level;
     }
+}
+
+void StatisticsItem::setEnhancedIncrement(bool enhanced)
+{
+    m_IsEnhancedIncrementingUsed = enhanced;
 }
 
 bool StatisticsItem::canResetStatistics() const

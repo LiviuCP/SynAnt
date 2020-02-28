@@ -776,6 +776,7 @@ void GameFacade::_onChronometerEnabledChanged()
 {
     if (m_pChronometer->isEnabled())
     {
+        m_pStatisticsItem->setEnhancedIncrement(true);
         if (m_IsGameStarted)
         {
             m_pChronometer->start();
@@ -785,6 +786,7 @@ void GameFacade::_onChronometerEnabledChanged()
     }
     else
     {
+        m_pStatisticsItem->setEnhancedIncrement(false);
         Q_EMIT statusChanged(Game::StatusCodes::TIME_LIMIT_DISABLED);
     }
 

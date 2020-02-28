@@ -200,6 +200,14 @@ namespace Game
         {Game::Levels::LEVEL_HARD,   4}
     };
 
+    // use other increments when a time limit is enabled
+    const QMap<Game::Levels, int> c_EnhancedScoreIncrements
+    {
+        {Game::Levels::LEVEL_EASY,   2},
+        {Game::Levels::LEVEL_MEDIUM, 5},
+        {Game::Levels::LEVEL_HARD,   12}
+    };
+
     const QMap<Game::Levels, int> c_WordPieceSizes
     {
         {Game::Levels::LEVEL_EASY,   3},
