@@ -448,7 +448,8 @@ void GameFacade::setLanguage(int languageIndex, bool revertLanguageWhenDataUnava
 {
     if (m_CurrentLanguageIndex != languageIndex)
     {
-        if (m_pChronometer->isEnabled())
+        // pausing only allowed in the main pane
+        if (m_pChronometer->isEnabled() && m_IsGameStarted)
         {
             m_pChronometer->pause();
         }
@@ -607,7 +608,8 @@ void GameFacade::_onFetchDataForPrimaryLanguageFinished(bool success, bool valid
             Q_EMIT dataAvailableChanged();
             Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_FETCHING_COMPLETE);
 
-            if (m_pChronometer->isEnabled())
+            // restarting only allowed in the main pane
+            if (m_pChronometer->isEnabled() && m_IsGameStarted)
             {
                 m_pChronometer->restart();
             }
