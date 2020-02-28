@@ -41,10 +41,19 @@ void Chronometer::disable()
         {
             m_pRemainingTimeUpdateTimer->stop();
         }
-
-        if (m_pTimeExpiredSignallingTimer->isActive())
+        else if (m_IsRefreshIntervalTimerPaused)
+        {
+            m_IsRefreshIntervalTimerPaused = false;
+            m_RemainingTimerDurationWhenPaused = 0;
+        }
+        else if (m_pTimeExpiredSignallingTimer->isActive())
         {
             m_pTimeExpiredSignallingTimer->stop();
+        }
+        else if (m_IsTimeExpirationTimerPaused)
+        {
+            m_IsTimeExpirationTimerPaused = false;
+            m_RemainingTimerDurationWhenPaused = 0;
         }
 
         _resetRemainingTime();
