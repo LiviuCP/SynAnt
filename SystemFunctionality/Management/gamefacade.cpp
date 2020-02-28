@@ -423,16 +423,23 @@ void GameFacade::setGameLevel(Game::Levels level)
 
     if (m_GameLevel != level)
     {
+        // always stop the chronometer prior to changing level (time limit is changed)
+        if (m_pChronometer->isEnabled())
+        {
+            m_pChronometer->stop();
+        }
+
         m_GameLevel = level;
         _pushCurrentGameLevel();
 
-        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::LEVEL_CHANGED);
-
         m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
 
+        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::LEVEL_CHANGED);
+
+        // the chronometer should always run in main pane if enabled, so start it again once level params have been changed
         if (m_pChronometer->isEnabled())
         {
-            m_pChronometer->restart();
+            m_pChronometer->start();
         }
     }
 }
@@ -829,4 +836,5 @@ void GameFacade::_pushCurrentGameLevel()
 {
     m_pWordMixer->setGameLevel(m_GameLevel);
     m_pStatisticsItem->setGameLevel(m_GameLevel);
+    m_pChronometer->setTotalCountdownTime(Game::c_TimeLimits[m_GameLevel]);
 }

@@ -21,9 +21,12 @@ public:
     void enable();
     void disable();
     void start();
+    void stop();
     void restart();
     void pause();
     void resume();
+
+    bool setTotalCountdownTime(int time);
 
     QPair<QString, QString> getRemainingTimeMinSec();
     bool isEnabled() const;
@@ -42,7 +45,8 @@ private:
 
     QTimer* m_pRemainingTimeUpdateTimer;
     QTimer* m_pTimeExpiredSignallingTimer;
-    int m_TotalRemainingTimeInSeconds;
+    int m_InitialRemainingTimeInSeconds;
+    int m_CurrentRemainingTimeInSeconds;
     bool m_Enabled;
     bool m_IsRefreshIntervalTimerPaused;
     bool m_IsTimeExpirationTimerPaused;
