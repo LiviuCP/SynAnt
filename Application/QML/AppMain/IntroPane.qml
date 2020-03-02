@@ -66,6 +66,8 @@ Item {
         ActivationSwitch {
             id: timeLimitSwitch
 
+            switchEnabled: !presenter.dataFetchingInProgress
+
             Layout.minimumWidth: bottomBtnsMinWidth * 0.98
 
             customHeight: languageSelectionDropdown.height
