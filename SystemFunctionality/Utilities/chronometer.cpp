@@ -10,11 +10,8 @@ Chronometer::Chronometer(QObject *parent)
     , m_pTimeExpiredSignallingTimer{new QTimer{this}}
     , m_InitialRemainingTimeInSeconds{c_DefaultTimeIntervalSeconds}
     , m_CurrentRemainingTimeInSeconds{c_DefaultTimeIntervalSeconds}
-    , m_Enabled{false}
-    , m_IsRemainingTimeUpdateTimerPaused{false}
-    , m_IsTimeExpirationTimerPaused{false}
+    , m_State{ChronoState::DISABLED}
     , m_RemainingTimerDurationWhenPaused{0}
-    , m_IsStarted{false}
 {
     bool connected{connect(m_pRemainingTimeUpdateTimer, &QTimer::timeout, this, &Chronometer::_onRemainingTimeUpdateTimerTimeout)};
     Q_ASSERT(connected);
@@ -28,19 +25,23 @@ Chronometer::Chronometer(QObject *parent)
 
 void Chronometer::enable()
 {
-    if (!m_Enabled)
+    if (m_State == ChronoState::DISABLED)
     {
-        m_Enabled = true;
+        m_State = ChronoState::ENABLED_NOT_RUNNING;
+        _resetRemainingTime();
+
         Q_EMIT enabledChanged();
     }
 }
 
 void Chronometer::disable()
 {
-    if (m_Enabled)
+    if (m_State != ChronoState::DISABLED)
     {
         stop();
-        m_Enabled = false;
+        m_State = ChronoState::DISABLED;
+
+        _resetRemainingTime();
 
         Q_EMIT enabledChanged();
     }
@@ -48,106 +49,95 @@ void Chronometer::disable()
 
 void Chronometer::start()
 {
-    if (m_Enabled && !m_IsStarted && !m_pRemainingTimeUpdateTimer->isActive() && !m_pTimeExpiredSignallingTimer->isActive())
+    if (m_State == ChronoState::ENABLED_NOT_RUNNING)
     {
-        _resetRemainingTime();
-
-        m_pRemainingTimeUpdateTimer->start(m_InitialRemainingTimeInSeconds);
-        m_IsStarted = true;
-    }
-}
-
-void Chronometer::stop()
-{
-    if (m_Enabled && m_IsStarted)
-    {
-        if (m_pRemainingTimeUpdateTimer->isActive())
-        {
-            m_pRemainingTimeUpdateTimer->stop();
-        }
-        else if (m_IsRemainingTimeUpdateTimerPaused)
-        {
-            m_IsRemainingTimeUpdateTimerPaused = false;
-            m_RemainingTimerDurationWhenPaused = 0;
-        }
-        else if (m_pTimeExpiredSignallingTimer->isActive())
-        {
-            m_pTimeExpiredSignallingTimer->stop();
-        }
-        else if (m_IsTimeExpirationTimerPaused)
-        {
-            m_IsTimeExpirationTimerPaused = false;
-            m_RemainingTimerDurationWhenPaused = 0;
-        }
-
-        _resetRemainingTime();
-        m_IsStarted = false;
-    }
-}
-
-void Chronometer::restart()
-{
-    if (m_Enabled && m_IsStarted)
-    {
-        if (m_pRemainingTimeUpdateTimer->isActive())
-        {
-            m_pRemainingTimeUpdateTimer->stop();
-        }
-        else if (m_pTimeExpiredSignallingTimer->isActive())
-        {
-            m_pTimeExpiredSignallingTimer->stop();
-        }
-
         if (m_CurrentRemainingTimeInSeconds != m_InitialRemainingTimeInSeconds)
         {
             _resetRemainingTime();
         }
 
         m_pRemainingTimeUpdateTimer->start(c_RefreshIntervalMilliseconds);
+        m_State = ChronoState::RUNNING;
+    }
+}
+
+void Chronometer::stop()
+{
+    if (m_State != ChronoState::DISABLED && m_State != ChronoState::ENABLED_NOT_RUNNING)
+    {
+        if (m_pRemainingTimeUpdateTimer->isActive())
+        {
+            m_pRemainingTimeUpdateTimer->stop();
+        }
+        else if (m_pTimeExpiredSignallingTimer->isActive())
+        {
+            m_pTimeExpiredSignallingTimer->stop();
+        }
+        else if (m_State == ChronoState::PRIMARY_TIMER_PAUSED || m_State == ChronoState::SECONDARY_TIMER_PAUSED)
+        {
+            m_RemainingTimerDurationWhenPaused = 0;
+        }
+
+        m_State = ChronoState::ENABLED_NOT_RUNNING;
+    }
+}
+
+void Chronometer::restart()
+{
+    if (m_State != ChronoState::DISABLED && m_State != ChronoState::ENABLED_NOT_RUNNING)
+    {
+        if (m_pRemainingTimeUpdateTimer->isActive())
+        {
+            m_pRemainingTimeUpdateTimer->stop();
+        }
+        else if (m_pTimeExpiredSignallingTimer->isActive())
+        {
+            m_pTimeExpiredSignallingTimer->stop();
+        }
+
+        _resetRemainingTime();
+
+        m_pRemainingTimeUpdateTimer->start(c_RefreshIntervalMilliseconds);
+        m_State = ChronoState::RUNNING;
     }
 }
 
 void Chronometer::pause()
 {
-    if (m_Enabled && m_IsStarted && !m_IsRemainingTimeUpdateTimerPaused && !m_IsTimeExpirationTimerPaused)
+    if (m_State == ChronoState::RUNNING)
     {
-        Q_ASSERT(m_RemainingTimerDurationWhenPaused == 0); // avoid the situation when no timer is paised but a remaining duration at pause is recorded
+        Q_ASSERT(m_RemainingTimerDurationWhenPaused == 0); // avoid the situation when no timer is paused but a remaining duration at pause is recorded
 
         if (m_pRemainingTimeUpdateTimer->isActive())
         {
             m_RemainingTimerDurationWhenPaused = m_pRemainingTimeUpdateTimer->remainingTime();
             m_pRemainingTimeUpdateTimer->stop();
-            m_IsRemainingTimeUpdateTimerPaused = true;
+            m_State = ChronoState::PRIMARY_TIMER_PAUSED;
         }
         else if (m_pTimeExpiredSignallingTimer->isActive())
         {
             m_RemainingTimerDurationWhenPaused = m_pTimeExpiredSignallingTimer->remainingTime();
             m_pTimeExpiredSignallingTimer->stop();
-            m_IsTimeExpirationTimerPaused = true;
+            m_State = ChronoState::SECONDARY_TIMER_PAUSED;
         }
     }
 }
 
 void Chronometer::resume()
 {
-    if (m_Enabled && m_IsStarted && m_RemainingTimerDurationWhenPaused != 0)
+    if (m_State == ChronoState::PRIMARY_TIMER_PAUSED)
     {
-        if (m_IsRemainingTimeUpdateTimerPaused)
-        {
-            m_IsRemainingTimeUpdateTimerPaused = false;
-            m_pRemainingTimeUpdateTimer->start(m_RemainingTimerDurationWhenPaused);
-        }
-        else if (m_IsTimeExpirationTimerPaused)
-        {
-            m_IsTimeExpirationTimerPaused = false;
-            m_pTimeExpiredSignallingTimer->start(m_RemainingTimerDurationWhenPaused);
-        }
-        else
-        {
-            Q_ASSERT(false); // avoid the situation when no timer is paised but a remaining duration at pause is recorded
-        }
-
-        m_RemainingTimerDurationWhenPaused = 0;
+        m_pRemainingTimeUpdateTimer->start(m_RemainingTimerDurationWhenPaused);
+        m_State = ChronoState::RUNNING;
+    }
+    else if (m_State == ChronoState::SECONDARY_TIMER_PAUSED)
+    {
+        m_pTimeExpiredSignallingTimer->start(m_RemainingTimerDurationWhenPaused);
+        m_State = ChronoState::RUNNING;
+    }
+    else
+    {
+        Q_ASSERT(m_RemainingTimerDurationWhenPaused == 0); // avoid the situation when no timer is paused but a remaining duration at pause is recorded
     }
 }
 
@@ -155,7 +145,7 @@ bool Chronometer::setTotalCountdownTime(int time)
 {
     bool success{false};
 
-    if (!m_IsStarted && time > 0)
+    if ((m_State == ChronoState::DISABLED || m_State == ChronoState::ENABLED_NOT_RUNNING) && time > 0)
     {
         m_InitialRemainingTimeInSeconds = time;
         m_CurrentRemainingTimeInSeconds = m_InitialRemainingTimeInSeconds;
@@ -189,7 +179,7 @@ QPair<QString, QString> Chronometer::getRemainingTimeMinSec()
 
 bool Chronometer::isEnabled() const
 {
-    return m_Enabled;
+    return (m_State != ChronoState::DISABLED);
 }
 
 void Chronometer::_onRemainingTimeUpdateTimerTimeout()
@@ -209,6 +199,7 @@ void Chronometer::_onRemainingTimeUpdateTimerTimeout()
 
 void Chronometer::_onTimeExpiredTimerTimeout()
 {
+    m_State = ChronoState::COUNTDOWN_FINISHED;
     Q_EMIT timeoutTriggered();
 }
 

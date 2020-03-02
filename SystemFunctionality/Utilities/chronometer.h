@@ -41,17 +41,24 @@ private slots:
     void _onTimeExpiredTimerTimeout();
 
 private:
+    enum class ChronoState
+    {
+        DISABLED,
+        ENABLED_NOT_RUNNING,
+        RUNNING,
+        PRIMARY_TIMER_PAUSED,
+        SECONDARY_TIMER_PAUSED,
+        COUNTDOWN_FINISHED
+    };
+
     void _resetRemainingTime();
 
     QTimer* m_pRemainingTimeUpdateTimer;
     QTimer* m_pTimeExpiredSignallingTimer;
     int m_InitialRemainingTimeInSeconds;
     int m_CurrentRemainingTimeInSeconds;
-    bool m_Enabled;
-    bool m_IsRemainingTimeUpdateTimerPaused;
-    bool m_IsTimeExpirationTimerPaused;
+    ChronoState m_State;
     int m_RemainingTimerDurationWhenPaused;
-    bool m_IsStarted;
 };
 
 #endif // CHRONOMETER_H
