@@ -44,6 +44,25 @@ ComboBox {
         }
     }
 
+    Keys.onUpPressed: {
+        if (currentIndex == 0) {
+            currentIndex = dataModel.length-1;
+        } else {
+            --currentIndex;
+        }
+    }
+
+    Keys.onDownPressed: {
+        if (currentIndex == dataModel.length-1) {
+            currentIndex = 0;
+        } else {
+            ++currentIndex;
+        }
+    }
+
+    Keys.onReturnPressed: selectCurrentItem()
+    Keys.onEnterPressed: selectCurrentItem()
+
     ToolTip.visible: hovered && dropdownToolTip !== ""
     ToolTip.text: dropdownToolTip
     ToolTip.delay: 1000
@@ -51,4 +70,9 @@ ComboBox {
 
     editable: false
     model: dataModel
+
+    function selectCurrentItem() {
+        selectedIndex = currentIndex;
+        itemChanged();
+    }
 }
