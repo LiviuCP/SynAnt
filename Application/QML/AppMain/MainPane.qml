@@ -226,6 +226,7 @@ Item {
                 id: timeLimitSwitch
 
                 switchEnabled: !presenter.dataFetchingInProgress
+                dedicatedShortcutEnabled: false
 
                 Layout.alignment: Layout.Bottom
                 Layout.preferredWidth: 0.998 * parent.width
@@ -241,7 +242,7 @@ Item {
 
                 switchToolTip: switchChecked ? GameStrings.timeLimitDisableSwitchToolTip : GameStrings.timeLimitEnableSwitchToolTip
 
-                onSwitchToggled: presenter.setTimeLimitEnabled(switchChecked)
+                onSwitchClicked: presenter.setTimeLimitEnabled(!presenter.timeLimitEnabled)
             }
 
             StatusBox {

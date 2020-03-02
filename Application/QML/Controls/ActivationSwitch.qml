@@ -8,6 +8,8 @@ Item {
     property string leftSwitchLabel: ""
     property string rightSwitchLabel: ""
 
+    property string shortcutSequence: ""
+
     property string switchToolTip: ""
 
     readonly property int toolTipDelay: 1000
@@ -18,10 +20,9 @@ Item {
 
     property alias switchChecked: activationSwitch.checked
     property alias switchEnabled: activationSwitch.enabled
+    property bool dedicatedShortcutEnabled: true
 
-    signal switchToggled
-    signal rightToggled
-    signal leftToggled
+    signal switchClicked
 
     opacity: activationSwitch.enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
 
@@ -88,15 +89,14 @@ Item {
 
         text: undefined
 
-        onToggled: {
-            switchToggled();
+        Shortcut {
+            sequence: shortcutSequence
+            enabled: shortcutSequence !== "" && dedicatedShortcutEnabled
 
-            if (checked) {
-                rightToggled();
-            } else {
-                leftToggled();
-            }
+            onActivated: activationSwitchContainer.switchClicked()
         }
+
+        onClicked: activationSwitchContainer.switchClicked()
     }
 
     Text {

@@ -177,6 +177,13 @@ ApplicationWindow {
     // shortcuts shared among multiple panes
 
     Shortcut {
+        sequence: GameStrings.timeLimitButtonShortcut
+        enabled: !gamePresenter.dataFetchingInProgress
+
+        onActivated: gamePresenter.setTimeLimitEnabled(!gamePresenter.timeLimitEnabled)
+    }
+
+    Shortcut {
         sequence: GameStrings.dataEntryButtonShortcut
         enabled: gamePresenter.dataEntry.dataEntryEnabled && (gamePresenter.introPaneVisible || gamePresenter.mainPaneVisible) && !gamePresenter.dataEntry.dataFetchingInProgress
 

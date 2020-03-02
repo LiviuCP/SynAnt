@@ -67,6 +67,7 @@ Item {
             id: timeLimitSwitch
 
             switchEnabled: !presenter.dataFetchingInProgress
+            dedicatedShortcutEnabled: false
 
             Layout.minimumWidth: bottomBtnsMinWidth * 0.98
 
@@ -77,7 +78,7 @@ Item {
 
             switchToolTip: switchChecked ? GameStrings.timeLimitDisableSwitchToolTip : GameStrings.timeLimitEnableSwitchToolTip
 
-            onSwitchToggled: presenter.setTimeLimitEnabled(switchChecked)
+            onSwitchClicked: presenter.setTimeLimitEnabled(!presenter.timeLimitEnabled)
         }
     }
 
