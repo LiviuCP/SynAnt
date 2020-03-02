@@ -75,6 +75,8 @@ Item {
 
             switchChecked: presenter.timeLimitEnabled
 
+            switchToolTip: switchChecked ? GameStrings.timeLimitDisableSwitchToolTip : GameStrings.timeLimitEnableSwitchToolTip
+
             onSwitchToggled: presenter.setTimeLimitEnabled(switchChecked)
         }
     }

@@ -102,6 +102,8 @@ QtObject {
     readonly property string wordPieceAlreadySelectedToolTip:                       "Already added word piece to input!"
     readonly property string mainPaneFirstWordInputToolTip:                         "Click to remove the selected chunk of pieces from the first word input."
     readonly property string mainPaneSecondWordInputToolTip:                        "Click to remove the selected chunk of pieces from the second word input."
+    readonly property string timeLimitEnableSwitchToolTip:                          "Click to enable time limit for winning a round."
+    readonly property string timeLimitDisableSwitchToolTip:                         "Click to disable time limit for winning a round."
     readonly property string playButtonToolTip:                                     "Click or hit ALT+P to play."
     readonly property string quitButtonToolTip:                                     "Click or hit ALT+Q to exit application.
                                                                                     \nThe application will exit only after completing all load/save operations."

@@ -3,8 +3,15 @@ import QtQuick.Controls 2.2
 import GameUtils 1.0
 
 Item {
+    id: activationSwitchContainer
+
     property string leftSwitchLabel: ""
     property string rightSwitchLabel: ""
+
+    property string switchToolTip: ""
+
+    readonly property int toolTipDelay: 1000
+    readonly property int toolTipTimeout: 4000
 
     property double customHeight: 28    // use this to determine the actual height of the widget (also add same preferredHeight in Column/Grid layouts)
     readonly property double margin: 7
@@ -29,6 +36,12 @@ Item {
 
         width: parent.width
         height: activationSwitch.implicitHeight
+    }
+
+    MouseArea {
+        id: toolTipMouseArea
+        anchors.fill: switchBackground
+        hoverEnabled: true
     }
 
     Text {
@@ -98,6 +111,14 @@ Item {
         color: Styles.switchTextNoHighlight
 
         visible: rightSwitchLabel !== ""
+    }
+
+    ToolTip {
+        text: switchToolTip
+        enabled: text !== ""
+        visible: toolTipMouseArea.containsMouse || activationSwitch.hovered
+        delay: toolTipDelay
+        timeout: toolTipTimeout
     }
 
     states: [
