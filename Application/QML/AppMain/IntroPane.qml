@@ -63,7 +63,7 @@ Item {
             }
         }
 
-        ActivationSwitch {
+        AppSwitch {
             id: timeLimitSwitch
 
             switchEnabled: !presenter.dataFetchingInProgress

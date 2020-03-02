@@ -57,7 +57,7 @@ void registerDataTypesForQML()
     qmlRegisterType(QUrl("qrc:///Application/AppMain/DataEntryPane.qml"), "AppCore", 1, 0, "DataEntryPane");
 
     qmlRegisterType(QUrl("qrc:///Application/Controls/AppButton.qml"), "Controls", 1, 0, "AppButton");
-    qmlRegisterType(QUrl("qrc:///Application/Controls/ActivationSwitch.qml"), "Controls", 1, 0, "ActivationSwitch");
+    qmlRegisterType(QUrl("qrc:///Application/Controls/AppSwitch.qml"), "Controls", 1, 0, "AppSwitch");
     qmlRegisterType(QUrl("qrc:///Application/Controls/AppRadioButton.qml"), "Controls", 1, 0, "AppRadioButton");
     qmlRegisterType(QUrl("qrc:///Application/Controls/Dropdown.qml"), "Controls", 1, 0, "Dropdown");
     qmlRegisterType(QUrl("qrc:///Application/Controls/MixedWordPieces.qml"), "Controls", 1, 0, "MixedWordPieces");

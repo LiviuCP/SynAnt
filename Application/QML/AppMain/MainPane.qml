@@ -222,7 +222,7 @@ Item {
             Layout.minimumWidth: 2 * wordPairsBox.width + statisticsLayout.spacing
             Layout.minimumHeight: parent.height
 
-            ActivationSwitch {
+            AppSwitch {
                 id: timeLimitSwitch
 
                 switchEnabled: !presenter.dataFetchingInProgress

@@ -10,6 +10,7 @@
         <file>Dialogs/ErrorPane.qml</file>
         <file>Dialogs/ErrorDialog.qml</file>
         <file>Controls/AppButton.qml</file>
+        <file>Controls/AppSwitch.qml</file>
         <file>Controls/AppRadioButton.qml</file>
         <file>Controls/Dropdown.qml</file>
         <file>Controls/WordPiecesInput.qml</file>
@@ -18,6 +19,5 @@
         <file>OtherWidgets/StatisticsBox.qml</file>
         <file>Utilities/GameStrings.qml</file>
         <file>Utilities/Styles.qml</file>
-        <file>Controls/ActivationSwitch.qml</file>
     </qresource>
 </RCC>

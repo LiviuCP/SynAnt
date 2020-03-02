@@ -3,7 +3,7 @@ import QtQuick.Controls 2.2
 import GameUtils 1.0
 
 Item {
-    id: activationSwitchContainer
+    id: appSwitchContainer
 
     property string leftSwitchLabel: ""
     property string rightSwitchLabel: ""
@@ -18,13 +18,13 @@ Item {
     property double customHeight: 28    // use this to determine the actual height of the widget (also add same preferredHeight in Column/Grid layouts)
     readonly property double margin: 7
 
-    property alias switchChecked: activationSwitch.checked
-    property alias switchEnabled: activationSwitch.enabled
+    property alias switchChecked: appSwitch.checked
+    property alias switchEnabled: appSwitch.enabled
     property bool dedicatedShortcutEnabled: true
 
     signal switchClicked
 
-    opacity: activationSwitch.enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
+    opacity: appSwitch.enabled ? Styles.releasedButtonOpacity : Styles.disabledButtonOpacity
 
     Rectangle {
         id: switchBackground
@@ -36,7 +36,7 @@ Item {
         color: Styles.statusBoxBackgroundColor
 
         width: parent.width
-        height: activationSwitch.implicitHeight
+        height: appSwitch.implicitHeight
     }
 
     MouseArea {
@@ -60,7 +60,7 @@ Item {
     }
 
     Switch {
-        id: activationSwitch
+        id: appSwitch
 
         readonly property double switchHeight: customHeight * 0.7
 
@@ -68,20 +68,20 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
 
         indicator: Rectangle {
-                      x: activationSwitch.width - width - activationSwitch.rightPadding
+                      x: appSwitch.width - width - appSwitch.rightPadding
                       y: parent.height / 2 - height / 2
-                      implicitWidth: 2 * activationSwitch.switchHeight
-                      implicitHeight: activationSwitch.switchHeight
-                      radius: 0.5 * activationSwitch.switchHeight
+                      implicitWidth: 2 * appSwitch.switchHeight
+                      implicitHeight: appSwitch.switchHeight
+                      radius: 0.5 * appSwitch.switchHeight
 
-                      color: activationSwitch.checked && (!leftText.visible || !rightText.visible) ? Styles.switchOnColor : Styles.switchOffColor
+                      color: appSwitch.checked && (!leftText.visible || !rightText.visible) ? Styles.switchOnColor : Styles.switchOffColor
                       border.color: Styles.switchBorderColor
 
                       Rectangle {
-                          x: activationSwitch.checked ? parent.width - width : 0
-                          width: activationSwitch.switchHeight
-                          height: activationSwitch.switchHeight
-                          radius: 0.5 * activationSwitch.switchHeight
+                          x: appSwitch.checked ? parent.width - width : 0
+                          width: appSwitch.switchHeight
+                          height: appSwitch.switchHeight
+                          radius: 0.5 * appSwitch.switchHeight
 
                           border.color: Styles.switchBorderColor
                       }
@@ -93,10 +93,10 @@ Item {
             sequence: shortcutSequence
             enabled: shortcutSequence !== "" && dedicatedShortcutEnabled
 
-            onActivated: activationSwitchContainer.switchClicked()
+            onActivated: appSwitchContainer.switchClicked()
         }
 
-        onClicked: activationSwitchContainer.switchClicked()
+        onClicked: appSwitchContainer.switchClicked()
     }
 
     Text {
@@ -116,7 +116,7 @@ Item {
     ToolTip {
         text: switchToolTip
         enabled: text !== ""
-        visible: toolTipMouseArea.containsMouse || activationSwitch.hovered
+        visible: toolTipMouseArea.containsMouse || appSwitch.hovered
         delay: toolTipDelay
         timeout: toolTipTimeout
     }
@@ -139,7 +139,7 @@ Item {
             }
 
             AnchorChanges {
-                target: activationSwitch
+                target: appSwitch
 
                 anchors.right: undefined
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -157,13 +157,13 @@ Item {
             when: !leftText.visible && rightText.visible
 
             PropertyChanges {
-                target: activationSwitch
+                target: appSwitch
 
                 anchors.leftMargin: -margin
             }
 
             AnchorChanges {
-                target: activationSwitch
+                target: appSwitch
 
                 anchors.right: undefined
                 anchors.left: parent.left
@@ -175,7 +175,7 @@ Item {
             when: leftText.visible && rightText.visible
 
             AnchorChanges {
-                target: activationSwitch
+                target: appSwitch
 
                 anchors.right: undefined
                 anchors.horizontalCenter: parent.horizontalCenter
@@ -187,14 +187,14 @@ Item {
                 anchors.leftMargin: undefined
                 anchors.rightMargin: margin
 
-                color : activationSwitch.checked ? Styles.switchTextNoHighlight : Styles.switchHighlightedText
+                color : appSwitch.checked ? Styles.switchTextNoHighlight : Styles.switchHighlightedText
             }
 
             AnchorChanges {
                 target: leftText
 
                 anchors.left: undefined
-                anchors.right: activationSwitch.left
+                anchors.right: appSwitch.left
             }
 
             PropertyChanges {
@@ -203,14 +203,14 @@ Item {
                 anchors.rightMargin: undefined
                 anchors.leftMargin: margin
 
-                color : activationSwitch.checked ? Styles.switchHighlightedText : Styles.switchTextNoHighlight
+                color : appSwitch.checked ? Styles.switchHighlightedText : Styles.switchTextNoHighlight
             }
 
             AnchorChanges {
                 target: rightText
 
                 anchors.right: undefined
-                anchors.left: activationSwitch.right
+                anchors.left: appSwitch.right
             }
         }
     ]
