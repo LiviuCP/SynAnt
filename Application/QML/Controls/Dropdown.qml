@@ -17,6 +17,8 @@ ComboBox {
 
     enabled: dropdownEnabled && dataModel !== null && count > 0
 
+    property bool dropdownOpened: dropdown.popup.opened // don't modify manually, it is used to ensure that the language is restored if popup is closed without actually selecting
+
     Text {
         z:1
         text: noItemSelectedText
@@ -34,7 +36,7 @@ ComboBox {
         height: enabled ? implicitHeight : 0
 
         text: dataModel[index]
-        font.bold: index === currentIndex
+        font.bold: index === selectedIndex
 
         onClicked: {
             if (index !== currentIndex) {
@@ -45,23 +47,23 @@ ComboBox {
     }
 
     Keys.onUpPressed: {
-        if (currentIndex == 0) {
-            currentIndex = dataModel.length-1;
+        if (selectedIndex == 0) {
+            selectedIndex = dataModel.length-1;
         } else {
-            --currentIndex;
+            --selectedIndex;
         }
     }
 
     Keys.onDownPressed: {
-        if (currentIndex == dataModel.length-1) {
-            currentIndex = 0;
+        if (selectedIndex == dataModel.length-1) {
+            selectedIndex = 0;
         } else {
-            ++currentIndex;
+            ++selectedIndex;
         }
     }
 
-    Keys.onReturnPressed: selectCurrentItem()
-    Keys.onEnterPressed: selectCurrentItem()
+    Keys.onReturnPressed: itemChanged()
+    Keys.onEnterPressed: itemChanged()
 
     ToolTip.visible: hovered && dropdownToolTip !== ""
     ToolTip.text: dropdownToolTip
@@ -71,8 +73,11 @@ ComboBox {
     editable: false
     model: dataModel
 
-    function selectCurrentItem() {
-        selectedIndex = currentIndex;
-        itemChanged();
+    onCurrentIndexChanged: selectedIndex = currentIndex
+
+    onDropdownOpenedChanged: {
+        if (!dropdownOpened && selectedIndex !== currentIndex) {
+            selectedIndex = currentIndex;
+        }
     }
 }
