@@ -9,10 +9,13 @@ Item {
     id: mainPane
 
     property bool dataEntryButtonShortcutActivated: false
+    property bool languageDropdownShortcutActivated: false
     property bool helpButtonShortcutActivated: false
     property bool quitButtonShortcutActivated: false
     property bool upArrowPressed: false
     property bool downArrowPressed: false
+    property bool languageDropdownOpened: languageSelectionDropdown.dropdownOpened
+    property bool languageDropdownInFocus: languageSelectionDropdown.focus
 
     property QtObject presenter
 
@@ -409,6 +412,14 @@ Item {
         {
             Styles.updateButtonOpacityAtShortcutActivation(dataEntryBtn);
             dataEntryButtonShortcutActivated = false;
+        }
+    }
+
+    onLanguageDropdownShortcutActivatedChanged: {
+        if (languageDropdownShortcutActivated) {
+            languageSelectionDropdown.forceActiveFocus();
+            languageSelectionDropdown.popup.open();
+            languageDropdownShortcutActivated = false;
         }
     }
 

@@ -14,7 +14,7 @@
 static const QString c_RawDataEntryHelpMessage          {
                                                              "\nPlease read following data entry instructions: \n\n"
                                                              "\n 1) Enter each required words pair within the provided text fields. "
-                                                             "Choose the language from dropdown and select if the words are synonyms or antonyms. "
+                                                             "Choose the language from dropdown (click or hit ALT+L to open it) and select if the words are synonyms or antonyms. "
                                                              "Press click Add pair or hit ALT+A to validate the pair.\n"
                                                              "\n 2) In order to choose if the words are synonyms of antonyms by keyboard please navigate between radio buttons "
                                                              "and text fields by using TAB/SHIFT+TAB. When the required radio button is selected hit SPACE to have it toggled on.\n"

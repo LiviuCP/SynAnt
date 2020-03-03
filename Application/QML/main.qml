@@ -119,11 +119,13 @@ ApplicationWindow {
     Item {
         id: mainPaneKeys
 
+        property bool languageDropdownOpened: mainPane.languageDropdownOpened
+
         anchors.fill: parent
-        focus: mainPane.visible
+        focus: mainPane.visible && !languageDropdownOpened
 
         onFocusChanged: {
-            if (mainPane.visible) {
+            if (mainPane.visible && !mainPane.languageDropdownInFocus) {
                 forceActiveFocus();
             }
         }
@@ -175,6 +177,24 @@ ApplicationWindow {
     }
 
     // shortcuts shared among multiple panes
+
+    Shortcut {
+        sequence: GameStrings.languageSelectionDropdownShortcut
+        enabled: gamePresenter.languageSelectionEnabled && !gamePresenter.dataEntry.dataSavingInProgress && !gamePresenter.dataEntry.dataFetchingInProgress
+
+        onActivated: {
+            if (gamePresenter.introPaneVisible) {
+                introPane.languageDropdownShortcutActivated = true;
+            } else if (gamePresenter.mainPaneVisible) {
+                mainPane.languageDropdownShortcutActivated = true;
+            } else if (gamePresenter.dataEntryPaneVisible) {
+                dataEntryPane.languageDropdownShortcutActivated = true;
+            }
+            else {
+                console.log("Error, language dropdown shortcut should not be enabled for current pane");
+            }
+        }
+    }
 
     Shortcut {
         sequence: GameStrings.timeLimitButtonShortcut

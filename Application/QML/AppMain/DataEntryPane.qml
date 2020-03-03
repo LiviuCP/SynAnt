@@ -10,6 +10,7 @@ Item {
 
     property QtObject presenter
 
+    property bool languageDropdownShortcutActivated: false
     property bool helpButtonShortcutActivated: false
     property bool quitButtonShortcutActivated: false
 
@@ -19,7 +20,6 @@ Item {
     readonly property double bottomBtnsLayoutHeight: height * 0.1
     readonly property double bottomBtnsMinWidth: (dataEntryStatusBox.width - 5 * bottomBtnsLayout.spacing) / 6
     readonly property double buttonRadiusRatio: 0.05
-
 
 
     function clearTextFields() {
@@ -322,6 +322,14 @@ Item {
 
         onDataFetchingInProgressChanged: {
             restoreToPrimaryLanguage();
+        }
+    }
+
+    onLanguageDropdownShortcutActivatedChanged: {
+        if (languageDropdownShortcutActivated) {
+            languageSelectionDropdown.forceActiveFocus();
+            languageSelectionDropdown.popup.open();
+            languageDropdownShortcutActivated = false;
         }
     }
 

@@ -9,7 +9,7 @@
 
 static const QString c_RawGameHelpMessage                   {
                                                                  "\nPlease read following game instructions: \n\n"
-                                                                 "\n 1) At game startup the language should be chosen via dropdown from the intro window. "
+                                                                 "\n 1) At game startup the language should be chosen via dropdown from the intro window  (click or hit ALT+L to open it). "
                                                                  "The language can then be changed from the main page. If the language contains no word pairs "
                                                                  "use the the data entry dialog to add data to it. In main game window it is not possible to "
                                                                  "switch to a language that doesn't contain any valid pairs.\n"

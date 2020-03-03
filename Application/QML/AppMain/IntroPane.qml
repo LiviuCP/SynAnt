@@ -11,6 +11,7 @@ Item {
     property QtObject presenter
 
     property bool dataEntryButtonShortcutActivated: false
+    property bool languageDropdownShortcutActivated: false
     property bool helpButtonShortcutActivated: false
     property bool quitButtonShortcutActivated: false
 
@@ -162,6 +163,14 @@ Item {
         {
             Styles.updateButtonOpacityAtShortcutActivation(dataEntryBtn);
             dataEntryButtonShortcutActivated = false;
+        }
+    }
+
+    onLanguageDropdownShortcutActivatedChanged: {
+        if (languageDropdownShortcutActivated) {
+            languageSelectionDropdown.forceActiveFocus();
+            languageSelectionDropdown.popup.open();
+            languageDropdownShortcutActivated = false;
         }
     }
 
