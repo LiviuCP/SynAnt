@@ -32,6 +32,7 @@ void UtilitiesTests::testStatisticsCorrectlyUpdated()
 
     std::unique_ptr<StatisticsItem> pStatisticsItem{new StatisticsItem{}};
 
+    pStatisticsItem->setGameLevel(Game::Levels::LEVEL_MEDIUM);
     pStatisticsItem->doInitialUpdate();
     _checkCorrectStatistics(*pStatisticsItem, 0, 0, 0, 0, "Checking initial statistics");
 
