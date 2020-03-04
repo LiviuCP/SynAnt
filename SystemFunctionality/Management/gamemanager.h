@@ -84,8 +84,6 @@ public:
     int getLastNrOfEntriesSavedToPrimaryLanguage() const;
     int getCurrentNrOfCacheEntries() const;
 
-    virtual ~GameManager();
-
 signals:
     Q_SIGNAL void newWordsPairAddedToCache();
     Q_SIGNAL void writeDataToDbFinished(int nrOfPrimaryLanguageSavedEntries, int totalNrOfSavedEntries);
@@ -108,6 +106,7 @@ private slots:
 
 private:
     explicit GameManager(QObject *parent = nullptr);
+    virtual ~GameManager();
     void _setDatabase(const QString& databasePath);
     void _makeDataConnections();
     void _registerMetaTypes();

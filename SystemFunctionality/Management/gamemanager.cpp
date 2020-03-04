@@ -223,14 +223,6 @@ int GameManager::getCurrentNrOfCacheEntries() const
     return m_pDataEntryStatistics->getCurrentNrOfCacheEntries();
 }
 
-GameManager::~GameManager()
-{
-    m_pDataSourceLoaderThread->quit();
-    m_pDataSourceLoaderThread->wait();
-    m_pDataEntryCacheThread->quit();
-    m_pDataEntryCacheThread->wait();
-}
-
 void GameManager::_onDataSourceSetupCompleted()
 {
     Q_ASSERT(m_pDataSourceLoaderThread->isRunning() && m_pDataEntryCacheThread->isRunning());
@@ -239,6 +231,14 @@ void GameManager::_onDataSourceSetupCompleted()
                                                 (WordMixer, WordPairOwner, InputBuilder, StatisticsItem, etc) on their own */
     m_pGameFacade = new GameFacade{this};
     m_pDataEntryFacade = new DataEntryFacade{this};
+}
+
+GameManager::~GameManager()
+{
+    m_pDataSourceLoaderThread->quit();
+    m_pDataSourceLoaderThread->wait();
+    m_pDataEntryCacheThread->quit();
+    m_pDataEntryCacheThread->wait();
 }
 
 void GameManager::_onLoadDataFromDbForPrimaryLanguageFinished(bool success, bool validEntriesLoaded)
