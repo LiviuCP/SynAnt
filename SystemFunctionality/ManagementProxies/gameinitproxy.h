@@ -5,13 +5,16 @@
 
 #include <QObject>
 
+#include "../ManagementInterfaces/gameinit.h"
+
 class GameManager;
 
-class GameInitProxy : public QObject
+class GameInitProxy : public QObject, public IGameInit
 {
 public:
     explicit GameInitProxy(QObject *parent = nullptr);
     void setDataSource(const QString& dataDirPath);
+    ~GameInitProxy();
 };
 
 #endif // GAMEINITPROXY_H

@@ -33,16 +33,23 @@ SOURCES += \
         DataAccess/dataentrycache.cpp \
         DataAccess/dataentrystatistics.cpp \
         DataAccess/datasourceaccesshelper.cpp \
+        ManagementInterfaces/gameinit.cpp \
+        ManagementInterfaces/game.cpp \
+        ManagementInterfaces/gamefunctionality.cpp \
+        ManagementInterfaces/dataaccess.cpp \
+        ManagementInterfaces/dataentry.cpp \
+        ManagementInterfaces/data.cpp \
+        ManagementInterfaces/datafunctionality.cpp \
         Management/gamemanager.cpp \
         Management/gamefacade.cpp \
         Management/dataentryfacade.cpp \
-        Proxies/gameinitproxy.cpp \
-        Proxies/gamefunctionalityproxy.cpp \
-        Proxies/gameproxy.cpp \
-        Proxies/datafunctionalityproxy.cpp \
-        Proxies/dataproxy.cpp \
-        Proxies/dataentryproxy.cpp \
-        Proxies/datasourceproxy.cpp \
+        ManagementProxies/gameinitproxy.cpp \
+        ManagementProxies/gamefunctionalityproxy.cpp \
+        ManagementProxies/gameproxy.cpp \
+        ManagementProxies/datafunctionalityproxy.cpp \
+        ManagementProxies/dataproxy.cpp \
+        ManagementProxies/dataaccessproxy.cpp \
+        ManagementProxies/dataentryproxy.cpp \
         Utilities/statisticsitem.cpp \
         Utilities/chronometer.cpp \
         Utilities/exceptions.cpp \
@@ -58,16 +65,23 @@ HEADERS += \
         DataAccess/dataentrycache.h \
         DataAccess/dataentrystatistics.h \
         DataAccess/datasourceaccesshelper.h \
+        ManagementInterfaces/gameinit.h \
+        ManagementInterfaces/game.h \
+        ManagementInterfaces/gamefunctionality.h \
+        ManagementInterfaces/dataaccess.h \
+        ManagementInterfaces/dataentry.h \
+        ManagementInterfaces/data.h \
+        ManagementInterfaces/datafunctionality.h \
         Management/gamemanager.h \
         Management/gamefacade.h \
         Management/dataentryfacade.h \
-        Proxies/gameinitproxy.h \
-        Proxies/gamefunctionalityproxy.h \
-        Proxies/gameproxy.h \
-        Proxies/datafunctionalityproxy.h \
-        Proxies/dataproxy.h \
-        Proxies/dataentryproxy.h \
-        Proxies/datasourceproxy.h \
+        ManagementProxies/gameinitproxy.h \
+        ManagementProxies/gamefunctionalityproxy.h \
+        ManagementProxies/gameproxy.h \
+        ManagementProxies/datafunctionalityproxy.h \
+        ManagementProxies/dataproxy.h \
+        ManagementProxies/dataaccessproxy.h \
+        ManagementProxies/dataentryproxy.h \
         Utilities/statisticsitem.h \
         Utilities/chronometer.h \
         Utilities/exceptions.h \

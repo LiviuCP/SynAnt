@@ -1,15 +1,15 @@
 #include "gamefunctionalityproxy.h"
 #include "../Management/gamemanager.h"
-#include "../Proxies/datasourceproxy.h"
+#include "../ManagementProxies/dataaccessproxy.h"
 
 GameFunctionalityProxy::GameFunctionalityProxy(QObject *parent)
     : QObject(parent)
 {
 }
 
-DataSourceProxy* GameFunctionalityProxy::getDataSourceProxy() const
+DataAccessProxy* GameFunctionalityProxy::getDataAccessProxy() const
 {
-    return GameManager::getManager()->getDataSourceProxy();
+    return GameManager::getManager()->getDataAccessProxy();
 }
 
 DataSourceAccessHelper* GameFunctionalityProxy::getDataSourceAccessHelper() const

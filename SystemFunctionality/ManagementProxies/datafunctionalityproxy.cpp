@@ -1,6 +1,6 @@
 #include "datafunctionalityproxy.h"
 #include "../Management/gamemanager.h"
-#include "../Proxies/dataentryproxy.h"
+#include "../ManagementProxies/dataentryproxy.h"
 
 DataFunctionalityProxy::DataFunctionalityProxy(QObject *parent)
     : QObject(parent)

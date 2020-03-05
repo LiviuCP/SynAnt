@@ -5,10 +5,12 @@
 
 #include <QObject>
 
+#include "../ManagementInterfaces/game.h"
+
 class GameFacade;
 class GameManager;
 
-class GameProxy : public QObject
+class GameProxy : public QObject, public IGame
 {
     Q_OBJECT
 public:

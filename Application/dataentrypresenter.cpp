@@ -1,6 +1,6 @@
 #include "dataentrypresenter.h"
 #include "../SystemFunctionality/Management/dataentryfacade.h"
-#include "../SystemFunctionality/Proxies/dataproxy.h"
+#include "../SystemFunctionality/ManagementProxies/dataproxy.h"
 #include "../SystemFunctionality/Utilities/dataentryutils.h"
 #include "../SystemFunctionality/Utilities/gameutils.h"
 

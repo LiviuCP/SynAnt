@@ -5,7 +5,7 @@
 #include "dataentrypresenter.h"
 #include "../SystemFunctionality/Management/gamefacade.h"
 #include "../SystemFunctionality/Utilities/exceptions.h"
-#include "../SystemFunctionality/Proxies/gameproxy.h"
+#include "../SystemFunctionality/ManagementProxies/gameproxy.h"
 
 static const QMap<GamePresenter::Pane, QString> c_WindowTitles
 {

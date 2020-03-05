@@ -28,6 +28,13 @@
 #include <QObject>
 #include <QSqlDatabase>
 
+#include "../ManagementInterfaces/gameinit.h"
+#include "../ManagementInterfaces/game.h"
+#include "../ManagementInterfaces/gamefunctionality.h"
+#include "../ManagementInterfaces/dataaccess.h"
+#include "../ManagementInterfaces/dataentry.h"
+#include "../ManagementInterfaces/data.h"
+#include "../ManagementInterfaces/datafunctionality.h"
 #include "../Utilities/dataentryutils.h"
 
 class GameFacade;
@@ -37,7 +44,7 @@ class DataSourceLoader;
 class DataEntryValidator;
 class DataEntryCache;
 class DataEntryStatistics;
-class DataSourceProxy;
+class DataAccessProxy;
 class DataEntryProxy;
 class DataSourceAccessHelper;
 class WordMixer;
@@ -47,12 +54,18 @@ class InputBuilder;
 class StatisticsItem;
 class Chronometer;
 
-class GameManager : public QObject
+class GameManager : public QObject,
+                    public IGameInit,
+                    public IGame,
+                    public IGameFunctionality,
+                    public IDataAccess,
+                    public IDataEntry,
+                    public IData,
+                    public IDataFunctionality
 {
     Q_OBJECT
 public:
     static GameManager* getManager();
-    static void releaseResources();
 
     void setDataSource(const QString& dataDirPath);
     void fetchDataForPrimaryLanguage(int languageIndex, bool allowEmptyResult);
@@ -61,6 +74,7 @@ public:
     void requestWriteToCache(QPair<QString, QString> newWordsPair, bool areSynonyms, int languageIndex);
     void requestCacheReset();
     void provideDataEntryToConsumer(int entryNumber);
+    void releaseResources();
 
     int getNrOfDataSourceEntries() const;
     DataEntry::ValidationCodes getPairEntryValidationCode() const;
@@ -68,10 +82,7 @@ public:
     GameFacade* getGameFacade() const;
     DataEntryFacade* getDataEntryFacade() const;
 
-    DataSource* getDataSource() const;
-    DataEntryValidator* getDataEntryValidator() const;
-    DataEntryCache* getDataEntryCache() const;
-    DataSourceProxy* getDataSourceProxy() const;
+    DataAccessProxy* getDataAccessProxy() const;
     DataEntryProxy* getDataEntryProxy() const;
     DataSourceAccessHelper* getDataSourceAccessHelper() const;
     WordMixer* getWordMixer() const;
@@ -107,6 +118,9 @@ private slots:
 private:
     explicit GameManager(QObject *parent = nullptr);
     virtual ~GameManager();
+
+    static void _deallocResources();
+
     void _setDatabase(const QString& databasePath);
     void _makeDataConnections();
     void _registerMetaTypes();
@@ -120,7 +134,7 @@ private:
     DataEntryValidator* m_pDataEntryValidator;
     DataEntryCache* m_pDataEntryCache;
     DataEntryStatistics* m_pDataEntryStatistics;
-    DataSourceProxy* m_pDataSourceProxy;
+    DataAccessProxy* m_pDataAccessProxy;
     DataEntryProxy* m_pDataEntryProxy;
     DataSourceAccessHelper* m_pDataSourceAccessHelper;
     WordMixer* m_pWordMixer;

@@ -17,7 +17,7 @@
 #include "../Utilities/gameutils.h"
 
 class GameFunctionalityProxy;
-class DataSourceProxy;
+class DataAccessProxy;
 class DataSourceAccessHelper;
 class WordMixer;
 class WordPairOwner;
@@ -129,7 +129,7 @@ private:
     void _pushCurrentGameLevel();
 
     GameFunctionalityProxy* m_pGameFunctionalityProxy;
-    DataSourceProxy* m_pDataSourceProxy;
+    DataAccessProxy* m_pDataAccessProxy;
     DataSourceAccessHelper* m_pDataSourceAccessHelper;
     WordMixer* m_pWordMixer;
     WordPairOwner* m_pWordPairOwner;

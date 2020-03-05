@@ -1,6 +1,6 @@
 #include "dataentryfacade.h"
-#include "../Proxies/datafunctionalityproxy.h"
-#include "../Proxies/dataentryproxy.h"
+#include "../ManagementProxies/datafunctionalityproxy.h"
+#include "../ManagementProxies/dataentryproxy.h"
 
 DataEntryFacade::DataEntryFacade(QObject *parent)
     : QObject(parent)

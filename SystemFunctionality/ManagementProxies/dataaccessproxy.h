@@ -1,21 +1,23 @@
-#ifndef DATASOURCEPROXY_H
-#define DATASOURCEPROXY_H
+#ifndef DATAACCESSPROXY_H
+#define DATAACCESSPROXY_H
 
 #include <QObject>
 
+#include "../ManagementInterfaces/dataaccess.h"
 #include "../Utilities/gameutils.h"
 
 class GameManager;
 
-class DataSourceProxy : public QObject
+class DataAccessProxy : public QObject,
+                              public IDataAccess
 {
     Q_OBJECT
 public:
-    explicit DataSourceProxy(QObject *parent = nullptr);
+    explicit DataAccessProxy(QObject *parent = nullptr);
 
     void fetchDataForPrimaryLanguage(int languageIndex, bool allowEmptyResult);
     void provideDataEntryToConsumer(int entryNumber);
-    int getNrOfDataSourceEntries();
+    int getNrOfDataSourceEntries() const;
 
 signals:
     Q_SIGNAL void fetchDataForPrimaryLanguageFinished(bool success, bool validEntriesFetched);
@@ -25,4 +27,4 @@ signals:
     Q_SIGNAL void entryProvidedToConsumer(QPair<QString, QString> newWordsPair, bool areSynonyms);
 };
 
-#endif // DATASOURCEPROXY_H
+#endif // DATAACCESSPROXY_H

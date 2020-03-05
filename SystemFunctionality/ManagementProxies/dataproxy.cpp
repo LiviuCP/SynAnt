@@ -6,7 +6,7 @@ DataProxy::DataProxy(QObject *parent)
 {
 }
 
-DataEntryFacade* DataProxy::getDataEntryFacade()
+DataEntryFacade* DataProxy::getDataEntryFacade() const
 {
     return GameManager::getManager()->getDataEntryFacade();
 }

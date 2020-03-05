@@ -1,22 +1,22 @@
-#include "datasourceproxy.h"
+#include "dataaccessproxy.h"
 #include "../Management/gamemanager.h"
 
-DataSourceProxy::DataSourceProxy(QObject *parent)
+DataAccessProxy::DataAccessProxy(QObject *parent)
     : QObject(parent)
 {
 }
 
-void DataSourceProxy::fetchDataForPrimaryLanguage(int languageIndex, bool allowEmptyResult)
+void DataAccessProxy::fetchDataForPrimaryLanguage(int languageIndex, bool allowEmptyResult)
 {
     GameManager::getManager()->fetchDataForPrimaryLanguage(languageIndex, allowEmptyResult);
 }
 
-void DataSourceProxy::provideDataEntryToConsumer(int entryNumber)
+void DataAccessProxy::provideDataEntryToConsumer(int entryNumber)
 {
     GameManager::getManager()->provideDataEntryToConsumer(entryNumber);
 }
 
-int DataSourceProxy::getNrOfDataSourceEntries()
+int DataAccessProxy::getNrOfDataSourceEntries() const
 {
     return GameManager::getManager()->getNrOfDataSourceEntries();
 }

@@ -3,10 +3,12 @@
 
 #include <QObject>
 
+#include "../ManagementInterfaces/datafunctionality.h"
+
 class GameManager;
 class DataEntryProxy;
 
-class DataFunctionalityProxy : public QObject
+class DataFunctionalityProxy : public QObject, public IDataFunctionality
 {
     Q_OBJECT
 public:

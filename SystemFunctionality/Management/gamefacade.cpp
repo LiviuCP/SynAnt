@@ -4,8 +4,8 @@
 #include "../CoreFunctionality/inputbuilder.h"
 #include "../DataAccess/datasource.h"
 #include "../DataAccess/datasourceaccesshelper.h"
-#include "../Proxies/gamefunctionalityproxy.h"
-#include "../Proxies/datasourceproxy.h"
+#include "../ManagementProxies/gamefunctionalityproxy.h"
+#include "../ManagementProxies/dataaccessproxy.h"
 #include "../Utilities/statisticsitem.h"
 #include "../Utilities/chronometer.h"
 
@@ -24,7 +24,7 @@ GameFacade::GameFacade(QObject *parent)
     , m_IsFetchingInProgress{false}
     , m_RevertLanguageWhenDataUnavailable{false}
 {
-    m_pDataSourceProxy = m_pGameFunctionalityProxy->getDataSourceProxy();
+    m_pDataAccessProxy = m_pGameFunctionalityProxy->getDataAccessProxy();
     m_pDataSourceAccessHelper = m_pGameFunctionalityProxy->getDataSourceAccessHelper();
     m_pWordMixer = m_pGameFunctionalityProxy->getWordMixer();
     m_pWordPairOwner = m_pGameFunctionalityProxy->getWordPairOwner();
@@ -34,7 +34,7 @@ GameFacade::GameFacade(QObject *parent)
 
     // all QObjects used by application (except the QML registered ones) should be parented (the non-parented ones would only be used in tests)
     Q_ASSERT(this->parent());
-    Q_ASSERT(m_pDataSourceProxy->parent());
+    Q_ASSERT(m_pDataAccessProxy->parent());
     Q_ASSERT(m_pDataSourceAccessHelper->parent());
     Q_ASSERT(m_pWordMixer->parent());
     Q_ASSERT(m_pWordPairOwner->parent());
@@ -68,13 +68,13 @@ GameFacade::GameFacade(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pChronometer, &Chronometer::refreshTriggered, this, &GameFacade::remainingTimeRefreshed);
     Q_ASSERT(connected);
-    connected = connect(m_pDataSourceProxy, &DataSourceProxy::fetchDataForPrimaryLanguageFinished, this, &GameFacade::_onFetchDataForPrimaryLanguageFinished);
+    connected = connect(m_pDataAccessProxy, &DataAccessProxy::fetchDataForPrimaryLanguageFinished, this, &GameFacade::_onFetchDataForPrimaryLanguageFinished);
     Q_ASSERT(connected);
-    connected = connect(m_pDataSourceProxy, &DataSourceProxy::fetchDataForSecondaryLanguageFinished, this, &GameFacade::_onFetchDataForSecondaryLanguageFinished);
+    connected = connect(m_pDataAccessProxy, &DataAccessProxy::fetchDataForSecondaryLanguageFinished, this, &GameFacade::_onFetchDataForSecondaryLanguageFinished);
     Q_ASSERT(connected);
-    connected = connect(m_pDataSourceProxy, &DataSourceProxy::writeDataToDbFinished, this, &GameFacade::_onWriteDataToDbFinished);
+    connected = connect(m_pDataAccessProxy, &DataAccessProxy::writeDataToDbFinished, this, &GameFacade::_onWriteDataToDbFinished);
     Q_ASSERT(connected);
-    connected = connect(m_pDataSourceProxy, &DataSourceProxy::writeDataToDbErrorOccured, this, &GameFacade::_onWriteDataToDbErrorOccured);
+    connected = connect(m_pDataAccessProxy, &DataAccessProxy::writeDataToDbErrorOccured, this, &GameFacade::_onWriteDataToDbErrorOccured);
     Q_ASSERT(connected);
 }
 
@@ -391,7 +391,7 @@ void GameFacade::handleSubmitRequest()
     if (success)
     {
         m_pStatisticsItem->updateStatistics(Game::StatisticsUpdateTypes::FULL_UPDATE);
-        m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
+        m_pDataAccessProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
 
         if (m_pChronometer->isEnabled())
         {
@@ -409,7 +409,7 @@ void GameFacade::provideCorrectWordsPairToUser()
 {
     m_pStatisticsItem->updateStatistics(Game::StatisticsUpdateTypes::PARTIAL_UPDATE);
     Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::SOLUTION_REQUESTED_BY_USER);
-    m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
+    m_pDataAccessProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
 
     if (m_pChronometer->isEnabled())
     {
@@ -432,7 +432,7 @@ void GameFacade::setGameLevel(Game::Levels level)
         m_GameLevel = level;
         _pushCurrentGameLevel();
 
-        m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
+        m_pDataAccessProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
 
         Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::LEVEL_CHANGED);
 
@@ -467,7 +467,7 @@ void GameFacade::setLanguage(int languageIndex, bool revertLanguageWhenDataUnava
 
         Q_EMIT dataAvailableChanged();
 
-        m_pDataSourceProxy->fetchDataForPrimaryLanguage(languageIndex, !revertLanguageWhenDataUnavailable);
+        m_pDataAccessProxy->fetchDataForPrimaryLanguage(languageIndex, !revertLanguageWhenDataUnavailable);
     }
 }
 
@@ -600,9 +600,9 @@ void GameFacade::_onFetchDataForPrimaryLanguageFinished(bool success, bool valid
 
         if (validEntriesFetched)
         {
-            m_pDataSourceAccessHelper->setEntriesTable(m_pDataSourceProxy->getNrOfDataSourceEntries());
+            m_pDataSourceAccessHelper->setEntriesTable(m_pDataAccessProxy->getNrOfDataSourceEntries());
             _connectToDataSource();
-            m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
+            m_pDataAccessProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
             m_IsDataAvailable = true;
 
             Q_EMIT dataAvailableChanged();
@@ -673,7 +673,7 @@ void GameFacade::_onWriteDataToDbFinished(int nrOfPrimaryLanguageSavedEntries)
         m_pDataSourceAccessHelper->addEntriesToTable(nrOfPrimaryLanguageSavedEntries);
         m_IsDataAvailable = true;
         _connectToDataSource();
-        m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
+        m_pDataAccessProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
 
         Q_EMIT dataAvailableChanged();
         Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_GOT_AVAILABLE);
@@ -769,7 +769,7 @@ void GameFacade::_onStatisticsUpdated(Game::StatisticsUpdateTypes updateType)
 void GameFacade::_onChronometerTimeoutTriggered()
 {
     m_pStatisticsItem->updateStatistics(Game::StatisticsUpdateTypes::PARTIAL_UPDATE);
-    m_pDataSourceProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
+    m_pDataAccessProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
     Q_EMIT statusChanged(Game::StatusCodes::TIME_LIMIT_REACHED);
     m_pChronometer->restart();
 }
@@ -800,7 +800,7 @@ void GameFacade::_connectToDataSource()
 {
     if (!m_IsConnectedToDataSource)
     {
-        m_IsConnectedToDataSource =  connect(m_pDataSourceProxy, &DataSourceProxy::entryProvidedToConsumer, this, &GameFacade::_onEntryProvidedToConsumer);
+        m_IsConnectedToDataSource =  connect(m_pDataAccessProxy, &DataAccessProxy::entryProvidedToConsumer, this, &GameFacade::_onEntryProvidedToConsumer);
         Q_ASSERT(m_IsConnectedToDataSource);
     }
 }

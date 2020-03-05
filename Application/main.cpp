@@ -4,7 +4,7 @@
 
 #include "gamepresenter.h"
 #include "../SystemFunctionality/Utilities/exceptions.h"
-#include "../SystemFunctionality/Proxies/gameinitproxy.h"
+#include "../SystemFunctionality/ManagementProxies/gameinitproxy.h"
 
 
 void registerDataTypesForQML();

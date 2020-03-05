@@ -10,3 +10,8 @@ void GameInitProxy::setDataSource(const QString &dataDirPath)
 {
     GameManager::getManager()->setDataSource(dataDirPath);
 }
+
+GameInitProxy::~GameInitProxy()
+{
+
+}
