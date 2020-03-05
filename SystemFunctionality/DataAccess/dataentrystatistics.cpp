@@ -23,19 +23,19 @@ int DataEntryStatistics::getLastSavedTotalNrOfEntries() const
     return m_TotalNrOfSavedEntries;
 }
 
-void DataEntryStatistics::onNewWordsPairAddedToCache()
+void DataEntryStatistics::onRecordAddedPairRequested()
 {
     ++m_CurrentNrOfCacheEntries;
 }
 
-void DataEntryStatistics::onWriteDataToDbFinished(int nrOfPrimaryLanguageSavedEntries, int totalNrOfSavedEntries)
+void DataEntryStatistics::onDataSavedStatisticsUpdateRequested(int nrOfPrimaryLanguageSavedEntries, int totalNrOfSavedEntries)
 {
     m_TotalNrOfSavedEntries = totalNrOfSavedEntries;
     m_NrOfPrimaryLanguageSavedEntries = nrOfPrimaryLanguageSavedEntries;
     m_CurrentNrOfCacheEntries = 0;
 }
 
-void DataEntryStatistics::onCacheReset()
+void DataEntryStatistics::onCurrentEntriesStatisticsResetRequested()
 {
     m_CurrentNrOfCacheEntries = 0; // only reset the cached entries number, saved entries numbers should persist until the next save operation
 }

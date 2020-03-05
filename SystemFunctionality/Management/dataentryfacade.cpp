@@ -33,7 +33,7 @@ DataEntryFacade::DataEntryFacade(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pDataEntryProxy, &DataEntryProxy::writeDataToDbFinished, this, &DataEntryFacade::_onWriteDataToDbFinished);
     Q_ASSERT(connected);
-    connected = connect(m_pDataEntryProxy, &DataEntryProxy::fetchDataForSecondaryLanguageFinished, this, &DataEntryFacade::_onFetchDataForSecondaryLanguageFinished);
+    connected = connect(m_pDataEntryProxy, &DataEntryProxy::fetchDataForDataEntryLanguageFinished, this, &DataEntryFacade::_onFetchDataForDataEntryLanguageFinished);
     Q_ASSERT(connected);
 }
 
@@ -220,7 +220,7 @@ void DataEntryFacade::_onWriteDataToDbFinished()
     Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::DATA_SUCCESSFULLY_SAVED);
 }
 
-void DataEntryFacade::_onFetchDataForSecondaryLanguageFinished(bool success)
+void DataEntryFacade::_onFetchDataForDataEntryLanguageFinished(bool success)
 {
     if (success)
     {

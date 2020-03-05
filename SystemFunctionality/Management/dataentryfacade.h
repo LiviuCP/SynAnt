@@ -62,7 +62,7 @@ private slots:
     void _onWordsPairAlreadyContainedInCache();
     void _onCacheReset();
     void _onWriteDataToDbFinished();
-    void _onFetchDataForSecondaryLanguageFinished(bool success);
+    void _onFetchDataForDataEntryLanguageFinished(bool success);
 
 private:
     void _allowAddToCache();

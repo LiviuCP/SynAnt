@@ -112,7 +112,7 @@ private slots:
     void _onFetchDataForPrimaryLanguageFinished(bool success, bool validEntriesFetched);
     void _onFetchDataForSecondaryLanguageFinished(bool success);
     void _onEntryProvidedToConsumer(QPair<QString, QString> newWordsPair, bool areSynonyms);
-    void _onWriteDataToDbFinished(int nrOfPrimaryLanguageSavedEntries);
+    void _onPrimaryLanguageDataSavingFinished(int nrOfPrimaryLanguageSavedEntries);
     void _onWriteDataToDbErrorOccured();
     void _onPiecesAddedToInputStateChanged();
     void _onNewWordsPairMixed();

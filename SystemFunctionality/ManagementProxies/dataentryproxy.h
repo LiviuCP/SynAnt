@@ -32,7 +32,7 @@ signals:
     Q_SIGNAL void wordsPairAlreadyContainedInCache();
     Q_SIGNAL void cacheReset();
     Q_SIGNAL void writeDataToDbFinished();
-    Q_SIGNAL void fetchDataForSecondaryLanguageFinished(bool success);
+    Q_SIGNAL void fetchDataForDataEntryLanguageFinished(bool success);
 };
 
 #endif // DATAENTRYPROXY_H

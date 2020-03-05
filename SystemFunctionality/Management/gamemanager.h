@@ -97,8 +97,12 @@ public:
 
 signals:
     Q_SIGNAL void newWordsPairAddedToCache();
+    Q_SIGNAL void recordAddedPairRequested();
     Q_SIGNAL void writeDataToDbFinished(int nrOfPrimaryLanguageSavedEntries, int totalNrOfSavedEntries);
+    Q_SIGNAL void dataSavedStatisticsUpdateRequested(int nrOfPrimaryLanguageSavedEntries, int totalNrOfSavedEntries);
+    Q_SIGNAL void primaryLanguageDataSavingFinished(int nrOfPrimaryLanguageSavedEntries);
     Q_SIGNAL void cacheReset();
+    Q_SIGNAL void currentEntriesStatisticsResetRequested();
     Q_SIGNAL void dataSourceSetupCompleted();
     Q_SIGNAL void readDataForPrimaryLanguage(int languageIndex, bool allowEmptyResult);
     Q_SIGNAL void readDataForSecondaryLanguage(int languageIndex);
@@ -106,6 +110,7 @@ signals:
     Q_SIGNAL void resetCacheRequested();
     Q_SIGNAL void fetchDataForPrimaryLanguageFinished(bool success, bool validEntriesLoaded);
     Q_SIGNAL void fetchDataForSecondaryLanguageFinished(bool success);
+    Q_SIGNAL void fetchDataForDataEntryLanguageFinished(bool success);
     Q_SIGNAL void dataEntryAllowed(bool allowed);
 
 private slots:
@@ -114,6 +119,9 @@ private slots:
     void _onRequestedPrimaryLanguageAlreadyContainedInDataSource(bool validEntriesLoaded);
     void _onLoadDataFromDbForSecondaryLanguageFinished(bool success);
     void _onRequestedSecondaryLanguageAlreadySetAsPrimary();
+    void _onNewWordsPairAddedToCache();
+    void _onWriteDataToDbFinished(int nrOfPrimaryLanguageSavedEntries, int totalNrOfSavedEntries);
+    void _onCacheReset();
 
 private:
     explicit GameManager(QObject *parent = nullptr);

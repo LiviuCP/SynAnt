@@ -14,9 +14,9 @@ public:
     int getLastSavedTotalNrOfEntries() const;
 
 public slots:
-    void onNewWordsPairAddedToCache();
-    void onWriteDataToDbFinished(int nrOfPrimaryLanguageSavedEntries, int totalNrOfSavedEntries);
-    void onCacheReset();
+    void onRecordAddedPairRequested();
+    void onDataSavedStatisticsUpdateRequested(int nrOfPrimaryLanguageSavedEntries, int totalNrOfSavedEntries);
+    void onCurrentEntriesStatisticsResetRequested();
 
 private:
     int m_CurrentNrOfCacheEntries;

@@ -72,7 +72,7 @@ GameFacade::GameFacade(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pDataAccessProxy, &DataAccessProxy::fetchDataForSecondaryLanguageFinished, this, &GameFacade::_onFetchDataForSecondaryLanguageFinished);
     Q_ASSERT(connected);
-    connected = connect(m_pDataAccessProxy, &DataAccessProxy::writeDataToDbFinished, this, &GameFacade::_onWriteDataToDbFinished);
+    connected = connect(m_pDataAccessProxy, &DataAccessProxy::primaryLanguageDataSavingFinished, this, &GameFacade::_onPrimaryLanguageDataSavingFinished);
     Q_ASSERT(connected);
     connected = connect(m_pDataAccessProxy, &DataAccessProxy::writeDataToDbErrorOccured, this, &GameFacade::_onWriteDataToDbErrorOccured);
     Q_ASSERT(connected);
@@ -659,7 +659,7 @@ void GameFacade::_onEntryProvidedToConsumer(QPair<QString, QString> newWordsPair
     m_pWordMixer->mixWords(newWordsPair, areSynonyms);
 }
 
-void GameFacade::_onWriteDataToDbFinished(int nrOfPrimaryLanguageSavedEntries)
+void GameFacade::_onPrimaryLanguageDataSavingFinished(int nrOfPrimaryLanguageSavedEntries)
 {
     const int initialNrOfPrimarySourceEntries{m_pDataSourceAccessHelper->getTotalNrOfEntries()};
 
