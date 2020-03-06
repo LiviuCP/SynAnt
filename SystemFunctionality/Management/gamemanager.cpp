@@ -245,33 +245,38 @@ void GameManager::_onRequestedPrimaryLanguageAlreadyContainedInDataSource(bool e
 
 void GameManager::_onLoadDataFromDbForSecondaryLanguageFinished(bool success)
 {
-    Q_EMIT fetchDataForDataEntryLanguageFinished(success);
+    // keep exactly this order
     Q_EMIT fetchDataForSecondaryLanguageFinished(success);
+    Q_EMIT fetchDataForDataEntryLanguageFinished(success);
 }
 
 void GameManager::_onRequestedSecondaryLanguageAlreadySetAsPrimary()
 {
-    Q_EMIT fetchDataForDataEntryLanguageFinished(true);
+    // keep exactly this order
     Q_EMIT fetchDataForSecondaryLanguageFinished(true);
+    Q_EMIT fetchDataForDataEntryLanguageFinished(true);
 }
 
 void GameManager::_onNewWordsPairAddedToCache()
 {
-    Q_EMIT newWordsPairAddedToCache();
+    // keep exactly this execution order (statistics signal should always be executed first)
     Q_EMIT recordAddedPairRequested();
+    Q_EMIT newWordsPairAddedToCache();
 }
 
 void GameManager::_onWriteDataToDbFinished(int nrOfPrimaryLanguageSavedEntries, int totalNrOfSavedEntries)
 {
-    Q_EMIT writeDataToDbFinished(nrOfPrimaryLanguageSavedEntries, totalNrOfSavedEntries);
-    Q_EMIT primaryLanguageDataSavingFinished(nrOfPrimaryLanguageSavedEntries);
+    // keep exactly this execution order (statistics signal should always be executed first)
     Q_EMIT dataSavedStatisticsUpdateRequested(nrOfPrimaryLanguageSavedEntries, totalNrOfSavedEntries);
+    Q_EMIT primaryLanguageDataSavingFinished(nrOfPrimaryLanguageSavedEntries);
+    Q_EMIT writeDataToDbFinished(nrOfPrimaryLanguageSavedEntries, totalNrOfSavedEntries);
 }
 
 void GameManager::_onCacheReset()
 {
-    Q_EMIT cacheReset();
+    // keep exactly this execution order (statistics signal should always be executed first)
     Q_EMIT currentEntriesStatisticsResetRequested();
+    Q_EMIT cacheReset();
 }
 
 void GameManager::_onWriteDataToDbErrorOccured()
