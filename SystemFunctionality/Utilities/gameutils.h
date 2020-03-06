@@ -250,9 +250,9 @@ namespace Game
 
     namespace Colors
     {
-        const QString c_BeginPieceTextColor                 {    "blue"                                                                                     };
-        const QString c_MiddlePieceTextColor                {    "black"                                                                                    };
-        const QString c_EndPieceTextColor                   {    "red"                                                                                      };
+        const QString c_BeginPieceTextColor                 {    "#0000ff"                                                                                  };
+        const QString c_MiddlePieceTextColor                {    "#000000"                                                                                  };
+        const QString c_EndPieceTextColor                   {    "#ff0000"                                                                                  };
     }
 
     namespace Database
