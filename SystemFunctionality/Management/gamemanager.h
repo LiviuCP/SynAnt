@@ -112,6 +112,10 @@ signals:
     Q_SIGNAL void fetchDataForSecondaryLanguageFinished(bool success);
     Q_SIGNAL void fetchDataForDataEntryLanguageFinished(bool success);
     Q_SIGNAL void dataEntryAllowed(bool allowed);
+    Q_SIGNAL void writeDataToDbErrorOccured();
+    Q_SIGNAL void wordsPairAlreadyContainedInCache();
+    Q_SIGNAL void addInvalidWordsPairRequested();
+    Q_SIGNAL void entryProvidedToConsumer(QPair<QString, QString> newWordsPair, bool areSynonyms);
 
 private slots:
     void _onDataSourceSetupCompleted();
@@ -122,6 +126,10 @@ private slots:
     void _onNewWordsPairAddedToCache();
     void _onWriteDataToDbFinished(int nrOfPrimaryLanguageSavedEntries, int totalNrOfSavedEntries);
     void _onCacheReset();
+    void _onWriteDataToDbErrorOccured();
+    void _onWordsPairAlreadyContainedInCache();
+    void _onAddInvalidWordsPairRequested();
+    void _onEntryProvidedToConsumer(QPair<QString, QString> newWordsPair, bool areSynonyms);
 
 private:
     explicit GameManager(QObject *parent = nullptr);

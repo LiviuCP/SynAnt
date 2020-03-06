@@ -274,6 +274,26 @@ void GameManager::_onCacheReset()
     Q_EMIT currentEntriesStatisticsResetRequested();
 }
 
+void GameManager::_onWriteDataToDbErrorOccured()
+{
+    Q_EMIT writeDataToDbErrorOccured();
+}
+
+void GameManager::_onWordsPairAlreadyContainedInCache()
+{
+    Q_EMIT wordsPairAlreadyContainedInCache();
+}
+
+void GameManager::_onAddInvalidWordsPairRequested()
+{
+    Q_EMIT addInvalidWordsPairRequested();
+}
+
+void GameManager::_onEntryProvidedToConsumer(QPair<QString, QString> newWordsPair, bool areSynonyms)
+{
+    Q_EMIT entryProvidedToConsumer(newWordsPair, areSynonyms);
+}
+
 void GameManager::_setDatabase(const QString& databasePath)
 {
     if (QSqlDatabase::isDriverAvailable(Game::Database::c_DbDriverName))
@@ -388,19 +408,27 @@ void GameManager::_makeDataConnections()
     Q_ASSERT(connected);
     connected = connect(m_pDataEntryCache, &DataEntryCache::cacheReset, this, &GameManager::_onCacheReset, Qt::QueuedConnection);
     Q_ASSERT(connected);
-    connected = connect(m_pDataEntryCache, &DataEntryCache::writeDataToDbErrorOccured, m_pDataAccessProxy, &DataAccessProxy::writeDataToDbErrorOccured, Qt::QueuedConnection);
+    connected = connect(m_pDataEntryCache, &DataEntryCache::writeDataToDbErrorOccured, this, &GameManager::_onWriteDataToDbErrorOccured, Qt::QueuedConnection);
     Q_ASSERT(connected);
-    connected = connect(m_pDataEntryCache, &DataEntryCache::wordsPairAlreadyContainedInCache, m_pDataEntryProxy, &DataEntryProxy::wordsPairAlreadyContainedInCache, Qt::QueuedConnection);
+    connected = connect(m_pDataEntryCache, &DataEntryCache::wordsPairAlreadyContainedInCache, this, &GameManager::_onWordsPairAlreadyContainedInCache, Qt::QueuedConnection);
+    Q_ASSERT(connected);
+    connected = connect(this, &GameManager::writeDataToDbErrorOccured, m_pDataAccessProxy, &DataAccessProxy::writeDataToDbErrorOccured, Qt::DirectConnection);
+    Q_ASSERT(connected);
+    connected = connect(this, &GameManager::wordsPairAlreadyContainedInCache, m_pDataEntryProxy, &DataEntryProxy::wordsPairAlreadyContainedInCache, Qt::DirectConnection);
     Q_ASSERT(connected);
 
     // validator
-    connected = connect(m_pDataEntryValidator, &DataEntryValidator::addInvalidWordsPairRequested, m_pDataEntryProxy, &DataEntryProxy::addInvalidWordsPairRequested, Qt::DirectConnection);
+    connected = connect(m_pDataEntryValidator, &DataEntryValidator::addInvalidWordsPairRequested, this, &GameManager::_onAddInvalidWordsPairRequested, Qt::DirectConnection);
+    Q_ASSERT(connected);
+    connected = connect(this, &GameManager::addInvalidWordsPairRequested, m_pDataEntryProxy, &DataEntryProxy::addInvalidWordsPairRequested, Qt::DirectConnection);
     Q_ASSERT(connected);
     connected = connect(m_pDataEntryValidator, &DataEntryValidator::entryValidated, m_pDataEntryCache, &DataEntryCache::onValidEntryReceived, Qt::QueuedConnection);
     Q_ASSERT(connected);
 
     // datasource
-    connected = connect(m_pDataSource, &DataSource::entryProvidedToConsumer, m_pDataAccessProxy, &DataAccessProxy::entryProvidedToConsumer, Qt::DirectConnection);
+    connected = connect(m_pDataSource, &DataSource::entryProvidedToConsumer, this, &GameManager::_onEntryProvidedToConsumer, Qt::DirectConnection);
+    Q_ASSERT(connected);
+    connected = connect(this, &GameManager::entryProvidedToConsumer, m_pDataAccessProxy, &DataAccessProxy::entryProvidedToConsumer, Qt::DirectConnection);
     Q_ASSERT(connected);
 
     // data entry statistics
