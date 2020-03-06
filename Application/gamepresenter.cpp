@@ -531,16 +531,6 @@ int GamePresenter::getLevelHard() const
     return static_cast<int>(Game::Levels::LEVEL_HARD);
 }
 
-int GamePresenter::getToolTipDelay() const
-{
-    return Game::Timing::c_ToolTipDelay;
-}
-
-int GamePresenter::getToolTipTimeout() const
-{
-    return Game::Timing::c_ToolTipTimeout;
-}
-
 QString GamePresenter::getWindowTitle() const
 {
     return (m_CurrentPane == Pane::HELP ? (c_WindowTitles[m_CurrentPane].arg(m_IsDataEntryHelpMenuActive ? DataEntry::Misc::c_DataEntryDescriptor

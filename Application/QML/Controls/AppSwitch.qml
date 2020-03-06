@@ -12,9 +12,6 @@ Item {
 
     property string switchToolTip: ""
 
-    readonly property int toolTipDelay: 1000
-    readonly property int toolTipTimeout: 4000
-
     property double customHeight: 28    // use this to determine the actual height of the widget (also add same preferredHeight in Column/Grid layouts)
     readonly property double margin: 7
 
@@ -117,8 +114,8 @@ Item {
         text: switchToolTip
         enabled: text !== ""
         visible: toolTipMouseArea.containsMouse || appSwitch.hovered
-        delay: toolTipDelay
-        timeout: toolTipTimeout
+        delay: Animations.toolTipDelay
+        timeout: Animations.toolTipTimeout
     }
 
     states: [

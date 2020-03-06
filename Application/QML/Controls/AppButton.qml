@@ -18,8 +18,6 @@ Button {
 
     property alias isActiveFocusOnTabEnabled: button.activeFocusOnTab
 
-    readonly property int toolTipDelay: 1000
-    readonly property int toolTipTimeout: 4000
     readonly property int shortcutActivationDelay: 50
 
     property Timer shortcutActivationTimer: Timer {
@@ -55,8 +53,8 @@ Button {
         text: buttonToolTip
         enabled: text !== ""
         visible: button.hovered
-        delay: toolTipDelay
-        timeout: toolTipTimeout
+        delay: Animations.toolTipDelay
+        timeout: Animations.toolTipTimeout
     }
 
     Shortcut {

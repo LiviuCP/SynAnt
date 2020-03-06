@@ -107,8 +107,8 @@ Repeater {
         ToolTip {
             text: pieceToolTip
             visible: !gamePresenter.persistentModeEnabled && wordInputCurrentPieceMouseArea.containsMouse
-            delay: gamePresenter.toolTipDelay
-            timeout: gamePresenter.toolTipTimeout
+            delay: Animations.toolTipDelay
+            timeout: Animations.toolTipTimeout
         }
     }
 

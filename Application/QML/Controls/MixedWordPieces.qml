@@ -84,8 +84,8 @@ Repeater {
         ToolTip {
             text: gamePresenter.mixedWordsPiecesSelections[index] ? GameStrings.wordPieceAlreadySelectedToolTip : GameStrings.selectWordPieceToolTip
             visible: !gamePresenter.persistentModeEnabled && mixedWordsCurrentPieceMouseArea.containsMouse
-            delay: gamePresenter.toolTipDelay
-            timeout: gamePresenter.toolTipTimeout
+            delay: Animations.toolTipDelay
+            timeout: Animations.toolTipTimeout
         }
     }
 

@@ -48,8 +48,8 @@ Item {
     ToolTip {
         text: GameStrings.dataEntryPaneToolTip
         visible: entryPaneMouseArea.containsMouse
-        delay: presenter.toolTipDelay
-        timeout: presenter.toolTipTimeout
+        delay: Animations.toolTipDelay
+        timeout: Animations.toolTipTimeout
     }
 
     StatusBox {
@@ -145,8 +145,8 @@ Item {
             ToolTip {
                 text: GameStrings.dataEntryFirstWordToolTip
                 visible: firstWordTextField.hovered
-                delay: presenter.toolTipDelay
-                timeout: presenter.toolTipTimeout
+                delay: Animations.toolTipDelay
+                timeout: Animations.toolTipTimeout
             }
 
             onVisibleChanged: {
@@ -170,8 +170,8 @@ Item {
             ToolTip {
                 text: GameStrings.dataEntrySecondWordToolTip
                 visible: secondWordTextField.hovered
-                delay: presenter.toolTipDelay
-                timeout: presenter.toolTipTimeout
+                delay: Animations.toolTipDelay
+                timeout: Animations.toolTipTimeout
             }
 
             Keys.onReleased: clearBtn.enabled = (firstWordTextField.text.length != 0 || secondWordTextField.text.length != 0) ? true : false

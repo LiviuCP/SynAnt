@@ -19,5 +19,6 @@
         <file>OtherWidgets/StatisticsBox.qml</file>
         <file>Utilities/GameStrings.qml</file>
         <file>Utilities/Styles.qml</file>
+        <file>Utilities/Animations.qml</file>
     </qresource>
 </RCC>

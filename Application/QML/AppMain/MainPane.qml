@@ -35,8 +35,8 @@ Item {
     ToolTip {
         text: GameStrings.mainPaneToolTip
         visible: mainPaneMouseArea.containsMouse
-        delay: presenter.toolTipDelay
-        timeout: presenter.toolTipTimeout
+        delay: Animations.toolTipDelay
+        timeout: Animations.toolTipTimeout
     }
 
     RowLayout {
@@ -172,8 +172,8 @@ Item {
                 ToolTip {
                     text: GameStrings.levelButtonsToolTip
                     visible: levelBtnsMouseArea.containsMouse
-                    delay: presenter.toolTipDelay
-                    timeout: presenter.toolTipTimeout
+                    delay: Animations.toolTipDelay
+                    timeout: Animations.toolTipTimeout
                 }
 
                 ColumnLayout {

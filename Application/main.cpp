@@ -73,4 +73,5 @@ void registerDataTypesForQML()
 
     qmlRegisterSingletonType(QUrl("qrc:///Application/Utilities/GameStrings.qml"), "GameUtils", 1, 0, "GameStrings");
     qmlRegisterSingletonType(QUrl("qrc:///Application/Utilities/Styles.qml"), "GameUtils", 1, 0, "Styles");
+    qmlRegisterSingletonType(QUrl("qrc:///Application/Utilities/Animations.qml"), "GameUtils", 1, 0, "Animations");
 }

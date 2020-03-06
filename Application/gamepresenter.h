@@ -76,8 +76,6 @@ class GamePresenter : public QObject
     Q_PROPERTY(bool dataFetchingInProgress READ getDataFetchingInProgress NOTIFY dataFetchingInProgressChanged)
     Q_PROPERTY(bool errorOccured READ getErrorOccured NOTIFY errorOccuredChanged)
     Q_PROPERTY(bool quitGameDeferred READ getQuitGameDeferred WRITE setQuitGameDeferred NOTIFY quitGameDeferredChanged)
-    Q_PROPERTY(int toolTipDelay READ getToolTipDelay CONSTANT)
-    Q_PROPERTY(int toolTipTimeout READ getToolTipTimeout CONSTANT)
 
 public:
     enum class Pane
@@ -168,8 +166,6 @@ public:
     int getLevelEasy() const;
     int getLevelMedium() const;
     int getLevelHard() const;
-    int getToolTipDelay() const;
-    int getToolTipTimeout() const;
 
     QString getWindowTitle() const;
 
