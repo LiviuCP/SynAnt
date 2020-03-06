@@ -64,6 +64,8 @@ class GameManager : public QObject,
                     public IDataFunctionality
 {
     Q_OBJECT
+    Q_INTERFACES(IDataAccess)
+    Q_INTERFACES(IDataEntry)
 public:
     static GameManager* getManager();
 
@@ -96,26 +98,33 @@ public:
     int getCurrentNrOfCacheEntries() const;
 
 signals:
-    Q_SIGNAL void newWordsPairAddedToCache();
-    Q_SIGNAL void recordAddedPairRequested();
-    Q_SIGNAL void writeDataToDbFinished(int nrOfPrimaryLanguageSavedEntries, int totalNrOfSavedEntries);
-    Q_SIGNAL void dataSavedStatisticsUpdateRequested(int nrOfPrimaryLanguageSavedEntries, int totalNrOfSavedEntries);
+    // data access proxy
+    Q_SIGNAL void fetchDataForPrimaryLanguageFinished(bool success, bool validEntriesLoaded);
+    Q_SIGNAL void fetchDataForSecondaryLanguageFinished(bool success);
     Q_SIGNAL void primaryLanguageDataSavingFinished(int nrOfPrimaryLanguageSavedEntries);
+    Q_SIGNAL void writeDataToDbErrorOccured();
+    Q_SIGNAL void entryProvidedToConsumer(QPair<QString, QString> newWordsPair, bool areSynonyms);
+
+    // data entry proxy
+    Q_SIGNAL void dataEntryAllowed(bool allowed);
+    Q_SIGNAL void newWordsPairAddedToCache();
+    Q_SIGNAL void addInvalidWordsPairRequested();
+    Q_SIGNAL void wordsPairAlreadyContainedInCache();
     Q_SIGNAL void cacheReset();
+    Q_SIGNAL void writeDataToDbFinished();
+    Q_SIGNAL void fetchDataForDataEntryLanguageFinished(bool success);
+
+    // data entry statistics
+    Q_SIGNAL void recordAddedPairRequested();
+    Q_SIGNAL void dataSavedStatisticsUpdateRequested(int nrOfPrimaryLanguageSavedEntries, int totalNrOfSavedEntries);
     Q_SIGNAL void currentEntriesStatisticsResetRequested();
+
+    // data source, loader, cache
     Q_SIGNAL void dataSourceSetupCompleted();
     Q_SIGNAL void readDataForPrimaryLanguage(int languageIndex, bool allowEmptyResult);
     Q_SIGNAL void readDataForSecondaryLanguage(int languageIndex);
     Q_SIGNAL void writeDataToDb();
     Q_SIGNAL void resetCacheRequested();
-    Q_SIGNAL void fetchDataForPrimaryLanguageFinished(bool success, bool validEntriesLoaded);
-    Q_SIGNAL void fetchDataForSecondaryLanguageFinished(bool success);
-    Q_SIGNAL void fetchDataForDataEntryLanguageFinished(bool success);
-    Q_SIGNAL void dataEntryAllowed(bool allowed);
-    Q_SIGNAL void writeDataToDbErrorOccured();
-    Q_SIGNAL void wordsPairAlreadyContainedInCache();
-    Q_SIGNAL void addInvalidWordsPairRequested();
-    Q_SIGNAL void entryProvidedToConsumer(QPair<QString, QString> newWordsPair, bool areSynonyms);
 
 private slots:
     void _onDataSourceSetupCompleted();

@@ -269,7 +269,7 @@ void GameManager::_onWriteDataToDbFinished(int nrOfPrimaryLanguageSavedEntries, 
     // keep exactly this execution order (statistics signal should always be executed first)
     Q_EMIT dataSavedStatisticsUpdateRequested(nrOfPrimaryLanguageSavedEntries, totalNrOfSavedEntries);
     Q_EMIT primaryLanguageDataSavingFinished(nrOfPrimaryLanguageSavedEntries);
-    Q_EMIT writeDataToDbFinished(nrOfPrimaryLanguageSavedEntries, totalNrOfSavedEntries);
+    Q_EMIT writeDataToDbFinished();
 }
 
 void GameManager::_onCacheReset()

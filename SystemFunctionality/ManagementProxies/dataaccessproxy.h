@@ -8,10 +8,10 @@
 
 class GameManager;
 
-class DataAccessProxy : public QObject,
-                              public IDataAccess
+class DataAccessProxy : public QObject, public IDataAccess
 {
     Q_OBJECT
+    Q_INTERFACES(IDataAccess)
 public:
     explicit DataAccessProxy(QObject *parent = nullptr);
 

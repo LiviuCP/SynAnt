@@ -11,6 +11,7 @@ class GameManager;
 class DataEntryProxy : public QObject, public IDataEntry
 {
     Q_OBJECT
+    Q_INTERFACES(IDataEntry)
 public:
     explicit DataEntryProxy(QObject *parent = nullptr);
 
@@ -26,7 +27,6 @@ public:
 
 signals:
     Q_SIGNAL void dataEntryAllowed(bool allowed);
-    Q_SIGNAL void newWordsPairValidated(bool isValid);
     Q_SIGNAL void newWordsPairAddedToCache();
     Q_SIGNAL void addInvalidWordsPairRequested();
     Q_SIGNAL void wordsPairAlreadyContainedInCache();
