@@ -40,22 +40,4 @@ QtObject {
     readonly property int borderWidth: 1
     readonly property int selectedBorderWidth: 2
     readonly property int pushButtonRadius: 5
-
-    // button behavior when using shortcuts
-    property QtObject button
-
-    property Timer pressOpacityTimer: Timer {
-        interval: 50
-        onTriggered: revertButtonOpacityAfterShortcutActivation(button);
-    }
-
-    function updateButtonOpacityAtShortcutActivation(btn) {
-        btn.buttonOpacity = pressedButtonOpacity;
-        button = btn;
-        pressOpacityTimer.start();
-    }
-
-    function revertButtonOpacityAfterShortcutActivation(btn) {
-        btn.buttonOpacity = releasedButtonOpacity;
-    }
 }

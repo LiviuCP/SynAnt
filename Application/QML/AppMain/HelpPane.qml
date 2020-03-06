@@ -71,7 +71,7 @@ Item {
     }
 
     onQuitButtonShortcutActivatedChanged: {
-        Styles.updateButtonOpacityAtShortcutActivation(quitBtn);
+        Animations.updateButtonOpacityAtShortcutActivation(quitBtn);
         quitButtonShortcutActivated = false;
     }
 }

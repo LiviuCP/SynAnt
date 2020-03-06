@@ -161,7 +161,7 @@ Item {
     onDataEntryButtonShortcutActivatedChanged: {
         if (dataEntryButtonShortcutActivated)
         {
-            Styles.updateButtonOpacityAtShortcutActivation(dataEntryBtn);
+            Animations.updateButtonOpacityAtShortcutActivation(dataEntryBtn);
             dataEntryButtonShortcutActivated = false;
         }
     }
@@ -177,7 +177,7 @@ Item {
     onHelpButtonShortcutActivatedChanged: {
         if (helpButtonShortcutActivated)
         {
-            Styles.updateButtonOpacityAtShortcutActivation(helpBtn);
+            Animations.updateButtonOpacityAtShortcutActivation(helpBtn);
             helpButtonShortcutActivated = false;
         }
     }
@@ -185,7 +185,7 @@ Item {
     onQuitButtonShortcutActivatedChanged: {
         if (quitButtonShortcutActivated)
         {
-            Styles.updateButtonOpacityAtShortcutActivation(quitBtn);
+            Animations.updateButtonOpacityAtShortcutActivation(quitBtn);
             quitButtonShortcutActivated = false;
         }
     }
