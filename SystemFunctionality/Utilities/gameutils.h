@@ -6,6 +6,7 @@
 #define GAMEUTILS_H
 
 #include <QMap>
+#include <QVector>
 
 static const QString c_RawGameHelpMessage                   {
                                                                  "\nPlease read following game instructions: \n\n"
@@ -283,6 +284,13 @@ namespace Game
         const QString c_InsertEntryForLanguageIntoDbQuery   {
                                                                  "INSERT INTO GameDataTable(firstWord, secondWord, areSynonyms, language) "
                                                                  "VALUES(:firstWord, :secondWord, :areSynonyms, :language)"
+                                                            };
+
+        const QVector<QString> c_LanguageCodes              {
+                                                                 "EN",  // English
+                                                                 "DE",  // German
+                                                                 "RO",  // Romanian
+                                                                 "IT"   // Italian
                                                             };
     }
 

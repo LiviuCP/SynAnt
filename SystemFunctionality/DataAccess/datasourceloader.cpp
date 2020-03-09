@@ -7,8 +7,6 @@
 #include "datasourceloader.h"
 #include "../Utilities/gameutils.h"
 
-const QVector<QString> c_LanguageCodes{"EN", "DE", "RO", "IT"};
-
 DataSourceLoader::DataSourceLoader(DataSource* pDataSource, QObject *parent)
     : QObject(parent)
     , m_pDataSource{pDataSource}
@@ -119,7 +117,7 @@ bool DataSourceLoader::_loadEntriesFromDb(QVector<DataSource::DataEntry>& dbEntr
 
         if (db.open())
         {
-            QSqlQuery retrieveDataQuery{Game::Database::c_RetrieveEntriesFromLanguageQuery.arg(c_LanguageCodes[languageIndex])};
+            QSqlQuery retrieveDataQuery{Game::Database::c_RetrieveEntriesFromLanguageQuery.arg(Game::Database::c_LanguageCodes[languageIndex])};
             if (retrieveDataQuery.isActive())
             {
                 while (retrieveDataQuery.next())

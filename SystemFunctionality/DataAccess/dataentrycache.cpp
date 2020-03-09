@@ -6,8 +6,6 @@
 #include "dataentrycache.h"
 #include "../Utilities/gameutils.h"
 
-const QVector<QString> c_LanguageCodes{"EN", "DE", "RO", "IT"};
-
 DataEntryCache::DataEntryCache(DataSource* pDataSource, QObject *parent)
     : QObject(parent)
     , m_CacheEntries{}
@@ -69,7 +67,7 @@ void DataEntryCache::onWriteDataToDbRequested()
                     query.bindValue(Game::Database::c_FirstWordFieldPlaceholder, m_CacheEntries[entry].firstWord);
                     query.bindValue(Game::Database::c_SecondWordFieldPlaceholder, m_CacheEntries[entry].secondWord);
                     query.bindValue(Game::Database::c_AreSynonymsFieldPlaceholder, static_cast<int>(m_CacheEntries[entry].areSynonyms));
-                    query.bindValue(Game::Database::c_LanguageFieldPlaceholder, c_LanguageCodes[m_LanguageIndexes[entry]]);
+                    query.bindValue(Game::Database::c_LanguageFieldPlaceholder, Game::Database::c_LanguageCodes[m_LanguageIndexes[entry]]);
 
                     if (!query.exec())
                     {
