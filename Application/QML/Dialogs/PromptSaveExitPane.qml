@@ -62,8 +62,12 @@ Item {
             shortcutSequence: GameStrings.promptSaveYesButtonShortcut
 
             onButtonClicked: {
-                presenter.dataEntry.handleSaveAddedWordPairsRequest();
-                promptSaveExitPane.quitOrExitDataEntry();
+                if (presenter.quitGameDeferred) {
+                    presenter.handleSaveAndQuit();
+                } else {
+                    presenter.dataEntry.handleSaveAddedWordPairsRequest();
+                    quitOrExitDataEntry();
+                }
             }
         }
 

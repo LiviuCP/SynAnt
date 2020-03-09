@@ -122,6 +122,7 @@ public:
     Q_INVOKABLE void updateSecondWordInputHoverIndex(int index);
     Q_INVOKABLE void clearWordInputHoverIndexes();
     Q_INVOKABLE void quit();
+    Q_INVOKABLE void handleSaveAndQuit();
 
     QObject* getDataEntryPresenter() const;
 

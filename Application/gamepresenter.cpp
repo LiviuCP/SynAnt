@@ -292,6 +292,15 @@ void GamePresenter::quit()
     }
 }
 
+void GamePresenter::handleSaveAndQuit()
+{
+    if (m_QuitDeferred)
+    {
+        _switchToPane(Pane::DATA_ENTRY);
+        qobject_cast<DataEntryPresenter*>(m_pDataEntryPresenter)->handleSaveAddedWordPairsRequest();
+    }
+}
+
 QObject *GamePresenter::getDataEntryPresenter() const
 {
     return m_pDataEntryPresenter;
@@ -633,9 +642,10 @@ void GamePresenter::_onStatisticsChanged()
 
 void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
 {
-    // once main pane is accessed exclude handling the status codes that are only applicable for the intro pane (from status message display point of view)
+    // once main pane is accessed exclude handling the status codes that are only applicable for the intro pane (from status message display point of view) ...
     if (!m_MainPaneInitialized || (statusCode != Game::StatusCodes::DATA_SUCCESSFULLY_SAVED &&
-                                   statusCode != Game::StatusCodes::ADDITIONAL_DATA_SAVE_IN_PROGRESS))
+                                   statusCode != Game::StatusCodes::ADDITIONAL_DATA_SAVE_IN_PROGRESS) ||
+                                  (m_QuitDeferred && statusCode == Game::StatusCodes::DATA_SUCCESSFULLY_SAVED)) // ...except this status when user quits and data save is pending
     {
         if (m_pStatusUpdateTimer->isActive())
         {
@@ -720,7 +730,14 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
             break;
         case Game::StatusCodes::DATA_SUCCESSFULLY_SAVED:
             _updateStatusMessage(Game::Messages::c_AdditionalDataAvailableMessage, Pane::INTRO, Game::Timing::c_NoDelay);
-            _updateStatusMessage(Game::Messages::c_PleasePlayOrEnterDataMessage, Pane::INTRO, Game::Timing::c_ShortStatusUpdateDelay);
+            if (m_QuitDeferred)
+            {
+                QTimer::singleShot(Game::Timing::c_GameQuitDelay, this, [this](){quit();});
+            }
+            else if (m_CurrentPane == Pane::INTRO)
+            {
+                _updateStatusMessage(Game::Messages::c_PleasePlayOrEnterDataMessage, Pane::INTRO, Game::Timing::c_ShortStatusUpdateDelay);
+            }
             break;
         case Game::StatusCodes::DATA_ENTRY_SAVING_ERROR:
             _launchErrorPane(Game::Error::c_CannotSaveDataMessage);
@@ -837,6 +854,8 @@ void GamePresenter::_switchToPane(Pane pane)
         case Pane::DATA_ENTRY:
             break;
         case Pane::PROMPT_DISCARD:
+            break;
+        case Pane::PROMPT_SAVE_EXIT:
             break;
         default:
             Q_ASSERT(false);
