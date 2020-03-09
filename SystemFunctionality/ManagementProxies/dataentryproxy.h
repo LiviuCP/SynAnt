@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#include "../ManagementInterfaces/dataentry.h"
+#include "../ManagementInterfaces/dataentryinterface.h"
 #include "../Utilities/dataentryutils.h"
 
 class GameManager;

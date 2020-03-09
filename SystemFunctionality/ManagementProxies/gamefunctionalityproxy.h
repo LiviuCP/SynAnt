@@ -5,7 +5,7 @@
 
 #include <QObject>
 
-#include "../ManagementInterfaces/gamefunctionality.h"
+#include "../ManagementInterfaces/gamefunctionalityinterface.h"
 
 class GameManager;
 class DataSource;

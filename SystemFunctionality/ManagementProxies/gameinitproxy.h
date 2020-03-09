@@ -5,7 +5,7 @@
 
 #include <QObject>
 
-#include "../ManagementInterfaces/gameinit.h"
+#include "../ManagementInterfaces/gameinitinterface.h"
 
 class GameManager;
 

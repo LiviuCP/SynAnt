@@ -1,4 +1,4 @@
-#include "dataentry.h"
+#include "dataentryinterface.h"
 
 IDataEntry::~IDataEntry()
 {

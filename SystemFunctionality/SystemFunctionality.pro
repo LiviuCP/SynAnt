@@ -33,11 +33,11 @@ SOURCES += \
         DataAccess/dataentrycache.cpp \
         DataAccess/dataentrystatistics.cpp \
         DataAccess/datasourceaccesshelper.cpp \
-        ManagementInterfaces/gameinit.cpp \
-        ManagementInterfaces/game.cpp \
-        ManagementInterfaces/gamefunctionality.cpp \
-        ManagementInterfaces/dataentry.cpp \
-        ManagementInterfaces/data.cpp \
+        ManagementInterfaces/datainterface.cpp \
+        ManagementInterfaces/dataentryinterface.cpp \
+        ManagementInterfaces/gameinterface.cpp \
+        ManagementInterfaces/gameinitinterface.cpp \
+        ManagementInterfaces/gamefunctionalityinterface.cpp \
         Management/gamemanager.cpp \
         Management/gamefacade.cpp \
         Management/dataentryfacade.cpp \
@@ -51,6 +51,7 @@ SOURCES += \
         Utilities/exceptions.cpp \
         systemfunctionality.cpp
 
+
 HEADERS += \
         CoreFunctionality/wordmixer.h \
         CoreFunctionality/wordpairowner.h \
@@ -61,11 +62,11 @@ HEADERS += \
         DataAccess/dataentrycache.h \
         DataAccess/dataentrystatistics.h \
         DataAccess/datasourceaccesshelper.h \
-        ManagementInterfaces/gameinit.h \
-        ManagementInterfaces/game.h \
-        ManagementInterfaces/gamefunctionality.h \
-        ManagementInterfaces/dataentry.h \
-        ManagementInterfaces/data.h \
+        ManagementInterfaces/datainterface.h \
+        ManagementInterfaces/dataentryinterface.h \
+        ManagementInterfaces/gameinterface.h \
+        ManagementInterfaces/gamefunctionalityinterface.h \
+        ManagementInterfaces/gameinitinterface.h \
         Management/gamemanager.h \
         Management/gamefacade.h \
         Management/dataentryfacade.h \

@@ -28,11 +28,11 @@
 #include <QObject>
 #include <QSqlDatabase>
 
-#include "../ManagementInterfaces/gameinit.h"
-#include "../ManagementInterfaces/game.h"
-#include "../ManagementInterfaces/gamefunctionality.h"
-#include "../ManagementInterfaces/dataentry.h"
-#include "../ManagementInterfaces/data.h"
+#include "../ManagementInterfaces/gameinitinterface.h"
+#include "../ManagementInterfaces/gameinterface.h"
+#include "../ManagementInterfaces/gamefunctionalityinterface.h"
+#include "../ManagementInterfaces/dataentryinterface.h"
+#include "../ManagementInterfaces/datainterface.h"
 #include "../Utilities/dataentryutils.h"
 
 class GameFacade;

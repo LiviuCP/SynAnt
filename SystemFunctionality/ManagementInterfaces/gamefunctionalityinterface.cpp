@@ -1,4 +1,4 @@
-#include "gamefunctionality.h"
+#include "gamefunctionalityinterface.h"
 
 IGameFunctionality::~IGameFunctionality()
 {
