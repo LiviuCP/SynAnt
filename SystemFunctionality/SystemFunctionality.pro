@@ -36,7 +36,6 @@ SOURCES += \
         ManagementInterfaces/gameinit.cpp \
         ManagementInterfaces/game.cpp \
         ManagementInterfaces/gamefunctionality.cpp \
-        ManagementInterfaces/dataaccess.cpp \
         ManagementInterfaces/dataentry.cpp \
         ManagementInterfaces/data.cpp \
         Management/gamemanager.cpp \
@@ -46,7 +45,6 @@ SOURCES += \
         ManagementProxies/gamefunctionalityproxy.cpp \
         ManagementProxies/gameproxy.cpp \
         ManagementProxies/dataproxy.cpp \
-        ManagementProxies/dataaccessproxy.cpp \
         ManagementProxies/dataentryproxy.cpp \
         Utilities/statisticsitem.cpp \
         Utilities/chronometer.cpp \
@@ -66,7 +64,6 @@ HEADERS += \
         ManagementInterfaces/gameinit.h \
         ManagementInterfaces/game.h \
         ManagementInterfaces/gamefunctionality.h \
-        ManagementInterfaces/dataaccess.h \
         ManagementInterfaces/dataentry.h \
         ManagementInterfaces/data.h \
         Management/gamemanager.h \
@@ -76,7 +73,6 @@ HEADERS += \
         ManagementProxies/gamefunctionalityproxy.h \
         ManagementProxies/gameproxy.h \
         ManagementProxies/dataproxy.h \
-        ManagementProxies/dataaccessproxy.h \
         ManagementProxies/dataentryproxy.h \
         Utilities/statisticsitem.h \
         Utilities/chronometer.h \

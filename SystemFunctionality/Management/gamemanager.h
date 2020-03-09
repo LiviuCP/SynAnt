@@ -31,7 +31,6 @@
 #include "../ManagementInterfaces/gameinit.h"
 #include "../ManagementInterfaces/game.h"
 #include "../ManagementInterfaces/gamefunctionality.h"
-#include "../ManagementInterfaces/dataaccess.h"
 #include "../ManagementInterfaces/dataentry.h"
 #include "../ManagementInterfaces/data.h"
 #include "../Utilities/dataentryutils.h"
@@ -43,8 +42,6 @@ class DataSourceLoader;
 class DataEntryValidator;
 class DataEntryCache;
 class DataEntryStatistics;
-class DataAccessProxy;
-class DataEntryProxy;
 class DataSourceAccessHelper;
 class WordMixer;
 class WordMixerProxy;
@@ -57,12 +54,11 @@ class GameManager : public QObject,
                     public IGameInit,
                     public IGame,
                     public IGameFunctionality,
-                    public IDataAccess,
                     public IDataEntry,
                     public IData
 {
     Q_OBJECT
-    Q_INTERFACES(IDataAccess)
+    Q_INTERFACES(IGameFunctionality)
     Q_INTERFACES(IDataEntry)
 public:
     static GameManager* getManager();
@@ -82,7 +78,6 @@ public:
     GameFacade* getGameFacade() const;
     DataEntryFacade* getDataEntryFacade() const;
 
-    DataAccessProxy* getDataAccessProxy() const;
     DataSourceAccessHelper* getDataSourceAccessHelper() const;
     WordMixer* getWordMixer() const;
     WordPairOwner* getWordPairOwner() const;
@@ -156,7 +151,6 @@ private:
     DataEntryValidator* m_pDataEntryValidator;
     DataEntryCache* m_pDataEntryCache;
     DataEntryStatistics* m_pDataEntryStatistics;
-    DataAccessProxy* m_pDataAccessProxy;
     DataSourceAccessHelper* m_pDataSourceAccessHelper;
     WordMixer* m_pWordMixer;
     WordPairOwner* m_pWordPairOwner;

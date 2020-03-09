@@ -9,7 +9,6 @@
 
 class GameManager;
 class DataSource;
-class DataAccessProxy;
 class DataSourceAccessHelper;
 class WordMixer;
 class WordPairOwner;
@@ -20,16 +19,27 @@ class Chronometer;
 class GameFunctionalityProxy : public QObject, public IGameFunctionality
 {
     Q_OBJECT
+    Q_INTERFACES(IGameFunctionality)
 public:
     explicit GameFunctionalityProxy(QObject *parent = nullptr);
 
-    DataAccessProxy* getDataAccessProxy() const;
+    void fetchDataForPrimaryLanguage(int languageIndex, bool allowEmptyResult);
+    void provideDataEntryToConsumer(int entryNumber);
+    int getNrOfDataSourceEntries() const;
+
     DataSourceAccessHelper* getDataSourceAccessHelper() const;
     WordMixer* getWordMixer() const;
     WordPairOwner* getWordPairOwner() const;
     InputBuilder* getInputBuilder() const;
     StatisticsItem* getStatisticsItem() const;
     Chronometer* getChronometer() const;
+
+signals:
+    Q_SIGNAL void fetchDataForPrimaryLanguageFinished(bool success, bool validEntriesFetched);
+    Q_SIGNAL void fetchDataForSecondaryLanguageFinished(bool success);
+    Q_SIGNAL void primaryLanguageDataSavingFinished(int nrOfPrimaryLanguageSavedEntries);
+    Q_SIGNAL void writeDataToDbErrorOccured();
+    Q_SIGNAL void entryProvidedToConsumer(QPair<QString, QString> newWordsPair, bool areSynonyms);
 };
 
 #endif // GAMEFUNCTIONALITYPROXY_H
