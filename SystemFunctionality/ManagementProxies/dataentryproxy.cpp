@@ -3,6 +3,23 @@
 
 DataEntryProxy::DataEntryProxy(QObject *parent) : QObject(parent)
 {
+    GameManager* pGameManager{GameManager::getManager()};
+    Q_ASSERT(pGameManager);
+
+    bool connected = connect(pGameManager, &GameManager::newWordsPairAddedToCache, this, &DataEntryProxy::newWordsPairAddedToCache, Qt::DirectConnection);
+    Q_ASSERT(connected);
+    connected = connect(pGameManager, &GameManager::writeDataToDbFinished, this, &DataEntryProxy::writeDataToDbFinished, Qt::DirectConnection);
+    Q_ASSERT(connected);
+    connected = connect(pGameManager, &GameManager::cacheReset, this, &DataEntryProxy::cacheReset, Qt::DirectConnection);
+    Q_ASSERT(connected);
+    connected = connect(pGameManager, &GameManager::addInvalidWordsPairRequested, this, &DataEntryProxy::addInvalidWordsPairRequested, Qt::DirectConnection);
+    Q_ASSERT(connected);
+    connected = connect(pGameManager, &GameManager::wordsPairAlreadyContainedInCache, this, &DataEntryProxy::wordsPairAlreadyContainedInCache, Qt::DirectConnection);
+    Q_ASSERT(connected);
+    connected = connect(pGameManager, &GameManager::fetchDataForDataEntryLanguageFinished, this, &DataEntryProxy::fetchDataForDataEntryLanguageFinished, Qt::DirectConnection);
+    Q_ASSERT(connected);
+    connected = connect(pGameManager, &GameManager::dataEntryAllowed, this, &DataEntryProxy::dataEntryAllowed, Qt::DirectConnection);
+    Q_ASSERT(connected);
 }
 
 void DataEntryProxy::fetchDataForSecondaryLanguage(int languageIndex)

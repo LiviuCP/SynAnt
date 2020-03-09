@@ -1,10 +1,9 @@
 #include "dataentryfacade.h"
-#include "../ManagementProxies/datafunctionalityproxy.h"
 #include "../ManagementProxies/dataentryproxy.h"
 
 DataEntryFacade::DataEntryFacade(QObject *parent)
     : QObject(parent)
-    , m_pDataFunctionalityProxy{new DataFunctionalityProxy{this}}
+    , m_pDataEntryProxy{new DataEntryProxy{this}}
     , m_CurrentStatusCode{DataEntry::StatusCodes::NO_DATA_ENTRY_REQUESTED}
     , m_IsDataEntryAllowed{false}
     , m_IsAddingToCacheAllowed{true}
@@ -15,8 +14,6 @@ DataEntryFacade::DataEntryFacade(QObject *parent)
     , m_CurrentLanguageIndex{-1}
     , m_IsSavingDeferred{false}
 {
-    m_pDataEntryProxy = m_pDataFunctionalityProxy->getDataEntryProxy();
-
     // all QObjects used by application (except the QML registered ones) should be parented (the non-parented ones would only be used in tests)
     Q_ASSERT(this->parent());
     Q_ASSERT(m_pDataEntryProxy->parent());

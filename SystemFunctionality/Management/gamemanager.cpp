@@ -17,7 +17,6 @@
 #include "../DataAccess/dataentrystatistics.h"
 #include "../DataAccess/datasourceaccesshelper.h"
 #include "../ManagementProxies/dataaccessproxy.h"
-#include "../ManagementProxies/dataentryproxy.h"
 #include "../Utilities/statisticsitem.h"
 #include "../Utilities/chronometer.h"
 #include "../Utilities/exceptions.h"
@@ -44,7 +43,6 @@ GameManager::GameManager(QObject *parent)
     , m_pDataEntryCache{nullptr}
     , m_pDataEntryStatistics{nullptr}
     , m_pDataAccessProxy{nullptr}
-    , m_pDataEntryProxy{nullptr}
     , m_pDataSourceAccessHelper{new DataSourceAccessHelper{this}}
     , m_pWordMixer{new WordMixer{this}}
     , m_pWordPairOwner{new WordPairOwner{this}}
@@ -80,7 +78,6 @@ void GameManager::setDataSource(const QString &dataDirPath)
 
         // always ensure these items are created after all data source related items are initialized
         m_pDataAccessProxy = new DataAccessProxy{this};
-        m_pDataEntryProxy = new DataEntryProxy{this};
 
         m_pDataSourceLoader->moveToThread(m_pDataSourceLoaderThread);
         m_pDataEntryCache->moveToThread(m_pDataEntryCacheThread);
@@ -152,11 +149,6 @@ DataEntryFacade* GameManager::getDataEntryFacade() const
 DataAccessProxy* GameManager::getDataAccessProxy() const
 {
     return m_pDataAccessProxy;
-}
-
-DataEntryProxy *GameManager::getDataEntryProxy() const
-{
-    return m_pDataEntryProxy;
 }
 
 DataSourceAccessHelper *GameManager::getDataSourceAccessHelper() const
@@ -374,7 +366,6 @@ void GameManager::_makeDataConnections()
     Q_ASSERT(m_pDataEntryValidator);
     Q_ASSERT(m_pDataSource);
     Q_ASSERT(m_pDataAccessProxy);
-    Q_ASSERT(m_pDataEntryProxy);
 
     // loader
     bool connected{connect(m_pDataSourceLoaderThread, &QThread::finished, m_pDataSourceLoader, &DataSourceLoader::deleteLater)};
@@ -394,10 +385,6 @@ void GameManager::_makeDataConnections()
     connected = connect(this, &GameManager::fetchDataForPrimaryLanguageFinished, m_pDataAccessProxy, &DataAccessProxy::fetchDataForPrimaryLanguageFinished, Qt::DirectConnection);
     Q_ASSERT(connected);
     connected = connect(this, &GameManager::fetchDataForSecondaryLanguageFinished, m_pDataAccessProxy, &DataAccessProxy::fetchDataForSecondaryLanguageFinished, Qt::DirectConnection);
-    Q_ASSERT(connected);
-    connected = connect(this, &GameManager::fetchDataForDataEntryLanguageFinished, m_pDataEntryProxy, &DataEntryProxy::fetchDataForDataEntryLanguageFinished, Qt::DirectConnection);
-    Q_ASSERT(connected);
-    connected = connect(this, &GameManager::dataEntryAllowed, m_pDataEntryProxy, &DataEntryProxy::dataEntryAllowed, Qt::DirectConnection);
     Q_ASSERT(connected);
 
     // cache
@@ -419,13 +406,9 @@ void GameManager::_makeDataConnections()
     Q_ASSERT(connected);
     connected = connect(this, &GameManager::writeDataToDbErrorOccured, m_pDataAccessProxy, &DataAccessProxy::writeDataToDbErrorOccured, Qt::DirectConnection);
     Q_ASSERT(connected);
-    connected = connect(this, &GameManager::wordsPairAlreadyContainedInCache, m_pDataEntryProxy, &DataEntryProxy::wordsPairAlreadyContainedInCache, Qt::DirectConnection);
-    Q_ASSERT(connected);
 
     // validator
     connected = connect(m_pDataEntryValidator, &DataEntryValidator::addInvalidWordsPairRequested, this, &GameManager::_onAddInvalidWordsPairRequested, Qt::DirectConnection);
-    Q_ASSERT(connected);
-    connected = connect(this, &GameManager::addInvalidWordsPairRequested, m_pDataEntryProxy, &DataEntryProxy::addInvalidWordsPairRequested, Qt::DirectConnection);
     Q_ASSERT(connected);
     connected = connect(m_pDataEntryValidator, &DataEntryValidator::entryValidated, m_pDataEntryCache, &DataEntryCache::onValidEntryReceived, Qt::QueuedConnection);
     Q_ASSERT(connected);
@@ -446,12 +429,6 @@ void GameManager::_makeDataConnections()
 
     // game manager to proxy
     connected = connect(this, &GameManager::primaryLanguageDataSavingFinished, m_pDataAccessProxy, &DataAccessProxy::primaryLanguageDataSavingFinished, Qt::DirectConnection);
-    Q_ASSERT(connected);
-    connected = connect(this, &GameManager::newWordsPairAddedToCache, m_pDataEntryProxy, &DataEntryProxy::newWordsPairAddedToCache, Qt::DirectConnection);
-    Q_ASSERT(connected);
-    connected = connect(this, &GameManager::writeDataToDbFinished, m_pDataEntryProxy, &DataEntryProxy::writeDataToDbFinished, Qt::DirectConnection);
-    Q_ASSERT(connected);
-    connected = connect(this, &GameManager::cacheReset, m_pDataEntryProxy, &DataEntryProxy::cacheReset, Qt::DirectConnection);
     Q_ASSERT(connected);
 }
 

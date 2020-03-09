@@ -34,7 +34,6 @@
 #include "../ManagementInterfaces/dataaccess.h"
 #include "../ManagementInterfaces/dataentry.h"
 #include "../ManagementInterfaces/data.h"
-#include "../ManagementInterfaces/datafunctionality.h"
 #include "../Utilities/dataentryutils.h"
 
 class GameFacade;
@@ -60,8 +59,7 @@ class GameManager : public QObject,
                     public IGameFunctionality,
                     public IDataAccess,
                     public IDataEntry,
-                    public IData,
-                    public IDataFunctionality
+                    public IData
 {
     Q_OBJECT
     Q_INTERFACES(IDataAccess)
@@ -85,7 +83,6 @@ public:
     DataEntryFacade* getDataEntryFacade() const;
 
     DataAccessProxy* getDataAccessProxy() const;
-    DataEntryProxy* getDataEntryProxy() const;
     DataSourceAccessHelper* getDataSourceAccessHelper() const;
     WordMixer* getWordMixer() const;
     WordPairOwner* getWordPairOwner() const;
@@ -160,7 +157,6 @@ private:
     DataEntryCache* m_pDataEntryCache;
     DataEntryStatistics* m_pDataEntryStatistics;
     DataAccessProxy* m_pDataAccessProxy;
-    DataEntryProxy* m_pDataEntryProxy;
     DataSourceAccessHelper* m_pDataSourceAccessHelper;
     WordMixer* m_pWordMixer;
     WordPairOwner* m_pWordPairOwner;

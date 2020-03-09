@@ -14,7 +14,6 @@
 
 #include "../Utilities/dataentryutils.h"
 
-class DataFunctionalityProxy;
 class DataEntryProxy;
 
 class DataEntryFacade : public QObject
@@ -72,7 +71,6 @@ private:
     void _allowSaveToDb();
     void _blockSaveToDb();
 
-    DataFunctionalityProxy* m_pDataFunctionalityProxy;
     DataEntryProxy* m_pDataEntryProxy;
 
     DataEntry::StatusCodes m_CurrentStatusCode;

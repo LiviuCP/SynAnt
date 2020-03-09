@@ -39,14 +39,12 @@ SOURCES += \
         ManagementInterfaces/dataaccess.cpp \
         ManagementInterfaces/dataentry.cpp \
         ManagementInterfaces/data.cpp \
-        ManagementInterfaces/datafunctionality.cpp \
         Management/gamemanager.cpp \
         Management/gamefacade.cpp \
         Management/dataentryfacade.cpp \
         ManagementProxies/gameinitproxy.cpp \
         ManagementProxies/gamefunctionalityproxy.cpp \
         ManagementProxies/gameproxy.cpp \
-        ManagementProxies/datafunctionalityproxy.cpp \
         ManagementProxies/dataproxy.cpp \
         ManagementProxies/dataaccessproxy.cpp \
         ManagementProxies/dataentryproxy.cpp \
@@ -71,14 +69,12 @@ HEADERS += \
         ManagementInterfaces/dataaccess.h \
         ManagementInterfaces/dataentry.h \
         ManagementInterfaces/data.h \
-        ManagementInterfaces/datafunctionality.h \
         Management/gamemanager.h \
         Management/gamefacade.h \
         Management/dataentryfacade.h \
         ManagementProxies/gameinitproxy.h \
         ManagementProxies/gamefunctionalityproxy.h \
         ManagementProxies/gameproxy.h \
-        ManagementProxies/datafunctionalityproxy.h \
         ManagementProxies/dataproxy.h \
         ManagementProxies/dataaccessproxy.h \
         ManagementProxies/dataentryproxy.h \
