@@ -39,7 +39,7 @@ public:
     const QVector<QString>& getMixedWordsPiecesContent() const;
     QString getFirstWord() const;
     QString getSecondWord() const;
-    int getPieceSizeForLevel(Game::Levels level) const;
+    int getCurrentPieceSize() const;
     Game::Levels getGameLevel() const;
 
     // indexes of the beginning and the end piece of each word in the mixed words array

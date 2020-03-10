@@ -135,7 +135,7 @@ void CoreFunctionalityTests::_checkCorrectMixing(QVector<QString> mixedWords, QV
 void CoreFunctionalityTests::_checkLevelAndPieceSize(const WordMixer& wordMixer, Game::Levels level, int pieceSize)
 {
     QVERIFY2(wordMixer.getGameLevel() == level, "The setup game level is incorrect");
-    QVERIFY2(wordMixer.getPieceSizeForLevel(level) == pieceSize, "The piece size for the setup level is incorrect");
+    QVERIFY2(wordMixer.getCurrentPieceSize() == pieceSize, "The piece size for the setup level is incorrect");
 }
 
 QTEST_APPLESS_MAIN(CoreFunctionalityTests)
