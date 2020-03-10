@@ -114,7 +114,7 @@ QString WordMixer::getSecondWord() const
 
 int WordMixer::getPieceSizeForLevel(Game::Levels level) const
 {
-    return m_WordPieceSizes[level];
+    return m_WordPieceSizes.contains(level) ? m_WordPieceSizes[level] : -1;
 }
 
 Game::Levels WordMixer::getGameLevel() const
