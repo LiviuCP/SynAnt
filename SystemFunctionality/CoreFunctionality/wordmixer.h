@@ -33,9 +33,14 @@ public:
     // sets number of characters for each word piece
     void setGameLevel(Game::Levels level);
 
+    // personalize the word mixer
+    void setPieceSizeForLevel(int size, Game::Levels level);
+
     const QVector<QString>& getMixedWordsPiecesContent() const;
     QString getFirstWord() const;
     QString getSecondWord() const;
+    int getPieceSizeForLevel(Game::Levels level) const;
+    Game::Levels getGameLevel() const;
 
     // indexes of the beginning and the end piece of each word in the mixed words array
     int getFirstWordFirstPieceIndex() const;
@@ -62,6 +67,7 @@ private:
     Game::Levels m_GameLevel;
     QPair<QString,QString> m_WordsPair;
     QVector<QString> m_MixedWordsPiecesContent;
+    QMap<Game::Levels, int> m_WordPieceSizes;
 
     // stores the indexes of the first and last piece of the 2 words in the mixed words string vector
     QMap<WordsBeginEndPieces,int> m_WordsBeginEndPieceIndexes;

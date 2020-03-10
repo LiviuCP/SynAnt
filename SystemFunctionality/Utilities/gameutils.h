@@ -223,13 +223,6 @@ namespace Game
         {Game::Levels::LEVEL_HARD,   12}
     };
 
-    const QMap<Game::Levels, int> c_WordPieceSizes
-    {
-        {Game::Levels::LEVEL_EASY,   3},
-        {Game::Levels::LEVEL_MEDIUM, 2},
-        {Game::Levels::LEVEL_HARD,   1}
-    };
-
     const QMap<Game::Levels, int> c_TimeLimits
     {
         {Game::Levels::LEVEL_EASY, 30},
