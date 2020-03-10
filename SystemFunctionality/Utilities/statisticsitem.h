@@ -26,12 +26,16 @@ public:
     void updateStatistics(Game::StatisticsUpdateTypes updateType);
     void setGameLevel(Game::Levels level);
     void setEnhancedIncrement(bool enhanced);
+    void setIncrementForLevel(int increment, Game::Levels level, bool enhanced = false);
     bool canResetStatistics() const;
 
     QString getObtainedScore() const;
     QString getTotalAvailableScore() const;
     QString getGuessedWordPairs() const;
     QString getTotalWordPairs() const;
+    Game::Levels getGameLevel() const;
+    int getCurrentIncrement() const;
+    int isEnhancedIncrementingUsed() const;
 
 signals:
     Q_SIGNAL void statisticsUpdated(Game::StatisticsUpdateTypes updateType);
@@ -45,6 +49,9 @@ private:
     int m_TotalAvailableScore;
     int m_GuessedWordPairs;
     int m_TotalWordPairs;
+
+    QMap<Game::Levels, int> m_ScoreIncrements;
+    QMap<Game::Levels, int> m_EnhancedScoreIncrements;
 
     Game::Levels m_GameLevel;
 };

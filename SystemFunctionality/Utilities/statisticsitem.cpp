@@ -8,6 +8,8 @@ StatisticsItem::StatisticsItem(QObject *parent)
     , m_TotalAvailableScore{0}
     , m_GuessedWordPairs{0}
     , m_TotalWordPairs{0}
+    , m_ScoreIncrements{Game::c_ScoreIncrements}
+    , m_EnhancedScoreIncrements{Game::c_EnhancedScoreIncrements}
     , m_GameLevel{Game::Levels::LEVEL_NONE}
 {
 }
@@ -26,6 +28,7 @@ void StatisticsItem::doInitialUpdate()
 void StatisticsItem::updateStatistics(Game::StatisticsUpdateTypes updateType)
 {
     Q_ASSERT(m_IsInitialUpdateDone && m_GameLevel != Game::Levels::LEVEL_NONE);
+    Q_ASSERT(m_IsEnhancedIncrementingUsed ? m_EnhancedScoreIncrements.contains(m_GameLevel) : m_ScoreIncrements.contains(m_GameLevel));
 
     if (updateType == Game::StatisticsUpdateTypes::RESET)
     {
@@ -73,6 +76,21 @@ void StatisticsItem::setEnhancedIncrement(bool enhanced)
     m_IsEnhancedIncrementingUsed = enhanced;
 }
 
+void StatisticsItem::setIncrementForLevel(int increment, Game::Levels level, bool enhanced)
+{
+    if (increment > 0 && level != Game::Levels::LEVEL_NONE)
+    {
+        if (enhanced)
+        {
+            m_EnhancedScoreIncrements[level] = increment;
+        }
+        else
+        {
+            m_ScoreIncrements[level] = increment;
+        }
+    }
+}
+
 bool StatisticsItem::canResetStatistics() const
 {
     return (m_ObtainedScore != 0 || m_TotalAvailableScore != 0 || m_GuessedWordPairs != 0 || m_TotalWordPairs != 0);
@@ -96,4 +114,20 @@ QString StatisticsItem::getGuessedWordPairs() const
 QString StatisticsItem::getTotalWordPairs() const
 {
     return QString::number(m_TotalWordPairs);
+}
+
+Game::Levels StatisticsItem::getGameLevel() const
+{
+    return m_GameLevel;
+}
+
+int StatisticsItem::getCurrentIncrement() const
+{
+    return m_IsEnhancedIncrementingUsed ? (m_EnhancedScoreIncrements.contains(m_GameLevel) ? m_EnhancedScoreIncrements[m_GameLevel]: -1)
+                                        : (m_ScoreIncrements.contains(m_GameLevel) ? m_ScoreIncrements[m_GameLevel] : -1);
+}
+
+int StatisticsItem::isEnhancedIncrementingUsed() const
+{
+    return m_IsEnhancedIncrementingUsed;
 }

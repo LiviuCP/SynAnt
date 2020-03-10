@@ -13,7 +13,9 @@ public:
     UtilitiesTests();
 
 private slots:
+    void testLevelCorrectlySetup();
     void testStatisticsCorrectlyUpdated();
+    void testSetScoreIncrementForLevel();
 
 private:
     void _checkCorrectStatistics(const StatisticsItem& statisticsItem, int guessedWordPairs, int totalWordPairs, int obtainedScore, int totalAvailableScore, const QString& status);
@@ -21,6 +23,38 @@ private:
 
 UtilitiesTests::UtilitiesTests()
 {
+}
+
+void UtilitiesTests::testLevelCorrectlySetup()
+{
+    {
+        std::unique_ptr<StatisticsItem> pStatisticsItem{new StatisticsItem{}};
+        QVERIFY2(pStatisticsItem->getGameLevel() == Game::Levels::LEVEL_NONE, "The level has not been correctly setup for the statistics item");
+        pStatisticsItem->setGameLevel(Game::Levels::LEVEL_EASY);
+        QVERIFY2(pStatisticsItem->getGameLevel() == Game::Levels::LEVEL_EASY, "The level has not been correctly setup for the statistics item");
+        QVERIFY2(pStatisticsItem->getCurrentIncrement() == Game::c_ScoreIncrements[Game::Levels::LEVEL_EASY], "Incorrect default score increment for level easy");
+        pStatisticsItem->setGameLevel(Game::Levels::LEVEL_MEDIUM);
+        QVERIFY2(pStatisticsItem->getGameLevel() == Game::Levels::LEVEL_MEDIUM, "The level has not been correctly setup for the statistics item");
+        QVERIFY2(pStatisticsItem->getCurrentIncrement() == Game::c_ScoreIncrements[Game::Levels::LEVEL_MEDIUM], "Incorrect default score increment for level medium");
+        pStatisticsItem->setGameLevel(Game::Levels::LEVEL_HARD);
+        QVERIFY2(pStatisticsItem->getGameLevel() == Game::Levels::LEVEL_HARD, "The level has not been correctly setup for the statistics item");
+        QVERIFY2(pStatisticsItem->getCurrentIncrement() == Game::c_ScoreIncrements[Game::Levels::LEVEL_HARD], "Incorrect default score increment for level hard");
+    }
+
+    {
+        std::unique_ptr<StatisticsItem> pStatisticsItem{new StatisticsItem{}};
+        pStatisticsItem->setEnhancedIncrement(true);
+        QVERIFY2(pStatisticsItem->getGameLevel() == Game::Levels::LEVEL_NONE, "The level has not been correctly setup for the statistics item");
+        pStatisticsItem->setGameLevel(Game::Levels::LEVEL_EASY);
+        QVERIFY2(pStatisticsItem->getGameLevel() == Game::Levels::LEVEL_EASY, "The level has not been correctly setup for the statistics item");
+        QVERIFY2(pStatisticsItem->getCurrentIncrement() == Game::c_EnhancedScoreIncrements[Game::Levels::LEVEL_EASY], "Incorrect default enhanced score increment for level easy");
+        pStatisticsItem->setGameLevel(Game::Levels::LEVEL_MEDIUM);
+        QVERIFY2(pStatisticsItem->getGameLevel() == Game::Levels::LEVEL_MEDIUM, "The level has not been correctly setup for the statistics item");
+        QVERIFY2(pStatisticsItem->getCurrentIncrement() == Game::c_EnhancedScoreIncrements[Game::Levels::LEVEL_MEDIUM], "Incorrect default enhanced score increment for level medium");
+        pStatisticsItem->setGameLevel(Game::Levels::LEVEL_HARD);
+        QVERIFY2(pStatisticsItem->getGameLevel() == Game::Levels::LEVEL_HARD, "The level has not been correctly setup for the statistics item");
+        QVERIFY2(pStatisticsItem->getCurrentIncrement() == Game::c_EnhancedScoreIncrements[Game::Levels::LEVEL_HARD], "Incorrect default enhanced score increment for level hard");
+    }
 }
 
 void UtilitiesTests::testStatisticsCorrectlyUpdated()
@@ -79,6 +113,25 @@ void UtilitiesTests::testStatisticsCorrectlyUpdated()
 
     _checkCorrectStatistics(*pStatisticsItem, 1, 2, Game::c_ScoreIncrements[Game::Levels::LEVEL_HARD], 2 * Game::c_ScoreIncrements[Game::Levels::LEVEL_HARD],
             "Checking statistics after reset and then setting level to hard and running a full and partial update");
+}
+
+void UtilitiesTests::testSetScoreIncrementForLevel()
+{
+    std::unique_ptr<StatisticsItem> pStatisticsItem{new StatisticsItem{}};
+    pStatisticsItem->setGameLevel(Game::Levels::LEVEL_MEDIUM);
+
+    pStatisticsItem->setIncrementForLevel(10, Game::Levels::LEVEL_HARD);
+    pStatisticsItem->setIncrementForLevel(20, Game::Levels::LEVEL_HARD, true);
+
+    QVERIFY2(pStatisticsItem->getCurrentIncrement() == Game::c_ScoreIncrements[Game::Levels::LEVEL_MEDIUM], "Incorrect default score increment for current level");
+
+    pStatisticsItem->setGameLevel(Game::Levels::LEVEL_HARD);
+
+    QVERIFY2(pStatisticsItem->getCurrentIncrement() == 10, "The increment has not been correctly setup for the new level");
+
+    pStatisticsItem->setEnhancedIncrement(true);
+
+    QVERIFY2(pStatisticsItem->getCurrentIncrement() == 20, "The enhanced increment has not been correctly setup for the current level");
 }
 
 void UtilitiesTests::_checkCorrectStatistics(const StatisticsItem& statisticsItem, int guessedWordPairs, int totalWordPairs, int obtainedScore, int totalAvailableScore, const QString &status)
