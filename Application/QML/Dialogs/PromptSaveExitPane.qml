@@ -83,8 +83,14 @@ Item {
             shortcutSequence: GameStrings.promptSaveNoButtonShortcut
 
             onButtonClicked: {
-                presenter.dataEntry.handleClearAddedWordPairsRequest();
-                promptSaveExitPane.quitOrExitDataEntry();
+                if (presenter.quitGameDeferred) {
+                    presenter.quit();
+                } else {
+                    presenter.dataEntry.handleClearAddedWordPairsRequest();
+                    // user should return to the page that was visited before arriving to the data entry page (from which the prompt was issued)
+                    presenter.goBack();
+                    presenter.goBack();
+                }
             }
         }
 
