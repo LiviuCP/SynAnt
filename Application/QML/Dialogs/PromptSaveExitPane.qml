@@ -15,16 +15,6 @@ Item {
     readonly property double bottomBtnsMinWidth: (promptSaveExitPaneStatusBox.width - 2 * bottomBtnsLayout.spacing) / 3
     readonly property double buttonRadiusRatio: 0.025
 
-    function quitOrExitDataEntry() {
-        if (presenter.quitGameDeferred) {
-            presenter.quit();
-        } else {
-            // user should return to the page that was visited before arriving to the data entry page (from which the prompt was issued)
-            presenter.goBack();
-            presenter.goBack();
-        }
-    }
-
     StatusBox {
         id: promptSaveExitPaneStatusBox
 
@@ -66,7 +56,9 @@ Item {
                     presenter.handleSaveAndQuit();
                 } else {
                     presenter.dataEntry.handleSaveAddedWordPairsRequest();
-                    quitOrExitDataEntry();
+                    // user should return to the page that was visited before arriving to the data entry page (from which the prompt was issued)
+                    presenter.goBack();
+                    presenter.goBack();
                 }
             }
         }
