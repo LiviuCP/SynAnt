@@ -199,15 +199,6 @@ namespace Game
         LEVEL_NONE
     };
 
-    enum class StatisticsUpdateTypes
-    {
-        INITIAL_UPDATE,
-        FULL_UPDATE,
-        PARTIAL_UPDATE,
-        RESET,
-        UpdateTypesCount
-    };
-
     const QMap<Game::Levels, int> c_ScoreIncrements
     {
         {Game::Levels::LEVEL_EASY,   1},

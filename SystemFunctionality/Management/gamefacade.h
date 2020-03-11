@@ -117,7 +117,7 @@ private slots:
     void _onNewWordsPairMixed();
     void _onPieceAddedToInput(int index);
     void _onPiecesRemovedFromInput(QVector<int> indexes);
-    void _onStatisticsUpdated(Game::StatisticsUpdateTypes updateType);
+    void _onStatisticsUpdated();
     void _onChronometerTimeoutTriggered();
     void _onChronometerEnabledChanged();
 

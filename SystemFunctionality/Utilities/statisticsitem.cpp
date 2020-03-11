@@ -2,6 +2,7 @@
 
 StatisticsItem::StatisticsItem(QObject *parent)
     : QObject(parent)
+    , m_LastUpdateOperation{StatisticsUpdateOperations::NO_UPDATE}
     , m_IsInitialUpdateDone{false}
     , m_IsEnhancedIncrementingUsed{false}
     , m_ObtainedScore{0}
@@ -21,16 +22,18 @@ void StatisticsItem::doInitialUpdate()
     if (!m_IsInitialUpdateDone)
     {
         m_IsInitialUpdateDone = true;
-        Q_EMIT statisticsUpdated(Game::StatisticsUpdateTypes::INITIAL_UPDATE);
+        m_LastUpdateOperation = StatisticsUpdateOperations::INITIAL_UPDATE;
+
+        Q_EMIT statisticsUpdated();
     }
 }
 
-void StatisticsItem::updateStatistics(Game::StatisticsUpdateTypes updateType)
+void StatisticsItem::updateStatistics(StatisticsItem::StatisticsUpdateOperations updateType)
 {
     Q_ASSERT(m_IsInitialUpdateDone && m_GameLevel != Game::Levels::LEVEL_NONE);
     Q_ASSERT(m_IsEnhancedIncrementingUsed ? m_EnhancedScoreIncrements.contains(m_GameLevel) : m_ScoreIncrements.contains(m_GameLevel));
 
-    if (updateType == Game::StatisticsUpdateTypes::RESET)
+    if (updateType == StatisticsItem::StatisticsUpdateOperations::RESET)
     {
         if (m_TotalAvailableScore != 0 && m_TotalWordPairs != 0)
         {
@@ -39,7 +42,8 @@ void StatisticsItem::updateStatistics(Game::StatisticsUpdateTypes updateType)
             m_GuessedWordPairs = 0;
             m_TotalWordPairs = 0;
 
-            Q_EMIT statisticsUpdated(updateType);
+            m_LastUpdateOperation = updateType;
+            Q_EMIT statisticsUpdated();
         }
         else
         {
@@ -50,7 +54,7 @@ void StatisticsItem::updateStatistics(Game::StatisticsUpdateTypes updateType)
     {
         const int c_ScoreIncrement{m_IsEnhancedIncrementingUsed ? m_EnhancedScoreIncrements[m_GameLevel] : m_ScoreIncrements[m_GameLevel]};
 
-        if (updateType == Game::StatisticsUpdateTypes::FULL_UPDATE)
+        if (updateType == StatisticsItem::StatisticsUpdateOperations::FULL_UPDATE)
         {
             m_ObtainedScore += c_ScoreIncrement;
             m_GuessedWordPairs++;
@@ -59,7 +63,8 @@ void StatisticsItem::updateStatistics(Game::StatisticsUpdateTypes updateType)
         m_TotalAvailableScore += c_ScoreIncrement;
         m_TotalWordPairs++;
 
-        Q_EMIT statisticsUpdated(updateType);
+        m_LastUpdateOperation = updateType;
+        Q_EMIT statisticsUpdated();
     }
 }
 
@@ -94,6 +99,11 @@ void StatisticsItem::setIncrementForLevel(int increment, Game::Levels level, boo
 bool StatisticsItem::canResetStatistics() const
 {
     return (m_ObtainedScore != 0 || m_TotalAvailableScore != 0 || m_GuessedWordPairs != 0 || m_TotalWordPairs != 0);
+}
+
+StatisticsItem::StatisticsUpdateOperations StatisticsItem::getLastUpdateOperation() const
+{
+    return m_LastUpdateOperation;
 }
 
 QString StatisticsItem::getObtainedScore() const

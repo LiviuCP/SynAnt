@@ -20,15 +20,25 @@ class StatisticsItem : public QObject
     Q_OBJECT
 
 public:
+    enum class StatisticsUpdateOperations
+    {
+        NO_UPDATE,
+        INITIAL_UPDATE,
+        FULL_UPDATE,
+        PARTIAL_UPDATE,
+        RESET,
+    };
+
     explicit StatisticsItem(QObject *parent = nullptr);
 
     void doInitialUpdate();
-    void updateStatistics(Game::StatisticsUpdateTypes updateType);
+    void updateStatistics(StatisticsItem::StatisticsUpdateOperations updateType);
     void setGameLevel(Game::Levels level);
     void setEnhancedIncrement(bool enhanced);
     void setIncrementForLevel(int increment, Game::Levels level, bool enhanced = false);
     bool canResetStatistics() const;
 
+    StatisticsUpdateOperations getLastUpdateOperation() const;
     QString getObtainedScore() const;
     QString getTotalAvailableScore() const;
     QString getGuessedWordPairs() const;
@@ -38,10 +48,11 @@ public:
     int isEnhancedIncrementingUsed() const;
 
 signals:
-    Q_SIGNAL void statisticsUpdated(Game::StatisticsUpdateTypes updateType);
+    Q_SIGNAL void statisticsUpdated();
 
 private:
     // total number is the maximum number that can be correctly guessed by user
+    StatisticsUpdateOperations m_LastUpdateOperation;
     bool m_IsInitialUpdateDone;
     bool m_IsEnhancedIncrementingUsed; // use a special incrementing scheme for certain conditions (e.g. a time limit enabled)
 

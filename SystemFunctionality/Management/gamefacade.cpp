@@ -387,7 +387,7 @@ void GameFacade::handleSubmitRequest()
 
     if (success)
     {
-        m_pStatisticsItem->updateStatistics(Game::StatisticsUpdateTypes::FULL_UPDATE);
+        m_pStatisticsItem->updateStatistics(StatisticsItem::StatisticsUpdateOperations::FULL_UPDATE);
         m_pGameFunctionalityProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
 
         if (m_pChronometer->isEnabled())
@@ -404,7 +404,7 @@ void GameFacade::handleSavingInProgress()
 
 void GameFacade::provideCorrectWordsPairToUser()
 {
-    m_pStatisticsItem->updateStatistics(Game::StatisticsUpdateTypes::PARTIAL_UPDATE);
+    m_pStatisticsItem->updateStatistics(StatisticsItem::StatisticsUpdateOperations::PARTIAL_UPDATE);
     Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::SOLUTION_REQUESTED_BY_USER);
     m_pGameFunctionalityProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
 
@@ -475,7 +475,7 @@ bool GameFacade::canResetGameStatistics() const
 
 void GameFacade::resetGameStatistics()
 {
-    m_pStatisticsItem->updateStatistics(Game::StatisticsUpdateTypes::RESET);
+    m_pStatisticsItem->updateStatistics(StatisticsItem::StatisticsUpdateOperations::RESET);
 }
 
 QVector<QString> GameFacade::getMixedWordsPiecesContent() const
@@ -751,10 +751,10 @@ void GameFacade::_onPiecesRemovedFromInput(QVector<int> indexes)
     Q_EMIT inputChanged();
 }
 
-void GameFacade::_onStatisticsUpdated(Game::StatisticsUpdateTypes updateType)
+void GameFacade::_onStatisticsUpdated()
 {
     // for full and partial update no status message required (there are already status messages in the operations that trigger the full/partial update of statistics)
-    if (updateType == Game::StatisticsUpdateTypes::RESET)
+    if (m_pStatisticsItem->getLastUpdateOperation() == StatisticsItem::StatisticsUpdateOperations::RESET)
     {
         Q_EMIT statusChanged(m_CurrentStatusCode = m_pInputBuilder->isInputComplete() ? Game::StatusCodes::STATISTICS_RESET_COMPLETE_INPUT
                                                                                       : Game::StatusCodes::STATISTICS_RESET_INCOMPLETE_INPUT);
@@ -765,7 +765,7 @@ void GameFacade::_onStatisticsUpdated(Game::StatisticsUpdateTypes updateType)
 
 void GameFacade::_onChronometerTimeoutTriggered()
 {
-    m_pStatisticsItem->updateStatistics(Game::StatisticsUpdateTypes::PARTIAL_UPDATE);
+    m_pStatisticsItem->updateStatistics(StatisticsItem::StatisticsUpdateOperations::PARTIAL_UPDATE);
     m_pGameFunctionalityProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
     Q_EMIT statusChanged(Game::StatusCodes::TIME_LIMIT_REACHED);
     m_pChronometer->restart();
