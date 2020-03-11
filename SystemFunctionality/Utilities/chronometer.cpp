@@ -1,6 +1,6 @@
 #include "chronometer.h"
 
-constexpr int c_RefreshIntervalMilliseconds{1000};
+constexpr int c_OneSecondRefreshInterval{1000};
 constexpr int c_DefaultTimeIntervalSeconds{30};
 constexpr int c_MillisecondsBeforeTimeout{250};
 
@@ -10,6 +10,7 @@ Chronometer::Chronometer(QObject *parent)
     , m_pTimeExpiredSignallingTimer{new QTimer{this}}
     , m_InitialRemainingTimeInSeconds{c_DefaultTimeIntervalSeconds}
     , m_CurrentRemainingTimeInSeconds{c_DefaultTimeIntervalSeconds}
+    , m_MillisecondsBeforeTimeout{c_MillisecondsBeforeTimeout}
     , m_State{ChronoState::DISABLED}
     , m_RemainingTimerDurationWhenPaused{0}
 {
@@ -56,7 +57,7 @@ void Chronometer::start()
             _resetRemainingTime();
         }
 
-        m_pRemainingTimeUpdateTimer->start(c_RefreshIntervalMilliseconds);
+        m_pRemainingTimeUpdateTimer->start(c_OneSecondRefreshInterval);
         m_State = ChronoState::RUNNING;
     }
 }
@@ -97,7 +98,7 @@ void Chronometer::restart()
 
         _resetRemainingTime();
 
-        m_pRemainingTimeUpdateTimer->start(c_RefreshIntervalMilliseconds);
+        m_pRemainingTimeUpdateTimer->start(c_OneSecondRefreshInterval);
         m_State = ChronoState::RUNNING;
     }
 }
@@ -141,17 +142,30 @@ void Chronometer::resume()
     }
 }
 
-bool Chronometer::setTotalCountdownTime(int time)
+bool Chronometer::setTotalCountdownTime(int seconds)
 {
     bool success{false};
 
-    if ((m_State == ChronoState::DISABLED || m_State == ChronoState::ENABLED_NOT_RUNNING) && time > 0)
+    if ((m_State == ChronoState::DISABLED || m_State == ChronoState::ENABLED_NOT_RUNNING) && seconds > 0)
     {
-        m_InitialRemainingTimeInSeconds = time;
+        m_InitialRemainingTimeInSeconds = seconds;
         m_CurrentRemainingTimeInSeconds = m_InitialRemainingTimeInSeconds;
         success = true;
 
         Q_EMIT refreshTriggered();
+    }
+
+    return success;
+}
+
+bool Chronometer::setGracePeriodBeforeTimeout(int milliSeconds)
+{
+    bool success{false};
+
+    if ((m_State == ChronoState::DISABLED || m_State == ChronoState::ENABLED_NOT_RUNNING) && milliSeconds > 0)
+    {
+        m_MillisecondsBeforeTimeout = milliSeconds;
+        success = true;
     }
 
     return success;
@@ -189,11 +203,11 @@ void Chronometer::_onRemainingTimeUpdateTimerTimeout()
 
     if (m_CurrentRemainingTimeInSeconds == 0)
     {
-        m_pTimeExpiredSignallingTimer->start(c_MillisecondsBeforeTimeout);
+        m_pTimeExpiredSignallingTimer->start(m_MillisecondsBeforeTimeout);
     }
     else
     {
-        m_pRemainingTimeUpdateTimer->start(c_RefreshIntervalMilliseconds);
+        m_pRemainingTimeUpdateTimer->start(c_OneSecondRefreshInterval);
     }
 }
 

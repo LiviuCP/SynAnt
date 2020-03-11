@@ -26,7 +26,8 @@ public:
     void pause();
     void resume();
 
-    bool setTotalCountdownTime(int time);
+    bool setTotalCountdownTime(int seconds);
+    bool setGracePeriodBeforeTimeout(int milliSeconds);
 
     QPair<QString, QString> getRemainingTimeMinSec();
     bool isEnabled() const;
@@ -57,6 +58,7 @@ private:
     QTimer* m_pTimeExpiredSignallingTimer;
     int m_InitialRemainingTimeInSeconds;
     int m_CurrentRemainingTimeInSeconds;
+    int m_MillisecondsBeforeTimeout;
     ChronoState m_State;
     int m_RemainingTimerDurationWhenPaused;
 };
