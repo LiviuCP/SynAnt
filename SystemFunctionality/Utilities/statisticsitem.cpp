@@ -48,7 +48,7 @@ void StatisticsItem::updateStatistics(Game::StatisticsUpdateTypes updateType)
     }
     else
     {
-        const int c_ScoreIncrement{m_IsEnhancedIncrementingUsed ? Game::c_EnhancedScoreIncrements[m_GameLevel] : Game::c_ScoreIncrements[m_GameLevel]};
+        const int c_ScoreIncrement{m_IsEnhancedIncrementingUsed ? m_EnhancedScoreIncrements[m_GameLevel] : m_ScoreIncrements[m_GameLevel]};
 
         if (updateType == Game::StatisticsUpdateTypes::FULL_UPDATE)
         {
