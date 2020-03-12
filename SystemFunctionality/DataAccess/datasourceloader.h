@@ -15,7 +15,7 @@ class DataSourceLoader : public QObject
 {
     Q_OBJECT
 public:
-    explicit DataSourceLoader(DataSource* pDataSource, QObject *parent = nullptr);
+    explicit DataSourceLoader(DataSource* pDataSource, QString dataBasePath, QObject *parent = nullptr);
 
 public slots:
     void onLoadDataFromDbForPrimaryLanguageRequested(int languageIndex, bool allowEmptyResult);
@@ -34,6 +34,7 @@ private:
 
     QVector<DataSource::DataEntry> m_ValidDataEntries;
     DataSource* m_pDataSource;
+    QString m_DatabasePath;
 };
 
 #endif // DATASOURCELOADER_H

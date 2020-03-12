@@ -63,11 +63,11 @@ void GameManager::setEnvironment(const QString &dataDirPath)
 
         _setDatabase(databasePath);
 
-        m_pDataSource = new DataSource{databasePath, this};
-        m_pDataSourceLoader = new DataSourceLoader{m_pDataSource};
+        m_pDataSource = new DataSource{this};
+        m_pDataSourceLoader = new DataSourceLoader{m_pDataSource, databasePath};
         m_pDataSourceLoaderThread = new QThread{this};
         m_pDataEntryValidator = new DataEntryValidator{m_pDataSource, this};
-        m_pDataEntryCache = new DataEntryCache{m_pDataSource};
+        m_pDataEntryCache = new DataEntryCache{m_pDataSource, databasePath};
         m_pDataEntryCacheThread = new QThread{this};
         m_pDataEntryStatistics = new DataEntryStatistics{this};
 

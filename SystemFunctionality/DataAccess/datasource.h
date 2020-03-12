@@ -35,7 +35,7 @@ public:
         APPEND,
     };
 
-    explicit DataSource(const QString& dataBasePath, QObject *parent = nullptr);
+    explicit DataSource(QObject *parent = nullptr);
 
     void updateDataEntries(const QVector<DataEntry>& dataEntries, int languageIndex, DataSource::UpdateOperation updateOperation = DataSource::UpdateOperation::LOAD_TO_PRIMARY);
     void provideDataEntryToConsumer(int entryNumber);
@@ -45,7 +45,6 @@ public:
     int getPrimarySourceNrOfEntries() const;
     int getSecondarySourceNrOfEntries() const;
 
-    QString getDataFilePath() const;
     bool entryAlreadyExists(const DataEntry& dataEntry, int languageIndex);
 
 signals:
@@ -60,7 +59,6 @@ private:
         QVector<DataEntry> entries;
     };
 
-    QString m_DataBasePath;
     Source m_PrimarySource;
     Source m_SecondarySource;
     mutable QMutex m_DataSourceMutex;

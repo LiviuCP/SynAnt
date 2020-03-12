@@ -3,15 +3,18 @@
 #include <QSqlDatabase>
 #include <QSqlField>
 #include <QSqlQuery>
+#include <QFile>
 
 #include "datasourceloader.h"
 #include "../Utilities/gameutils.h"
 
-DataSourceLoader::DataSourceLoader(DataSource* pDataSource, QObject *parent)
+DataSourceLoader::DataSourceLoader(DataSource* pDataSource, QString databasePath, QObject *parent)
     : QObject(parent)
     , m_pDataSource{pDataSource}
+    , m_DatabasePath{databasePath}
 {
     Q_ASSERT(m_pDataSource);
+    Q_ASSERT(QFile{databasePath}.exists());
 }
 
 void DataSourceLoader::onLoadDataFromDbForPrimaryLanguageRequested(int languageIndex, bool allowEmptyResult)
@@ -113,7 +116,7 @@ bool DataSourceLoader::_loadEntriesFromDb(QVector<DataSource::DataEntry>& dbEntr
     {
         QSqlDatabase db{QSqlDatabase::database(QSqlDatabase::defaultConnection)};
 
-        db.setDatabaseName(m_pDataSource->getDataFilePath());
+        db.setDatabaseName(m_DatabasePath);
 
         if (db.open())
         {

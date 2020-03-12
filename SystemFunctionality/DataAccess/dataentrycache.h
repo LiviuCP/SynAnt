@@ -16,7 +16,7 @@ class DataEntryCache : public QObject
 {
     Q_OBJECT
 public:
-    explicit DataEntryCache(DataSource* pDataSource, QObject *parent = nullptr);
+    explicit DataEntryCache(DataSource* pDataSource, QString databasePath, QObject *parent = nullptr);
 
 public slots:
     void onValidEntryReceived(DataSource::DataEntry dataEntry, int languageIndex);
@@ -36,6 +36,7 @@ private:
     QVector<DataSource::DataEntry> m_CacheEntries;
     QVector<int> m_LanguageIndexes;
     DataSource* m_pDataSource;
+    QString m_DatabasePath;
 };
 
 #endif // DATAENTRYCACHE_H

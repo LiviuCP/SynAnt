@@ -2,17 +2,20 @@
 #include <QSqlDatabase>
 #include <QSqlField>
 #include <QSqlQuery>
+#include <QFile>
 
 #include "dataentrycache.h"
 #include "../Utilities/gameutils.h"
 
-DataEntryCache::DataEntryCache(DataSource* pDataSource, QObject *parent)
+DataEntryCache::DataEntryCache(DataSource* pDataSource, QString databasePath, QObject *parent)
     : QObject(parent)
     , m_CacheEntries{}
     , m_LanguageIndexes{}
     , m_pDataSource{pDataSource}
+    , m_DatabasePath{databasePath}
 {
     Q_ASSERT(pDataSource);
+    Q_ASSERT(QFile{databasePath}.exists());
 }
 
 void DataEntryCache::onValidEntryReceived(DataSource::DataEntry dataEntry, int languageIndex)
@@ -54,7 +57,7 @@ void DataEntryCache::onWriteDataToDbRequested()
         {
             QSqlDatabase db{QSqlDatabase::database(QSqlDatabase::defaultConnection)};
 
-            db.setDatabaseName(m_pDataSource->getDataFilePath());
+            db.setDatabaseName(m_DatabasePath);
 
             if (db.open())
             {

@@ -2,9 +2,8 @@
 
 #include "datasource.h"
 
-DataSource::DataSource(const QString &dataBasePath, QObject *parent)
+DataSource::DataSource(QObject *parent)
     : QObject (parent)
-    , m_DataBasePath{dataBasePath}
     , m_PrimarySource{}
     , m_SecondarySource{}
     , m_DataSourceMutex{}
@@ -88,11 +87,6 @@ int DataSource::getSecondarySourceNrOfEntries() const
 {
     QMutexLocker mutexLocker{&m_DataSourceMutex};
     return m_SecondarySource.entries.size();
-}
-
-QString DataSource::getDataFilePath() const
-{
-    return m_DataBasePath;
 }
 
 bool DataSource::entryAlreadyExists(const DataSource::DataEntry &dataEntry, int languageIndex)
