@@ -6,9 +6,9 @@ GameInitProxy::GameInitProxy(QObject *parent)
 {
 }
 
-void GameInitProxy::setDataSource(const QString &dataDirPath)
+void GameInitProxy::setEnvironment(const QString &dataDirPath)
 {
-    GameManager::getManager()->setDataSource(dataDirPath);
+    GameManager::getManager()->setEnvironment(dataDirPath);
 }
 
 GameInitProxy::~GameInitProxy()

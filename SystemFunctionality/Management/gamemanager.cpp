@@ -51,12 +51,9 @@ GameManager::GameManager(QObject *parent)
     , m_pDataEntryCacheThread{nullptr}
 {
     _registerMetaTypes();
-
-    bool connected{connect(this, &GameManager::dataSourceSetupCompleted, this, &GameManager::_onDataSourceSetupCompleted)};
-    Q_ASSERT(connected);
 }
 
-void GameManager::setDataSource(const QString &dataDirPath)
+void GameManager::setEnvironment(const QString &dataDirPath)
 {
     Q_ASSERT(QDir{dataDirPath}.exists());
 
@@ -83,7 +80,17 @@ void GameManager::setDataSource(const QString &dataDirPath)
         m_pDataSourceLoaderThread->start();
         m_pDataEntryCacheThread->start();
 
-        Q_EMIT dataSourceSetupCompleted();
+        if (m_pDataSourceLoaderThread->isRunning() && m_pDataEntryCacheThread->isRunning())
+        {
+            /* the facades are created by manager and will build the connections to the other manager provided components
+                                                        (WordMixer, WordPairOwner, InputBuilder, StatisticsItem, etc) on their own */
+            m_pGameFacade = new GameFacade{this};
+            m_pDataEntryFacade = new DataEntryFacade{this};
+        }
+        else
+        {
+            Q_ASSERT(false);
+        }
     }
 }
 
@@ -185,16 +192,6 @@ int GameManager::getLastNrOfEntriesSavedToPrimaryLanguage() const
 int GameManager::getCurrentNrOfCacheEntries() const
 {
     return m_pDataEntryStatistics->getCurrentNrOfCacheEntries();
-}
-
-void GameManager::_onDataSourceSetupCompleted()
-{
-    Q_ASSERT(m_pDataSourceLoaderThread->isRunning() && m_pDataEntryCacheThread->isRunning());
-
-    /* the facades are created by manager and will build the connections to the other manager provided components
-                                                (WordMixer, WordPairOwner, InputBuilder, StatisticsItem, etc) on their own */
-    m_pGameFacade = new GameFacade{this};
-    m_pDataEntryFacade = new DataEntryFacade{this};
 }
 
 GameManager::~GameManager()

@@ -13,7 +13,7 @@ class GameInitProxy : public QObject, public IGameInit
 {
 public:
     explicit GameInitProxy(QObject *parent = nullptr);
-    void setDataSource(const QString& dataDirPath);
+    void setEnvironment(const QString& dataDirPath);
     ~GameInitProxy();
 };
 

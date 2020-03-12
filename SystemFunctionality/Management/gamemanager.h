@@ -63,7 +63,7 @@ class GameManager : public QObject,
 public:
     static GameManager* getManager();
 
-    void setDataSource(const QString& dataDirPath);
+    void setEnvironment(const QString& dataDirPath);
     void fetchDataForPrimaryLanguage(int languageIndex, bool allowEmptyResult);
     void fetchDataForSecondaryLanguage(int languageIndex);
     void saveDataToDb();
@@ -119,7 +119,6 @@ signals:
     Q_SIGNAL void resetCacheRequested();
 
 private slots:
-    void _onDataSourceSetupCompleted();
     void _onLoadDataFromDbForPrimaryLanguageFinished(bool success, bool validEntriesLoaded);
     void _onRequestedPrimaryLanguageAlreadyContainedInDataSource(bool validEntriesLoaded);
     void _onLoadDataFromDbForSecondaryLanguageFinished(bool success);

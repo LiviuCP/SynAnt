@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 
     try
     {
-        gameInitProxy.setDataSource(app.applicationDirPath());
+        gameInitProxy.setEnvironment(app.applicationDirPath());
         engine.load(QUrl(QLatin1String("qrc:/Application/main.qml")));
 
         if (engine.rootObjects().isEmpty())

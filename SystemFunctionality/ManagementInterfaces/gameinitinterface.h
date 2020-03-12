@@ -6,7 +6,7 @@
 class IGameInit
 {
 public:
-    virtual void setDataSource(const QString& dataDirPath) = 0;
+    virtual void setEnvironment(const QString& dataDirPath) = 0;
     virtual ~IGameInit() = 0;
 };
 
