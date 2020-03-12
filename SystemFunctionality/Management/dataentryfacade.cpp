@@ -99,7 +99,7 @@ void DataEntryFacade::requestCacheReset()
 
 int DataEntryFacade::getCurrentNrOfAddedWordPairs() const
 {
-    return m_pDataEntryProxy->getCurrentNrOfCacheEntries();
+    return m_pDataEntryProxy->getCurrentNrOfCachedEntries();
 }
 
 int DataEntryFacade::getLastSavedTotalNrOfEntries() const

@@ -16,23 +16,23 @@ public:
     explicit DataEntryProxy(QObject *parent = nullptr);
 
     void fetchDataForSecondaryLanguage(int languageIndex);
-    void saveDataToDb();
     void requestWriteToCache(QPair<QString, QString> newWordsPair, bool areSynonyms, int languageIndex);
     void requestCacheReset();
+    void saveDataToDb();
 
     DataEntry::ValidationCodes getPairEntryValidationCode() const;
+    int getCurrentNrOfCachedEntries() const;
     int getLastSavedTotalNrOfEntries() const;
     int getLastNrOfEntriesSavedToPrimaryLanguage() const;
-    int getCurrentNrOfCacheEntries() const;
 
 signals:
+    Q_SIGNAL void fetchDataForDataEntryLanguageFinished(bool success);
     Q_SIGNAL void dataEntryAllowed(bool allowed);
     Q_SIGNAL void newWordsPairAddedToCache();
     Q_SIGNAL void addInvalidWordsPairRequested();
     Q_SIGNAL void wordsPairAlreadyContainedInCache();
     Q_SIGNAL void cacheReset();
     Q_SIGNAL void writeDataToDbFinished();
-    Q_SIGNAL void fetchDataForDataEntryLanguageFinished(bool success);
 };
 
 #endif // DATAENTRYPROXY_H

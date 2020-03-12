@@ -189,7 +189,7 @@ int GameManager::getLastNrOfEntriesSavedToPrimaryLanguage() const
     return m_pDataEntryStatistics->getLastNrOfEntriesSavedToPrimaryLanguage();
 }
 
-int GameManager::getCurrentNrOfCacheEntries() const
+int GameManager::getCurrentNrOfCachedEntries() const
 {
     return m_pDataEntryStatistics->getCurrentNrOfCacheEntries();
 }

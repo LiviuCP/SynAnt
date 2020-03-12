@@ -87,7 +87,7 @@ public:
 
     int getLastSavedTotalNrOfEntries() const;
     int getLastNrOfEntriesSavedToPrimaryLanguage() const;
-    int getCurrentNrOfCacheEntries() const;
+    int getCurrentNrOfCachedEntries() const;
 
 signals:
     // data access proxy
