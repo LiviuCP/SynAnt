@@ -78,7 +78,7 @@ Item {
                 if (presenter.quitGameDeferred) {
                     presenter.quit();
                 } else {
-                    presenter.dataEntry.handleClearAddedWordPairsRequest();
+                    presenter.dataEntry.handleDiscardAddedWordPairsRequest();
                     // user should return to the page that was visited before arriving to the data entry page (from which the prompt was issued)
                     presenter.goBack();
                     presenter.goBack();

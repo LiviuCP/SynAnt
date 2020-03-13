@@ -43,12 +43,18 @@ DataEntryPresenter::DataEntryPresenter(QObject *parent)
     Q_ASSERT(connected);
 }
 
+void DataEntryPresenter::handleLanguageChangeRequest(int newLanguageIndex)
+{
+    Q_ASSERT(newLanguageIndex >= 0); // update it once the languages are better setup in backend (beyond facade)
+    m_pDataEntryFacade->setLanguage(newLanguageIndex);
+}
+
 void DataEntryPresenter::handleAddWordsPairRequest(const QString &firstWord, const QString &secondWord, bool areSynonyms)
 {
     m_pDataEntryFacade->requestAddPairToCache(firstWord, secondWord, areSynonyms);
 }
 
-void DataEntryPresenter::handleClearAddedWordPairsRequest()
+void DataEntryPresenter::handleDiscardAddedWordPairsRequest()
 {
     m_pDataEntryFacade->requestCacheReset();
 }
@@ -56,12 +62,6 @@ void DataEntryPresenter::handleClearAddedWordPairsRequest()
 void DataEntryPresenter::handleSaveAddedWordPairsRequest()
 {
     m_pDataEntryFacade->requestSaveDataToDb();
-}
-
-void DataEntryPresenter::handleLanguageChangeRequest(int newLanguageIndex)
-{
-    Q_ASSERT(newLanguageIndex >= 0); // update it once the languages are better setup in backend (beyond facade)
-    m_pDataEntryFacade->setLanguage(newLanguageIndex);
 }
 
 void DataEntryPresenter::startDataEntry()
@@ -99,24 +99,24 @@ bool DataEntryPresenter::isSaveAddedWordPairsEnabled() const
     return m_pDataEntryFacade->isSavingToDbAllowed();
 }
 
-bool DataEntryPresenter::getDataFetchingInProgress() const
+bool DataEntryPresenter::isDataFetchingInProgress() const
 {
     return m_pDataEntryFacade->isDataFetchingInProgress();
 }
 
-bool DataEntryPresenter::getDataSavingInProgress() const
+bool DataEntryPresenter::isDataSavingInProgress() const
 {
     return m_pDataEntryFacade->isDataSavingInProgress();
-}
-
-QString DataEntryPresenter::getDataEntryPaneStatusMessage() const
-{
-    return m_DataEntryPaneStatusMessage;
 }
 
 int DataEntryPresenter::getLanguageIndex() const
 {
     return m_pDataEntryFacade->getCurrentLanguageIndex();
+}
+
+QString DataEntryPresenter::getDataEntryPaneStatusMessage() const
+{
+    return m_DataEntryPaneStatusMessage;
 }
 
 void DataEntryPresenter::_onStatusChanged(DataEntry::StatusCodes statusCode)

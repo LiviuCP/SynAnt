@@ -19,16 +19,16 @@ class DataEntryPresenter : public QObject
     Q_PROPERTY(bool saveAddedWordPairsEnabled READ isSaveAddedWordPairsEnabled NOTIFY saveAddedWordPairsEnabledChanged)
     Q_PROPERTY(QString dataEntryPaneStatusMessage READ getDataEntryPaneStatusMessage NOTIFY dataEntryPaneStatusMessageChanged)
     Q_PROPERTY(int languageIndex READ getLanguageIndex NOTIFY languageChanged)
-    Q_PROPERTY(bool dataFetchingInProgress READ getDataFetchingInProgress NOTIFY dataFetchingInProgressChanged)
-    Q_PROPERTY(bool dataSavingInProgress READ getDataSavingInProgress NOTIFY dataSavingInProgressChanged)
+    Q_PROPERTY(bool dataFetchingInProgress READ isDataFetchingInProgress NOTIFY dataFetchingInProgressChanged)
+    Q_PROPERTY(bool dataSavingInProgress READ isDataSavingInProgress NOTIFY dataSavingInProgressChanged)
 
 public:
     explicit DataEntryPresenter(QObject *parent = nullptr);
 
-    Q_INVOKABLE void handleAddWordsPairRequest(const QString& firstWord, const QString& secondWord, bool areSynonyms);
-    Q_INVOKABLE void handleClearAddedWordPairsRequest();
-    Q_INVOKABLE void handleSaveAddedWordPairsRequest();
     Q_INVOKABLE void handleLanguageChangeRequest(int newLanguageIndex);
+    Q_INVOKABLE void handleAddWordsPairRequest(const QString& firstWord, const QString& secondWord, bool areSynonyms);
+    Q_INVOKABLE void handleDiscardAddedWordPairsRequest();
+    Q_INVOKABLE void handleSaveAddedWordPairsRequest();
 
     // call directly from game presenter to avoid unnecessary signal routing to QML
     void startDataEntry();
@@ -39,26 +39,25 @@ public:
     bool isAddWordsPairEnabled() const;
     bool isDiscardAddedWordPairsEnabled() const;
     bool isSaveAddedWordPairsEnabled() const;
-    bool getDataFetchingInProgress() const;
-    bool getDataSavingInProgress() const;
-
-    QString getDataEntryPaneStatusMessage() const;
+    bool isDataFetchingInProgress() const;
+    bool isDataSavingInProgress() const;
 
     int getLanguageIndex() const;
+    QString getDataEntryPaneStatusMessage() const;
 
 signals:
+    Q_SIGNAL void languageChanged();
     Q_SIGNAL void dataEntryEnabledChanged();
     Q_SIGNAL void addWordsPairEnabledChanged();
     Q_SIGNAL void discardAddedWordPairsEnabledChanged();
     Q_SIGNAL void saveAddedWordPairsEnabledChanged();
-    Q_SIGNAL void dataEntryPaneStatusMessageChanged();
     Q_SIGNAL void dataEntryAddSucceeded();
     Q_SIGNAL void dataEntryAddInvalid();
     Q_SIGNAL void dataFetchingInProgressChanged();
     Q_SIGNAL void dataSavingInProgressChanged();
     Q_SIGNAL void dataSaveInProgress(); // used for connecting to panes outside of data entry
     Q_SIGNAL void dataEntryStopped();
-    Q_SIGNAL void languageChanged();
+    Q_SIGNAL void dataEntryPaneStatusMessageChanged();
 
 private slots:
     void _onStatusChanged(DataEntry::StatusCodes statusCode);
@@ -67,14 +66,13 @@ private:
     void _updateStatusMessage(const QString& message, int delay);
     void _updateMessage();
 
+    DataEntryFacade* m_pDataEntryFacade;
+    DataProxy* m_pDataProxy;
+    QTimer* m_pStatusUpdateTimer;
+
     QString m_DataEntryPaneStatusMessage;
     QString m_CurrentStatusMessage;
     bool m_QuitDeferred;
-
-    DataEntryFacade* m_pDataEntryFacade;
-    DataProxy* m_pDataProxy;
-
-    QTimer* m_pStatusUpdateTimer;
 };
 
 #endif // DATAENTRYPRESENTER_H

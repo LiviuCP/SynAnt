@@ -52,7 +52,7 @@ Item {
             shortcutSequence: GameStrings.promptDiscardYesButtonShortcut
 
             onButtonClicked: {
-                presenter.dataEntry.handleClearAddedWordPairsRequest();
+                presenter.dataEntry.handleDiscardAddedWordPairsRequest();
                 presenter.goBack();
             }
         }
