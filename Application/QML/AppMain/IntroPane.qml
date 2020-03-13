@@ -152,12 +152,6 @@ Item {
         }
     }
 
-    Connections {
-        target: presenter.dataEntry
-
-        onDataSaveInProgress: presenter.handleDataSaveInProgress()
-    }
-
     onDataEntryButtonShortcutActivatedChanged: {
         if (dataEntryButtonShortcutActivated)
         {

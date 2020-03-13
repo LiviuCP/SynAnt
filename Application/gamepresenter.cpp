@@ -79,6 +79,8 @@ GamePresenter::GamePresenter(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(m_pStatusUpdateTimer, &QTimer::timeout, this, &GamePresenter::_updateMessage);
     Q_ASSERT(connected);
+    connected = connect(qobject_cast<DataEntryPresenter*>(m_pDataEntryPresenter), &DataEntryPresenter::dataSaveInProgress, this, &GamePresenter::_onDataSaveInProgress);
+    Q_ASSERT(connected);
 
     m_pGameFacade->init();
 }
@@ -137,11 +139,6 @@ void GamePresenter::promptForDiscardingAddedWordPairs()
     m_CurrentPane = Pane::PROMPT_DISCARD;
 
     Q_EMIT currentPaneChanged();
-}
-
-void GamePresenter::handleDataSaveInProgress()
-{
-    m_pGameFacade->handleDataSavingOperationInProgress();
 }
 
 void GamePresenter::handleDisplayCorrectWordsPairRequest()
@@ -638,6 +635,11 @@ void GamePresenter::_onStatisticsChanged()
     }
 
     Q_EMIT mainPaneStatisticsChanged();
+}
+
+void GamePresenter::_onDataSaveInProgress()
+{
+    m_pGameFacade->handleDataSavingOperationInProgress();
 }
 
 void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)

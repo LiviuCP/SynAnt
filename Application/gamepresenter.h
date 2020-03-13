@@ -97,7 +97,6 @@ public:
     Q_INVOKABLE void goBack();
     Q_INVOKABLE void promptForSavingAddedWordPairs();
     Q_INVOKABLE void promptForDiscardingAddedWordPairs();
-    Q_INVOKABLE void handleDataSaveInProgress();
     Q_INVOKABLE void handleDisplayCorrectWordsPairRequest();
     Q_INVOKABLE void handleSubmitMainPaneInputRequest();
     Q_INVOKABLE void handleMainPaneStatisticsResetRequest();
@@ -212,6 +211,7 @@ signals:
 private slots:
     void _onInputChanged();
     void _onStatisticsChanged();
+    void _onDataSaveInProgress();
     void _onStatusChanged(Game::StatusCodes statusCode);
 
 private:
