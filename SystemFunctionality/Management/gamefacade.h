@@ -37,6 +37,12 @@ public:
     void pauseGame();
     void quitGame();
 
+    void setGameLevel(Game::Levels level);
+    void setLanguage(int languageIndex, bool revertLanguageWhenDataUnavailable);
+
+    void enableTimeLimit();
+    void disableTimeLimit();
+
     void enablePersistentMode();
     void disablePersistentMode();
     void goToNextPersistentModeContainer();
@@ -45,60 +51,53 @@ public:
     void executeFirstPersistentModeAction();
     void executeSecondPersistentModeAction();
 
-    void enableTimeLimit();
-    void disableTimeLimit();
-
     void addPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex);
     void removePiecesFromInputWord(Game::InputWordNumber inputWordNumber, int inputRangeStart);
     void clearInputWord(Game::InputWordNumber inputWordNumber);
     void clearInput();
-
     void handleSubmitRequest();
-    void handleSavingInProgress();
     void provideCorrectWordsPairToUser();
-    void setGameLevel(Game::Levels level);
-    void setLanguage(int languageIndex, bool revertLanguageWhenDataUnavailable);
-    bool canResetGameStatistics() const;
+
     void resetGameStatistics();
+    void handleDataSavingOperationInProgress();
+
+    bool isDataFetchingInProgress() const;
+    bool isDataAvailable() const;
+    bool isPersistentModeEnabled() const;
+    bool isInputComplete() const;
+    bool areWordsFromCurrentPairSynonyms() const;
+    bool isTimeLimitEnabled() const;
+    bool canResetGameStatistics() const;
+
+    int getCurrentLanguageIndex() const;
 
     QVector<QString> getMixedWordsPiecesContent() const;
     QVector<Game::PieceTypes> getMixedWordsPiecesTypes() const;
     QVector<bool> getAreMixedWordsPiecesSelected() const;
-
     const QVector<int> getFirstWordInputIndexes() const;
     const QVector<int> getSecondWordInputIndexes() const;
+    QString getFirstReferenceWord() const;
+    QString getSecondReferenceWord() const;
 
     int getPersistentPieceSelectionIndex() const;
     int getFirstPersistentPiecesRemovalIndex() const;
     int getSecondPersistentPiecesRemovalIndex() const;
 
-    bool isPersistentModeEnabled() const;
-    bool isInputComplete() const;
-    bool isTimeLimitEnabled() const;
-
-    QString getFirstReferenceWord() const;
-    QString getSecondReferenceWord() const;
+    QPair<QString, QString> getRemainingTime() const;
 
     QString getObtainedScore() const;
     QString getTotalAvailableScore() const;
     QString getGuessedWordPairs() const;
     QString getTotalWordPairs() const;
 
-    int getCurrentLanguageIndex() const;
-    QPair<QString, QString> getRemainingTime() const;
-
-    bool isDataFetchingInProgress() const;
-    bool isDataAvailable() const;
-    bool areSynonyms() const;
-
 signals:
     Q_SIGNAL void fetchingInProgressChanged();
     Q_SIGNAL void dataAvailableChanged();
+    Q_SIGNAL void languageChanged();
     Q_SIGNAL void newMixedWordsAvailable();
     Q_SIGNAL void inputChanged();
     Q_SIGNAL void completionChanged();
     Q_SIGNAL void piecesAddedToInputChanged();
-    Q_SIGNAL void languageChanged();
     Q_SIGNAL void persistentPieceSelectionIndexChanged();
     Q_SIGNAL void persistentPiecesRemovalIndexesChanged();
     Q_SIGNAL void persistentIndexModeEnabledChanged();
@@ -110,22 +109,22 @@ signals:
 private slots:
     void _onFetchDataForPrimaryLanguageFinished(bool success, bool validEntriesFetched);
     void _onFetchDataForSecondaryLanguageFinished(bool success);
-    void _onEntryProvidedToConsumer(QPair<QString, QString> newWordsPair, bool areSynonyms);
-    void _onPrimaryLanguageDataSavingFinished(int nrOfPrimaryLanguageSavedEntries);
-    void _onWriteDataToDbErrorOccured();
-    void _onPiecesAddedToInputStateChanged();
+    void _onEntryProvidedToConsumer(QPair<QString, QString> newWordsPair, bool areWordsFromCurrentPairSynonyms);
     void _onNewWordsPairMixed();
+    void _onPiecesAddedToInputStateChanged();
     void _onPieceAddedToInput(int index);
     void _onPiecesRemovedFromInput(QVector<int> indexes);
-    void _onStatisticsUpdated();
     void _onChronometerTimeoutTriggered();
     void _onChronometerEnabledChanged();
+    void _onStatisticsUpdated();
+    void _onPrimaryLanguageDataSavingFinished(int nrOfPrimaryLanguageSavedEntries);
+    void _onDataSavingErrorOccured();
 
 private:
     void _connectToDataSource();
+    void _pushCurrentGameLevel();
     void _addPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex);
     void _removePiecesFromInputWordInPersistentMode();
-    void _pushCurrentGameLevel();
 
     GameFunctionalityProxy* m_pGameFunctionalityProxy;
     DataSourceAccessHelper* m_pDataSourceAccessHelper;
@@ -134,17 +133,19 @@ private:
     InputBuilder* m_pInputBuilder;
     StatisticsItem* m_pStatisticsItem;
     Chronometer* m_pChronometer;
+
+    Game::Levels m_GameLevel;
+    int m_CurrentLanguageIndex;
+    int m_PreviousLanguageIndex; // used for restoring the previous language in main pane in case no word can be fetched from currently setup one
     Game::StatusCodes m_CurrentStatusCode;
+
     bool m_IsConnectedToDataSource;
     bool m_IsDataAvailable;
     bool m_IsGameStarted;
     bool m_IsGamePaused;
     bool m_IsPersistentIndexModeEnabled;
-    Game::Levels m_GameLevel;
-    int m_CurrentLanguageIndex;
-    int m_PreviousLanguageIndex; // used for restoring the previous language in main pane in case no word can be fetched from currently setup one
     bool m_IsFetchingInProgress;
-    bool m_RevertLanguageWhenDataUnavailable;
+    bool m_ShouldRevertLanguageWhenDataUnavailable;
 };
 
 #endif // GAMEFACADE_H

@@ -262,7 +262,7 @@ void GameManager::_onWriteDataToDbFinished(int nrOfPrimaryLanguageSavedEntries, 
 
 void GameManager::_onWriteDataToDbErrorOccured()
 {
-    Q_EMIT writeDataToDbErrorOccured();
+    Q_EMIT dataSavingErrorOccured();
 }
 
 void GameManager::_onEntryProvidedToConsumer(QPair<QString, QString> newWordsPair, bool areSynonyms)

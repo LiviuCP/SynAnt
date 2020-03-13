@@ -91,7 +91,7 @@ signals:
     Q_SIGNAL void fetchDataForPrimaryLanguageFinished(bool success, bool validEntriesLoaded);
     Q_SIGNAL void fetchDataForSecondaryLanguageFinished(bool success);
     Q_SIGNAL void primaryLanguageDataSavingFinished(int nrOfPrimaryLanguageSavedEntries);
-    Q_SIGNAL void writeDataToDbErrorOccured();
+    Q_SIGNAL void dataSavingErrorOccured();
     Q_SIGNAL void entryProvidedToConsumer(QPair<QString, QString> newWordsPair, bool areSynonyms);
 
     // data entry proxy

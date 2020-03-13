@@ -11,7 +11,7 @@ GameFunctionalityProxy::GameFunctionalityProxy(QObject *parent)
     Q_ASSERT(connected);
     connected = connect(pGameManager, &GameManager::entryProvidedToConsumer, this, &GameFunctionalityProxy::entryProvidedToConsumer, Qt::DirectConnection);
     Q_ASSERT(connected);
-    connected = connect(pGameManager, &GameManager::writeDataToDbErrorOccured, this, &GameFunctionalityProxy::writeDataToDbErrorOccured, Qt::DirectConnection);
+    connected = connect(pGameManager, &GameManager::dataSavingErrorOccured, this, &GameFunctionalityProxy::dataSavingErrorOccured, Qt::DirectConnection);
     Q_ASSERT(connected);
     connected = connect(pGameManager, &GameManager::fetchDataForPrimaryLanguageFinished, this, &GameFunctionalityProxy::fetchDataForPrimaryLanguageFinished, Qt::DirectConnection);
     Q_ASSERT(connected);

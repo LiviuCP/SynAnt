@@ -141,7 +141,7 @@ void GamePresenter::promptForDiscardingAddedWordPairs()
 
 void GamePresenter::handleDataSaveInProgress()
 {
-    m_pGameFacade->handleSavingInProgress();
+    m_pGameFacade->handleDataSavingOperationInProgress();
 }
 
 void GamePresenter::handleDisplayCorrectWordsPairRequest()
@@ -766,7 +766,7 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         {
             QString message{Game::Messages::c_CorrectUserInputMessage.arg(m_pGameFacade->getFirstReferenceWord())
                         .arg(m_pGameFacade->getSecondReferenceWord())
-                        .arg(m_pGameFacade->areSynonyms() ? Game::Misc::c_SynonymsDescriptor : Game::Misc::c_AntonymsDescriptor)};
+                        .arg(m_pGameFacade->areWordsFromCurrentPairSynonyms() ? Game::Misc::c_SynonymsDescriptor : Game::Misc::c_AntonymsDescriptor)};
             _updateStatusMessage(message, Pane::MAIN, Game::Timing::c_NoDelay);
         }
             _updateStatusMessage(Game::Messages::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::Timing::c_LongStatusUpdateDelay);
@@ -779,7 +779,7 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         {
             QString message = Game::Messages::c_ShowPairRequestedByUserMessage.arg(m_pGameFacade->getFirstReferenceWord())
                     .arg(m_pGameFacade->getSecondReferenceWord())
-                    .arg(m_pGameFacade->areSynonyms() ? Game::Misc::c_SynonymsDescriptor : Game::Misc::c_AntonymsDescriptor);
+                    .arg(m_pGameFacade->areWordsFromCurrentPairSynonyms() ? Game::Misc::c_SynonymsDescriptor : Game::Misc::c_AntonymsDescriptor);
             _updateStatusMessage(message, Pane::MAIN, Game::Timing::c_NoDelay);
         }
             _updateStatusMessage(Game::Messages::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::Timing::c_LongStatusUpdateDelay);

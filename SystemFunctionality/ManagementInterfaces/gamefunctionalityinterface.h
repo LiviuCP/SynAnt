@@ -27,7 +27,7 @@ public:
     Q_SIGNAL virtual void fetchDataForPrimaryLanguageFinished(bool success, bool validEntriesFetched) = 0;
     Q_SIGNAL virtual void fetchDataForSecondaryLanguageFinished(bool success) = 0;
     Q_SIGNAL virtual void primaryLanguageDataSavingFinished(int nrOfPrimaryLanguageSavedEntries) = 0;
-    Q_SIGNAL virtual void writeDataToDbErrorOccured() = 0;
+    Q_SIGNAL virtual void dataSavingErrorOccured() = 0;
     Q_SIGNAL virtual void entryProvidedToConsumer(QPair<QString, QString> newWordsPair, bool areSynonyms) = 0;
 };
 
