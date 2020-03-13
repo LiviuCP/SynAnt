@@ -136,7 +136,7 @@ void DataEntryPresenter::_onStatusChanged(DataEntry::StatusCodes statusCode)
         _updateStatusMessage(DataEntry::Messages::c_DataEntrySaveInProgressStartMessage, Game::Timing::c_NoDelay);
         break;
     case DataEntry::StatusCodes::DATA_ENTRY_RESUMED:
-        _updateStatusMessage(DataEntry::Messages::c_DataEntryResumeMessage.arg(m_pDataEntryFacade->getCurrentNrOfAddedWordPairs()), Game::Timing::c_NoDelay);
+        _updateStatusMessage(DataEntry::Messages::c_DataEntryResumeMessage.arg(m_pDataEntryFacade->getCurrentNrOfAddedPairs()), Game::Timing::c_NoDelay);
         _updateStatusMessage(DataEntry::Messages::c_DataEntryRequestMessage, Game::Timing::c_ShortStatusUpdateDelay);
         break;
     case DataEntry::StatusCodes::DATA_ENTRY_STOPPED:
@@ -153,11 +153,11 @@ void DataEntryPresenter::_onStatusChanged(DataEntry::StatusCodes statusCode)
         break;
     case DataEntry::StatusCodes::DATA_ENTRY_ADD_SUCCESS:
         Q_EMIT dataEntryAddSucceeded();
-        _updateStatusMessage(DataEntry::Messages::c_DataEntrySuccessMessage.arg(m_pDataEntryFacade->getCurrentNrOfAddedWordPairs()), Game::Timing::c_NoDelay);
+        _updateStatusMessage(DataEntry::Messages::c_DataEntrySuccessMessage.arg(m_pDataEntryFacade->getCurrentNrOfAddedPairs()), Game::Timing::c_NoDelay);
         _updateStatusMessage(DataEntry::Messages::c_DataEntryRequestMessage, Game::Timing::c_ShortStatusUpdateDelay);
         break;
     case DataEntry::StatusCodes::DATA_ENTRY_ADD_INVALID:
-        _updateStatusMessage(DataEntry::Messages::c_DataEntryInvalidPairMessage.arg(c_InvalidPairEntryReasonMessages[m_pDataEntryFacade->getDataEntryValidationCode()]),
+        _updateStatusMessage(DataEntry::Messages::c_DataEntryInvalidPairMessage.arg(c_InvalidPairEntryReasonMessages[m_pDataEntryFacade->getEnteredPairValidationCode()]),
                              Game::Timing::c_NoDelay);
         _updateStatusMessage(DataEntry::Messages::c_DataEntryRequestMessage, Game::Timing::c_ShortStatusUpdateDelay);
         Q_EMIT dataEntryAddInvalid();
@@ -179,7 +179,7 @@ void DataEntryPresenter::_onStatusChanged(DataEntry::StatusCodes statusCode)
         Q_EMIT dataSavingInProgressChanged();
         break;
     case DataEntry::StatusCodes::DATA_SUCCESSFULLY_SAVED:
-        _updateStatusMessage(DataEntry::Messages::c_DataSuccessfullySavedMessage.arg(m_pDataEntryFacade->getLastSavedTotalNrOfEntries()).arg(m_pDataEntryFacade->getLastNrOfEntriesSavedToPrimaryLanguage()), Game::Timing::c_NoDelay);
+        _updateStatusMessage(DataEntry::Messages::c_DataSuccessfullySavedMessage.arg(m_pDataEntryFacade->getLastSavedTotalNrOfPairs()).arg(m_pDataEntryFacade->getLastNrOfPairsSavedToPrimaryLanguage()), Game::Timing::c_NoDelay);
         _updateStatusMessage(DataEntry::Messages::c_DataEntryRequestMessage, Game::Timing::c_ShortStatusUpdateDelay);
         Q_EMIT dataSavingInProgressChanged();
         break;

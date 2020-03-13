@@ -97,17 +97,17 @@ void DataEntryFacade::requestCacheReset()
     }
 }
 
-int DataEntryFacade::getCurrentNrOfAddedWordPairs() const
+int DataEntryFacade::getCurrentNrOfAddedPairs() const
 {
     return m_pDataEntryProxy->getCurrentNrOfCachedEntries();
 }
 
-int DataEntryFacade::getLastSavedTotalNrOfEntries() const
+int DataEntryFacade::getLastSavedTotalNrOfPairs() const
 {
     return m_pDataEntryProxy->getLastSavedTotalNrOfEntries();
 }
 
-int DataEntryFacade::getLastNrOfEntriesSavedToPrimaryLanguage() const
+int DataEntryFacade::getLastNrOfPairsSavedToPrimaryLanguage() const
 {
     return m_pDataEntryProxy->getLastNrOfEntriesSavedToPrimaryLanguage();
 }
@@ -117,7 +117,7 @@ int DataEntryFacade::getCurrentLanguageIndex() const
     return m_CurrentLanguageIndex;
 }
 
-DataEntry::ValidationCodes DataEntryFacade::getDataEntryValidationCode() const
+DataEntry::ValidationCodes DataEntryFacade::getEnteredPairValidationCode() const
 {
     return m_pDataEntryProxy->getPairEntryValidationCode();
 }
@@ -168,6 +168,27 @@ void DataEntryFacade::setLanguage(int languageIndex)
     }
 }
 
+void DataEntryFacade::_onFetchDataForDataEntryLanguageFinished(bool success)
+{
+    if (success)
+    {
+        m_IsFetchingInProgress = false;
+        Q_EMIT fetchingInProgressChanged();
+
+        if (m_IsSavingDeferred)
+        {
+            m_IsSavingDeferred = false;
+            m_IsSavingInProgress = true;
+            Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::DATA_FETCHING_FINISHED_SAVE_IN_PROGRESS);
+            m_pDataEntryProxy->saveDataToDb();
+        }
+        else
+        {
+            Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::DATA_FETCHING_FINISHED);
+        }
+    }
+}
+
 void DataEntryFacade::_onDataEntryAllowed(bool allowed)
 {
     if (m_IsDataEntryAllowed != allowed)
@@ -215,27 +236,6 @@ void DataEntryFacade::_onWriteDataToDbFinished()
     m_IsSavingInProgress = false;
 
     Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::DATA_SUCCESSFULLY_SAVED);
-}
-
-void DataEntryFacade::_onFetchDataForDataEntryLanguageFinished(bool success)
-{
-    if (success)
-    {
-        m_IsFetchingInProgress = false;
-        Q_EMIT fetchingInProgressChanged();
-
-        if (m_IsSavingDeferred)
-        {
-            m_IsSavingDeferred = false;
-            m_IsSavingInProgress = true;
-            Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::DATA_FETCHING_FINISHED_SAVE_IN_PROGRESS);
-            m_pDataEntryProxy->saveDataToDb();
-        }
-        else
-        {
-            Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::DATA_FETCHING_FINISHED);
-        }
-    }
 }
 
 void DataEntryFacade::_allowAddToCache()

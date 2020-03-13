@@ -30,11 +30,11 @@ public:
     void requestSaveDataToDb();
     void requestCacheReset();
 
-    int getCurrentNrOfAddedWordPairs() const;
-    int getLastSavedTotalNrOfEntries() const;
-    int getLastNrOfEntriesSavedToPrimaryLanguage() const;
+    int getCurrentNrOfAddedPairs() const;
+    int getLastSavedTotalNrOfPairs() const;
+    int getLastNrOfPairsSavedToPrimaryLanguage() const;
     int getCurrentLanguageIndex() const;
-    DataEntry::ValidationCodes getDataEntryValidationCode() const;
+    DataEntry::ValidationCodes getEnteredPairValidationCode() const;
 
     bool isDataEntryAllowed() const;
     bool isAddingToCacheAllowed() const;
@@ -55,13 +55,13 @@ signals:
     Q_SIGNAL void fetchingInProgressChanged();
 
 private slots:
+    void _onFetchDataForDataEntryLanguageFinished(bool success);
     void _onDataEntryAllowed(bool success);
     void _onNewWordsPairAddedToCache();
     void _onAddInvalidWordsPairRequested();
     void _onWordsPairAlreadyContainedInCache();
     void _onCacheReset();
     void _onWriteDataToDbFinished();
-    void _onFetchDataForDataEntryLanguageFinished(bool success);
 
 private:
     void _allowAddToCache();
