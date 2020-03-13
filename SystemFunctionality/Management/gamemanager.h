@@ -29,9 +29,9 @@
 #include <QSqlDatabase>
 
 #include "../ManagementInterfaces/gameinitinterface.h"
-#include "../ManagementInterfaces/gameinterface.h"
 #include "../ManagementInterfaces/gamefunctionalityinterface.h"
 #include "../ManagementInterfaces/dataentryinterface.h"
+#include "../ManagementInterfaces/gameinterface.h"
 #include "../ManagementInterfaces/datainterface.h"
 #include "../Utilities/dataentryutils.h"
 
@@ -44,7 +44,6 @@ class DataEntryCache;
 class DataEntryStatistics;
 class DataSourceAccessHelper;
 class WordMixer;
-class WordMixerProxy;
 class WordPairOwner;
 class InputBuilder;
 class StatisticsItem;
@@ -52,9 +51,9 @@ class Chronometer;
 
 class GameManager : public QObject,
                     public IGameInit,
-                    public IGame,
                     public IGameFunctionality,
                     public IDataEntry,
+                    public IGame,
                     public IData
 {
     Q_OBJECT
@@ -66,18 +65,20 @@ public:
     void setEnvironment(const QString& dataDirPath);
     void fetchDataForPrimaryLanguage(int languageIndex, bool allowEmptyResult);
     void fetchDataForSecondaryLanguage(int languageIndex);
-    void saveDataToDb();
     void requestWriteToCache(QPair<QString, QString> newWordsPair, bool areSynonyms, int languageIndex);
     void requestCacheReset();
+    void saveDataToDb();
     void provideDataEntryToConsumer(int entryNumber);
     void releaseResources();
 
-    int getNrOfDataSourceEntries() const;
     DataEntry::ValidationCodes getPairEntryValidationCode() const;
+    int getNrOfDataSourceEntries() const;
+    int getLastSavedTotalNrOfEntries() const;
+    int getLastNrOfEntriesSavedToPrimaryLanguage() const;
+    int getCurrentNrOfCachedEntries() const;
 
     GameFacade* getGameFacade() const;
     DataEntryFacade* getDataEntryFacade() const;
-
     DataSourceAccessHelper* getDataSourceAccessHelper() const;
     WordMixer* getWordMixer() const;
     WordPairOwner* getWordPairOwner() const;
@@ -85,12 +86,8 @@ public:
     StatisticsItem* getStatisticsItem() const;
     Chronometer* getChronometer() const;
 
-    int getLastSavedTotalNrOfEntries() const;
-    int getLastNrOfEntriesSavedToPrimaryLanguage() const;
-    int getCurrentNrOfCachedEntries() const;
-
 signals:
-    // data access proxy
+    // game functionality proxy
     Q_SIGNAL void fetchDataForPrimaryLanguageFinished(bool success, bool validEntriesLoaded);
     Q_SIGNAL void fetchDataForSecondaryLanguageFinished(bool success);
     Q_SIGNAL void primaryLanguageDataSavingFinished(int nrOfPrimaryLanguageSavedEntries);
@@ -124,11 +121,11 @@ private slots:
     void _onLoadDataFromDbForSecondaryLanguageFinished(bool success);
     void _onRequestedSecondaryLanguageAlreadySetAsPrimary();
     void _onNewWordsPairAddedToCache();
-    void _onWriteDataToDbFinished(int nrOfPrimaryLanguageSavedEntries, int totalNrOfSavedEntries);
-    void _onCacheReset();
-    void _onWriteDataToDbErrorOccured();
     void _onWordsPairAlreadyContainedInCache();
     void _onAddInvalidWordsPairRequested();
+    void _onCacheReset();
+    void _onWriteDataToDbFinished(int nrOfPrimaryLanguageSavedEntries, int totalNrOfSavedEntries);
+    void _onWriteDataToDbErrorOccured();
     void _onEntryProvidedToConsumer(QPair<QString, QString> newWordsPair, bool areSynonyms);
 
 private:
@@ -156,6 +153,7 @@ private:
     InputBuilder* m_pInputBuilder;
     StatisticsItem* m_pStatisticsItem;
     Chronometer* m_pChronometer;
+
     QThread* m_pDataSourceLoaderThread;
     QThread* m_pDataEntryCacheThread;
 };

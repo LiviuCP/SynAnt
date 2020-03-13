@@ -22,16 +22,6 @@
 
 GameManager* GameManager::s_pGameManager = nullptr;
 
-GameManager *GameManager::getManager()
-{
-    if (!s_pGameManager)
-    {
-        s_pGameManager = new GameManager{};
-    }
-
-    return s_pGameManager;
-}
-
 GameManager::GameManager(QObject *parent)
     : QObject(parent)
     , m_pGameFacade{nullptr}
@@ -51,6 +41,16 @@ GameManager::GameManager(QObject *parent)
     , m_pDataEntryCacheThread{nullptr}
 {
     _registerMetaTypes();
+}
+
+GameManager *GameManager::getManager()
+{
+    if (!s_pGameManager)
+    {
+        s_pGameManager = new GameManager{};
+    }
+
+    return s_pGameManager;
 }
 
 void GameManager::setEnvironment(const QString &dataDirPath)
@@ -104,11 +104,6 @@ void GameManager::fetchDataForSecondaryLanguage(int languageIndex)
     Q_EMIT readDataForSecondaryLanguage(languageIndex);
 }
 
-void GameManager::saveDataToDb()
-{
-    Q_EMIT writeDataToDb();
-}
-
 void GameManager::requestWriteToCache(QPair<QString, QString> newWordsPair, bool areSynonyms, int languageIndex)
 {
     m_pDataEntryValidator->validateWordsPair(newWordsPair, areSynonyms, languageIndex);
@@ -117,6 +112,11 @@ void GameManager::requestWriteToCache(QPair<QString, QString> newWordsPair, bool
 void GameManager::requestCacheReset()
 {
     Q_EMIT resetCacheRequested();
+}
+
+void GameManager::saveDataToDb()
+{
+    Q_EMIT writeDataToDb();
 }
 
 void GameManager::provideDataEntryToConsumer(int entryNumber)
@@ -129,14 +129,29 @@ void GameManager::releaseResources()
     _deallocResources();
 }
 
+DataEntry::ValidationCodes GameManager::getPairEntryValidationCode() const
+{
+    return m_pDataEntryValidator->getValidationCode();
+}
+
 int GameManager::getNrOfDataSourceEntries() const
 {
     return m_pDataSource->getPrimarySourceNrOfEntries();
 }
 
-DataEntry::ValidationCodes GameManager::getPairEntryValidationCode() const
+int GameManager::getLastSavedTotalNrOfEntries() const
 {
-    return m_pDataEntryValidator->getValidationCode();
+    return m_pDataEntryStatistics->getLastSavedTotalNrOfEntries();
+}
+
+int GameManager::getLastNrOfEntriesSavedToPrimaryLanguage() const
+{
+    return m_pDataEntryStatistics->getLastNrOfEntriesSavedToPrimaryLanguage();
+}
+
+int GameManager::getCurrentNrOfCachedEntries() const
+{
+    return m_pDataEntryStatistics->getCurrentNrOfCacheEntries();
 }
 
 GameFacade* GameManager::getGameFacade() const
@@ -179,36 +194,12 @@ Chronometer *GameManager::getChronometer() const
     return m_pChronometer;
 }
 
-int GameManager::getLastSavedTotalNrOfEntries() const
-{
-    return m_pDataEntryStatistics->getLastSavedTotalNrOfEntries();
-}
-
-int GameManager::getLastNrOfEntriesSavedToPrimaryLanguage() const
-{
-    return m_pDataEntryStatistics->getLastNrOfEntriesSavedToPrimaryLanguage();
-}
-
-int GameManager::getCurrentNrOfCachedEntries() const
-{
-    return m_pDataEntryStatistics->getCurrentNrOfCacheEntries();
-}
-
 GameManager::~GameManager()
 {
     m_pDataSourceLoaderThread->quit();
     m_pDataSourceLoaderThread->wait();
     m_pDataEntryCacheThread->quit();
     m_pDataEntryCacheThread->wait();
-}
-
-void GameManager::_deallocResources()
-{
-    if (s_pGameManager)
-    {
-        delete s_pGameManager;
-        s_pGameManager = nullptr;
-    }
 }
 
 void GameManager::_onLoadDataFromDbForPrimaryLanguageFinished(bool success, bool validEntriesLoaded)
@@ -244,26 +235,6 @@ void GameManager::_onNewWordsPairAddedToCache()
     Q_EMIT newWordsPairAddedToCache();
 }
 
-void GameManager::_onWriteDataToDbFinished(int nrOfPrimaryLanguageSavedEntries, int totalNrOfSavedEntries)
-{
-    // keep exactly this execution order (statistics signal should always be executed first)
-    Q_EMIT dataSavedStatisticsUpdateRequested(nrOfPrimaryLanguageSavedEntries, totalNrOfSavedEntries);
-    Q_EMIT primaryLanguageDataSavingFinished(nrOfPrimaryLanguageSavedEntries);
-    Q_EMIT writeDataToDbFinished();
-}
-
-void GameManager::_onCacheReset()
-{
-    // keep exactly this execution order (statistics signal should always be executed first)
-    Q_EMIT currentEntriesStatisticsResetRequested();
-    Q_EMIT cacheReset();
-}
-
-void GameManager::_onWriteDataToDbErrorOccured()
-{
-    Q_EMIT writeDataToDbErrorOccured();
-}
-
 void GameManager::_onWordsPairAlreadyContainedInCache()
 {
     Q_EMIT wordsPairAlreadyContainedInCache();
@@ -274,9 +245,38 @@ void GameManager::_onAddInvalidWordsPairRequested()
     Q_EMIT addInvalidWordsPairRequested();
 }
 
+void GameManager::_onCacheReset()
+{
+    // keep exactly this execution order (statistics signal should always be executed first)
+    Q_EMIT currentEntriesStatisticsResetRequested();
+    Q_EMIT cacheReset();
+}
+
+void GameManager::_onWriteDataToDbFinished(int nrOfPrimaryLanguageSavedEntries, int totalNrOfSavedEntries)
+{
+    // keep exactly this execution order (statistics signal should always be executed first)
+    Q_EMIT dataSavedStatisticsUpdateRequested(nrOfPrimaryLanguageSavedEntries, totalNrOfSavedEntries);
+    Q_EMIT primaryLanguageDataSavingFinished(nrOfPrimaryLanguageSavedEntries);
+    Q_EMIT writeDataToDbFinished();
+}
+
+void GameManager::_onWriteDataToDbErrorOccured()
+{
+    Q_EMIT writeDataToDbErrorOccured();
+}
+
 void GameManager::_onEntryProvidedToConsumer(QPair<QString, QString> newWordsPair, bool areSynonyms)
 {
     Q_EMIT entryProvidedToConsumer(newWordsPair, areSynonyms);
+}
+
+void GameManager::_deallocResources()
+{
+    if (s_pGameManager)
+    {
+        delete s_pGameManager;
+        s_pGameManager = nullptr;
+    }
 }
 
 void GameManager::_setDatabase(const QString& databasePath)

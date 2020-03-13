@@ -18,8 +18,6 @@
 
 #include "../Utilities/gameutils.h"
 
-class WordMixerProxy;
-
 class WordPairOwner : public QObject
 {
     Q_OBJECT
