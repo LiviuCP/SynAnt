@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import GameUtils 1.0
+import Animations 1.0
 
 Item {
     id: appSwitchContainer
@@ -84,7 +85,7 @@ Item {
                       }
                   }
 
-        text: undefined
+        text: ""
 
         Shortcut {
             sequence: shortcutSequence
@@ -112,8 +113,7 @@ Item {
 
     ToolTip {
         text: switchToolTip
-        enabled: text !== ""
-        visible: toolTipMouseArea.containsMouse || appSwitch.hovered
+        visible: text !== "" && (toolTipMouseArea.containsMouse || appSwitch.hovered)
         delay: Animations.toolTipDelay
         timeout: Animations.toolTipTimeout
     }

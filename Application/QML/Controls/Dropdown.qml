@@ -1,5 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
+import Animations 1.0
 
 ComboBox {
     id: dropdown
@@ -67,8 +68,8 @@ ComboBox {
 
     ToolTip.visible: hovered && dropdownToolTip !== ""
     ToolTip.text: dropdownToolTip
-    ToolTip.delay: 1000
-    ToolTip.timeout: 4000
+    ToolTip.delay: Animations.toolTipDelay
+    ToolTip.timeout: Animations.toolTipTimeout
 
     editable: false
     model: dataModel

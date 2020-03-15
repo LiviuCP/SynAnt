@@ -3,6 +3,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import GameUtils 1.0
 import Controls 1.0
+import StatusBoxes 1.0
 
 Item {
     id: errorPane

@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import GameUtils 1.0
+import Animations 1.0
 
 Item {
     id: statusBox
@@ -22,8 +23,8 @@ Item {
     ToolTip {
         text: boxToolTip
         visible: statusBoxMouseArea.containsMouse && boxToolTip !== ""
-        delay: 1000
-        timeout: 4000
+        delay: Animations.toolTipDelay
+        timeout: Animations.toolTipTimeout
     }
 
     Rectangle {

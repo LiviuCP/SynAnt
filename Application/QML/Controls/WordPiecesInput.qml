@@ -1,6 +1,7 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.2
 import GameUtils 1.0
+import Animations 1.0
 
 Repeater {
     id: wordPiecesInput

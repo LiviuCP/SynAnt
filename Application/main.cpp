@@ -68,10 +68,10 @@ void registerDataTypesForQML()
     qmlRegisterType(QUrl("qrc:///Application/Dialogs/PromptDiscardPane.qml"), "AppDialogs", 1, 0, "PromptDiscardPane");
     qmlRegisterType(QUrl("qrc:///Application/Dialogs/PromptSaveExitPane.qml"), "AppDialogs", 1, 0, "PromptSaveExitPane");
 
-    qmlRegisterType(QUrl("qrc:///Application/OtherWidgets/StatusBox.qml"), "GameUtils", 1, 0, "StatusBox");
-    qmlRegisterType(QUrl("qrc:///Application/OtherWidgets/StatisticsBox.qml"), "GameUtils", 1, 0, "StatisticsBox");
+    qmlRegisterType(QUrl("qrc:///Application/OtherWidgets/StatusBox.qml"), "StatusBoxes", 1, 0, "StatusBox");
+    qmlRegisterType(QUrl("qrc:///Application/OtherWidgets/StatisticsBox.qml"), "StatusBoxes", 1, 0, "StatisticsBox");
 
     qmlRegisterSingletonType(QUrl("qrc:///Application/Utilities/GameStrings.qml"), "GameUtils", 1, 0, "GameStrings");
     qmlRegisterSingletonType(QUrl("qrc:///Application/Utilities/Styles.qml"), "GameUtils", 1, 0, "Styles");
-    qmlRegisterSingletonType(QUrl("qrc:///Application/Utilities/Animations.qml"), "GameUtils", 1, 0, "Animations");
+    qmlRegisterSingletonType(QUrl("qrc:///Application/Utilities/Animations.qml"), "Animations", 1, 0, "Animations");
 }

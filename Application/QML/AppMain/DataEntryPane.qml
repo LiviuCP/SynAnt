@@ -4,6 +4,8 @@ import QtQuick.Layouts 1.3
 import GameManagers 1.0
 import GameUtils 1.0
 import Controls 1.0
+import StatusBoxes 1.0
+import Animations 1.0
 
 Item {
     id: dataEntryPane
