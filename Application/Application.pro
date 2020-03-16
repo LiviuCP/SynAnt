@@ -34,7 +34,8 @@ HEADERS += \
     gamepresenter.h \
     dataentrypresenter.h \
     gamestrings.h \
-    dataentrystrings.h
+    dataentrystrings.h \
+    gamecolors.h
 
 QMAKE_LFLAGS += "-Wl,-rpath,\'$$top_builddir/SystemFunctionality\'"
 

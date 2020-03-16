@@ -107,13 +107,6 @@ namespace Game
         static constexpr int c_NoDelay{-1};
     }
 
-    namespace Colors
-    {
-        const QString c_BeginPieceTextColor                 {    "#0000ff"                                                                                  };
-        const QString c_MiddlePieceTextColor                {    "#000000"                                                                                  };
-        const QString c_EndPieceTextColor                   {    "#ff0000"                                                                                  };
-    }
-
     namespace Constraints
     {
         static constexpr int c_MinWordSize{5};

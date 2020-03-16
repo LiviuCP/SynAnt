@@ -5,6 +5,7 @@
 #include "dataentrypresenter.h"
 #include "gamestrings.h"
 #include "dataentrystrings.h"
+#include "gamecolors.h"
 #include "../SystemFunctionality/Management/gamefacade.h"
 #include "../SystemFunctionality/Utilities/exceptions.h"
 #include "../SystemFunctionality/ManagementProxies/gameproxy.h"
@@ -22,9 +23,9 @@ static const QMap<GamePresenter::Pane, QString> c_WindowTitles
 
 static const QMap<Game::PieceTypes, QColor> c_WordPieceTextColors
 {
-    {Game::PieceTypes::BEGIN_PIECE, Game::Colors::c_BeginPieceTextColor},
-    {Game::PieceTypes::MIDDLE_PIECE, Game::Colors::c_MiddlePieceTextColor},
-    {Game::PieceTypes::END_PIECE, Game::Colors::c_EndPieceTextColor}
+    {Game::PieceTypes::BEGIN_PIECE, Colors::c_BeginPieceTextColor},
+    {Game::PieceTypes::MIDDLE_PIECE, Colors::c_MiddlePieceTextColor},
+    {Game::PieceTypes::END_PIECE, Colors::c_EndPieceTextColor}
 };
 
 GamePresenter::GamePresenter(QObject *parent)
