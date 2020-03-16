@@ -130,136 +130,136 @@ static const QString c_RawGameHelpMessage                   {
                                                                  "Please refer to the data entry help menu for more details "
                                                                  "regarding closing the application from data entry dialog.\n"
                                                                  "\nPress Ok to return to previous page.\n"
-                                                        };
+                                                            };
 
 namespace GameStrings
 {
     namespace Titles
     {
-    const QString c_IntroWindowTitle                    {    "SynAnt - Welcome"                                                                         };
-    const QString c_HelpWindowTitle                     {    "SynAnt - %1 Help"                                                                         };
-    const QString c_MainWindowTitle                     {    "SynAnt - Let's Play!"                                                                     };
-    const QString c_DataEntryWindowTitle                {    "SynAnt - Enter New Word Pairs"                                                            };
-    const QString c_PromptSaveExitWindowTitle           {    "SynAnt - Save Data?"                                                                      };
-    const QString c_PromptDiscardWindowTitle            {    "SynAnt - Discard Data?"                                                                   };
-    const QString c_FatalErrorWindowTitle               {    "Fatal Error!"                                                                             };
+        const QString c_IntroWindowTitle                    {    "SynAnt - Welcome"                                                                         };
+        const QString c_HelpWindowTitle                     {    "SynAnt - %1 Help"                                                                         };
+        const QString c_MainWindowTitle                     {    "SynAnt - Let's Play!"                                                                     };
+        const QString c_DataEntryWindowTitle                {    "SynAnt - Enter New Word Pairs"                                                            };
+        const QString c_PromptSaveExitWindowTitle           {    "SynAnt - Save Data?"                                                                      };
+        const QString c_PromptDiscardWindowTitle            {    "SynAnt - Discard Data?"                                                                   };
+        const QString c_FatalErrorWindowTitle               {    "Fatal Error!"                                                                             };
     }
 
     namespace Messages
     {
-    // pane messages
-    const QString c_GameHelpMessage                     {
-        c_RawGameHelpMessage
-                .arg(Game::Constraints::c_MinWordSize)
-                .arg(Game::Constraints::c_MinPairSize)
-                .arg(Game::Constraints::c_MaxPairSize)
-                .arg(Game::c_ScoreIncrements[Game::Levels::LEVEL_EASY])
-                .arg(Game::c_ScoreIncrements[Game::Levels::LEVEL_MEDIUM])
-                .arg(Game::c_ScoreIncrements[Game::Levels::LEVEL_HARD])
-                .arg(Game::c_EnhancedScoreIncrements[Game::Levels::LEVEL_EASY])
-                .arg(Game::c_EnhancedScoreIncrements[Game::Levels::LEVEL_MEDIUM])
-                .arg(Game::c_EnhancedScoreIncrements[Game::Levels::LEVEL_HARD])
-    };
+        // pane messages
+        const QString c_GameHelpMessage                     {
+            c_RawGameHelpMessage
+                    .arg(Game::Constraints::c_MinWordSize)
+                    .arg(Game::Constraints::c_MinPairSize)
+                    .arg(Game::Constraints::c_MaxPairSize)
+                    .arg(Game::c_ScoreIncrements[Game::Levels::LEVEL_EASY])
+                    .arg(Game::c_ScoreIncrements[Game::Levels::LEVEL_MEDIUM])
+                    .arg(Game::c_ScoreIncrements[Game::Levels::LEVEL_HARD])
+                    .arg(Game::c_EnhancedScoreIncrements[Game::Levels::LEVEL_EASY])
+                    .arg(Game::c_EnhancedScoreIncrements[Game::Levels::LEVEL_MEDIUM])
+                    .arg(Game::c_EnhancedScoreIncrements[Game::Levels::LEVEL_HARD])
+        };
 
-    const QString c_GameHelpPaneToolTip                 {    "Please read the detailed %1 instructions."                                                };
-    const QString c_GameHelpButtonToolTip               {    "Click or hit ALT+H for accessing the detailed %1 instructions."                           };
+        const QString c_GameHelpPaneToolTip                 {    "Please read the detailed %1 instructions."                                                };
+        const QString c_GameHelpButtonToolTip               {    "Click or hit ALT+H for accessing the detailed %1 instructions."                           };
 
 
 
-    // status messages
-    const QString c_FetchingDataMessage                 {    "\n\n\n\nFetching data.\n\nLanguage change disabled.\n\nPlease wait..."                    };
+        // status messages
+        const QString c_FetchingDataMessage                 {    "\n\n\n\nFetching data.\n\nLanguage change disabled.\n\nPlease wait..."                    };
 
-    const QString c_NoValidEntriesFetchedMessage        {
-        "\n\n\n\nThe selected language has no valid pairs.\n\n"
-        "Please select another language or use the data entry page to add pairs.\n\n"
-        "Then return to intro page and press Play to start the game."
-    };
+        const QString c_NoValidEntriesFetchedMessage        {
+            "\n\n\n\nThe selected language has no valid pairs.\n\n"
+            "Please select another language or use the data entry page to add pairs.\n\n"
+            "Then return to intro page and press Play to start the game."
+        };
 
-    const QString c_NoValidEntriesSavedForGameLanguage  {
-        "\n\n\n\nNo valid entries saved for current game language.\n\n"
-        "Please select another language or use the data entry page to add pairs.\n\n"
-        "Then return to intro page and press Play to start the game."
-    };
+        const QString c_NoValidEntriesSavedForGameLanguage  {
+            "\n\n\n\nNo valid entries saved for current game language.\n\n"
+            "Please select another language or use the data entry page to add pairs.\n\n"
+            "Then return to intro page and press Play to start the game."
+        };
 
-    const QString c_CannotChangeLanguageMessage         {    "Cannot change language. No word pairs are available."                                     };
+        const QString c_CannotChangeLanguageMessage         {    "Cannot change language. No word pairs are available."                                     };
 
-    const QString c_WelcomeMessage                      {
-        "\n\nWelcome to SynAnt!\n\n"
-        "\nIt's simple: two words are divided into equal pieces and mixed with each other.\n"
-        "\nYou just need to guess them.\n"
-        "\nThe words can either be synonyms or antonyms.\n\n"
-        "For more details click Help.\n"
-        "\n\nPlease select a language."
-    };
+        const QString c_WelcomeMessage                      {
+            "\n\nWelcome to SynAnt!\n\n"
+            "\nIt's simple: two words are divided into equal pieces and mixed with each other.\n"
+            "\nYou just need to guess them.\n"
+            "\nThe words can either be synonyms or antonyms.\n\n"
+            "For more details click Help.\n"
+            "\n\nPlease select a language."
+        };
 
-    const QString c_AdditionalDataAvailableMessage      {    "\n\nAdditional data available"                                                            };
+        const QString c_AdditionalDataAvailableMessage      {    "\n\nAdditional data available"                                                            };
 
-    const QString c_PleasePlayOrEnterDataMessage        {
-        "\n\nPress Play to enter the game or Enter new pairs to add more data.\n"
-        "\nUse the dropdown to change the language if required"
-        "\n\nFor more information click Help."
-    };
+        const QString c_PleasePlayOrEnterDataMessage        {
+            "\n\nPress Play to enter the game or Enter new pairs to add more data.\n"
+            "\nUse the dropdown to change the language if required"
+            "\n\nFor more information click Help."
+        };
 
-    const QString c_GameStartedMessage                  {    "Game started"                                                                             };
-    const QString c_GamePausedMessage                   {    "Game paused"                                                                              };
-    const QString c_GameResumedMessage                  {    "Game resumed"                                                                             };
-    const QString c_GameStoppedMessage                  {    "Exiting game"                                                                             };
-    const QString c_SelectOrDeleteWordPiecesMessage     {    "Please select a new word piece or delete one/more if necessary"                           };
+        const QString c_GameStartedMessage                  {    "Game started"                                                                             };
+        const QString c_GamePausedMessage                   {    "Game paused"                                                                              };
+        const QString c_GameResumedMessage                  {    "Game resumed"                                                                             };
+        const QString c_GameStoppedMessage                  {    "Exiting game"                                                                             };
+        const QString c_SelectOrDeleteWordPiecesMessage     {    "Please select a new word piece or delete one/more if necessary"                           };
 
-    const QString c_NewDataSaveInProgressMessage        {
-        "\n\nData is currently being saved.\n\n"
-        "Once ready playing will be enabled.\n\n"
-        "Please wait..."
-    };
+        const QString c_NewDataSaveInProgressMessage        {
+            "\n\nData is currently being saved.\n\n"
+            "Once ready playing will be enabled.\n\n"
+            "Please wait..."
+        };
 
-    const QString c_AdditionalDataSaveInProgressMessage {
-        "\n\nAdditional data is currently being saved...\n\n"
-        "Playing is enabled with already existing data."
-    };
+        const QString c_AdditionalDataSaveInProgressMessage {
+            "\n\nAdditional data is currently being saved...\n\n"
+            "Playing is enabled with already existing data."
+        };
 
-    const QString c_PieceNotAddedToInputMessage         {    "The selected wordpiece cannot be added to the input of the required word!"                };
-    const QString c_PieceAddedToInputMessage            {    "The selected wordpiece has been successfully added to user input"                         };
-    const QString c_PiecesRemovedFromInputMessage       {    "One or more wordpieces has been removed from input"                                       };
-    const QString c_AllPiecesAddedMessage               {    "All pieces selected. Hit Submit or correct the input if needed"                           };
-    const QString c_AllPiecesRemovedMessage             {    "All pieces have been removed from user input"                                             };
+        const QString c_PieceNotAddedToInputMessage         {    "The selected wordpiece cannot be added to the input of the required word!"                };
+        const QString c_PieceAddedToInputMessage            {    "The selected wordpiece has been successfully added to user input"                         };
+        const QString c_PiecesRemovedFromInputMessage       {    "One or more wordpieces has been removed from input"                                       };
+        const QString c_AllPiecesAddedMessage               {    "All pieces selected. Hit Submit or correct the input if needed"                           };
+        const QString c_AllPiecesRemovedMessage             {    "All pieces have been removed from user input"                                             };
 
-    const QString c_CorrectUserInputMessage             {
-        "Congrats! You entered the correct words."
-        "\n\nThe two words are:\n\n"
-        "\t%1\n"
-        "\t%2\n"
-        "\nThe words are: \n\n\t"
-        "%3"
-        "\n\nA new pair of words is available below."
-    };
+        const QString c_CorrectUserInputMessage             {
+            "Congrats! You entered the correct words."
+            "\n\nThe two words are:\n\n"
+            "\t%1\n"
+            "\t%2\n"
+            "\nThe words are: \n\n\t"
+            "%3"
+            "\n\nA new pair of words is available below."
+        };
 
-    const QString c_IncorrectUserInputMessage           {    "You didn't enter the correct words.\n\nPlease correct input and try again!"               };
+        const QString c_IncorrectUserInputMessage           {    "You didn't enter the correct words.\n\nPlease correct input and try again!"               };
 
-    const QString c_ShowPairRequestedByUserMessage      {
-        "\nThe correct words are:\n\n"
-        "\t%1\n"
-        "\t%2\n"
-        "\nThe words are: \n\n\t"
-        "%3"
-        "\n\nA new pair of words is available below."
-    };
+        const QString c_ShowPairRequestedByUserMessage      {
+            "\nThe correct words are:\n\n"
+            "\t%1\n"
+            "\t%2\n"
+            "\nThe words are: \n\n\t"
+            "%3"
+            "\n\nA new pair of words is available below."
+        };
 
-    const QString c_StatisticsResetMessage              {    "The statistics have been reset!\n"                                                        };
+        const QString c_StatisticsResetMessage              {    "The statistics have been reset!\n"                                                        };
 
-    const QString c_LevelChangedMessage                 {
-        "Level changed\n\n"
-        "A new pair of words is available below"
-    };
+        const QString c_LevelChangedMessage                 {
+            "Level changed\n\n"
+            "A new pair of words is available below"
+        };
 
-    const QString c_LanguageChangedMessage              {    "Language changed\n\n"                                                                     };
+        const QString c_LanguageChangedMessage              {    "Language changed\n\n"                                                                     };
 
-    const QString c_TimeLimitEnabledMessage             {    "The time limit has been enabled. Countdown has started!"                                  };
-    const QString c_TimeLimitDisabledMessage            {    "The time limit has been disabled!"                                                        };
-    const QString c_TimeLimitReachedMessage             {    "The time limit has been reached. A new pair of words has been provided."                   };
+        const QString c_TimeLimitEnabledMessage             {    "The time limit has been enabled. Countdown has started!"                                  };
+        const QString c_TimeLimitDisabledMessage            {    "The time limit has been disabled!"                                                        };
+        const QString c_TimeLimitReachedMessage             {    "The time limit has been reached. A new pair of words has been provided."                  };
 
-    const QString c_CursorModeEnabledMessage            {    "Cursor enabled."                                                                          };
-    const QString c_CursorModeDisabledMessage           {    "Cursor disabled."                                                                         };
-    const QString c_ClickSelectOrRemoveDisabledMessage  {    "Mouse click selection or removal of word pieces disabled while cursor mode is active!"    };
+        const QString c_CursorModeEnabledMessage            {    "Cursor enabled."                                                                          };
+        const QString c_CursorModeDisabledMessage           {    "Cursor disabled."                                                                         };
+        const QString c_ClickSelectOrRemoveDisabledMessage  {    "Mouse click selection or removal of word pieces disabled while cursor mode is active!"    };
     }
 
     namespace Descriptors
@@ -269,6 +269,5 @@ namespace GameStrings
         const QString c_AntonymsDescriptor{"antonyms"};
     }
 }
-
 
 #endif // GAMESTRINGS_H
