@@ -132,11 +132,6 @@ namespace Game
         const QString c_CannotFetchDataMessage              {    "An error occured when fetching the word pair(s)!\n"                                       };
         const QString c_CannotSaveDataMessage               {    "An error occured when saving the word pair(s)!\n"                                         };
     }
-
-    namespace Misc
-    {
-        static constexpr int c_RequiredNrOfDbTableFields{5};
-    }
 }
 
 #endif // GAMEUTILS_H

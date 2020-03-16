@@ -21,6 +21,8 @@
 #include "../Utilities/exceptions.h"
 #include "../Utilities/databaseutils.h"
 
+static constexpr int c_RequiredNrOfDbTableFields{5};
+
 GameManager* GameManager::s_pGameManager = nullptr;
 
 GameManager::GameManager(QObject *parent)
@@ -304,7 +306,7 @@ void GameManager::_setDatabase(const QString& databasePath)
             {
                 bool isValidTable{true};
 
-                if (db.record(Database::c_TableName).count() != Game::Misc::c_RequiredNrOfDbTableFields)
+                if (db.record(Database::c_TableName).count() != c_RequiredNrOfDbTableFields)
                 {
                     isValidTable = false;
                 }
