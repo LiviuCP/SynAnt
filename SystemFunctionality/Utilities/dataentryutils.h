@@ -47,11 +47,6 @@ namespace DataEntry
         IDENTICAL_WORDS,
         ValidationCodesCount
     };
-
-    namespace Misc
-    {
-        const QString c_DataEntryDescriptor{"Data Entry"};  // keep default capitalized, use toLower() where required
-    }
 }
 
 #endif // DATAENTRYUTILS_H

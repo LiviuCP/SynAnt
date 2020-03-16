@@ -541,7 +541,7 @@ int GamePresenter::getLevelHard() const
 
 QString GamePresenter::getWindowTitle() const
 {
-    return (m_CurrentPane == Pane::HELP ? (c_WindowTitles[m_CurrentPane].arg(m_IsDataEntryHelpMenuActive ? DataEntry::Misc::c_DataEntryDescriptor
+    return (m_CurrentPane == Pane::HELP ? (c_WindowTitles[m_CurrentPane].arg(m_IsDataEntryHelpMenuActive ? DataEntryStrings::Descriptors::c_DataEntryDescriptor
                                                                                                          : GameStrings::Descriptors::c_GameDescriptor))
                                         : c_WindowTitles[m_CurrentPane]);
 }
@@ -558,13 +558,13 @@ QString GamePresenter::getHelpPaneMessage() const
 
 QString GamePresenter::getHelpPaneToolTip() const
 {
-    return (GameStrings::Messages::c_GameHelpPaneToolTip.arg((m_IsDataEntryHelpMenuActive ? DataEntry::Misc::c_DataEntryDescriptor
+    return (GameStrings::Messages::c_GameHelpPaneToolTip.arg((m_IsDataEntryHelpMenuActive ? DataEntryStrings::Descriptors::c_DataEntryDescriptor
                                                                                    : GameStrings::Descriptors::c_GameDescriptor).toLower()));
 }
 
 QString GamePresenter::getHelpButtonToolTip() const
 {
-    return (GameStrings::Messages::c_GameHelpButtonToolTip.arg((m_CurrentPane == Pane::DATA_ENTRY ? DataEntry::Misc::c_DataEntryDescriptor
+    return (GameStrings::Messages::c_GameHelpButtonToolTip.arg((m_CurrentPane == Pane::DATA_ENTRY ? DataEntryStrings::Descriptors::c_DataEntryDescriptor
                                                                                            : GameStrings::Descriptors::c_GameDescriptor).toLower()));
 }
 
