@@ -120,18 +120,6 @@ namespace Game
         static constexpr int c_MinPairSize{15};
         static constexpr int c_MaxPairSize{30};
     }
-
-    namespace Error
-    {
-        // fatal error messages
-        const QString c_FileExceptionRawMessage             {    "\n%1\n\nFile: %2\n"                                                                       };
-        const QString c_DatabaseDriverNotAvailable          {    "The SQLite driver is not available!"                                                      };
-        const QString c_CannotOpenDatabase                  {    "The database cannot be opened!"                                                           };
-        const QString c_CannotCreateTable                   {    "Cannot create database table!"                                                            };
-        const QString c_TableIsInvalid                      {    "The database table is invalid!"                                                           };
-        const QString c_CannotFetchDataMessage              {    "An error occured when fetching the word pair(s)!\n"                                       };
-        const QString c_CannotSaveDataMessage               {    "An error occured when saving the word pair(s)!\n"                                         };
-    }
 }
 
 #endif // GAMEUTILS_H

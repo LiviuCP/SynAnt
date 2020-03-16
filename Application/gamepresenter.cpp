@@ -692,7 +692,7 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
             }
             break;
         case Game::StatusCodes::DATA_FETCHING_ERROR:
-            _launchErrorPane(Game::Error::c_CannotFetchDataMessage);
+            _launchErrorPane(GameStrings::Error::c_CannotFetchDataMessage);
             break;
         case Game::StatusCodes::DATA_GOT_AVAILABLE:
             _updateStatusMessage(GameStrings::Messages::c_PleasePlayOrEnterDataMessage, Pane::INTRO, Game::Timing::c_NoDelay);
@@ -744,7 +744,7 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
             }
             break;
         case Game::StatusCodes::DATA_ENTRY_SAVING_ERROR:
-            _launchErrorPane(Game::Error::c_CannotSaveDataMessage);
+            _launchErrorPane(GameStrings::Error::c_CannotSaveDataMessage);
             break;
         case Game::StatusCodes::PIECE_NOT_ADDED:
             _updateStatusMessage(GameStrings::Messages::c_PieceNotAddedToInputMessage, Pane::MAIN, Game::Timing::c_NoDelay);

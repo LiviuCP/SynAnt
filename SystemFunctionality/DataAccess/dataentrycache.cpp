@@ -52,7 +52,7 @@ void DataEntryCache::onWriteDataToDbRequested()
 
     if (m_CacheEntries.size() > 0)
     {
-        Q_UNUSED(QSqlDatabase::addDatabase(Database::c_DbDriverName));
+        Q_UNUSED(QSqlDatabase::addDatabase(Database::Query::c_DbDriverName));
 
         // ensure all database related objects are destroyed before the connection is removed
         {
@@ -66,12 +66,12 @@ void DataEntryCache::onWriteDataToDbRequested()
 
                 for (int entry{0}; entry < m_CacheEntries.size(); ++entry)
                 {
-                    query.prepare(Database::c_InsertEntryForLanguageIntoDbQuery);
+                    query.prepare(Database::Query::c_InsertEntryForLanguageIntoDbQuery);
 
-                    query.bindValue(Database::c_FirstWordFieldPlaceholder, m_CacheEntries[entry].firstWord);
-                    query.bindValue(Database::c_SecondWordFieldPlaceholder, m_CacheEntries[entry].secondWord);
-                    query.bindValue(Database::c_AreSynonymsFieldPlaceholder, static_cast<int>(m_CacheEntries[entry].areSynonyms));
-                    query.bindValue(Database::c_LanguageFieldPlaceholder, Database::c_LanguageCodes[m_LanguageIndexes[entry]]);
+                    query.bindValue(Database::Query::c_FirstWordFieldPlaceholder, m_CacheEntries[entry].firstWord);
+                    query.bindValue(Database::Query::c_SecondWordFieldPlaceholder, m_CacheEntries[entry].secondWord);
+                    query.bindValue(Database::Query::c_AreSynonymsFieldPlaceholder, static_cast<int>(m_CacheEntries[entry].areSynonyms));
+                    query.bindValue(Database::Query::c_LanguageFieldPlaceholder, Database::Query::c_LanguageCodes[m_LanguageIndexes[entry]]);
 
                     if (!query.exec())
                     {

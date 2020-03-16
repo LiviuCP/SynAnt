@@ -62,7 +62,7 @@ void GameManager::setEnvironment(const QString &dataDirPath)
 
     if (!m_pDataSource)
     {
-        QString databasePath{dataDirPath + "/" + Database::c_DatabaseName};
+        QString databasePath{dataDirPath + "/" + Database::Query::c_DatabaseName};
 
         _setDatabase(databasePath);
 
@@ -284,64 +284,64 @@ void GameManager::_deallocResources()
 
 void GameManager::_setDatabase(const QString& databasePath)
 {
-    if (QSqlDatabase::isDriverAvailable(Database::c_DbDriverName))
+    if (QSqlDatabase::isDriverAvailable(Database::Query::c_DbDriverName))
     {
-        QSqlDatabase db{QSqlDatabase::addDatabase(Database::c_DbDriverName)};
+        QSqlDatabase db{QSqlDatabase::addDatabase(Database::Query::c_DbDriverName)};
         db.setDatabaseName(databasePath);
 
         if (db.open())
         {
-            if (!db.tables().contains(Database::c_TableName))
+            if (!db.tables().contains(Database::Query::c_TableName))
             {
                 QSqlQuery createTableQuery;
 
-                createTableQuery.prepare(Database::c_CreateTableQuery);
+                createTableQuery.prepare(Database::Query::c_CreateTableQuery);
 
                 if (!createTableQuery.exec())
                 {
-                    throw GameException{Game::Error::c_CannotCreateTable};
+                    throw GameException{Database::Error::c_CannotCreateTable};
                 }
             }
             else
             {
                 bool isValidTable{true};
 
-                if (db.record(Database::c_TableName).count() != c_RequiredNrOfDbTableFields)
+                if (db.record(Database::Query::c_TableName).count() != c_RequiredNrOfDbTableFields)
                 {
                     isValidTable = false;
                 }
-                else if (db.record(Database::c_TableName).field(0).name() != Database::c_IdFieldName ||
-                         db.record(Database::c_TableName).field(1).name() != Database::c_FirstWordFieldName ||
-                         db.record(Database::c_TableName).field(2).name() != Database::c_SecondWordFieldName ||
-                         db.record(Database::c_TableName).field(3).name() != Database::c_AreSynonymsFieldName ||
-                         db.record(Database::c_TableName).field(4).name() != Database::c_LanguageFieldName)
+                else if (db.record(Database::Query::c_TableName).field(0).name() != Database::Query::c_IdFieldName ||
+                         db.record(Database::Query::c_TableName).field(1).name() != Database::Query::c_FirstWordFieldName ||
+                         db.record(Database::Query::c_TableName).field(2).name() != Database::Query::c_SecondWordFieldName ||
+                         db.record(Database::Query::c_TableName).field(3).name() != Database::Query::c_AreSynonymsFieldName ||
+                         db.record(Database::Query::c_TableName).field(4).name() != Database::Query::c_LanguageFieldName)
                 {
                     isValidTable = false;
                 }
-                else if (db.record(Database::c_TableName).field(0).type() != QVariant::Int ||
-                         db.record(Database::c_TableName).field(1).type() != QVariant::String ||
-                         db.record(Database::c_TableName).field(2).type() != QVariant::String ||
-                         db.record(Database::c_TableName).field(3).type() != QVariant::Int ||
-                         db.record(Database::c_TableName).field(4).type() != QVariant::String)
+                else if (db.record(Database::Query::c_TableName).field(0).type() != QVariant::Int ||
+                         db.record(Database::Query::c_TableName).field(1).type() != QVariant::String ||
+                         db.record(Database::Query::c_TableName).field(2).type() != QVariant::String ||
+                         db.record(Database::Query::c_TableName).field(3).type() != QVariant::Int ||
+                         db.record(Database::Query::c_TableName).field(4).type() != QVariant::String)
                 {
                     isValidTable = false;
                 }
 
                 if (!isValidTable)
                 {
-                    throw GameException{Game::Error::c_TableIsInvalid};
+                    throw GameException{Database::Error::c_TableIsInvalid};
                 }
             }
             db.close();
         }
         else
         {
-            throw FileException{Game::Error::c_CannotOpenDatabase, databasePath};
+            throw FileException{Database::Error::c_CannotOpenDatabase, databasePath};
         }
     }
     else
     {
-        throw GameException{Game::Error::c_DatabaseDriverNotAvailable};
+        throw GameException{Database::Error::c_DatabaseDriverNotAvailable};
     }
 
     QSqlDatabase::removeDatabase(QSqlDatabase::defaultConnection);

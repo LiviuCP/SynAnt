@@ -268,6 +268,12 @@ namespace GameStrings
         const QString c_SynonymsDescriptor{"synonyms"};
         const QString c_AntonymsDescriptor{"antonyms"};
     }
+
+    namespace Error
+    {
+        const QString c_CannotFetchDataMessage              {    "An error occured when fetching the word pair(s)!\n"                                       };
+        const QString c_CannotSaveDataMessage               {    "An error occured when saving the word pair(s)!\n"                                         };
+    }
 }
 
 #endif // GAMESTRINGS_H

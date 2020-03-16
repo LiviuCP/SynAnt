@@ -111,7 +111,7 @@ bool DataSourceLoader::_loadEntriesFromDb(QVector<DataSource::DataEntry>& dbEntr
 {
     bool success{true};
 
-    Q_UNUSED(QSqlDatabase::addDatabase(Database::c_DbDriverName));
+    Q_UNUSED(QSqlDatabase::addDatabase(Database::Query::c_DbDriverName));
 
     // ensure all database related objects are destroyed before the connection is removed
     {
@@ -121,7 +121,7 @@ bool DataSourceLoader::_loadEntriesFromDb(QVector<DataSource::DataEntry>& dbEntr
 
         if (db.open())
         {
-            QSqlQuery retrieveDataQuery{Database::c_RetrieveEntriesFromLanguageQuery.arg(Database::c_LanguageCodes[languageIndex])};
+            QSqlQuery retrieveDataQuery{Database::Query::c_RetrieveEntriesFromLanguageQuery.arg(Database::Query::c_LanguageCodes[languageIndex])};
             if (retrieveDataQuery.isActive())
             {
                 while (retrieveDataQuery.next())
