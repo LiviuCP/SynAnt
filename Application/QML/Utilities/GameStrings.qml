@@ -16,7 +16,11 @@ QtObject {
                                                                                     "English",
                                                                                     "Deutsch",
                                                                                     "Romana",
-                                                                                    "Italiano"
+                                                                                    "Italiano",
+                                                                                    "Espanol",
+                                                                                    "Portugues",
+                                                                                    "Magyar",
+                                                                                    "Turkce"
     ]
 
     // labels

@@ -274,7 +274,11 @@ namespace Game
                                                                  "EN",  // English
                                                                  "DE",  // German
                                                                  "RO",  // Romanian
-                                                                 "IT"   // Italian
+                                                                 "IT",  // Italian
+                                                                 "ES",  // Spanish
+                                                                 "PT",  // Portuguese
+                                                                 "MY",  // Hungarian
+                                                                 "TR",  // Turkish
                                                             };
     }
 
