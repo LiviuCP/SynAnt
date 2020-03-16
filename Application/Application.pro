@@ -33,7 +33,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     gamepresenter.h \
     dataentrypresenter.h \
-    gamestrings.h
+    gamestrings.h \
+    dataentrystrings.h
 
 QMAKE_LFLAGS += "-Wl,-rpath,\'$$top_builddir/SystemFunctionality\'"
 
