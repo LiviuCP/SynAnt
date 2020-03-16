@@ -542,7 +542,7 @@ int GamePresenter::getLevelHard() const
 QString GamePresenter::getWindowTitle() const
 {
     return (m_CurrentPane == Pane::HELP ? (c_WindowTitles[m_CurrentPane].arg(m_IsDataEntryHelpMenuActive ? DataEntry::Misc::c_DataEntryDescriptor
-                                                                                                         : Game::Misc::c_GameDescriptor))
+                                                                                                         : GameStrings::Descriptors::c_GameDescriptor))
                                         : c_WindowTitles[m_CurrentPane]);
 }
 
@@ -559,13 +559,13 @@ QString GamePresenter::getHelpPaneMessage() const
 QString GamePresenter::getHelpPaneToolTip() const
 {
     return (GameStrings::Messages::c_GameHelpPaneToolTip.arg((m_IsDataEntryHelpMenuActive ? DataEntry::Misc::c_DataEntryDescriptor
-                                                                                   : Game::Misc::c_GameDescriptor).toLower()));
+                                                                                   : GameStrings::Descriptors::c_GameDescriptor).toLower()));
 }
 
 QString GamePresenter::getHelpButtonToolTip() const
 {
     return (GameStrings::Messages::c_GameHelpButtonToolTip.arg((m_CurrentPane == Pane::DATA_ENTRY ? DataEntry::Misc::c_DataEntryDescriptor
-                                                                                           : Game::Misc::c_GameDescriptor).toLower()));
+                                                                                           : GameStrings::Descriptors::c_GameDescriptor).toLower()));
 }
 
 QString GamePresenter::getMainPaneStatusMessage() const
@@ -770,7 +770,7 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         {
             QString message{GameStrings::Messages::c_CorrectUserInputMessage.arg(m_pGameFacade->getFirstReferenceWord())
                         .arg(m_pGameFacade->getSecondReferenceWord())
-                        .arg(m_pGameFacade->areWordsFromCurrentPairSynonyms() ? Game::Misc::c_SynonymsDescriptor : Game::Misc::c_AntonymsDescriptor)};
+                        .arg(m_pGameFacade->areWordsFromCurrentPairSynonyms() ? GameStrings::Descriptors::c_SynonymsDescriptor : GameStrings::Descriptors::c_AntonymsDescriptor)};
             _updateStatusMessage(message, Pane::MAIN, Game::Timing::c_NoDelay);
         }
             _updateStatusMessage(GameStrings::Messages::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::Timing::c_LongStatusUpdateDelay);
@@ -783,7 +783,7 @@ void GamePresenter::_onStatusChanged(Game::StatusCodes statusCode)
         {
             QString message = GameStrings::Messages::c_ShowPairRequestedByUserMessage.arg(m_pGameFacade->getFirstReferenceWord())
                     .arg(m_pGameFacade->getSecondReferenceWord())
-                    .arg(m_pGameFacade->areWordsFromCurrentPairSynonyms() ? Game::Misc::c_SynonymsDescriptor : Game::Misc::c_AntonymsDescriptor);
+                    .arg(m_pGameFacade->areWordsFromCurrentPairSynonyms() ? GameStrings::Descriptors::c_SynonymsDescriptor : GameStrings::Descriptors::c_AntonymsDescriptor);
             _updateStatusMessage(message, Pane::MAIN, Game::Timing::c_NoDelay);
         }
             _updateStatusMessage(GameStrings::Messages::c_SelectOrDeleteWordPiecesMessage, Pane::MAIN, Game::Timing::c_LongStatusUpdateDelay);

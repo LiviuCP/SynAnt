@@ -136,10 +136,6 @@ namespace Game
     namespace Misc
     {
         static constexpr int c_RequiredNrOfDbTableFields{5};
-
-        const QString c_GameDescriptor{"Game"};             // keep default capitalized, use toLower() where required
-        const QString c_SynonymsDescriptor{"synonyms"};
-        const QString c_AntonymsDescriptor{"antonyms"};
     }
 }
 

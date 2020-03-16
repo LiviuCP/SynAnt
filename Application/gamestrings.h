@@ -261,6 +261,13 @@ namespace GameStrings
     const QString c_CursorModeDisabledMessage           {    "Cursor disabled."                                                                         };
     const QString c_ClickSelectOrRemoveDisabledMessage  {    "Mouse click selection or removal of word pieces disabled while cursor mode is active!"    };
     }
+
+    namespace Descriptors
+    {
+        const QString c_GameDescriptor{"Game"};             // keep default capitalized, use toLower() where required
+        const QString c_SynonymsDescriptor{"synonyms"};
+        const QString c_AntonymsDescriptor{"antonyms"};
+    }
 }
 
 
