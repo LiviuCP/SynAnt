@@ -1,4 +1,5 @@
 #include "dataentrypresenter.h"
+#include "dataentrystrings.h"
 #include "../SystemFunctionality/Management/dataentryfacade.h"
 #include "../SystemFunctionality/ManagementProxies/dataproxy.h"
 #include "../SystemFunctionality/Utilities/dataentryutils.h"
@@ -6,12 +7,12 @@
 
 static const QMap<DataEntry::ValidationCodes, QString> c_InvalidPairEntryReasonMessages
 {
-    {DataEntry::ValidationCodes::LESS_MIN_CHARS_PER_WORD, DataEntry::Messages::c_WordHasLessThanMinCharacters},
-    {DataEntry::ValidationCodes::LESS_MIN_TOTAL_PAIR_CHARS, DataEntry::Messages::c_PairHasLessThanMinCharacters},
-    {DataEntry::ValidationCodes::MORE_MAX_TOTAL_PAIR_CHARS, DataEntry::Messages::c_PairHasMoreThanMaxCharacters},
-    {DataEntry::ValidationCodes::INVALID_CHARACTERS, DataEntry::Messages::c_InvalidCharactersEntered},
-    {DataEntry::ValidationCodes::IDENTICAL_WORDS, DataEntry::Messages::c_PairHasIdenticalWords},
-    {DataEntry::ValidationCodes::PAIR_ALREADY_EXISTS, DataEntry::Messages::c_PairAlreadyExists}
+    {DataEntry::ValidationCodes::LESS_MIN_CHARS_PER_WORD, DataEntryStrings::Messages::c_WordHasLessThanMinCharacters},
+    {DataEntry::ValidationCodes::LESS_MIN_TOTAL_PAIR_CHARS, DataEntryStrings::Messages::c_PairHasLessThanMinCharacters},
+    {DataEntry::ValidationCodes::MORE_MAX_TOTAL_PAIR_CHARS, DataEntryStrings::Messages::c_PairHasMoreThanMaxCharacters},
+    {DataEntry::ValidationCodes::INVALID_CHARACTERS, DataEntryStrings::Messages::c_InvalidCharactersEntered},
+    {DataEntry::ValidationCodes::IDENTICAL_WORDS, DataEntryStrings::Messages::c_PairHasIdenticalWords},
+    {DataEntry::ValidationCodes::PAIR_ALREADY_EXISTS, DataEntryStrings::Messages::c_PairAlreadyExists}
 };
 
 DataEntryPresenter::DataEntryPresenter(QObject *parent)
@@ -129,70 +130,70 @@ void DataEntryPresenter::_onStatusChanged(DataEntry::StatusCodes statusCode)
     switch (statusCode)
     {
     case DataEntry::StatusCodes::DATA_ENTRY_STARTED:
-        _updateStatusMessage(DataEntry::Messages::c_DataEntryStartMessage, Game::Timing::c_NoDelay);
-        _updateStatusMessage(DataEntry::Messages::c_DataEntryRequestMessage, Game::Timing::c_ShortStatusUpdateDelay);
+        _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryStartMessage, Game::Timing::c_NoDelay);
+        _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryRequestMessage, Game::Timing::c_ShortStatusUpdateDelay);
         break;
     case DataEntry::StatusCodes::DATA_ENTRY_STARTED_SAVE_IN_PROGRESS:
-        _updateStatusMessage(DataEntry::Messages::c_DataEntrySaveInProgressStartMessage, Game::Timing::c_NoDelay);
+        _updateStatusMessage(DataEntryStrings::Messages::c_DataEntrySaveInProgressStartMessage, Game::Timing::c_NoDelay);
         break;
     case DataEntry::StatusCodes::DATA_ENTRY_RESUMED:
-        _updateStatusMessage(DataEntry::Messages::c_DataEntryResumeMessage.arg(m_pDataEntryFacade->getCurrentNrOfAddedPairs()), Game::Timing::c_NoDelay);
-        _updateStatusMessage(DataEntry::Messages::c_DataEntryRequestMessage, Game::Timing::c_ShortStatusUpdateDelay);
+        _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryResumeMessage.arg(m_pDataEntryFacade->getCurrentNrOfAddedPairs()), Game::Timing::c_NoDelay);
+        _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryRequestMessage, Game::Timing::c_ShortStatusUpdateDelay);
         break;
     case DataEntry::StatusCodes::DATA_ENTRY_STOPPED:
-        _updateStatusMessage(DataEntry::Messages::c_DataEntryStopMessage, Game::Timing::c_NoDelay);
+        _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryStopMessage, Game::Timing::c_NoDelay);
         Q_EMIT dataEntryStopped();
         break;
     case DataEntry::StatusCodes::DATA_ENTRY_STOPPED_SAVE_IN_PROGRESS:
-        _updateStatusMessage(DataEntry::Messages::c_DataEntrySaveInProgressStopMessage, Game::Timing::c_NoDelay);
+        _updateStatusMessage(DataEntryStrings::Messages::c_DataEntrySaveInProgressStopMessage, Game::Timing::c_NoDelay);
         Q_EMIT dataEntryStopped();
         break;
     case DataEntry::StatusCodes::DATA_ENTRY_DISABLED:
-        _updateStatusMessage(DataEntry::Messages::c_DataEntryDisabledMessage, Game::Timing::c_NoDelay);
+        _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryDisabledMessage, Game::Timing::c_NoDelay);
         Q_EMIT dataEntryStopped();
         break;
     case DataEntry::StatusCodes::DATA_ENTRY_ADD_SUCCESS:
         Q_EMIT dataEntryAddSucceeded();
-        _updateStatusMessage(DataEntry::Messages::c_DataEntrySuccessMessage.arg(m_pDataEntryFacade->getCurrentNrOfAddedPairs()), Game::Timing::c_NoDelay);
-        _updateStatusMessage(DataEntry::Messages::c_DataEntryRequestMessage, Game::Timing::c_ShortStatusUpdateDelay);
+        _updateStatusMessage(DataEntryStrings::Messages::c_DataEntrySuccessMessage.arg(m_pDataEntryFacade->getCurrentNrOfAddedPairs()), Game::Timing::c_NoDelay);
+        _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryRequestMessage, Game::Timing::c_ShortStatusUpdateDelay);
         break;
     case DataEntry::StatusCodes::DATA_ENTRY_ADD_INVALID:
-        _updateStatusMessage(DataEntry::Messages::c_DataEntryInvalidPairMessage.arg(c_InvalidPairEntryReasonMessages[m_pDataEntryFacade->getEnteredPairValidationCode()]),
+        _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryInvalidPairMessage.arg(c_InvalidPairEntryReasonMessages[m_pDataEntryFacade->getEnteredPairValidationCode()]),
                              Game::Timing::c_NoDelay);
-        _updateStatusMessage(DataEntry::Messages::c_DataEntryRequestMessage, Game::Timing::c_ShortStatusUpdateDelay);
+        _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryRequestMessage, Game::Timing::c_ShortStatusUpdateDelay);
         Q_EMIT dataEntryAddInvalid();
         break;
     case DataEntry::StatusCodes::PAIR_ALREADY_ADDED:
-        _updateStatusMessage(DataEntry::Messages::c_DataEntryPairAlreadyAddedMessage, Game::Timing::c_NoDelay);
-        _updateStatusMessage(DataEntry::Messages::c_DataEntryRequestMessage, Game::Timing::c_ShortStatusUpdateDelay);
+        _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryPairAlreadyAddedMessage, Game::Timing::c_NoDelay);
+        _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryRequestMessage, Game::Timing::c_ShortStatusUpdateDelay);
         break;
     case DataEntry::StatusCodes::RESET_CACHE_REQUESTED:
-        _updateStatusMessage(DataEntry::Messages::c_DataCacheResetInProgressMessage, Game::Timing::c_NoDelay);
+        _updateStatusMessage(DataEntryStrings::Messages::c_DataCacheResetInProgressMessage, Game::Timing::c_NoDelay);
         break;
     case DataEntry::StatusCodes::CACHE_RESET:
-        _updateStatusMessage(DataEntry::Messages::c_DataCacheResetMessage, Game::Timing::c_NoDelay);
-        _updateStatusMessage(DataEntry::Messages::c_DataEntryRequestMessage, Game::Timing::c_ShortStatusUpdateDelay);
+        _updateStatusMessage(DataEntryStrings::Messages::c_DataCacheResetMessage, Game::Timing::c_NoDelay);
+        _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryRequestMessage, Game::Timing::c_ShortStatusUpdateDelay);
         break;
     case DataEntry::StatusCodes::DATA_SAVE_IN_PROGRESS:
-        _updateStatusMessage(DataEntry::Messages::c_DataSaveInProgressMessage, Game::Timing::c_NoDelay);
+        _updateStatusMessage(DataEntryStrings::Messages::c_DataSaveInProgressMessage, Game::Timing::c_NoDelay);
         Q_EMIT dataSaveInProgress();
         Q_EMIT dataSavingInProgressChanged();
         break;
     case DataEntry::StatusCodes::DATA_SUCCESSFULLY_SAVED:
-        _updateStatusMessage(DataEntry::Messages::c_DataSuccessfullySavedMessage.arg(m_pDataEntryFacade->getLastSavedTotalNrOfPairs()).arg(m_pDataEntryFacade->getLastNrOfPairsSavedToPrimaryLanguage()), Game::Timing::c_NoDelay);
-        _updateStatusMessage(DataEntry::Messages::c_DataEntryRequestMessage, Game::Timing::c_ShortStatusUpdateDelay);
+        _updateStatusMessage(DataEntryStrings::Messages::c_DataSuccessfullySavedMessage.arg(m_pDataEntryFacade->getLastSavedTotalNrOfPairs()).arg(m_pDataEntryFacade->getLastNrOfPairsSavedToPrimaryLanguage()), Game::Timing::c_NoDelay);
+        _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryRequestMessage, Game::Timing::c_ShortStatusUpdateDelay);
         Q_EMIT dataSavingInProgressChanged();
         break;
     case DataEntry::StatusCodes::FETCHING_DATA:
-        _updateStatusMessage(DataEntry::Messages::c_FetchingDataMessage, Game::Timing::c_NoDelay);
+        _updateStatusMessage(DataEntryStrings::Messages::c_FetchingDataMessage, Game::Timing::c_NoDelay);
         break;
     case DataEntry::StatusCodes::DATA_FETCHING_FINISHED:
-        _updateStatusMessage(DataEntry::Messages::c_LanguageChangedMessage, Game::Timing::c_NoDelay);
-        _updateStatusMessage(DataEntry::Messages::c_DataEntryRequestMessage, Game::Timing::c_ShortStatusUpdateDelay);
+        _updateStatusMessage(DataEntryStrings::Messages::c_LanguageChangedMessage, Game::Timing::c_NoDelay);
+        _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryRequestMessage, Game::Timing::c_ShortStatusUpdateDelay);
         break;
     case DataEntry::StatusCodes::DATA_FETCHING_FINISHED_SAVE_IN_PROGRESS:
-        _updateStatusMessage(DataEntry::Messages::c_LanguageChangedMessage, Game::Timing::c_NoDelay);
-        _updateStatusMessage(DataEntry::Messages::c_DataSaveInProgressMessage, Game::Timing::c_ShortStatusUpdateDelay / 2);
+        _updateStatusMessage(DataEntryStrings::Messages::c_LanguageChangedMessage, Game::Timing::c_NoDelay);
+        _updateStatusMessage(DataEntryStrings::Messages::c_DataSaveInProgressMessage, Game::Timing::c_ShortStatusUpdateDelay / 2);
         Q_EMIT dataSaveInProgress();
         Q_EMIT dataSavingInProgressChanged();
         break;

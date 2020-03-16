@@ -4,6 +4,7 @@
 #include "gamepresenter.h"
 #include "dataentrypresenter.h"
 #include "gamestrings.h"
+#include "dataentrystrings.h"
 #include "../SystemFunctionality/Management/gamefacade.h"
 #include "../SystemFunctionality/Utilities/exceptions.h"
 #include "../SystemFunctionality/ManagementProxies/gameproxy.h"
@@ -552,7 +553,7 @@ QString GamePresenter::getIntroPaneMessage() const
 
 QString GamePresenter::getHelpPaneMessage() const
 {
-    return (m_IsDataEntryHelpMenuActive ? DataEntry::Messages::c_DataEntryHelpMessage : GameStrings::Messages::c_GameHelpMessage);
+    return (m_IsDataEntryHelpMenuActive ? DataEntryStrings::Messages::c_DataEntryHelpMessage : GameStrings::Messages::c_GameHelpMessage);
 }
 
 QString GamePresenter::getHelpPaneToolTip() const
