@@ -96,6 +96,8 @@ namespace DataEntry
                                                             };
 
         // status messages
+        const QString c_FetchingDataMessage                 {    "\n\n\n\nFetching data.\n\nLanguage change disabled.\n\nPlease wait..."                    };
+        const QString c_LanguageChangedMessage              {    "Language changed\n\n"                                                                     };
         const QString c_DataEntryStartMessage               {    "Welcome to data entry"                                                                    };
         const QString c_DataEntrySaveInProgressStartMessage {    "Welcome back to data entry. Please wait, data is currently being saved..."                };
         const QString c_DataEntryResumeMessage              {    "Word pairs entry resumed. There are %1 entries pending to be saved!"                      };

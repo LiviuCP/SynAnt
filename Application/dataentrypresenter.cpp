@@ -184,14 +184,14 @@ void DataEntryPresenter::_onStatusChanged(DataEntry::StatusCodes statusCode)
         Q_EMIT dataSavingInProgressChanged();
         break;
     case DataEntry::StatusCodes::FETCHING_DATA:
-        _updateStatusMessage(Game::Messages::c_FetchingDataMessage, Game::Timing::c_NoDelay);
+        _updateStatusMessage(DataEntry::Messages::c_FetchingDataMessage, Game::Timing::c_NoDelay);
         break;
     case DataEntry::StatusCodes::DATA_FETCHING_FINISHED:
-        _updateStatusMessage(Game::Messages::c_LanguageChangedMessage, Game::Timing::c_NoDelay);
+        _updateStatusMessage(DataEntry::Messages::c_LanguageChangedMessage, Game::Timing::c_NoDelay);
         _updateStatusMessage(DataEntry::Messages::c_DataEntryRequestMessage, Game::Timing::c_ShortStatusUpdateDelay);
         break;
     case DataEntry::StatusCodes::DATA_FETCHING_FINISHED_SAVE_IN_PROGRESS:
-        _updateStatusMessage(Game::Messages::c_LanguageChangedMessage, Game::Timing::c_NoDelay);
+        _updateStatusMessage(DataEntry::Messages::c_LanguageChangedMessage, Game::Timing::c_NoDelay);
         _updateStatusMessage(DataEntry::Messages::c_DataSaveInProgressMessage, Game::Timing::c_ShortStatusUpdateDelay / 2);
         Q_EMIT dataSaveInProgress();
         Q_EMIT dataSavingInProgressChanged();
