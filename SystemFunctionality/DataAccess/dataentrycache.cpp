@@ -6,6 +6,7 @@
 
 #include "dataentrycache.h"
 #include "../Utilities/gameutils.h"
+#include "../Utilities/databaseutils.h"
 
 DataEntryCache::DataEntryCache(DataSource* pDataSource, QString databasePath, QObject *parent)
     : QObject(parent)
@@ -51,7 +52,7 @@ void DataEntryCache::onWriteDataToDbRequested()
 
     if (m_CacheEntries.size() > 0)
     {
-        Q_UNUSED(QSqlDatabase::addDatabase(Game::Database::c_DbDriverName));
+        Q_UNUSED(QSqlDatabase::addDatabase(Database::c_DbDriverName));
 
         // ensure all database related objects are destroyed before the connection is removed
         {
@@ -65,12 +66,12 @@ void DataEntryCache::onWriteDataToDbRequested()
 
                 for (int entry{0}; entry < m_CacheEntries.size(); ++entry)
                 {
-                    query.prepare(Game::Database::c_InsertEntryForLanguageIntoDbQuery);
+                    query.prepare(Database::c_InsertEntryForLanguageIntoDbQuery);
 
-                    query.bindValue(Game::Database::c_FirstWordFieldPlaceholder, m_CacheEntries[entry].firstWord);
-                    query.bindValue(Game::Database::c_SecondWordFieldPlaceholder, m_CacheEntries[entry].secondWord);
-                    query.bindValue(Game::Database::c_AreSynonymsFieldPlaceholder, static_cast<int>(m_CacheEntries[entry].areSynonyms));
-                    query.bindValue(Game::Database::c_LanguageFieldPlaceholder, Game::Database::c_LanguageCodes[m_LanguageIndexes[entry]]);
+                    query.bindValue(Database::c_FirstWordFieldPlaceholder, m_CacheEntries[entry].firstWord);
+                    query.bindValue(Database::c_SecondWordFieldPlaceholder, m_CacheEntries[entry].secondWord);
+                    query.bindValue(Database::c_AreSynonymsFieldPlaceholder, static_cast<int>(m_CacheEntries[entry].areSynonyms));
+                    query.bindValue(Database::c_LanguageFieldPlaceholder, Database::c_LanguageCodes[m_LanguageIndexes[entry]]);
 
                     if (!query.exec())
                     {

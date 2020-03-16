@@ -19,6 +19,7 @@
 #include "../Utilities/statisticsitem.h"
 #include "../Utilities/chronometer.h"
 #include "../Utilities/exceptions.h"
+#include "../Utilities/databaseutils.h"
 
 GameManager* GameManager::s_pGameManager = nullptr;
 
@@ -59,7 +60,7 @@ void GameManager::setEnvironment(const QString &dataDirPath)
 
     if (!m_pDataSource)
     {
-        QString databasePath{dataDirPath + "/" + Game::Database::c_DatabaseName};
+        QString databasePath{dataDirPath + "/" + Database::c_DatabaseName};
 
         _setDatabase(databasePath);
 
@@ -281,18 +282,18 @@ void GameManager::_deallocResources()
 
 void GameManager::_setDatabase(const QString& databasePath)
 {
-    if (QSqlDatabase::isDriverAvailable(Game::Database::c_DbDriverName))
+    if (QSqlDatabase::isDriverAvailable(Database::c_DbDriverName))
     {
-        QSqlDatabase db{QSqlDatabase::addDatabase(Game::Database::c_DbDriverName)};
+        QSqlDatabase db{QSqlDatabase::addDatabase(Database::c_DbDriverName)};
         db.setDatabaseName(databasePath);
 
         if (db.open())
         {
-            if (!db.tables().contains(Game::Database::c_TableName))
+            if (!db.tables().contains(Database::c_TableName))
             {
                 QSqlQuery createTableQuery;
 
-                createTableQuery.prepare(Game::Database::c_CreateTableQuery);
+                createTableQuery.prepare(Database::c_CreateTableQuery);
 
                 if (!createTableQuery.exec())
                 {
@@ -303,23 +304,23 @@ void GameManager::_setDatabase(const QString& databasePath)
             {
                 bool isValidTable{true};
 
-                if (db.record(Game::Database::c_TableName).count() != Game::Misc::c_RequiredNrOfDbTableFields)
+                if (db.record(Database::c_TableName).count() != Game::Misc::c_RequiredNrOfDbTableFields)
                 {
                     isValidTable = false;
                 }
-                else if (db.record(Game::Database::c_TableName).field(0).name() != Game::Database::c_IdFieldName ||
-                         db.record(Game::Database::c_TableName).field(1).name() != Game::Database::c_FirstWordFieldName ||
-                         db.record(Game::Database::c_TableName).field(2).name() != Game::Database::c_SecondWordFieldName ||
-                         db.record(Game::Database::c_TableName).field(3).name() != Game::Database::c_AreSynonymsFieldName ||
-                         db.record(Game::Database::c_TableName).field(4).name() != Game::Database::c_LanguageFieldName)
+                else if (db.record(Database::c_TableName).field(0).name() != Database::c_IdFieldName ||
+                         db.record(Database::c_TableName).field(1).name() != Database::c_FirstWordFieldName ||
+                         db.record(Database::c_TableName).field(2).name() != Database::c_SecondWordFieldName ||
+                         db.record(Database::c_TableName).field(3).name() != Database::c_AreSynonymsFieldName ||
+                         db.record(Database::c_TableName).field(4).name() != Database::c_LanguageFieldName)
                 {
                     isValidTable = false;
                 }
-                else if (db.record(Game::Database::c_TableName).field(0).type() != QVariant::Int ||
-                         db.record(Game::Database::c_TableName).field(1).type() != QVariant::String ||
-                         db.record(Game::Database::c_TableName).field(2).type() != QVariant::String ||
-                         db.record(Game::Database::c_TableName).field(3).type() != QVariant::Int ||
-                         db.record(Game::Database::c_TableName).field(4).type() != QVariant::String)
+                else if (db.record(Database::c_TableName).field(0).type() != QVariant::Int ||
+                         db.record(Database::c_TableName).field(1).type() != QVariant::String ||
+                         db.record(Database::c_TableName).field(2).type() != QVariant::String ||
+                         db.record(Database::c_TableName).field(3).type() != QVariant::Int ||
+                         db.record(Database::c_TableName).field(4).type() != QVariant::String)
                 {
                     isValidTable = false;
                 }

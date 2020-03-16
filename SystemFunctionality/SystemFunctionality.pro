@@ -80,6 +80,7 @@ HEADERS += \
         Utilities/exceptions.h \
         Utilities/gameutils.h \
         Utilities/dataentryutils.h \
+        Utilities/databaseutils.h \
         systemfunctionality.h \
         systemfunctionality_global.h
 
