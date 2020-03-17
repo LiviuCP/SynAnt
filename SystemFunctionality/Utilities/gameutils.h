@@ -88,18 +88,6 @@ namespace Game
         {Game::Levels::LEVEL_HARD,   12}
     };
 
-    namespace Timing
-    {
-        static constexpr int c_PaneSwitchingDelay{350};
-        static constexpr int c_LoadDataThreadDelay{1000};
-        static constexpr int c_WriteDataThreadDelay{1000};
-        static constexpr int c_ResetCacheDelay{250};
-        static constexpr int c_ShortStatusUpdateDelay{1000};
-        static constexpr int c_LongStatusUpdateDelay{2000};
-        static constexpr int c_GameQuitDelay{200};
-        static constexpr int c_NoDelay{-1};
-    }
-
     namespace Constraints
     {
         static constexpr int c_MinWordSize{5};

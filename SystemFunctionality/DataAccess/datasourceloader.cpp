@@ -9,6 +9,8 @@
 #include "../Utilities/gameutils.h"
 #include "../Utilities/databaseutils.h"
 
+static constexpr int c_LoadDataThreadDelay{1000};
+
 DataSourceLoader::DataSourceLoader(DataSource* pDataSource, QString databasePath, QObject *parent)
     : QObject(parent)
     , m_pDataSource{pDataSource}
@@ -56,7 +58,7 @@ void DataSourceLoader::onLoadDataFromDbForPrimaryLanguageRequested(int languageI
                 }
 
                 // for sync purposes only
-                QThread::msleep(Game::Timing::c_LoadDataThreadDelay);
+                QThread::msleep(c_LoadDataThreadDelay);
             }
             else
             {
@@ -92,7 +94,7 @@ void DataSourceLoader::onLoadDataFromDbForSecondaryLanguageRequested(int languag
             }
 
             // for sync purposes only
-            QThread::msleep(Game::Timing::c_LoadDataThreadDelay);
+            QThread::msleep(c_LoadDataThreadDelay);
         }
         else
         {

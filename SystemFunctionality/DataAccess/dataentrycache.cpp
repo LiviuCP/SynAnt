@@ -5,8 +5,10 @@
 #include <QFile>
 
 #include "dataentrycache.h"
-#include "../Utilities/gameutils.h"
 #include "../Utilities/databaseutils.h"
+
+static constexpr int c_WriteDataThreadDelay{1000};
+static constexpr int c_ResetCacheDelay{250};
 
 DataEntryCache::DataEntryCache(DataSource* pDataSource, QString databasePath, QObject *parent)
     : QObject(parent)
@@ -41,7 +43,7 @@ void DataEntryCache::onResetCacheRequested()
     m_LanguageIndexes.clear();
 
     // for sync purposes only
-    QThread::msleep(Game::Timing::c_ResetCacheDelay);
+    QThread::msleep(c_ResetCacheDelay);
 
     Q_EMIT cacheReset();
 }
@@ -87,7 +89,7 @@ void DataEntryCache::onWriteDataToDbRequested()
                 _moveCachedEntriesToDataSource(nrOfPrimaryLanguageSavedEntries);
 
                 // for sync purposes only
-                QThread::msleep(Game::Timing::c_WriteDataThreadDelay);
+                QThread::msleep(c_WriteDataThreadDelay);
 
                 Q_EMIT writeDataToDbFinished(nrOfPrimaryLanguageSavedEntries, totalNrOfSavedEntries);
             }
