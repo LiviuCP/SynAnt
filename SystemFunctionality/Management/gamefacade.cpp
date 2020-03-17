@@ -8,6 +8,13 @@
 #include "../Utilities/statisticsitem.h"
 #include "../Utilities/chronometer.h"
 
+const QMap<Game::Levels, int> c_TimeLimits
+{
+    {Game::Levels::LEVEL_EASY, 30},
+    {Game::Levels::LEVEL_MEDIUM, 120},
+    {Game::Levels::LEVEL_HARD, 300}
+};
+
 GameFacade::GameFacade(QObject *parent)
     : QObject(parent)
     , m_pGameFunctionalityProxy{new GameFunctionalityProxy{this}}
@@ -806,7 +813,7 @@ void GameFacade::_pushCurrentGameLevel()
 {
     m_pWordMixer->setGameLevel(m_GameLevel);
     m_pStatisticsItem->setGameLevel(m_GameLevel);
-    m_pChronometer->setTotalCountdownTime(Game::c_TimeLimits[m_GameLevel]);
+    m_pChronometer->setTotalCountdownTime(c_TimeLimits[m_GameLevel]);
 }
 
 void GameFacade::_addPieceToInputWord(Game::InputWordNumber inputWordNumber, int wordPieceIndex)

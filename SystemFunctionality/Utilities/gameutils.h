@@ -88,13 +88,6 @@ namespace Game
         {Game::Levels::LEVEL_HARD,   12}
     };
 
-    const QMap<Game::Levels, int> c_TimeLimits
-    {
-        {Game::Levels::LEVEL_EASY, 30},
-        {Game::Levels::LEVEL_MEDIUM, 120},
-        {Game::Levels::LEVEL_HARD, 300}
-    };
-
     namespace Timing
     {
         static constexpr int c_PaneSwitchingDelay{350};
