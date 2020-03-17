@@ -4,8 +4,6 @@
 #include <QObject>
 #include <QTimer>
 
-#include "../SystemFunctionality/Utilities/dataentryutils.h"
-
 class DataEntryFacade;
 class DataProxy;
 
@@ -60,7 +58,7 @@ signals:
     Q_SIGNAL void dataEntryPaneStatusMessageChanged();
 
 private slots:
-    void _onStatusChanged(DataEntry::StatusCodes statusCode);
+    void _onStatusChanged();
 
 private:
     void _updateStatusMessage(const QString& message, int delay);

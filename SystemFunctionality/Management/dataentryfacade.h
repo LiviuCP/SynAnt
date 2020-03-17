@@ -12,14 +12,39 @@
 
 #include <QObject>
 
-#include "../Utilities/dataentryutils.h"
-
 class DataEntryProxy;
 
 class DataEntryFacade : public QObject
 {
     Q_OBJECT
 public:
+    enum class StatusCodes
+    {
+        NO_DATA_ENTRY_REQUESTED,
+        DATA_ENTRY_STARTED,
+        DATA_ENTRY_STARTED_SAVE_IN_PROGRESS,
+        DATA_ENTRY_RESUMED,
+        DATA_ENTRY_STOPPED,
+        DATA_ENTRY_STOPPED_SAVE_IN_PROGRESS,
+        DATA_ENTRY_DISABLED,
+        DATA_ENTRY_ADD_SUCCESS,
+        ADD_FAILED_LESS_MIN_CHARS_PER_WORD,
+        ADD_FAILED_LESS_MIN_TOTAL_PAIR_CHARS,
+        ADD_FAILED_MORE_MAX_TOTAL_PAIR_CHARS,
+        ADD_FAILED_INVALID_CHARACTERS,
+        ADD_FAILED_PAIR_ALREADY_EXISTS,
+        ADD_FAILED_IDENTICAL_WORDS,
+        PAIR_ALREADY_ADDED,
+        RESET_CACHE_REQUESTED,
+        CACHE_RESET,
+        FETCHING_DATA,
+        DATA_FETCHING_FINISHED,
+        DATA_FETCHING_FINISHED_SAVE_IN_PROGRESS,
+        DATA_SAVE_IN_PROGRESS,
+        DATA_SUCCESSFULLY_SAVED,
+        StatusCodesCount
+    };
+
     explicit DataEntryFacade(QObject *parent = nullptr);
 
     void startDataEntry();
@@ -34,6 +59,7 @@ public:
     int getLastSavedTotalNrOfPairs() const;
     int getLastNrOfPairsSavedToPrimaryLanguage() const;
     int getCurrentLanguageIndex() const;
+    DataEntryFacade::StatusCodes getStatusCode() const;
 
     bool isDataEntryAllowed() const;
     bool isAddingToCacheAllowed() const;
@@ -50,7 +76,7 @@ signals:
     Q_SIGNAL void resetCacheAllowedChanged();
     Q_SIGNAL void saveNewPairsToDbAllowedChanged();
     Q_SIGNAL void languageChanged();
-    Q_SIGNAL void statusChanged(DataEntry::StatusCodes status);
+    Q_SIGNAL void statusChanged();
     Q_SIGNAL void fetchingInProgressChanged();
 
 private slots:
@@ -72,7 +98,7 @@ private:
 
     DataEntryProxy* m_pDataEntryProxy;
 
-    DataEntry::StatusCodes m_CurrentStatusCode;
+    DataEntryFacade::StatusCodes m_CurrentStatusCode;
 
     bool m_IsDataEntryAllowed;
     bool m_IsAddingToCacheAllowed;

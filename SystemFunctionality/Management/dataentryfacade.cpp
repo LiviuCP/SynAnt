@@ -1,20 +1,22 @@
+#include <QMap>
+
 #include "dataentryfacade.h"
 #include "../ManagementProxies/dataentryproxy.h"
 
-static const QMap<QString, DataEntry::StatusCodes> c_ValidationToStatusCodes
+static const QMap<QString, DataEntryFacade::StatusCodes> c_ValidationToStatusCodes
 {
-    {"LESS_MIN_CHARS_PER_WORD", DataEntry::StatusCodes::ADD_FAILED_LESS_MIN_CHARS_PER_WORD},
-    {"LESS_MIN_TOTAL_PAIR_CHARS", DataEntry::StatusCodes::ADD_FAILED_LESS_MIN_TOTAL_PAIR_CHARS},
-    {"MORE_MAX_TOTAL_PAIR_CHARS", DataEntry::StatusCodes::ADD_FAILED_MORE_MAX_TOTAL_PAIR_CHARS},
-    {"INVALID_CHARACTERS", DataEntry::StatusCodes::ADD_FAILED_INVALID_CHARACTERS},
-    {"IDENTICAL_WORDS", DataEntry::StatusCodes::ADD_FAILED_IDENTICAL_WORDS},
-    {"PAIR_ALREADY_EXISTS", DataEntry::StatusCodes::ADD_FAILED_PAIR_ALREADY_EXISTS}
+    {"LESS_MIN_CHARS_PER_WORD", DataEntryFacade::StatusCodes::ADD_FAILED_LESS_MIN_CHARS_PER_WORD},
+    {"LESS_MIN_TOTAL_PAIR_CHARS", DataEntryFacade::StatusCodes::ADD_FAILED_LESS_MIN_TOTAL_PAIR_CHARS},
+    {"MORE_MAX_TOTAL_PAIR_CHARS", DataEntryFacade::StatusCodes::ADD_FAILED_MORE_MAX_TOTAL_PAIR_CHARS},
+    {"INVALID_CHARACTERS", DataEntryFacade::StatusCodes::ADD_FAILED_INVALID_CHARACTERS},
+    {"IDENTICAL_WORDS", DataEntryFacade::StatusCodes::ADD_FAILED_IDENTICAL_WORDS},
+    {"PAIR_ALREADY_EXISTS", DataEntryFacade::StatusCodes::ADD_FAILED_PAIR_ALREADY_EXISTS}
 };
 
 DataEntryFacade::DataEntryFacade(QObject *parent)
     : QObject(parent)
     , m_pDataEntryProxy{new DataEntryProxy{this}}
-    , m_CurrentStatusCode{DataEntry::StatusCodes::NO_DATA_ENTRY_REQUESTED}
+    , m_CurrentStatusCode{DataEntryFacade::StatusCodes::NO_DATA_ENTRY_REQUESTED}
     , m_IsDataEntryAllowed{false}
     , m_IsAddingToCacheAllowed{true}
     , m_IsResettingCacheAllowed{false}
@@ -46,22 +48,25 @@ DataEntryFacade::DataEntryFacade(QObject *parent)
 
 void DataEntryFacade::startDataEntry()
 {
-    Q_EMIT statusChanged(m_CurrentStatusCode = m_IsSavingInProgress ? DataEntry::StatusCodes::DATA_ENTRY_STARTED_SAVE_IN_PROGRESS : DataEntry::StatusCodes::DATA_ENTRY_STARTED);
+    m_CurrentStatusCode = m_IsSavingInProgress ? DataEntryFacade::StatusCodes::DATA_ENTRY_STARTED_SAVE_IN_PROGRESS : DataEntryFacade::StatusCodes::DATA_ENTRY_STARTED;
+    Q_EMIT statusChanged();
 }
 
 void DataEntryFacade::resumeDataEntry()
 {
     if (!m_IsSavingInProgress)
     {
-        Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::DATA_ENTRY_RESUMED);
+        m_CurrentStatusCode = DataEntryFacade::StatusCodes::DATA_ENTRY_RESUMED;
+        Q_EMIT statusChanged();
     }
 }
 
 void DataEntryFacade::stopDataEntry()
 {
-    Q_EMIT statusChanged(m_CurrentStatusCode = m_IsSavingInProgress ? DataEntry::StatusCodes::DATA_ENTRY_STOPPED_SAVE_IN_PROGRESS
-                                                                    : isDataFetchingInProgress() ? DataEntry::StatusCodes::DATA_ENTRY_DISABLED :
-                                                                                                   DataEntry::StatusCodes::DATA_ENTRY_STOPPED);
+    m_CurrentStatusCode = m_IsSavingInProgress ? DataEntryFacade::StatusCodes::DATA_ENTRY_STOPPED_SAVE_IN_PROGRESS
+                                                                        : isDataFetchingInProgress() ? DataEntryFacade::StatusCodes::DATA_ENTRY_DISABLED :
+                                                                                                       DataEntryFacade::StatusCodes::DATA_ENTRY_STOPPED;
+    Q_EMIT statusChanged();
 }
 
 void DataEntryFacade::requestAddPairToCache(const QString &firstWord, const QString &secondWord, bool areSynonyms)
@@ -84,7 +89,8 @@ void DataEntryFacade::requestSaveDataToDb()
         if (!isDataFetchingInProgress())
         {
             m_IsSavingInProgress = true;
-            Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::DATA_SAVE_IN_PROGRESS);
+            m_CurrentStatusCode = DataEntryFacade::StatusCodes::DATA_SAVE_IN_PROGRESS;
+            Q_EMIT statusChanged();
 
             m_pDataEntryProxy->saveDataToDb();
         }
@@ -99,7 +105,8 @@ void DataEntryFacade::requestCacheReset()
 {
     if (m_IsDataEntryAllowed && m_IsResettingCacheAllowed)
     {
-        Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::RESET_CACHE_REQUESTED);
+        m_CurrentStatusCode = DataEntryFacade::StatusCodes::RESET_CACHE_REQUESTED;
+        Q_EMIT statusChanged();
 
         _blockSaveToDb();
         _blockCacheReset();
@@ -125,6 +132,11 @@ int DataEntryFacade::getLastNrOfPairsSavedToPrimaryLanguage() const
 int DataEntryFacade::getCurrentLanguageIndex() const
 {
     return m_CurrentLanguageIndex;
+}
+
+DataEntryFacade::StatusCodes DataEntryFacade::getStatusCode() const
+{
+    return m_CurrentStatusCode;
 }
 
 bool DataEntryFacade::isDataEntryAllowed() const
@@ -167,7 +179,8 @@ void DataEntryFacade::setLanguage(int languageIndex)
 
         Q_EMIT languageChanged();
         Q_EMIT fetchingInProgressChanged();
-        Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::FETCHING_DATA);
+        m_CurrentStatusCode = DataEntryFacade::StatusCodes::FETCHING_DATA;
+        Q_EMIT statusChanged();
 
         m_pDataEntryProxy->fetchDataForSecondaryLanguage(languageIndex);
     }
@@ -184,12 +197,14 @@ void DataEntryFacade::_onFetchDataForDataEntryLanguageFinished(bool success)
         {
             m_IsSavingDeferred = false;
             m_IsSavingInProgress = true;
-            Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::DATA_FETCHING_FINISHED_SAVE_IN_PROGRESS);
+            m_CurrentStatusCode = DataEntryFacade::StatusCodes::DATA_FETCHING_FINISHED_SAVE_IN_PROGRESS;
+            Q_EMIT statusChanged();
             m_pDataEntryProxy->saveDataToDb();
         }
         else
         {
-            Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::DATA_FETCHING_FINISHED);
+            m_CurrentStatusCode = DataEntryFacade::StatusCodes::DATA_FETCHING_FINISHED;
+            Q_EMIT statusChanged();
         }
     }
 }
@@ -209,7 +224,8 @@ void DataEntryFacade::_onNewWordsPairAddedToCache()
     _allowCacheReset();
     _allowSaveToDb();
 
-    Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::DATA_ENTRY_ADD_SUCCESS);
+    m_CurrentStatusCode = DataEntryFacade::StatusCodes::DATA_ENTRY_ADD_SUCCESS;
+    Q_EMIT statusChanged();
 }
 
 void DataEntryFacade::_onAddInvalidWordsPairRequested()
@@ -220,7 +236,8 @@ void DataEntryFacade::_onAddInvalidWordsPairRequested()
     // restore add to cache capability so the user can re-add the entry after modifying the words
     _allowAddToCache();
 
-    Q_EMIT statusChanged(c_ValidationToStatusCodes[validationCode]);
+    m_CurrentStatusCode = c_ValidationToStatusCodes[validationCode];
+    Q_EMIT statusChanged();
 }
 
 void DataEntryFacade::_onWordsPairAlreadyContainedInCache()
@@ -229,13 +246,15 @@ void DataEntryFacade::_onWordsPairAlreadyContainedInCache()
     _allowCacheReset();
     _allowSaveToDb();
 
-    Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::PAIR_ALREADY_ADDED);
+    m_CurrentStatusCode = DataEntryFacade::StatusCodes::PAIR_ALREADY_ADDED;
+    Q_EMIT statusChanged();
 }
 
 void DataEntryFacade::_onCacheReset()
 {
     _allowAddToCache();
-    Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::CACHE_RESET);
+    m_CurrentStatusCode = DataEntryFacade::StatusCodes::CACHE_RESET;
+    Q_EMIT statusChanged();
 }
 
 void DataEntryFacade::_onWriteDataToDbFinished()
@@ -243,7 +262,8 @@ void DataEntryFacade::_onWriteDataToDbFinished()
     _allowAddToCache();
     m_IsSavingInProgress = false;
 
-    Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::DATA_SUCCESSFULLY_SAVED);
+    m_CurrentStatusCode = DataEntryFacade::StatusCodes::DATA_SUCCESSFULLY_SAVED;
+    Q_EMIT statusChanged();
 }
 
 void DataEntryFacade::_allowAddToCache()

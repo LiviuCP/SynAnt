@@ -10,7 +10,6 @@
 #include <QObject>
 
 #include "datasource.h"
-//#include "../Utilities/dataentryutils.h"
 
 class DataEntryValidator : public QObject
 {

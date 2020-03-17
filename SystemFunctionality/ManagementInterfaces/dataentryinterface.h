@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QString>
-#include "../Utilities/dataentryutils.h"
 
 class IDataEntry
 {

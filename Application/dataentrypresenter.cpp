@@ -3,17 +3,16 @@
 #include "timing.h"
 #include "../SystemFunctionality/Management/dataentryfacade.h"
 #include "../SystemFunctionality/ManagementProxies/dataproxy.h"
-#include "../SystemFunctionality/Utilities/dataentryutils.h"
 #include "../SystemFunctionality/Utilities/gameutils.h"
 
-static const QMap<DataEntry::StatusCodes, QString> c_InvalidPairEntryStatusMessages
+static const QMap<DataEntryFacade::StatusCodes, QString> c_InvalidPairEntryStatusMessages
 {
-    {DataEntry::StatusCodes::ADD_FAILED_LESS_MIN_CHARS_PER_WORD, DataEntryStrings::Messages::c_WordHasLessThanMinCharacters},
-    {DataEntry::StatusCodes::ADD_FAILED_LESS_MIN_TOTAL_PAIR_CHARS, DataEntryStrings::Messages::c_PairHasLessThanMinCharacters},
-    {DataEntry::StatusCodes::ADD_FAILED_MORE_MAX_TOTAL_PAIR_CHARS, DataEntryStrings::Messages::c_PairHasMoreThanMaxCharacters},
-    {DataEntry::StatusCodes::ADD_FAILED_INVALID_CHARACTERS, DataEntryStrings::Messages::c_InvalidCharactersEntered},
-    {DataEntry::StatusCodes::ADD_FAILED_IDENTICAL_WORDS, DataEntryStrings::Messages::c_PairHasIdenticalWords},
-    {DataEntry::StatusCodes::ADD_FAILED_PAIR_ALREADY_EXISTS, DataEntryStrings::Messages::c_PairAlreadyExists}
+    {DataEntryFacade::StatusCodes::ADD_FAILED_LESS_MIN_CHARS_PER_WORD, DataEntryStrings::Messages::c_WordHasLessThanMinCharacters},
+    {DataEntryFacade::StatusCodes::ADD_FAILED_LESS_MIN_TOTAL_PAIR_CHARS, DataEntryStrings::Messages::c_PairHasLessThanMinCharacters},
+    {DataEntryFacade::StatusCodes::ADD_FAILED_MORE_MAX_TOTAL_PAIR_CHARS, DataEntryStrings::Messages::c_PairHasMoreThanMaxCharacters},
+    {DataEntryFacade::StatusCodes::ADD_FAILED_INVALID_CHARACTERS, DataEntryStrings::Messages::c_InvalidCharactersEntered},
+    {DataEntryFacade::StatusCodes::ADD_FAILED_IDENTICAL_WORDS, DataEntryStrings::Messages::c_PairHasIdenticalWords},
+    {DataEntryFacade::StatusCodes::ADD_FAILED_PAIR_ALREADY_EXISTS, DataEntryStrings::Messages::c_PairAlreadyExists}
 };
 
 DataEntryPresenter::DataEntryPresenter(QObject *parent)
@@ -121,8 +120,9 @@ QString DataEntryPresenter::getDataEntryPaneStatusMessage() const
     return m_DataEntryPaneStatusMessage;
 }
 
-void DataEntryPresenter::_onStatusChanged(DataEntry::StatusCodes statusCode)
+void DataEntryPresenter::_onStatusChanged()
 {
+    DataEntryFacade::StatusCodes statusCode{m_pDataEntryFacade->getStatusCode()};
     if (m_pStatusUpdateTimer->isActive())
     {
         m_pStatusUpdateTimer->stop();
@@ -130,75 +130,75 @@ void DataEntryPresenter::_onStatusChanged(DataEntry::StatusCodes statusCode)
 
     switch (statusCode)
     {
-    case DataEntry::StatusCodes::DATA_ENTRY_STARTED:
+    case DataEntryFacade::StatusCodes::DATA_ENTRY_STARTED:
         _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryStartMessage, Timing::c_NoDelay);
         _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryRequestMessage, Timing::c_ShortStatusUpdateDelay);
         break;
-    case DataEntry::StatusCodes::DATA_ENTRY_STARTED_SAVE_IN_PROGRESS:
+    case DataEntryFacade::StatusCodes::DATA_ENTRY_STARTED_SAVE_IN_PROGRESS:
         _updateStatusMessage(DataEntryStrings::Messages::c_DataEntrySaveInProgressStartMessage, Timing::c_NoDelay);
         break;
-    case DataEntry::StatusCodes::DATA_ENTRY_RESUMED:
+    case DataEntryFacade::StatusCodes::DATA_ENTRY_RESUMED:
         _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryResumeMessage.arg(m_pDataEntryFacade->getCurrentNrOfAddedPairs()), Timing::c_NoDelay);
         _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryRequestMessage, Timing::c_ShortStatusUpdateDelay);
         break;
-    case DataEntry::StatusCodes::DATA_ENTRY_STOPPED:
+    case DataEntryFacade::StatusCodes::DATA_ENTRY_STOPPED:
         _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryStopMessage, Timing::c_NoDelay);
         Q_EMIT dataEntryStopped();
         break;
-    case DataEntry::StatusCodes::DATA_ENTRY_STOPPED_SAVE_IN_PROGRESS:
+    case DataEntryFacade::StatusCodes::DATA_ENTRY_STOPPED_SAVE_IN_PROGRESS:
         _updateStatusMessage(DataEntryStrings::Messages::c_DataEntrySaveInProgressStopMessage, Timing::c_NoDelay);
         Q_EMIT dataEntryStopped();
         break;
-    case DataEntry::StatusCodes::DATA_ENTRY_DISABLED:
+    case DataEntryFacade::StatusCodes::DATA_ENTRY_DISABLED:
         _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryDisabledMessage, Timing::c_NoDelay);
         Q_EMIT dataEntryStopped();
         break;
-    case DataEntry::StatusCodes::DATA_ENTRY_ADD_SUCCESS:
+    case DataEntryFacade::StatusCodes::DATA_ENTRY_ADD_SUCCESS:
         Q_EMIT dataEntryAddSucceeded();
         _updateStatusMessage(DataEntryStrings::Messages::c_DataEntrySuccessMessage.arg(m_pDataEntryFacade->getCurrentNrOfAddedPairs()), Timing::c_NoDelay);
         _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryRequestMessage, Timing::c_ShortStatusUpdateDelay);
         break;
-    case DataEntry::StatusCodes::ADD_FAILED_LESS_MIN_CHARS_PER_WORD:
-    case DataEntry::StatusCodes::ADD_FAILED_LESS_MIN_TOTAL_PAIR_CHARS:
-    case DataEntry::StatusCodes::ADD_FAILED_MORE_MAX_TOTAL_PAIR_CHARS:
-    case DataEntry::StatusCodes::ADD_FAILED_INVALID_CHARACTERS:
-    case DataEntry::StatusCodes::ADD_FAILED_IDENTICAL_WORDS:
-    case DataEntry::StatusCodes::ADD_FAILED_PAIR_ALREADY_EXISTS:
+    case DataEntryFacade::StatusCodes::ADD_FAILED_LESS_MIN_CHARS_PER_WORD:
+    case DataEntryFacade::StatusCodes::ADD_FAILED_LESS_MIN_TOTAL_PAIR_CHARS:
+    case DataEntryFacade::StatusCodes::ADD_FAILED_MORE_MAX_TOTAL_PAIR_CHARS:
+    case DataEntryFacade::StatusCodes::ADD_FAILED_INVALID_CHARACTERS:
+    case DataEntryFacade::StatusCodes::ADD_FAILED_IDENTICAL_WORDS:
+    case DataEntryFacade::StatusCodes::ADD_FAILED_PAIR_ALREADY_EXISTS:
         Q_ASSERT(c_InvalidPairEntryStatusMessages.contains(statusCode));
         _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryInvalidPairMessage.arg(c_InvalidPairEntryStatusMessages[statusCode]),
                              Timing::c_NoDelay);
         _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryRequestMessage, Timing::c_ShortStatusUpdateDelay);
         Q_EMIT dataEntryAddInvalid();
         break;
-    case DataEntry::StatusCodes::PAIR_ALREADY_ADDED:
+    case DataEntryFacade::StatusCodes::PAIR_ALREADY_ADDED:
         _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryPairAlreadyAddedMessage, Timing::c_NoDelay);
         _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryRequestMessage, Timing::c_ShortStatusUpdateDelay);
         break;
-    case DataEntry::StatusCodes::RESET_CACHE_REQUESTED:
+    case DataEntryFacade::StatusCodes::RESET_CACHE_REQUESTED:
         _updateStatusMessage(DataEntryStrings::Messages::c_DataCacheResetInProgressMessage, Timing::c_NoDelay);
         break;
-    case DataEntry::StatusCodes::CACHE_RESET:
+    case DataEntryFacade::StatusCodes::CACHE_RESET:
         _updateStatusMessage(DataEntryStrings::Messages::c_DataCacheResetMessage, Timing::c_NoDelay);
         _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryRequestMessage, Timing::c_ShortStatusUpdateDelay);
         break;
-    case DataEntry::StatusCodes::DATA_SAVE_IN_PROGRESS:
+    case DataEntryFacade::StatusCodes::DATA_SAVE_IN_PROGRESS:
         _updateStatusMessage(DataEntryStrings::Messages::c_DataSaveInProgressMessage, Timing::c_NoDelay);
         Q_EMIT dataSaveInProgress();
         Q_EMIT dataSavingInProgressChanged();
         break;
-    case DataEntry::StatusCodes::DATA_SUCCESSFULLY_SAVED:
+    case DataEntryFacade::StatusCodes::DATA_SUCCESSFULLY_SAVED:
         _updateStatusMessage(DataEntryStrings::Messages::c_DataSuccessfullySavedMessage.arg(m_pDataEntryFacade->getLastSavedTotalNrOfPairs()).arg(m_pDataEntryFacade->getLastNrOfPairsSavedToPrimaryLanguage()), Timing::c_NoDelay);
         _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryRequestMessage, Timing::c_ShortStatusUpdateDelay);
         Q_EMIT dataSavingInProgressChanged();
         break;
-    case DataEntry::StatusCodes::FETCHING_DATA:
+    case DataEntryFacade::StatusCodes::FETCHING_DATA:
         _updateStatusMessage(DataEntryStrings::Messages::c_FetchingDataMessage, Timing::c_NoDelay);
         break;
-    case DataEntry::StatusCodes::DATA_FETCHING_FINISHED:
+    case DataEntryFacade::StatusCodes::DATA_FETCHING_FINISHED:
         _updateStatusMessage(DataEntryStrings::Messages::c_LanguageChangedMessage, Timing::c_NoDelay);
         _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryRequestMessage, Timing::c_ShortStatusUpdateDelay);
         break;
-    case DataEntry::StatusCodes::DATA_FETCHING_FINISHED_SAVE_IN_PROGRESS:
+    case DataEntryFacade::StatusCodes::DATA_FETCHING_FINISHED_SAVE_IN_PROGRESS:
         _updateStatusMessage(DataEntryStrings::Messages::c_LanguageChangedMessage, Timing::c_NoDelay);
         _updateStatusMessage(DataEntryStrings::Messages::c_DataSaveInProgressMessage, Timing::c_ShortStatusUpdateDelay / 2);
         Q_EMIT dataSaveInProgress();

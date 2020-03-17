@@ -33,7 +33,6 @@
 #include "../ManagementInterfaces/dataentryinterface.h"
 #include "../ManagementInterfaces/gameinterface.h"
 #include "../ManagementInterfaces/datainterface.h"
-#include "../Utilities/dataentryutils.h"
 
 class GameFacade;
 class DataEntryFacade;
