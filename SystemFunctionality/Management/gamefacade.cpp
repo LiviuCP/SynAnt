@@ -21,7 +21,7 @@ GameFacade::GameFacade(QObject *parent)
     , m_GameLevel{Game::Levels::LEVEL_MEDIUM}
     , m_CurrentLanguageIndex{-1}
     , m_PreviousLanguageIndex{-1}
-    , m_CurrentStatusCode{Game::StatusCodes::NO_LANGUAGE_SET}
+    , m_CurrentStatusCode{GameFacade::StatusCodes::NO_LANGUAGE_SET}
     , m_IsConnectedToDataSource{false}
     , m_IsDataAvailable{false}
     , m_IsGameStarted{false}
@@ -88,9 +88,9 @@ void GameFacade::init()
 
     _pushCurrentGameLevel();
 
-    if (m_CurrentStatusCode == Game::StatusCodes::NO_LANGUAGE_SET)
+    if (m_CurrentStatusCode == GameFacade::StatusCodes::NO_LANGUAGE_SET)
     {
-        Q_EMIT statusChanged(m_CurrentStatusCode);
+        Q_EMIT statusChanged();
     }
     else
     {
@@ -111,7 +111,8 @@ void GameFacade::startGame()
             m_pChronometer->start();
         }
 
-        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::GAME_STARTED);
+        m_CurrentStatusCode = GameFacade::StatusCodes::GAME_STARTED;
+        Q_EMIT statusChanged();
 
         m_IsGameStarted = true;
     }
@@ -127,8 +128,9 @@ void GameFacade::resumeGame()
         m_pChronometer->resume();
     }
 
-    Q_EMIT statusChanged(m_CurrentStatusCode = m_pInputBuilder->isInputComplete() ? Game::StatusCodes::GAME_RESUMED_COMPLETE_INPUT
-                                                                                  : Game::StatusCodes::GAME_RESUMED_INCOMPLETE_INPUT);
+    m_CurrentStatusCode = m_pInputBuilder->isInputComplete() ? GameFacade::StatusCodes::GAME_RESUMED_COMPLETE_INPUT
+                                                             : GameFacade::StatusCodes::GAME_RESUMED_INCOMPLETE_INPUT;
+    Q_EMIT statusChanged();
 }
 
 void GameFacade::pauseGame()
@@ -141,13 +143,15 @@ void GameFacade::pauseGame()
         m_pChronometer->pause();
     }
 
-    Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::GAME_PAUSED);
+    m_CurrentStatusCode = GameFacade::StatusCodes::GAME_PAUSED;
+    Q_EMIT statusChanged();
 }
 
 void GameFacade::quitGame()
 {
     Q_ASSERT(m_IsGameStarted);
-    Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::GAME_STOPPED);
+    m_CurrentStatusCode = GameFacade::StatusCodes::GAME_STOPPED;
+    Q_EMIT statusChanged();
 }
 
 void GameFacade::setGameLevel(Game::Levels level)
@@ -167,7 +171,8 @@ void GameFacade::setGameLevel(Game::Levels level)
 
         m_pGameFunctionalityProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
 
-        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::LEVEL_CHANGED);
+        m_CurrentStatusCode = GameFacade::StatusCodes::LEVEL_CHANGED;
+        Q_EMIT statusChanged();
 
         // the chronometer should always run in main pane if enabled, so start it again once level params have been changed
         if (m_pChronometer->isEnabled())
@@ -194,7 +199,8 @@ void GameFacade::setLanguage(int languageIndex, bool revertLanguageWhenDataUnava
 
         Q_EMIT languageChanged();
         Q_EMIT fetchingInProgressChanged();
-        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::FETCHING_DATA);
+        m_CurrentStatusCode = GameFacade::StatusCodes::FETCHING_DATA;
+        Q_EMIT statusChanged();
 
         m_IsDataAvailable = false;
 
@@ -232,7 +238,8 @@ void GameFacade::enablePersistentMode()
         m_IsPersistentIndexModeEnabled = true;
 
         Q_EMIT persistentIndexModeEnabledChanged();
-        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::PERSISTENT_MODE_ENTERED);
+        m_CurrentStatusCode = GameFacade::StatusCodes::PERSISTENT_MODE_ENTERED;
+        Q_EMIT statusChanged();
     }
 }
 
@@ -247,7 +254,8 @@ void GameFacade::disablePersistentMode()
         m_pInputBuilder->clearPersistentPiecesRemovalIndexes();
 
         Q_EMIT persistentIndexModeEnabledChanged();
-        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::PERSISTENT_MODE_EXITED);
+        m_CurrentStatusCode = GameFacade::StatusCodes::PERSISTENT_MODE_EXITED;
+        Q_EMIT statusChanged();
     }
 }
 
@@ -389,7 +397,8 @@ void GameFacade::addPieceToInputWord(Game::InputWordNumber inputWordNumber, int 
     }
     else
     {
-        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::PERSISTENT_INDEX_REQUIRED);
+        m_CurrentStatusCode = GameFacade::StatusCodes::PERSISTENT_INDEX_REQUIRED;
+        Q_EMIT statusChanged();
     }
 }
 
@@ -399,12 +408,14 @@ void GameFacade::removePiecesFromInputWord(Game::InputWordNumber inputWordNumber
     {
         if (m_pInputBuilder->removePiecesFromInputWord(inputWordNumber, inputRangeStart))
         {
-            Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::PIECES_REMOVED);
+            m_CurrentStatusCode = GameFacade::StatusCodes::PIECES_REMOVED;
+            Q_EMIT statusChanged();
         }
     }
     else
     {
-        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::PERSISTENT_INDEX_REQUIRED);
+        m_CurrentStatusCode = GameFacade::StatusCodes::PERSISTENT_INDEX_REQUIRED;
+        Q_EMIT statusChanged();
     }
 }
 
@@ -412,7 +423,8 @@ void GameFacade::clearInputWord(Game::InputWordNumber inputWordNumber)
 {
     if (m_pInputBuilder->removePiecesFromInputWord(inputWordNumber, 0))
     {
-        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::PIECES_REMOVED);
+        m_CurrentStatusCode = GameFacade::StatusCodes::PIECES_REMOVED;
+        Q_EMIT statusChanged();
     }
 }
 
@@ -420,7 +432,8 @@ void GameFacade::clearInput()
 {
     if (m_pInputBuilder->clearInput())
     {
-        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::USER_INPUT_CLEARED);
+        m_CurrentStatusCode = GameFacade::StatusCodes::USER_INPUT_CLEARED;
+        Q_EMIT statusChanged();
     }
 }
 
@@ -444,7 +457,8 @@ void GameFacade::handleSubmitRequest()
     bool success{(firstInputWord == m_pWordPairOwner->getFirstReferenceWord() && secondInputWord == m_pWordPairOwner->getSecondReferenceWord()) ||
                  (firstInputWord == m_pWordPairOwner->getSecondReferenceWord() && secondInputWord == m_pWordPairOwner->getFirstReferenceWord())};
 
-    Q_EMIT statusChanged(m_CurrentStatusCode = success ? Game::StatusCodes::CORRECT_USER_INPUT : Game::StatusCodes::INCORRECT_USER_INPUT);
+    m_CurrentStatusCode = success ? GameFacade::StatusCodes::CORRECT_USER_INPUT : GameFacade::StatusCodes::INCORRECT_USER_INPUT;
+    Q_EMIT statusChanged();
 
     if (success)
     {
@@ -461,7 +475,8 @@ void GameFacade::handleSubmitRequest()
 void GameFacade::provideCorrectWordsPairToUser()
 {
     m_pStatisticsItem->updateStatistics(StatisticsItem::StatisticsUpdateOperations::PARTIAL_UPDATE);
-    Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::SOLUTION_REQUESTED_BY_USER);
+    m_CurrentStatusCode = GameFacade::StatusCodes::SOLUTION_REQUESTED_BY_USER;
+    Q_EMIT statusChanged();
     m_pGameFunctionalityProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
 
     if (m_pChronometer->isEnabled())
@@ -477,7 +492,8 @@ void GameFacade::resetGameStatistics()
 
 void GameFacade::handleDataSavingOperationInProgress()
 {
-    Q_EMIT statusChanged(m_CurrentStatusCode = m_IsDataAvailable ? Game::StatusCodes::ADDITIONAL_DATA_SAVE_IN_PROGRESS : Game::StatusCodes::NEW_DATA_SAVE_IN_PROGRESS);
+    m_CurrentStatusCode = m_IsDataAvailable ? GameFacade::StatusCodes::ADDITIONAL_DATA_SAVE_IN_PROGRESS : GameFacade::StatusCodes::NEW_DATA_SAVE_IN_PROGRESS;
+    Q_EMIT statusChanged();
 }
 
 bool GameFacade::isDataFetchingInProgress() const
@@ -518,6 +534,11 @@ bool GameFacade::canResetGameStatistics() const
 int GameFacade::getCurrentLanguageIndex() const
 {
     return m_CurrentLanguageIndex;
+}
+
+GameFacade::StatusCodes GameFacade::getStatusCode() const
+{
+    return m_CurrentStatusCode;
 }
 
 QVector<QString> GameFacade::getMixedWordsPiecesContent() const
@@ -610,7 +631,8 @@ void GameFacade::_onFetchDataForPrimaryLanguageFinished(bool success, bool valid
             m_IsDataAvailable = true;
 
             Q_EMIT dataAvailableChanged();
-            Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_FETCHING_COMPLETE);
+            m_CurrentStatusCode = GameFacade::StatusCodes::DATA_FETCHING_COMPLETE;
+            Q_EMIT statusChanged();
 
             // restarting only allowed in the main pane
             if (m_pChronometer->isEnabled() && m_IsGameStarted)
@@ -636,7 +658,8 @@ void GameFacade::_onFetchDataForPrimaryLanguageFinished(bool success, bool valid
                 m_pDataSourceAccessHelper->clearEntriesTable();
             }
 
-            Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::NO_DATA_ENTRIES_FETCHED);
+            m_CurrentStatusCode = GameFacade::StatusCodes::NO_DATA_ENTRIES_FETCHED;
+            Q_EMIT statusChanged();
         }
     }
     else
@@ -646,7 +669,8 @@ void GameFacade::_onFetchDataForPrimaryLanguageFinished(bool success, bool valid
             m_pChronometer->disable();
         }
 
-        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_FETCHING_ERROR);
+        m_CurrentStatusCode = GameFacade::StatusCodes::DATA_FETCHING_ERROR;
+        Q_EMIT statusChanged();
     }
 }
 
@@ -654,7 +678,8 @@ void GameFacade::_onFetchDataForSecondaryLanguageFinished(bool success)
 {
     if (!success)
     {
-        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_FETCHING_ERROR);
+        m_CurrentStatusCode = GameFacade::StatusCodes::DATA_FETCHING_ERROR;
+        Q_EMIT statusChanged();
     }
 }
 
@@ -732,7 +757,8 @@ void GameFacade::_onChronometerTimeoutTriggered()
 {
     m_pStatisticsItem->updateStatistics(StatisticsItem::StatisticsUpdateOperations::PARTIAL_UPDATE);
     m_pGameFunctionalityProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
-    Q_EMIT statusChanged(Game::StatusCodes::TIME_LIMIT_REACHED);
+    m_CurrentStatusCode = GameFacade::StatusCodes::TIME_LIMIT_REACHED;
+    Q_EMIT statusChanged();
     m_pChronometer->restart();
 }
 
@@ -746,12 +772,14 @@ void GameFacade::_onChronometerEnabledChanged()
             m_pChronometer->start();
         }
 
-        Q_EMIT statusChanged(Game::StatusCodes::TIME_LIMIT_ENABLED);
+        m_CurrentStatusCode = GameFacade::StatusCodes::TIME_LIMIT_ENABLED;
+        Q_EMIT statusChanged();
     }
     else
     {
         m_pStatisticsItem->setEnhancedIncrement(false);
-        Q_EMIT statusChanged(Game::StatusCodes::TIME_LIMIT_DISABLED);
+        m_CurrentStatusCode = GameFacade::StatusCodes::TIME_LIMIT_DISABLED;
+        Q_EMIT statusChanged();
     }
 
     Q_EMIT timeLimitEnabledChanged();
@@ -762,8 +790,9 @@ void GameFacade::_onStatisticsUpdated()
     // for full and partial update no status message required (there are already status messages in the operations that trigger the full/partial update of statistics)
     if (m_pStatisticsItem->getLastUpdateOperation() == StatisticsItem::StatisticsUpdateOperations::RESET)
     {
-        Q_EMIT statusChanged(m_CurrentStatusCode = m_pInputBuilder->isInputComplete() ? Game::StatusCodes::STATISTICS_RESET_COMPLETE_INPUT
-                                                                                      : Game::StatusCodes::STATISTICS_RESET_INCOMPLETE_INPUT);
+        m_CurrentStatusCode = m_pInputBuilder->isInputComplete() ? GameFacade::StatusCodes::STATISTICS_RESET_COMPLETE_INPUT
+                                                                 : GameFacade::StatusCodes::STATISTICS_RESET_INCOMPLETE_INPUT;
+        Q_EMIT statusChanged();
     }
 
     Q_EMIT statisticsChanged();
@@ -776,7 +805,8 @@ void GameFacade::_onPrimaryLanguageDataSavingFinished(int nrOfPrimaryLanguageSav
     if (initialNrOfPrimarySourceEntries > 0)
     {
         m_pDataSourceAccessHelper->addEntriesToTable(nrOfPrimaryLanguageSavedEntries);
-        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_SUCCESSFULLY_SAVED);
+        m_CurrentStatusCode = GameFacade::StatusCodes::DATA_SUCCESSFULLY_SAVED;
+        Q_EMIT statusChanged();
     }
     else if (nrOfPrimaryLanguageSavedEntries > 0)
     {
@@ -786,17 +816,20 @@ void GameFacade::_onPrimaryLanguageDataSavingFinished(int nrOfPrimaryLanguageSav
         m_pGameFunctionalityProxy->provideDataEntryToConsumer(m_pDataSourceAccessHelper->generateEntryNumber());
 
         Q_EMIT dataAvailableChanged();
-        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_GOT_AVAILABLE);
+        m_CurrentStatusCode = GameFacade::StatusCodes::DATA_GOT_AVAILABLE;
+        Q_EMIT statusChanged();
     }
     else
     {
-        Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_STILL_UNAVAILABLE);
+        m_CurrentStatusCode = GameFacade::StatusCodes::DATA_STILL_UNAVAILABLE;
+        Q_EMIT statusChanged();
     }
 }
 
 void GameFacade::_onDataSavingErrorOccured()
 {
-    Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::DATA_ENTRY_SAVING_ERROR);
+    m_CurrentStatusCode = GameFacade::StatusCodes::DATA_ENTRY_SAVING_ERROR;
+    Q_EMIT statusChanged();
 }
 
 // should only be called once when switching to a language that either has word pairs in the database or pairs have just been added for it to the database
@@ -822,9 +855,10 @@ void GameFacade::_addPieceToInputWord(Game::InputWordNumber inputWordNumber, int
     Game::PieceTypes pieceType{m_pWordPairOwner->getWordPieceType(wordPieceIndex)};
     bool pieceAdded{m_pInputBuilder->addPieceToInputWord(inputWordNumber, wordPieceIndex, pieceType)};
 
-    Q_EMIT statusChanged(m_CurrentStatusCode = pieceAdded ? (m_pInputBuilder->isInputComplete() ? Game::StatusCodes::PIECE_ADDED_COMPLETE_INPUT
-                                                                                                : Game::StatusCodes::PIECE_ADDED_INCOMPLETE_INPUT)
-                                                          : Game::StatusCodes::PIECE_NOT_ADDED);
+    m_CurrentStatusCode = pieceAdded ? (m_pInputBuilder->isInputComplete() ? GameFacade::StatusCodes::PIECE_ADDED_COMPLETE_INPUT
+                                                                           : GameFacade::StatusCodes::PIECE_ADDED_INCOMPLETE_INPUT)
+                                     : GameFacade::StatusCodes::PIECE_NOT_ADDED;
+    Q_EMIT statusChanged();
 }
 
 void GameFacade::_removePiecesFromInputWordInPersistentMode()
@@ -834,7 +868,8 @@ void GameFacade::_removePiecesFromInputWordInPersistentMode()
         if (m_pInputBuilder->removePiecesFromInputWord(Game::InputWordNumber::ONE, m_pInputBuilder->getFirstWordPersistentPiecesRemovalIndex()))
         {
             m_pWordPairOwner->setPersistentPieceSelectionIndex(m_pInputBuilder->isEmptyInput() || m_pInputBuilder->isHalfInput());
-            Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::PIECES_REMOVED);
+            m_CurrentStatusCode = GameFacade::StatusCodes::PIECES_REMOVED;
+            Q_EMIT statusChanged();
         }
     }
     else if (m_pInputBuilder->getSecondWordPersistentPiecesRemovalIndex() != -1)
@@ -842,7 +877,8 @@ void GameFacade::_removePiecesFromInputWordInPersistentMode()
         if (m_pInputBuilder->removePiecesFromInputWord(Game::InputWordNumber::TWO, m_pInputBuilder->getSecondWordPersistentPiecesRemovalIndex()))
         {
             m_pWordPairOwner->setPersistentPieceSelectionIndex(m_pInputBuilder->isEmptyInput() || m_pInputBuilder->isHalfInput());
-            Q_EMIT statusChanged(m_CurrentStatusCode = Game::StatusCodes::PIECES_REMOVED);
+            m_CurrentStatusCode = GameFacade::StatusCodes::PIECES_REMOVED;
+            Q_EMIT statusChanged();
         }
     }
 }

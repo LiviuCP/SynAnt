@@ -28,6 +28,44 @@ class GameFacade : public QObject
 {
     Q_OBJECT
 public:
+    enum class StatusCodes
+    {
+        NO_LANGUAGE_SET,
+        FETCHING_DATA,
+        DATA_FETCHING_COMPLETE,
+        NO_DATA_ENTRIES_FETCHED,
+        DATA_FETCHING_ERROR,
+        DATA_GOT_AVAILABLE,
+        DATA_STILL_UNAVAILABLE,
+        GAME_STARTED,
+        GAME_PAUSED,
+        GAME_RESUMED_COMPLETE_INPUT,
+        GAME_RESUMED_INCOMPLETE_INPUT,
+        GAME_STOPPED,
+        NEW_DATA_SAVE_IN_PROGRESS,
+        ADDITIONAL_DATA_SAVE_IN_PROGRESS,
+        DATA_SUCCESSFULLY_SAVED,
+        DATA_ENTRY_SAVING_ERROR,
+        PIECE_NOT_ADDED,
+        PIECE_ADDED_COMPLETE_INPUT,
+        PIECE_ADDED_INCOMPLETE_INPUT,
+        PIECES_REMOVED,
+        USER_INPUT_CLEARED,
+        CORRECT_USER_INPUT,
+        INCORRECT_USER_INPUT,
+        SOLUTION_REQUESTED_BY_USER,
+        STATISTICS_RESET_COMPLETE_INPUT,
+        STATISTICS_RESET_INCOMPLETE_INPUT,
+        LEVEL_CHANGED,
+        PERSISTENT_MODE_ENTERED,
+        PERSISTENT_MODE_EXITED,
+        PERSISTENT_INDEX_REQUIRED,
+        TIME_LIMIT_ENABLED,
+        TIME_LIMIT_DISABLED,
+        TIME_LIMIT_REACHED,
+        StatusCodesCount
+    };
+
     explicit GameFacade(QObject *parent = nullptr);
 
     void init();
@@ -70,6 +108,7 @@ public:
     bool canResetGameStatistics() const;
 
     int getCurrentLanguageIndex() const;
+    GameFacade::StatusCodes getStatusCode() const;
 
     QVector<QString> getMixedWordsPiecesContent() const;
     QVector<Game::PieceTypes> getMixedWordsPiecesTypes() const;
@@ -104,7 +143,7 @@ signals:
     Q_SIGNAL void timeLimitEnabledChanged();
     Q_SIGNAL void remainingTimeRefreshed();
     Q_SIGNAL void statisticsChanged();
-    Q_SIGNAL void statusChanged(Game::StatusCodes status);
+    Q_SIGNAL void statusChanged();
 
 private slots:
     void _onFetchDataForPrimaryLanguageFinished(bool success, bool validEntriesFetched);
@@ -137,7 +176,7 @@ private:
     Game::Levels m_GameLevel;
     int m_CurrentLanguageIndex;
     int m_PreviousLanguageIndex; // used for restoring the previous language in main pane in case no word can be fetched from currently setup one
-    Game::StatusCodes m_CurrentStatusCode;
+    GameFacade::StatusCodes m_CurrentStatusCode;
 
     bool m_IsConnectedToDataSource;
     bool m_IsDataAvailable;

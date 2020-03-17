@@ -212,7 +212,7 @@ private slots:
     void _onInputChanged();
     void _onStatisticsChanged();
     void _onDataSaveInProgress();
-    void _onStatusChanged(Game::StatusCodes statusCode);
+    void _onStatusChanged();
 
 private:
     bool _canResetGameStatistics() const;
