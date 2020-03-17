@@ -71,7 +71,7 @@ public:
     void provideDataEntryToConsumer(int entryNumber);
     void releaseResources();
 
-    DataEntry::ValidationCodes getPairEntryValidationCode() const;
+    QString getPairEntryValidationCode() const;
     int getNrOfDataSourceEntries() const;
     int getLastSavedTotalNrOfEntries() const;
     int getLastNrOfEntriesSavedToPrimaryLanguage() const;

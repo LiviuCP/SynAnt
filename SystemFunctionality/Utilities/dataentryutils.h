@@ -23,7 +23,12 @@ namespace DataEntry
         DATA_ENTRY_STOPPED_SAVE_IN_PROGRESS,
         DATA_ENTRY_DISABLED,
         DATA_ENTRY_ADD_SUCCESS,
-        DATA_ENTRY_ADD_INVALID,
+        ADD_FAILED_LESS_MIN_CHARS_PER_WORD,
+        ADD_FAILED_LESS_MIN_TOTAL_PAIR_CHARS,
+        ADD_FAILED_MORE_MAX_TOTAL_PAIR_CHARS,
+        ADD_FAILED_INVALID_CHARACTERS,
+        ADD_FAILED_PAIR_ALREADY_EXISTS,
+        ADD_FAILED_IDENTICAL_WORDS,
         PAIR_ALREADY_ADDED,
         RESET_CACHE_REQUESTED,
         CACHE_RESET,
@@ -33,19 +38,6 @@ namespace DataEntry
         DATA_SAVE_IN_PROGRESS,
         DATA_SUCCESSFULLY_SAVED,
         StatusCodesCount
-    };
-
-    enum class ValidationCodes
-    {
-        NO_PAIR_VALIDATED,
-        VALID_PAIR,
-        LESS_MIN_CHARS_PER_WORD,
-        LESS_MIN_TOTAL_PAIR_CHARS,
-        MORE_MAX_TOTAL_PAIR_CHARS,
-        INVALID_CHARACTERS,
-        PAIR_ALREADY_EXISTS,
-        IDENTICAL_WORDS,
-        ValidationCodesCount
     };
 }
 

@@ -23,6 +23,17 @@
 
 static constexpr int c_RequiredNrOfDbTableFields{5};
 
+// a conversion of validation codes is required as the data entry validator should not be exposed to client classes
+static QMap<DataEntryValidator::ValidationCodes, QString> c_DataEntryInvalidCodesAsStrings
+{
+    {DataEntryValidator::ValidationCodes::LESS_MIN_CHARS_PER_WORD, "LESS_MIN_CHARS_PER_WORD"},
+    {DataEntryValidator::ValidationCodes::LESS_MIN_TOTAL_PAIR_CHARS, "LESS_MIN_TOTAL_PAIR_CHARS"},
+    {DataEntryValidator::ValidationCodes::MORE_MAX_TOTAL_PAIR_CHARS, "MORE_MAX_TOTAL_PAIR_CHARS"},
+    {DataEntryValidator::ValidationCodes::INVALID_CHARACTERS, "INVALID_CHARACTERS"},
+    {DataEntryValidator::ValidationCodes::PAIR_ALREADY_EXISTS, "PAIR_ALREADY_EXISTS"},
+    {DataEntryValidator::ValidationCodes::IDENTICAL_WORDS, "IDENTICAL_WORDS"}
+};
+
 GameManager* GameManager::s_pGameManager = nullptr;
 
 GameManager::GameManager(QObject *parent)
@@ -132,9 +143,12 @@ void GameManager::releaseResources()
     _deallocResources();
 }
 
-DataEntry::ValidationCodes GameManager::getPairEntryValidationCode() const
+QString GameManager::getPairEntryValidationCode() const
 {
-    return m_pDataEntryValidator->getValidationCode();
+    DataEntryValidator::ValidationCodes validationCode{m_pDataEntryValidator->getValidationCode()};
+    Q_ASSERT(c_DataEntryInvalidCodesAsStrings.contains(validationCode));
+
+    return c_DataEntryInvalidCodesAsStrings[m_pDataEntryValidator->getValidationCode()];
 }
 
 int GameManager::getNrOfDataSourceEntries() const

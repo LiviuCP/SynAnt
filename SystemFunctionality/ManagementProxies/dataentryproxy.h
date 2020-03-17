@@ -20,7 +20,7 @@ public:
     void requestCacheReset();
     void saveDataToDb();
 
-    DataEntry::ValidationCodes getPairEntryValidationCode() const;
+    QString getPairEntryValidationCode() const;
     int getCurrentNrOfCachedEntries() const;
     int getLastSavedTotalNrOfEntries() const;
     int getLastNrOfEntriesSavedToPrimaryLanguage() const;

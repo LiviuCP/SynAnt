@@ -10,16 +10,29 @@
 #include <QObject>
 
 #include "datasource.h"
-#include "../Utilities/dataentryutils.h"
+//#include "../Utilities/dataentryutils.h"
 
 class DataEntryValidator : public QObject
 {
     Q_OBJECT
 public:
+    enum class ValidationCodes
+    {
+        NO_PAIR_VALIDATED,
+        VALID_PAIR,
+        LESS_MIN_CHARS_PER_WORD,
+        LESS_MIN_TOTAL_PAIR_CHARS,
+        MORE_MAX_TOTAL_PAIR_CHARS,
+        INVALID_CHARACTERS,
+        PAIR_ALREADY_EXISTS,
+        IDENTICAL_WORDS,
+        ValidationCodesCount
+    };
+
     explicit DataEntryValidator(DataSource* pDataSource, QObject *parent = nullptr);
 
     void validateWordsPair(QPair<QString, QString> newWordsPair, bool areSynonyms, int languageIndex);
-    DataEntry::ValidationCodes getValidationCode() const;
+    ValidationCodes getValidationCode() const;
 
 signals:
     Q_SIGNAL void addInvalidWordsPairRequested();
@@ -28,7 +41,7 @@ signals:
 private:
     bool _isValidDataEntry(DataSource::DataEntry& rawDataEntry, const QString& firstWord, const QString& secondWord, bool areSynonyms, int languageIndex);
 
-    DataEntry::ValidationCodes m_ValidationCode;
+    ValidationCodes m_ValidationCode;
     DataSource* m_pDataSource;
 };
 

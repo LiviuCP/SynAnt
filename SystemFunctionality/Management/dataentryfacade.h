@@ -34,7 +34,6 @@ public:
     int getLastSavedTotalNrOfPairs() const;
     int getLastNrOfPairsSavedToPrimaryLanguage() const;
     int getCurrentLanguageIndex() const;
-    DataEntry::ValidationCodes getEnteredPairValidationCode() const;
 
     bool isDataEntryAllowed() const;
     bool isAddingToCacheAllowed() const;

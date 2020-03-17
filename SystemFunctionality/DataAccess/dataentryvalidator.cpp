@@ -3,7 +3,7 @@
 
 DataEntryValidator::DataEntryValidator(DataSource* pDataSource, QObject *parent)
     : QObject(parent)
-    , m_ValidationCode{DataEntry::ValidationCodes::NO_PAIR_VALIDATED}
+    , m_ValidationCode{ValidationCodes::NO_PAIR_VALIDATED}
     , m_pDataSource{pDataSource}
 {
     Q_ASSERT(pDataSource);
@@ -25,7 +25,7 @@ void DataEntryValidator::validateWordsPair(QPair<QString, QString> newWordsPair,
     }
 }
 
-DataEntry::ValidationCodes DataEntryValidator::getValidationCode() const
+DataEntryValidator::ValidationCodes DataEntryValidator::getValidationCode() const
 {
     return m_ValidationCode;
 }
@@ -52,34 +52,34 @@ bool DataEntryValidator::_isValidDataEntry(DataSource::DataEntry& dataEntry, con
 
     if (firstWord.size() < Game::Constraints::c_MinWordSize || secondWord.size() < Game::Constraints::c_MinWordSize)
     {
-        m_ValidationCode = DataEntry::ValidationCodes::LESS_MIN_CHARS_PER_WORD;
+        m_ValidationCode = ValidationCodes::LESS_MIN_CHARS_PER_WORD;
     }
     else if (firstWord.size() + secondWord.size() < Game::Constraints::c_MinPairSize)
     {
-        m_ValidationCode = DataEntry::ValidationCodes::LESS_MIN_TOTAL_PAIR_CHARS;
+        m_ValidationCode = ValidationCodes::LESS_MIN_TOTAL_PAIR_CHARS;
     }
     else if (firstWord.size() + secondWord.size() > Game::Constraints::c_MaxPairSize)
     {
-        m_ValidationCode = DataEntry::ValidationCodes::MORE_MAX_TOTAL_PAIR_CHARS;
+        m_ValidationCode = ValidationCodes::MORE_MAX_TOTAL_PAIR_CHARS;
     }
     else if (hasInvalidCharacters(firstWord) || hasInvalidCharacters(secondWord))
     {
-        m_ValidationCode = DataEntry::ValidationCodes::INVALID_CHARACTERS;
+        m_ValidationCode = ValidationCodes::INVALID_CHARACTERS;
     }
     else if (firstWord == secondWord)
     {
-        m_ValidationCode = DataEntry::ValidationCodes::IDENTICAL_WORDS;
+        m_ValidationCode = ValidationCodes::IDENTICAL_WORDS;
     }
     else if (m_pDataSource->entryAlreadyExists(DataSource::DataEntry{firstWord, secondWord, areSynonyms}, languageIndex))
     {
-        m_ValidationCode = DataEntry::ValidationCodes::PAIR_ALREADY_EXISTS;
+        m_ValidationCode = ValidationCodes::PAIR_ALREADY_EXISTS;
     }
     else
     {
-        m_ValidationCode = DataEntry::ValidationCodes::VALID_PAIR;
+        m_ValidationCode = ValidationCodes::VALID_PAIR;
     }
 
-    if (m_ValidationCode == DataEntry::ValidationCodes::VALID_PAIR)
+    if (m_ValidationCode == ValidationCodes::VALID_PAIR)
     {
         dataEntry = DataSource::DataEntry{firstWord, secondWord, areSynonyms};
     }

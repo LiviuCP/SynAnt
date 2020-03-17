@@ -42,7 +42,7 @@ void DataEntryProxy::saveDataToDb()
     GameManager::getManager()->saveDataToDb();
 }
 
-DataEntry::ValidationCodes DataEntryProxy::getPairEntryValidationCode() const
+QString DataEntryProxy::getPairEntryValidationCode() const
 {
     return GameManager::getManager()->getPairEntryValidationCode();
 }

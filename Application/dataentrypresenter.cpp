@@ -6,14 +6,14 @@
 #include "../SystemFunctionality/Utilities/dataentryutils.h"
 #include "../SystemFunctionality/Utilities/gameutils.h"
 
-static const QMap<DataEntry::ValidationCodes, QString> c_InvalidPairEntryReasonMessages
+static const QMap<DataEntry::StatusCodes, QString> c_InvalidPairEntryStatusMessages
 {
-    {DataEntry::ValidationCodes::LESS_MIN_CHARS_PER_WORD, DataEntryStrings::Messages::c_WordHasLessThanMinCharacters},
-    {DataEntry::ValidationCodes::LESS_MIN_TOTAL_PAIR_CHARS, DataEntryStrings::Messages::c_PairHasLessThanMinCharacters},
-    {DataEntry::ValidationCodes::MORE_MAX_TOTAL_PAIR_CHARS, DataEntryStrings::Messages::c_PairHasMoreThanMaxCharacters},
-    {DataEntry::ValidationCodes::INVALID_CHARACTERS, DataEntryStrings::Messages::c_InvalidCharactersEntered},
-    {DataEntry::ValidationCodes::IDENTICAL_WORDS, DataEntryStrings::Messages::c_PairHasIdenticalWords},
-    {DataEntry::ValidationCodes::PAIR_ALREADY_EXISTS, DataEntryStrings::Messages::c_PairAlreadyExists}
+    {DataEntry::StatusCodes::ADD_FAILED_LESS_MIN_CHARS_PER_WORD, DataEntryStrings::Messages::c_WordHasLessThanMinCharacters},
+    {DataEntry::StatusCodes::ADD_FAILED_LESS_MIN_TOTAL_PAIR_CHARS, DataEntryStrings::Messages::c_PairHasLessThanMinCharacters},
+    {DataEntry::StatusCodes::ADD_FAILED_MORE_MAX_TOTAL_PAIR_CHARS, DataEntryStrings::Messages::c_PairHasMoreThanMaxCharacters},
+    {DataEntry::StatusCodes::ADD_FAILED_INVALID_CHARACTERS, DataEntryStrings::Messages::c_InvalidCharactersEntered},
+    {DataEntry::StatusCodes::ADD_FAILED_IDENTICAL_WORDS, DataEntryStrings::Messages::c_PairHasIdenticalWords},
+    {DataEntry::StatusCodes::ADD_FAILED_PAIR_ALREADY_EXISTS, DataEntryStrings::Messages::c_PairAlreadyExists}
 };
 
 DataEntryPresenter::DataEntryPresenter(QObject *parent)
@@ -158,8 +158,14 @@ void DataEntryPresenter::_onStatusChanged(DataEntry::StatusCodes statusCode)
         _updateStatusMessage(DataEntryStrings::Messages::c_DataEntrySuccessMessage.arg(m_pDataEntryFacade->getCurrentNrOfAddedPairs()), Timing::c_NoDelay);
         _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryRequestMessage, Timing::c_ShortStatusUpdateDelay);
         break;
-    case DataEntry::StatusCodes::DATA_ENTRY_ADD_INVALID:
-        _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryInvalidPairMessage.arg(c_InvalidPairEntryReasonMessages[m_pDataEntryFacade->getEnteredPairValidationCode()]),
+    case DataEntry::StatusCodes::ADD_FAILED_LESS_MIN_CHARS_PER_WORD:
+    case DataEntry::StatusCodes::ADD_FAILED_LESS_MIN_TOTAL_PAIR_CHARS:
+    case DataEntry::StatusCodes::ADD_FAILED_MORE_MAX_TOTAL_PAIR_CHARS:
+    case DataEntry::StatusCodes::ADD_FAILED_INVALID_CHARACTERS:
+    case DataEntry::StatusCodes::ADD_FAILED_IDENTICAL_WORDS:
+    case DataEntry::StatusCodes::ADD_FAILED_PAIR_ALREADY_EXISTS:
+        Q_ASSERT(c_InvalidPairEntryStatusMessages.contains(statusCode));
+        _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryInvalidPairMessage.arg(c_InvalidPairEntryStatusMessages[statusCode]),
                              Timing::c_NoDelay);
         _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryRequestMessage, Timing::c_ShortStatusUpdateDelay);
         Q_EMIT dataEntryAddInvalid();

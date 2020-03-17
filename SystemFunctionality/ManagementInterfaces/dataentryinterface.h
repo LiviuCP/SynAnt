@@ -13,7 +13,7 @@ public:
     virtual void requestCacheReset() = 0;
     virtual void saveDataToDb() = 0;
 
-    virtual DataEntry::ValidationCodes getPairEntryValidationCode() const = 0;
+    virtual QString getPairEntryValidationCode() const = 0;
     virtual int getCurrentNrOfCachedEntries() const = 0;
     virtual int getLastSavedTotalNrOfEntries() const = 0;
     virtual int getLastNrOfEntriesSavedToPrimaryLanguage() const = 0;

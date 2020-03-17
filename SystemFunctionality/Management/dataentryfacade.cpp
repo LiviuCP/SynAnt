@@ -1,6 +1,16 @@
 #include "dataentryfacade.h"
 #include "../ManagementProxies/dataentryproxy.h"
 
+static const QMap<QString, DataEntry::StatusCodes> c_ValidationToStatusCodes
+{
+    {"LESS_MIN_CHARS_PER_WORD", DataEntry::StatusCodes::ADD_FAILED_LESS_MIN_CHARS_PER_WORD},
+    {"LESS_MIN_TOTAL_PAIR_CHARS", DataEntry::StatusCodes::ADD_FAILED_LESS_MIN_TOTAL_PAIR_CHARS},
+    {"MORE_MAX_TOTAL_PAIR_CHARS", DataEntry::StatusCodes::ADD_FAILED_MORE_MAX_TOTAL_PAIR_CHARS},
+    {"INVALID_CHARACTERS", DataEntry::StatusCodes::ADD_FAILED_INVALID_CHARACTERS},
+    {"IDENTICAL_WORDS", DataEntry::StatusCodes::ADD_FAILED_IDENTICAL_WORDS},
+    {"PAIR_ALREADY_EXISTS", DataEntry::StatusCodes::ADD_FAILED_PAIR_ALREADY_EXISTS}
+};
+
 DataEntryFacade::DataEntryFacade(QObject *parent)
     : QObject(parent)
     , m_pDataEntryProxy{new DataEntryProxy{this}}
@@ -117,11 +127,6 @@ int DataEntryFacade::getCurrentLanguageIndex() const
     return m_CurrentLanguageIndex;
 }
 
-DataEntry::ValidationCodes DataEntryFacade::getEnteredPairValidationCode() const
-{
-    return m_pDataEntryProxy->getPairEntryValidationCode();
-}
-
 bool DataEntryFacade::isDataEntryAllowed() const
 {
     return m_IsDataEntryAllowed;
@@ -209,10 +214,13 @@ void DataEntryFacade::_onNewWordsPairAddedToCache()
 
 void DataEntryFacade::_onAddInvalidWordsPairRequested()
 {
+    const QString validationCode{m_pDataEntryProxy->getPairEntryValidationCode()};
+    Q_ASSERT(c_ValidationToStatusCodes.contains(validationCode));
+
     // restore add to cache capability so the user can re-add the entry after modifying the words
     _allowAddToCache();
 
-    Q_EMIT statusChanged(m_CurrentStatusCode = DataEntry::StatusCodes::DATA_ENTRY_ADD_INVALID);
+    Q_EMIT statusChanged(c_ValidationToStatusCodes[validationCode]);
 }
 
 void DataEntryFacade::_onWordsPairAlreadyContainedInCache()
