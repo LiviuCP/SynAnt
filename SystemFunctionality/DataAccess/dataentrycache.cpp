@@ -25,7 +25,17 @@ void DataEntryCache::onValidEntryReceived(DataSource::DataEntry dataEntry, int l
 {
     Q_ASSERT(m_CacheEntries.size() == m_LanguageIndexes.size());
 
-    if (!m_CacheEntries.contains(dataEntry))
+    QVector<DataSource::DataEntry> currentLanguageEntries;
+    for (int entry{0}; entry < m_LanguageIndexes.size(); ++entry)
+    {
+        if (m_LanguageIndexes[entry] == languageIndex)
+        {
+            currentLanguageEntries.append(m_CacheEntries[languageIndex]);
+        }
+    }
+
+    // check for duplicates for current data entry language only
+    if (!currentLanguageEntries.contains(dataEntry))
     {
         m_CacheEntries.append(dataEntry);
         m_LanguageIndexes.append(languageIndex);
