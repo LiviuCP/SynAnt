@@ -18,6 +18,9 @@ class DataEntryCache : public QObject
 public:
     explicit DataEntryCache(DataSource* pDataSource, QString databasePath, QObject *parent = nullptr);
 
+    // for testing purposes only
+    int getNrOfCachedEntries() const;
+
 public slots:
     void onValidEntryReceived(DataSource::DataEntry dataEntry, int languageIndex);
     void onResetCacheRequested();

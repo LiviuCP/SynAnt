@@ -30,6 +30,12 @@ DataEntryValidator::ValidationCodes DataEntryValidator::getValidationCode() cons
     return m_ValidationCode;
 }
 
+bool DataEntryValidator::isGivenWordsPairValid(const QString &firstWord, const QString &secondWord, bool areSynonyms, int languageIndex)
+{
+    DataSource::DataEntry entry;
+    return _isValidDataEntry(entry, firstWord, secondWord, areSynonyms, languageIndex);
+}
+
 bool DataEntryValidator::_isValidDataEntry(DataSource::DataEntry& dataEntry, const QString &firstWord, const QString &secondWord, bool areSynonyms, int languageIndex)
 {
     auto hasInvalidCharacters = [](const QString &word)

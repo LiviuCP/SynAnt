@@ -17,8 +17,11 @@ DataEntryCache::DataEntryCache(DataSource* pDataSource, QString databasePath, QO
     , m_pDataSource{pDataSource}
     , m_DatabasePath{databasePath}
 {
-    Q_ASSERT(pDataSource);
-    Q_ASSERT(QFile{databasePath}.exists());
+}
+
+int DataEntryCache::getNrOfCachedEntries() const
+{
+    return m_CacheEntries.size();
 }
 
 void DataEntryCache::onValidEntryReceived(DataSource::DataEntry dataEntry, int languageIndex)
@@ -60,6 +63,7 @@ void DataEntryCache::onResetCacheRequested()
 
 void DataEntryCache::onWriteDataToDbRequested()
 {
+    Q_ASSERT(QFile{m_DatabasePath}.exists());
     Q_ASSERT(m_CacheEntries.size() == m_LanguageIndexes.size());
 
     if (m_CacheEntries.size() > 0)
@@ -116,7 +120,7 @@ void DataEntryCache::onWriteDataToDbRequested()
 
 void DataEntryCache::_moveCachedEntriesToDataSource(int& nrOfEntriesSavedToPrimaryLanguage)
 {
-    Q_ASSERT(m_CacheEntries.size() == m_LanguageIndexes.size());
+    Q_ASSERT(m_pDataSource && m_CacheEntries.size() == m_LanguageIndexes.size());
 
     if (m_CacheEntries.size() != 0)
     {
