@@ -21,18 +21,11 @@
 #include "../Utilities/exceptions.h"
 #include "../Utilities/databaseutils.h"
 
-static constexpr int c_RequiredNrOfDbTableFields{5};
+static_assert (static_cast<int>(DataEntryValidator::ValidationCodes::InvalidCodesCount) == static_cast<int>(DataEntryFacade::StatusCodes::Add_Failed_Status_Codes_End) -
+                                                                                           static_cast<int>(DataEntryFacade::StatusCodes::Add_Failed_Status_Codes_Start) - 1,
+               "Number of invalid pair entry reason codes from DataEntryValidator does not match the number of invalid pair entry status codes from DataEntryFacade");
 
-// a conversion of validation codes is required as the data entry validator should not be exposed to client classes
-static QMap<DataEntryValidator::ValidationCodes, QString> c_DataEntryInvalidCodesAsStrings
-{
-    {DataEntryValidator::ValidationCodes::LESS_MIN_CHARS_PER_WORD, "LESS_MIN_CHARS_PER_WORD"},
-    {DataEntryValidator::ValidationCodes::LESS_MIN_TOTAL_PAIR_CHARS, "LESS_MIN_TOTAL_PAIR_CHARS"},
-    {DataEntryValidator::ValidationCodes::MORE_MAX_TOTAL_PAIR_CHARS, "MORE_MAX_TOTAL_PAIR_CHARS"},
-    {DataEntryValidator::ValidationCodes::INVALID_CHARACTERS, "INVALID_CHARACTERS"},
-    {DataEntryValidator::ValidationCodes::PAIR_ALREADY_EXISTS, "PAIR_ALREADY_EXISTS"},
-    {DataEntryValidator::ValidationCodes::IDENTICAL_WORDS, "IDENTICAL_WORDS"}
-};
+static constexpr int c_RequiredNrOfDbTableFields{5};
 
 GameManager* GameManager::s_pGameManager = nullptr;
 
@@ -143,12 +136,9 @@ void GameManager::releaseResources()
     _deallocResources();
 }
 
-QString GameManager::getPairEntryValidationCode() const
+uint16_t GameManager::getInvalidPairEntryReasonCode() const
 {
-    DataEntryValidator::ValidationCodes validationCode{m_pDataEntryValidator->getValidationCode()};
-    Q_ASSERT(c_DataEntryInvalidCodesAsStrings.contains(validationCode));
-
-    return c_DataEntryInvalidCodesAsStrings[m_pDataEntryValidator->getValidationCode()];
+    return m_pDataEntryValidator->getInvalidPairReasonCode();
 }
 
 int GameManager::getNrOfDataSourceEntries() const

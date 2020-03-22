@@ -42,9 +42,9 @@ void DataEntryProxy::saveDataToDb()
     GameManager::getManager()->saveDataToDb();
 }
 
-QString DataEntryProxy::getPairEntryValidationCode() const
+uint16_t DataEntryProxy::getInvalidPairEntryReasonCode() const
 {
-    return GameManager::getManager()->getPairEntryValidationCode();
+    return GameManager::getManager()->getInvalidPairEntryReasonCode();
 }
 
 int DataEntryProxy::getCurrentNrOfCachedEntries() const

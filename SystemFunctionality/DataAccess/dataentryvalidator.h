@@ -17,21 +17,21 @@ class DataEntryValidator : public QObject
 public:
     enum class ValidationCodes
     {
-        NO_PAIR_VALIDATED,
-        VALID_PAIR,
         LESS_MIN_CHARS_PER_WORD,
         LESS_MIN_TOTAL_PAIR_CHARS,
         MORE_MAX_TOTAL_PAIR_CHARS,
         INVALID_CHARACTERS,
         PAIR_ALREADY_EXISTS,
         IDENTICAL_WORDS,
-        ValidationCodesCount
+        InvalidCodesCount,
+        NO_PAIR_VALIDATED,
+        VALID_PAIR,
     };
 
     explicit DataEntryValidator(DataSource* pDataSource, QObject *parent = nullptr);
 
     void validateWordsPair(QPair<QString, QString> newWordsPair, bool areSynonyms, int languageIndex);
-    ValidationCodes getValidationCode() const;
+    uint16_t getInvalidPairReasonCode() const;
 
     // for testing purposes only
     bool isGivenWordsPairValid(const QString& firstWord, const QString& secondWord, bool areSynonyms, int languageIndex);

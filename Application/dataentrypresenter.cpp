@@ -123,6 +123,7 @@ QString DataEntryPresenter::getDataEntryPaneStatusMessage() const
 void DataEntryPresenter::_onStatusChanged()
 {
     DataEntryFacade::StatusCodes statusCode{m_pDataEntryFacade->getStatusCode()};
+
     if (m_pStatusUpdateTimer->isActive())
     {
         m_pStatusUpdateTimer->stop();

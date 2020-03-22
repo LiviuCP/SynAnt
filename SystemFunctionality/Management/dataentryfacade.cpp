@@ -3,15 +3,9 @@
 #include "dataentryfacade.h"
 #include "../ManagementProxies/dataentryproxy.h"
 
-static const QMap<QString, DataEntryFacade::StatusCodes> c_ValidationToStatusCodes
-{
-    {"LESS_MIN_CHARS_PER_WORD", DataEntryFacade::StatusCodes::ADD_FAILED_LESS_MIN_CHARS_PER_WORD},
-    {"LESS_MIN_TOTAL_PAIR_CHARS", DataEntryFacade::StatusCodes::ADD_FAILED_LESS_MIN_TOTAL_PAIR_CHARS},
-    {"MORE_MAX_TOTAL_PAIR_CHARS", DataEntryFacade::StatusCodes::ADD_FAILED_MORE_MAX_TOTAL_PAIR_CHARS},
-    {"INVALID_CHARACTERS", DataEntryFacade::StatusCodes::ADD_FAILED_INVALID_CHARACTERS},
-    {"IDENTICAL_WORDS", DataEntryFacade::StatusCodes::ADD_FAILED_IDENTICAL_WORDS},
-    {"PAIR_ALREADY_EXISTS", DataEntryFacade::StatusCodes::ADD_FAILED_PAIR_ALREADY_EXISTS}
-};
+static constexpr int c_NrOfInvalidPairEntryStatusCodes{static_cast<uint16_t>(DataEntryFacade::StatusCodes::Add_Failed_Status_Codes_End) -
+                                              static_cast<uint16_t>(DataEntryFacade::StatusCodes::Add_Failed_Status_Codes_Start) - 1};
+static constexpr uint16_t c_InvalidPairBaseReasonCode {uint16_t{0x0001} << (c_NrOfInvalidPairEntryStatusCodes-1)};
 
 DataEntryFacade::DataEntryFacade(QObject *parent)
     : QObject(parent)
@@ -230,13 +224,10 @@ void DataEntryFacade::_onNewWordsPairAddedToCache()
 
 void DataEntryFacade::_onAddInvalidWordsPairRequested()
 {
-    const QString validationCode{m_pDataEntryProxy->getPairEntryValidationCode()};
-    Q_ASSERT(c_ValidationToStatusCodes.contains(validationCode));
-
     // restore add to cache capability so the user can re-add the entry after modifying the words
     _allowAddToCache();
 
-    m_CurrentStatusCode = c_ValidationToStatusCodes[validationCode];
+    m_CurrentStatusCode = _retrieveInvalidWordsPairStatusCode();
     Q_EMIT statusChanged();
 }
 
@@ -318,4 +309,29 @@ void DataEntryFacade::_blockSaveToDb()
         m_IsSavingToDbAllowed = false;
         Q_EMIT saveNewPairsToDbAllowedChanged();
     }
+}
+
+DataEntryFacade::StatusCodes DataEntryFacade::_retrieveInvalidWordsPairStatusCode()
+{
+    bool success{false};
+    const uint16_t c_RetrievedReasonCode{m_pDataEntryProxy->getInvalidPairEntryReasonCode()};
+    uint16_t localReasonCode{c_InvalidPairBaseReasonCode};
+    int offset{0};
+
+    // decode the retrieved reason code to get the offset to be applied for determining the exact status code to be emitted to presenter
+    while (localReasonCode != uint16_t{0})
+    {
+        if (localReasonCode == c_RetrievedReasonCode)
+        {
+            success = true;
+            break;
+        }
+        localReasonCode = localReasonCode >> 1;
+        ++offset;
+    }
+
+    // ensure the retrieved reason code is valid (e.g. only one bit should be set)
+    Q_ASSERT(success);
+
+    return static_cast<DataEntryFacade::StatusCodes>(static_cast<int>(DataEntryFacade::StatusCodes::Add_Failed_Status_Codes_Start) + offset + 1);
 }

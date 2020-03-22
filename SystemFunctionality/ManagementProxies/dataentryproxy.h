@@ -19,7 +19,7 @@ public:
     void requestCacheReset();
     void saveDataToDb();
 
-    QString getPairEntryValidationCode() const;
+    uint16_t getInvalidPairEntryReasonCode() const;
     int getCurrentNrOfCachedEntries() const;
     int getLastSavedTotalNrOfEntries() const;
     int getLastNrOfEntriesSavedToPrimaryLanguage() const;

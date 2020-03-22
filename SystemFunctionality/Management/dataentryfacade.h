@@ -28,12 +28,14 @@ public:
         DATA_ENTRY_STOPPED_SAVE_IN_PROGRESS,
         DATA_ENTRY_DISABLED,
         DATA_ENTRY_ADD_SUCCESS,
+        Add_Failed_Status_Codes_Start, // should not be emitted to presenter, it's just for counting failed add status codes
         ADD_FAILED_LESS_MIN_CHARS_PER_WORD,
         ADD_FAILED_LESS_MIN_TOTAL_PAIR_CHARS,
         ADD_FAILED_MORE_MAX_TOTAL_PAIR_CHARS,
         ADD_FAILED_INVALID_CHARACTERS,
         ADD_FAILED_PAIR_ALREADY_EXISTS,
         ADD_FAILED_IDENTICAL_WORDS,
+        Add_Failed_Status_Codes_End, // should not be emitted to presenter, it's just for counting failed add status codes
         PAIR_ALREADY_ADDED,
         RESET_CACHE_REQUESTED,
         CACHE_RESET,
@@ -42,7 +44,6 @@ public:
         DATA_FETCHING_FINISHED_SAVE_IN_PROGRESS,
         DATA_SAVE_IN_PROGRESS,
         DATA_SUCCESSFULLY_SAVED,
-        StatusCodesCount
     };
 
     explicit DataEntryFacade(QObject *parent = nullptr);
@@ -95,6 +96,7 @@ private:
     void _blockCacheReset();
     void _allowSaveToDb();
     void _blockSaveToDb();
+    DataEntryFacade::StatusCodes _retrieveInvalidWordsPairStatusCode();
 
     DataEntryProxy* m_pDataEntryProxy;
 

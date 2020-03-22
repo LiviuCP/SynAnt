@@ -70,7 +70,7 @@ public:
     void provideDataEntryToConsumer(int entryNumber);
     void releaseResources();
 
-    QString getPairEntryValidationCode() const;
+    uint16_t getInvalidPairEntryReasonCode() const;
     int getNrOfDataSourceEntries() const;
     int getLastSavedTotalNrOfEntries() const;
     int getLastNrOfEntriesSavedToPrimaryLanguage() const;
