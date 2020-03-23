@@ -83,7 +83,10 @@ namespace DataEntryStrings
                                                                  "Please correct and try again!"
                                                             };
 
-        const QString c_DataEntryPairAlreadyAddedMessage    {    "The pair has already been added. Please save added pairs to database or discard them"     };
+        const QString c_DataEntryPairAlreadyAddedMessage    {
+                                                                 "The pair has already been added for the given language and is pending to be saved.\n\n"
+                                                                 "Please save current added pairs to database or discard them."
+                                                            };
 
         const QString c_DataCacheResetInProgressMessage     {    "Discarding unsaved entries"                                                               };
         const QString c_DataCacheResetMessage               {    "The unsaved entries been discarded"                                                       };
@@ -96,7 +99,7 @@ namespace DataEntryStrings
         const QString c_PairHasMoreThanMaxCharacters        {    "The entered word pair has more than the allowed maximum number of characters."            };
         const QString c_InvalidCharactersEntered            {    "At least one of the words contains invalid characters."                                   };
         const QString c_PairHasIdenticalWords               {    "The entered word pair has identical words."                                               };
-        const QString c_PairAlreadyExists                   {    "The entered word pair already exists."                                                    };
+        const QString c_PairAlreadyExistsInDatabase         {    "The entered word pair already exists in the game database for the given language."        };
     }
 
     namespace Descriptors

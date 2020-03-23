@@ -12,7 +12,7 @@ static const QMap<DataEntryFacade::StatusCodes, QString> c_InvalidPairEntryStatu
     {DataEntryFacade::StatusCodes::ADD_FAILED_MORE_MAX_TOTAL_PAIR_CHARS, DataEntryStrings::Messages::c_PairHasMoreThanMaxCharacters},
     {DataEntryFacade::StatusCodes::ADD_FAILED_INVALID_CHARACTERS, DataEntryStrings::Messages::c_InvalidCharactersEntered},
     {DataEntryFacade::StatusCodes::ADD_FAILED_IDENTICAL_WORDS, DataEntryStrings::Messages::c_PairHasIdenticalWords},
-    {DataEntryFacade::StatusCodes::ADD_FAILED_PAIR_ALREADY_EXISTS, DataEntryStrings::Messages::c_PairAlreadyExists}
+    {DataEntryFacade::StatusCodes::ADD_FAILED_PAIR_ALREADY_EXISTS_IN_DATABASE, DataEntryStrings::Messages::c_PairAlreadyExistsInDatabase}
 };
 
 DataEntryPresenter::DataEntryPresenter(QObject *parent)
@@ -164,14 +164,14 @@ void DataEntryPresenter::_onStatusChanged()
     case DataEntryFacade::StatusCodes::ADD_FAILED_MORE_MAX_TOTAL_PAIR_CHARS:
     case DataEntryFacade::StatusCodes::ADD_FAILED_INVALID_CHARACTERS:
     case DataEntryFacade::StatusCodes::ADD_FAILED_IDENTICAL_WORDS:
-    case DataEntryFacade::StatusCodes::ADD_FAILED_PAIR_ALREADY_EXISTS:
+    case DataEntryFacade::StatusCodes::ADD_FAILED_PAIR_ALREADY_EXISTS_IN_DATABASE:
         Q_ASSERT(c_InvalidPairEntryStatusMessages.contains(statusCode));
         _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryInvalidPairMessage.arg(c_InvalidPairEntryStatusMessages[statusCode]),
                              Timing::c_NoDelay);
         _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryRequestMessage, Timing::c_ShortStatusUpdateDelay);
         Q_EMIT dataEntryAddInvalid();
         break;
-    case DataEntryFacade::StatusCodes::PAIR_ALREADY_ADDED:
+    case DataEntryFacade::StatusCodes::PAIR_ALREADY_ADDED_SAVE_OR_DISCARD:
         _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryPairAlreadyAddedMessage, Timing::c_NoDelay);
         _updateStatusMessage(DataEntryStrings::Messages::c_DataEntryRequestMessage, Timing::c_ShortStatusUpdateDelay);
         break;

@@ -33,10 +33,10 @@ public:
         ADD_FAILED_LESS_MIN_TOTAL_PAIR_CHARS,
         ADD_FAILED_MORE_MAX_TOTAL_PAIR_CHARS,
         ADD_FAILED_INVALID_CHARACTERS,
-        ADD_FAILED_PAIR_ALREADY_EXISTS,
+        ADD_FAILED_PAIR_ALREADY_EXISTS_IN_DATABASE,
         ADD_FAILED_IDENTICAL_WORDS,
         Add_Failed_Status_Codes_End, // should not be emitted to presenter, it's just for counting failed add status codes
-        PAIR_ALREADY_ADDED,
+        PAIR_ALREADY_ADDED_SAVE_OR_DISCARD,
         RESET_CACHE_REQUESTED,
         CACHE_RESET,
         FETCHING_DATA,

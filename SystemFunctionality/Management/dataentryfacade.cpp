@@ -237,7 +237,7 @@ void DataEntryFacade::_onWordsPairAlreadyContainedInCache()
     _allowCacheReset();
     _allowSaveToDb();
 
-    m_CurrentStatusCode = DataEntryFacade::StatusCodes::PAIR_ALREADY_ADDED;
+    m_CurrentStatusCode = DataEntryFacade::StatusCodes::PAIR_ALREADY_ADDED_SAVE_OR_DISCARD;
     Q_EMIT statusChanged();
 }
 
