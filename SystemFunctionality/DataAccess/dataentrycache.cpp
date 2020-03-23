@@ -33,7 +33,7 @@ void DataEntryCache::onValidEntryReceived(DataSource::DataEntry dataEntry, int l
     {
         if (m_LanguageIndexes[entry] == languageIndex)
         {
-            currentLanguageEntries.append(m_CacheEntries[languageIndex]);
+            currentLanguageEntries.append(m_CacheEntries[entry]);
         }
     }
 
