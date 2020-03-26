@@ -92,14 +92,17 @@ GamePresenter::GamePresenter(QObject *parent)
     m_pGameFacade->init();
 }
 
-void GamePresenter::switchToPane(GamePresenter::Pane pane)
+void GamePresenter::setCurrentPane(GamePresenter::Pane pane)
 {
-    m_PreviousPanesStack.append(m_CurrentPane);
-    _switchToPane(pane);
-
-    if (pane == GamePresenter::Pane::DATA_ENTRY)
+    if (m_CurrentPane != pane)
     {
-        qobject_cast<DataEntryPresenter*>(m_pDataEntryPresenter)->startDataEntry();
+        m_PreviousPanesStack.append(m_CurrentPane);
+        _switchToPane(pane);
+
+        if (pane == GamePresenter::Pane::DATA_ENTRY)
+        {
+            qobject_cast<DataEntryPresenter*>(m_pDataEntryPresenter)->startDataEntry();
+        }
     }
 }
 

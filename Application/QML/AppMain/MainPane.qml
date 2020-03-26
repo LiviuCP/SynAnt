@@ -134,7 +134,7 @@ Item {
                 buttonLabel: GameStrings.dataEntryButtonLabel
                 buttonToolTip: GameStrings.dataEntryButtonToolTip
 
-                onButtonClicked: presenter.switchToPane(GamePresenter.DATA_ENTRY)
+                onButtonClicked: presenter.currentPane = GamePresenter.DATA_ENTRY
             }
 
             Dropdown {
@@ -377,7 +377,7 @@ Item {
             buttonLabel: GameStrings.helpButtonLabel
             buttonToolTip: presenter.helpButtonToolTip
 
-            onButtonClicked: presenter.switchToPane(GamePresenter.HELP)
+            onButtonClicked: presenter.currentPane = GamePresenter.HELP
         }
 
         AppButton {

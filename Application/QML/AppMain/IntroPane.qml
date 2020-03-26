@@ -110,7 +110,7 @@ Item {
             buttonToolTip: GameStrings.playButtonToolTip
             shortcutSequence: GameStrings.playButtonShortcut
 
-            onButtonClicked: presenter.switchToPane(GamePresenter.MAIN)
+            onButtonClicked: presenter.currentPane = GamePresenter.MAIN
         }
 
         AppButton {
@@ -124,7 +124,7 @@ Item {
             buttonLabel: GameStrings.dataEntryButtonLabel
             buttonToolTip: GameStrings.dataEntryButtonToolTip
 
-            onButtonClicked: presenter.switchToPane(GamePresenter.DATA_ENTRY)
+            onButtonClicked: presenter.currentPane = GamePresenter.DATA_ENTRY
         }
 
         AppButton {
@@ -137,7 +137,7 @@ Item {
             buttonLabel: GameStrings.helpButtonLabel
             buttonToolTip: presenter.helpButtonToolTip
 
-            onButtonClicked: presenter.switchToPane(GamePresenter.HELP)
+            onButtonClicked: presenter.currentPane = GamePresenter.HELP
         }
 
         AppButton {

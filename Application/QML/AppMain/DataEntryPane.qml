@@ -250,7 +250,7 @@ Item {
             buttonLabel: GameStrings.helpButtonLabel
             buttonToolTip: presenter.helpButtonToolTip
 
-            onButtonClicked: presenter.switchToPane(GamePresenter.HELP)
+            onButtonClicked: presenter.currentPane = GamePresenter.HELP
         }
 
         AppButton {

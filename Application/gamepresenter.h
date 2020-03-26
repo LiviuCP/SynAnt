@@ -19,7 +19,7 @@ class GamePresenter : public QObject
     Q_OBJECT
 
     /* current pane and data entry presenter */
-    Q_PROPERTY(Pane currentPane READ getCurrentPane NOTIFY currentPaneChanged)
+    Q_PROPERTY(Pane currentPane READ getCurrentPane WRITE setCurrentPane NOTIFY currentPaneChanged)
     Q_PROPERTY(QObject* dataEntry READ getDataEntryPresenter CONSTANT)
 
     /* functionality enabling properties */
@@ -87,7 +87,8 @@ public:
 
     explicit GamePresenter(QObject *parent = nullptr);
 
-    Q_INVOKABLE void switchToPane(Pane pane);
+    void setCurrentPane(Pane pane);
+
     Q_INVOKABLE void goBack();
     Q_INVOKABLE void promptForSavingAddedWordPairs();
     Q_INVOKABLE void promptForDiscardingAddedWordPairs();
@@ -120,6 +121,7 @@ public:
     QObject* getDataEntryPresenter() const;
 
     Pane getCurrentPane() const;
+
     bool isLanguageSelectionEnabled() const;
     bool isPlayEnabled() const;
     bool getMainPaneStatisticsResetEnabled() const;

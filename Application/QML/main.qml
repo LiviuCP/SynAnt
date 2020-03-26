@@ -209,9 +209,7 @@ ApplicationWindow {
 
         property Timer dataEntryTimer: Timer {
             interval: 100
-            onTriggered: {
-                gamePresenter.switchToPane(GamePresenter.DATA_ENTRY);
-            }
+            onTriggered: gamePresenter.currentPane = GamePresenter.DATA_ENTRY
         }
 
         onActivated: {
@@ -234,9 +232,7 @@ ApplicationWindow {
 
         property Timer helpTimer: Timer {
             interval: 100
-            onTriggered: {
-                gamePresenter.switchToPane(GamePresenter.HELP);
-            }
+            onTriggered: gamePresenter.currentPane = GamePresenter.HELP
         }
 
         onActivated: {
