@@ -112,7 +112,7 @@ Item {
                 id: resetBtn
 
                 buttonEnabled: presenter.mainPaneStatisticsResetEnabled
-                dedicatedShortcutEnabled: presenter.mainPaneVisible && presenter.mainPaneStatisticsResetEnabled
+                dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.MAIN && presenter.mainPaneStatisticsResetEnabled
 
                 Layout.minimumWidth: highscoresBox.width
 
@@ -186,7 +186,7 @@ Item {
 
                         buttonChecked: false
                         buttonEnabled: !presenter.dataFetchingInProgress
-                        dedicatedShortcutEnabled: presenter.mainPaneVisible
+                        dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.MAIN
 
                         buttonLabel: GameStrings.levelEasyButtonLabel
                         shortcutSequence: GameStrings.levelEasyButtonShortcut
@@ -199,7 +199,7 @@ Item {
 
                         buttonChecked: true
                         buttonEnabled: !presenter.dataFetchingInProgress
-                        dedicatedShortcutEnabled: presenter.mainPaneVisible
+                        dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.MAIN
 
                         buttonLabel: GameStrings.levelMediumButtonLabel
                         shortcutSequence: GameStrings.levelMediumButtonShortcut
@@ -212,7 +212,7 @@ Item {
 
                         buttonChecked: false
                         buttonEnabled: !presenter.dataFetchingInProgress
-                        dedicatedShortcutEnabled: presenter.mainPaneVisible
+                        dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.MAIN
 
                         buttonLabel: GameStrings.levelHardButtonLabel
                         shortcutSequence: GameStrings.levelHardButtonShortcut
@@ -275,7 +275,7 @@ Item {
         WordPiecesInput {
             id: firstWordInput
             gamePresenter: presenter
-            clearShortcutEnabled: presenter.mainPaneVisible
+            clearShortcutEnabled: presenter.currentPane === GamePresenter.MAIN
             clearShortcutSequence: GameStrings.clearMainPaneFirstInputWordShortcut
             pieceWidth: parent.width / mixedWordPieces.count
             pieceHeight: parent.height
@@ -318,7 +318,7 @@ Item {
         WordPiecesInput {
             id: secondWordInput
             gamePresenter: presenter
-            clearShortcutEnabled: presenter.mainPaneVisible
+            clearShortcutEnabled: presenter.currentPane === GamePresenter.MAIN
             clearShortcutSequence: GameStrings.clearMainPaneSecondInputWordShortcut
             pieceWidth: parent.width / mixedWordPieces.count
             pieceHeight: parent.height
@@ -341,7 +341,7 @@ Item {
             id: submitBtn
 
             buttonEnabled: presenter.submitMainPaneInputEnabled && !presenter.dataFetchingInProgress
-            dedicatedShortcutEnabled: presenter.mainPaneVisible && presenter.submitMainPaneInputEnabled
+            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.MAIN && presenter.submitMainPaneInputEnabled
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -356,7 +356,7 @@ Item {
             id: clearInputBtn
 
             buttonEnabled: presenter.clearMainPaneInputEnabled && !presenter.dataFetchingInProgress
-            dedicatedShortcutEnabled: presenter.mainPaneVisible && presenter.clearMainPaneInputEnabled
+            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.MAIN && presenter.clearMainPaneInputEnabled
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -384,7 +384,7 @@ Item {
             id: showPairBtn
 
             buttonEnabled: !presenter.dataFetchingInProgress
-            dedicatedShortcutEnabled: presenter.mainPaneVisible
+            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.MAIN
 
             Layout.minimumWidth: bottomBtnsMinWidth
 

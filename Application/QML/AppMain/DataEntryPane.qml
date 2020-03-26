@@ -184,7 +184,7 @@ Item {
 
             isActiveFocusOnTabEnabled: false
             buttonEnabled: false
-            dedicatedShortcutEnabled: enabled && presenter.dataEntryPaneVisible
+            dedicatedShortcutEnabled: enabled && presenter.currentPane === GamePresenter.DATA_ENTRY
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -214,7 +214,7 @@ Item {
 
             isActiveFocusOnTabEnabled: false
             buttonEnabled: presenter.dataEntry.addWordsPairEnabled && !presenter.dataEntry.dataFetchingInProgress
-            dedicatedShortcutEnabled: presenter.dataEntryPaneVisible && presenter.dataEntry.addWordsPairEnabled  && !presenter.dataEntry.dataFetchingInProgress
+            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.DATA_ENTRY && presenter.dataEntry.addWordsPairEnabled  && !presenter.dataEntry.dataFetchingInProgress
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -229,7 +229,7 @@ Item {
             id: backBtn
 
             isActiveFocusOnTabEnabled: false
-            dedicatedShortcutEnabled: presenter.dataEntryPaneVisible
+            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.DATA_ENTRY
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -258,7 +258,7 @@ Item {
 
             isActiveFocusOnTabEnabled: false
             buttonEnabled: presenter.dataEntry.discardAddedWordPairsEnabled
-            dedicatedShortcutEnabled: presenter.dataEntryPaneVisible && presenter.dataEntry.discardAddedWordPairsEnabled
+            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.DATA_ENTRY && presenter.dataEntry.discardAddedWordPairsEnabled
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -277,7 +277,7 @@ Item {
 
             isActiveFocusOnTabEnabled: false
             buttonEnabled: presenter.dataEntry.saveAddedWordPairsEnabled
-            dedicatedShortcutEnabled: presenter.dataEntryPaneVisible && presenter.dataEntry.saveAddedWordPairsEnabled
+            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.DATA_ENTRY && presenter.dataEntry.saveAddedWordPairsEnabled
 
             Layout.minimumWidth: bottomBtnsMinWidth
 

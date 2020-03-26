@@ -34,7 +34,7 @@ ApplicationWindow {
         id: introPane
 
         presenter: gamePresenter
-        visible: gamePresenter.introPaneVisible
+        visible: gamePresenter.currentPane === GamePresenter.INTRO
 
         anchors {
             fill: parent
@@ -46,7 +46,7 @@ ApplicationWindow {
         id: mainPane
 
         presenter: gamePresenter
-        visible: gamePresenter.mainPaneVisible
+        visible: gamePresenter.currentPane === GamePresenter.MAIN
 
         anchors {
             fill: parent
@@ -58,7 +58,7 @@ ApplicationWindow {
         id: dataEntryPane
 
         presenter: gamePresenter
-        visible: gamePresenter.dataEntryPaneVisible
+        visible: gamePresenter.currentPane === GamePresenter.DATA_ENTRY
 
         anchors {
             fill: parent
@@ -70,7 +70,7 @@ ApplicationWindow {
         id: promptSaveExitPane
 
         presenter: gamePresenter
-        visible: gamePresenter.promptSaveExitPaneVisible
+        visible: gamePresenter.currentPane === GamePresenter.PROMPT_SAVE_EXIT
 
         anchors {
             fill: parent
@@ -82,7 +82,7 @@ ApplicationWindow {
         id: promptDiscardPane
 
         presenter: gamePresenter
-        visible: gamePresenter.promptDiscardPaneVisible
+        visible: gamePresenter.currentPane === GamePresenter.PROMPT_DISCARD
 
         anchors {
             fill: parent
@@ -94,7 +94,7 @@ ApplicationWindow {
         id: helpPane
 
         presenter: gamePresenter
-        visible: gamePresenter.helpPaneVisible
+        visible: gamePresenter.currentPane === GamePresenter.HELP
 
         anchors {
             fill: parent
@@ -183,11 +183,11 @@ ApplicationWindow {
         enabled: gamePresenter.languageSelectionEnabled && !gamePresenter.dataEntry.dataSavingInProgress && !gamePresenter.dataEntry.dataFetchingInProgress
 
         onActivated: {
-            if (gamePresenter.introPaneVisible) {
+            if (gamePresenter.currentPane === GamePresenter.INTRO) {
                 introPane.languageDropdownShortcutActivated = true;
-            } else if (gamePresenter.mainPaneVisible) {
+            } else if (gamePresenter.currentPane === GamePresenter.MAIN) {
                 mainPane.languageDropdownShortcutActivated = true;
-            } else if (gamePresenter.dataEntryPaneVisible) {
+            } else if (gamePresenter.currentPane === GamePresenter.DATA_ENTRY) {
                 dataEntryPane.languageDropdownShortcutActivated = true;
             }
             else {
@@ -205,7 +205,7 @@ ApplicationWindow {
 
     Shortcut {
         sequence: GameStrings.dataEntryButtonShortcut
-        enabled: gamePresenter.dataEntry.dataEntryEnabled && (gamePresenter.introPaneVisible || gamePresenter.mainPaneVisible) && !gamePresenter.dataEntry.dataFetchingInProgress
+        enabled: gamePresenter.dataEntry.dataEntryEnabled && (gamePresenter.currentPane === GamePresenter.INTRO || gamePresenter.currentPane === GamePresenter.MAIN) && !gamePresenter.dataEntry.dataFetchingInProgress
 
         property Timer dataEntryTimer: Timer {
             interval: 100
@@ -215,9 +215,9 @@ ApplicationWindow {
         }
 
         onActivated: {
-            if (gamePresenter.introPaneVisible) {
+            if (gamePresenter.currentPane === GamePresenter.INTRO) {
                 introPane.dataEntryButtonShortcutActivated = true;
-            } else if (gamePresenter.mainPaneVisible) {
+            } else if (gamePresenter.currentPane === GamePresenter.MAIN) {
                 mainPane.dataEntryButtonShortcutActivated = true;
             }
             else {
@@ -230,7 +230,7 @@ ApplicationWindow {
 
     Shortcut {
         sequence: GameStrings.helpButtonShortcut
-        enabled: gamePresenter.introPaneVisible || gamePresenter.mainPaneVisible || (gamePresenter.dataEntryPaneVisible && !gamePresenter.dataEntry.dataFetchingInProgress)
+        enabled: gamePresenter.currentPane === GamePresenter.INTRO || gamePresenter.currentPane === GamePresenter.MAIN || (gamePresenter.currentPane === GamePresenter.DATA_ENTRY && !gamePresenter.dataEntry.dataFetchingInProgress)
 
         property Timer helpTimer: Timer {
             interval: 100
@@ -240,11 +240,11 @@ ApplicationWindow {
         }
 
         onActivated: {
-            if (gamePresenter.introPaneVisible) {
+            if (gamePresenter.currentPane === GamePresenter.INTRO) {
                 introPane.helpButtonShortcutActivated = true;
-            } else if (gamePresenter.mainPaneVisible) {
+            } else if (gamePresenter.currentPane === GamePresenter.MAIN) {
                 mainPane.helpButtonShortcutActivated = true;
-            } else if (gamePresenter.dataEntryPaneVisible) {
+            } else if (gamePresenter.currentPane === GamePresenter.DATA_ENTRY) {
                 dataEntryPane.helpButtonShortcutActivated = true;
             }
             else {
@@ -257,12 +257,12 @@ ApplicationWindow {
 
     Shortcut {
         sequence: GameStrings.quitButtonShortcut
-        enabled: gamePresenter.introPaneVisible || gamePresenter.helpPaneVisible || gamePresenter.mainPaneVisible || gamePresenter.dataEntryPaneVisible
+        enabled: gamePresenter.currentPane === GamePresenter.INTRO || gamePresenter.currentPane === GamePresenter.HELP || gamePresenter.currentPane === GamePresenter.MAIN || gamePresenter.currentPane === GamePresenter.DATA_ENTRY
 
         property Timer quitTimer: Timer {
             interval: 100
             onTriggered: {
-                if (gamePresenter.dataEntryPaneVisible && gamePresenter.dataEntry.saveAddedWordPairsEnabled) {
+                if (gamePresenter.currentPane === GamePresenter.DATA_ENTRY && gamePresenter.dataEntry.saveAddedWordPairsEnabled) {
                     gamePresenter.quitGameDeferred = true;
                     gamePresenter.promptForSavingAddedWordPairs();
                 } else {
@@ -272,13 +272,13 @@ ApplicationWindow {
         }
 
         onActivated: {
-            if (gamePresenter.introPaneVisible) {
+            if (gamePresenter.currentPane === GamePresenter.INTRO) {
                 introPane.quitButtonShortcutActivated = true;
-            } else if (gamePresenter.mainPaneVisible) {
+            } else if (gamePresenter.currentPane === GamePresenter.MAIN) {
                 mainPane.quitButtonShortcutActivated = true;
-            } else if (gamePresenter.helpPaneVisible) {
+            } else if (gamePresenter.currentPane === GamePresenter.HELP) {
                 helpPane.quitButtonShortcutActivated = true;
-            } else if (gamePresenter.dataEntryPaneVisible) {
+            } else if (gamePresenter.currentPane === GamePresenter.DATA_ENTRY) {
                 dataEntryPane.quitButtonShortcutActivated = true;
             }
             else {

@@ -102,7 +102,7 @@ Item {
             id: playBtn
 
             buttonEnabled: presenter.playEnabled && presenter.languageIndex !== -1
-            dedicatedShortcutEnabled: presenter.introPaneVisible && presenter.playEnabled
+            dedicatedShortcutEnabled: presenter.playEnabled && presenter.currentPane === GamePresenter.INTRO
 
             Layout.minimumWidth: bottomBtnsMinWidth
 

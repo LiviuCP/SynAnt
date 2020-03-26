@@ -310,34 +310,9 @@ QObject *GamePresenter::getDataEntryPresenter() const
     return m_pDataEntryPresenter;
 }
 
-bool GamePresenter::getIntroPaneVisible() const
+GamePresenter::Pane GamePresenter::getCurrentPane() const
 {
-    return (m_CurrentPane == Pane::INTRO);
-}
-
-bool GamePresenter::getHelpPaneVisible() const
-{
-    return (m_CurrentPane == Pane::HELP);
-}
-
-bool GamePresenter::getMainPaneVisible() const
-{
-    return (m_CurrentPane == Pane::MAIN);
-}
-
-bool GamePresenter::getDataEntryPaneVisible() const
-{
-    return (m_CurrentPane == Pane::DATA_ENTRY);
-}
-
-bool GamePresenter::getPromptSaveExitPaneVisible() const
-{
-    return (m_CurrentPane == Pane::PROMPT_SAVE_EXIT);
-}
-
-bool GamePresenter::getPromptDiscardPaneVisible() const
-{
-    return (m_CurrentPane == Pane::PROMPT_DISCARD);
+    return m_CurrentPane;
 }
 
 bool GamePresenter::isLanguageSelectionEnabled() const

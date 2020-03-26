@@ -18,15 +18,9 @@ class GamePresenter : public QObject
 {
     Q_OBJECT
 
+    /* current pane and data entry presenter */
+    Q_PROPERTY(Pane currentPane READ getCurrentPane NOTIFY currentPaneChanged)
     Q_PROPERTY(QObject* dataEntry READ getDataEntryPresenter CONSTANT)
-
-    /* pane visibility properties */
-    Q_PROPERTY(bool introPaneVisible READ getIntroPaneVisible NOTIFY currentPaneChanged)
-    Q_PROPERTY(bool helpPaneVisible READ getHelpPaneVisible NOTIFY currentPaneChanged)
-    Q_PROPERTY(bool mainPaneVisible READ getMainPaneVisible NOTIFY currentPaneChanged)
-    Q_PROPERTY(bool dataEntryPaneVisible READ getDataEntryPaneVisible NOTIFY currentPaneChanged)
-    Q_PROPERTY(bool promptSaveExitPaneVisible READ getPromptSaveExitPaneVisible NOTIFY currentPaneChanged)
-    Q_PROPERTY(bool promptDiscardPaneVisible READ getPromptDiscardPaneVisible NOTIFY currentPaneChanged)
 
     /* functionality enabling properties */
     Q_PROPERTY(bool playEnabled READ isPlayEnabled NOTIFY playEnabledChanged)
@@ -125,12 +119,7 @@ public:
 
     QObject* getDataEntryPresenter() const;
 
-    bool getIntroPaneVisible() const;
-    bool getHelpPaneVisible() const;
-    bool getMainPaneVisible() const;
-    bool getDataEntryPaneVisible() const;
-    bool getPromptSaveExitPaneVisible() const;
-    bool getPromptDiscardPaneVisible() const;
+    Pane getCurrentPane() const;
     bool isLanguageSelectionEnabled() const;
     bool isPlayEnabled() const;
     bool getMainPaneStatisticsResetEnabled() const;
