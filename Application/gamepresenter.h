@@ -81,7 +81,7 @@ public:
         PROMPT_SAVE_EXIT,
         PROMPT_DISCARD,
         ERROR,
-        Nr_Of_Panes
+        NrOfPanes
     };
     Q_ENUM(Pane)
 

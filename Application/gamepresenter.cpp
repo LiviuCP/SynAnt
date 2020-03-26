@@ -817,7 +817,7 @@ void GamePresenter::_onStatusChanged()
 
 void GamePresenter::_switchToPane(Pane pane)
 {
-    Q_ASSERT(static_cast<int>(pane) >= 0 && static_cast<int>(pane) < static_cast<int>(Pane::Nr_Of_Panes));
+    Q_ASSERT(static_cast<int>(pane) >= 0 && static_cast<int>(pane) < static_cast<int>(Pane::NrOfPanes));
     Q_ASSERT(!(m_CurrentPane == Pane::MAIN && pane == Pane::INTRO));
 
     bool delayedSwitchingRequested{false};
@@ -960,7 +960,7 @@ void GamePresenter::_updateMessage()
     case Pane::ERROR:
         break;
     default:
-        Q_ASSERT(static_cast<int>(m_StatusUpdatePane) >= 0 && static_cast<int>(m_StatusUpdatePane) < static_cast<int>(Pane::Nr_Of_Panes));
+        Q_ASSERT(static_cast<int>(m_StatusUpdatePane) >= 0 && static_cast<int>(m_StatusUpdatePane) < static_cast<int>(Pane::NrOfPanes));
     }
 }
 
