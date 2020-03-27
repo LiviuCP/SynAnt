@@ -48,10 +48,6 @@ class GamePresenter : public QObject
     Q_PROPERTY(int pieceSelectionCursorPosition READ getPieceSelectionCursorPosition NOTIFY pieceSelectionCursorPositionChanged)
     Q_PROPERTY(int piecesRemovalFirstWordCursorPosition READ getPiecesRemovalFirstWordCursorPosition NOTIFY piecesRemovalCursorPositionChanged)
     Q_PROPERTY(int piecesRemovalSecondWordCursorPosition READ getPiecesRemovalSecondWordCursorPosition NOTIFY piecesRemovalCursorPositionChanged)
-    // need to use these three properties as Q_ENUM cannot be used with the Level enum (it si not part of the presenter class)
-    Q_PROPERTY(int levelEasy READ getLevelEasy CONSTANT)
-    Q_PROPERTY(int levelMedium READ getLevelMedium CONSTANT)
-    Q_PROPERTY(int levelHard READ getLevelHard CONSTANT)
 
     /* text properties */
     Q_PROPERTY(QString windowTitle READ getWindowTitle NOTIFY currentPaneChanged)
@@ -85,6 +81,16 @@ public:
     };
     Q_ENUM(Pane)
 
+    // need this enum class as Game::Levels cannot be registered for QML usage (doesn't belong to presenter)
+    enum class Levels
+    {
+        LEVEL_EASY,
+        LEVEL_MEDIUM,
+        LEVEL_HARD,
+        LEVEL_NONE
+    };
+    Q_ENUM(Levels)
+
     explicit GamePresenter(QObject *parent = nullptr);
 
     void setCurrentPane(Pane pane);
@@ -95,7 +101,7 @@ public:
     Q_INVOKABLE void handleDisplayCorrectWordsPairRequest();
     Q_INVOKABLE void handleSubmitMainPaneInputRequest();
     Q_INVOKABLE void handleMainPaneStatisticsResetRequest();
-    Q_INVOKABLE void switchToLevel(int level);
+    Q_INVOKABLE void setLevel(Levels level);
     Q_INVOKABLE void handleLanguageChangeRequest(int newLanguageIndex, bool revertLanguageWhenDataUnavailable = false);
     Q_INVOKABLE void enableCursor();
     Q_INVOKABLE void disableCursor();
@@ -153,10 +159,6 @@ public:
     int getLanguageIndex() const;
 
     QStringList getRemainingTime() const;
-
-    int getLevelEasy() const;
-    int getLevelMedium() const;
-    int getLevelHard() const;
 
     QString getWindowTitle() const;
 

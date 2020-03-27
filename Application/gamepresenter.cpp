@@ -32,6 +32,11 @@ static const QMap<Game::PieceTypes, QColor> c_WordPieceTextColors
 static constexpr int c_PaneSwitchingDelay{350};
 static constexpr int c_GameQuitDelay{200};
 
+static_assert (static_cast<int>(GamePresenter::Levels::LEVEL_EASY) == static_cast<int>(Game::Levels::LEVEL_EASY) &&
+               static_cast<int>(GamePresenter::Levels::LEVEL_MEDIUM) == static_cast<int>(Game::Levels::LEVEL_MEDIUM) &&
+               static_cast<int>(GamePresenter::Levels::LEVEL_HARD) == static_cast<int>(Game::Levels::LEVEL_HARD) &&
+               static_cast<int>(GamePresenter::Levels::LEVEL_NONE) == static_cast<int>(GamePresenter::Levels::LEVEL_NONE), "Incorrect mapping between GamePresenter::Levels and Game::Levels");
+
 GamePresenter::GamePresenter(QObject *parent)
     : QObject(parent)
     , m_pDataEntryPresenter{new DataEntryPresenter{this}}
@@ -166,9 +171,9 @@ void GamePresenter::handleMainPaneStatisticsResetRequest()
     m_pGameFacade -> resetGameStatistics();
 }
 
-void GamePresenter::switchToLevel(int level)
+void GamePresenter::setLevel(GamePresenter::Levels level)
 {
-    Q_ASSERT(level >= 0 && level < static_cast<int>(Game::Levels::LEVEL_NONE));
+    Q_ASSERT(static_cast<int>(level) >= 0 && static_cast<int>(level) < static_cast<int>(Game::Levels::LEVEL_NONE));
     m_pGameFacade->setGameLevel(static_cast<Game::Levels>(level));
 }
 
@@ -505,21 +510,6 @@ QStringList GamePresenter::getRemainingTime() const
 {
     QPair<QString, QString> currentTimeMinSec{m_pGameFacade->getRemainingTime()};
     return QStringList{} << currentTimeMinSec.first << currentTimeMinSec.second;
-}
-
-int GamePresenter::getLevelEasy() const
-{
-    return static_cast<int>(Game::Levels::LEVEL_EASY);
-}
-
-int GamePresenter::getLevelMedium() const
-{
-    return static_cast<int>(Game::Levels::LEVEL_MEDIUM);
-}
-
-int GamePresenter::getLevelHard() const
-{
-    return static_cast<int>(Game::Levels::LEVEL_HARD);
 }
 
 QString GamePresenter::getWindowTitle() const

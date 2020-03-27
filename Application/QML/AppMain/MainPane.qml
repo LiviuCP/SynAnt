@@ -191,7 +191,7 @@ Item {
                         buttonLabel: GameStrings.levelEasyButtonLabel
                         shortcutSequence: GameStrings.levelEasyButtonShortcut
 
-                        onButtonToggled: presenter.switchToLevel(presenter.levelEasy)
+                        onButtonToggled: presenter.setLevel(GamePresenter.LEVEL_EASY)
                     }
 
                     AppRadioButton {
@@ -204,7 +204,7 @@ Item {
                         buttonLabel: GameStrings.levelMediumButtonLabel
                         shortcutSequence: GameStrings.levelMediumButtonShortcut
 
-                        onButtonToggled: presenter.switchToLevel(presenter.levelMedium)
+                        onButtonToggled: presenter.setLevel(GamePresenter.LEVEL_MEDIUM)
                     }
 
                     AppRadioButton {
@@ -217,7 +217,7 @@ Item {
                         buttonLabel: GameStrings.levelHardButtonLabel
                         shortcutSequence: GameStrings.levelHardButtonShortcut
 
-                        onButtonToggled: presenter.switchToLevel(presenter.levelHard)
+                        onButtonToggled: presenter.setLevel(GamePresenter.LEVEL_HARD)
                     }
                 }
             }
