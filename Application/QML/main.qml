@@ -253,12 +253,15 @@ ApplicationWindow {
 
     Shortcut {
         sequence: GameStrings.quitButtonShortcut
-        enabled: gamePresenter.currentPane === GamePresenter.INTRO_PANE || gamePresenter.currentPane === GamePresenter.HELP_PANE || gamePresenter.currentPane === GamePresenter.MAIN_PANE || gamePresenter.currentPane === GamePresenter.DATA_ENTRY_PANE
+        enabled: gamePresenter.currentPane === GamePresenter.INTRO_PANE ||
+                 gamePresenter.currentPane === GamePresenter.HELP_PANE ||
+                 gamePresenter.currentPane === GamePresenter.MAIN_PANE ||
+                 gamePresenter.currentPane === GamePresenter.DATA_ENTRY_PANE
 
         property Timer quitTimer: Timer {
             interval: 100
             onTriggered: {
-                if (gamePresenter.currentPane === GamePresenter.DATA_ENTRY_PANE && gamePresenter.dataEntry.saveAddedWordPairsEnabled) {
+                if ((gamePresenter.currentPane === GamePresenter.DATA_ENTRY_PANE || gamePresenter.currentPane === GamePresenter.HELP_PANE) && gamePresenter.dataEntry.saveAddedWordPairsEnabled) {
                     gamePresenter.quitGameDeferred = true;
                     gamePresenter.promptForSavingAddedWordPairs();
                 } else {

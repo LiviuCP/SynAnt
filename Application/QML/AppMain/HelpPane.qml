@@ -68,7 +68,14 @@ Item {
             buttonLabel: GameStrings.quitButtonLabel
             buttonToolTip: GameStrings.quitButtonToolTip
 
-            onButtonClicked: presenter.quit()
+            onButtonClicked: {
+                if (presenter.dataEntry.saveAddedWordPairsEnabled) {
+                    presenter.quitGameDeferred = true;
+                    presenter.promptForSavingAddedWordPairs();
+                } else {
+                    presenter.quit();
+                }
+            }
         }
     }
 

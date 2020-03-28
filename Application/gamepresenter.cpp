@@ -115,7 +115,7 @@ void GamePresenter::goBack()
 {
     if (m_CurrentPane == Panes::PROMPT_SAVE_EXIT_PANE)
     {
-        m_CurrentPane = Panes::DATA_ENTRY_PANE;
+        m_CurrentPane = m_PreviousPanesStack.last();
         m_PreviousPanesStack.pop_back();
 
         if (m_QuitDeferred)
@@ -126,7 +126,10 @@ void GamePresenter::goBack()
 
         Q_EMIT currentPaneChanged();
 
-        qobject_cast<DataEntryPresenter*>(m_pDataEntryPresenter)->resumeDataEntry();
+        if (m_CurrentPane == Panes::DATA_ENTRY_PANE)
+        {
+            qobject_cast<DataEntryPresenter*>(m_pDataEntryPresenter)->resumeDataEntry();
+        }
     }
     else
     {
@@ -138,7 +141,7 @@ void GamePresenter::goBack()
 
 void GamePresenter::promptForSavingAddedWordPairs()
 {
-    Q_ASSERT(m_CurrentPane == Panes::DATA_ENTRY_PANE);
+    Q_ASSERT(m_CurrentPane == Panes::DATA_ENTRY_PANE || (m_CurrentPane == Panes::HELP_PANE && m_PreviousPanesStack.last() == Panes::DATA_ENTRY_PANE));
 
     m_PreviousPanesStack.append(m_CurrentPane);
     m_CurrentPane = Panes::PROMPT_SAVE_EXIT_PANE;
