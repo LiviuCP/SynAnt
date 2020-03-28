@@ -670,7 +670,14 @@ void GamePresenter::_onStatusChanged()
             _launchErrorPane(GameStrings::Error::c_CannotFetchDataMessage);
             break;
         case GameFacade::StatusCodes::DATA_GOT_AVAILABLE:
-            _updateStatusMessage(GameStrings::Messages::c_PleasePlayOrEnterDataMessage, Panes::INTRO_PANE, Timing::c_NoDelay);
+            if (m_QuitDeferred)
+            {
+                QTimer::singleShot(c_GameQuitDelay, this, [this](){quit();});
+            }
+            else if (m_CurrentPane == Panes::INTRO_PANE)
+            {
+                _updateStatusMessage(GameStrings::Messages::c_PleasePlayOrEnterDataMessage, Panes::INTRO_PANE, Timing::c_NoDelay);
+            }
             break;
         case GameFacade::StatusCodes::DATA_STILL_UNAVAILABLE:
             _updateStatusMessage(GameStrings::Messages::c_NoValidEntriesSavedForGameLanguage, Panes::INTRO_PANE, Timing::c_NoDelay);
