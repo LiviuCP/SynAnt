@@ -34,7 +34,7 @@ ApplicationWindow {
         id: introPane
 
         presenter: gamePresenter
-        visible: gamePresenter.currentPane === GamePresenter.INTRO
+        visible: gamePresenter.currentPane === GamePresenter.INTRO_PANE
 
         anchors {
             fill: parent
@@ -46,7 +46,7 @@ ApplicationWindow {
         id: mainPane
 
         presenter: gamePresenter
-        visible: gamePresenter.currentPane === GamePresenter.MAIN
+        visible: gamePresenter.currentPane === GamePresenter.MAIN_PANE
 
         anchors {
             fill: parent
@@ -58,7 +58,7 @@ ApplicationWindow {
         id: dataEntryPane
 
         presenter: gamePresenter
-        visible: gamePresenter.currentPane === GamePresenter.DATA_ENTRY
+        visible: gamePresenter.currentPane === GamePresenter.DATA_ENTRY_PANE
 
         anchors {
             fill: parent
@@ -70,7 +70,7 @@ ApplicationWindow {
         id: promptSaveExitPane
 
         presenter: gamePresenter
-        visible: gamePresenter.currentPane === GamePresenter.PROMPT_SAVE_EXIT
+        visible: gamePresenter.currentPane === GamePresenter.PROMPT_SAVE_EXIT_PANE
 
         anchors {
             fill: parent
@@ -82,7 +82,7 @@ ApplicationWindow {
         id: promptDiscardPane
 
         presenter: gamePresenter
-        visible: gamePresenter.currentPane === GamePresenter.PROMPT_DISCARD
+        visible: gamePresenter.currentPane === GamePresenter.PROMPT_DISCARD_PANE
 
         anchors {
             fill: parent
@@ -94,7 +94,7 @@ ApplicationWindow {
         id: helpPane
 
         presenter: gamePresenter
-        visible: gamePresenter.currentPane === GamePresenter.HELP
+        visible: gamePresenter.currentPane === GamePresenter.HELP_PANE
 
         anchors {
             fill: parent
@@ -183,11 +183,11 @@ ApplicationWindow {
         enabled: gamePresenter.languageSelectionEnabled && !gamePresenter.dataEntry.dataSavingInProgress && !gamePresenter.dataEntry.dataFetchingInProgress
 
         onActivated: {
-            if (gamePresenter.currentPane === GamePresenter.INTRO) {
+            if (gamePresenter.currentPane === GamePresenter.INTRO_PANE) {
                 introPane.languageDropdownShortcutActivated = true;
-            } else if (gamePresenter.currentPane === GamePresenter.MAIN) {
+            } else if (gamePresenter.currentPane === GamePresenter.MAIN_PANE) {
                 mainPane.languageDropdownShortcutActivated = true;
-            } else if (gamePresenter.currentPane === GamePresenter.DATA_ENTRY) {
+            } else if (gamePresenter.currentPane === GamePresenter.DATA_ENTRY_PANE) {
                 dataEntryPane.languageDropdownShortcutActivated = true;
             }
             else {
@@ -205,17 +205,17 @@ ApplicationWindow {
 
     Shortcut {
         sequence: GameStrings.dataEntryButtonShortcut
-        enabled: gamePresenter.dataEntry.dataEntryEnabled && (gamePresenter.currentPane === GamePresenter.INTRO || gamePresenter.currentPane === GamePresenter.MAIN) && !gamePresenter.dataEntry.dataFetchingInProgress
+        enabled: gamePresenter.dataEntry.dataEntryEnabled && (gamePresenter.currentPane === GamePresenter.INTRO_PANE || gamePresenter.currentPane === GamePresenter.MAIN_PANE) && !gamePresenter.dataEntry.dataFetchingInProgress
 
         property Timer dataEntryTimer: Timer {
             interval: 100
-            onTriggered: gamePresenter.currentPane = GamePresenter.DATA_ENTRY
+            onTriggered: gamePresenter.currentPane = GamePresenter.DATA_ENTRY_PANE
         }
 
         onActivated: {
-            if (gamePresenter.currentPane === GamePresenter.INTRO) {
+            if (gamePresenter.currentPane === GamePresenter.INTRO_PANE) {
                 introPane.dataEntryButtonShortcutActivated = true;
-            } else if (gamePresenter.currentPane === GamePresenter.MAIN) {
+            } else if (gamePresenter.currentPane === GamePresenter.MAIN_PANE) {
                 mainPane.dataEntryButtonShortcutActivated = true;
             }
             else {
@@ -228,19 +228,19 @@ ApplicationWindow {
 
     Shortcut {
         sequence: GameStrings.helpButtonShortcut
-        enabled: gamePresenter.currentPane === GamePresenter.INTRO || gamePresenter.currentPane === GamePresenter.MAIN || (gamePresenter.currentPane === GamePresenter.DATA_ENTRY && !gamePresenter.dataEntry.dataFetchingInProgress)
+        enabled: gamePresenter.currentPane === GamePresenter.INTRO_PANE || gamePresenter.currentPane === GamePresenter.MAIN_PANE || (gamePresenter.currentPane === GamePresenter.DATA_ENTRY_PANE && !gamePresenter.dataEntry.dataFetchingInProgress)
 
         property Timer helpTimer: Timer {
             interval: 100
-            onTriggered: gamePresenter.currentPane = GamePresenter.HELP
+            onTriggered: gamePresenter.currentPane = GamePresenter.HELP_PANE
         }
 
         onActivated: {
-            if (gamePresenter.currentPane === GamePresenter.INTRO) {
+            if (gamePresenter.currentPane === GamePresenter.INTRO_PANE) {
                 introPane.helpButtonShortcutActivated = true;
-            } else if (gamePresenter.currentPane === GamePresenter.MAIN) {
+            } else if (gamePresenter.currentPane === GamePresenter.MAIN_PANE) {
                 mainPane.helpButtonShortcutActivated = true;
-            } else if (gamePresenter.currentPane === GamePresenter.DATA_ENTRY) {
+            } else if (gamePresenter.currentPane === GamePresenter.DATA_ENTRY_PANE) {
                 dataEntryPane.helpButtonShortcutActivated = true;
             }
             else {
@@ -253,12 +253,12 @@ ApplicationWindow {
 
     Shortcut {
         sequence: GameStrings.quitButtonShortcut
-        enabled: gamePresenter.currentPane === GamePresenter.INTRO || gamePresenter.currentPane === GamePresenter.HELP || gamePresenter.currentPane === GamePresenter.MAIN || gamePresenter.currentPane === GamePresenter.DATA_ENTRY
+        enabled: gamePresenter.currentPane === GamePresenter.INTRO_PANE || gamePresenter.currentPane === GamePresenter.HELP_PANE || gamePresenter.currentPane === GamePresenter.MAIN_PANE || gamePresenter.currentPane === GamePresenter.DATA_ENTRY_PANE
 
         property Timer quitTimer: Timer {
             interval: 100
             onTriggered: {
-                if (gamePresenter.currentPane === GamePresenter.DATA_ENTRY && gamePresenter.dataEntry.saveAddedWordPairsEnabled) {
+                if (gamePresenter.currentPane === GamePresenter.DATA_ENTRY_PANE && gamePresenter.dataEntry.saveAddedWordPairsEnabled) {
                     gamePresenter.quitGameDeferred = true;
                     gamePresenter.promptForSavingAddedWordPairs();
                 } else {
@@ -268,13 +268,13 @@ ApplicationWindow {
         }
 
         onActivated: {
-            if (gamePresenter.currentPane === GamePresenter.INTRO) {
+            if (gamePresenter.currentPane === GamePresenter.INTRO_PANE) {
                 introPane.quitButtonShortcutActivated = true;
-            } else if (gamePresenter.currentPane === GamePresenter.MAIN) {
+            } else if (gamePresenter.currentPane === GamePresenter.MAIN_PANE) {
                 mainPane.quitButtonShortcutActivated = true;
-            } else if (gamePresenter.currentPane === GamePresenter.HELP) {
+            } else if (gamePresenter.currentPane === GamePresenter.HELP_PANE) {
                 helpPane.quitButtonShortcutActivated = true;
-            } else if (gamePresenter.currentPane === GamePresenter.DATA_ENTRY) {
+            } else if (gamePresenter.currentPane === GamePresenter.DATA_ENTRY_PANE) {
                 dataEntryPane.quitButtonShortcutActivated = true;
             }
             else {

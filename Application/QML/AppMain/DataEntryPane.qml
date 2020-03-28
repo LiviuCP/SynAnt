@@ -184,7 +184,7 @@ Item {
 
             isActiveFocusOnTabEnabled: false
             buttonEnabled: false
-            dedicatedShortcutEnabled: enabled && presenter.currentPane === GamePresenter.DATA_ENTRY
+            dedicatedShortcutEnabled: enabled && presenter.currentPane === GamePresenter.DATA_ENTRY_PANE
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -214,7 +214,7 @@ Item {
 
             isActiveFocusOnTabEnabled: false
             buttonEnabled: presenter.dataEntry.addWordsPairEnabled && !presenter.dataEntry.dataFetchingInProgress
-            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.DATA_ENTRY && presenter.dataEntry.addWordsPairEnabled  && !presenter.dataEntry.dataFetchingInProgress
+            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.DATA_ENTRY_PANE && presenter.dataEntry.addWordsPairEnabled  && !presenter.dataEntry.dataFetchingInProgress
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -229,7 +229,7 @@ Item {
             id: backBtn
 
             isActiveFocusOnTabEnabled: false
-            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.DATA_ENTRY
+            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.DATA_ENTRY_PANE
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -250,7 +250,7 @@ Item {
             buttonLabel: GameStrings.helpButtonLabel
             buttonToolTip: presenter.helpButtonToolTip
 
-            onButtonClicked: presenter.currentPane = GamePresenter.HELP
+            onButtonClicked: presenter.currentPane = GamePresenter.HELP_PANE
         }
 
         AppButton {
@@ -258,7 +258,7 @@ Item {
 
             isActiveFocusOnTabEnabled: false
             buttonEnabled: presenter.dataEntry.discardAddedWordPairsEnabled
-            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.DATA_ENTRY && presenter.dataEntry.discardAddedWordPairsEnabled
+            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.DATA_ENTRY_PANE && presenter.dataEntry.discardAddedWordPairsEnabled
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -277,7 +277,7 @@ Item {
 
             isActiveFocusOnTabEnabled: false
             buttonEnabled: presenter.dataEntry.saveAddedWordPairsEnabled
-            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.DATA_ENTRY && presenter.dataEntry.saveAddedWordPairsEnabled
+            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.DATA_ENTRY_PANE && presenter.dataEntry.saveAddedWordPairsEnabled
 
             Layout.minimumWidth: bottomBtnsMinWidth
 

@@ -112,7 +112,7 @@ Item {
                 id: resetBtn
 
                 buttonEnabled: presenter.mainPaneStatisticsResetEnabled
-                dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.MAIN && presenter.mainPaneStatisticsResetEnabled
+                dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.MAIN_PANE && presenter.mainPaneStatisticsResetEnabled
 
                 Layout.minimumWidth: highscoresBox.width
 
@@ -134,7 +134,7 @@ Item {
                 buttonLabel: GameStrings.dataEntryButtonLabel
                 buttonToolTip: GameStrings.dataEntryButtonToolTip
 
-                onButtonClicked: presenter.currentPane = GamePresenter.DATA_ENTRY
+                onButtonClicked: presenter.currentPane = GamePresenter.DATA_ENTRY_PANE
             }
 
             Dropdown {
@@ -186,7 +186,7 @@ Item {
 
                         buttonChecked: false
                         buttonEnabled: !presenter.dataFetchingInProgress
-                        dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.MAIN
+                        dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.MAIN_PANE
 
                         buttonLabel: GameStrings.levelEasyButtonLabel
                         shortcutSequence: GameStrings.levelEasyButtonShortcut
@@ -199,7 +199,7 @@ Item {
 
                         buttonChecked: true
                         buttonEnabled: !presenter.dataFetchingInProgress
-                        dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.MAIN
+                        dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.MAIN_PANE
 
                         buttonLabel: GameStrings.levelMediumButtonLabel
                         shortcutSequence: GameStrings.levelMediumButtonShortcut
@@ -212,7 +212,7 @@ Item {
 
                         buttonChecked: false
                         buttonEnabled: !presenter.dataFetchingInProgress
-                        dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.MAIN
+                        dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.MAIN_PANE
 
                         buttonLabel: GameStrings.levelHardButtonLabel
                         shortcutSequence: GameStrings.levelHardButtonShortcut
@@ -275,7 +275,7 @@ Item {
         WordPiecesInput {
             id: firstWordInput
             gamePresenter: presenter
-            clearShortcutEnabled: presenter.currentPane === GamePresenter.MAIN
+            clearShortcutEnabled: presenter.currentPane === GamePresenter.MAIN_PANE
             clearShortcutSequence: GameStrings.clearMainPaneFirstInputWordShortcut
             pieceWidth: parent.width / mixedWordPieces.count
             pieceHeight: parent.height
@@ -318,7 +318,7 @@ Item {
         WordPiecesInput {
             id: secondWordInput
             gamePresenter: presenter
-            clearShortcutEnabled: presenter.currentPane === GamePresenter.MAIN
+            clearShortcutEnabled: presenter.currentPane === GamePresenter.MAIN_PANE
             clearShortcutSequence: GameStrings.clearMainPaneSecondInputWordShortcut
             pieceWidth: parent.width / mixedWordPieces.count
             pieceHeight: parent.height
@@ -341,7 +341,7 @@ Item {
             id: submitBtn
 
             buttonEnabled: presenter.submitMainPaneInputEnabled && !presenter.dataFetchingInProgress
-            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.MAIN && presenter.submitMainPaneInputEnabled
+            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.MAIN_PANE && presenter.submitMainPaneInputEnabled
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -356,7 +356,7 @@ Item {
             id: clearInputBtn
 
             buttonEnabled: presenter.clearMainPaneInputEnabled && !presenter.dataFetchingInProgress
-            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.MAIN && presenter.clearMainPaneInputEnabled
+            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.MAIN_PANE && presenter.clearMainPaneInputEnabled
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -377,14 +377,14 @@ Item {
             buttonLabel: GameStrings.helpButtonLabel
             buttonToolTip: presenter.helpButtonToolTip
 
-            onButtonClicked: presenter.currentPane = GamePresenter.HELP
+            onButtonClicked: presenter.currentPane = GamePresenter.HELP_PANE
         }
 
         AppButton {
             id: showPairBtn
 
             buttonEnabled: !presenter.dataFetchingInProgress
-            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.MAIN
+            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.MAIN_PANE
 
             Layout.minimumWidth: bottomBtnsMinWidth
 

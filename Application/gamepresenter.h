@@ -19,7 +19,7 @@ class GamePresenter : public QObject
     Q_OBJECT
 
     /* current pane and data entry presenter */
-    Q_PROPERTY(Pane currentPane READ getCurrentPane WRITE setCurrentPane NOTIFY currentPaneChanged)
+    Q_PROPERTY(Panes currentPane READ getCurrentPane WRITE setCurrentPane NOTIFY currentPaneChanged)
     Q_PROPERTY(QObject* dataEntry READ getDataEntryPresenter CONSTANT)
 
     /* functionality enabling properties */
@@ -68,18 +68,18 @@ class GamePresenter : public QObject
     Q_PROPERTY(bool quitGameDeferred READ getQuitGameDeferred WRITE setQuitGameDeferred NOTIFY quitGameDeferredChanged)
 
 public:
-    enum class Pane
+    enum class Panes
     {
-        INTRO,
-        HELP,
-        MAIN,
-        DATA_ENTRY,
-        PROMPT_SAVE_EXIT,
-        PROMPT_DISCARD,
-        ERROR,
+        INTRO_PANE,
+        HELP_PANE,
+        MAIN_PANE,
+        DATA_ENTRY_PANE,
+        PROMPT_SAVE_EXIT_PANE,
+        PROMPT_DISCARD_PANE,
+        ERROR_PANE,
         NrOfPanes
     };
-    Q_ENUM(Pane)
+    Q_ENUM(Panes)
 
     // need this enum class as Game::Levels cannot be registered for QML usage (doesn't belong to presenter)
     enum class Levels
@@ -93,7 +93,7 @@ public:
 
     explicit GamePresenter(QObject *parent = nullptr);
 
-    void setCurrentPane(Pane pane);
+    void setCurrentPane(Panes pane);
 
     Q_INVOKABLE void goBack();
     Q_INVOKABLE void promptForSavingAddedWordPairs();
@@ -126,7 +126,7 @@ public:
 
     QObject* getDataEntryPresenter() const;
 
-    Pane getCurrentPane() const;
+    Panes getCurrentPane() const;
 
     bool isLanguageSelectionEnabled() const;
     bool isPlayEnabled() const;
@@ -209,9 +209,9 @@ private slots:
 
 private:
     bool _canResetGameStatistics() const;
-    void _switchToPane(Pane pane);
+    void _switchToPane(Panes pane);
     void _setDataEntryHelpMenuActive(bool isDataEntryHelpMenuRequired);
-    void _updateStatusMessage(const QString& message, Pane pane, int delay);
+    void _updateStatusMessage(const QString& message, Panes pane, int delay);
     void _updateMessage();
     void _launchErrorPane(const QString& errorMessage);
 
@@ -231,9 +231,9 @@ private:
     QString m_ErrorMessage;
     QString m_CurrentStatusMessage;
 
-    Pane m_CurrentPane;
-    Pane m_StatusUpdatePane;
-    QVector<Pane> m_PreviousPanesStack;
+    Panes m_CurrentPane;
+    Panes m_StatusUpdatePane;
+    QVector<Panes> m_PreviousPanesStack;
 
     int m_FirstWordInputPiecesHoverIndex;
     int m_SecondWordInputPiecesHoverIndex;

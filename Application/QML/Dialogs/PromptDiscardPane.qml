@@ -45,7 +45,7 @@ Item {
         AppButton {
             id: yesBtn
 
-            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.PROMPT_DISCARD
+            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.PROMPT_DISCARD_PANE
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -62,7 +62,7 @@ Item {
         AppButton {
             id: cancelBtn
 
-            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.PROMPT_DISCARD
+            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.PROMPT_DISCARD_PANE
 
             Layout.minimumWidth: bottomBtnsMinWidth
 

@@ -47,7 +47,7 @@ Item {
         AppButton {
             id: okBtn
 
-            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.HELP
+            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.HELP_PANE
 
             Layout.minimumWidth: bottomBtnsMinWidth
 

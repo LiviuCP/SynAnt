@@ -102,7 +102,7 @@ Item {
             id: playBtn
 
             buttonEnabled: presenter.playEnabled && presenter.languageIndex !== -1
-            dedicatedShortcutEnabled: presenter.playEnabled && presenter.currentPane === GamePresenter.INTRO
+            dedicatedShortcutEnabled: presenter.playEnabled && presenter.currentPane === GamePresenter.INTRO_PANE
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -110,7 +110,7 @@ Item {
             buttonToolTip: GameStrings.playButtonToolTip
             shortcutSequence: GameStrings.playButtonShortcut
 
-            onButtonClicked: presenter.currentPane = GamePresenter.MAIN
+            onButtonClicked: presenter.currentPane = GamePresenter.MAIN_PANE
         }
 
         AppButton {
@@ -124,7 +124,7 @@ Item {
             buttonLabel: GameStrings.dataEntryButtonLabel
             buttonToolTip: GameStrings.dataEntryButtonToolTip
 
-            onButtonClicked: presenter.currentPane = GamePresenter.DATA_ENTRY
+            onButtonClicked: presenter.currentPane = GamePresenter.DATA_ENTRY_PANE
         }
 
         AppButton {
@@ -137,7 +137,7 @@ Item {
             buttonLabel: GameStrings.helpButtonLabel
             buttonToolTip: presenter.helpButtonToolTip
 
-            onButtonClicked: presenter.currentPane = GamePresenter.HELP
+            onButtonClicked: presenter.currentPane = GamePresenter.HELP_PANE
         }
 
         AppButton {

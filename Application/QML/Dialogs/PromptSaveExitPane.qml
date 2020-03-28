@@ -44,7 +44,7 @@ Item {
         AppButton {
             id: yesBtn
 
-            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.PROMPT_SAVE_EXIT
+            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.PROMPT_SAVE_EXIT_PANE
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -67,7 +67,7 @@ Item {
         AppButton {
             id: noBtn
 
-            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.PROMPT_SAVE_EXIT
+            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.PROMPT_SAVE_EXIT_PANE
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
@@ -90,7 +90,7 @@ Item {
         AppButton {
             id: cancelBtn
 
-            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.PROMPT_SAVE_EXIT
+            dedicatedShortcutEnabled: presenter.currentPane === GamePresenter.PROMPT_SAVE_EXIT_PANE
 
             Layout.minimumWidth: bottomBtnsMinWidth
 
