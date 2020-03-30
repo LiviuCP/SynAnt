@@ -48,7 +48,7 @@ ComboBox {
     }
 
     Keys.onUpPressed: {
-        if (selectedIndex == 0) {
+        if (selectedIndex <= 0) {
             selectedIndex = dataModel.length-1;
         } else {
             --selectedIndex;
