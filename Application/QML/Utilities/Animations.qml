@@ -10,6 +10,10 @@ QtObject {
     readonly property int toolTipDelay: 1000
     readonly property int toolTipTimeout: 4000
 
+    // flick velocities
+    readonly property int flickDownVelocity: 500
+    readonly property int flickUpVelocity: -500
+
     // button behavior when using shortcuts
     property QtObject button
 

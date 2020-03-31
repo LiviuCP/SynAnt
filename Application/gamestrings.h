@@ -161,7 +161,11 @@ namespace GameStrings
                     .arg(Game::c_EnhancedScoreIncrements[Game::Levels::LEVEL_HARD])
         };
 
-        const QString c_GameHelpPaneToolTip                 {    "Please read the detailed %1 instructions."                                                };
+        const QString c_GameHelpPaneToolTip                 {
+                                                                 "Please read the detailed %1 instructions.\n"
+                                                                 "Use mouse cursor drag, mouse wheel or CTRL + up/down arrow keys to scroll through."
+        };
+
         const QString c_GameHelpButtonToolTip               {    "Click or hit ALT+H for accessing the detailed %1 instructions."                           };
 
 

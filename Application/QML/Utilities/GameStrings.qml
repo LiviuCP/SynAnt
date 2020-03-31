@@ -62,6 +62,8 @@ QtObject {
     readonly property string languageSelectionDropdownShortcut:                     "ALT+L"
     readonly property string playButtonShortcut:                                    "ALT+P"
     readonly property string helpButtonShortcut:                                    "ALT+H"
+    readonly property string helpMenuFlickUpShortcut:                               "ALT+DOWN"
+    readonly property string helpMenuFlickDownShortcut:                             "ALT+UP"
     readonly property string quitButtonShortcut:                                    "ALT+Q"
     readonly property string submitButtonShortcut:                                  "ALT+S"
     readonly property string clearMainPaneInputButtonShortcut:                      "ALT+Z"

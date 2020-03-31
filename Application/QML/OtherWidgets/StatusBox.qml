@@ -13,6 +13,18 @@ Item {
     property bool isErrorStatus: false
     property bool hasFlickable: false
 
+    function flickUp() {
+        if (hasFlickable) {
+            statusBoxFlickable.flick(0, Animations.flickUpVelocity);
+        }
+    }
+
+    function flickDown() {
+        if (hasFlickable) {
+            statusBoxFlickable.flick(0, Animations.flickDownVelocity);
+        }
+    }
+
     MouseArea {
         id: statusBoxMouseArea
 
@@ -53,7 +65,7 @@ Item {
         }
 
         Flickable {
-            id: helpPaneFlickable
+            id: statusBoxFlickable
             visible: hasFlickable
 
             clip: true

@@ -18,6 +18,26 @@ Item {
     readonly property double bottomBtnsLayoutHeight: height * 0.1
     readonly property double bottomBtnsMinWidth: (helpPaneStatusBox.width - bottomBtnsLayout.spacing) * 0.5
 
+    // couldn't use just the down arrow key due to a focus conflict with the language dropdown (probably will be fixed in a future version)
+    Shortcut {
+        id: flickUpShortcut
+
+        enabled: helpPane.visible
+
+        sequence: GameStrings.helpMenuFlickUpShortcut
+        onActivated: helpPaneStatusBox.flickUp();
+    }
+
+    // couldn't use just the up arrow key due to a focus conflict with the language dropdown (probably will be fixed in a future version)
+    Shortcut {
+        id: flickDownShortcut
+
+        enabled: helpPane.visible
+
+        sequence: GameStrings.helpMenuFlickDownShortcut
+        onActivated: helpPaneStatusBox.flickDown();
+    }
+
     StatusBox {
         id: helpPaneStatusBox
 
