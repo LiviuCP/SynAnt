@@ -139,6 +139,8 @@ Item {
         TextField {
             id: firstWordTextField
 
+            enabled: dataEntryPane.visible
+
             activeFocusOnTab: true
 
             Layout.minimumWidth: parent.width * 0.414
@@ -162,6 +164,8 @@ Item {
 
         TextField {
             id: secondWordTextField
+
+            enabled: dataEntryPane.visible
 
             activeFocusOnTab: true
 
