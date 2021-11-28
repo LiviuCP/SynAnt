@@ -1,5 +1,5 @@
 #include "exceptions.h"
-#include "../Utilities/gameutils.h"
+#include "gameutils.h"
 
 const QString c_FileExceptionRawMessage{"\n%1\n\nFile: %2\n"};
 

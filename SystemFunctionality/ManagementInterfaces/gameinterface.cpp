@@ -1,5 +1,5 @@
 #include "gameinterface.h"
-#include "../Management/gamefacade.h"
+#include "gamefacade.h"
 
 IGame::~IGame()
 {

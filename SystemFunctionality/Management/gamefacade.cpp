@@ -1,12 +1,12 @@
 #include "gamefacade.h"
-#include "../CoreFunctionality/wordmixer.h"
-#include "../CoreFunctionality/wordpairowner.h"
-#include "../CoreFunctionality/inputbuilder.h"
-#include "../DataAccess/datasource.h"
-#include "../DataAccess/datasourceaccesshelper.h"
-#include "../ManagementProxies/gamefunctionalityproxy.h"
-#include "../Utilities/statisticsitem.h"
-#include "../Utilities/chronometer.h"
+#include "wordmixer.h"
+#include "wordpairowner.h"
+#include "inputbuilder.h"
+#include "datasource.h"
+#include "datasourceaccesshelper.h"
+#include "gamefunctionalityproxy.h"
+#include "statisticsitem.h"
+#include "chronometer.h"
 
 const QMap<Game::Levels, int> c_TimeLimits
 {

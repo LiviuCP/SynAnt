@@ -3,9 +3,9 @@
 
 #include <memory>
 
-#include "../../SystemFunctionality/DataAccess/datasource.h"
-#include "../../SystemFunctionality/DataAccess/dataentryvalidator.h"
-#include "../../SystemFunctionality/DataAccess/dataentrycache.h"
+#include "datasource.h"
+#include "dataentryvalidator.h"
+#include "dataentrycache.h"
 
 class DataEntryTests : public QObject
 {

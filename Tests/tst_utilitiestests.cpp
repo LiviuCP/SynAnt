@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "../../SystemFunctionality/Utilities/statisticsitem.h"
+#include "statisticsitem.h"
 
 class UtilitiesTests : public QObject
 {

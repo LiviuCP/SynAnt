@@ -1,5 +1,5 @@
 #include "dataentryvalidator.h"
-#include "../Utilities/gameutils.h"
+#include "gameutils.h"
 
 static constexpr uint16_t c_InvalidPairBaseReasonCode{uint16_t{0x0001} << (static_cast<uint16_t>(DataEntryValidator::ValidationCodes::InvalidCodesCount) - 1)};
 

@@ -7,9 +7,9 @@
 #include "dataentrystrings.h"
 #include "gamecolors.h"
 #include "timing.h"
-#include "../SystemFunctionality/Management/gamefacade.h"
-#include "../SystemFunctionality/Utilities/exceptions.h"
-#include "../SystemFunctionality/ManagementProxies/gameproxy.h"
+#include "gamefacade.h"
+#include "exceptions.h"
+#include "gameproxy.h"
 
 static const QMap<GamePresenter::Panes, QString> c_WindowTitles
 {

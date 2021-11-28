@@ -1,5 +1,5 @@
 #include "dataentryproxy.h"
-#include "../Management/gamemanager.h"
+#include "gamemanager.h"
 
 DataEntryProxy::DataEntryProxy(QObject *parent) : QObject(parent)
 {

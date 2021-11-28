@@ -1,6 +1,6 @@
 #include "wordmixer.h"
-#include "../Utilities/gameutils.h"
-#include "../Utilities/exceptions.h"
+#include "gameutils.h"
+#include "exceptions.h"
 
 const QMap<Game::Levels, int> c_WordPieceSizes
 {

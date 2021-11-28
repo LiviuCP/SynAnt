@@ -5,7 +5,7 @@
 #include <QFile>
 
 #include "dataentrycache.h"
-#include "../Utilities/databaseutils.h"
+#include "databaseutils.h"
 
 static constexpr int c_WriteDataThreadDelay{1000};
 static constexpr int c_ResetCacheDelay{250};

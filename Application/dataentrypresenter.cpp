@@ -1,9 +1,9 @@
 #include "dataentrypresenter.h"
 #include "dataentrystrings.h"
 #include "timing.h"
-#include "../SystemFunctionality/Management/dataentryfacade.h"
-#include "../SystemFunctionality/ManagementProxies/dataproxy.h"
-#include "../SystemFunctionality/Utilities/gameutils.h"
+#include "dataentryfacade.h"
+#include "dataproxy.h"
+#include "gameutils.h"
 
 static const QMap<DataEntryFacade::StatusCodes, QString> c_InvalidPairEntryStatusMessages
 {

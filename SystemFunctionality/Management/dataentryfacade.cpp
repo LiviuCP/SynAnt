@@ -1,7 +1,7 @@
 #include <QMap>
 
 #include "dataentryfacade.h"
-#include "../ManagementProxies/dataentryproxy.h"
+#include "dataentryproxy.h"
 
 static constexpr int c_NrOfInvalidPairEntryStatusCodes{static_cast<uint16_t>(DataEntryFacade::StatusCodes::Add_Failed_Status_Codes_End) -
                                               static_cast<uint16_t>(DataEntryFacade::StatusCodes::Add_Failed_Status_Codes_Start) - 1};

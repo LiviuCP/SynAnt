@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "../../SystemFunctionality/CoreFunctionality/wordmixer.h"
+#include "wordmixer.h"
 
 class CoreFunctionalityTests : public QObject
 {

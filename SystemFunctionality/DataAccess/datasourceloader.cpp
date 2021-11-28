@@ -6,8 +6,8 @@
 #include <QFile>
 
 #include "datasourceloader.h"
-#include "../Utilities/gameutils.h"
-#include "../Utilities/databaseutils.h"
+#include "gameutils.h"
+#include "databaseutils.h"
 
 static constexpr int c_LoadDataThreadDelay{1000};
 
