@@ -43,7 +43,8 @@ int DataSourceAccessHelper::generateEntryNumber()
 {
     Q_ASSERT(m_EntryUsedStatuses.size() > 0);
 
-    int alreadyAccessedEntriesCount{m_EntryUsedStatuses.count(true)};
+    // static_cast required to solve compiling error (normally there should be no overflow - to be refactored to use size_t if required)
+    int alreadyAccessedEntriesCount{static_cast<int>(m_EntryUsedStatuses.count(true))};
 
     if (alreadyAccessedEntriesCount == m_EntryUsedStatuses.size())
     {
@@ -51,7 +52,8 @@ int DataSourceAccessHelper::generateEntryNumber()
         alreadyAccessedEntriesCount = 0;
     }
 
-    std::uniform_int_distribution<int> chooseEntryNumberDist{0, m_EntryUsedStatuses.size() - alreadyAccessedEntriesCount-1};
+    // same note regarding static_cast as above
+    std::uniform_int_distribution<int> chooseEntryNumberDist{0, static_cast<int>(m_EntryUsedStatuses.size()) - alreadyAccessedEntriesCount - 1};
 
     int chosenAvailableEntryRelativeNr{chooseEntryNumberDist(m_ChooseEntryNumberEngine)};
     int chosenAvailableEntryAbsoluteNr{-1};

@@ -362,7 +362,7 @@ void GameManager::_makeDataConnections()
     Q_ASSERT(m_pDataSource);
 
     // loader
-    bool connected{connect(m_pDataSourceLoaderThread, &QThread::finished, m_pDataSourceLoader, &DataSourceLoader::deleteLater)};
+    auto connected{connect(m_pDataSourceLoaderThread, &QThread::finished, m_pDataSourceLoader, &DataSourceLoader::deleteLater)};
     Q_ASSERT(connected);
     connected = connect(this, &GameManager::readDataForPrimaryLanguage, m_pDataSourceLoader, &DataSourceLoader::onLoadDataFromDbForPrimaryLanguageRequested, Qt::QueuedConnection);
     Q_ASSERT(connected);

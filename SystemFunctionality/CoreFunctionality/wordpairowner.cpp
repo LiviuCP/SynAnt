@@ -161,7 +161,10 @@ void WordPairOwner::decreasePersistentPieceSelectionIndex()
 
         if (!success)
         {
-            for (int index{m_MixedWordsPieces.size()-1}; index > m_PersistentPieceSelectionIndex; --index)
+            /* static_cast required for solving compiling error (there should be no overflow issue as the number of indexes is reasonably low
+               to be refactored later if required/possible)
+            */
+            for (int index{static_cast<int>(m_MixedWordsPieces.size()) - 1}; index > m_PersistentPieceSelectionIndex; --index)
             {
                 if (!m_MixedWordsPieces[index].isAddedToInput)
                 {

@@ -14,7 +14,7 @@ Chronometer::Chronometer(QObject *parent)
     , m_State{ChronoState::DISABLED}
     , m_RemainingTimerDurationWhenPaused{0}
 {
-    bool connected{connect(m_pRemainingTimeUpdateTimer, &QTimer::timeout, this, &Chronometer::_onRemainingTimeUpdateTimerTimeout)};
+    auto connected{connect(m_pRemainingTimeUpdateTimer, &QTimer::timeout, this, &Chronometer::_onRemainingTimeUpdateTimerTimeout)};
     Q_ASSERT(connected);
     connected = connect(m_pTimeExpiredSignallingTimer, &QTimer::timeout, this, &Chronometer::_onTimeExpiredTimerTimeout);
     Q_ASSERT(connected);

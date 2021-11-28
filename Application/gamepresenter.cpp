@@ -61,7 +61,7 @@ GamePresenter::GamePresenter(QObject *parent)
 
     m_pStatusUpdateTimer->setSingleShot(true);
 
-    bool connected{connect(m_pGameFacade, &GameFacade::statisticsChanged, this, &GamePresenter::_onStatisticsChanged)};
+    auto connected{connect(m_pGameFacade, &GameFacade::statisticsChanged, this, &GamePresenter::_onStatisticsChanged)};
     Q_ASSERT(connected);
     connected = connect(m_pGameFacade, &GameFacade::statusChanged, this, &GamePresenter::_onStatusChanged);
     Q_ASSERT(connected);

@@ -183,7 +183,9 @@ bool DataSourceLoader::_isValidDataEntry(const DataSource::DataEntry &dataEntry)
     };
 
     bool isValidPair{true};
-    const int totalPairSize{dataEntry.firstWord.size() + dataEntry.secondWord.size()};
+
+    // static_cast required to solve compiling error (normally there should be no overflow - to be refactored to use size_t if required)
+    const int totalPairSize{static_cast<int>(dataEntry.firstWord.size() + dataEntry.secondWord.size())};
 
     if (totalPairSize < Game::Constraints::c_MinPairSize || totalPairSize > Game::Constraints::c_MaxPairSize)
     {

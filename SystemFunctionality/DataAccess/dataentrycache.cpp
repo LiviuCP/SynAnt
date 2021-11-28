@@ -97,7 +97,8 @@ void DataEntryCache::onWriteDataToDbRequested()
 
                 db.close();
 
-                int totalNrOfSavedEntries{m_CacheEntries.size()};
+                // static_cast required to solve compiling error (normally there should be no overflow - to be refactored to use size_t if required)
+                int totalNrOfSavedEntries{static_cast<int>(m_CacheEntries.size())};
                 int nrOfPrimaryLanguageSavedEntries{0};
 
                 _moveCachedEntriesToDataSource(nrOfPrimaryLanguageSavedEntries);

@@ -26,7 +26,7 @@ DataEntryPresenter::DataEntryPresenter(QObject *parent)
 
     m_pStatusUpdateTimer->setSingleShot(true);
 
-    bool connected{connect(m_pDataEntryFacade, &DataEntryFacade::dataEntryAllowedChanged, this, &DataEntryPresenter::dataEntryEnabledChanged)};
+    auto connected{connect(m_pDataEntryFacade, &DataEntryFacade::dataEntryAllowedChanged, this, &DataEntryPresenter::dataEntryEnabledChanged)};
     Q_ASSERT(connected);
     connected = connect(m_pDataEntryFacade, &DataEntryFacade::addPairToCacheAllowedChanged, this, &DataEntryPresenter::addWordsPairEnabledChanged);
     Q_ASSERT(connected);

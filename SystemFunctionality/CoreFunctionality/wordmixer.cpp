@@ -32,9 +32,12 @@ void WordMixer::mixWords(QPair<QString, QString> newWordsPair, bool areSynonyms)
     Q_ASSERT(m_GameLevel != Game::Levels::LEVEL_NONE && m_WordPieceSizes.contains(m_GameLevel));
     Q_ASSERT(newWordsPair.first.size() > m_WordPieceSizes[m_GameLevel] && newWordsPair.second.size() > m_WordPieceSizes[m_GameLevel] && m_WordPieceSizes[m_GameLevel] > 0);
 
-    auto insertWordPiece = [this](const QString &word, int firstCharPos, QVector<int> &wordPieceIndexes)
+    auto insertWordPiece = [this](const QString& word, int firstCharPos, QVector<int>& wordPieceIndexes)
     {
-        std::uniform_int_distribution<int> indexDist{0,wordPieceIndexes.size()-1};
+        Q_ASSERT(wordPieceIndexes.size() > 0u);
+
+        // static_cast required for solving compiling error (there should be no overflow issue as the number of word piece indexes is reasonably low - to be refactored later if possible/required)
+        std::uniform_int_distribution<int> indexDist{0, static_cast<int>(wordPieceIndexes.size()) - 1};
         int insertOnPositionIndex{indexDist(m_WordPieceIndexEngine)};
 
         int insertOnPosition{wordPieceIndexes[insertOnPositionIndex]};
@@ -47,8 +50,8 @@ void WordMixer::mixWords(QPair<QString, QString> newWordsPair, bool areSynonyms)
     m_WordsPair = newWordsPair;
     m_AreSynonyms = areSynonyms;
 
-    int firstWordSize{m_WordsPair.first.size()};
-    int secondWordSize{m_WordsPair.second.size()};
+    int firstWordSize{static_cast<int>(m_WordsPair.first.size())}; // same note regarding static_cast (see above)
+    int secondWordSize{static_cast<int>(m_WordsPair.second.size())}; // same note regarding static_cast (see above)
     int firstWordNrOfPieces{firstWordSize / m_WordPieceSizes[m_GameLevel] + ((firstWordSize % m_WordPieceSizes[m_GameLevel]) == 0 ? 0 : 1)};
     int secondWordNrOfPieces{secondWordSize / m_WordPieceSizes[m_GameLevel] + ((secondWordSize % m_WordPieceSizes[m_GameLevel]) == 0 ? 0 : 1)};
     int totalNrOfPieces{firstWordNrOfPieces + secondWordNrOfPieces};
@@ -56,6 +59,7 @@ void WordMixer::mixWords(QPair<QString, QString> newWordsPair, bool areSynonyms)
     m_MixedWordsPiecesContent.resize(totalNrOfPieces);
 
     QVector<int> wordPieceIndexes{};
+
     for (int pieceIndex{0}; pieceIndex<totalNrOfPieces; ++pieceIndex)
     {
         wordPieceIndexes.append(pieceIndex);

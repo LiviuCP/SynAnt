@@ -7,7 +7,7 @@ GameFunctionalityProxy::GameFunctionalityProxy(QObject *parent)
     GameManager* pGameManager{GameManager::getManager()};
     Q_ASSERT(pGameManager);
 
-    bool connected{connect(pGameManager, &GameManager::primaryLanguageDataSavingFinished, this, &GameFunctionalityProxy::primaryLanguageDataSavingFinished, Qt::DirectConnection)};
+    auto connected{connect(pGameManager, &GameManager::primaryLanguageDataSavingFinished, this, &GameFunctionalityProxy::primaryLanguageDataSavingFinished, Qt::DirectConnection)};
     Q_ASSERT(connected);
     connected = connect(pGameManager, &GameManager::entryProvidedToConsumer, this, &GameFunctionalityProxy::entryProvidedToConsumer, Qt::DirectConnection);
     Q_ASSERT(connected);
