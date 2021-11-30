@@ -29,7 +29,7 @@ void DataEntryValidator::validateWordsPair(QPair<QString, QString> newWordsPair,
 
 uint16_t DataEntryValidator::getInvalidPairReasonCode() const
 {
-    return (m_ValidationCode < DataEntryValidator::ValidationCodes::InvalidCodesCount ? c_InvalidPairBaseReasonCode >> static_cast<uint16_t>(m_ValidationCode) : u_int16_t{0xFFFF});
+    return (m_ValidationCode < DataEntryValidator::ValidationCodes::InvalidCodesCount ? c_InvalidPairBaseReasonCode >> static_cast<uint16_t>(m_ValidationCode) : uint16_t{0xFFFF});
 }
 
 bool DataEntryValidator::isGivenWordsPairValid(const QString &firstWord, const QString &secondWord, bool areSynonyms, int languageIndex)
