@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(SystemFunctionality VERSION 2.1 LANGUAGES CXX)
+project(${SYS_FUNC_LIB_NAME} VERSION 2.1 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -63,11 +63,11 @@ add_library(${PROJECT_NAME} ${SYS_FUNC_LIB_TYPE}
     ${PROJECT_SOURCES}
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE
+target_link_libraries(${SYS_FUNC_LIB_NAME} PRIVATE
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::Sql
 )
 
-target_compile_definitions(SystemFunctionality PRIVATE
+target_compile_definitions(${SYS_FUNC_LIB_NAME} PRIVATE
     SYSTEMFUNCTIONALITY_LIBRARY
 )

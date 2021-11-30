@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(SynAnt VERSION 2.1 LANGUAGES CXX)
+project(${APP_NAME} VERSION 2.1 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -31,33 +31,33 @@ include_directories(
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(${PROJECT_NAME}
+    qt_add_executable(${APP_NAME}
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
     )
 else()
-    add_executable(${PROJECT_NAME}
+    add_executable(${APP_NAME}
         ${PROJECT_SOURCES}
     )
 endif()
 
-target_compile_definitions(${PROJECT_NAME} PRIVATE
+target_compile_definitions(${APP_NAME} PRIVATE
     $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE
+target_link_libraries(${APP_NAME} PRIVATE
     Qt${QT_VERSION_MAJOR}::Core
     Qt${QT_VERSION_MAJOR}::Quick
-    SystemFunctionality
+    ${SYS_FUNC_LIB_NAME}
 )
 
-set_target_properties(${PROJECT_NAME} PROPERTIES
+set_target_properties(${APP_NAME} PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
 )
 
 if(QT_VERSION_MAJOR EQUAL 6)
-    qt_import_qml_plugins(${PROJECT_NAME})
-    qt_finalize_executable(${PROJECT_NAME})
+    qt_import_qml_plugins(${APP_NAME})
+    qt_finalize_executable(${APP_NAME})
 endif()

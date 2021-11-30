@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(Tests LANGUAGES CXX)
+project(Tests VERSION 2.1 LANGUAGES CXX)
 
 find_package(QT NAMES Qt5 Qt6 COMPONENTS Test REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Test REQUIRED)
@@ -45,20 +45,20 @@ add_test(NAME UtilitiesTests COMMAND UtilitiesTests)
 
 target_link_libraries(CoreFunctionalityTests PRIVATE
     Qt${QT_VERSION_MAJOR}::Test
-    SystemFunctionality
+    ${SYS_FUNC_LIB_NAME}
 )
 
 target_link_libraries(DataAccessTests PRIVATE
     Qt${QT_VERSION_MAJOR}::Test
-    SystemFunctionality
+    ${SYS_FUNC_LIB_NAME}
 )
 
 target_link_libraries(DataEntryTests PRIVATE
     Qt${QT_VERSION_MAJOR}::Test
-    SystemFunctionality
+    ${SYS_FUNC_LIB_NAME}
 )
 
 target_link_libraries(UtilitiesTests PRIVATE
     Qt${QT_VERSION_MAJOR}::Test
-    SystemFunctionality
+    ${SYS_FUNC_LIB_NAME}
 )
