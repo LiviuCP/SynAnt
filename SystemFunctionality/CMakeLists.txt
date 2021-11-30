@@ -52,7 +52,14 @@ include_directories(
     Utilities
 )
 
-add_library(${PROJECT_NAME} SHARED
+set(SYS_FUNC_LIB_TYPE SHARED)
+
+# Some errors were encountered when building SystemFunctionality as shared library on Windows so it has been decided to keep it static on this OS for the moment
+if(WIN32)
+    set(SYS_FUNC_LIB_TYPE STATIC)
+endif()
+
+add_library(${PROJECT_NAME} ${SYS_FUNC_LIB_TYPE}
     ${PROJECT_SOURCES}
 )
 
