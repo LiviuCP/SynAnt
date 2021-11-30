@@ -321,12 +321,23 @@ Item {
     Connections {
         target: presenter.dataEntry
 
-        onDataEntryAddSucceeded: dataEntryPane.clearTextFields()
-        onDataEntryAddInvalid: firstWordTextField.forceActiveFocus()
-        onDataEntryStopped: dataEntryPane.clearTextFields()
-        onLanguageChanged: firstWordTextField.forceActiveFocus()
+        function onDataEntryAddSucceeded() {
+            dataEntryPane.clearTextFields()
+        }
 
-        onDataFetchingInProgressChanged: {
+        function onDataEntryAddInvalid() {
+            firstWordTextField.forceActiveFocus()
+        }
+
+        function onDataEntryStopped() {
+            dataEntryPane.clearTextFields()
+        }
+
+        function onLanguageChanged() {
+            firstWordTextField.forceActiveFocus()
+        }
+
+        function onDataFetchingInProgressChanged() {
             restoreToPrimaryLanguage();
         }
     }
