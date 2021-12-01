@@ -24,7 +24,7 @@ DataEntryFacade::DataEntryFacade(QObject *parent)
     Q_ASSERT(this->parent());
     Q_ASSERT(m_pDataEntryProxy->parent());
 
-    bool connected{connect(m_pDataEntryProxy, &DataEntryProxy::dataEntryAllowed, this, &DataEntryFacade::_onDataEntryAllowed)};
+    auto connected{connect(m_pDataEntryProxy, &DataEntryProxy::dataEntryAllowed, this, &DataEntryFacade::_onDataEntryAllowed)};
     Q_ASSERT(connected);
     connected = connect(m_pDataEntryProxy, &DataEntryProxy::newWordsPairAddedToCache, this, &DataEntryFacade::_onNewWordsPairAddedToCache);
     Q_ASSERT(connected);

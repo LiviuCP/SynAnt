@@ -6,7 +6,7 @@ DataEntryProxy::DataEntryProxy(QObject *parent) : QObject(parent)
     GameManager* pGameManager{GameManager::getManager()};
     Q_ASSERT(pGameManager);
 
-    bool connected{connect(pGameManager, &GameManager::newWordsPairAddedToCache, this, &DataEntryProxy::newWordsPairAddedToCache, Qt::DirectConnection)};
+    auto connected{connect(pGameManager, &GameManager::newWordsPairAddedToCache, this, &DataEntryProxy::newWordsPairAddedToCache, Qt::DirectConnection)};
     Q_ASSERT(connected);
     connected = connect(pGameManager, &GameManager::writeDataToDbFinished, this, &DataEntryProxy::writeDataToDbFinished, Qt::DirectConnection);
     Q_ASSERT(connected);

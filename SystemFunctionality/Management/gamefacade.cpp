@@ -46,7 +46,7 @@ GameFacade::GameFacade(QObject *parent)
     Q_ASSERT(m_pStatisticsItem->parent());
     Q_ASSERT(m_pChronometer->parent());
 
-    bool connected{connect(m_pWordMixer, &WordMixer::newWordsPairMixed, this, &GameFacade::_onNewWordsPairMixed)};
+    auto connected{connect(m_pWordMixer, &WordMixer::newWordsPairMixed, this, &GameFacade::_onNewWordsPairMixed)};
     Q_ASSERT(connected);
     connected = connect(m_pWordPairOwner, &WordPairOwner::newWordsPairSetup, this, &GameFacade::newMixedWordsAvailable);
     Q_ASSERT(connected);
