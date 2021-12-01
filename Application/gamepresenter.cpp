@@ -663,7 +663,7 @@ void GamePresenter::_onStatusChanged()
             {
                 QTimer::singleShot(c_GameQuitDelay, this, [this](){quit();});
             }
-            else if (m_CurrentPane == Panes::INTRO_PANE)
+            else
             {
                 _updateStatusMessage(GameStrings::Messages::c_PleasePlayOrEnterDataMessage, Panes::INTRO_PANE, Timing::c_NoDelay);
             }
@@ -709,7 +709,7 @@ void GamePresenter::_onStatusChanged()
             {
                 QTimer::singleShot(c_GameQuitDelay, this, [this](){quit();});
             }
-            else if (m_CurrentPane == Panes::INTRO_PANE)
+            else
             {
                 _updateStatusMessage(GameStrings::Messages::c_PleasePlayOrEnterDataMessage, Panes::INTRO_PANE, Timing::c_ShortStatusUpdateDelay);
             }
