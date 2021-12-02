@@ -25,9 +25,7 @@ static_assert (static_cast<int>(DataEntryValidator::ValidationCodes::InvalidCode
                                                                                            static_cast<int>(DataEntryFacade::StatusCodes::Add_Failed_Status_Codes_Start) - 1,
                "Number of invalid pair entry reason codes from DataEntryValidator does not match the number of invalid pair entry status codes from DataEntryFacade");
 
-static constexpr int c_RequiredNrOfDbTableFields{5};
-
-GameManager* GameManager::s_pGameManager = nullptr;
+GameManager* GameManager::s_pGameManager{nullptr};
 
 GameManager::GameManager(QObject *parent)
     : QObject(parent)
@@ -310,7 +308,7 @@ void GameManager::_setDatabase(const QString& databasePath)
             {
                 bool isValidTable{true};
 
-                if (db.record(Database::Query::c_TableName).count() != c_RequiredNrOfDbTableFields)
+                if (db.record(Database::Query::c_TableName).count() != sc_RequiredNrOfDbTableFields)
                 {
                     isValidTable = false;
                 }

@@ -137,6 +137,8 @@ private:
     void _makeDataConnections();
     void _registerMetaTypes();
 
+    static constexpr int sc_RequiredNrOfDbTableFields{5};
+
     static GameManager* s_pGameManager;
 
     GameFacade* m_pGameFacade;

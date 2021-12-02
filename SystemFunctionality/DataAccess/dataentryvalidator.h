@@ -43,6 +43,8 @@ signals:
 private:
     bool _isValidDataEntry(DataSource::DataEntry& rawDataEntry, const QString& firstWord, const QString& secondWord, bool areSynonyms, int languageIndex);
 
+    static constexpr uint16_t sc_InvalidPairBaseReasonCode{uint16_t{0x0001} << (static_cast<uint16_t>(DataEntryValidator::ValidationCodes::InvalidCodesCount) - 1)};
+
     ValidationCodes m_ValidationCode;
     DataSource* m_pDataSource;
 };

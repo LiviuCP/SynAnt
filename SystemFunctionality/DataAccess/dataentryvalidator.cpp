@@ -1,8 +1,6 @@
 #include "dataentryvalidator.h"
 #include "gameutils.h"
 
-static constexpr uint16_t c_InvalidPairBaseReasonCode{uint16_t{0x0001} << (static_cast<uint16_t>(DataEntryValidator::ValidationCodes::InvalidCodesCount) - 1)};
-
 DataEntryValidator::DataEntryValidator(DataSource* pDataSource, QObject *parent)
     : QObject(parent)
     , m_ValidationCode{ValidationCodes::NO_PAIR_VALIDATED}
@@ -29,7 +27,7 @@ void DataEntryValidator::validateWordsPair(QPair<QString, QString> newWordsPair,
 
 uint16_t DataEntryValidator::getInvalidPairReasonCode() const
 {
-    return (m_ValidationCode < DataEntryValidator::ValidationCodes::InvalidCodesCount ? c_InvalidPairBaseReasonCode >> static_cast<uint16_t>(m_ValidationCode) : uint16_t{0xFFFF});
+    return (m_ValidationCode < DataEntryValidator::ValidationCodes::InvalidCodesCount ? sc_InvalidPairBaseReasonCode >> static_cast<uint16_t>(m_ValidationCode) : uint16_t{0xFFFF});
 }
 
 bool DataEntryValidator::isGivenWordsPairValid(const QString &firstWord, const QString &secondWord, bool areSynonyms, int languageIndex)

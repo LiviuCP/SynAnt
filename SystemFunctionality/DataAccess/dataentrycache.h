@@ -36,6 +36,9 @@ signals:
 private:
     void _moveCachedEntriesToDataSource(int& nrOfEntriesSavedToPrimaryLanguage);
 
+    static constexpr int sc_WriteDataThreadDelay{1000};
+    static constexpr int sc_ResetCacheDelay{250};
+
     QVector<DataSource::DataEntry> m_CacheEntries;
     QVector<int> m_LanguageIndexes;
     DataSource* m_pDataSource;

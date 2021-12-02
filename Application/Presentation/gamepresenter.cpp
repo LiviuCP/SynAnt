@@ -11,7 +11,7 @@
 #include "exceptions.h"
 #include "gameproxy.h"
 
-static const QMap<GamePresenter::Panes, QString> c_WindowTitles
+const QMap<GamePresenter::Panes, QString> GamePresenter::sc_WindowTitles
 {
     {GamePresenter::Panes::INTRO_PANE, GameStrings::Titles::c_IntroWindowTitle},
     {GamePresenter::Panes::HELP_PANE, GameStrings::Titles::c_HelpWindowTitle},
@@ -22,22 +22,19 @@ static const QMap<GamePresenter::Panes, QString> c_WindowTitles
     {GamePresenter::Panes::ERROR_PANE, GameStrings::Titles::c_FatalErrorWindowTitle}
 };
 
-static const QMap<Game::PieceTypes, QColor> c_WordPieceTextColors
+const QMap<Game::PieceTypes, QColor> GamePresenter::sc_WordPieceTextColors
 {
     {Game::PieceTypes::BEGIN_PIECE, Colors::c_BeginPieceTextColor},
     {Game::PieceTypes::MIDDLE_PIECE, Colors::c_MiddlePieceTextColor},
     {Game::PieceTypes::END_PIECE, Colors::c_EndPieceTextColor}
 };
 
-static constexpr int c_PaneSwitchingDelay{350};
-static constexpr int c_GameQuitDelay{200};
-
 static_assert (static_cast<int>(GamePresenter::Levels::LEVEL_EASY) == static_cast<int>(Game::Levels::LEVEL_EASY) &&
                static_cast<int>(GamePresenter::Levels::LEVEL_MEDIUM) == static_cast<int>(Game::Levels::LEVEL_MEDIUM) &&
                static_cast<int>(GamePresenter::Levels::LEVEL_HARD) == static_cast<int>(Game::Levels::LEVEL_HARD) &&
                static_cast<int>(GamePresenter::Levels::LEVEL_NONE) == static_cast<int>(GamePresenter::Levels::LEVEL_NONE), "Incorrect mapping between GamePresenter::Levels and Game::Levels");
 
-GamePresenter::GamePresenter(QObject *parent)
+GamePresenter::GamePresenter(QObject* parent)
     : QObject(parent)
     , m_pDataEntryPresenter{new DataEntryPresenter{this}}
     , m_MainPaneInitialized {false}
@@ -389,7 +386,7 @@ QList<QVariant> GamePresenter::getMixedWordsPiecesTextColors() const
 
     for (auto pieceType : m_pGameFacade->getMixedWordsPiecesTypes())
     {
-        mixedWordsPiecesTextColors.append(c_WordPieceTextColors[pieceType]);
+        mixedWordsPiecesTextColors.append(sc_WordPieceTextColors[pieceType]);
     }
 
     return mixedWordsPiecesTextColors;
@@ -425,7 +422,7 @@ QList<QVariant> GamePresenter::getFirstWordInputPiecesTextColors() const
 
     for (auto index : m_pGameFacade->getFirstWordInputIndexes())
     {
-        firstWordInputPiecesTextColors.append(c_WordPieceTextColors[m_pGameFacade->getMixedWordsPiecesTypes().at(index)]);
+        firstWordInputPiecesTextColors.append(sc_WordPieceTextColors[m_pGameFacade->getMixedWordsPiecesTypes().at(index)]);
     }
 
     return firstWordInputPiecesTextColors;
@@ -459,7 +456,7 @@ QList<QVariant> GamePresenter::getSecondWordInputPiecesTextColors() const
 
     for (auto index : m_pGameFacade->getSecondWordInputIndexes())
     {
-        secondWordInputPiecesTextColors.append(c_WordPieceTextColors[m_pGameFacade->getMixedWordsPiecesTypes().at(index)]);
+        secondWordInputPiecesTextColors.append(sc_WordPieceTextColors[m_pGameFacade->getMixedWordsPiecesTypes().at(index)]);
     }
 
     return secondWordInputPiecesTextColors;
@@ -503,9 +500,9 @@ QStringList GamePresenter::getRemainingTime() const
 
 QString GamePresenter::getWindowTitle() const
 {
-    return (m_CurrentPane == Panes::HELP_PANE ? (c_WindowTitles[m_CurrentPane].arg(m_IsDataEntryHelpMenuActive ? DataEntryStrings::Descriptors::c_DataEntryDescriptor
+    return (m_CurrentPane == Panes::HELP_PANE ? (sc_WindowTitles[m_CurrentPane].arg(m_IsDataEntryHelpMenuActive ? DataEntryStrings::Descriptors::c_DataEntryDescriptor
                                                                                                          : GameStrings::Descriptors::c_GameDescriptor))
-                                        : c_WindowTitles[m_CurrentPane]);
+                                        : sc_WindowTitles[m_CurrentPane]);
 }
 
 QString GamePresenter::getIntroPaneMessage() const
@@ -661,7 +658,7 @@ void GamePresenter::_onStatusChanged()
         case GameFacade::StatusCodes::DATA_GOT_AVAILABLE:
             if (m_QuitDeferred)
             {
-                QTimer::singleShot(c_GameQuitDelay, this, [this](){quit();});
+                QTimer::singleShot(sc_GameQuitDelay, this, [this](){quit();});
             }
             else
             {
@@ -690,7 +687,7 @@ void GamePresenter::_onStatusChanged()
             if (m_CurrentPane == Panes::MAIN_PANE)
             {
                 _updateStatusMessage(GameStrings::Messages::c_GameStoppedMessage, Panes::MAIN_PANE, Timing::c_NoDelay);
-                QTimer::singleShot(c_GameQuitDelay, this, [](){QGuiApplication::quit();});
+                QTimer::singleShot(sc_GameQuitDelay, this, [](){QGuiApplication::quit();});
             }
             else
             {
@@ -707,7 +704,7 @@ void GamePresenter::_onStatusChanged()
             _updateStatusMessage(GameStrings::Messages::c_AdditionalDataAvailableMessage, Panes::INTRO_PANE, Timing::c_NoDelay);
             if (m_QuitDeferred)
             {
-                QTimer::singleShot(c_GameQuitDelay, this, [this](){quit();});
+                QTimer::singleShot(sc_GameQuitDelay, this, [this](){quit();});
             }
             else
             {
@@ -888,7 +885,7 @@ void GamePresenter::_switchToPane(Panes pane)
 
         if (delayedSwitchingRequested)
         {
-            QTimer::singleShot(c_PaneSwitchingDelay, this, [triggerPaneSwitching](){triggerPaneSwitching();});
+            QTimer::singleShot(sc_PaneSwitchingDelay, this, [triggerPaneSwitching](){triggerPaneSwitching();});
         }
         else
         {

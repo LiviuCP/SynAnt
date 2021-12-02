@@ -32,6 +32,8 @@ private:
     void _validateLoadedDataEntries(const QVector<DataSource::DataEntry> dbEntries);
     bool _isValidDataEntry(const DataSource::DataEntry& dataEntry);
 
+    static constexpr int sc_LoadDataThreadDelay{1000};
+
     QVector<DataSource::DataEntry> m_ValidDataEntries;
     DataSource* m_pDataSource;
     QString m_DatabasePath;

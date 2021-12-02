@@ -215,6 +215,12 @@ private:
     void _updateMessage();
     void _launchErrorPane(const QString& errorMessage);
 
+    static const QMap<GamePresenter::Panes, QString> sc_WindowTitles;
+    static const QMap<Game::PieceTypes, QColor> sc_WordPieceTextColors;
+
+    static constexpr int sc_PaneSwitchingDelay{350};
+    static constexpr int sc_GameQuitDelay{200};
+
     QObject* m_pDataEntryPresenter;
 
     bool m_MainPaneInitialized;

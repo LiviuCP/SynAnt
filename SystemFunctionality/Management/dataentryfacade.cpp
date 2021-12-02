@@ -3,10 +3,6 @@
 #include "dataentryfacade.h"
 #include "dataentryproxy.h"
 
-static constexpr int c_NrOfInvalidPairEntryStatusCodes{static_cast<uint16_t>(DataEntryFacade::StatusCodes::Add_Failed_Status_Codes_End) -
-                                              static_cast<uint16_t>(DataEntryFacade::StatusCodes::Add_Failed_Status_Codes_Start) - 1};
-static constexpr uint16_t c_InvalidPairBaseReasonCode {uint16_t{0x0001} << (c_NrOfInvalidPairEntryStatusCodes-1)};
-
 DataEntryFacade::DataEntryFacade(QObject *parent)
     : QObject(parent)
     , m_pDataEntryProxy{new DataEntryProxy{this}}
@@ -315,7 +311,7 @@ DataEntryFacade::StatusCodes DataEntryFacade::_retrieveInvalidWordsPairStatusCod
 {
     bool success{false};
     const uint16_t c_RetrievedReasonCode{m_pDataEntryProxy->getInvalidPairEntryReasonCode()};
-    uint16_t localReasonCode{c_InvalidPairBaseReasonCode};
+    uint16_t localReasonCode{sc_InvalidPairBaseReasonCode};
     int offset{0};
 
     // decode the retrieved reason code to get the offset to be applied for determining the exact status code to be emitted to presenter

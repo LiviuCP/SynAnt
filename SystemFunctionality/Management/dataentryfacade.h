@@ -98,6 +98,10 @@ private:
     void _blockSaveToDb();
     DataEntryFacade::StatusCodes _retrieveInvalidWordsPairStatusCode();
 
+    static constexpr int sc_NrOfInvalidPairEntryStatusCodes{static_cast<uint16_t>(DataEntryFacade::StatusCodes::Add_Failed_Status_Codes_End) -
+                                                  static_cast<uint16_t>(DataEntryFacade::StatusCodes::Add_Failed_Status_Codes_Start) - 1};
+    static constexpr uint16_t sc_InvalidPairBaseReasonCode {uint16_t{0x0001} << (sc_NrOfInvalidPairEntryStatusCodes - 1)};
+
     DataEntryProxy* m_pDataEntryProxy;
 
     DataEntryFacade::StatusCodes m_CurrentStatusCode;

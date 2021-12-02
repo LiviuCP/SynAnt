@@ -5,16 +5,6 @@
 #include "dataproxy.h"
 #include "gameutils.h"
 
-static const QMap<DataEntryFacade::StatusCodes, QString> c_InvalidPairEntryStatusMessages
-{
-    {DataEntryFacade::StatusCodes::ADD_FAILED_LESS_MIN_CHARS_PER_WORD, DataEntryStrings::Messages::c_WordHasLessThanMinCharacters},
-    {DataEntryFacade::StatusCodes::ADD_FAILED_LESS_MIN_TOTAL_PAIR_CHARS, DataEntryStrings::Messages::c_PairHasLessThanMinCharacters},
-    {DataEntryFacade::StatusCodes::ADD_FAILED_MORE_MAX_TOTAL_PAIR_CHARS, DataEntryStrings::Messages::c_PairHasMoreThanMaxCharacters},
-    {DataEntryFacade::StatusCodes::ADD_FAILED_INVALID_CHARACTERS, DataEntryStrings::Messages::c_InvalidCharactersEntered},
-    {DataEntryFacade::StatusCodes::ADD_FAILED_IDENTICAL_WORDS, DataEntryStrings::Messages::c_PairHasIdenticalWords},
-    {DataEntryFacade::StatusCodes::ADD_FAILED_PAIR_ALREADY_EXISTS_IN_DATABASE, DataEntryStrings::Messages::c_PairAlreadyExistsInDatabase}
-};
-
 DataEntryPresenter::DataEntryPresenter(QObject *parent)
     : QObject(parent)
     , m_pDataEntryFacade{nullptr}
@@ -122,6 +112,16 @@ QString DataEntryPresenter::getDataEntryPaneStatusMessage() const
 
 void DataEntryPresenter::_onStatusChanged()
 {
+    const QMap<DataEntryFacade::StatusCodes, QString> c_InvalidPairEntryStatusMessages
+    {
+        {DataEntryFacade::StatusCodes::ADD_FAILED_LESS_MIN_CHARS_PER_WORD, DataEntryStrings::Messages::c_WordHasLessThanMinCharacters},
+        {DataEntryFacade::StatusCodes::ADD_FAILED_LESS_MIN_TOTAL_PAIR_CHARS, DataEntryStrings::Messages::c_PairHasLessThanMinCharacters},
+        {DataEntryFacade::StatusCodes::ADD_FAILED_MORE_MAX_TOTAL_PAIR_CHARS, DataEntryStrings::Messages::c_PairHasMoreThanMaxCharacters},
+        {DataEntryFacade::StatusCodes::ADD_FAILED_INVALID_CHARACTERS, DataEntryStrings::Messages::c_InvalidCharactersEntered},
+        {DataEntryFacade::StatusCodes::ADD_FAILED_IDENTICAL_WORDS, DataEntryStrings::Messages::c_PairHasIdenticalWords},
+        {DataEntryFacade::StatusCodes::ADD_FAILED_PAIR_ALREADY_EXISTS_IN_DATABASE, DataEntryStrings::Messages::c_PairAlreadyExistsInDatabase}
+    };
+
     DataEntryFacade::StatusCodes statusCode{m_pDataEntryFacade->getStatusCode()};
 
     if (m_pStatusUpdateTimer->isActive())
