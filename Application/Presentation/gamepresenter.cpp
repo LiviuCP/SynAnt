@@ -739,9 +739,9 @@ void GamePresenter::_onStatusChanged()
             break;
         case GameFacade::StatusCodes::CORRECT_USER_INPUT:
         {
-            QString message{GameStrings::Messages::c_CorrectUserInputMessage.arg(m_pGameFacade->getFirstReferenceWord())
-                        .arg(m_pGameFacade->getSecondReferenceWord())
-                        .arg(m_pGameFacade->areWordsFromCurrentPairSynonyms() ? GameStrings::Descriptors::c_SynonymsDescriptor : GameStrings::Descriptors::c_AntonymsDescriptor)};
+            QString message{GameStrings::Messages::c_CorrectUserInputMessage.arg(m_pGameFacade->getFirstReferenceWord(),
+                                                                                 m_pGameFacade->getSecondReferenceWord(),
+                                                                                 m_pGameFacade->areWordsFromCurrentPairSynonyms() ? GameStrings::Descriptors::c_SynonymsDescriptor : GameStrings::Descriptors::c_AntonymsDescriptor)};
             _updateStatusMessage(message, Panes::MAIN_PANE, Timing::c_NoDelay);
         }
             _updateStatusMessage(GameStrings::Messages::c_SelectOrDeleteWordPiecesMessage, Panes::MAIN_PANE, Timing::c_LongStatusUpdateDelay);
@@ -752,9 +752,9 @@ void GamePresenter::_onStatusChanged()
             break;
         case GameFacade::StatusCodes::SOLUTION_REQUESTED_BY_USER:
         {
-            QString message = GameStrings::Messages::c_ShowPairRequestedByUserMessage.arg(m_pGameFacade->getFirstReferenceWord())
-                    .arg(m_pGameFacade->getSecondReferenceWord())
-                    .arg(m_pGameFacade->areWordsFromCurrentPairSynonyms() ? GameStrings::Descriptors::c_SynonymsDescriptor : GameStrings::Descriptors::c_AntonymsDescriptor);
+            QString message = GameStrings::Messages::c_ShowPairRequestedByUserMessage.arg(m_pGameFacade->getFirstReferenceWord(),
+                                                                                          m_pGameFacade->getSecondReferenceWord(),
+                                                                                          m_pGameFacade->areWordsFromCurrentPairSynonyms() ? GameStrings::Descriptors::c_SynonymsDescriptor : GameStrings::Descriptors::c_AntonymsDescriptor);
             _updateStatusMessage(message, Panes::MAIN_PANE, Timing::c_NoDelay);
         }
             _updateStatusMessage(GameStrings::Messages::c_SelectOrDeleteWordPiecesMessage, Panes::MAIN_PANE, Timing::c_LongStatusUpdateDelay);
