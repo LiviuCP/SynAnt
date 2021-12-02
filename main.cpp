@@ -6,7 +6,6 @@
 #include "exceptions.h"
 #include "gameinitproxy.h"
 
-
 void registerDataTypesForQML();
 
 int main(int argc, char *argv[])

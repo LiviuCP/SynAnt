@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(${APP_NAME} VERSION 2.1 LANGUAGES CXX)
+project(${APP_LIB_NAME} VERSION 2.1 LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -11,53 +11,32 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick REQUIRED)
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick REQUIRED)
+find_package(QT NAMES Qt6 Qt5 COMPONENTS Core REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core REQUIRED)
 
-set(PROJECT_SOURCES
-    main.cpp
-    gamepresenter.cpp
-    dataentrypresenter.cpp
-    QML/qml.qrc
+set(APP_LIB_SOURCES
+    Presentation/gamepresenter.cpp
+    Presentation/dataentrypresenter.cpp
 )
 
 include_directories(
-    ../SystemFunctionality/CoreFunctionality
-    ../SystemFunctionality/DataAccess
-    ../SystemFunctionality/ManagementInterfaces
+    Presentation
+    Utilities
     ../SystemFunctionality/Management
     ../SystemFunctionality/ManagementProxies
     ../SystemFunctionality/Utilities
 )
 
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(${APP_NAME}
-        MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
-    )
-else()
-    add_executable(${APP_NAME}
-        ${PROJECT_SOURCES}
-    )
-endif()
-
-target_compile_definitions(${APP_NAME} PRIVATE
-    $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>
+add_library(${APP_LIB_NAME} STATIC
+    ${APP_LIB_SOURCES}
 )
 
-target_link_libraries(${APP_NAME} PRIVATE
+target_link_libraries(${APP_LIB_NAME} PRIVATE
     Qt${QT_VERSION_MAJOR}::Core
-    Qt${QT_VERSION_MAJOR}::Quick
+    Qt${QT_VERSION_MAJOR}::Quick # required for <QGuiApplication> in game presenter
     ${SYS_FUNC_LIB_NAME}
 )
 
-set_target_properties(${APP_NAME} PROPERTIES
-    MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
-    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
-    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+target_compile_definitions(${APP_LIB_NAME} PRIVATE
+    APPLICATION_LIBRARY
 )
-
-if(QT_VERSION_MAJOR EQUAL 6)
-    qt_import_qml_plugins(${APP_NAME})
-    qt_finalize_executable(${APP_NAME})
-endif()

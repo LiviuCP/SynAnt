@@ -14,7 +14,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Sql REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Sql REQUIRED)
 
-set(PROJECT_SOURCES
+set(SYS_FUNC_LIB_SOURCES
     CoreFunctionality/wordmixer.cpp
     CoreFunctionality/wordpairowner.cpp
     CoreFunctionality/inputbuilder.cpp
@@ -59,8 +59,8 @@ if(WIN32)
     set(SYS_FUNC_LIB_TYPE STATIC)
 endif()
 
-add_library(${PROJECT_NAME} ${SYS_FUNC_LIB_TYPE}
-    ${PROJECT_SOURCES}
+add_library(${SYS_FUNC_LIB_NAME} ${SYS_FUNC_LIB_TYPE}
+    ${SYS_FUNC_LIB_SOURCES}
 )
 
 target_link_libraries(${SYS_FUNC_LIB_NAME} PRIVATE
