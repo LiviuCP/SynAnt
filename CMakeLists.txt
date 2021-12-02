@@ -20,6 +20,7 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick REQUIRED)
 
 set(PROJECT_SOURCES
     main.cpp
+    register.cpp
     ${APP_LIB_NAME}/QML/qml.qrc
 )
 
