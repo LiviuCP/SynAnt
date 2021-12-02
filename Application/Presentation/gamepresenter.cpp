@@ -370,9 +370,10 @@ void GamePresenter::setQuitGameDeferred(bool deferred)
 
 QList<QVariant> GamePresenter::getMixedWordsPiecesContent() const
 {
+    const QVector<QString> c_MixedWordsPiecesContent{m_pGameFacade->getMixedWordsPiecesContent()};
     QList<QVariant> mixedWordsPiecesContent;
 
-    for (auto pieceContent : m_pGameFacade->getMixedWordsPiecesContent())
+    for (const auto& pieceContent : c_MixedWordsPiecesContent)
     {
         mixedWordsPiecesContent.append(pieceContent);
     }
@@ -382,9 +383,10 @@ QList<QVariant> GamePresenter::getMixedWordsPiecesContent() const
 
 QList<QVariant> GamePresenter::getMixedWordsPiecesTextColors() const
 {
+    const QVector<Game::PieceTypes> c_MixedWordsPiecesTextColors{m_pGameFacade->getMixedWordsPiecesTypes()};
     QList<QVariant> mixedWordsPiecesTextColors;
 
-    for (auto pieceType : m_pGameFacade->getMixedWordsPiecesTypes())
+    for (const auto& pieceType : c_MixedWordsPiecesTextColors)
     {
         mixedWordsPiecesTextColors.append(sc_WordPieceTextColors[pieceType]);
     }
@@ -394,9 +396,10 @@ QList<QVariant> GamePresenter::getMixedWordsPiecesTextColors() const
 
 QList<QVariant> GamePresenter::getMixedWordsPiecesSelections() const
 {
+    const QVector<bool> c_MixedWordsPiecesSelections{m_pGameFacade->getAreMixedWordsPiecesSelected()};
     QList<QVariant> mixedWordsPiecesSelections;
 
-    for (auto isPieceSelected : m_pGameFacade->getAreMixedWordsPiecesSelected())
+    for (const auto& isPieceSelected : c_MixedWordsPiecesSelections)
     {
         mixedWordsPiecesSelections.append(isPieceSelected);
     }
