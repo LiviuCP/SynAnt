@@ -37,13 +37,19 @@ include_directories(
     SystemFunctionality/Utilities
 )
 
+set(ADDITIONAL_BUILD_OPTIONS "")
+
+if (APPLE)
+    set(ADDITIONAL_BUILD_OPTIONS "MACOSX_BUNDLE")
+endif()
+
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(${APP_NAME}
+    qt_add_executable(${APP_NAME} ${ADDITIONAL_BUILD_OPTIONS}
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
     )
 else()
-    add_executable(${APP_NAME}
+    add_executable(${APP_NAME} ${ADDITIONAL_BUILD_OPTIONS}
         ${PROJECT_SOURCES}
     )
 endif()
@@ -68,4 +74,17 @@ set_target_properties(${APP_NAME} PROPERTIES
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_import_qml_plugins(${APP_NAME})
     qt_finalize_executable(${APP_NAME})
+endif()
+
+# this is required for Linux systems when using linuxdeployqt for deploying SynAnt:
+# - in order to be able to run the app after deployment it should be ensured that the system functionality library (and any other shared library in general) had previously been copied into the "lib" subdir
+# - the deploy tool will subsequently append all required Qt libraries to this subfolder
+if (UNIX AND NOT APPLE)
+    add_custom_target(make-shared-lib-directory ALL
+        COMMAND ${CMAKE_COMMAND} -E make_directory lib
+    )
+
+    add_custom_command(TARGET ${APP_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy "${SYS_FUNC_LIB_NAME}/lib${SYS_FUNC_LIB_NAME}.so" lib
+    )
 endif()
