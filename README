@@ -2,29 +2,23 @@
 
 This program retrieves a words pair that can either be synonyms or antonyms, divides them into (almost) equal pieces and mixes them. The user should guess the correct words.
 
-1. Available Versions and Supported Operating Systems
+1. Version Info and Supported Operating Systems
 
-Currently there are three versions on this repo: v1.2, v2.0 and v2.1 (v1.0 and v1.1 are older versions which I haven't included in GitHub). All three are in finished (released) state and ready to use. They have been compiled on Fedora 28 using Qt 5.9.2 and a 64bit GCC-C++ compiler.
+Unlike previous version the QWidgets support has been entirely removed so v2.0 only uses QML for the UI.
 
-For all of them the deployment has been made on Fedora 28. They have also been deployed on: OpenSUSE 42.3 (v1.2 and v2.0) and OpenSUSE 15.1 (version 2.1).
+Code has been written by using the Qt 5.9.2 framework.
 
-The app is currently not supported on any non-Linux operating system.
+The deployment has been made on Fedora 28 and OpenSUSE 42.3.
 
-2. Build 
+This version is currently not supported on any non-Linux operating system.
 
-For version 1.2 there are 2 branches, each of them containing an implementation of the application:
-- SynAnt_v1.2_QWidgets
-- SynAnt_v1.2_QML
+2. Build
 
-Choose the branch you would like to use and then compile it.
-
-For v1.2 after compiling the code copy the file "data" into the Application sub-directory. Feel free to modify it by adding new word pairs. The file should keep its name ("data"), otherwise it won't be recognized by the app and an error will be triggered. For v2.0 this step is no longer needed as if no data exists, after opening the app the user will be redirected to a data entry section where new word pairs can be added. These pairs can then be played within the game.
-
-Starting with v2.0 there is no more QWidgets support. The whole UI has been written in QML. Use branches SynAnt_v2.0 and SynAnt_v2.1 to pull the code for the v2.x versions.
+Choose branch SynAnt_v2.0 and then compile it.
 
 3. Deploying the app
 
-For both v1.2 and v2.x I used linuxdeployqt for having all necessary libs added to the application so it can run on Linux machines where Qt is not installed. In order to successfully create the deployable package please follow these steps:
+I used linuxdeployqt for having all necessary libs added to the application so it can run on Linux machines where Qt is not installed. In order to successfully create the deployable package please follow these steps:
 - download linuxdeployqt from this GitHub page: https://github.com/probonopd/linuxdeployqt (check instructions from the page for more details)
 - Make the downloaded file executable: chmod a+x linuxdeployqt-continuous-x86_64.AppImage
 - locate the folder where the qmake executable resides. The directory should have a path similar to this: /path/to/Qt/5.9.2/gcc_64/bin
@@ -34,34 +28,25 @@ For both v1.2 and v2.x I used linuxdeployqt for having all necessary libs added 
   QMake version 3.1
   Using Qt version 5.9.2 in /path/to/Qt/5.9.2/gcc_64/lib
 
-- for v2.x (which uses a SQLite database instead of a text file for storing data) please use this "hack" to prevent an error regarding a missing MySQL library (caused by not finding libmysqlclient.so.18):
+- if required please use this "hack" to prevent an error regarding a missing MySQL library (caused by not finding libmysqlclient.so.18):
   - go to the sqldrivers directory which has a path similar to this: cd /path/to/Qt/5.9.2/gcc_64/plugins/sqldrivers
   - move all files EXCEPT libqsqlite.so to a different location, preferably outside Qt. I only had two files to move: libqsqlmysql.so, libqsqlpsql.so
   - after deployment is done put these two files back to their original location
 - build the application as RELEASE
-- run the linuxdeployqt as follows:
-  - for the SynAnt_v1.2_QWidgets branch you only need to provide the path of the executable contained within the BUILD DIRECTORY as argument:
-    /path/to/linuxdeployqt-continuous-x86_64.AppImage /path/to/builddir/Application/SynAnt
-  - for the SynAnt_v1.2_QML and SynAnt_v2.x branches the directory containing the qml files should be provided too. This is located in the Application subdir of the SOURCE CODE DIRECTORY:
+- run linuxdeployqt by providing both the directory containing the executable and the one containing the qml files. The latter one is located in the Application subdir of the SOURCE CODE DIRECTORY:
     /path/to/linuxdeployqt-continuous-x86_64.AppImage /path/to/builddir/Application/SynAnt -qmldir='/path/to/sourcedir/Application'
-- check that the build directory now contains following folders within the Application subdir: lib, plugins, qml (last one only for the SynAnt_v1.2_QML and SynAnt_v2.x branches)
+- check that the build directory now contains following folders within the Application subdir: lib, plugins, qml
 - copy the build directory onto a Linux machine where Qt is not installed and check that it runs successfully (should run exactly the same as on the Qt machine)
 
-Note: an error might trigger when running linuxdeployqt mentioning that libjasper.so.1 cannot be found. I solved this error by creating a symbolic link to libjasper.so.4. The symbolic link was placed into the same directory as the libjasper.so.4 file. You can use the locate command (don't forget to execute updatedb as sudo before running it) for finding the libjasper.so files.
+Note: an error might trigger when running linuxdeployqt mentioning that libjasper.so.1 cannot be found. I solved this error by creating it as a symbolic link to libjasper.so.4. The symbolic link was placed into the same directory as the libjasper.so.4 file. You can use the locate command (don't forget to execute updatedb as sudo before running it) for finding the libjasper.so files.
 
 4. Updating the "data" file
 
-The data file can only be updated manually for version 1.2. See above sections for more information.
-
-Each row should contain one word pair. The 2 words from each pair are separated by a special character which is '=' for synonyms and '!' for antonyms. No rows should be left empty or with incorrect format (e.g. no separator/multiple separators) otherwise an exception will be triggered when reading the incorrect row and the program will stop. The minimum word size is 5 characters.
-
 Starting with version 2.0 the data is being updated by using a data entry dialog page. This is a significant improvement comparing to previous versions as it is even possible to start the game without having a data file (the user will need to enter at least one word pair so the game can be played), so no more manual updating is required. Also the data is not stored into a text file but a SQLite database, which increases reliability and maintainability. For more information check the Help dialog.
-
-Version 2.1 adds multiple languages support both in game and data entry mode.
 
 5. Keyboard access
 
-The game can be played either by using the mouse (keyboard is only required for entering the words pair in data entry dialog) or entirely by keyboard. Every button, toggle switch or dropdown has an appropriate shortcut or access key. Further improvement of shortcuts and access keys might occur in the next versions. There is still work to do regarding keyboard focus which might consist in definining multiple focus scopes. For example in order to scroll through the help menu I had to use two shortcuts (ALT + down arrow/up arrow) instead of the arrow keys only. This was necessary due to a keyboard focus conflict with the language selection dropdowns that I was unfortunately not able to solve in the current version. I plan to get this fixed in a future version by performing some re-engineering of the UI software architecture.
+The game can be played either by using the mouse (keyboard is only required for entering the words pair in data entry dialog) or entirely by keyboard. Every button has an appropriate shortcut or access key. Further improvement of shortcuts and access keys might occur in the next versions.
 
 6. Further info
 
